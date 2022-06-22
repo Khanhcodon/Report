@@ -1,0 +1,100 @@
+﻿@model Bkav.eGovCloud.Entities.Admin.Apps
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            url: '@Url.Action("AppIconUpload", "Setting")',
+            autoUpload: true,
+            done: function (e, data) {
+                if (data.result.success) {
+                    $('#IconUrl').val(data.result.Avatar);
+                    $('#imgIconUrl').attr('src', data.result.Avatar);
+
+                    return;
+                }
+                else {
+                    alert(data.result.message);
+                }
+            }
+        });
+        $('#AppUrl').change(function () {
+            $("#preview").empty();
+            var iframe = $("<iframe />");
+            $("#preview").html(iframe);
+            iframe.attr("src", $(this).val());
+
+        });
+        $('#IconUrl').change(function () {
+            $('#imgIconUrl').attr('src', "../" + $(this).val());
+        });
+        $(document).bindResources();
+    });
+
+</script>
+<style>
+    #newapp #fileupload {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+    }
+
+    #preview iframe {
+        width: 100%;
+    }
+
+    #newapp #imgIconUrl {
+        margin-top: 15px;
+    }
+</style>
+<div class="full-height ">
+    <div class="form-group">
+        <label for="Title">Ứng dụng</label>
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Title">Tên ứng dụng</label>
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="AppUrl">Đường dẫn</label>
+        @Html.TextBoxFor(model => model.AppUrl, new { @class = "form-control" })
+    </div>
+    <div id="preview">
+
+    </div>
+    <div class="row">
+        <div class="col-sm-13">
+            <div class="form-group">
+                <label for="IconUrl">Icon</label>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.IconUrl, new { @class = "form-control" })
+                    <span class="input-group-addon">
+                        <input id="fileupload" type="file" name="file">
+                        <span>Chọn</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="IsBackgroundApp">Mặc định</label>
+                    @Html.CheckBoxFor(model => model.IsDefaultApp)
+                </div>
+                <div class="form-group">
+                    <label for="IsBackgroundApp">Tự chạy khi vào hệ thống</label>
+                    @Html.CheckBoxFor(model => model.IsBackgroundApp)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <img id="imgIconUrl" src="../@Model.IconUrl" width="60" height="60" />
+        </div>
+    </div>
+</div>
+

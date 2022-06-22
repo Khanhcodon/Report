@@ -1,0 +1,104 @@
+﻿@model DocumentRelatedModel
+@{
+
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.js")"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $("#FormName").focus();
+
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function(e, data) {
+                var filename = data.files[0].name;
+                if (filename.length > 0) {
+                    if (filename.indexOf(".xlsx", filename - ".xlsx".length) !== -1 ||
+                        filename.indexOf(".docx", filename - ".docx".length) !== -1 ||
+                        filename.indexOf(".pdf", filename - ".pdf".length) !== -1 ||
+                        filename.indexOf(".pptx", filename - ".pptx".length) !== -1) {
+                        $(".EmbryonicPath").text(filename);
+                        data.submit();
+                    } else {
+                        eGovMessage.show("Chỉ được up file xlsx, docx, pptx, pdf","",eGovMessage.messageButtons.Ok);
+                    }
+                } else {
+                    eGovMessage.show("chưa chọn file","",eGovMessage.messageButtons.Ok);
+                }
+            },
+            done: function(e, data) {
+                var result = data.result[0];
+                $("#EmbryonicPath").val(result.name);
+                $("#EmbryonicLocationName").val(result.key);
+            },
+            fail: function(e, data) {
+                $(".EmbryonicPath").text("@Localizer("Common.Error.DownloadFile")");
+            }
+        });
+    });
+
+    function download(id) {
+        var link = '@Url.Action("DownloadEmbryonicFileBase64", "Attachment", new { area = "" })/' + id;
+        $.fileDownload(link, {
+            failCallback: function (response) {
+                var html = $(response);
+                try {
+                    var json = JSON.parse(html.text());
+                    alert(json.error);
+                } catch (e) {
+                    alert('"@Localizer("Common.Error.DownloadFile")"');
+                }
+            }
+        });
+    }
+
+
+</script>
+
+@Html.HiddenFor(model => model.DocumentRelatedId)
+
+<table>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.Name)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Mô tả
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Description)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.EmbryonicLocationName)</td>
+        <td>
+            <span class="EmbryonicPath">@Model.EmbryonicLocationName</span>
+            <div style="display: none">
+                @Html.HiddenFor(model => model.EmbryonicLocationName, new { Id = "EmbryonicLocationName" })
+                @Html.HiddenFor(model => model.EmbryonicPath, new { Id = "EmbryonicPath" })
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input class="btn btn-primary" type="button" value="Tải lên" onclick="$('#upload').click()" />
+            <input class="btn" type="file" name="files" id="upload" style="display: none;" data-url="@Url.Action("UploadEmbryonic", "Attachment", new {area = ""})" accept="*.xlsx" />
+            @Html.ValidationMessageFor(model => model.EmbryonicLocationName)
+        </td>
+    </tr>
+</table>

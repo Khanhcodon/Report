@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Xem CLS</title>
+    <style>
+        .btn-close {
+            margin-bottom: 10px;
+            background: #879deb;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    @*<input type="button" class="btn-close" value="Tắt báo cáo" onclick="closeIframe()">*@
+    <iframe  style="overflow:auto" src=@ViewBag.viewPath width="1024" height="800" >  </iframe>
+</body>
+</html>

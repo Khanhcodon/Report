@@ -1,0 +1,103 @@
+﻿@model ClientModel
+<style>
+    .form-control {
+        display: inline;
+    }
+</style>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<script type="text/javascript">
+    function genGuid(id) {
+        $("#" + id).val(createNewGuid());
+    }
+
+    function createNewGuid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+        }
+
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+    }
+
+    $(function () {
+        $("#delete").remove();
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        if ('@Model.Id' == 0) {
+            genGuid("Identifier");
+            genGuid("Secret");
+        }
+    });
+
+    function onChangeGuid(_this) {
+        var key = $(_this).attr("data-change");
+        var guid = createNewGuid();
+        $(key).val(guid);
+    }
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<table>
+    <tr>
+        <td style="width: 15%">@Html.LabelRequireFor(model => model.Name):</td>
+        <td>@Html.TextBoxFor(model => model.Name,
+        new { @class = "form-control", @placeholder = Localizer("Common.Client.CreateOrEdit.Field.Name.Label") })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.Identifier):</td>
+        <td>
+            @Html.TextBoxFor(model => model.Identifier, new
+       {
+           @class = "form-control",
+           @placeholder = Localizer("Common.Client.CreateOrEdit.Field.Identifier.Label"),
+           @readonly = "readonly",
+           @style = "width:80%x"
+       })
+            <input data-change="#Identifier" onclick="onChangeGuid(this)"
+                value="@Localizer("Common.Client.CreateOrEdit.Field.ChangeIdentifier")" type="button" style="display: inline" />
+            @Html.ValidationMessageFor(model => model.Identifier, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.Secret):</td>
+        <td>@Html.TextBoxFor(model => model.Secret, new
+       {
+           @class = "form-control",
+           @placeholder = Localizer("Common.Client.CreateOrEdit.Field.Secret.Label"),
+           @readonly = "readonly",
+           @style = "width:80%x"
+       })
+            <input data-change="#Secret" onclick="onChangeGuid(this)"
+                 value="@Localizer("Common.Client.CreateOrEdit.Field.ChangeSecret")"type="button" />
+            @Html.ValidationMessageFor(model => model.Secret, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.Domain):</td>
+        <td>@Html.TextBoxFor(model => model.Domain, new { @class = "form-control", @placeholder = Localizer("Common.Client.CreateOrEdit.Field.Domain.Label") })
+            @Html.ValidationMessageFor(model => model.Domain, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.Ip):</td>
+        <td>@Html.TextBoxFor(model => model.Ip, new { @class = "form-control", @placeholder = Localizer("Common.Client.CreateOrEdit.Field.Ip.Label") })
+            @Html.ValidationMessageFor(model => model.Ip, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <td>
+            <label for="IsActivated">@Localizer("Common.User.IsActivated.Active"):</label>
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsActivated)</td>
+    </tr>
+</table>

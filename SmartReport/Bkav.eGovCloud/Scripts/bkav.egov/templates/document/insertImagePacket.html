@@ -1,0 +1,74 @@
+﻿<ul class="nav nav-pills toolbar"></ul>
+<div class="container-fluid document-info">
+    <form>
+        <div class="staticPart">
+            <div class="form-horizontal document-info-template">
+                <table id="tableLayout">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="wrapInOutCode" class="form-group">
+                                    <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.InOutCode"></label>
+                                    <div class="col-sm-13 col-md-14">
+                                        <input type="text" class="form-control" id="InOutCode" spellcheck="false">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group form-group-sm" id="wrapCompendium">
+                                    <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.Compendium"></label>
+                                    <div class="col-sm-13 col-md-14">
+                                        <textarea cols="20" class="form-control" id="Compendium" rows="2" required data-restitle="egov.resources.document.CompendiumTitle"></textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group form-group-sm" id="wrapComment">
+                                    <div class="col-sm-3 col-md-2 control-label">
+                                        <label class="control-label" data-res="egov.resources.document.Comment"></label>
+                                        <label class="control-label">
+                                            <input type="button" id="openDialogCommon" name="openDialogCommon" data-restitle="egov.resources.document.addCommonComment" data-res="egov.resources.document.selectCommonComment" class="btn" />
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-11 col-md-14">
+                                        <textarea class="form-control" name="Comment" id="Comment" rows="2" style="height: 70px;" cols="20"></textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="document-attachment row" style="display: none;">
+                    <div class="container-fluid">
+                        <div data-res="egov.resources.document.AttachmentList" class="col-md-14 col-sm-14 row"></div>
+                        <div class="col-md-2 col-sm-2" style="float: right">
+                            <span class="attachment-download-all" style="float: right">
+                                <span class="icon icon-download3" data-restitle="egov.resources.attachment.downloadAll" title="Tải về"></span>
+                                <span data-res="egov.resources.attachment.downloadAll"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-16 col-sm-16" id="wrapAttachment">
+                        <ul class="list-group attachment-list"></ul>
+                    </div>
+                </div>
+                <div class="document-relation row" style="display: none;">
+                    <div class="container-fluid" data-res="egov.resources.document.RelationList">
+                    </div>
+                    <div class="col-md-16  col-sm-16" id="wrapDocumentRelation">
+                        <ul class="list-group relation-list"></ul>
+                    </div>
+                </div>
+            </div>
+</div>
+<div class="scrollPart row">
+    <div>
+        <div id="divContent" class="document-contents"></div>
+    </div>
+</div>
+</form>
+</div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="00d8dad0-e8f0-4d8a-98b8-f6f89cf4daa9" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://sso.hsmctt.bkav.com/SingleSignOnService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SingleSignOnService4.xsd" MetadataType="Schema" ID="432a4be2-8b05-448e-95b4-4ee1bd1b9e62" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd3" />
+    <MetadataFile FileName="SingleSignOnService41.xsd" MetadataType="Schema" ID="db4fbdd8-e8f0-4d55-9d14-179532c743fb" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd2" />
+    <MetadataFile FileName="SingleSignOnService1.disco" MetadataType="Disco" ID="774d79f1-d640-41af-9907-af22debc245b" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?disco" />
+    <MetadataFile FileName="SingleSignOnService42.xsd" MetadataType="Schema" ID="5eda16a7-8d2b-4599-bb55-5ef23b485cc8" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd1" />
+    <MetadataFile FileName="SingleSignOnService1.wsdl" MetadataType="Wsdl" ID="5c80d6d6-a866-47c9-b975-46ee61db4ea8" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?wsdl" />
+    <MetadataFile FileName="SingleSignOnService43.xsd" MetadataType="Schema" ID="a3daa4f5-256a-44b6-87c4-3e4a0f9be443" SourceId="1" SourceUrl="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,185 @@
+﻿input[readonly="readonly"]
+{
+    background: none repeat scroll 0 0 #DDDDDD;
+}
+/*****/
+#pnl_root_prop input
+{
+    width: 170px;
+}
+#pnl_root_prop input[type="button"], #pnl_root_prop input[type="checkbox"]
+{
+    width: auto;
+}
+.css_NestedElement
+{
+    float: left;
+    width: 254px;
+    min-width: 20px;
+    max-width: 98.7%;
+    min-height: 22px;
+    padding: 0.5%;
+    padding-top: 1%;
+    border: 1px solid #A6C9E2;
+    background-color: #FDFEFE;
+    cursor: pointer;
+    margin: 1px;
+}
+.css_NestedInputForm
+{
+    float: left;
+    width: 254px;
+    min-width: 20px;
+    max-width: 98.7%;
+    min-height: 22px;
+    padding: 0.5%;
+    padding-top: 1%;
+}
+.cssNestedLabel
+{
+    float: left;
+    min-width: 10px;
+    margin-top: 3px;
+    margin-right: 3px;
+    text-align: left;
+}
+
+#pnl_root .icontainer .css_NestedElement:first-child .cssNestedLabel, #pnl_root .inputform .css_NestedInputForm:first-child .cssNestedLabel, .pnl_root .icontainer .css_NestedElement:first-child .cssNestedLabel, .pnl_root .inputform .css_NestedInputForm:first-child .cssNestedLabel /*TienBV: thay id = class dung chung cho nhieu form*/
+{
+    width: 120px;
+}
+.css_NestedElementActiving
+{
+    background: #619FCD;
+    border: solid 1px #467596;
+    color: White;
+}
+.css_NestedElement:hover
+{
+    border: solid 1px #79AFF2;
+}
+.css_DragHoverItem
+{
+    border: dashed 1px red;
+    text-decoration: blink;
+    color: Red;
+}
+
+/**Root Panel ***/
+#pnl_root, .pnl_root
+{
+    width: 100%;
+    background-color: White;
+    box-shadow: 2px 2px 11px gray;
+    height: 80%;
+    margin: 20px auto;
+    padding: 20px;
+}
+#pnl_root .icontainer, .pnl_root .icontainer
+{
+    float: left;
+    width: 99%;
+    min-height: 30px;
+    border: 1px dashed Gray;
+    border-top: 0px dashed white;
+    border-left: 0px dashed white;
+    border-right: 0px dashed white;
+    position: relative;
+}
+#pnl_root .icontainer:hover, .pnl_root .icontainer:hover
+{
+    /*border-right: solid 1px blue; 	border-bottom: solid 1px blue;*/
+    background: #ECF4FF;
+}
+#pnl_root .icontainer:first-child, .pnl_root .icontainer:first-child
+{
+    border-top: dashed 1px white;
+}
+#pnl_root .inputform. .pnl_root .inputform
+{
+    float: left;
+    width: 99%;
+    min-height: 30px; /* 	border: dotted 1px #c2c2c2; 	border-top: solid 0px; 	*/
+}
+#pnl_root .inputform input, .pnl_root .inputform input
+{
+    background: transparent;
+    border: solid 1px transparent;
+    border-bottom: dotted 1px gray;
+}
+#pnl_root .inputform select .pnl_root .inputform select
+{
+    background: transparent;
+    border: solid 1px transparent;
+    border-bottom: dotted 1px gray;
+}
+#pnl_root .btnDeleteRow
+{
+    
+    color: #3F5F94;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0 3px;
+    position: absolute;
+    right: 0px;
+    bottom: 8px;
+    visibility: hidden;
+}
+#pnl_root .btnDeleteRow:hover
+{
+    background-color: #3F5F94;
+    color: White;
+}
+.css_SelectedRow
+{
+    border-right: solid 1px blue;
+    border-bottom: solid 1px blue;
+    background: #ECF4FF;
+}
+
+
+#pnl_root_commands, .pnl_root_commands
+{
+    background: none repeat scroll 0 0 #BFDBFF;
+    border-radius: 5px 0 0 0;
+    clear: both;
+    float: left;
+    padding: 3px 0;
+    text-align: right;
+    width: 100%;
+}
+
+#pnl_option
+{
+    /*width	: 402px;*/ /*position: relative; 	top: 10px; 	right: 10px;*/
+    background: #BFDBFF;
+    font-size: 12px;
+    font-family: Segoe UI, Arial, Sans-Serif;
+    color: Black;
+}
+.cssErr
+{
+    color: red;
+}
+
+.subformTitle
+{
+    display: block;
+    font-weight: bold;
+    font-size: small;
+}
+.lblDescription
+{
+    font-style: italic;
+    font-weight: bold;
+    background-color: #f5deb3;
+    padding: 0px 10px;
+}
+
+.downloadDoc
+{
+    margin-left: 5px;
+}
+.sub_pnl_root {
+    
+}

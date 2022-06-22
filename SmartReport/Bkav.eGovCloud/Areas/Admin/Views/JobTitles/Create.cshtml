@@ -1,0 +1,38 @@
+﻿@model JobTitlesModel
+@{
+    ViewBag.Title = Localizer("Customer.JobTitles.Created");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user4"></i>
+        <span data-res="egov.resources.sitemap.jobtitles"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/jobtitles/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.Partial("_qtip")
+        @Html.Partial("_Notifications")
+        @Html.AntiForgeryToken()
+        @Html.Partial("_CreateOrEdit", Model)
+    </div>
+}
+<div class="tooltipPacket" style="display: none">
+    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+</div>

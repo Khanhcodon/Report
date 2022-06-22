@@ -1,0 +1,188 @@
+﻿@model Bkav.eGovCloud.Models.SupplementaryModel
+<style type="text/css">
+    .supp-receive-buttons {
+        text-align: right;
+    }
+
+        .supp-receive-buttons input {
+            border: none;
+            height: 25px;
+            color: white;
+            background-color: #21bbf7;
+            font-family: arial;
+        }
+
+    .supp-item {
+        margin-bottom: 10px;
+    }
+
+        .supp-item .supp-item-stt {
+        }
+
+        .supp-item .supp-item-content {
+            width: 340px;
+            display: inline-table;
+        }
+
+        .supp-item .supp-item-user {
+            margin-left: 10px;
+            /*color: blue;*/
+            display: inline-block;
+            width: 130px;
+            text-align: right;
+        }
+
+        .supp-item .supp-item-datesend {
+            margin-left: 10px;
+            display: inline-block;
+            width: 120px;
+            text-align: right;
+        }
+
+        .supp-item .supp-item-type {
+            font-style: italic;
+            padding-left: 15px;
+        }
+
+    .paper-fee ul {
+        display: inline-table;
+        width: 100%;
+        -webkit-padding-start: 0px;
+    }
+
+        .paper-fee ul li {
+            display: inline-table;
+            width: 100%;
+        }
+
+        .paper-fee ul input[type="text"] {
+            width: 60px;
+            border: none;
+            border-bottom: 1px dotted;
+        }
+
+    .div-paper, .div-fee {
+        width: 50%;
+        float: left;
+    }
+
+    .paper-fee ul .paper-name, .paper-fee ul .fee-name {
+        display: inline-table;
+        width: 190px;
+    }
+
+    .paper-amount, .fee-price {
+        float: right;
+        margin-right: 10px;
+    }
+
+    .add-paper-fee {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+</style>
+<script type="text/javascript">
+    function save(_this) {
+        var papers = getPapers();
+        var fees = getFees();
+        var content = $("#suppComment").val();
+        var supp = {};
+        supp.SupplementaryId = $("#SupplementaryId").val();
+        supp.DocumentCopyId = $("#DocumentCopyId").val();
+        supp.DocumentId = $("#DocumentId").val();
+        $.ajax({
+            url: "@Url.Action("Receive", "Supplementary")",
+            data: { model: JSON.stringify(supp), papers: papers, fees: fees },
+            success: function (result) {
+                if (result.success) {
+                    eGovMessage.notification("Tiếp nhận kết quả thành công", eGovMessage.messageTypes.success);
+                }
+                else {
+
+                }
+            }
+        });
+    }
+</script>
+@if (Model != null)
+{
+    <div class="supp-receive-main">
+        @Html.HiddenFor(model => model.SupplementaryId)
+        @Html.HiddenFor(model => model.DocumentCopyId)
+        @Html.HiddenFor(model => model.DocumentId)
+        <div style="margin-bottom: 10px"><strong>Yêu cầu bổ sung</strong></div>
+        <div class="supp-item">
+            <span class="supp-item-stt">1.</span>
+            <span class="supp-item-content">@Model.CommentSend</span>
+            <span class="supp-item-user">@Model.UserSend.FullName</span>
+            <span class="supp-item-datesend">@Model.DateSend.ToString("hh:mm dd/MM/yyyy")</span>
+        </div>
+        <div>
+            <div style="margin-bottom: 10px"><strong>Thông tin bổ sung</strong></div>
+            <div class="supp-info">
+                <div class="paper-fee">
+                    <div class="div-paper">
+                        <span>
+                            <span>Giấy tờ</span>
+                            <span class="add-paper-fee" onclick="egov.cshtml.transfer.supplementary.addPaper($('.ul-papers'))">Thêm giấy tờ</span>
+                        </span>
+                        <ul class="ul-papers">
+                            @foreach (var paper in ViewBag.Papers as IEnumerable<Bkav.eGovCloud.Entities.Customer.Paper>)
+                            {
+                                <li>
+                                    <input class="paper-id" type="checkbox" value ="@paper.PaperId" />
+                                    <span class="paper-name">@paper.PaperName</span>
+                                    <input class="paper-amount" type="text" value="@paper.Amount" />
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="div-fee">
+                        <span>
+                            <span>Lệ phí</span>
+                            <span class="add-paper-fee" onclick="egov.cshtml.transfer.supplementary.addFee($('.ul-fees'))">Thêm lệ phí</span>
+                        </span>
+                        <ul class="ul-fees">
+                            @foreach (var fee in ViewBag.Fees as IEnumerable<Bkav.eGovCloud.Entities.Customer.Fee>)
+                            { 
+                                <li>
+                                    <input class="fee-id" type="checkbox" value="@fee.FeeId" />
+                                    <span class="fee-name">@fee.FeeName</span>
+                                    <span style="float: right">Vnd</span>
+                                    <input class="fee-price" type="text" value="@fee.Price" />
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <span style="float: right; color: red; margin-bottom: 5px; font-weight: bold;">
+                    <input type="checkbox" id="IsUnsuccess" />
+                    Dân không bổ sung</span>
+                <textarea id="suppComment" style="width: 99%"></textarea>
+                <div style="margin-bottom: 10px" class="supp-type">
+                    <span>Tính hẹn trả</span>
+                    @if (Model.SupplementType == 1)
+                    { 
+                        <span>tính lại từ đầu.</span>
+                    }
+                    else if (Model.SupplementType == 2)
+                    { 
+                        <span>tiếp tục tính</span>
+                    }
+                    else
+                    {
+                        <span>cộng thêm @Model.OffsetDay ngày</span>
+                    }
+                    <span style="margin-left: 20px;">Ngày hẹn trả mới: </span>
+                    <strong><span class="date-appointed">@ViewBag.NewDateAppointed</span></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <strong><span>Không có yêu cầu bổ sung nào</span></strong>
+}

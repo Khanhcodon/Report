@@ -1,0 +1,114 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.WorkTimeSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Time.WorkTime");
+    Layout = Layout = "~/Areas/Admin/Views/Time/_TimeLayout.cshtml";
+}
+<style type="text/css">
+    .lbl-field {
+        width: 100px;
+        display: inline-block;
+    }
+
+    .work-time {
+        padding-left: 20px;
+    }
+
+    .form-control {
+        width: auto;
+        display: inline;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $("#workTime a").addClass("selected");
+        $(".timepicker").timepicker({
+            'timeFormat': 'H:i',
+            'step': 15
+        });
+    });
+</script>
+@Html.Partial("_Notifications")
+@using (Html.BeginForm("WorkTime", "Time"))
+{
+    @Html.AntiForgeryToken()
+    <p><strong data-res="egov.resources.time.worktime">Giờ hành chính</strong></p>
+    <div class="work-time">
+        <label class="lbl-field" data-res="egov.resources.commonlabel.time.morning"></label>
+
+        @Html.LabelFor(model => model.AmStartTime)
+        @Html.TextBoxFor(model => model.AmStartTime, new { @class = "timepicker" })
+
+        @Html.LabelFor(model => model.AmEndTime)
+        @Html.TextBoxFor(model => model.AmEndTime, new { @class = "timepicker" })
+    </div>
+    <div class="work-time">
+        <label class="lbl-field" data-res="egov.resources.commonlabel.time.affternoon"></label>
+
+        @Html.LabelFor(model => model.PmStartTime)
+        @Html.TextBoxFor(model => model.PmStartTime, new { @class = "timepicker" })
+
+        @Html.LabelFor(model => model.PmEndTime)
+        @Html.TextBoxFor(model => model.PmEndTime, new { @class = "timepicker" })
+    </div>
+    <div class="saturdayTime">
+        <p><strong data-res="egov.resources.commonlabel.time.sat"></strong></p>
+        @Html.CheckBoxFor(model => model.IsPmWorkingSaturday)
+        @Html.LabelFor(model => model.IsPmWorkingSaturday)
+        <div class="work-time">
+            <label class="lbl-field" data-res="egov.resources.commonlabel.time.morning"></label>
+
+            @Html.LabelFor(model => model.AmSaturdayStartTime)
+            @Html.TextBoxFor(model => model.AmSaturdayStartTime, new { @class = "timepicker" })
+
+            @Html.LabelFor(model => model.AmSaturdayEndTime)
+            @Html.TextBoxFor(model => model.AmSaturdayEndTime, new { @class = "timepicker" })
+        </div>
+        <div class="work-time">
+            <label class="lbl-field" data-res="egov.resources.commonlabel.time.affternoon"></label>
+
+            @Html.LabelFor(model => model.PmSaturdayStartTime)
+            @Html.TextBoxFor(model => model.PmSaturdayStartTime, new { @class = "timepicker" })
+
+            @Html.LabelFor(model => model.PmSatudayEndTime)
+            @Html.TextBoxFor(model => model.PmSatudayEndTime, new { @class = "timepicker" })
+        </div>
+    </div>
+    <div>
+        @*@Html.CheckBoxFor(model => model.IsNormalTime)
+            @Html.LabelFor(model => model.IsNormalTime)
+            <div>
+                <i>Note: @Localizer("Setting.WorkTime.Fields.IsNormalTime.Decription")</i>
+            </div>*@
+
+        <div class="radio">
+            <label>
+                <input type="radio" name="WorkTimeType" id="WorkTimeType" value="1" @(Model.WorkTimeType == 1 ? "checked" : "")>
+                Tính thời gian xử lý văn bản: Bỏ qua ngày tiếp nhận khi tính hạn xử lý và hạn xử lý luôn tính đến 24h.
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="WorkTimeType" id="WorkTimeType" value="2" @(Model.WorkTimeType == 2 ? "checked" : "")>
+                Tính thời gian xử lý hồ sơ một cửa: tính bình thường
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="WorkTimeType" id="WorkTimeType" value="3" @(Model.WorkTimeType == 3 ? "checked" : "")>
+                Tính thời gian xử lý hồ sơ một cửa: bỏ qua ngày tiếp nhận không tính vào số ngày xử lý hồ sơ.
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="WorkTimeType" id="WorkTimeType" value="4" @(Model.WorkTimeType == 4 ? "checked" : "")>
+                Tính thời gian xử lý hồ sơ một cửa: vẫn tính ngày tiếp nhận nếu tiếp nhận sau 15h.
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="WorkTimeType" id="WorkTimeType" value="5" @(Model.WorkTimeType == 5 ? "checked" : "")>
+                Tính thời gian xử lý hồ sơ một cửa: Tính một cửa đến 24h
+            </label>
+        </div>
+    </div>
+}

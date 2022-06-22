@@ -1,0 +1,58 @@
+﻿
+<input type="hidden" value="${DoctypeId}" id="DoctypeId" />
+<div>
+    <div class="form-group">
+        <label>Loại hồ sơ</label>
+        <div>${DoctypeName}</div>
+    </div>
+    <div class="form-group">
+        <label>Loại giấy tờ, lệ phí:</label>
+        <div>{{if Type == 1}}Tiếp nhận{{else Type == 2}}Bổ sung{{else}}Trả kết quả{{/if}}</div>
+    </div>
+    <div class="row paper-fee">
+        <div class="col-md-8">
+            <label class="control-label">Giấy tờ</label>
+            <div>
+                <ul class="list-group ul-papers">
+                    {{each Papers}}
+                    <li class="doc-paper list-group-item">
+                        <span class="delete-paper" title="Xóa giấy tờ" value="${PaperId}">x</span>
+                        <input class="paper-id" type="checkbox" value="${PaperId}" {{if IsRequired}} checked {{/if}} />
+                        <span class="paper-name">${PaperName}</span>
+                        <input class="paper-amount form-control pull-right" type="text" value="${Amount}" />
+                    </li>
+                    {{/each}}
+                    <li class="list-group-item form-group doc-paper add-paper">
+                        <input class="paper-id pull-left" type="checkbox" value="0" checked />
+                        <input class="paper-name form-control pull-left" type="text" data-respholder="egov.resources.document.supplementary.addPaper" />
+                        <input class="paper-amount form-control pull-right" type="text" value="1" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <label class="control-label">Lệ phí</label>
+            <div>
+                <ul class="list-group ul-fees">
+                    {{each Fees}}
+                    <li class="doc-fee list-group-item">
+                        <span class="delete-fee" title="Xóa lệ phí" value="${FeeId}">x</span>
+                        <input class="fee-id" type="checkbox" value="${FeeId}" {{if IsRequired}} checked {{/if}} />
+                        <span class="fee-name">${FeeName}</span>
+                        <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                        <span class="pull-right moneyFormat"></span>
+                        <input class="fee-price pull-right form-control" type="text" value="${Price}" />
+                    </li>
+                    {{/each}}
+                    <li class="list-group-item doc-fee form-group add-paper">
+                        <input class="fee-id pull-left" type="checkbox" value="0" checked />
+                        <input class="fee-name form-control pull-left" type="text" data-respholder="egov.resources.document.supplementary.addFee" />
+                        <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                        <span class="pull-right moneyFormat"></span>
+                        <input class="fee-price form-control pull-right" type="text" placeholder="0" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

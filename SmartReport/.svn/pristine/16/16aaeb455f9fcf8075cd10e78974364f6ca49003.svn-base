@@ -1,0 +1,59 @@
+﻿<div class="row titlerow">
+    <div class="col-sm-16 col-md-16 col-lg-16">
+        <span data-res="egov.resources.question.listquestiontitle" class="listquestiontitle"></span>
+    </div>
+</div>
+<div class="row">
+    <ul class="list-group listQuestion">
+        {{each(i, question) questions}}
+        <li class="list-group-item" data-questionid="${question.QuestionId}">
+            <div class="row basicInfo">
+                <div class="col-sm-12 col-md-12 col-lg-12 wraptext">
+                    <span class="question-name">${question.Name}</span>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 wraptext text-right">
+                    <span class="question-detail">${question.Date}</span>
+                </div>
+                <!--<a href="#" class="col-sm-2 col-md-2 col-lg-2 btnViewDetail" data-res="egov.resources.question.btnShowDocumentDetail"></a>
+                <a href="#" class="col-sm-2 col-md-2 col-lg-2 btnQuickAnswer" data-res="egov.resources.question.quickanswer"></a>-->
+            </div>
+            <div class="row questionInfo">
+                <div class="row">
+                    <div class="col-sm-16 col-md-16 col-lg-16" data-restitle="egov.resources.question.content">
+                        <fieldset>
+                            <legend>
+                                <span class="legend">
+                                    <b data-restitle="egov.resources.question.citizenname">${question.AskPeople} </b>
+                                    {{if question.Email != null && question.Email.length > 0}}<b data-restitle="egov.resources.question.email"> - ${question.Email}</b>{{/if}}
+                                </span>
+                            </legend>
+                            <div class="questiondetail">
+                                ${question.Detail}
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row formanswer">
+                    <div class="col-sm-16 col-md-16 col-lg-16">
+                        <div class="btnShowQuickAnswer">
+                            <span class="caret"></span> &nbsp; <label class="large" data-res="egov.resources.question.btnAnswer"></label>
+                            <div class="pull-right">
+                                <input type="checkbox" class="checkbox chkShowAdvancedEdit" />&nbsp; 
+                                <label class="pull-right lblshowadvancededit" data-res="egov.resources.question.showadvancededit"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="advanceeditor" style="display: none">
+                                <div class="alhToolbar"></div>
+                                <div class="form-control divAnswer">${question.Answer}</div>
+                            </div>
+                            <textarea cols="3" class="form-control txtAnswer">${question.Answer}</textarea>
+                        </div>
+                        <button class="btn btn-default btnAnswer" data-res="egov.resources.question.btnAnswer"></button>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>

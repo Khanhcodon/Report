@@ -1,0 +1,47 @@
+﻿<div questionid="${QuestionId}">
+    <div class="list-group-item preview-compendium">
+        <div class="wraptext">
+            <span class="icon icon-info2"></span>
+            ${Name}
+        </div>
+    </div>
+    <div class="container-fluid list-group preview-info questionQuickViewWrap">
+        <fieldset>
+            <div class="form-group">
+                <div class="questionInfo">
+                    <div class="row">
+                        <div class="col-sm-16 col-md-16 col-lg-16 detail" data-restitle="egov.resources.question.content">
+                            ${Detail}
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                        </div>
+                        <div class="col-sm-10 col-md-10 col-lg-10 text-right" data-restitle="egov.resources.question.date">
+                            <b data-restitle="egov.resources.question.citizenname">${AskPeople} </b>
+                            {{if Email != null && Email.length > 0}}<b data-restitle="egov.resources.question.email"> - ${Email}</b>{{/if}}
+                            - ${Date}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row formanswer">
+            <div class="col-sm-16 col-md-16 col-lg-16">
+                <div class="btnShowQuickAnswer">
+                    <span class="caret"></span> &nbsp; <label class="large" data-res="egov.resources.question.quickanswer"></label>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <textarea cols="3" class="form-control txtAnswer">${Answer}</textarea>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="chkIsActive" checked /> <label for="chkIsActive" data-res="egov.resources.question.uptohome"></label>
+                    </div>
+                    <button class="btn btn-default btnQuickAnswer" questionid="${QuestionId}" data-res="egov.resources.buttons.confirm"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

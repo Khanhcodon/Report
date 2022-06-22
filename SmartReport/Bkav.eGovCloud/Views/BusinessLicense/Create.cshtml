@@ -1,0 +1,76 @@
+﻿@model Bkav.eGovCloud.Models.BusinessLicenseModel
+@{
+    ViewBag.Title = "Thêm mới giấy phép";
+    var allBusiness = ViewBag.allBusiness as string;
+    Layout = null;
+}
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" rel="stylesheet" type="text/css" />
+
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-1.7.2.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.nicescroll.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftAjax.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftMvcAjax.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.layout-latest.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../Scripts/bkav.egov/util/bkav.utilities.js"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+
+<!--Jquery FileUpload-->
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js"></script>
+
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileDownload.js"></script>
+<script type="text/javascript">
+    function abc() {
+        alert("aaa");
+    }
+    $(function () {
+        function openbusiness(docCopyId, businessTypeId, businessName) {
+            //            var frame = window.frameElement.name;
+            var business = new window.parent.egov.document.business(docCopyId, businessTypeId, businessName);
+            business.open(true);
+        }
+
+        $("#addBusinesses").click(function () {
+            var docCopyId = $("#DocumentCopyId").val();
+            var businessName = $("#BusinessName").val()
+            var businessTypeId = $("#BusinessTypeId").val();
+            openbusiness(docCopyId, businessTypeId, businessName);
+        });
+        $("#btnSubmit").click(function () {
+            var value = $("#addbusinesslicense").serializeArray();
+            var dataPost = {};
+            for (var i = 0; i < value.length; i++) {
+                dataPost[value[i].name] = value[i].value;
+            }
+            var data = JSON.stringify(dataPost);
+            $("#licenseinfo").val(data);
+            $("#docCopyId").val($("#DocumentCopyId").val());
+            debugger
+            window.parent.waitStatusAddBusinessLicense();
+            $("#formBusinessLiscense").submit();
+        })
+    })
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addbusinesslicense" }))
+{    
+    @Html.Partial("_CreateOrEditCitizen", Model)    
+}
+
+<form action="/BusinessLicense/CreateLicense" method="post" id="formBusinessLiscense">
+    <input type="hidden" name="licenseinfo" value="" id="licenseinfo" />
+    <input type="hidden" name="docCopyId" value="" id="docCopyId" />
+    <input type="button" name="name" value="Lưu" id="btnSubmit" />
+</form>

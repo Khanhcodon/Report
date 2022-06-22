@@ -1,0 +1,113 @@
+﻿@model IEnumerable<BackupRestoreManagerModel>
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreManager.Title.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.BackupRestoreManagerSearchModel;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input[type="submit"]').first().focus();
+        $('#deleteMulti').bind("click", function () {
+            if ($("#formdelete input[name=ids]").length > 0) {
+                eGovMessage.show(
+                    '@Html.Raw(Localizer("Customer.BackupRestoreManager.ConfirmMessage"))',
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $("#formdelete").submit();
+                    }
+                );
+            } else {
+                eGovMessage.show("@Localizer("Customer.BackupRestoreManager.NotSelectToDelete")");
+            }
+        });
+
+        $("#FromDate,#ToDate").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+
+    function onBegin() {
+        $("#divBackupRestoreManager").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divBackupRestoreManager').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divBackupRestoreManager').unblockpanel();
+    }
+
+    function searchManager(_el) {
+        var action = '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val();
+        $(_el).parent().attr('action', action);
+    }
+
+    function onSubmit(_el) {
+        searchManager(_el);
+        $(_el).parent().submit();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.backupRestoreManager"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/BackupRestoreManager/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search", null,
+    new AjaxOptions
+    {
+        UpdateTargetId = "divBackupRestoreManager",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }, new { @class = "form-inline" }))
+    {
+        @Localizer("Customer.BackupRestoreManager.Index.Search.Fields.IsDatabaseFile.Label")
+        <select name="IsDatabaseFile" id="IsDatabaseFile" style="display: inline; width: 150px" onchange="onSubmit(this);">
+            <option value="">@Localizer("Common.All.Label")</option>
+            <option value="True" @((search.IsDatabaseFile.HasValue && search.IsDatabaseFile.Value) ? "selected" : "")>Database</option>
+            <option value="False" @((search.IsDatabaseFile.HasValue && !search.IsDatabaseFile.Value) ? "selected" : "")>File</option>
+        </select>
+        @:&nbsp;
+
+        @Localizer("Customer.BackupRestoreManager.Index.Search.Fields.ToDate.Label")
+        <input type="text" name="FromDate"  id="FromDate"style = "width: 130px;margin-left:5px;margin-right:5px;" value="@search.FromDate" />
+        @:&nbsp;
+
+        @Localizer("Customer.BackupRestoreManager.Index.Search.Fields.ToDate.Label")
+        <input type="text" name="ToDate"  id="ToDate"style = "width: 130px;margin-left:5px;margin-right:5px;" value="@search.ToDate" />
+
+        <input type="submit" id="search" value="@Localizer("Common.Log.Index.Search.Button.Search")" class="btn" onclick="searchManager(this)" />
+
+        <p class="pull-right">
+            <input id="deleteMulti" name="deleteMulti" type="button" value="@Localizer("Common.Button.Delete")" class="btn" />
+        </p>
+    }
+    <br />
+    <div id="divBackupRestoreManager">
+        @Html.Partial("_PartialList")
+    </div>
+</div>

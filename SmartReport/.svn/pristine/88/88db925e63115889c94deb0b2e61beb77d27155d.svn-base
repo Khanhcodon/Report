@@ -1,0 +1,28 @@
+﻿<form class="form-horizontal search-form" id="formCreateCitizen">
+    <div class="col-md-16">
+        <div class="form-group form-group-sm" style="margin-bottom:7px">
+            <label class="col-md-4" data-res="">Tên Doanh nghiệp</label>
+            <div class="col-md-12">
+                <input type="text" name="CitizenName" value="" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-md-4" data-res="">Số điện thoại</label>
+            <div class="col-md-12">
+                <input type="text" name="PhoneNumber" value="" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-md-4" data-res="">Email</label>
+            <div class="col-md-12">
+                <input type="text" name="Email" value="" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-md-4" data-res="">Địa chỉ</label>
+            <div class="col-md-12">
+                <input type="text" name="Address" value="" class="form-control" />
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,84 @@
+﻿@model ProcessFunctionFilterModel
+
+<script type="text/javascript">
+    $(function () {
+        $('#Name').focus();
+
+        if ($("#IsSqlValue").prop("checked")) {
+            $('.node-name').show();
+        }   else {
+            $('.node-name').hide();
+        }
+
+        $('#IsSqlValue').click(function () {
+            if ($(this).prop("checked")) {
+                $('.node-name').show();
+            }
+            else {
+                $('.node-name').hide();
+            }
+        });
+    })
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.ProcessFunctionFilterId)
+<table>
+    <tr>
+        <td style="width: 300px">
+            @Html.EgovLabelFor(model => model.Name):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.FilterExpression):
+        </td>
+        <td>
+            @Html.DropDownList("FilterExpression")
+            @Html.ValidationMessageFor(model => model.FilterExpression)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.DataField):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DataField)
+            @Html.ValidationMessageFor(model => model.DataField)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Value):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Value, 5, 5, null)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @Html.EditorFor(model => model.IsSqlValue)
+            @Html.LabelFor(model => model.IsSqlValue)
+        </td>
+    </tr>
+    <tr class="node-name" style="display: none;">
+        <td></td>
+        <td>
+            @Html.EditorFor(model => model.IsAutoGenNodeName)
+            @Html.LabelFor(model => model.IsAutoGenNodeName)
+        </td>
+    </tr>
+    <tr class="node-name" style="display: none;">
+        <td>
+            @Html.EgovLabelFor(model => model.NodeNameTemp):
+        </td>
+        <td>
+            @Html.EditorFor(model => model.NodeNameTemp)
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,26 @@
+﻿@model ProcessFunctionFilterModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.EditFilter");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.Edit"), "Index")</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.StoreList"), "ProcessFunctionGroup")</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddStore"), "CreateGroup")</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.FilterList"), "ProcessFunctionFilter")</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddFilter"), "CreateFilter")</li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    <div id="divForm" class="bkavegov">
+        @Html.Partial("_Notifications")
+
+        <form action="EditFilter" method="post">
+            @{
+                Html.RenderPartial("_CreateOrEditFilter", Model);
+            }
+        </form>
+    </div>
+</div>

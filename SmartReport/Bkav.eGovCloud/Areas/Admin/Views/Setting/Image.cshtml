@@ -1,0 +1,106 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.ImageSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Image");
+    Layout = "_SettingLayout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+@*<style>
+    input[type="text"] {
+        width: 100px;
+    }
+</style>*@
+<script type="text/javascript">
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        if ($("#ColorBits").val() == 8) {
+            $('#IsGrayImage').removeAttr('disabled');
+        }
+    });
+
+    function onChangeCheckbox(item) {
+        if ($(item).is(':checked')) {
+            $('select[name="ColorBits"] option').removeAttr('selected');
+            $('select[name="ColorBits"] option[value="8"]').attr('selected', 'selected');
+        }
+    }
+
+    function onChangeSelect(item) {
+        if ($(item).val() == 8) {
+            $('#IsGrayImage').removeAttr('disabled');
+        }
+        else {
+            $('#IsGrayImage').attr('checked', false);
+            $('#IsGrayImage').attr('disabled', 'disabled');
+        }
+    }
+</script>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td style="padding-left: 0; width: 12%">
+                        @Html.EgovLabelFor(model => model.IsFileAttachment):
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsFileAttachment)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.NumberStartPage):
+                    </td>
+                    <td>
+                        <div>@Html.EditorFor(model => model.NumberStartPage)</div>
+                        <div>@Html.ValidationMessageFor(model => model.NumberStartPage)  </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.NumberEndPage):
+                    </td>
+                    <td>
+                        <div>@Html.EditorFor(model => model.NumberEndPage)</div>
+                        <div>@Html.ValidationMessageFor(model => model.NumberEndPage)  </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.ColorBits):
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.ColorBits, ViewBag.Bits as List<SelectListItem>, new { @onchange = "onChangeSelect(this);" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.IsGrayImage):
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsGrayImage, new { @onchange = "onChangeCheckbox(this);", disabled = "disabled" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.ZipImage):
+                    </td>
+                    <td>
+                        <div>@Html.EditorFor(model => model.ZipImage)</div>
+                        <div>@Html.ValidationMessageFor(model => model.ZipImage)</div>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>

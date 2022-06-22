@@ -1,0 +1,80 @@
+﻿@model IEnumerable<CatalogModel>
+@{
+    ViewBag.Title = Localizer("Common.Catalog.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .txt-filter {
+        margin-bottom: 10px;
+    }
+</style>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+
+<script type="text/javascript">
+    function deleteCatalog(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function Filter() {
+        var filter = $("#TxtFilter").val().toLowerCase();
+        if (filter != "") {
+            $('.table-main .td-filter').each(function () {
+                if ($(this).text().toLowerCase().indexOf(filter) < 0) {
+                    $(this).parent().hide();
+                }
+                else {
+                    $(this).parent().show();
+                }
+            });
+        }
+        else {
+            $('.table-main tr').show();
+        }
+    }
+
+    function onBegin() {
+        $("#divListCatalogs").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListCatalogs').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListCatalogs').unblockpanel();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-popup"></i>
+        <span data-res="egov.resources.sitemap.catalog"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/catalog/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Index.Search.Fields.CatalogName.Label") </span>
+    <input type="text" id="TxtFilter" class="txt-filter" onkeyup="Filter(event)" style="display: inline; width: 70%" />
+    <div id="divListCatalogs">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

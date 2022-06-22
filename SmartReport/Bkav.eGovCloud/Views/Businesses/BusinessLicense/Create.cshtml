@@ -1,0 +1,53 @@
+﻿@model Bkav.eGovCloud.Models.BusinessLicenseModel
+@{
+    ViewBag.Title = "Thêm mới giấy phép";
+    var allBusiness = ViewBag.allBusiness as string;
+    Layout = null;
+}
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.22.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.cookie.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.blockUI.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bkav.messagebox.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.nicescroll.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/MicrosoftAjax.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.ui.layout/jquery.layout-latest.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/jquery.jstree.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/_lib/jquery.cookie.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/_lib/jquery.hotkeys.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.contextmenu/jquery.contextMenu.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/underscore.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bkav.utilities.js")" type="text/javascript" ></script>
+<script src="@Url.Content("~/Scripts/bkav.blockpanel.js")" type="text/javascript"></script>
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.fileupload.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="../../../../Scripts/jquery.fileDownload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        function openbusiness(docCopyId, businessTypeId, businessName) {
+            //            var frame = window.frameElement.name;
+            var token = $("input[name='__RequestVerificationToken']").val();
+            var business = new window.parent.egov.document.business(docCopyId, businessTypeId, businessName, null, token);
+            business.open(true);
+        }
+
+        $("#addBusinesses").click(function () {
+            var docCopyId = $("#DocumentCopyId").val();
+            var businessName = $("#BusinessName").val()
+            var businessTypeId = $("#BusinessTypeId").val();
+            openbusiness(docCopyId, businessTypeId, businessName);
+        });
+    })
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addbusinesslicense" }))
+{    
+    @Html.Partial("_CreateOrEdit", Model)    
+}

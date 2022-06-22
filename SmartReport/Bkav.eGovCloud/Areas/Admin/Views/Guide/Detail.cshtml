@@ -1,0 +1,21 @@
+﻿@model GuideModel
+@{
+    ViewBag.Title = @Model.Name;
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script>
+    backUrl = "/admin/Guide";
+</script>
+<script>
+    $(document).ready(function () {
+        $("#control-btn").hide();
+    });
+</script>
+<div class="content-right" style="overflow:auto;">
+    <h2 id="content-title">@Model.Name</h2>
+    <hr />
+    <div id="content-view">
+        @Html.Raw(Model.Content)
+    </div>
+</div>

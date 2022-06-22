@@ -1,0 +1,143 @@
+﻿@model IEnumerable<TemplateModel>
+@{
+    var number = 0;
+}
+
+<style type="text/css">
+    #tblTemplate tr:first-child {
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    function deleteTemplate(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Template.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.Ok,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    $(function() {
+        $("#tblTemplate").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+    $(".table-main").addClass("table-bordered table-hover");
+    function addChild(id)
+    {
+        $.ajax({
+            url: "@Url.Action("AddChild")",
+            data: {parentId: id},
+            success: function (result) {
+                var $dialog = $("#config");
+                $dialog.html(result);
+                $dialog.dialog({
+                    modal: true,
+                    width: 1000,
+                    height: 600,
+                    title: "Thêm mẫu con",
+                    open: function () {
+                        $("#config #accordion").accordion({
+                            collapsible: true
+                        });
+                        if (editor)
+                            editor.destroy();
+                        editor = CKEDITOR.replace("Content", { toolbar: "Basic", height: 380 });
+                    },
+                    buttons: {
+                        "Thêm": function () {
+                            if (editor)
+                                editor.destroy();
+                            //$(".config #Content").val(escape($(".config #Content").val()));
+                            $("form[name='AddChild']").submit();
+                            $("#config").dialog("destroy");
+                        },
+                        "Hủy": function () {
+                            $("#config").dialog("destroy");
+                        }
+                    },
+                    close: function () {
+                        $("#config").html("");
+                    }
+                });
+            }
+        });
+    }
+</script>
+<div style="clear: both">
+</div>
+<input class="btn" type="button" value="Thêm mẫu con" onclick="addChild('@Model.First().TemplateId')" style="margin-bottom:5px"/>
+<table class="table-main table table-bordered table-hover" id="tblTemplate">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 200px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Admin.Template.Index.List.Column.Name")
+            </th>
+            <th class="header">
+                @Localizer("Admin.Template.Index.List.Column.Doctype")
+            </th>
+            <th class="header">
+                @Localizer("Admin.Template.Index.List.Column.Content")
+            </th>
+            <th class="header">
+                @Localizer("Common.Template.Index.List.Column.IsActive")
+            </th>
+            <th class="header">
+                @Localizer("Common.Template.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var template in Model)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                </td>
+                <td>@template.Name
+                </td>
+                <td>
+                    @(template.Doctype == null ? "" : template.Doctype.DocTypeName)
+                </td>
+                <td>
+                    <a href="#" onclick="openConfig(@template.TemplateId, '@template.Name')">Cấu hình</a>
+                </td>
+                <td>
+                    <input type="checkbox" @(template.IsActive ? "checked = 'checked'" : "")/>
+                </td>
+                <td>
+                    <a href="javascript:deleteTemplate(@(template.TemplateId))">@Localizer("Admin.Template.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(template.TemplateId)" style="display: none" action="@Url.Action("Delete", new { Id = template.TemplateId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" data-res="egov.resources.template.nodata">
+                    Không có mẫu nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

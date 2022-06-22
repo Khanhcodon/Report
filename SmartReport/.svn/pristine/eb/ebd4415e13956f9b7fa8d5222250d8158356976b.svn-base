@@ -1,0 +1,117 @@
+﻿@model IEnumerable<KeyWordModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+@using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListKeyWord", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.Search.Fields.KeyWordName.Label")</span>
+    <input style="display:inline;width:50%" class="form-control" type="text" name="keywordname" id="keywordname" value="@(ViewBag.KeyWordName ?? "")" />
+    <input class="btn" type="submit" id="search" onclick="$(this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblKeyWord").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblKeyWord").openLink({ urlOpen: '/admin/KeyWord/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+</script>
+<table class="table-main table" id="tblKeyWord">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("KeyWordName", Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.KeyWordName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        keywordName = ViewBag.KeyWordName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListKeyWord",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+                 
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var keyword in Model)
+            {
+                number += 1;
+            <tr data-id="@keyword.KeyWordId"> 
+                <td>@number
+                </td>
+                <td>@keyword.KeyWordName
+                </td>
+                
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.Edit.Button"), "Edit", new { Id = keyword.KeyWordId })
+                </td>
+                <td>
+                    <a href="javascript:deleteKeyWord(@(keyword.KeyWordId))">@Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(keyword.KeyWordId)" style="display: none" action="@Url.Action("Delete", new { Id = keyword.KeyWordId })" method="POST">
+                      @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">
+                    Không có từ khóa nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      keywordName = ViewBag.KeyWordName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListKeyWord",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

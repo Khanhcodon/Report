@@ -1,0 +1,61 @@
+﻿
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="mdl-layout__header mdl-layout__header--seamed" style="display: block;">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnbacktochat" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <div class="chat-header">
+                Chi tiết hội thoại
+            </div>
+        </div>
+    </div>
+    <div class="mdl-layout__content">
+        <div>
+            <div class="mdl-list" style="border-bottom: 1px solid rgba(0,0,0,0.3);">
+                <div class="mdl-list__item mdl-list__item--two-line">
+                    <span class="mdl-list__item-primary-content">
+                        <img src="${avatar}" alt="" class="mdl-list__item-avatar" />
+                        <span><b>${fullname}</b></span>
+                        <span class="mdl-list__item-sub-title">
+                            {{if isGroup}}
+                            <span>${members.length} thành viên</span>
+                            {{else}}
+                            ${jid}
+                            {{/if}}
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="mdl-list">
+                {{each departments}}
+                <div class="mdl-list__item mdl-list__item--two-line">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon" style="margin-bottom: 25px;color: #6b7fef;">supervisor_account</i>
+                        <span>${jobTitlesName}</span>
+                        <span class="mdl-list__item-sub-title">
+                            ${deptName}
+                        </span>
+                    </span>
+                </div>
+                {{/each}}
+            </div>
+            {{if isGroup}}
+            <div style="padding: 0 16px;">
+                <b>Danh sách thành viên</b>
+            </div>
+            <div class="mdl-list">
+                {{each members}}
+                <div class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                        <img class="mdl-list__item-avatar" src="${avatar}" />
+                        <span>${fullname}</span>
+                    </span>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

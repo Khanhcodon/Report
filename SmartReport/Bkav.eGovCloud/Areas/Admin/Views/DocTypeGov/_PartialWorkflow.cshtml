@@ -1,0 +1,97 @@
+﻿@{
+    var allWorkflows = ViewBag.AllWorkflows as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.WorkflowModel>;
+}
+<script type="text/javascript">
+    function updateDocTypeWorkflow(workflowIds) {
+        if (workflowIds == undefined || workflowIds.length <= 0) {
+            return;
+        }
+
+        $.ajax({
+            url: "@Url.Action("UpdateDocTypeWorkflow")",
+            type: "POST",
+            traditional: true,
+            data: {
+                workflowIds: workflowIds,
+                id: '@ViewBag.DoctypeId'
+            },
+            success: function () {
+               window.location.reload(true);
+            }
+        });
+    }
+
+    function updateWorkflow() {
+        var workflowIds = []
+        $("#tbodyWorkflow input[name=selected]").each(function () {
+            if ($(this).prop('checked')) {
+                workflowIds.push(parseInt($(this).attr("value")));
+            }
+        });
+
+        updateDocTypeWorkflow(workflowIds);
+    }
+
+</script>
+<div class="grid">
+    <div class="grid-header">
+        <div class="grid-header-wrap">
+            <table class="table-main table" id="tblDocTypeWWorkflow">
+                <colgroup>
+                    <col />
+                    <col style="width: 150px" />
+                    <col style="width: 100px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("Admin.DocTypeWorkflow.WorkflowName")
+                    </th>
+                    <th class="header text-center">
+                        @Localizer("Admin.DocTypeWorkflow.IsActivated")
+                    </th>
+                    <th class="header text-center">
+                        @Localizer("Admin.DocTypeWorkflow.Selected")
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+</div>
+<div class="grid-content">
+    <table class="table-main table">
+        <colgroup>
+            <col />
+            <col style="width: 150px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <tbody id="tbodyWorkflow">
+            @if (allWorkflows != null && allWorkflows.Any())
+            {
+                foreach (var item in allWorkflows)
+                {
+                    <tr>
+                        <td class="td-filter">
+                            @item.WorkflowName
+                    </td>
+                    <td style="text-align: center;">
+                        @Localizer(item.IsActivated ? "Admin.DocTypeWorkflow.Activated" : "Admin.DocTypeWorkflow.NotActivated")
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" name="selected" value='@item.WorkflowId' />
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Form.List.Null")
+            </td>
+        </tr>
+    }
+        </tbody>
+    </table>
+</div>
+</div>

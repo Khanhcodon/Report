@@ -1,0 +1,14 @@
+﻿@model Bkav.eGovCloud.Models.AuthorizeModel
+@{
+}
+<div class="Hb qd">
+    @using (Ajax.BeginForm("CreateAuthorize", "Account", new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "menuRight",
+
+    }, new { enctype = "multipart/form-data" }))
+    {     
+        @Html.Partial("_CreateOrEditAuthorize")
+    }
+</div>

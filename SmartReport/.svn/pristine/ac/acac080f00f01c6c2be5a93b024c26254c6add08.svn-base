@@ -1,0 +1,373 @@
+﻿@*Tạo mới, sửa loại hồ sơ liên quan đến hồ sơ 1 cửa*@
+@model DocTypeFormModel
+@Html.HiddenFor(model => model.DocType.StoreIds)
+@Html.HiddenFor(model => model.DocType.DocTypeId)
+@{
+    var allDocFields = ViewBag.AllDocFields as IEnumerable<DocFieldModel>;
+    var allCategorys = ViewBag.AllCategorys as IEnumerable<CategoryModel>;
+    var allCodes = ViewBag.AllCodes as IEnumerable<CodeModel>;
+
+
+    var allStores = ViewBag.AllStores as IEnumerable<StoreModel>;
+    var storeIds = ViewBag.StoreIds as List<int>;
+    var strStoreIds = "";
+    if (storeIds != null && storeIds.Any())
+    {
+        foreach (var docTypeStore in storeIds)
+        {
+            strStoreIds = strStoreIds == "" ? strStoreIds + docTypeStore : strStoreIds + ";" + docTypeStore;
+        }
+    }
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/combotree/comboTreePlugin.js")"></script>
+<link href="@Url.Content("~/Content/bkav.egov/libs/combotree/comboTreePlugin.css")" rel="stylesheet">
+<link href="@Url.Content("~/assets/vendor_components/MaterialDesign-Webfont-5.0.45/css/materialdesignicons.min.css")" rel="stylesheet">
+
+<style>
+    .form-control {
+        width: 100%;
+    }
+</style>
+<script src="../../../../Scripts/bkav.egov/libs/tinymce/tinymce.min.js"></script>
+
+<script>
+    tinyMCE.init({
+        mode: "exact",
+        selector: "#txtTextArea",
+        language: "vi",
+        height: "300",
+        width: "800",
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+        readonly: false
+    });
+</script>
+
+<script type="text/javascript">
+    var docTypeComboTree;
+    $(document).ready(function () {
+        $("form").submit(function () {
+            var strStoreIds = "";
+            $(".checkItemStore").each(function () {
+                if ($(this).is(':checked')) {
+                    strStoreIds = strStoreIds == "" ? strStoreIds + $(this).attr('id') : strStoreIds + ';' + $(this).attr('id');
+                }
+            });
+            $("#StoreIds").val(strStoreIds);
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        $("#DocType_DocTypeName").focus();
+        $("#DocType_ActionLevel").on("change", function (e) {
+            switch (this.value) {
+                case "1":
+                    $("#TimeJob_ScheduleTypeEnum").val("HangNam");
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    $("#TimeJob_ScheduleTypeEnum").val("HangQuy");
+                    break;
+                case "4":
+                    $("#TimeJob_ScheduleTypeEnum").val("HangThang");
+                    break;
+                case "5":
+                    $("#TimeJob_ScheduleTypeEnum").val("HangTuan");
+                    break;
+                case "6":
+                    $("#TimeJob_ScheduleTypeEnum").val("HangNgay");
+                    break;
+                default:
+            }
+            $("#TimeJob_ScheduleTypeEnum").trigger("change");
+        });
+
+        $('#docTypeComboTree').on('change', function (e) {
+            if (docTypeComboTree) {
+                var selectedIds = docTypeComboTree.getSelectedIds();
+                if (selectedIds.length > 0) $('#DocType_ParentId').val(selectedIds[0]);
+                else $('#DocType_ParentId').val(null);
+            }
+        });
+
+        $.ajax({
+            url: '/webapi/doctype/getsall',
+            type: "GET",
+            success: function (res) {
+                var parents = res.filter(r => !r.ParentId);
+                var data = parents.map(p => ({ id: p.DocTypeId, title: p.DocTypeName }));
+                addDocType(data, res);
+                docTypeComboTree = $('#docTypeComboTree').attr('disabled', false).comboTree({
+                    source: data,
+                    isMultiple: false
+                });
+            },
+            error: function (error) { }
+        });
+
+        // Tạo mã loại hồ sơ hệ thống tự sinh
+        $('#DocType_DocTypeCode').val(function () {
+            var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+            var string_length = 15;
+            var randomstring = '';
+            for (var i = 0; i < string_length; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                randomstring += chars.substring(rnum, rnum + 1);
+            }
+            return randomstring;
+        });
+
+        // Sự kiện change input tên báo cáo
+        $('#DocType_DocTypeName').change(function () {
+            // Thay đổi lại mã tự sinh
+           // $("#DocType_DocTypeCode").val(ghepMaTuSinh($(this).val(), $('#DocType_DocTypeCode').val()));
+            // Thay đổi lại tiêu đề báo cáo
+            $("#DocType_CompendiumDefault").val($(this).val());
+            // Thay đổi lại tiêu bảng
+            $("#Form_TableName").val(taoTenBang($(this).val()));
+        });
+    });
+
+    function ghepMaTuSinh(tenNhapVao, maSinhRa) {
+        var result = ""; 
+        if (maSinhRa != null && maSinhRa != undefined) {
+            var tachMa = maSinhRa.split("_");
+            result = tachMa.length > 1 ? tenNhapVao + "_" + tachMa[1] : tenNhapVao + "_" + tachMa[0];
+        } else {
+            result = tenNhapVao + "_";
+        }
+        return result;
+    }
+
+    function taoTenBang(tenBaoCao) {
+        tenBaoCao = tenBaoCao.replace(/ /g, "");
+        var tenBang = "";
+        if (tenBaoCao != null && tenBaoCao != undefined && tenBaoCao != "") {
+            tenBang = xoaDauVaKhoangTrang(tenBaoCao);
+            tenBang = tenBang.length > 47 ? tenBang.substring(0, 47) + dinhDangNgay(new Date()) : tenBang + dinhDangNgay(new Date());
+           
+        }
+        return tenBang;
+        // Đổi từ có dấu sang không dấu
+    }
+
+    function xoaDauVaKhoangTrang(chuoi) {
+        chuoi = chuoi.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        chuoi = chuoi.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        chuoi = chuoi.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        chuoi = chuoi.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        chuoi = chuoi.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        chuoi = chuoi.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        chuoi = chuoi.replace(/đ/g, "d");
+        chuoi = chuoi.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        chuoi = chuoi.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        chuoi = chuoi.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        chuoi = chuoi.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        chuoi = chuoi.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        chuoi = chuoi.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        chuoi = chuoi.replace(/Đ/g, "D");
+        chuoi = chuoi.replace(/ /g, "");
+        return chuoi;
+    }
+
+    // Định dạng ngày 12 ký tự yyMMddhhmmss
+    function dinhDangNgay(d = new Date) {
+        return [d.getFullYear().toString().substr(-2), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()]
+            .map(n => n < 10 ? `0${n}` : `${n}`).join("");
+    }
+
+    function addDocType(array, data) {
+        array.forEach(item => {
+            var children = data.filter(d => d.ParentId === item.id);
+            if (children.length) {
+                item.subs = children.map(c => ({ id: c.DocTypeId, title: c.DocTypeName }));
+
+                addDocType(item.subs, data);
+            }
+        });
+    }
+</script>
+
+<table>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DocType.CategoryId):
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.CategoryId, new SelectList(allCategorys, "CategoryId", "CategoryName"))
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%">
+            <label>Kỳ báo cáo</label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.ActionLevel, (IEnumerable<SelectListItem>)ViewBag.ListActionLevel)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.LevelId):
+        </td>
+        <td>
+
+            @Html.DropDownListFor(model => model.DocType.LevelId, (IEnumerable<SelectListItem>)ViewBag.ListLevel, new { @id = "productitem", style = "width:200px" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.DocFieldId)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.DocFieldId, new SelectList(allDocFields, "DocFieldId", "DocFieldName"))
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.ReportModeId)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.ReportModeId, new SelectList(ViewBag.AllReportModel, "ReportModeId", "Name",0), new { @class = "form-control"})
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.DocTypeCode)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.DocTypeCode, new Dictionary<string, object>() { { "type", "text"} })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Tên báo cáo</label>
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DocType.DocTypeName, new Dictionary<string, object>() { })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DocType.Content)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.Content, new { @class = "form-control", id = "txtTextArea" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Tiêu đề báo cáo
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.CompendiumDefault)
+        </td>
+    </tr>
+
+    <tr class="hidden">
+        <td>
+            @Html.LabelRequireFor(model => model.DocType.DocTypePermission)
+        </td>
+        <td>
+            @(Html.CheckboxListForEnum("DoctypePermissions", Model.DocType.DocTypePermissionInEnum ?? 0))
+            @Html.ValidationMessageFor(model => model.DocType.DoctypePermissions)
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td></td>
+        <td>
+            @Html.CheckBox("IsAllowOnline", Model.DocType.IsAllowOnline.GetValueOrDefault())
+            @Html.LabelFor(model => model.DocType.IsAllowOnline)
+        </td>
+    </tr>
+    <tr>
+        <td>Loại báo cáo cha</td>
+        <td>
+            @Html.HiddenFor(model => model.DocType.ParentId)
+            <input id="docTypeComboTree" type="text" disabled />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @Html.CheckBoxFor(model => model.DocType.IsActivated)
+            @Html.LabelFor(model => model.DocType.IsActivated)
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td></td>
+        <td style="z-index: -1;">
+            @Html.CheckBoxFor(model => model.DocType.HasOverdueInNode)
+            <label for="HasOverdueInNode">Không tính hạn giữ khi báo cáo, thống kê</label>
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.List")
+            <br />
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.Save.IsAllowed")
+        </td>
+        <td>
+            <table class="table-main table" id="tblStore">
+                <colgroup>
+                    <col style="width: 40px" />
+                    <col />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header-unresize text-center">
+                            <input type="checkbox" id="checkAllStore" @(allStores != null && allStores.Any() && storeIds != null && storeIds.Any() && allStores.Count() == storeIds.Count ? "checked='checked'" : "") />
+                        </th>
+                        <th class="header-unresize">
+                            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.StoreName")
+                        </th>
+                        <th class="header-unresize">Xem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (allStores != null && allStores.Any())
+                    {
+                        foreach (var store in allStores)
+                        {
+                            <tr>
+                                <td align="center">
+                                    @{ if (storeIds != null && storeIds.Any())
+                                        {
+                                            <input type="checkbox" id="@store.StoreId" @(storeIds.Contains(store.StoreId) ? "checked='checked'" : "") class="checkItemStore" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="@store.StoreId" class="checkItemStore" />
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @store.StoreName
+                                </td>
+                                <td>
+                                    <a href="/admin/Store/Edit/@store.StoreId">Xem</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.List.Null")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>

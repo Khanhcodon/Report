@@ -1,0 +1,60 @@
+﻿@model ResourceModel
+<script type="text/javascript">
+    $(function () {
+        $(document).bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                if ($("form").valid()) {
+                    $("form").submit();
+                } else {
+                    $(this).find('input.input-validation-error').first().focus();
+                }
+            }
+        });
+    })
+</script>
+
+<style>
+    .form-control {
+        width: 80%;
+    }
+</style>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-language"></i>
+        <span data-res="egov.resources.sitemap.resource"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/resource/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div>
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ResourceId)
+    <table style="width: 100%">
+        <tr>
+            <td class="col-md-1" style="padding-left:0; width: 150px">
+                @Html.EgovLabelFor(model => model.ResourceKey):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ResourceKey)
+                @Html.ValidationMessageFor(model => model.ResourceKey)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.EgovLabelFor(model => model.ResourceValue):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ResourceValue)
+                @Html.ValidationMessageFor(model => model.ResourceValue)
+            </td>
+        </tr>
+    </table>
+</div>

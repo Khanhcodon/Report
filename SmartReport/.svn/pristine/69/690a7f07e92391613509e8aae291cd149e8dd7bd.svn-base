@@ -1,0 +1,29 @@
+﻿<div class="row">
+    <div class="col-xs-2 col-sm-2">
+        <button id="btnhidemultiselection" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect pull-left">
+            <i class="material-icons">arrow_back</i>
+        </button>
+    </div>
+    <div class="col-xs-10 col-sm-10 wraptext">
+        <b id="selectionCount" class="list-group-item no-padding-left"></b>
+    </div>
+    <div class="col-xs-4 col-sm-4 text-right full-height">
+        <button id="multi-option"
+                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+            for="multi-option">
+            <li class="mdl-menu__item" id="btnmarkread">
+                <a href="#">
+                    <span class="icon icon-eye"></span><span>Đánh dấu đã đọc</span>
+                </a>
+            </li>
+            <li class="mdl-menu__item" id="btnmarkunread">
+                <a href="#">
+                    <span class="icon icon-eye-blocked"></span><span>Đánh dấu chưa đọc</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

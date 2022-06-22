@@ -1,0 +1,41 @@
+﻿using System;
+using Bkav.eGovCloud.Areas.Admin.Validator;
+using Bkav.eGovCloud.Web.Framework;
+
+namespace Bkav.eGovCloud.Areas.Admin.Models
+{
+    [FluentValidation.Attributes.Validator(typeof(InCatalogValueValidator))]
+    public class InCatalogValueModel : PacketModel
+    {
+        public InCatalogValueModel() : base() { }
+        /// <summary>
+        /// Lấy hoặc thiết lập Id của danh mục trên form
+        /// </summary>
+        public Guid InCatalogValueId { get; set; }
+
+        /// <summary>
+        /// Lấy hoặc thiết lập Tên danh mục
+        /// </summary>
+        [LocalizationDisplayName("InCatalogValue.CreateOrEdit.Fields.InCatalogValueName.Label")]
+        public string InCatalogValueName { get; set; }
+
+        [LocalizationDisplayName("InCatalogValue.CreateOrEdit.Fields.ParentId.Label")]
+        public Guid? ParentId { get; set; }
+
+        [LocalizationDisplayName("InCatalogValue.CreateOrEdit.Fields.InCatalogValueCode.Label")]
+        public string InCatalogValueCode { get; set; }
+
+        public Guid InCatalogId { get; set; }
+
+        public int Level { get; set; }
+
+    }
+
+    public class ImportInCatalogModel
+    {
+        public string tenchitieu { get; set; }
+        public string machitieu { get; set; }
+        public string duongdan { get; set; }
+        public string danhmuc { get; set; }
+    }
+}

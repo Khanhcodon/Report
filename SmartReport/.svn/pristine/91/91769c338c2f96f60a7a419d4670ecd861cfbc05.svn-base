@@ -1,0 +1,28 @@
+﻿<div id="Consult" class="consult">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group form-group-sm">
+                    <label class="col-md-16 text-left" data-res="egov.resources.transfer.ConsultContent">Nội dung xin ý kiến</label>
+                    <div class="col-md-16">
+                        <textarea class="form-control comment" rows="3" style="height: 75px"></textarea>
+                    </div>
+                </div>
+                <div class=" row form-group-sm">
+                    <label class="col-md-16 text-left" data-res="egov.resources.transfer.ConsultUser">Người xin ý kiến</label>
+                    <div class="col-md-16 dg-view"></div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group form-group-sm">
+                    <div class="col-md-16">
+                        <span class="bold" data-res="egov.resources.transfer.AnnouceUser">Nhận thông báo</span> <i data-res="egov.resources.transfer.AnnouceUserComment">(để xem)</i>
+                        <div class="private-anoun">
+                            <ul class="list-group"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

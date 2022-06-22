@@ -1,0 +1,254 @@
+﻿@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@using StackExchange.Profiling
+@{
+    ViewBag.Title = "Bkav eGovernment";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetUserLangCode();
+    var hasOnlineRegistration = (bool)ViewBag.HasOnlineRegistration;
+    var hasFAQ = (bool)ViewBag.HasFAQ;
+    var allTreeGroups = ViewBag.AllTreeGroups as IEnumerable<Bkav.eGovCloud.Models.TreeGroupModel>;
+}
+
+<link href="../../Content/bkav.egov/egovdocument.min.css" rel="stylesheet" />
+
+<link href="@Url.Content("~/Content/fonts-googleapis/css-roboto-300-400-400i-500-700.css")" rel="stylesheet">
+
+<link href="@Url.Content("~/Content/offline/offline." + @lang + ".css")" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/bkav/editor/css/bmailEditor.css" rel="stylesheet" />
+<link href="../../Content/bkav.egov/datepicker.css" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js?v=22")"></script>
+
+<style type="text/css">
+    .egov {
+        padding: 15px;
+        background: #e3e3e3;
+        background-image: url(../../Content/bkav.egov/images/bg_dn.png);
+        background-repeat: no-repeat;
+    }
+
+    .system-tree, .center-panel {
+        background: white;
+        border-radius: 5px;
+    }
+
+        .system-tree > ul.nav li > a {
+            padding: 10px 15px;
+            font-size: 15px;
+        }
+
+        .system-tree > ul.nav li {
+            /*border-bottom: 1px solid #e3e3e3;*/
+        }
+
+    .badge {
+        display: inline-block;
+        width: 28px;
+        height: 19px;
+        line-height: 19px;
+        border-radius: 5px;
+        background: #2196F3 !important;
+        color: white !important;
+    }
+
+    .user-profile {
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e3e3e3;
+    }
+
+        .user-profile .avatar {
+            border-radius: 50%;
+            width: 75px;
+        }
+
+        .user-profile .full-name {
+            font-size: 20px;
+            padding: 10px 0;
+        }
+
+    .table-hover > tbody > tr > td {
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    #ulTabs > li > a {
+        font-size: 15px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="egov full-height">
+    <div class="row full-height">
+        <div class="col-md-4">
+            <nav role="navigation" class="system-tree center-menu">
+                <div class="user-profile">
+                    <img class="avatar" src="@Url.Content(ViewBag.Avatar) " />
+                    <div class="full-name">
+                        @ViewBag.FullName
+                    </div>
+                </div>
+                <ul class="nav nav-pills nav-stacked" id="menu-document">
+                    @foreach (var item in allTreeGroups)
+                    {
+                        var nodeId = "child" + item.TreeGroupId;
+                        var groupid = "group_" + item.TreeGroupId;
+                        var target = "#" + nodeId;
+
+                        <li id="@groupid">
+                            <a class="list-group-item" data-toggle="collapse"
+                               data-parent="#menu-document" data-target="@target"
+                               href="#">
+                                <span class="node-name">@(item.IsShowUserFullName ? ViewBag.FullName : item.TreeGroupName)</span>
+                                <span class="badge reload qtooltip icon-spinner6"
+                                      data-restitle="egov.resources.index.reload"></span>
+                            </a>
+                            <ul id="@nodeId" data-id="@item.TreeGroupId"
+                                class="nav panel-collapse collapse in" role="menu"></ul>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-12 full-height">
+            <div class="app-list row">
+                <div class="flex-container">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview selected" data-app="calendar" onclick="changeApp(this, 'calendar')">
+                                <div class="overview-icon" style="background: #5677fc;">
+                                    <i class="material-icons">
+                                        calendar_today
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">7</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Lịch làm việc
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview" data-app="hsmc" onclick="changeApp(this, 'hsmc')">
+                                <div class="overview-icon" style="background: #8eb432;">
+                                    <i class="material-icons">
+                                        people
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">18</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        HS một cửa
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="xlvb" onclick="changeApp(this, 'xlvb')">
+                                <div class="overview-icon" style="background: #b24e30;">
+                                    <i class="material-icons">
+                                        folder_open
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">25</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Xử lý văn bản
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="email" onclick="changeApp(this, 'email')">
+                                <div class="overview-icon" style="background: #4f7414;">
+                                    <i class="material-icons">
+                                        email
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">12</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Thư điện tử
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="bmm" onclick="changeApp(this, 'bmm')">
+                                <div class="overview-icon" style="background: #5677fc;">
+                                    <i class="material-icons">
+                                        view_list
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">12</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Nhiệm vụ
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="center-panel center full-height" id="center">
+                <ul id="ulTabs" class="nav nav-tabs" role="tablist"></ul>
+                <div class="full-height" id="tabContents">
+                    <div class="full-height document-process tab-content" id="documentProcess">
+                        <div class="document-process-main full-height">
+                            <div id="documentList" class="document-list">
+                            </div>
+                        </div>
+                        <div class="preview-below document-process-preview">
+                            <div class="document-preview document-preview-below"></div>
+                        </div>
+                        <div class="preview-right document-process-preview">
+                            <div class="document-preview document-preview-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert egov-status" id="egovStatus">
+</div>
+
+@{
+    Html.RenderPartial("_Tokens");
+}
+
+<script>
+    egov.resources.avatar.path = "@ViewBag.AvatarPath";
+    //document.domain = '@ViewBag.ParentDomain';
+    egov.userid = @ViewBag.UserId;
+</script>
+
+
+<script type="text/javascript" src="http://reporting.quangninh.gov.vn:8000/web-apps/apps/api/documents/api.js"></script>
+<script src="/Scripts/require.js" data-main="@Url.Content("/Scripts/bkav.egov/main.js?v=" + (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds)"></script>

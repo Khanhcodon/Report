@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActiveQueryBuilder.InformixMetadataProvider</name>
+    </assembly>
+    <members>
+        <member name="T:ActiveQueryBuilder.Core.InformixMetadataProvider">
+            <summary> Metadata Provider for Informix Database Server. </summary>
+        </member>
+    </members>
+</doc>

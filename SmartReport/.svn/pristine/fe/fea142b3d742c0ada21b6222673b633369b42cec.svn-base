@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>eGovCloud: Page not found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <style>
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+            background: rgb(135,224,253); /* Old browsers */
+            background: -moz-radial-gradient(center, ellipse cover, rgba(135,224,253,1) 0%, rgba(83,203,241,1) 40%, rgba(5,171,224,1) 100%); /* FF3.6-15 */
+            background: -webkit-radial-gradient(center, ellipse cover, rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%); /* Chrome10-25,Safari5.1-6 */
+            background: radial-gradient(ellipse at center, rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        }
+
+        #main {
+            text-align: center;
+            width: 300px;
+            height: 200px;
+            margin: 20% auto;
+            padding: 15px 0;
+            text-shadow: 3px 3px 7px #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <h1 id="error">
+            ERROR
+        </h1>
+        <h2 id="notfound">
+            Sorry, Page not found
+        </h2>
+    </div>
+</body>
+</html>

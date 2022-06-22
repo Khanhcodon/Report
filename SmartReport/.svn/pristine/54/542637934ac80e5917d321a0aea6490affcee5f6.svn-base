@@ -1,0 +1,32 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.LanguageSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Language");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    <label style="width: 15%;" data-res="egov.resources.setting.general.language"></label><br />
+    <label>
+        @Html.RadioButtonFor(model => model.Language, Bkav.eGovCloud.Entities.Language.Vietnamese)
+        Vietnamese
+    </label>
+    <label>
+        @Html.RadioButtonFor(model => model.Language, Bkav.eGovCloud.Entities.Language.English)
+        English
+    </label>
+    <label>
+        @Html.RadioButtonFor(model => model.Language, Bkav.eGovCloud.Entities.Language.Lao)
+        Lao
+    </label>
+    <label>
+        @Html.RadioButtonFor(model => model.Language, Bkav.eGovCloud.Entities.Language.Cambodian)
+        Cambodian
+    </label><br />
+    <label>
+        @Html.CheckBoxFor(model => model.UseVietNameseTyping)
+        <span data-res="egov.resources.setting.general.useVietNameseTyping"></span>
+    </label>
+}

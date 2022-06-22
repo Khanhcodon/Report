@@ -1,0 +1,706 @@
+﻿@model DocColumnSettingModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var type = (int)ViewBag.Type;
+}
+<style>
+    .pagination>li>a, .pagination>li>span {
+    padding: 0px 6px;
+}
+</style>
+<script type="text/javascript">
+    var columnSetting = @(string.IsNullOrEmpty(Model.DisplayColumn) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DisplayColumn));
+    var defaultSortList = @(string.IsNullOrEmpty(Model.SortColumn) ? MvcHtmlString.Create("[]") : Html.Raw(Model.SortColumn));
+    var groupSetting = @(string.IsNullOrEmpty(Model.GroupColumn) ? MvcHtmlString.Create("[]") : Html.Raw(Model.GroupColumn));
+
+    var isValid = false;
+
+    $(function() {
+        $("#submit").off("click").bind("click",function() {
+            $("#submit-function").click();
+        });
+
+        $('input[type="text"]').first().focus();
+        $('input.input-validation-error').first().focus();
+
+        $("#tblColumnSetting, #tblColumnDefaultSort").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $('#tabs form:first').attr("data-bind", "submit: save");
+
+        bindSettings();
+    });
+
+    function bindSettings(){
+        //object cấu hình cho thiết lập các cột hiển thị
+        var columnLine = function(lines, columnName, displayName, width, enableSort, sortName, justify) {
+            var self = this;
+            self.columnName = columnName
+                ? ko.observable(columnName).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+            self.displayName = displayName
+                ? ko.observable(displayName).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } });
+            self.width = ko.observable(width);
+            self.enableSort = ko.observable(enableSort);
+            self.sortName = ko.observable(sortName);
+            self.justify = ko.observable(justify);
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+            self.background = ko.computed(function() {
+                var index = lines ? lines.indexOf(self) : 0;
+                return index % 2 == 1 ? 'whiteSmoke' : 'white';
+            });
+        };
+
+        //object cấu hình sắp xếp theo thứ tự
+        var defaultSortLine= function(lines, columnName, isDesc){
+            var self = this;
+            self.columnName = columnName
+                ? ko.observable(columnName).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+            self.isDesc = ko.observable(isDesc);
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+        };
+
+        var groupLine = function(lines, displayName, columnName, groupBy, hasDisplayCount){
+            var self = this;
+            self.displayName = displayName
+                ? ko.observable(displayName).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+            self.columnName = columnName
+                ? ko.observable(columnName).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+            self.groupBy = groupBy
+                ? ko.observable(groupBy).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+            self.hasDisplayCount = ko.observable(hasDisplayCount);
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+        };
+
+        var config = function(columnSetting , defaultSortList, groupSetting) {
+            var self = this;
+            self.columnLines = ko.observableArray([]);
+            if(columnSetting && $.isArray(columnSetting) && columnSetting.length > 0) {
+                columnSetting = _.sortBy(columnSetting, function(item) {
+                    return item.Order;
+                });
+
+                for(var i = 0; i < columnSetting.length; i ++) {
+                    self.columnLines.push(new columnLine(self.columnLines, columnSetting[i].ColumnName,
+                                                columnSetting[i].DisplayName, columnSetting[i].Width,
+                                                columnSetting[i].EnableSort, columnSetting[i].SortName, columnSetting[i].Justify));
+                }
+            }
+
+            self.cssActive = function (line ,item) {
+                if ((!line.justify() && item =="left") || item == line.justify()) {
+                    return "active";
+                }
+                return "";
+            };
+
+            self.disableSubmit = function(line, event) {
+                if(event.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            };
+
+            self.addColumn = function() {
+                self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false, null));
+                var allrow = $("#tblColumnSetting tbody tr");
+                allrow.eq(allrow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.keyEvent = function(line, event) {
+                if(line) {
+                    if(event.keyCode == 13) {
+                        var index = self.columnLines.indexOf(line);
+                        var allrow;
+                        if(index == self.columnLines().length - 1) {
+                            self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false, null));
+                            self.errors = ko.validation.group(self, { deep:true });
+                            allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(allrow.length - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        } else if(index > -1 && index < self.columnLines().length - 1){
+                            allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    } else if(event.keyCode == 38) {
+                        self.up(line, event);
+                    } else if(event.keyCode == 40) {
+                        self.down(line, event);
+                    }
+                }
+            };
+
+            self.removeColumn = function(line) {
+                self.columnLines.remove(line);
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.up = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index > 0) {
+                            var before = self.columnLines()[index - 1];
+                            var clone = new columnLine(self.columnLines, before.columnName(), before.displayName(), before.width(), before.enableSort(), before.sortName());//_.clone(self.columnLines()[index - 1]);
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort(), line.sortName());
+                            self.columnLines()[index - 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 38) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.down = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index < self.columnLines().length - 1) {
+                            var after = self.columnLines()[index + 1];
+                            var clone = new columnLine(self.columnLines, after.columnName(), after.displayName(), after.width(), after.enableSort(), after.sortName());
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort(), line.sortName());
+                            self.columnLines()[index + 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 40) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.save = function() {
+                isValid = validate(self);
+            };
+
+            self.errors = ko.validation.group(self, { deep:true });
+
+            self.lines = ko.observableArray([]);
+
+            if(defaultSortList && $.isArray(defaultSortList) && defaultSortList.length > 0) {
+                defaultSortList = _.sortBy(defaultSortList, function(item) {
+                    return item.index;
+                });
+                for(var i = 0; i < defaultSortList.length; i ++) {
+                    self.lines.push(new defaultSortLine(self.lines, defaultSortList[i].columnName, defaultSortList[i].isDesc));
+                }
+            }
+
+            //Thêm hàng mới
+            self.addColumnDefaultSorts = function() {
+                self.lines.push(new defaultSortLine(self.lines, null, false));
+                var allRow = $("#tblColumnDefaultSort tbody tr");
+                allRow.eq(allRow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.keyEventDefaultSorts = function(line, event) {
+                if(!line) {
+                    return;
+                }
+
+                if(event.keyCode == 13) {
+                    var index = self.lines.indexOf(line);
+                    var allrow;
+                    if(index == self.lines().length - 1) {
+                        self.lines.push(new defaultSortLine(self.lines, null, false));
+                        self.errors= ko.validation.group(self, { deep:true });
+                        allrow = $("#tblColumnDefaultSort tbody tr");
+                        if(allrow) {
+                            allrow.eq(allrow.length - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                        }
+                    } else if(index > -1 && index < self.lines().length - 1){
+                        allrow = $("#tblColumnDefaultSort tbody tr");
+                        if(allrow) {
+                            allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                        }
+                    }
+                } else if(event.keyCode == 38) {
+                    self.upDefaultSorts(line, event);
+                } else if(event.keyCode == 40) {
+                    self.downDefaultSorts(line, event);
+                }
+            };
+
+            self.removeColumnDefaultSorts = function(line) {
+                self.lines.remove(line);
+                self.errorsDefaultSorts = ko.validation.group(self, { deep:true });
+            };
+
+            self.upDefaultSorts = function(line, event) {
+                if(!line) {
+                    return;
+                }
+                var index = self.lines.indexOf(line);
+                if(index > -1) {
+                    if(index > 0) {
+                        var before = self.lines()[index - 1];
+                        var clone = new defaultSortLine(self.lines, before.columnName(), before.isDesc());
+                        var cloneLine = new defaultSortLine(self.lines, line.columnName(), line.isDesc());
+                        self.lines()[index - 1] = cloneLine;
+                        self.lines()[index] = clone;
+                        self.lines(self.lines());
+                        self.errors = ko.validation.group(self, { deep:true });
+                        if(event && event.keyCode == 38) {
+                            var allrow = $("#tblColumnDefaultSort tbody tr");
+                            if(allrow) {
+                                allrow.eq(index - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.downDefaultSorts = function(line, event) {
+                if(!line) {
+                    return;
+                }
+                var index = self.lines.indexOf(line);
+                if(index > -1) {
+                    if(index < self.lines().length - 1) {
+                        var after = self.lines()[index + 1];
+                        var clone = new defaultSortLine(self.lines, after.columnName(), after.isDesc());
+                        var cloneLine = new defaultSortLine(self.lines, line.columnName(), line.isDesc() );
+                        self.lines()[index + 1] = cloneLine;
+                        self.lines()[index] = clone;
+                        self.lines(self.lines());
+                        self.errors = ko.validation.group(self, { deep:true });
+                        if(event && event.keyCode == 40) {
+                            var allrow = $("#tblColumnDefaultSort tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.groupLines = ko.observableArray([]);
+            if(groupSetting && $.isArray(groupSetting) && groupSetting.length > 0) {
+                for(var i = 0; i < groupSetting.length; i ++) {
+                    self.groupLines.push(new groupLine(self.groupLines, groupSetting[i].displayName, groupSetting[i].columnName,
+                                            groupSetting[i].groupBy, groupSetting[i].hasDisplayCount));
+                }
+            }
+
+            //Thêm hàng mới
+            self.addColumnGroup = function() {
+                self.groupLines.push(new groupLine(self.groupLines, null, null, null, false));
+                var allRow = $("#tblColumnGroup tbody tr");
+                allRow.eq(allRow.length - 1).children('td').eq(0).children('input').focus();
+                self.errorsGroup = ko.validation.group(self, { deep:true });
+            };
+            
+            self.removeColumnGroup = function(line) {
+                self.groupLines.remove(line);
+                self.errorsGroup = ko.validation.group(self, { deep:true });
+            };
+
+            self.upGroup = function(line, event) {
+                if(!line) {
+                    return;
+                }
+                var index = self.groupLines.indexOf(line);
+                if(index > -1) {
+                    if(index > 0) {
+                        var before = self.groupLines()[index - 1];
+                        var clone = new groupLine(self.groupLines, before.displayName(), before.columnName(), before.groupBy(), before.hasDisplayCount());
+                        var cloneLine = new groupLine(self.groupLines, line.displayName(), line.columnName(), line.groupBy(), line.hasDisplayCount());
+                        self.groupLines()[index - 1] = cloneLine;
+                        self.groupLines()[index] = clone;
+                        self.groupLines(self.groupLines());
+                        self.errorsGroup = ko.validation.group(self, { deep:true });
+                        if(event && event.keyCode == 38) {
+                            var allrow = $("#tblColumnGroup tbody tr");
+                            if(allrow) {
+                                allrow.eq(index - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.downGroup = function(line, event) {
+                if(!line) {
+                    return;
+                }
+                var index = self.groupLines.indexOf(line);
+                if(index > -1) {
+                    if(index < self.groupLines().length - 1) {
+                        var after = self.groupLines()[index + 1];
+                        var clone = new groupLine(self.groupLines, after.displayName(), after.columnName(), after.groupBy(), after.hasDisplayCount());                        
+                        var cloneLine = new groupLine(self.groupLines, line.displayName(), line.columnName(), line.groupBy(), line.hasDisplayCount());
+                        self.groupLines()[index + 1] = cloneLine;
+                        self.groupLines()[index] = clone;
+                        self.groupLines(self.groupLines());
+                        self.errorsGroup = ko.validation.group(self, { deep:true });
+                        if(event && event.keyCode == 40) {
+                            var allrow = $("#tblColumnGroup tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    }
+                }
+            };
+            self.activeJustify = function (line, event) {
+                if(!line) {
+                    return;
+                }
+                var target = $(event.target).closest("li");
+                var $ul = target.parent();
+                $ul.find("li").removeClass("active");
+                target.addClass("active");
+                
+                var justify = $ul.find("li.active").data("justify");
+                var index = self.columnLines.indexOf(line);
+                var clone = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort(), line.sortName(), justify);//_.clone(self.columnLines()[index - 1]);
+                self.columnLines()[index] = clone;
+                self.columnLines(self.columnLines());
+                self.errors = ko.validation.group(self, { deep:true });
+            }
+        };
+
+        ko.applyBindings(new config(columnSetting, defaultSortList, groupSetting), document.getElementById('tabs'));
+    }
+
+    function validate(self) {
+        if(!$('form:first').validate().form()){
+            return false;
+        }
+
+        if(self.errors().length > 0) {
+            self.errors.showAllMessages();
+            return false;
+        }
+
+        var columnSettings = $.map(self.columnLines(), function(line) {
+            return line.columnName() ? {
+                ColumnName: line.columnName(),
+                DisplayName: line.displayName(),
+                SortName: line.sortName(),
+                Width: line.width() != '' ? line.width() : null,
+                EnableSort: line.enableSort() ? line.enableSort() : false,
+                Order: line.index(),
+                Justify: line.justify()
+            } : undefined;
+        });
+        $("#DisplayColumn").val(JSON.stringify(columnSettings));
+
+        var defaultSorts = $.map(self.lines(), function(line) {
+            return line.columnName() ? {
+                columnName: line.columnName(),
+                isDesc: line.isDesc() ? line.isDesc():false,
+                index: line.index()
+            } : undefined;
+        });
+        $("#SortColumn").val(JSON.stringify(defaultSorts));
+        var groupSetting = $.map(self.groupLines(), function(line) {
+            return line.columnName() ? {
+                displayName: line.displayName(),
+                columnName: line.columnName(),
+                groupBy:line.groupBy(),
+                hasDisplayCount: line.hasDisplayCount() ? line.hasDisplayCount():false,
+                index: line.index()
+            } : undefined;
+        });
+        $("#GroupColumn").val(JSON.stringify(groupSetting));
+
+        return true;
+    }
+
+    function onSaveBegin() {
+        return isValid;
+    }
+
+    function onSaveSuccess(result) {
+        if(result) {
+            if(result.error) {
+                eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                $(window).unblockpanel();
+            }
+            else  if(result.success) {
+                eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                $(window).unblockpanel();
+            }
+
+            document.location='@(Model.DocColumnSettingId > 0 ? "/admin/DocColumnSetting/Index" : "/admin/DocColumnSetting/Create")';
+        }
+    }
+</script>
+
+@using (Ajax.BeginForm(Model.DocColumnSettingId == 0 ? "Create" : "Edit",
+        new AjaxOptions { HttpMethod = "Post", OnBegin = "onSaveBegin", OnSuccess = "onSaveSuccess" }))
+{
+    <div>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.DocColumnSettingId)
+        @Html.HiddenFor(model => model.Type)
+        <table>
+            <tr>
+                <td style="width: 20%">
+                    @Html.EgovLabelFor(model => model.DocColumnSettingName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.DocColumnSettingName)
+                    @Html.ValidationMessageFor(model => model.DocColumnSettingName)
+                </td>
+            </tr>
+        </table>
+
+        <h4 data-res="egov.resources.processfunction.defaultdocumentsortconfig">Cấu hình sắp xếp văn bản mặc định</h4>
+        @Html.HiddenFor(model => model.SortColumn)
+        @Html.ValidationMessageFor(model => model.SortColumn)
+        <div id="listColumnDefaultSort">
+            <table class="table-main table" id="tblColumnDefaultSort">
+                <colgroup>
+                    <col style="width: 200px" />
+                    <col style="width: 200px" />
+                    <col style="width: 80px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.tableheader.sortcolumnname">
+                            Tên cột sắp xếp
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.sorttype">
+                            Kiểu sắp xếp(tăng hoặc giảm)
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.order">
+                            Thứ tự
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.delete"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach:lines'>
+                    <tr>
+                        <td>
+                            <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit , keyup: $parent.keyEventDefaultSorts }'
+                                   style="width: 90%" />
+                        </td>
+                        <td>
+                            <label>
+                                <input type="checkbox" data-bind="checked: isDesc" />
+                                <span data-res="egov.resources.commonlabel.deincrease">Giảm dần</span>
+                            </label>
+                        </td>
+
+                        <td align="center">
+                            <img src="@Url.Content("~/Content/Images/nav_up_green.png")" alt="Lên" data-bind='click: $parent.upDefaultSorts ' style="cursor: pointer" />
+                            <img src="@Url.Content("~/Content/Images/nav_down_blue.png")" alt="Xuống" data-bind='click: $parent.downDefaultSorts ' style="cursor: pointer" />
+                        </td>
+                        <td align="center">
+                            <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumnDefaultSorts ' style="cursor: pointer" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" data-bind='click: addColumnDefaultSorts' class="btn" data-res="egov.resources.commonlabel.addcolumn"></button>
+            <i style="font-size: 12px" data-res="egov.resources.processfunction.entertobreakpage">
+                (Dùng phím enter để xuống dòng (nếu ở dòng
+                cuối cùng thì thêm dòng mới), dùng phím lên xuống để sắp xếp cột)
+            </i>
+        </div>
+
+        <hr />
+
+        @if (type == 2)
+        {
+            <h4>Cấu hình nhóm dữ liệu</h4>
+            @Html.HiddenFor(model => model.GroupColumn)
+            @Html.ValidationMessageFor(model => model.GroupColumn)
+            <div id="listColumnGroup">
+                <table class="table-main table" id="tblColumnGroup">
+                    <colgroup>
+                        <col style="width: 200px" />
+                        <col style="width: 200px" />
+                        <col style="width: 200px" />
+                        <col style="width: 120px" />
+                        <col style="width: 80px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">
+                                Tên hiển thị nhóm
+                            </th>
+                            <th class="header">
+                                Tên cột hiển thị
+                            </th>
+                            <th class="header">
+                                Tên cột nhóm theo
+                            </th>
+                            <th class="header">
+                                Hiển thị số lượng
+                            </th>
+                            <th class="header">
+                                Thứ tự
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.delete"></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind='foreach:groupLines'>
+                        <tr>
+                            <td>
+                                <input data-bind='value: displayName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit , keyup: $parent.keyEventDefaultSorts }'
+                                       style="width: 90%" />
+                            </td>
+                            <td>
+                                <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit , keyup: $parent.keyEventDefaultSorts }'
+                                       style="width: 90%" />
+                            </td>
+                            <td>
+                                <input data-bind='value: groupBy, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit , keyup: $parent.keyEventDefaultSorts }'
+                                       style="width: 90%" />
+                            </td>
+                            <td>
+                                <input type="checkbox" data-bind="checked: hasDisplayCount" />
+                            </td>
+                            <td align="center">
+                                <img src="@Url.Content("~/Content/Images/nav_up_green.png")" alt="Lên" data-bind='click: $parent.upGroup ' style="cursor: pointer" />
+                                <img src="@Url.Content("~/Content/Images/nav_down_blue.png")" alt="Xuống" data-bind='click: $parent.downGroup ' style="cursor: pointer" />
+                            </td>
+                            <td align="center">
+                                <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumnGroup ' style="cursor: pointer" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" data-bind='click: addColumnGroup' class="btn" data-res="egov.resources.commonlabel.addcolumn"></button>
+                <i style="font-size: 12px" data-res="egov.resources.processfunction.entertobreakpage">
+                    (Dùng phím enter để xuống dòng (nếu ở dòng
+                    cuối cùng thì thêm dòng mới), dùng phím lên xuống để sắp xếp cột)
+                </i>
+            </div>
+
+            <hr />
+        }
+
+        <h4 data-res="egov.resources.processfunction.configlistbynode">Cấu hình danh sách tương ứng với node</h4>
+        @Html.HiddenFor(model => model.DisplayColumn)
+        @Html.ValidationMessageFor(model => model.DisplayColumn)
+        <div id="listColumn">
+            <table class="table-main table" id="tblColumnSetting">
+                <colgroup>
+                    <col />
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 150px" />
+                    <col />
+                    <col />
+                    <col style="width: 80px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.tableheader.columnname"></th>
+                        <th class="header" data-res="egov.resources.tableheader.displayname"></th>
+                        <th class="header" data-res="egov.resources.tableheader.width"></th>
+                        <th class="header" data-res="egov.resources.tableheader.isallowsort"></th>
+                        <th class="header" data-res="egov.resources.tableheader.sortcolumn"></th>
+                        <th class="header" data-res="egov.resources.tableheader.justify"></th>
+                        <th class="header" data-res="egov.resources.tableheader.sort"></th>
+                        <th class="header" data-res="egov.resources.tableheader.delete"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach: columnLines'>
+                    <tr data-bind="style: { 'background-color': background() }">
+                        <td>
+                            <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                   style="width: 90%" />
+                        </td>
+                        <td>
+                            <input data-bind='value: displayName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                   style="width: 90%" />
+                        </td>
+                        <td>
+                            <input data-bind='value: width, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                   style="width: 90%" />
+                        </td>
+                        <td align="center">
+                            <input type="checkbox" data-bind="checked: enableSort" />
+                        </td>
+                        <td>
+                            <input data-bind='value: sortName, valueUpdate: "afterkeydown", enable: enableSort' />
+                        </td>
+                        <td>
+                            <ul class="pagination justifyColumn" style="margin:0px" data-bind="value: justify">
+                                <li data-justify="left" data-bind='click:$parent.activeJustify, attr: { class: $parent.cssActive($data, "left") }'>
+                                    <a href="#">
+                                        <i class="icon-paragraph-left2"></i>
+                                    </a>
+                                </li>
+                                <li data-justify="center" data-bind='click:$parent.activeJustify, attr: { class: $parent.cssActive($data, "center") }'>
+                                    <a href="#">
+                                        <i class="icon-paragraph-center2"></i>
+                                    </a>
+                                </li>
+                                <li data-justify="right" data-bind='click:$parent.activeJustify, attr: { class: $parent.cssActive($data, "right") }'>
+                                    <a href="#">
+                                        <i class="icon-paragraph-right2"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                        <td align="center">
+                            <img src="@Url.Content("~/Content/Images/nav_up_green.png")" alt="Lên" data-bind='click: $parent.up' style="cursor: pointer" />
+                            <img src="@Url.Content("~/Content/Images/nav_down_blue.png")" alt="Xuống" data-bind='click: $parent.down' style="cursor: pointer" />
+                        </td>
+                        <td align="center">
+                            <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumn' style="cursor: pointer" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" data-bind='click: addColumn' class="btn" data-res="egov.resources.commonlabel.addcolumn"></button>
+            <i style="font-size: 12px" data-res="egov.resources.processfunction.entertobreakpage">
+                (Dùng phím enter để xuống dòng (nếu ở dòng
+                cuối cùng thì thêm dòng mới), dùng phím lên xuống để sắp xếp cột)
+            </i>
+        </div>
+    </div>
+
+    <div id="sticky" class="stuck" style="display: none">
+        <input value="@(Model.DocColumnSettingId > 0 ? @Localizer("Common.Update.Label") : @Localizer("Common.Create.Label"))" type="submit" id="submit-function" />
+        <span id="message" style="color: red; display: none"></span>
+    </div>
+}
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

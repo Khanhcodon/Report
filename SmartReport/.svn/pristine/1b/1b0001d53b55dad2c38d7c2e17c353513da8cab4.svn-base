@@ -1,0 +1,103 @@
+﻿@model LogSearchModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Log.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@*<div class="bkavegov-content-title">
+        <h3>Nhật kí hệ thống</h3>
+    </div>*@
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('input[type="submit"]').first().focus();
+
+        $('#deleteLogs').click(function () {
+            if ($("#formdelete input[name=logids]").length > 0) {
+                eGovMessage.show(
+                    '@Html.Raw(Localizer("Customer.Logs.ConfirmMessage"))',
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $("#formdelete").submit();
+                    }
+                );
+            } else {
+                eGovMessage.show("@Localizer("Customer.Logs.NotSelectToDelete")");
+            }
+        });
+
+        $("#FromDate,#ToDate").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+
+    setInterval(function () { window.location.reload(); }, 5000);
+
+    function onBegin() {
+        $("#divLogs").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divLogs').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divLogs').unblockpanel();
+    }
+
+    function clearLog(target) {
+        eGovMessage.show(
+            '@Localizer("Common.Log.Index.ClearLog.ConfirmMessage")',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $(target).parent().submit();
+            }
+        );
+        return false;
+    }
+
+
+</script>
+@Html.Partial("_Notifications")
+@using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divLogs", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }, null, new { @class = "form-inline" }))
+{
+    @Html.LabelFor(model => model.FromDate)
+    @Html.TextBoxFor(model => model.FromDate, new { @style = "width: 100px;margin-left:5px;margin-right:5px;" })
+    @Html.LabelFor(model => model.ToDate)
+    @Html.TextBoxFor(model => model.ToDate, new { @style = "width: 100px;margin-left:5px" })
+    <input type="submit" id="search" value="@Localizer("Common.Log.Index.Search.Button.Search")" onclick="$(this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())" />
+}
+<div class="pull-right">
+    <span>Tải lại trang trong</span>
+    
+    <input type="text" />
+    <span>(s)</span>
+</div>
+<div id="divLogs">
+    @{
+        Html.RenderPartial("_PartialList");
+    }
+</div>
+<p>
+    @using (Html.BeginForm("ClearLog", "Log", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input onclick="return clearLog(this);" type="submit" value="@Localizer("Common.Log.Index.ClearLog.Button.ClearLog")" />
+        <input id="deleteLogs" name="deleteLogs" type="button" value="" data-res="egov.resources.log.deleteSelection" />
+    }
+
+</p>

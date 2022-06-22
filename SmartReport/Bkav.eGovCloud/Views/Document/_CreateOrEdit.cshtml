@@ -1,0 +1,459 @@
+﻿@model Bkav.eGovCloud.Models.DocumentModel
+@using Bkav.eGovCloud.Core.Utils;
+@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@{
+    var attachments = ViewBag.Attachments as string;
+    var relations = Model.RelationModels.StringifyJs();
+    var categoryBusiness = (CategoryBusinessTypes)ViewBag.CategoryBusiness;
+    var organization = ViewBag.Organization as string;
+    var listContents = Model.DocumentContents;
+    var hasLicense = (bool)(ViewBag.License ?? false);
+}
+<script type="text/javascript">
+    egov.cshtml.document.categoryBusiness='@categoryBusiness';
+    egov.cshtml.document.currentCultureName = '@(CultureHelper.GetCurrentCultureName())';
+    egov.cshtml.document.relations = @(string.IsNullOrEmpty(relations) ? MvcHtmlString.Create("[]") : Html.Raw(relations));
+    egov.cshtml.document.attachments = @(string.IsNullOrEmpty(attachments) ? MvcHtmlString.Create("[]") : Html.Raw(attachments));
+    egov.cshtml.document.organization = @(string.IsNullOrEmpty(organization) ? MvcHtmlString.Create("[]") : Html.Raw(organization));
+    egov.cshtml.document.template = @(string.IsNullOrEmpty(ViewBag.Template) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.Template));
+    egov.cshtml.document.transferType = @ViewBag.TransferTypes;
+    egov.cshtml.document.nodeCurrent = @(ViewBag.NodeCurrent == null ? 0 : (int)ViewBag.NodeCurrent);
+    egov.cshtml.document.isChangeExpireProcess = false;
+    egov.cshtml.document.transferplan = @(string.IsNullOrEmpty(ViewBag.DestinationPlan) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.DestinationPlan));
+</script>
+
+@Html.HiddenFor(model => model.DocumentId)
+@Html.HiddenFor(model => model.DocumentCopyId)
+@Html.HiddenFor(model => model.ResultStatus)
+<div id="layout" class="document-info">
+</div>
+<div class="document-extend">
+    @if (!Model.DocumentId.Equals(Guid.Empty))
+    {
+        <div class="process-status">
+            <div class="main-title">
+                <span>Tổng hợp tình trạng xử lý</span>
+            </div>
+            <div class="document-status" style="display: none;">
+                <span>@ViewBag.DocumentCopyStatusText</span>
+                <span>Kết quả duyệt:
+                    <span>@(Model.IsSuccess == null ? "Chưa duyệt" : (Model.IsSuccess == true ? "Đồng ý" : "Từ chối"))</span></span>
+                <span>Người đang giữ: <span>@(ViewBag.CurrentUser ?? string.Empty)</span></span>
+                <span>Trạng thái: <span>@(Model.Status == 4 ? "Đã kết thúc" : "Đang xử lý")</span></span>
+            </div>
+            <div class="process-info">
+                <div class="status-title">
+                    <span>Ý kiến đồng xử lý (<span class="coProcess-count"></span>)</span>
+                </div>
+            </div>
+        </div>
+        <div class="comments">
+            <div class="main-title">
+                <span>Tổng hợp ý kiến giải quyết</span>
+                <span class="view-all"></span>
+            </div>
+        </div>
+    }
+    @{
+        Html.RenderPartial("_FormView", Model);
+    }
+</div>
+
+<div style="display: none">
+    <div id="wrapCompendium">
+        <div class="label-field">
+            @Html.LabelRequireFor(model => model.Compendium)
+            @Html.Hidden("DefaultCompendium", Model.Compendium)
+        </div>
+        <div class="field">
+            @Html.TextAreaFor(model => model.Compendium, new { rows = "2", cols = "20" })
+            @Html.ValidationMessageFor(model => model.Compendium)
+        </div>
+    </div>
+    <div id="wrapComment">
+        <div class="label-field">
+            <span>Ý kiến xử lý</span>
+        </div>
+        <div class="field">
+            @Html.TextAreaFor(model => model.Comments.Content, new { rows = "2", cols = "20" })
+        </div>
+    </div>
+    <div id="wrapDoctype">
+        <div class="label-field">
+            @Html.LabelFor(model => model.DocTypeId)
+        </div>
+        <div class="field">
+            @if (Model.DocumentId == Guid.Empty)
+            {
+                @Html.DropDownList("DocTypeId", null, new { onchange = "document.location = '/Document/Create/' + this.value;" })
+            }
+            else
+            {
+                @Html.DropDownList("DocTypeId", null, new { disabled = "disabled" })
+            }
+        </div>
+    </div>
+    <div id="wrapCategory">
+        <div class="label-field">
+            @Html.LabelFor(model => model.CategoryId)
+        </div>
+        <div class="field">
+            @Html.DropDownList("CategoryId")
+        </div>
+    </div>
+    <div id="wrapUrgent">
+        <div class="label-field">
+            @Html.LabelFor(model => model.UrgentId)
+        </div>
+        <div class="field">
+            @Html.DropDownList("UrgentId")
+        </div>
+    </div>
+    <div id="wrapInOutPlace">
+        <div class="label-field">
+            @Html.LabelFor(model => model.InOutPlace)
+        </div>
+        <div class="field">
+            @Html.DropDownListFor(model => model.InOutPlace, ViewBag.ListInOutPlace as IEnumerable<SelectListItem>)
+            @Html.ValidationMessageFor(model => model.Keyword)
+        </div>
+    </div>
+    <div id="wrapDateAppointed">
+        <div class="label-field">
+            @Html.LabelFor(model => model.DateAppointed)
+        </div>
+        <div class="field">
+            @if ((bool)ViewBag.IsCreatingDocument)
+            {
+                if (!IsXuLyVanBanEdition && categoryBusiness == CategoryBusinessTypes.Hsmc)
+                {
+                <div class="thuly" style="display: inline-block; float: left">
+                    <select id="ddlDateAppoint"
+                        style="width: 50px">
+                        @for (var year = 1; year <= 365; year++)
+                        {
+                            <option value="@year" @(Model.ExpireProcess.ToString() == year.ToString() ? "selected='selected'" : "")>
+                                @year
+                            </option>
+                        }
+                    </select>
+                    <span style="margin-left: 10px;">Ngày</span>
+                </div>
+                }
+                @Html.TextBox("DateAppointed", Model.DateAppointed.HasValue ? Model.DateAppointed.Value.ToString("g") : "", new { style = "float: right; " + (categoryBusiness == CategoryBusinessTypes.Hsmc ? "width: 50%;" : "width: 100%;") })
+            }
+            else
+            {
+                <strong><span class="dateappoint">@Model.DateAppointed</span></strong>
+            }
+        </div>
+    </div>
+    <div id="wrapDateResponse">
+        <div class="label-field">
+            <span>Hồi báo</span>
+        </div>
+        <div class="field">
+            <div style="display: inline-block; margin-top: 4px">
+                <input type="checkbox" name="tabIndex" @(Model.DateResponse.HasValue ? "checked='checked'" : "")  />&nbsp;Yêu
+                cầu hồi báo
+            </div>
+            <input name="DateResponse" class="tabIndex" id="DateResponse" @(Model.DateResponse.HasValue ? "" : "disabled='disabled'") style="width: 50%;float:right" type="text" value="@(Model.DateResponse.HasValue ? Model.DateResponse.Value.ToShortDateString() : DateTime.Now.ToShortDateString())"/>
+        </div>
+    </div>
+    <div id="wrapDocumentRelation">
+        <div class="relation">
+            <table class="table-main" id="tblRelations">
+                <colgroup>
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">Trích yếu văn bản liên quan
+                        </th>
+                        <th class="header">Số hiệu
+                        </th>
+                        <th class="header">Người xử lý
+                        </th>
+                        <th class="header">Ngày tạo
+                        </th>
+                        <th class="header">Hình thức
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* @if (Model.RelationModels != null)
+                    {
+                        foreach (var doc in Model.RelationModels)
+                        { 
+                        <tr>
+                            <td>@doc.Compendium
+                                <input name="DocRelationId" value="@doc.RelationId " type="hidden" />
+                            </td>
+                            <td>@doc.DocCode
+                            </td>
+                            <td>@doc.CitizenName
+                            </td>
+                            <td>@doc.DateCreated.ToString()
+                            </td>
+                            <td>@doc.CategoryName
+                            </td>
+                        </tr>
+                        }
+                    }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="wrapAttachment">
+        <div class="file" id="divFiles">
+            <span style="display: none;">
+                <input id="fileupload" type="file" name="files" data-url="@Url.Action("UploadTemp", "Attachment")" multiple style="position: absolute;top: 0;right: 0;margin: 0;opacity: 0;-ms-filter: 'alpha(opacity=0)';font-size: 200px;direction: ltr;cursor: pointer;"/>
+            </span>
+            <table class="table-main" id="tblFiles">
+                <colgroup>
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 200px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">Tên tệp đính kèm
+                        </th>
+                        <th class="header">Kích thước
+                        </th>
+                        <th class="header">Phiên bản
+                        </th>
+                        <th class="header">Người cập nhật cuối
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (categoryBusiness == CategoryBusinessTypes.VbDen)
+    {
+        <div id="wrapOrganization">
+            <div class="label-field">
+                @Html.LabelRequireFor(model => model.Organization)
+            </div>
+            <div class="field">
+                @Html.EditorFor(model => model.Organization)
+                @Html.ValidationMessageFor(model => model.Organization)
+            </div>
+        </div>
+        <div id="wrapDocCode">
+            <div class="label-field">
+                <label for="DocCode">
+                    Số/ký hiệu</label>&nbsp;<span class="spanRequire">*</span>
+            </div>
+            <div class="field">
+                @Html.EditorFor(model => model.DocCode)
+                @*@Html.ValidationMessageFor(model => model.Compendium)*@
+            </div>
+        </div>
+        <div id="wrapDateArrived">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DateArrived)
+            </div>
+            <div class="field">
+                @Html.TextBox("DateArrived", Model.DateArrived.HasValue ? Model.DateArrived.Value.ToString("d") : "")
+            </div>
+        </div>
+        <div id="wrapDatePublished">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DatePublished)
+            </div>
+            <div class="field">
+                @Html.TextBox("DatePublished", Model.DatePublished.HasValue ? Model.DatePublished.Value.ToString("d") : "")
+            </div>
+        </div>
+        <div id="wrapStore">
+            <div class="label-field">
+                <label for="StoreId">
+                    Sổ văn bản</label>
+            </div>
+            <div class="field">
+                @Html.DropDownList("StoreId", "")
+            </div>
+        </div>
+        <div id="wrapInOutCode">
+            <div class="label-field">
+                @Html.LabelFor(model => model.InOutCode)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.InOutCode)
+            </div>
+        </div>
+        <div id="wrapSecurity">
+            <div class="label-field">
+                @Html.LabelFor(model => model.SecurityId)
+            </div>
+            <div class="field">
+                @Html.DropDownList("SecurityId")
+            </div>
+        </div>
+        <div id="wrapTotalPage">
+            <div class="label-field">
+                @Html.LabelFor(model => model.TotalPage)
+            </div>
+            <div class="field">
+                @Html.DropDownListFor(model => model.TotalPage, ViewBag.ListTotalPage as List<SelectListItem>, "Chọn số trang")
+                @Html.ValidationMessageFor(model => model.TotalPage)
+            </div>
+        </div>
+        <div id="wrapDocField">
+            <div class="label-field">
+                Lĩnh vực
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.DocFieldIds)
+                @Html.ListBox("ListDocField")
+                @Html.ValidationMessageFor(model => model.DocFieldIds)
+            </div>
+        </div>
+        <div id="wrapKeyword">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Keyword)
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.Keyword)
+                @Html.ListBox("ListKeyword")
+                @Html.ValidationMessageFor(model => model.Keyword)
+            </div>
+        </div>
+        <div id="wrapSendType">
+            <div class="label-field">
+                @Html.LabelFor(model => model.SendTypeId)
+            </div>
+            <div class="field">
+                @Html.DropDownListFor(model => model.SendTypeId, ViewBag.ListSendTypeId as IEnumerable<SelectListItem>)
+                @Html.ValidationMessageFor(model => model.SendTypeId)
+            </div>
+        </div>
+    }
+
+    @if (categoryBusiness == CategoryBusinessTypes.Hsmc)
+    { 
+        <div id="wrapDocCode">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocCode)
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.DocCode)
+                <strong>@Html.DisplayFor(model => model.DocCode)</strong>
+            </div>
+        </div>
+        <div id="wrapCitizenName">
+            <div class="label-field">
+                @Html.LabelFor(model => model.CitizenName)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.CitizenName)
+                @Html.ValidationMessageFor(model => model.CitizenName)
+            </div>
+        </div>
+        <div id="wrapAddress">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Address)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Address)
+            </div>
+        </div>
+        <div id="wrapPhone">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Phone)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Phone, new { alt = "phone-vn" })
+                @Html.ValidationMessageFor(model => model.Phone)
+            </div>
+        </div>
+        <div id="wrapPapers">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocPapers)
+            </div>
+            <div class="field">
+                <ul class="papers">
+                    @if (Model.DocPapers.Any())
+                    {
+                        foreach (var paper in Model.DocPapers)
+                        {
+                        <li class="doc-paper">
+                            <div class="label-field" style="width: 20px; margin-left: 0;">
+                                <input type="checkbox" value="@paper.DocPaperId " @(paper.IsRequired ? "checked='checked'" : "") class="paper-id"/>
+                            </div>
+                            <div class="field">
+                                <span class="paper-name" style="width:80%" title="@paper.PaperName">@paper.PaperName</span>
+                                <input type="text" value="@paper.Amount" class="paper-amount" style="width: 16%"/>
+                            </div>
+                        </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div id="wrapIdentityCard">
+            <div class="label-field">
+                @Html.LabelFor(model => model.IdentityCard)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.IdentityCard, new { alt = "cmnd" })
+                @Html.ValidationMessageFor(model => model.IdentityCard)
+            </div>
+        </div>
+        <div id="wrapEmail">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div id="wrapCommune">
+            <div class="label-field">
+                Xã phường
+            </div>
+            <div class="field">
+                <input type="text" class="tabIndex" tabindex="11" />
+            </div>
+        </div>
+        <div id="wrapFees">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocFees): <span id="totalFee" style="font-weight: bold">0</span> <b>Vnd</b>
+            </div>
+            <div class="field">
+                <ul class="fees">
+                    @if (Model.DocFees.Any())
+                    {
+                        foreach (var fee in Model.DocFees)
+                        {
+                        <li class="doc-fee">
+                            <div class="label-field" style="width: 20px; margin-left: 0;">
+                                <input  class="fee-id" type="checkbox" value="@fee.DocFeeId"  @(fee.IsRequired ? "checked=checked" : "") />
+                            </div>
+                            <div class="field">
+                                <span class="fee-name" style="width: 70%" title="@fee.FeeName">@fee.FeeName</span>
+                                <span class="price-unit">Vnd</span>
+                                <input class="fee-price"  type="text" value="@fee.Price" style="width: 20%"/>
+                            </div>
+                        </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="../../Scripts/require.js" data-main="../../Scripts/bkav.egov/views/document/main"></script>

@@ -1,0 +1,300 @@
+﻿@model PermissionSettingModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var allPositions = ViewBag.AllPositions as string;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allUsers = ViewBag.AllUsers as string;
+}
+<script type="text/javascript">
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allPositions = @(string.IsNullOrEmpty(allPositions) ? MvcHtmlString.Create("[]") : Html.Raw(allPositions));
+    var selectedUserIds = @(string.IsNullOrEmpty(Model.UserHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.UserHasPermission));
+    var selectedDepartmentPositions = @(string.IsNullOrEmpty(Model.DepartmentPositionHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DepartmentPositionHasPermission));
+    var selectedPositionIds = @(string.IsNullOrEmpty(Model.PositionHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.PositionHasPermission));
+    var isValid = false;
+
+    $(function() {
+
+        $("#submit").unbind("click").bind("click",function() {
+            $("#submit-function").click();
+        });
+
+        $('input[type="text"]').first().focus();
+        $('input.input-validation-error').first().focus();
+
+        $("#tblPermissions").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#positionTemplate").tmpl(allPositions).appendTo("#position");
+
+        $("#selectedDepartmentPosition").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allDepartments, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedDepartmentPosition").val(ui.item.label);
+                $("#idSelectedDepartment").val(ui.item.value);
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#selectedUser").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allUsers, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedUser").val('');
+                var exist = _.find(selectedUserIds, function(item) {
+                    return item === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUserIds.push(selected.value);
+                        var noresult = $("#tblPermissions tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+
+                        $("#tblPermissions tbody").append("<tr><td>@Localizer("User.CreateOrEdit.Tab.User") <input type='hidden' value='" + selected.value + "' name='UserIds' /></td><td>" + selected.label + "</td><td><a href='javascript:deleteUser(" + selected.value + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+                        $("#tblPermissions").grid('refresh');
+                    }
+                }
+                return false;
+            }
+        })
+            .data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+            };
+
+        $("#addDepartmentPosition").click(function() {
+            var posId;
+            var noresult;
+            if($("#idSelectedDepartment").val() == '') {
+                posId = $("#position").val();
+                var posExist = _.find(selectedPositionIds, function(item) {
+                    return item == posId;
+                });
+                if(!posExist) {
+                    selectedPositionIds.push(posId);
+                    noresult = $("#tblPermissions tbody #noresult");
+                    if(noresult.length > 0) {
+                        noresult.remove();
+                    }
+                    $("#tblPermissions tbody").append("<tr><td>@Localizer("Customer.Position.Label")<input type='hidden' value='" + posId + "' name='PositionIds' /></td><td>" + $("#position option[value=" + posId + "]").text() + "</td><td><a href='javascript:deletePosition(" + posId + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+                    $("#tblPermissions").grid('refresh');
+                }
+            } else {
+                posId = $("#position").val();
+                var deptId = $("#idSelectedDepartment").val();
+                var deptPosExist = _.find(selectedDepartmentPositions, function(item) {
+                    return item.DepartmentId == deptId && item.PositionId == posId;
+                });
+                if(!deptPosExist) {
+                    var selected = _.find(allDepartments, function(dept) {
+                        return dept.value == deptId;
+                    });
+                    if (selected) {
+                        selectedDepartmentPositions.push({'DepartmentId': deptId, 'PositionId': posId});
+                        noresult = $("#tblPermissions tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#tblPermissions tbody").append("<tr><td>@Localizer("Customer.DepartmentPosition.Label") <input type='hidden' value='" + deptId + "," + posId + "' name='DepartmentPositionIds' /></td><td>" + selected.label + "\\" + $("#position option[value=" + posId + "]").text() + "</td><td><a href='javascript:deleteDepartment(" + deptId + ", " + posId + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+                        $("#idSelectedDepartment").val('');
+                        $("#selectedDepartmentPosition").val('');
+                        $("#tblPermissions").grid('refresh');
+                    }
+                }
+            }
+        });
+
+        $("#selectedUser, #selectedDepartmentPosition").keypress(function(e) {
+            if(e.keyCode == 13) {
+                return false;
+            }
+            return true;
+        });
+
+        $.each(selectedDepartmentPositions, function(index, item) {
+            var department = _.find(allDepartments, function(dep) {
+                return dep.value == item.DepartmentId;
+            });
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item.PositionId;
+            });
+            if(department && position) {
+                $("#tblPermissions tbody").append("<tr><td>@Localizer("Customer.DepartmentPosition.Label") <input type='hidden' value='" + item.DepartmentId + "," + item.PositionId + "' name='DepartmentPositionIds' /></td><td>" + department.label + "\\" + position.PositionName + "</td><td><a href='javascript:deleteDepartment(" + item.DepartmentId + ", " + item.PositionId + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+            }
+        });
+
+        $.each(selectedPositionIds, function(index, item) {
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item;
+            });
+            if(position) {
+                $("#tblPermissions tbody").append("<tr><td>@Localizer("Customer.Position.Label") <input type='hidden' value='" + item + "' name='PositionIds' /></td><td>" + position.PositionName + "</td><td><a href='javascript:deletePosition(" + item + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+            }
+        });
+
+        $.each(selectedUserIds, function(index, item) {
+            var user = _.find(allUsers, function(u) {
+                return u.value == item;
+            });
+            if(user) {
+                $("#tblPermissions tbody").append("<tr><td>@Localizer("User.CreateOrEdit.Tab.User") <input type='hidden' value='" + user.value + "' name='UserIds' /></td><td>" + user.label + "</td><td><a href='javascript:deleteUser(" + user.value + ")'>@Localizer("Common.Button.Delete")</a></td></tr>");
+            }
+        });
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.AllUserHasPermission.Label")</td></tr>");
+        }
+    });
+
+    function onSaveBegin() {
+        return isValid;
+    }
+
+    function onSaveSuccess(result) {
+        if(result) {
+            if(result.error) {
+                eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                $(window).unblockpanel();
+            }
+            else  if(result.success) {
+                eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                $(window).unblockpanel();
+            }
+
+            document.location='@(Model.PermissionSettingId > 0 ? "/admin/DocColumnSetting/Index" : "/admin/DocColumnSetting/Create")';
+        }
+    }
+
+    function deleteUser(id) {
+        selectedUserIds = _.reject(selectedUserIds, function(item) {
+            return item == id;
+        });
+        $('input[name="UserIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.AllUserHasPermission.Label")</td></tr>");
+        }
+    }
+
+    function deletePosition(id) {
+        selectedPositionIds = _.reject(selectedPositionIds, function(item) {
+            return item == id;
+        });
+        $('input[name="PositionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.AllUserHasPermission.Label")</td></tr>");
+        }
+    }
+
+    function deleteDepartment(deptid, posid) {
+        selectedDepartmentPositions = _.reject(selectedDepartmentPositions, function(item) {
+            return item.DepartmentId == deptid && item.Positionid == posid;
+        });
+        $('input[name="DepartmentPositionIds"][value="' + deptid + ',' + posid + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.AllUserHasPermission.Label")</td></tr>");
+        }
+    }
+</script>
+@using (Html.BeginForm(Model.PermissionSettingId == 0 ? "Create" : "Edit"))
+{
+    <div>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PermissionSettingId)
+        <table>
+            <tr>
+                <td style="width: 20%">
+                    @Html.EgovLabelFor(model => model.PermissionSettingName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PermissionSettingName)
+                    @Html.ValidationMessageFor(model => model.PermissionSettingName)
+                </td>
+            </tr>
+        </table>
+
+        <h3 data-res="egov.resources.processfunction.divrole"></h3>
+        <fieldset>
+            <legend data-res="egov.resources.processfunction.position1"></legend>
+            <input type="text" id="selectedDepartmentPosition" style="width: 400px; display: inline" />
+            <input type="hidden" id="idSelectedDepartment" />
+            <select id="position" style="width: 200px; display: inline"></select>
+            <input type="button" id="addDepartmentPosition" data-res="egov.resources.commonlabel.add" value="" style="display: inline" class="btn  " />
+        </fieldset>
+        <fieldset>
+            <legend data-res="egov.resources.processfunction.user"></legend>
+            <input type="text" id="selectedUser" style="width: 400px" />
+        </fieldset>
+        <div id="permissions">
+            <table class="table-main table" id="tblPermissions">
+                <colgroup>
+                    <col style="width: 150px" />
+                    <col />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.tableheader.type"></th>
+                        <th class="header" data-res="egov.resources.tableheader.value"></th>
+                        <th class="header" data-res="egov.resources.tableheader.delete"></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="sticky" class="stuck" style="display: none">
+        <input value="@(Model.PermissionSettingId > 0 ? @Localizer("Common.Update.Label") : @Localizer("Common.Create.Label"))" type="submit" id="submit-function" />
+        <span id="message" style="color: red; display: none"></span>
+    </div>
+}
+
+<script id="positionTemplate" type="text/x-jquery-tmpl">
+    <option value="${PositionId}">${PositionName}</option>
+</script>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

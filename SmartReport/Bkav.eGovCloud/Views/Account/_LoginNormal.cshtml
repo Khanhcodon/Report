@@ -1,0 +1,150 @@
+﻿@model Bkav.eGovCloud.Models.LoginModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    var error = ViewBag.Error as string;
+    var passwordPolicySettings = ViewBag.PasswordPolicySettings as Bkav.eGovCloud.Entities.Customer.PasswordPolicySettings;
+
+    var allowUsersToAutomaticallyLogin = ViewBag.AllowUsersToAutomaticallyLogin is bool && (bool)ViewBag.AllowUsersToAutomaticallyLogin;
+
+    var enableCaptcha = passwordPolicySettings.EnableCaptcha;
+    var captchaType = passwordPolicySettings.CaptchaType.ToString();
+    var captchaKeyNumbers = passwordPolicySettings.CaptchaKeyNumbers;
+    var lastUserInfo = ViewBag.LastUserInfo == null ? null : (ViewBag.LastUserInfo as Bkav.eGovCloud.Entities.CustomerCookieData);
+}
+
+<link href="../Content/Login/material.min.css" rel="stylesheet" />
+<link href="../Content/Login/normal.css" rel="stylesheet" />
+
+<style type="text/css">
+    .app-download {
+        position: fixed;
+        bottom: 30px;
+        left: 65px;
+        width: 280px;
+        color: white;
+        height: 184px;
+        border: 1px solid rgba(245, 239, 239, 0.2);
+        border-radius: 5px;
+        background: rgba(245, 239, 239, 0.5);
+    }
+
+        .app-download > div {
+            float: left;
+            width: 120px;
+            text-align: center;
+            padding: 10px;
+        }
+
+            .app-download > div > img {
+                width: 120px;
+                margin-bottom: 10px;
+            }
+</style>
+
+<div class="login-form">
+    <div class="header hidden">
+        <img src="../Content/Images/login/bkavegov-banner.png" id="img-BkaveGov" />
+    </div>
+
+    <div class="mesage-login-error mesage-login-error-hide"></div>
+    <div id="auto-login-desktop" class="hidden">Tự đăng nhập sau <span id="expireLoginTime"></span> giây. Nhấn phím bất kỳ để hủy tự đăng nhập</div>
+
+    <div class="center">
+        <div class="login row">
+            <div id="offcename-wrap" class="hidden-sm">
+                <h2>Hệ thống hành chính điện tử thông minh</h2>
+                <i><span>Báo cáo</span></i>
+            </div>
+            <div class="col-sm-offset-7 col-md-offset-9 col-lg-offset-10">
+                <div id="egov-login-wrap">
+                    <div id="egov-login">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.ValidationSummary(true)
+                            <p id="error" style="color: Red; display: none">@error</p>
+                            <div class="">
+                                @if (lastUserInfo == null)
+                                {
+                                    <h3>
+                                        Đăng nhập
+                                    </h3>
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input type="text" name="Username" id="Username" class="mdl-textfield__input" autocomplete="off" />
+                                        <label class="mdl-textfield__label" for="Username">Tên đăng nhập</label>
+                                        <span class="field-validation-valid mdl-textfield__error" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <h3>
+                                        Xin chào
+                                    </h3>
+                                    <div style="text-align: center">
+                                        <input type="hidden" name="Username" id="Username" class="" autocomplete="off" value="@lastUserInfo.UsernameWithDomain" />
+                                        <span class="field-validation-valid mdl-textfield__error" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                                        <img src="@ViewBag.LastUserAvatar" alt="" class="avatar" />
+                                        <div class="usernameText">
+                                            @lastUserInfo.FullName<br />
+                                            <a href="#" class="otherAccount" title="Chọn tài khoản khác">Không phải bạn? (Esc)</a>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input type="password" name="Password" id="Password" class="mdl-textfield__input" autocomplete="new-password" />
+                                    <label class="mdl-textfield__label" for="Password">Nhập mật khẩu của bạn</label>
+                                    <span class="pull-right capslockalert" data-res="egov.resources.setting.login.capslockison" style="display: none;"></span>
+                                    <span class="field-validation-valid mdl-textfield__error" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                </div>
+
+                                @if (enableCaptcha)
+                                {
+                                    <div id="captchaWrap" class="">
+                                        <div class="text-left">
+                                            <span class="field-label" style="color:#FF6500">Vui lòng nhập chính xác mã phía dưới</span>
+                                        </div>
+                                        <div id="captcha">
+                                            @if (captchaType == "Text")
+                                            {
+                                                @Html.Captcha(Localizer("Account.Captcha.Retry"), Localizer("Account.Captcha.EnterText"), @captchaKeyNumbers, "")
+                                            }
+                                            else if (captchaType == "Math")
+                                            {
+                                                @Html.MathCaptcha(Localizer("Account.Captcha.Retry"), Localizer("Account.Captcha.EnterResult"), "")
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                <br />
+                                <div class="b-row">
+                                    <div id="loginProcess" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="width: 100%;"></div>
+                                    <button id="login" type="submit" class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">
+                                        Đăng nhập
+                                    </button>
+                                </div>
+
+                                @if (allowUsersToAutomaticallyLogin)
+                                {
+                                    <div class="remember-me">
+                                        <div class="form-group form-inline input-checkbox-wrapper">
+                                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="RememberMe">
+                                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "mdl-checkbox__input" })
+                                                <span class="mdl-checkbox__label">Duy trì đăng nhập</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="text-right">
+                                    <a href="@Url.Action("ResetPassword","Account")" style="color: #0057ae; font-weight: normal;">
+                                        <span>Bạn quên mật khẩu?</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            @Html.AntiForgeryToken()
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,171 @@
+﻿@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.SmsOrMailSearchModel;
+    var mails = ViewBag.Mails as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.MailModel>;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblMailManager").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblMailManager").openLink({ urlOpen: '/admin/MailManager/Detail' });
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $('#tblMailManager input[name="ids"]').on("change", function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+                if ($('#tblMailManager input[name="ids"]:checked').length === $('#tblMailManager input[name="ids"]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").on("change", function () {
+            $('#tblMailManager input[name="ids"]').prop('checked', this.checked);
+            $('#tblMailManager input[name="ids"]').each(function () {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+            });
+        });
+    });
+
+</script>
+
+<form id="formdelete" style="display:none" action="@Url.Action("Delete")" method="POST">
+</form>
+
+<table class="table-main table" id="tblMailManager">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 30px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("MailManager.Index.List.Column.Subject")
+            </th>
+            <th class="header">
+                @Localizer("MailManager.Index.List.Column.SendTo")
+            </th>
+            <th class="header">
+                @Localizer("MailManager.Index.List.Column.IsSent")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateCreated", Localizer("MailManager.Index.List.Column.DateCreated"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+
+                                    FindText = search.FindText,
+                                    FromDate = search.FromDate,
+                                    IsSent = search.IsSent,
+                                    ToDate = search.ToDate,
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestore",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Detail")
+            </th>
+            <th align="center" class="header">
+                <input type="checkbox" id="checkAll" data-restitle="egov.resources.buttons.selectAll" title="Chọn tất" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (mails != null && mails.Any())
+        {
+            foreach (var item in mails)
+            {
+                number++;
+            <tr data-id="@item.MailId">
+                <td>
+                    @number
+                </td>
+
+                <td>
+                    @item.Subject
+                </td>
+                <td>
+                    @item.SendTo
+                </td>
+                <td>
+                    @(item.IsSent ? "Đã gửi" : "Chưa gửi")
+
+                </td>
+                <td>
+                    @(item.DateCreated.HasValue ? item.DateCreated.Value.ToString("dd/MM/yyyy hh:mm:ss:tt") : "")
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Detail.Button"), "Detail", new { Id = item.MailId })
+                </td>
+                <td align="center">
+                    <input type="checkbox" name="ids" value="@item.MailId" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  FindText = search.FindText,
+                                  FromDate = search.FromDate,
+                                  IsSent = search.IsSent,
+                                  ToDate = search.ToDate,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divMailManager",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+
+</table>
+

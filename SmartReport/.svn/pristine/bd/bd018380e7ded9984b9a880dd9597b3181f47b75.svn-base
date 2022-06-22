@@ -1,0 +1,261 @@
+﻿@model CategoryModel
+@using Bkav.eGovCloud.Core.Utils;
+@using Bkav.eGovCloud.Entities
+@{
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+    var allCodes = ViewBag.AllCodes as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.CodeModel>;
+    var allCodeJson = allCodes.Stringify();
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.js"></script>
+
+<script>
+    var allCodes = @(string.IsNullOrEmpty(allCodeJson) ? MvcHtmlString.Create("[]") : Html.Raw(allCodeJson));
+    $(function(){
+        var $tabContent = $('.ui-tabs-hide');
+        $tabContent.removeClass('ui-tabs-hide');
+        $tabContent.addClass('ui-tabs-hide');
+
+        //$("#tblCodeForCate").grid({
+        //    isFixHeightContent: true,
+        //    height: 350,
+        //    isResizeColumn: false
+        //});
+
+        autoCompleteCodeForStore();
+        egov.utilities.checkbox.checkAndUnCheckAll($("#checkAllCode"), $(".checkItemCode"));
+        $("input.checkItemCode").on('change', function () {
+            //var $this = $(this);
+            //var row = $this.closest('tr');
+            //if ($this.prop('checked')) { // move to top
+            //    row.insertBefore(row.parent().find('tr:first-child'));
+            //}
+            //else { // move to bottom
+            //    row.insertAfter(row.parent().find('tr:last-child'));
+            //}
+        });
+
+        $('#tablist a').bind("click", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            $("#tabsChild>div").hide();
+            $(id).show();
+        });
+
+        $('input.checkItemDefault').on('change', function() {
+            //var checked = $(this).closest('tr').find("input.checkItemCode").prop('checked');
+            //if(checked){
+            //    $('input.checkItemDefault').not(this).prop('checked', false);
+
+            //    var codeId = $(this).attr("data-id");
+            //    if (codeId) {
+            //        $("#DefaultCodeId").val(codeId);
+            //    }
+            //}else{
+            //    $(this).prop('checked',false);
+            //}
+        });
+    });
+
+    function autoCompleteCodeForStore(){
+        $("#findCodeForCate").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response($.grep(allCodes, function( value) {
+                    return matcher.test(value.CodeName)
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.CodeName ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                var _el=  $("#tblCodeForCate tbody tr").find("input[data-id="+ui.item.CodeId+"]");
+                if($(_el).length > 0){
+                    var checked= _el.prop("checked");
+                    _el.prop("checked",!checked);
+                    $("#findCodeForCate").val('');
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.CodeName  +"( "+ item.Template+")"+ "</a>")
+                .appendTo(ul);
+        };
+    }
+
+</script>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.CategoryId)
+
+<div id="tabsChild">
+    <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom: 20px;">
+        <li class="active"><a href="#tabs-1" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.Category.Detail")</a></li>
+        <li><a href="#tabs-2" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.Category.Store")</a></li>
+    </ul>
+
+    <div id="tabs-1" class="tab">
+        <table>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelRequireFor(model => model.CategoryName):
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.CategoryName,
+ new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+                    @if (Model.CategoryId == 0)
+                    {
+                    <div>
+                        <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                    </div>
+                    }
+                    @Html.ValidationMessageFor(model => model.CategoryName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.CategoryBusinessId):
+                </td>
+                <td>
+                    @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+                    {
+                        foreach (var categoryBusiness in allCategoryBusiness)
+                        {
+                            var categoryValue = Convert.ToInt32(categoryBusiness.Value);
+                    <label>
+                        <input type="checkbox" name="CategoryBusiness"
+                               value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "checked='checked'" : "")
+                               @(Model.CategoryBusinessIdInEnum.HasFlag((CategoryBusinessTypes)categoryValue) ? "checked='checked'" : "") />@categoryBusiness.Text
+                        </label>
+                        }
+                    }
+
+                    @Html.ValidationMessageFor(model => model.CategoryBusiness)
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div id="tabs-2" style="display: none" class="tab">
+        <p style="display: inline">
+            Tên mẫu sổ:
+            <input type="text" id="findCodeForCate" style="width: 400px; display: inline" />
+        </p>
+        <input type="hidden" name="DefaultCodeId" id="DefaultCodeId" value="@Model.DefaultCodeId" />
+
+        <table class="table-main table" id="tblCodeForCate" style="width: 100%;">
+            <colgroup>
+                <col/>
+                <col style="width: 80px" />
+                <col style="width: 80px" />
+                <col style="width: 300px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header">
+                        <span data-res="egov.resources.store.alltempname"></span>
+                    </th>
+                    <th>
+                        Mặc định
+                    </th>
+                    <th class="header">
+                        
+                        @if (allCodes != null && allCodes.Any()
+                            && Model.CodeIds != null && Model.CodeIds.Any()
+                            && allCodes.Count() == Model.CodeIds.Count)
+                        {
+                            <input type="checkbox" checked="checked" id="checkAllCode" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="checkAllCode" />
+                        }
+                        Kích hoạt
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Code.Index.List.Column.Template")
+                    </th>
+                    <th class="header">
+                        Xem
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (allCodes != null && allCodes.Any())
+                {
+                    foreach (var code in allCodes)
+                    {
+                        <tr data-codeid="@code.CodeId">
+                            
+                            <td>
+                                @code.CodeName
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.CodeIds != null && Model.CodeIds.Any())
+                                {
+                                    if (code.IsDefault)
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" name="IsDefault" value="@code.CodeId" checked="checked" class="checkItemDefault" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" name="IsDefault" value="@code.CodeId" class="checkItemDefault" />
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-id="@code.CodeId" name="IsDefault" value="@code.CodeId" class="checkItemDefault" />
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (Model.CodeIds != null && Model.CodeIds.Any())
+                                {
+                                    if (code.Checked)
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" name="CodeIds" value="@code.CodeId" checked="checked" class="checkItemCode" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" name="CodeIds" value="@code.CodeId" class="checkItemCode" />
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-id="@code.CodeId" name="CodeIds" value="@code.CodeId" class="checkItemCode" />
+                                }
+                            </td>
+                            <td>
+                                @code.Template
+                            </td>
+                            <td>
+                                <a href="/admin/code/edit/@code.CodeId">Xem</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2" data-res="egov.resources.store.notemp">
+                            Không tồn tại mẫu nào!
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

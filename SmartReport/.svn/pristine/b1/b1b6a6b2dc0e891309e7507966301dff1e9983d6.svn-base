@@ -1,0 +1,409 @@
+﻿@model StatisticsModel
+@{
+    Layout = null;
+}
+<style type="text/css">
+    .report-info > div {
+        width: 100%;
+        float: left;
+        margin-bottom: 5px;
+        padding: 0 5px 0 5px;
+    }
+
+    .field-label {
+        float: left;
+        width: 18%;
+        height: 25px;
+    }
+
+    .field-input {
+        float: left;
+        width: 80%;
+    }
+
+        .field-input input[type='text'], .field-input textarea {
+            width: 100%;
+        }
+
+        .field-input #tblPermission {
+            width: 100%;
+        }
+
+            .field-input #tblPermission td, .field-input #tblPermission th {
+                border: 1px solid #BBB;
+                height: 25px;
+            }
+
+            .field-input #tblPermission th {
+                background-color: #F1F1F1;
+            }
+
+    .span-report-group {
+        margin-right: 10px;
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 0;
+        padding: 5px;
+    }
+
+        fieldset div {
+            float: left;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+</style>
+
+<script type="text/javascript">
+    var selectedUserIds = @(string.IsNullOrEmpty(Model.UserPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.UserPermission));
+    var selectedDepartmentPositions = @(string.IsNullOrEmpty(Model.DeptPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DeptPermission));
+    var selectedPositionIds = @(string.IsNullOrEmpty(Model.PositionPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.PositionPermission));
+    var selectedGroups = @(string.IsNullOrEmpty(Model.ReportGroup) ? MvcHtmlString.Create("[]") : Html.Raw(Model.ReportGroup));
+
+    $(function () {  
+                $("#DeptPermission").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(allDepartments, function (value) {
+                    value = value.label || value.value || value;
+                    return matcher.test(value) || matcher.test(egov.utilities.string.stripVietnameseChars(value));
+                }));
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#DeptPermission").val(ui.item.label);
+                $("#deptId").val(ui.item.value);
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#UserPermission").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(allUsers, function (value) {
+                    value = value.label || value.value || value;
+                    return matcher.test(value) || matcher.test(egov.utilities.string.stripVietnameseChars(value));
+                }));
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#UserPermission").val('');
+
+                var exist = _.find(selectedUserIds, function (item) {
+                    return item.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function (user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUserIds.push(selected);
+                        appendPermission('user', selected.label, selected.value);
+                    }
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $.each(allPositions, function(index, item){
+            $("#PositionPermission").append(
+                $("<option>").val(item.PositionId).text(item.PositionName));
+        });
+
+        $.each(selectedGroups, function(idx, item){
+            $(":checkbox[name='ReportGroupIds']").each(function(){
+                if($(this).val() == item) {
+                    $(this).attr("checked", "checked");
+                }
+            });
+        });
+       
+        // Hiển thị lại dánh sách các chức vụ trong phòng ban dc xem báo cáo
+        $.each(selectedDepartmentPositions, function(index, item) {
+            var department = _.find(allDepartments, function(dep) {
+                return dep.value == item.DepartmentId;
+            });
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item.PositionId;
+            });
+            if(department && position) {
+                appendPermission("department", department.label + "\\" + position.PositionName, item.DepartmentId + "," + item.PositionId);
+            }
+        });
+
+        // Hiển thị lại danh sách các chức vụ được xem báo cáo
+        $.each(selectedPositionIds, function(index, item) {
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item;
+            });
+            if(position) {
+                appendPermission("position", position.PositionName, item);
+            }
+        });
+
+        // Hiển thị lại danh sách các user được xem báo cáo
+        $.each(selectedUserIds, function(index, item) {
+            var user = _.find(allUsers, function(u) {
+                return u.value == item;
+            });
+            if(user) {
+                appendPermission("user", user.label, user.value);
+            }
+        });
+
+        $(window).keypress(function(event) {
+            if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;
+            onSubmit();
+            $("form").submit();
+            event.preventDefault();
+            return false;
+        });
+    });
+
+    function addDeptPosPermission() {
+        if ($("#DeptPermission").val() == '') {
+            var posId = $("#PositionPermission").val();
+            var posExist = _.find(selectedPositionIds, function (item) {
+                return item === posId;
+            });
+            if (!posExist || posExist == undefined) {
+                selectedPositionIds.push(posId);
+                appendPermission("position", $("#PositionPermission option[value=" + posId + "]").text(), posId);
+            }
+        } else {
+            var posId = $("#PositionPermission").val();
+            var deptId = $("#deptId").val();
+            var deptPosExist = _.find(selectedDepartmentPositions, function (item) {
+                return item.DepartmentId == deptId && item.PositionId == posId;
+            });
+            if (!deptPosExist || deptPosExist == undefined) {
+                var selected = _.find(allDepartments, function (dept) {
+                    return dept.value == deptId;
+                });
+                if (selected) {
+                    selectedDepartmentPositions.push({ 'DepartmentId': deptId, 'PositionId': posId });
+                    var name = selected.label + "\\" + $("#PositionPermission option[value=" + posId + "]").text();
+                    appendPermission("department", name, deptId + "," + posId);
+                    $("#DeptPermission").val('');
+                }
+            }
+        }
+    }
+
+    function deleteUser(id) {
+        selectedUserIds = _.reject(selectedUserIds, function(item) {
+            return item == id;
+        });
+        $('input[name="UserPermissionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function deletePosition(id) {
+        selectedPositionIds = _.reject(selectedPositionIds, function(item) {
+            return item == id;
+        });
+        $('input[name="PositionPermissionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function deleteDepartment(deptid, posid) {
+        selectedDepartmentPositions = _.reject(selectedDepartmentPositions, function(item) {
+            return item.DepartmentId == deptid && item.Positionid == posid;
+        });
+        $('input[name="DepartmentPositionIds"][value="' + deptid + ',' + posid + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function appendPermission(type, text, value)
+    {
+        var name = "";
+        var func = "";
+        var label = "";
+        if(type == "department")
+        {
+            label = "@Localizer("Customer.DepartmentPosition.Label")";
+            name = 'DepartmentPositionIds';
+            func = 'javascript:deleteDepartment(' + value + ')';
+        }
+        else if(type == "position")
+        {
+            label = "@Localizer("Customer.Position.Label")";
+            name = 'PositionPermissionIds';
+            func = 'javascript:deletePosition(' + value + ')';
+        }
+        else if(type == "user")
+        {
+            label = "@Localizer("Role.CreateOrEdit.Tab.User")";
+                name = 'UserPermissionIds';
+                func = 'javascript:deleteUser(' + value + ')';
+            }
+            else
+            {
+                return;
+            }
+    $(".no-permission").remove();
+    $("#tblPermission tbody")
+                    .append(
+                        $("<tr>")
+                            .append($("<td>").text(label).append($("<input/>").attr("type",'hidden').val(value).attr("name", name)))
+                            .append($("<td>").text(text))
+                            .append($("<td>").append($("<a/>").attr("href", func).text("@Localizer("Common.Button.Delete")"))));
+}
+    
+function onSubmit(){
+    return true;
+}
+</script>
+
+@using (Ajax.BeginForm(
+                Model.StatisticsId == 0 ? "Create" : "Edit",
+                new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSaveSuccess", OnBegin = "onBegin", OnFailure = "onFailure" }))
+{
+    <div class="report-info">
+        @Html.HiddenFor(model => model.StatisticsId)
+        @Html.HiddenFor(model => model.ParentId)
+        <div class="report-name">
+            <div class="field-label">
+                @Html.LabelRequireFor(model => model.Name)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.Description)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+            </div>
+            <div class="field-input">
+                @Html.CheckBoxFor(model => model.IsActive)
+                @Html.LabelFor(model => model.IsActive)
+            </div>
+        </div>
+            <fieldset @*style="@(Model.IsLabel ? "display: none" : "")"*@>
+            <legend style="font-weight: bold" data-res="egov.resources.report.showdatabygroup"></legend>
+            <div>
+                <div>
+                    <div class="field-label">
+                        @Html.LabelFor(model => model.ReportGroup)
+                    </div>
+                    <div class="field-input">
+                        @foreach (var group in ViewBag.ReportGroup as IEnumerable<ReportGroupModel>)
+                        {
+                           <label> <input type="checkbox" value="@group.ReportGroupId" name="ReportGroupIds" />
+                            <span class="span-report-group">@group.Name</span></label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        @*<div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.ReportGroupId)
+            </div>
+            <div class="field-input">
+                @Html.DropDownListFor(model => model.ReportGroupId, ViewBag.ReportGroupList as IEnumerable<SelectListItem>,Localizer("Common.Choose.Label"), new { @class = "form-control" })
+            </div>
+        </div>*@
+        <div>
+            <div class="field-label">
+                @Html.LabelRequireFor(model => model.Query)
+            </div>
+            <div class="field-input">
+                @Html.TextAreaFor(model => model.Query, new { style = "height: 100px;" })
+            </div>
+        </div>
+
+        <fieldset class="permission">
+            <legend data-res="egov.resources.report.permissionreadreport"></legend>
+            <div>
+                <div>
+                    <div class="field-label">
+                        @Html.LabelFor(model => model.DeptPermission),@Html.LabelFor(model => model.PositionPermission)
+                    </div>
+                    <div class="field-input">
+                        <input type="text" id="DeptPermission" style="width: 220px; display: inline" class="form-control" />
+                        <input type="hidden" id="deptId" />
+
+                        <select style="width: 220px; display: inline" id="PositionPermission" class="form-control"></select>
+                        <input type="button" class="btn" value="" data-res="egov.resources.commonlabel.add" onclick="addDeptPosPermission()" />
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        @Html.LabelFor(model => model.UserPermission)
+                    </div>
+                    <div class="field-input">
+                        <input type="text" id="UserPermission" class="form-control" />
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label"></div>
+                    <div class="field-input">
+                        <table id="tblPermission" class=" table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px;" data-res="egov.resources.tableheader.type"></th>
+                                    <th data-res="egov.resources.tableheader.value"></th>
+                                    <th style="width: 100px;" data-res="egov.resources.tableheader.delete"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="no-permission">
+                                    <td colspan="3" data-res="egov.resources.commonlabel.all"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div>
+        <input class="btn" id="submit" value="@(Model.StatisticsId > 0 ? Localizer("Common.Update.Label") : Localizer("Common.Create.Label"))" type="submit" onmousedown="return onSubmit();" />
+    </div>
+}
+
+<script src="../../../../Scripts/bkav.egov/resource/egov.resources.bindresource.js"></script>
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

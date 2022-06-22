@@ -1,0 +1,19 @@
+﻿@model OfficeModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Office.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script>
+    backUrl = "/admin/Office";
+</script>
+
+@ViewBag.ErrorDeleteId
+@using (Html.BeginForm())
+{
+    @Html.Partial("_Notifications")
+    <div id="divListOffice">
+        @{
+    Html.RenderPartial("_CreateOrEdit", Model);
+        }
+    </div>
+}

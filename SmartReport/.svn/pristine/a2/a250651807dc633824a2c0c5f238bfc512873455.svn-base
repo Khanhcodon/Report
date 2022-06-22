@@ -1,0 +1,42 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.FileLocationSettingsModel
+@{
+    Layout = null;
+}
+<link href="../../../../Scripts/bkav.egov/libs/bkav/editor/css/bmailEditor.css" rel="stylesheet" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.min.js")"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/yui.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/language.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/Config.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/MenuButton.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/EditorControl.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/Controls.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/editor/js/BmailEditor.js"></script>
+
+<table>
+    <tr>
+        <td>Mail:</td>
+        <td>
+            <input data-val="true" data-val-required="" id="txtMail" name="txtMail" type="text" class="form-control valid" />
+            <span class="field-validation-valid" data-valmsg-for="txtMail" data-valmsg-replace="true"></span></td>
+    </tr>
+    <tr>
+        <td >
+            @Localizer("Admin.Title.Setting.Email.TestSendMail.Content"):
+
+        </td>
+        <td>
+            <div id="contentMail" class="form-control"></div>
+        </td>
+    </tr>
+</table>
+
+<script type="text/ecmascript">
+    var bmailEditor;
+    $(function () {
+        bmailEditor = new BmailEditor($("#contentMail"));
+        bmailEditor.render();
+        bmailEditor.setHeight(300);
+    });
+</script>

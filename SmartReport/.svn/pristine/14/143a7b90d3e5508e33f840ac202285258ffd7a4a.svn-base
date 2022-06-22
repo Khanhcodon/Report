@@ -1,0 +1,53 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.MissionSettingsModel
+@{
+    ViewBag.Title = Localizer("Setting.MissionSettings.Tab.Title");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Cấu hình kết nối Giao nhiệm vụ</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ApiDomain)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ApiDomain, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.PartnerGUID)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.PartnerGUID, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.PartnerToken)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.PartnerToken, new { @class = "form-control" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}

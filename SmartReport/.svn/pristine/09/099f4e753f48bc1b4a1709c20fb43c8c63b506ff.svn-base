@@ -1,0 +1,557 @@
+﻿@using StackExchange.Profiling
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/images/favicon.ico">
+    <title>Báo cáo tổng hợp</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 4.1.3-->
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/jquery-ui.css")" rel="stylesheet" />
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/bootstrap-extend.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style.css">
+    <!-- Unique_Admin skins -->
+    <link rel="stylesheet" href="~/Scripts/generalreport/main/css/skins/_all-skins_general.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_plugins/pace/pace.min.css">
+
+    <link href="~/Scripts/bkav.egov/libs/jstree/themes/default-st/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.css">
+    
+
+    <!-- Fontawesome -->
+    <link href="~/Scripts/generalreport/main/fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse" style="width:100%; height:100%">
+    <style>
+         .jstree-themeicon{
+            font-size:19px;
+            color: #188ef4
+        }
+
+        .modal.fade.modal-right .modal-dialog {
+            width : 50%
+        }
+    </style>
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <b class="logo-mini">
+                <span class="light-logo"><img src="../images/logo-light.png" alt="logo"></span>
+                <span class="dark-logo"><img src="../images/logo-dark.png" alt="logo"></span>
+            </b>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">
+                <img src="../images/logo-light-text.png" alt="logo" class="light-logo">
+                <img src="../images/logo-dark-text.png" alt="logo" class="dark-logo">
+            </span>
+        </a>
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <li class="search-box">
+                        <a class="nav-link hidden-sm-down" href="javascript:void(0)"><i class="mdi mdi-magnify"></i></a>
+                        <form class="app-search" style="display: none;">
+                            <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                        </form>
+                    </li>
+
+                    <!-- Messages -->
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="mdi mdi-email"></i>
+                        </a>
+                        <ul class="dropdown-menu scale-up">
+                            <li class="header bg-primary text-white">You have 5 messages</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu inner-content-div">
+                                    <li>
+                                        <!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../images/user2-160x160.jpg" class="rounded-circle" alt="User Image">
+                                            </div>
+                                            <div class="mail-contnet">
+                                                <h4>
+                                                    Lorem Ipsum
+                                                    <small><i class="fa fa-clock-o"></i> 15 mins</small>
+                                                </h4>
+                                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end message -->
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../images/user3-128x128.jpg" class="rounded-circle" alt="User Image">
+                                            </div>
+                                            <div class="mail-contnet">
+                                                <h4>
+                                                    Nullam tempor
+                                                    <small><i class="fa fa-clock-o"></i> 4 hours</small>
+                                                </h4>
+                                                <span>Curabitur facilisis erat quis metus congue viverra.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../images/user4-128x128.jpg" class="rounded-circle" alt="User Image">
+                                            </div>
+                                            <div class="mail-contnet">
+                                                <h4>
+                                                    Proin venenatis
+                                                    <small><i class="fa fa-clock-o"></i> Today</small>
+                                                </h4>
+                                                <span>Vestibulum nec ligula nec quam sodales rutrum sed luctus.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../images/user3-128x128.jpg" class="rounded-circle" alt="User Image">
+                                            </div>
+                                            <div class="mail-contnet">
+                                                <h4>
+                                                    Praesent suscipit
+                                                    <small><i class="fa fa-clock-o"></i> Yesterday</small>
+                                                </h4>
+                                                <span>Curabitur quis risus aliquet, luctus arcu nec, venenatis neque.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../images/user4-128x128.jpg" class="rounded-circle" alt="User Image">
+                                            </div>
+                                            <div class="mail-contnet">
+                                                <h4>
+                                                    Donec tempor
+                                                    <small><i class="fa fa-clock-o"></i> 2 days</small>
+                                                </h4>
+                                                <span>Praesent vitae tellus eget nibh lacinia pretium.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#" class="bg-primary text-white">See all e-Mails</a></li>
+                        </ul>
+                    </li>
+                    <!-- Notifications -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="mdi mdi-bell"></i>
+                        </a>
+                        <ul class="dropdown-menu scale-up">
+                            <li class="header bg-primary text-white">You have 7 notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu inner-content-div">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-aqua"></i> Curabitur id eros quis nunc suscipit blandit.
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-warning text-yellow"></i> Duis malesuada justo eu sapien elementum, in semper diam posuere.
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-red"></i> Donec at nisi sit amet tortor commodo porttitor pretium a erat.
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-shopping-cart text-green"></i> In gravida mauris et nisi
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user text-red"></i> Praesent eu lacus in libero dictum fermentum.
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user text-red"></i> Nunc fringilla lorem
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user text-red"></i> Nullam euismod dolor ut quam interdum, at scelerisque ipsum imperdiet.
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#" class="bg-primary text-white">View all</a></li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-cog fa-spin"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <aside class="main-sidebar">
+        <!-- sidebar -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="ulogo">
+                    <a href="index.html">
+                        <!-- logo for regular state and mobile devices -->
+                        <span class="text-white">Hệ thống thông tin báo cáo </span>
+                    </a>
+                </div>
+                
+                <div class="info text-white">
+                    <p>Quản trị</p>
+                    <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Settings"><i class="ion ion-gear-b"></i></a>
+                    <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Email"><i class="ion ion-android-mail"></i></a>
+                    <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Logout"><i class="ion ion-power"></i></a>
+                </div>
+            </div>
+            <!-- sidebar menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+
+                <li class="treeview active">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Dashboard</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="active"><a href="index.html">Qua</a></li>
+                        <li><a href="index-2.html">Dashboard 2</a></li>
+                        <li><a href="index-3.html">Dashboard 3</a></li>
+                        <li><a href="index-4.html">Dashboard 4</a></li>
+                        <li><a href="index-5.html">Dashboard 5</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <div class="sidebar-background" style="background-image: url(../images/sidebar-bg/08.jpg);"></div>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Dashboard
+                <small>Control panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-6">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Phòng ban</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <label class="switch switch-border switch-info">
+                                        <input type="checkbox" checked="">
+                                        <span class="switch-indicator"></span>
+                                        <span class="switch-description"></span>
+                                    </label>
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" name="s" id="searchDepartment" placeholder="Tên phòng ban">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <div id="department"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Chỉ tiêu quản lý</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <label class="switch switch-border switch-info">
+                                        <input type="checkbox" checked="">
+                                        <span class="switch-indicator"></span>
+                                        <span class="switch-description"></span>
+                                    </label>
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" id="searchIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" id="ChooseIndicator">Chọn chỉ tiêu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div  class="box-body" id="indicatorBodyTree">
+                            <div  id="indicatorTree"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+     <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="nav-item"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+            <li class="nav-item"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-cog fa-spin"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Recent Activity</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Admin Birthday</h4>
+                                <p>Will be July 24th</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-user bg-yellow"></i>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Jhone Updated His Profile</h4>
+                                <p>New Email : jhone_doe@demo.com</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Disha Joined Mailing List</h4>
+                                <p>disha@demo.com</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-file-code-o bg-green"></i>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Code Change</h4>
+                                <p>Execution time 15 Days</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+                <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Web Design
+                                <span class="label label-danger pull-right">40%</span>
+                            </h4>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-danger" style="width: 40%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Update Data
+                                <span class="label label-success pull-right">75%</span>
+                            </h4>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-success" style="width: 75%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Order Process
+                                <span class="label label-warning pull-right">89%</span>
+                            </h4>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-warning" style="width: 89%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Development
+                                <span class="label label-primary pull-right">72%</span>
+                            </h4>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-primary" style="width: 72%"></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Stats tab content -->
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <!-- /.tab-pane -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <form method="post">
+                    <h3 class="control-sidebar-heading">General Settings</h3>
+                    <div class="form-group">
+                        <input type="checkbox" id="report_panel" class="chk-col-grey">
+                        <label for="report_panel" class="control-sidebar-subheading ">Report panel usage</label>
+                        <p>
+                            general settings information
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                        <input type="checkbox" id="allow_mail" class="chk-col-grey">
+                        <label for="allow_mail" class="control-sidebar-subheading ">Mail redirect</label>
+                        <p>
+                            Other sets of options are available
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                        <input type="checkbox" id="expose_author" class="chk-col-grey">
+                        <label for="expose_author" class="control-sidebar-subheading ">Expose author name</label>
+                        <p>
+                            Allow the user to show his name in blog posts
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+                    <h3 class="control-sidebar-heading">Chat Settings</h3>
+                    <div class="form-group">
+                        <input type="checkbox" id="show_me_online" class="chk-col-grey">
+                        <label for="show_me_online" class="control-sidebar-subheading ">Show me as online</label>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                        <input type="checkbox" id="off_notifications" class="chk-col-grey">
+                        <label for="off_notifications" class="control-sidebar-subheading ">Turn off notifications</label>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            <a href="javascript:void(0)" class="text-red margin-r-5"><i class="fa fa-trash-o"></i></a>
+                            Delete chat history
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+
+    <div class="modal modal-right fade" id="modalIndicator" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chọn chỉ tiêu</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Chỉ tiêu quản lý</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" id="searchChooseIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-body" id="bodyTree">
+                            <div id="chooseIndicatorTree">Chọn chỉ tiêu</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" id="btnSaveIndicator" class="btn btn-bold btn-pure btn-primary float-right">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery 3 -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <script src="/Scripts/generalreport/assets/vendor_components/PACE/pace.min.js"></script>
+    <!-- Bootstrap 4.1.3-->
+    <script src="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/generalreport/main/js/template_general.js"></script>
+    <!-- Unique_Admin for demo purposes -->
+
+    <script src="/Scripts/generalreport/main/js/demo.js"></script>
+    <script src="/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+    <script src="/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="/Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-ui/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart();
+        })
+    </script>
+   
+    <script src="/Scripts/bkav.egov/libs/html-docx/html-docx.js"></script>
+    <script src="/Scripts/bkav.egov/libs/html-docx/FileSaver.js"></script>
+    <script src="/Scripts/bkav.egov/libs/html-docx/html2canvas.min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/jstree/jstree_3_3_10.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+
+    <script src="~/Scripts/admin/indicatorDepartment/indicatorDepartment.js?v=@DateTime.Now.ToString("hhmmss")"></script>
+</body>
+</html>

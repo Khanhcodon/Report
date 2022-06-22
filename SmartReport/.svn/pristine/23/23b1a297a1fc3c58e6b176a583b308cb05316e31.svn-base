@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LevelModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Level.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+
+<script type="text/javascript">
+    function deleteDocField(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Level.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListLevels").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {$('tr th').css("line-height", "2.5");
+        $('#divListLevels').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")" || ""@Localizer("Common.Error")"");
+        $('#divListLevels').unblockpanel();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span data-res="egov.resources.sitemap.level"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/Level/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div id="divListLevels">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

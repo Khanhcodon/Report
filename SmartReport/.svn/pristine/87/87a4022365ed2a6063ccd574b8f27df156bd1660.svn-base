@@ -1,0 +1,1498 @@
+﻿@model DocTypeFormModel
+@{
+    var isCreate = new Guid().CompareTo(@Model.Form.FormId) == 0;
+    // 20191111 VuHQ REQ-5
+    var catalogs = ViewBag.Catalogs;
+    var inCatalogs = ViewBag.InCatalogs;
+
+    var formCodeCompilation = Model.Form.FormCodeCompilation;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="~/Content/bkav.egov/libs/dist/jstree.min.js"></script>
+<link href="~/Content/bkav.egov/libs/dist/themes/default/style.min.css" rel="stylesheet" />
+<link href="~/Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+<link href="~/Scripts/bkav.egov/libs/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/bkav.egov/libs/select2/select2.min.js"></script>
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.js")"></script>
+
+<link href="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.min.js"></script>
+@*20191128 VuHQ START REQ-5*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jsonform/jsonform.js")"></script>
+
+<style>
+    #cke_Form_FormHeader, #cke_Form_FormFooter {
+        width: 99.7%;
+    }
+
+    .handsontable table thead th {
+        white-space: pre-line;
+    }
+
+    .htBold {
+        font-weight: bold;
+    }
+
+    .htItalic {
+        font-style: italic;
+    }
+
+    .htStrike {
+        text-decoration: line-through;
+    }
+
+    .htUnderline {
+        text-decoration: underline;
+    }
+
+    #fieldTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 150px !important;*/
+    }
+
+    #typeTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    .modal-body {
+        overflow: scroll !important;
+    }
+
+    .modal .modal-body > div.class1 {
+        height: unset;
+    }
+
+    .modal-dialog {
+        width: 95%;
+        margin: 30px auto;
+    }
+
+    #fieldTable {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+    }
+
+    #dataTable {
+        width: 100%;
+        height: 450px;
+        overflow: hidden;
+    }
+
+    #typeTable {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .field-input {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .field-input > input {
+        font-size: 15px;
+    }
+
+    .level-0 {
+
+    }
+
+    .level-1 {
+        padding-left: 1em !important;
+    }
+
+    .level-2 {
+        padding-left: 2em !important;
+    }
+
+    .level-3 {
+        padding-left: 3em !important;
+    }
+
+    .level-4 {
+        padding-left: 4em !important;
+    }
+
+    .level-5 {
+        padding-left: 5em !important;
+    }
+    
+    /*#dataTable th .relative {
+        white-space: pre-line !important;
+    }*/
+
+    #divLoaiTongHop .jsonform-error-Form_Compilation_Match_Off .controls { display: inline-block;}
+        #divLoaiTongHop .jsonform-error-Form_Compilation_Match_Off .controls .checkbox label {
+            display: initial;
+            margin-left: 10px;
+        }
+    #choose-sheet{
+        display: none;
+        float: left;
+        width: auto;
+        height: 32px;
+        margin-right:20px;
+        background: green;
+        color: #ffffff;
+        font-size: 12px;
+    }
+
+    #cke_Form_FormHeader .cke_contents, #cke_Form_FormFooter .cke_contents {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+<script type='text/javascript' src="@Url.Content("~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.bundle.js")"></script>
+<script type="text/javascript">
+    var ckEditorName = '';
+
+    $(document).ready(function () {
+        $("#btnConfigSql").click(function(e) {
+            e.preventDefault();
+            openConfigQuery();
+        });
+        // 20200305 VuHQ START
+        var inputValue =$('input[type="radio"]:checked').attr("value");
+        var targetBox = $("." + inputValue);
+        $(".box").not(targetBox).hide();
+        $(targetBox).show();
+        // 20200305 VuHQ END
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 200;
+            config.toolbarCanCollapse = true;
+        };
+        CKEDITOR.replace('Form_FormHeader',{
+            extraPlugins: 'ruler'});
+        CKEDITOR.replace('Form_FormFooter', {
+            extraPlugins: 'ruler'
+        });
+        CKEDITOR.on("instanceReady",function (ev) {
+                var editor = ev.editor;
+                editor.on("focus",function (ev) {ckEditorName = editor.name;});
+            });
+        var compilation = @Html.Raw(formCodeCompilation);
+        $('#Form_FormCodeCompilation').jsonForm(compilation.targetConfigJsonForm);
+
+        // ko truyền được name có . vào jsonForm
+        $('[name="Form_Compilation_Field"]').attr('name', 'Form.Compilation.Field');
+        $('[name="Form_Compilation_Value"]').attr('name', 'Form.Compilation.Value');
+        $('[name="Form_Compilation_Match"]').attr('name', 'Form.Compilation.Match');
+        $('[name="Form_Compilation_Select"]').attr('name', 'Form.Compilation.Select');
+        $('[name="Form_Compilation_Display"]').attr('name', 'Form.Compilation.Display');
+        $('#Form_TongHopCompilation').jsonForm(compilation.summaryConfigJsonForm);
+        var thead = '<thead> <tr style="height:30px">';
+        var tbody = '<tbody> <tr style="height:30px">';
+        $.each($("#Form_TongHopCompilation > div > div:not('.jsonform-error-Form_sql,.jsonform-error-Form_Compilation_Match_Off')"),
+            function(i,k) {
+                thead += `<th style="vertical-align: middle;">${$(this.firstChild).text()}</th>`;
+                tbody += `<td class="col-compilation" data-name ='${$(this).find("input").first().attr("name")}'></th>`;
+            });
+        thead += '</tr></thead>';
+        tbody += ' </tr></tbody>';
+        var tableFrom = `<div class="tableForm hidden" style="max-width:1200px;overflow-x: auto;"><table class="table-bordered" style="width:100%;">${thead}${tbody}</table></div>`;
+        $("#Form_TongHopCompilation").prepend(" <div class='field-input'> <input type ='button' id='btnConfigSql' class ='btn btn-info' value='Query' />  <input type ='checkbox' @(Model.DocType.IsReportQuery ? "checked" : "") name='DocType.IsReportQuery' id ='DocType_IsReportQuery' style='margin-left: 15px'  value='@(Model.DocType.IsReportQuery ? "true" : "false")'/> <label for='DocType_IsReportQuery'>Sử dụng truy vấn báo cáo</label></div>");
+        if ($('[name="Form_sql"]') != undefined)
+            $('[name="Form_sql"]').css('width', '80%');
+        $("#Form_TongHopCompilation").append(tableFrom);
+        $('#DocType_IsReportQuery').change(function() {
+            if (this.checked) {
+                $(".tableForm").removeClass("hidden");
+                $("#report-Query").removeClass("hidden");
+                $("#Form_TongHopCompilation > div > div:not('.jsonform-error-Form_sql,.jsonform-error-Form_Compilation_Match_Off')").addClass("hidden");
+                $(this).val(true);
+            } else {
+                $("#Form_TongHopCompilation > div > div:not('.jsonform-error-Form_sql,.jsonform-error-Form_Compilation_Match_Off')").removeClass("hidden");
+                $(".tableForm").addClass("hidden");
+                $("#report-Query").addClass("hidden");
+                $(this).val(false);
+            }
+        });
+        //GetDataReport
+        if ("@(bool.Parse(Model.DocType.IsReportQuery.ToString()))" == "True" && "@(Model.Form.FormCategoryId)" == "3") {
+            $(".tableForm").removeClass("hidden");
+            $("#report-Query").removeClass("hidden");
+            $("#Form_TongHopCompilation > div > div:not('.jsonform-error-Form_sql,.jsonform-error-Form_Compilation_Match_Off')").addClass("hidden");
+        } else {
+            $("#Form_TongHopCompilation > div > div:not('.jsonform-error-Form_sql,.jsonform-error-Form_Compilation_Match_Off')").removeClass("hidden");
+            $(".tableForm").addClass("hidden");
+            $("#report-Query").addClass("hidden");
+        }
+        //_.each(compilation.summaryConfigJsonForm, function (item) {
+        //    _.each(Object.keys(item), function (key) {
+        //        debugger;
+        //        var itemName = key.split('_').join('.');
+        //        $('[name="' + key + '"]').attr('name', itemName);
+        //    });
+        //});
+        // 20200305 VuHQ END
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href"); // activated tab
+        var colName;
+        var rows;
+        var typeControl;
+        var headerTemplates = [];
+        var headerTemplate;
+        var patternCode;
+        var nameControl;
+
+        // get type configs
+        $.ajaxSetup({ async: false });
+        $.getJSON('/Admin/Form/GetHeaderTemplates', {},
+            function (data, textStatus, jqXHR) {
+                headerTemplates = JSON.parse(data.headerTemplates);
+            });
+        $.ajaxSetup({ async: true });
+
+        if (target == "#mobilePreviewTab") {
+            rows = "<div class='mbsc-form-group'>";
+            for (var i = 0; i < dataTable.countCols(); i++) {
+                typeControl = typeTable.getCellMeta(i, fieldRowsCount + 2).type;
+                nameControl = typeTable.getDataAtCell(i, fieldRowsCount);
+                headerTemplate = headerTemplates.filter(function (item) {
+                    return (item.TypeName == nameControl);
+                });
+
+                if (headerTemplate != null && headerTemplate != undefined && headerTemplate.length > 0) {
+                    if (nameControl == "Checkbox")
+                        patternCode = typeTable.getDataAtCell(i, fieldRowsCount + 3) == true ? String.format(headerTemplate[0].RegEx, "") : String.format(headerTemplate[0].RegEx, "|null|false");
+                    else
+                        patternCode = typeTable.getDataAtCell(i, fieldRowsCount + 3) == true ? String.format(headerTemplate[0].RegEx, "+") : String.format(headerTemplate[0].RegEx, "*");
+                }
+
+                // START get name
+                colName = '';
+                for (var j = 0; j < fieldRowsCount; j++) {
+                    if (j != 0)
+                        colName += " - ";
+                    if (typeTable.getDataAtCell(i, j) != null) {
+                        colName += typeTable.getDataAtCell(i, j);
+                    } else {
+                        for (var k = i; k >= 0; k--) {
+                            if (typeTable.getDataAtCell(k, j) != null) {
+                                colName += typeTable.getDataAtCell(k, j);
+                                break;
+                            }
+                        }
+                    }
+                }
+                // END get name
+                rows += String.format("<label for='{0}' class='mbsc-control-w mbsc-input'>", "input_" + i);
+                rows += String.format("<span class='mbsc-label' title='{0}'>{0}</span><span class='mbsc-input-wrap'>", colName);
+
+                if (typeControl == "dropdown") {
+                    rows += String.format("<select id='{0}' class='mbsc-control' style='-webkit-appearance: menulist !important'>", "input_" + i);
+                    var sourceControl = typeTable.getCellMeta(i, fieldRowsCount + 2).source;
+                    $.each(sourceControl, function (key, value) {
+                        rows += String.format("<option value='{0}'>{0}</option>", value);
+                    });
+                    rows += "</select>";
+                }
+                else {
+                    rows += String.format("<input id='{0}' type='{1}' placeholder='{2}' value='' name = '{0}' pattern='{3}' class='mbsc-control'", "input_" + i, typeControl, colName, patternCode);
+                    if (typeControl == "checkbox")
+                        rows += "style='-webkit-appearance: checkbox !important'>";
+                    else
+                        rows += ">";
+                }
+
+                rows += "<span class='mbsc-input-fill'></span>";
+                rows += "</span></label>";
+            }
+            rows += "</div>";
+            $('#formContentmbsc').html(rows);
+
+
+            $("form").validate({
+                rules: {
+                    input_1: {
+                        required: true
+                    }
+                },
+                messages: {
+                    input_1: {
+                        required: "Please create your username",
+                    }
+
+                },
+                submitHandler: function (form) { // for demo
+                    alert('valid form submitted'); // for demo
+                    return false;
+                }
+            });
+        }
+    });
+</script>
+@*20191128 VuHQ END REQ-5*@
+
+<script type="text/javascript">
+    $(function () {
+        setTimeout(function() {
+            matchOff($("input[name='Form_Compilation_Match_Off']").is(':checked'), $("input[name='DocType.IsReportQuery']").is(':checked'));
+        }, 100);
+        var dataSelect = $.map(@Html.Raw(Json.Encode(ViewBag.ListForm as IEnumerable<SelectListItem>)), function (item) {
+            return {
+                text: item.Text,
+                id: item.Value
+            }
+        });
+       // //if (typeof dataSelect.isArray == 'undefined') {
+       //     dataSelect.unshift({ text: "Lựa chọn báo cáo phát hành chỉ tiêu", id: "0" });
+       //// }
+        dataSelect.sort(function(x, y) {
+            return x.text.localeCompare(y.text);
+        });
+        $('#Form_CompilationId').select2({
+            language: "vi",
+            allowClear: true,
+            placeholder: "",
+            data: dataSelect
+        });
+        var compilation = "@Model.Form.CompilationId";
+        if (compilation != "" && $('#Form_CompilationId').find("option[value='" + compilation + "']").length) {
+            $('#Form_CompilationId').val(compilation).trigger('change');
+        }
+        else
+            $('#Form_CompilationId').val("").trigger('change');
+        $("input[name='Form_Compilation_Match_Off']").change(function () {
+            matchOff(this.checked, $("input[name='DocType.IsReportQuery']").is(':checked'));
+        });
+        var data = [];
+        var objDefault = {
+            "id": 0,
+            "text": "Template Key mặc định",
+            "icon": "/Content/Images/doctype_activate.png",
+            "children": []
+        }
+        var arr = [
+            { Value: "Phongbanhientai", Text: "Phòng ban hiện tại" },
+            { Value: "PHONGBANHIENTAI", Text: "PHÒNG BAN HIỆN TẠI" },
+            { Value: "dd", Text: "dd" },
+            { Value: "MM", Text: "MM" },
+            { Value: "yyyy", Text: "yyyy" },
+            { Value: "dd-mm-yyyy", Text: "dd-MM-yyyy" },
+            { Value: "dd-MM-yyyy hh:mm", Text: "dd-MM-yyyy hh:mm" }
+        ];
+        _.each(arr, function(x) {
+            objDefault.children.push({
+                "id": `default_${x.Value}`,
+                "text": x.Value,
+                "icon": "/Content/Images/doctype_key.png"
+            });
+        });
+        data.push(objDefault);
+        $('#tree').on("select_node.jstree",
+            function (evt, data) {
+                if(data.node.id == "0") return;
+                var check = ckEditorName == "";
+                if (check) return;
+                CKEDITOR.instances[ckEditorName].insertHtml(`&#64;&#64;${data.node.text}&#64;&#64;`);
+            }).jstree({
+            'core': {
+                "animation": 0,
+                'check_callback': true,
+                'multiple': false,
+                "themes": { "stripes": true },
+                'data': data
+            },
+            "search": {
+                "case_sensitive": false,
+                "show_only_matches": true
+            },
+            "plugins": ["dnd", "search"]
+        });
+        $("#search-input").keyup(function () {
+            var searchString = $(this).val();
+            $('#tree').jstree('search', searchString);
+        });
+
+        $.ajax({
+            url: '/ReportQuery/GetDataReport',
+            type: "POST",
+            success: function (result) {
+                if (result.success) {
+                    var data = [];
+                    var obj = {
+                        "id": 0,
+                        "text": "Truy vấn báo cáo",
+                        "icon": "/Content/Images/doctype_key.png",
+                        "children": []
+                    };
+                    var objGroup = {
+                        "id": 0,
+                        "text": "Nhóm truy vấn báo cáo",
+                        "icon": "/Content/Images/doctype_key.png",
+                        "children": []
+                    }
+                    _.each(result.ReportQuery,function(x) {
+                        obj.children.push({
+                            "id": `query_${x.ReportQueryId}`,
+                            "text": x.ReportQueryName,
+                            "icon": "/Content/Images/doctype_key.png"
+                        });
+                    });
+                    _.each(result.ReportQueryGroup,function(x) {
+                        objGroup.children.push({
+                            "id": `group_${x.ReportQueryGroupId}`,
+                            "text": x.ReportQueryGroupName,
+                            "icon": "/Content/Images/doctype_key.png"
+                        });
+                    });
+                    data.push(obj);
+                    data.push(objGroup);
+                    $('#tree-report').on("select_node.jstree",
+                        function (evt, data) {
+                            var type = "";
+                            if (data.node.id.includes("query")) {
+                                type = "Report";
+                            }
+                            else if (data.node.id.includes("group")) {
+                                type = "ReportGroup";
+                            }
+                            if (type == "") return;
+                            var id = `${data.node.id}`.match(/\d+/)[0];
+                            $("input[name='DocType.ReportQuery']").val(data.node.id);
+                            $('td.col-compilation').html('');
+                            var select = '<select class="browser-default custom-select" style="min-width:200px;"> <option selected></option>';
+                            $.ajax({
+                                url: '/ReportQuery/GetFormCode',
+                                type: "POST",
+                                data: { id: id, type: type},
+                                success: function (result) {
+                                    if (result.success) {
+                                        if (result.data.length > 0) {
+                                            _.each(result.data,
+                                                function(x) {
+                                                    var obj = JSON.parse(x);
+                                                    var data = obj.data || [];
+                                                    _.each(data,
+                                                        function (v) {
+                                                            if (v.length > 4)
+                                                                select += `<option value="${v[4]}">${v[4]}</option>`;
+                                                        });
+                                                });
+                                            select += "</select>";
+                                            _.each($('td.col-compilation:not([data-name="Form_Compilation_Display_Match"]'), function (v) {
+                                                $(v).html(select);
+                                                var value = $(`input[name="${$(v).attr("data-name")}"`).val();
+                                                $(v).find("select").first().val(value).trigger('change');
+                                            });
+
+                                        }
+                                        var defineFieldJson = $('#DefineFieldJson').val() == undefined ? $('#Form_DefineFieldJson').val() : $('#DefineFieldJson').val();
+                                        // var fieldTableData = JSON.parse(defineFieldJson)["data"];
+                                        var formCode = JSON.parse($('#Form_FormCode').val());
+                                        var fieldTableData = formCode.extra.columnSetting;
+
+                                        var match = $('td.col-compilation[data-name="Form_Compilation_Display_Match"]');
+                                        var selectMatch = '<select class="browser-default custom-select" style="min-width:200px;"> <option selected></option>';
+                                        // _.each(fieldTableData[0], function (v) {
+                                        //    selectMatch += `<option value="${v}">${v}</option>`;
+                                        //});
+                                        for (var key in fieldTableData) {
+                                            selectMatch += `<option value="${key.split('!!')[0]}">${key.split('!!')[1]}</option>`;
+                                        }
+
+                                        selectMatch += "</select>";
+                                        $(match).html(selectMatch);
+                                        var valueMatch = $(`input[name="${$(match).attr("data-name")}"`).val();
+                                        $(match).find("select").first().val(valueMatch).trigger('change');
+                                        $("textarea[name='Form_sql']").val(result.query || "");
+
+                                        $('td.col-compilation select').on('change', function() {
+                                            $(`input[name="${$(this).parent().attr("data-name")}"`).val(this.value);
+                                        });
+                                        setTimeout(function() {
+                                            matchOff($("input[name='Form_Compilation_Match_Off']").is(':checked'), $("input[name='DocType.IsReportQuery']").is(':checked'));
+                                        }, 100);
+                                    }
+                                },
+                                error: function (result) {
+
+                                }
+                            });
+                        }).jstree({
+                        'core': {
+                            "animation": 0,
+                            'check_callback': true,
+                            'multiple': false,
+                            "themes": { "stripes": true },
+                            'data': data
+                        },
+                        "search": {
+                            "case_sensitive": false,
+                            "show_only_matches": true
+                        },
+                        "plugins": ["dnd", "search"]
+                    });
+                }
+            },
+            error: function (result) {
+
+            }
+        });
+        var idReport = $("input[name='DocType.ReportQuery']").val();
+        if (idReport != "") {
+            $("#tree-report").on("loaded.jstree",
+                function() {
+                    $('#tree-report').jstree(true).select_node(idReport);
+                });
+        }
+        $("#search-input-report").keyup(function () {
+            var searchString = $(this).val();
+            $('#tree-report').jstree('search', searchString);
+        });
+    $(document).ready(function() {
+        $("#btnConfigSql").click(function(e) {
+            e.preventDefault();
+            openConfigQuery();
+        });
+        $("#DocType_DocTypeName").focus();
+    });
+
+    $("#FormName").focus();
+
+    $("#createETL").click(function (e) {
+        var comment = $("#Description").val();
+        $.ajax({
+            url: "/Admin/form/CreateETL?id=" + "@Model.Form.FormId" + "&comment=" + comment,
+            type: 'GET',
+            data: {}
+        }).done(function (result) {
+            if (result.succress) {
+                $.notify({
+                    message: "Tạo bảng mới thành công"
+                }, {
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    }
+                });
+                location.href = "/Admin/docType/EditPlus/" + "@Model.DocType.DocTypeId";
+            }
+            else {
+                $.notify({
+                    message: result.message
+                }, {
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    }
+                });
+            }
+        });
+    });
+
+    // 20191211 VuHQ REQ-5 START
+    $("#createETLPlus").click(function (e) {
+        var comment = $("#Form_TableName").val();
+        var actionLevel = $("#DocType_ActionLevel option:selected").val();
+        $.ajax({
+            url: "/Admin/form/CreateETLPlus?id=" + "@Model.Form.FormId" + "&comment=" + comment + "&actionLevel=" + actionLevel,
+            type: 'GET',
+            data: {}
+        }).done(function (result) {
+            if (result.succress) {
+                $.notify({
+                    message: "Tạo bảng mới thành công"
+                }, {
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    }
+                });
+                location.href = "/Admin/Form/Edit/" + "@Model.Form.FormId";
+            }
+            else {
+                $.notify({
+                    message: result.message
+                }, {
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    }
+                });
+            }
+        });
+    });
+    // 20191211 VuHQ REQ-5 END
+
+    $("#createFormMobile").click(function (e) {
+        $.ajax({
+            url: "/Admin/form/CreateFormMobile?id=" + "@Model.Form.FormId",
+            type: 'GET',
+            data: {}
+        }).done(function (result) {
+            $.notify({
+                message: "Tạo bảng mới thành công"
+            }, {
+                type: 'success',
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                }
+            });
+            location.href = "/Admin/docType/EditPlus/" + "@Model.DocType.DocTypeId";
+        });
+    });
+
+    $("#deleteForm").click(function (e) {
+
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Form.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $.ajax({
+                    url: "/Admin/doctype/DeleteFormNRef?id=" + "@Model.Form.FormId" + "&docTypeId=" + "@Model.DocType.DocTypeId",
+                    type: 'GET',
+                    data: {}
+                }).done(function (result) {
+                    if (result.success) {
+                        $.notify({
+                            message: "Xóa biểu mẫu thành công"
+                        }, {
+                            type: 'success',
+                            placement: {
+                                from: "bottom",
+                                align: "right"
+                            }
+                        });
+                        location.href = "/Admin/docType/EditPlus/" + "@Model.DocType.DocTypeId";
+                    }
+                });
+            }
+        );
+    });
+    });
+    function matchOff(match, query) {
+        if (query) {
+            if (match) {
+                $('td[data-name="Form_Compilation_Target_Match"] select').attr("disabled", false);
+                $('td[data-name="Form_Compilation_Display_Match"] select').attr("disabled", false);
+            } else {
+                $('td[data-name="Form_Compilation_Target_Match"] select').attr("disabled", true);
+                $('td[data-name="Form_Compilation_Display_Match"] select').attr("disabled", true);
+            }
+        } else {
+            if (match) {
+                $("input[name='Form_Compilation_Target_Match']").attr("disabled", false);
+                $("input[name='Form_Compilation_Display_Match']").attr("disabled", false);
+            } else {
+                $("input[name='Form_Compilation_Target_Match']").attr("disabled", true);
+                $("input[name='Form_Compilation_Display_Match']").attr("disabled", true);
+            }
+        }
+    }
+    function openConfigQuery() {
+        $("#configQuery").removeClass('hidden');
+        $("#configQuery").dialog({
+            width: 1200,
+            height: 800,
+            title: "Cấu hình câu truy vấn",
+            buttons: [
+                {
+                    text: "Generate",
+                    click: function () {
+                        var query = $("#configQueryFrame").contents().find(".qb-ui-editor").find("textarea").val();
+                        query = RenameSql(query);
+                        $('textarea[name=Form_sql]').val(query);
+                        setTimeout(function () {
+                            $("#configQuery").dialog("close");
+                            $("#configQuery").addClass('hidden');
+                        }, 1000);
+                    }
+                }
+            ]
+        });
+    }
+    function RenameSql(sql) {
+        var sqlAfter = sql;
+        var strSelect = sql.split('Select').pop().split('From')[0];
+        var listSelect = strSelect.split(",");
+        for (var i = 0; i < listSelect.length; i++) {
+            var strColumn = listSelect[i].trim();
+            var listPropColumn = strColumn.split("As");
+            var name = listPropColumn[0];
+            var alias = listPropColumn[1].trim();
+            name = name.split(".").length > 1 ? name.split(".")[1].trim() : name.trim();
+            sqlAfter = sqlAfter.replace(alias, name);
+        }
+        return sqlAfter;
+    }
+    function download(id) {
+        var link = '@Url.Action("DownloadEmbryonicFileBase64", "Attachment", new { area = "" })/' + id;
+        $.fileDownload(link, {
+            failCallback: function (response) {
+                var html = $(response);
+                try {
+                    var json = JSON.parse(html.text());
+                    alert(json.error);
+                } catch (e) {
+                    alert('"@Localizer("Common.Error.DownloadFile")"');
+                }
+            }
+        });
+    }
+
+    function openConfigEmbryonic(formId) {
+        $("#configEmbryonicForm").removeClass('hidden');
+        $("#configEmbryonicForm").dialog({
+            width: 1100,
+            height: 600,
+            title: "Cấu hình mẫu báo cáo",
+            buttons: [
+                {
+                    text: "Đóng",
+                    click: function () {
+                        var editor = $("#ereport")[0];
+                        editor.contentWindow.docEditor.destroyEditor();
+                        eGovMessage.show("Đang xử lý ...");
+                        setTimeout(function () {
+                            $("#configEmbryonicForm").dialog("close");
+                            // location.reload();
+                        }, 5000);
+                    }
+                }
+            ]
+        });
+    }
+
+
+    // 20200713 HuyNP Collapse ckeditor
+    function btnToggleCollapse(idButton, idContent) {
+        $(`#${idButton} #${idContent}.collapse`).collapse('toggle');
+        // THAY ĐỔI ICON
+        if ($(`#${idButton} a .pull-right-container i`).hasClass('fa-chevron-down')) {
+            $(`#${idButton} a .pull-right-container i`).removeClass('fa-chevron-down');
+            $(`#${idButton} a .pull-right-container i`).addClass('fa-chevron-up');
+        } else {
+            if ($(`#${idButton} a .pull-right-container i`).hasClass('fa-chevron-up')) {
+                $(`#${idButton} a .pull-right-container i`).removeClass('fa-chevron-up');
+                $(`#${idButton} a .pull-right-container i`).addClass('fa-chevron-down');
+            }
+        }
+    }
+
+    // 20191111 VuHQ REQ-2
+    $(document).ready(function () {
+        $("#upload").change(function() {
+            var upload = document.getElementById('upload');
+            var files = upload.files;
+            if( files[0] != undefined) {
+                if (files.length == 1) {
+                    var importFile = files[0];
+                    var filename = importFile.name;
+                    if (filename.indexOf(".xlsx", filename - ".xlsx".length) !== -1 || filename.indexOf(".xls", filename - ".xls".length) !== -1) {
+                        // Create FormData object
+                        var fileData = new FormData();
+                        // Looping over all files and add it to FormData object
+                        for (var i = 0; i < files.length; i++) {
+                            fileData.append(files[i].name, files[i]);
+                        }
+                        $.ajax({
+                            url: '/Admin/DocType/GenHandsonConfigsByExcel',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData, 
+                            success: function (result) {
+                                if(result.succress == false) {
+                                    $("#choose-sheet").find("option").remove();
+                                    if(result.listSheet.length > 1) {
+                                        var option = "";
+                                        result.listSheet.forEach(item => option += "<option value='"+item.IndexSheet+"'>"+ item.Name +"</option> ");
+                                        //var option = "<option value='1'>Sheet1</option> ";
+                                        $("#choose-sheet").append(option);
+                                        $("#choose-sheet").show(800); 
+                                    }else{
+                                        $("#choose-sheet").css("display", "none"); 
+                                    }
+                                }else {
+                                    eGovMessage.show("Tải tệp thất bại khi chọn","", eGovMessage.messageButtons.Ok);
+                                }
+                            },
+                            error: function (err) {
+                                eGovMessage.show("Có lỗi xảy ra: " + err.statusText,
+                                    "", eGovMessage.messageButtons.Ok);
+                            }
+                        });
+                    }
+                    else {
+                        eGovMessage.show("Chỉ được up file xlsx",
+                            "", eGovMessage.messageButtons.Ok);
+                    }
+                }
+            }
+           
+        });
+        $("#btnUpload").click(function (e) {
+            var upload = document.getElementById('upload');
+            var files = upload.files;
+            if (files.length == 1) {
+                var importFile = files[0];
+                var filename = importFile.name;
+                if (filename.indexOf(".xlsx", filename - ".xlsx".length) !== -1 || filename.indexOf(".xls", filename - ".xls".length) !== -1) {
+                    // Create FormData object
+                    var fileData = new FormData();
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    $.ajax({
+                        url: '/Admin/DocType/GenHandsonConfigsByExcel',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData, 
+                        success: function (result) {
+                            if(result.succress == false) {
+                                eGovMessage.show("Tệp đã được tải lên!","", eGovMessage.messageButtons.Ok);
+                                $("#choose-sheet").hide(500); 
+                                $('#Form_DefineFieldJson').val(result.defineFieldJson);
+                                $('#Form_DefineConfigJson').val(result.defineTypeJson);
+                                $('#Form_DefineValueJson').val(result.defineValueJson);
+                                $('#Form_TableName').val(result.tableName);       
+                                init();       
+                            }else {
+                                eGovMessage.show("Tải tệp thất bại","", eGovMessage.messageButtons.Ok);
+                            }
+                        },
+                        error: function (err) {
+                            eGovMessage.show("Có lỗi xảy ra: " + err.statusText,
+                                "", eGovMessage.messageButtons.Ok);
+                        }
+                    });
+                }
+                else {
+                    eGovMessage.show("Chỉ được up file xlsx",
+                        "", eGovMessage.messageButtons.Ok);
+                }
+            }
+        });
+        // 20200305 VuHQ START Thêm loại báo cáo
+        $('input[type="radio"]').click(function () {
+            var inputValue = $(this).attr("value");
+            var targetBox = $("." + inputValue);
+            $(".box").not(targetBox).hide();
+            $(targetBox).show();
+        });
+        // 20200305 VuHQ END Thêm loại báo cáo
+
+        $('#btnGenerate').click(function () {
+            // get cols width
+            //var table1_col_size = lstRowWidth[0];
+            var table1_col_size = [];
+            for (var i = 0; i < dataTable.countCols(); i++)
+                table1_col_size.push(fieldTable.getColWidth(i));
+
+            var fieldmergedCells = [];
+            if (fieldTable.getPlugin('mergeCells').mergedCellsCollection != null)
+                fieldmergedCells = fieldTable.getPlugin('mergeCells').mergedCellsCollection.mergedCells;
+
+            var defineFieldJson = {
+                "data": fieldTableData,
+                "mergedCells": fieldmergedCells,
+                "countCols": fieldTable.countCols(),
+                colWidths: table1_col_size,
+                newColumns: newColumns
+            };
+
+            typeTableData = typeTable.getData();
+
+            // get hidden fields
+            var hiddenColumns = [];
+            var autoSizeColumns = [];
+            for (var i = 0; i < typeTableData.length; i++) {
+                if (typeTableData[i][fieldTable.countRows() + 7])
+                    hiddenColumns.push(i);
+                if (typeTableData[i][fieldTable.countRows() + 12])
+                    autoSizeColumns.push(i);
+            }
+
+            // bind them source của dropdown cột [Chi tiết] & [Giá trị mặc định] START
+            var catalogDetail = [];
+            var catalogDefaults = [];
+            $.each(typeTableData, function (rowIndex, rowValue) {
+                $.each(rowValue, function (columnIndex, cellValue) {
+                    if (typeTableData[rowIndex][fieldTable.countRows()] == 'Catalog') {
+                        if (catalogDetail.length == 0 && columnIndex == fieldTable.countRows() + 1) {
+                            catalogDetail = typeTable.getCellMeta(rowIndex, columnIndex).source;
+                        }
+
+                        if (columnIndex == fieldTable.countRows() + 2) {
+                            catalogDefaults.push({ source: typeTable.getCellMeta(rowIndex, columnIndex).source, row: rowIndex, col: columnIndex });
+                        }
+                    }
+                });
+            });
+            // bind them source của dropdown cột [Chi tiết] & [Giá trị mặc định] END
+
+            var defineTypeJson = {
+                "data": typeTableData,
+                "columns": typeColumsSetting,
+                "hiddenColumns": hiddenColumns,
+                "autoSizeColumns": autoSizeColumns,
+                "catalogDetail": catalogDetail,
+                "catalogDefaults": catalogDefaults
+            };
+
+            var fieldmergedCellData = [];
+            if (dataTable.getPlugin('mergeCells').mergedCellsCollection != null) {
+                fieldmergedCellData = dataTable.getPlugin('mergeCells').mergedCellsCollection.mergedCells;
+            }
+
+            var fieldReadonly = []
+            var cells = dataTable.getCellsMeta();
+            for (var i = 0; i < cells.length; i++) {
+                var cellData = cells[i];
+                if (cellData && cellData.readOnly) {
+                    fieldReadonly.push({ "col": cellData.col , "row": cellData.row})
+                }
+            }
+
+            // set data bị merged từ null ==> data cell merge đầu tiên
+            var _modifiedDataTableData = dataTable.getData();
+
+            fieldmergedCellData.forEach((e) => {
+                for (var i = e.row; i < e.rowspan + e.row; i++) {
+                    for (var j = e.col; j < e.colspan + e.col; j++) {
+                        _modifiedDataTableData[i][j] = _modifiedDataTableData[e.row][e.col];
+                    }
+                }
+            })
+
+            // get classname of datatable
+            var classCells = [];
+            var h0 = document.getElementById('dataTable');
+            var st1 = '.ht_master tbody > tr';
+
+            $.each(h0.querySelectorAll(st1), function (rowIndex, rowValue) {
+                var row = [];
+                $.each(rowValue.cells, function (columnIndex, cellValue) {
+                    if (columnIndex == 0) return;
+                    row.push(cellValue.className);
+                });
+                classCells.push(row);
+            });
+
+            var defineDataJson = {
+                "data": _modifiedDataTableData, "columns": dataColumsSetting,
+                "mergedCells": fieldmergedCellData, readOnlys: fieldReadonly,
+                "xoayHeaders": isXoay ? xoayHeaders : null,
+                "xoayInfo": isXoay ? gia_tri_prop : null,
+                "classCells": classCells,
+                "chiTieuSources": chiTieuSources
+            };
+            $('#Form_DefineFieldJson').val(JSON.stringify(defineFieldJson));
+            $('#Form_DefineConfigJson').val(JSON.stringify(defineTypeJson));
+            $('#Form_DefineValueJson').val(JSON.stringify(defineDataJson));
+            $('#defaultModal').modal('hide');
+        });
+
+    });
+</script>
+@Html.HiddenFor(model => model.Form.FormId)
+@Html.HiddenFor(model => model.DocType.ReportQuery)
+<table style="margin-top: 15px">
+    @*<tr>
+            <td style="width: 250px;">
+                @Html.LabelFor(model => model.Form.FormGroupId)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Form.FormGroupId, new SelectList(ViewBag.FormGroupIds, "Value", "Text"))
+            </td>
+        </tr>
+        <tr>
+                <td>
+                    @Html.LabelFor(model => model.Form.FormTypeId)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.Form.FormTypeId, new SelectList(ViewBag.FormTypeIds, "Value", "Text"))
+                </td>
+            </tr>
+        <tr>*@
+    @*<td style="width: 250px;">
+            @Html.LabelRequireFor(model => model.Form.FormName)
+        </td>
+        <td>*@
+    @*@Html.TextAreaFor(model => model.Form.FormName)*@
+    @*@Html.TextAreaFor(model => model.Form.FormName, new Dictionary<string, object>() {
+        { "class", "egovQtip" },
+        { "data-qtip", ".tooltipPacket" } })*@
+    @*@if (Model.Form.FormId == Guid.Empty)
+        {
+            <div>
+                <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+            </div>}
+        @Html.ValidationMessageFor(model => model.Form.FormName)*@
+    @*</td>*@
+    @*</tr>*@
+    @*<tr>
+            <td>
+                @Html.LabelFor(model => model.Form.Description)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Form.Description, new { @class = "form-control", @placeholder = Model.Form.EmbryonicPath })
+            </td>
+        </tr>*@
+    
+    <tr class="txtFormUrl hidden">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.FormUrl)
+        </td>
+        <td style="width:80%">
+            @Html.TextBoxFor(model => model.Form.FormUrl, new { style = "display:inline" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.ConfigForm)
+        </td>
+        <td style="width:80%">
+            @Html.TextBoxFor(model => model.Form.ConfigForm, new { style = "display:inline" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelRequireFor(model => model.Form.Json)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.Json)
+        </td>
+    </tr>
+    <tr class="">
+        <td style="width:20%">
+            Children Form
+        </td>
+        <td style="width:80%">
+            @Html.TextBoxFor(model => model.Form.ChildCompilationId)
+        </td>
+    </tr>
+
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelRequireFor(model => model.Form.ConfigFunction)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.ConfigFunction)
+        </td>
+    </tr>
+
+    <tr>
+        <td style="width:20%">
+            Loại báo cáo
+        </td>
+        <td style="width:80%">
+            Thường @Html.RadioButtonFor(model => model.Form.FormCategoryId, "1", new { id = "loaiThuong", style = "margin-right: 15px" })
+            Giao chỉ tiêu @Html.RadioButtonFor(model => model.Form.FormCategoryId, "2", new { id = "loaiGiaoKeHoach", style = "margin-right: 15px" })
+            Tổng hợp @Html.RadioButtonFor(model => model.Form.FormCategoryId, "3", new { id = "loaiTongHop", style = "margin-right: 15px" })
+            @*<label style="padding-right: 10px"><input type="radio" name="loaiBaoCao" value="loaiThuong"> Thường</label>
+                <label style="padding-right: 10px"><input type="radio" name="loaiBaoCao" value="loaiGiaoKeHoach"> Giao chỉ tiêu</label>
+                <label><input type="radio" name="loaiBaoCao" value="loaiTongHop"> Tổng hợp</label>*@
+        </td>
+    </tr>
+    <tr class="box 1">
+        <td style="width:20%">
+        <td style="width:80%"></td>
+    </tr>
+    <tr class="box 2">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.CompilationId);
+        </td>
+        <td style="width: 80%">
+            <select id="Form_CompilationId" name ="Form.CompilationId" class ="form-control" style="width: 80%">
+             
+            </select>
+            @*@Html.DropDownListFor(model => model.Form.CompilationId, ViewBag.ListForm as IEnumerable<SelectListItem>, "Lựa chọn báo cáo phát hành chỉ tiêu")*@
+            @*<select id="childCompilationIds" style="width: 80%">
+                    @foreach (var form in ViewBag.ListForm)
+                    {
+                        <option value="@form.Value" @(form.Selected ? "selected ='selected'" : "")>@form.Text</option>
+                    }
+                </select>*@
+        </td>
+    </tr>
+    <tr class="box 2">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.FormCodeCompilation);
+        </td>
+        <td style="width:80%">
+            <div id="Form_FormCodeCompilation" name="Form_FormCodeCompilation"></div>
+            @*@Html.TextAreaFor(model => model.Form.FormCodeCompilation, new { placeholder = "Example: {" +
+                "\n\tcondition: \n\t{ \n\t\tfield: 'huyenthanhpho', \n\t\tvalue: 'Huyện Lục Yên'\n\t}," +
+                "\n\tmatch: 'madinhdanh', \n\tselect: 'giatri',\n\tdisplay: 'giatri'\n}", @class = "form-input", @rows = 9 } )*@
+        </td>
+    </tr>
+    <tr class="box 3">
+        <td style="width:20%">
+            Cấu hình
+            <div id="report-Query" class="hidden">
+                <input id="search-input-report" class="form-control" />
+                <div id="tree-report" style="background-color: white; width: 100%; height: 250px; padding: 2px; overflow-x: hidden">
+                </div>
+            </div>
+
+        </td>
+        <td id="divLoaiTongHop" style="width: 80%;">
+            <div id="Form_TongHopCompilation" name="Form_TongHopCompilation" style="margin-bottom: 10px;"></div>
+        </td>
+    </tr>
+    @*20191030 VUHQ START REQ-02
+        Lấy hoặc thiết lập Định nghĩa cấu hình table dạng json*@
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.DefineFieldJson)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.DefineFieldJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.DefineConfigJson)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.DefineConfigJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.DefineValueJson)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.DefineValueJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.FormHeader)
+            <input id="search-input" class="form-control" style="background-color: white; width: 95%;"/>
+            <div id="tree" style="background-color: white; width: 95%; height: auto; max-height:250px; padding: 2px; overflow-x: hidden">
+            </div>
+        </td>
+        <td style="width:80%; vertical-align: baseline">
+            @Html.Label(" ")
+            @*START-HUYNP-20200708-Task 21-[Báo cáo số liệu] Thu gọn Mẫu Header*@
+            <nav role="navigation" class="system-tree center-menu" style="color: white; background-color: #418EFF">
+                <ul class="nav nav-pills nav-stacked" id="menu-document" style="overflow-y: hidden; ">
+                    @{ var node_header_id = "child_header";
+                        var group_header_id = "group_header";
+                        var target_header_id = "#" + node_header_id; }
+                    <li id="@group_header_id" style="white-space: normal; /*border-bottom: 0.5px solid #95b0e0*/">
+                        <a class="list-group-item is-group" data-toggle="collapse"
+                           data-parent="#menu-document" data-target="@target_header_id" onclick="btnToggleCollapse('@group_header_id', '@node_header_id')">
+                            <span class="node-name" style="float:none; color: whitesmoke">HEADER</span>
+                            <span class="badge reload qtooltip icon-spinner6"
+                                  data-restitle="egov.resources.index.reload"></span>
+                            <span class="pull-right-container" style="cursor: pointer; float: right;">
+                                <i class="fa fa-chevron-down" aria-hidden="true" style="color: whitesmoke"></i>
+                            </span>
+                        </a>
+                       
+                        <ul id="@node_header_id" data-id="header"
+                            class="nav panel-collapse collapse" role="menu" style="clear: both;">
+                            @Html.TextAreaFor(model => model.Form.FormHeader)
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            @*END-HUYNP-20200708-Task 21-[Báo cáo số liệu] Thu gọn Mẫu Header*@
+        </td>
+    </tr>
+    <tr class="">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.FormFooter)
+        </td>
+        <td style="width:80%; vertical-align: baseline">
+            @*START-HUYNP-20200708-Task 21-[Báo cáo số liệu] Thu gọn Mẫu Footer*@
+            <nav role="navigation" class="system-tree center-menu" style="color: white; background-color: #418EFF">
+                <ul class="nav nav-pills nav-stacked" id="menu-document" style="overflow-y: hidden; ">
+                    @{ var node_footer_id = "child_footer";
+                        var group_footer_id = "group_footer";
+                        var target_footer_id = "#" + node_footer_id; }
+                    <li id="@group_footer_id" style="white-space: normal; /*border-bottom: 0.5px solid #95b0e0*/">
+                        <a class="list-group-item is-group" data-toggle="collapse"
+                           data-parent="#menu-document" data-target="@target_footer_id" onclick="btnToggleCollapse('@group_footer_id', '@node_footer_id')">
+                            <span class="node-name" style="float: none; color: whitesmoke">FOOTER</span>
+                            <span class="badge reload qtooltip icon-spinner6"
+                                  data-restitle="egov.resources.index.reload"></span>
+                            <span class="pull-right-container" style="cursor: pointer; float: right;">
+                                <i class="fa fa-chevron-down" aria-hidden="true" style="color: whitesmoke"></i>
+                            </span>
+                        </a>
+                        
+                        <ul id="@node_footer_id" data-id="header"
+                            class="nav panel-collapse collapse" role="menu" style="clear: both;">
+                            @Html.TextAreaFor(model => model.Form.FormFooter)
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            @*END-HUYNP-20200708-Task 21-[Báo cáo số liệu] Thu gọn Mẫu Footer*@
+        </td>
+    </tr>
+    <tr class="">
+        <td style="width:20%">
+            @Html.LabelFor(model => model.Form.TableName)
+        </td>
+        <td style="padding-top: 10px;width:80%">
+            @Html.TextBoxFor(model => model.Form.TableName)
+        </td>
+    </tr>
+    @*20191030 VUHQ END REQ-02
+        Lấy hoặc thiết lập Định nghĩa cấu hình table dạng json*@
+    @*<tr>
+            <td>
+                @Html.LabelFor(model => model.Form.IsActivated)
+            </td>
+            <td>
+                @Html.RadioButtonFor(model => model.Form.IsActivated, 1)
+                Sử dụng
+                @Html.RadioButtonFor(model => model.Form.IsActivated, 2)
+                Không Sử dụng
+            </td>
+        </tr>*@
+
+    <tr class="hidden">
+        <td style="width:20%">
+            @Html.LabelRequireFor(model => model.Form.FormCode)
+        </td>
+        <td style="width:80%">
+            @Html.TextAreaFor(model => model.Form.FormCode)
+        </td>
+    </tr>
+    @if (Model.Form.FormId != Guid.Empty)
+    {
+        <tr>
+            <td style="padding-top: 20px">
+                @*<b>Cấu hình mẫu báo cáo</b>*@
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @*Mẫu báo cáo*@
+            </td>
+            <td>
+                <span class="EmbryonicPath">@Model.Form.EmbryonicPath</span>
+                <div style="display:none">
+                    <input type="text" name="EmbryonicPath" id="EmbryonicPath" />
+                    <input type="text" name="EmbryonicLocationName" id="EmbryonicLocationName" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <!-- <input class="btn btn-primary" type="button" value="Tải lên" onclick="$('#uploadx').click()" /> -->
+                @*<input class="btn" type="file" name="files" id="upload" style="" data-url="@Url.Action("UploadEmbryonic", "Attachment", new { area = "" })" accept="*.xlsx" />*@
+                <input class="btn" type="file" name="files" id="upload" style="" />
+                <input class="btn btn-primary" type="button" id="btnUpload" value="Tải lên (Mới)" />
+                <a href="~/Content/FileEx.xlsx" download style="color:red">File mấu (*.xlsx) </a>
+                    @if (!string.IsNullOrEmpty(Model.Form.EmbryonicLocationName))
+                {
+                        <input type="button" class="btn btn-default" value="Tải xuống" onclick="download('@Model.Form.FormId')" />
+                    }
+
+                    @*20191128 VuHQ REQ-5 START *@
+                    @*<input type="button" class="btn btn-info" value="Cấu hình" style="margin-left: 20px" onclick="openConfigEmbryonic('@Model.Form.FormId')" />*@
+                    <a data-toggle="modal" id="btnConfig" href="#defaultModal" class="btn btn-primary btn-large" style="margin-left: 20px">
+                        Cấu hình
+                    </a>
+                    <select id="choose-sheet" class="custom-select" onchange="realtime_sheet()"></select>
+                    <input type="hidden" id="catalogs" value='@catalogs' />
+                    <input type="hidden" id="inCatalogs" value='@inCatalogs' />
+                    @*20191128 VuHQ REQ-5  *@
+                    <input type="button" id="createETLPlus" class="btn btn-info" value="Tạo ETL (Mới)" style="margin-left: 20px" />
+                    <input type="button" id="createETL" class="btn btn-info hidden" value="Tạo ETL" style="margin-left: 20px" />
+                    <input type="button" id="createFormMobile_Old" class="btn btn-info hidden" value="Tạo Form Mobile" style="margin-left: 20px" />
+                    <input type="button" id="deleteForm" class="btn btn-danger" value="Xóa biêu mẫu" style="margin-left: 20px" />
+</td>
+        </tr>
+    }
+
+</table>
+@*20191128 VuHQ START REQ-5*@
+<div id="defaultModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 id="modal-label">Cấu hình mẫu báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.steps-1.1.0/jquery.steps.min.js")"></script>
+                <link type="text/css" rel="stylesheet" href="@Url.Content("~/Scripts/bkav.egov/libs/jquery.steps-1.1.0/css/jquery.steps.css")" />
+                <script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js")"></script>
+                <link type="text/css" rel="stylesheet" href=@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css")>
+                <style>
+                    .gray {
+                        background-color: #E8E8E8 !important;
+                    }
+                </style>
+
+                <div id="report-template-steps">
+                    <h1>Cấu hình header</h1>
+                    <div>
+                        <button id="btnAddRowField" type="button" onclick="addRowField()" class="btn btn-success">Thêm dòng bên dưới</button>
+                        <button type="button" onclick="btnAddColField()" class="btn btn-info">Thêm cột bên phải</button>
+                        <br />
+                        <br />
+                        <div id="fieldTable"> </div>
+                        <!--<br />
+                        <br />
+                        <button type="button" onclick="btnSaveFieldConfig(false)" class="btn btn-primary">Lưu header</button>-->
+                    </div>
+                    <h1>Cấu hình kiểu dữ liệu</h1>
+                    <div>
+                        <div id="typeTable"> </div>
+                        <!--<br />
+                        <button type="button" onclick="btnSaveTypeConfig(false)" class="btn btn-primary">Lưu cấu hình</button>-->
+                    </div>
+                    <h1>Cấu hình dữ liệu</h1>
+                    <div>
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist" style="font-weight: bold; list-style: none !important;">
+                                <li role="presentation" class="active">
+                                    <a href="#dataConfigTab" aria-controls="dataConfigTab" role="tab" data-toggle="tab">Cấu hình dữ liệu mặc định</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#mobilePreviewTab" aria-controls="mobilePreviewTab" role="tab" data-toggle="tab">Mobile Preview</a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="dataConfigTab">
+                                    <br />
+                                    <button type="button" onclick="btnAddRowData()" class="btn btn-success">Thêm dòng bên dưới</button>
+                                    <br />
+                                    <br />
+                                    <div id="indexDataTable"> </div>
+                                    <div id="dataTable"> </div>
+                                    <br />
+                                </div>
+                                @*<div role="tabpanel" class="tab-pane" id="mobilePreviewTab">
+                                    <div class="document mdl-layout mdl-js-layout mdl-layout--fixed-header">
+                                        <div class="mdl-layout__content document-content">
+                                            <div class="detail-content">
+                                                <div class="document-form">
+                                                    <div class="document-info" data-id="">
+                                                        <div class="document-info-template">
+                                                            <div mbsc-form id="formEdit">
+                                                                <div class="mbsc-form-group-title">Nội dung báo cáo</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="document-attachment-mobile" style="display: none;">
+                                                            <div>
+                                                                <div id="wrapAttachment">
+                                                                    <ul class="mdl-list attachment-list"></ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="divContentmobile" class="">
+                                                            <div mbsc-form="" id="formContentmbsc" class="mbsc-comp mbsc-form mbsc-no-touch mbsc-mobiscroll mbsc-ltr">
+                                                            </div>
+                                                            <div mbsc-form="" class="mbsc-comp mbsc-form mbsc-no-touch mbsc-mobiscroll mbsc-ltr">
+                                                                <div class="mbsc-form-group">
+                                                                    <div class="mbsc-btn-group-block">
+                                                                        <button id="addItemForm" class="mbsc-control mbsc-btn">Thêm mới</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden">
+                    <input type="button" id="btnGenerate" value="Generate" class="btn btn-primary" />
+                </div>
+                <script>
+                    function realtime_sheet(){
+                        var valueChoose = document.getElementById("choose-sheet").value;
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/DocType/GetIndexSheet",
+                            data: {
+                                index: valueChoose
+                            },
+                            success: function(res){
+                                if( res.success == true ){
+                                    console.log("change sheet");
+                                }
+                            }
+                        });
+                    }
+                </script>
+                <script>
+                    $("#report-template-steps").steps({
+                        autoFocus: true,
+                        enableAllSteps: true,
+                        labels: {
+                            previous: "Quay lại",
+                            next: "Lưu header",
+                            finish: "Generate"
+                        },
+                        onStepChanging: function (event, currentIndex, newIndex, isPaginationClick) {
+                            if (isPaginationClick && currentIndex < newIndex) {
+                                if (currentIndex === 0) btnSaveFieldConfig(false);
+                                else if (currentIndex === 1) {
+                                    dataTableClassCells = [];
+                                    btnSaveTypeConfig(false);
+                                }
+                            }
+                            return true;
+                        },
+                        onStepChanged: function (event, currentIndex, priorIndex) {
+                            if (currentIndex === 0) {
+                                $('#report-template-steps .actions ul li a[href="#next"]').text('Lưu header');
+                                //$('#report-template-steps .actions ul li a[href="#next"]').css("display","none");
+                            } else if (currentIndex === 1) {
+                                $('#report-template-steps .actions ul li a[href="#next"]').text('Lưu cấu hình');
+                                $('#report-template-steps .actions ul li a[href="#next"]').css("background","#e4e4e4");
+                            }
+                        },
+                        onFinishing: function (event, currentIndex) {
+                            $('#btnGenerate').click();
+                            return true;
+                        }
+                    });
+                </script>
+
+                @*VuHQ 20191105 REQ-02*@
+                <script src="@Url.Content("~/Scripts/bkav.egov/views/document/form/dynamic-form.js")"></script>
+                <script src="@Url.Content("~/Scripts/bkav.egov/rateemployee/moment.js")"></script>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="configEmbryonicForm" class="hidden">
+    @*<iframe id="ereport" src="/admin/Form/ConfigReport?id=@Model.Form.FormId" width="1050" height="577" style="border:none;"></iframe>*@
+</div>
+<div id="configQuery" class="hidden" style="position:relative;">
+    <iframe id="configQueryFrame" src="/admin/Query/ConfigDocType?formId=@Model.Form.FormId" width="1050" height="577" style="border:none;"></iframe>
+</div>

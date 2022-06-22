@@ -1,0 +1,152 @@
+﻿
+<script type="text/template" id="selectDatasourceItem">
+    <a class="media media-single ds-list-item" href="#" data-id="${DataSourceId}">
+        <div class="media-body">
+            <h6>${Name}</h6>
+            <small class="text-fader">${Description}</small>
+        </div>
+    </a>
+</script>
+
+<script type="text/template" id="selectDatatableItem">
+    <a class="media media-single dt-list-item" href="#" data-name="${Description || Name}" data-id="${DataTableId}">
+        <div class="media-body">
+            <h6>${Description || Name}</h6>
+            <small class="text-fader">${Name}</small>
+        </div>
+    </a>
+</script>
+
+<script type="text/template" id="tableSelected">
+    <a class="media media-single" data-name="${FieldName} ${Description}" style="" data-id="{{if DataFieldId}}${DataFieldId}{{else}}${DataFieldMathId}{{/if}}">
+        <span class="color-blue" style="float: left;">
+            <img src="/Content/Images/${icon}" style="width: {{if icon == 'numeral.svg'}}12px{{else}}16px;{{/if}}" />
+        </span>
+        <div class="media-body" style="float: left;">
+            <p>
+                {{if Description}} ${Description} {{else}} ${FieldName} {{/if}}
+                {{if isRelation}}
+                <span class="fa fa-link" style="font-size:10px;color: #c5c5c5;"></span>
+                {{/if}}
+
+                {{if isCustomField}}
+                <span title="Xóa" field-id="${id}" class="pull-right btnDelFunc" style="padding: 0 5px; color: red;">x</span>
+                {{/if}}
+            </p>
+        </div>
+    </a>
+</script>
+
+<script type="text/template" id="templateSelected">
+    <a class="media media-single" href="#" style="padding: 5px;" data-id="${TemplateId}">
+        <span class="color-blue"><i class="fa fa-user"></i></span>
+        <div class="media-body" data-id="template">
+            <p>${Name} </p>
+        </div>
+    </a>
+</script>
+
+<script type="text/template" id="dropdowOrder">
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item order-item" href="#" data-id="ASC">ORDER - ASC</a>
+    <a class="dropdown-item order-item" href="#" data-id="DESC">ORDER - DESC</a>
+    <a class="dropdown-item order-item" href="#" data-id="">ORDER - NONE</a>
+</script>
+
+<script type="text/template" id="filterConfigSelectValue">
+    <div class="row-filter">
+        <div class="checkbox">
+            <label for="${ElId}">
+                <input type="checkbox" id="${ElId}" {{if Selected}} checked{{/if}} value="${FieldValue}" class="filled-in chk-col-light-blue" name="FieldValue">
+                ${FieldValue}
+            </label>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="xoayFilterConfigSelectValue">
+    <div class="row">
+        <div class="col-md-7 xoayAliasItem" style="font-weight: bold">
+            <label for="${ElId}">${FieldValue}</label>
+        </div>
+        <div class="col-md-2 xoayAliasItem" style="color: blue">
+            Alias
+        </div>
+        <div class="col-md-7">
+            <input type="text" class="form-control" name="aliasName" value="${FieldAlias}" />
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="filterConfigSelectValue-radio">
+    <div>
+        <input type="radio" id="${ElId}" {{if Selected}} checked{{/if}} value="${FieldValue}" class="filled-in chk-col-light-blue" name="FieldValue">
+        <label for="${ElId}">${FieldValue}</label>
+    </div>
+</script>
+
+<script type="text/template" id="tmpConditionValue">
+    <div class="col-md-4">
+        Giá trị
+    </div>
+    <div class="col-md-8">
+        <input type="text" class="form-control" name="ConditionValue" id="ConditionValue" />
+    </div>
+</script>
+
+<script type="text/template" id="tmpConditionValueBetween">
+    <div class="row">
+        <div class="col-md-4">
+            Giá trị từ
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="ConditionValue" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            Giá trị đến
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="ConditionToValue" />
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="tmpFilterDisplay-SelectValue">
+    <div class="filter-display">
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text" id="filterDisplay-label"></span>
+            </div>
+            <select class="form-control" id="filterDisplay-SelectValue"></select>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="tmpFilterDisplay-ConditionValue">
+    <div class="filter-display">
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text" id="filterDisplay-label"></span>
+            </div>
+            <input type="text" class="form-control" id="filterDisplay-ConditionValue" />
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="tmpFilterDisplay-ConditionValueBetween">
+    <div class="filter-display-between">
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text" id="filterDisplay-label"></span>
+            </div>
+            <input type="text" class="form-control" id="filterDisplay-ConditionFromValue" />
+            <div class="input-group-append">
+                <span class="input-group-text">Đến</span>
+            </div>
+            <input type="text" class="form-control" id="filterDisplay-ConditionToValue" />
+        </div>
+    </div>
+</script>
+

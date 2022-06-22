@@ -1,0 +1,23 @@
+﻿<td>
+    <label class="checkbox document-color">
+        <input name="checkbox[]" value="${DocumentCopyId}" type="checkbox">
+        <span class="document-color-1">
+            <i class="icon-check glyphicon"></i>
+        </span>
+    </label>
+</td>
+<td class="wraptext">${DocCode}</td>
+<td class="wraptext">${Compendium}</td>
+<td class="wraptext">${DateReceivedStr}</td>
+<td class="wraptext">${LastUserComment}</td>
+{{if Status==1}}
+    <td class="wraptext" data-res="egov.resources.search.status1">Đang dự thảo</td>
+{{else Status==2}}
+    <td class="wraptext" data-res="egov.resources.search.status2">Đang xử lý</td>
+{{else Status==4}}
+    <td class="wraptext" data-res="egov.resources.search.status4">Đã kết thúc</td>
+{{else Status==8}}
+    <td class="wraptext" data-res="egov.resources.search.status8">Đã hủy</td>
+{{else Status==16}}
+    <td class="wraptext" data-res="egov.resources.search.status16">Dừng xử lý</td>
+{{/if}}

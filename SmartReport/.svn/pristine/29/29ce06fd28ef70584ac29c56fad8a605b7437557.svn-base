@@ -1,0 +1,136 @@
+﻿@model IEnumerable<CitizenModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+
+<style>
+    table tbody tr td:nth-child(8) {
+        text-indent: 10px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblCitizen").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered");
+    });
+
+    function searchCitizen(_this) {
+        $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())
+    }
+
+    function deleteCitizen(id) {
+        eGovMessage.show(
+            '@Html.Raw("Bạn có muốn xóa không?")',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+</script>
+
+<div class="form-inline form-group">
+    @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListCitizen", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+    {
+        <input type="text" class="form-control" name="citizenName" id="searchName" value="@(ViewBag.CitizenName ?? "")" placeholder="Tên công dân / doanh nghiệp" style="width:40%" />
+        <input type="submit" class="btn" id="search" onclick="searchCitizen(this);" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+</div>
+<table id="tblCitizen" class="table table-bordered table-hover">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+         <col style="width: 100px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="text-center header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header" style="white-space: nowrap;">
+                @Ajax.SortLink("CitizenName","Công dân / Doanh nghiệp",
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        citizenName = ViewBag.CitizenName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListCitizen",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="text-center">
+                Xóa
+            </th>         
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var citizen in Model)
+            {
+                number += 1;
+            <tr data-id="@citizen.Id">
+                <td class="text-center">
+                    @number
+                </td>
+                <td>
+                    @citizen.CitizenName
+                </td>
+
+                <td class="text-center">
+                    <a href="javascript:deleteCitizen(@(citizen.Id))">Xóa</a>
+                    <form id="formdelete@(citizen.Id)" style="display: none" action="@Url.Action("Delete", new { Id = citizen.Id })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.citizen.nocitizen">
+                    Không có người dùng nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<table>
+    <tr>
+        <td class="" colspan="6" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+            @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      citizenName = ViewBag.CitizenName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListCitizen",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AuthorizeModel>
+@{
+    ViewBag.Title = Localizer("Customer.Authorize.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteAuthorize(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function searchAuthorize(_el) {
+        var action = '@Url.Action("Search")?search=' + $("#search").val() + '&pageSize=' + $('select[name=pageSize]:first').val();
+        $(_el).parent().attr('action', action);
+    }
+
+    function onBegin() {
+        $("#divAuthorize").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divAuthorize').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divAuthorize').unblockpanel();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-accessibility"></i>
+        <span data-res="egov.resources.sitemap.authorize"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/authorize/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div id="divListAuthorize">
+        @Html.Partial("_Notifications")
+
+        @using (Ajax.BeginForm("Search", null,
+                                    new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divAuthorize",
+                                        OnBegin = "onBegin",
+                                        OnSuccess = "onSuccess",
+                                        OnFailure = "onFailure",
+                                        HttpMethod = "Get"
+                                    }, new { @class = "form-inline" }))
+        {
+            <input type="text"  id="search" name="search" value="@ViewBag.Search"  class="form-control" style="display:inline;width:40%" />
+            <input type="submit"  value="@Localizer("Common.Log.Index.Search.Button.Search")" class="btn" onclick="searchAuthorize(this)" style="display:inline" />
+        }
+        <br />
+
+        <div id="divAuthorize">
+            @Html.Partial("_PartialList", Model)
+        </div>
+    </div>
+</div>

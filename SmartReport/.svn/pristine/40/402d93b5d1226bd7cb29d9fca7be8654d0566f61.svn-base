@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "flkjalựlkwa";
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+    var hasOnlineRegistration = (bool)ViewBag.HasOnlineRegistration;
+    var allTreeGroups = ViewBag.AllTreeGroups as IEnumerable<Bkav.eGovCloud.Models.TreeGroupModel>;
+}
+
+<div>fuck</div>
+
+<div class="dataList">
+    <div class="documents documents-dataList" id="documentList1" data-app="documents">
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_Tokens");
+}

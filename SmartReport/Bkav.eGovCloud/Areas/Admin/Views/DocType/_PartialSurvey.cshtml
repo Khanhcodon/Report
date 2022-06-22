@@ -1,0 +1,77 @@
+﻿@model DocTypeModel
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">Mã phiếu khảo sát</label>
+    <div class="col-sm-10">
+        @Html.TextBoxFor(model => model.DocTypeCode, new { @class = "form-control" })
+        <div class="col-sm-10">
+            @Html.ValidationMessageFor(model => model.DocTypeCode)
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">Tên phiếu khảo sát</label>
+    <div class="col-sm-10">
+        @Html.TextBoxFor(model => model.DocTypeName, new { @class = "form-control" })
+        <div class="col-sm-10">
+            @Html.ValidationMessageFor(model => model.DocTypeName)
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    @Html.LabelFor(model => model.IsActivated, new { @class = "col-sm-2 col-form-label" })
+    <div class="col-sm-10">
+        @Html.CheckBoxFor(model => model.IsActivated)
+    </div>
+</div>
+<div class="form-group row">
+    <label class = "col-sm-2 col-form-label">Ảnh</label>
+    <div class="col-sm-10">
+        <span id="SurveyImg" class="col-sm-16" style="padding-left: 0;">@Model.SurveyImg</span>
+        <input class="btn btn-primary" type="button" value="Tải lên" onclick="$('#upload').click()"/>
+        <input class="btn" type="file" name="files" id="upload" style="display: none;" data-url="@Url.Action("UploadEmbryonic", "Attachment", new {area = ""})"/>
+    </div>
+</div>
+@Html.HiddenFor(model => model.DocTypeId)
+@Html.HiddenFor(model => model.SurveyConfig)
+@Html.HiddenFor(model => model.CategoryId)
+@Html.HiddenFor(model => model.CategoryBusinessId)
+@Html.HiddenFor(model => model.ActionLevel)
+@Html.HiddenFor(model => model.IsAllowOnline)
+@Html.HiddenFor(model => model.SurveyCriteria)
+@Html.HiddenFor(model => model.SurveyImg)
+@Html.HiddenFor(model => model.SurveyImgPath)
+<script>
+    $(function() {
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function(e, data) {
+                var filename = data.files[0].name;
+                var allowedExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                if (filename.length > 0) {
+                    var fileExtension = filename.split('.').pop().toLowerCase();
+
+                    var isValidFile = allowedExtension.filter(item => item === fileExtension).length > 0;
+
+                    if (isValidFile) {
+                        $("#SurveyImg").text(filename);
+                        data.submit();
+                    } else {
+                        eGovMessage.show("Chỉ được up file jpeg', jpg, png, gif, bmp",
+                            "",
+                            eGovMessage.messageButtons.Ok);
+                    }
+                } else {
+                    eGovMessage.show("chưa chọn file", "", eGovMessage.messageButtons.Ok);
+                }
+            },
+            done: function(e, data) {
+                var result = data.result[0];
+                $("input[name='SurveyImg']").val(result.name);
+                $("input[name='SurveyImgPath']").val(result.key);
+            },
+            fail: function(e, data) {
+                $(".EmbryonicPath").text("@Localizer("Common.Error.DownloadFile")");
+            }
+        });
+    });
+</script>

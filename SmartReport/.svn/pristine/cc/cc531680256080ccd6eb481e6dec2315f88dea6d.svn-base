@@ -1,0 +1,923 @@
+﻿@model Bkav.eGovCloud.Models.DocumentModel
+@using Bkav.eGovCloud.Core.Utils;
+@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@{
+    var attachments = ViewBag.Attachments as string;
+    var relations = Model.RelationModels.StringifyJs();
+    var categoryBusiness = (CategoryBusinessTypes)ViewBag.CategoryBusiness;
+    var organization = ViewBag.Organization as string;
+    var listContents = Model.DocumentContents;
+    var hasLicense = (bool)(ViewBag.License ?? false);
+}
+
+<script src="../../Scripts/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.blockUI.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.blockpanel.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.contextmenu/jquery.contextMenu.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery-ui-1.8.22.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.cookie.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/knockout-2.2.0.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ui.layout/jquery.layout-latest.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="../../Scripts/jquery.qtip/jquery.qtip.min.js"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/underscore.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jQuery.tmpl.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/document/fileupload.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileDownload.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.nicescroll.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jquery/jquery.global.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jquery/jquery.glob.vi-VN.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jquery/jquery.maskedinput-1.3.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jquery/jquery.meio.mask.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.fileupload.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+
+<!--Bkav javascript library-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.grid.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.utilities.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.autocomplete.selectfirst.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.messagebox.js")" ></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egovToolbar/bkav.egovToolbar.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.cshtml.document.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.cshtml.transfer.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.formtemplate.js")"></script>
+
+<!--Form động-->
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jsutilt.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/eForm.Libdata.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/eForm.Controls.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/eForm.Lib.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/eForm.DB.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/eForm.Tool.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/Resize.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/bkav.egate.applet.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/bkav.egate.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/bkav.egate.compiler.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/document/document.permission.helper.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/document/document.shortkey.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/fb_installer.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.simulate.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.timepicker/jquery-ui-timepicker-addon.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/jquery.jstree.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/_lib/jquery.hotkeys.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jQuery.dotdotdot/jquery.dotdotdot.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ui.multiselect/js/jquery.multiselect.min.js")" ></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.nicescroll.plus.js")"></script>
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/jquery.ui.multiselect/css/jquery.multiselect.css")" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.autocomplete.selectfirst.js")"></script>
+<script src="../../Scripts/ckeditor/ckeditor.js"></script>
+<script src="../../Scripts/ckeditor/adapters/jquery.js"></script>
+
+<script src="../../Scripts/jquery.contextmenu/jquery.ui.position.js"></script>
+<script src="../../Scripts/jquery.contextmenu/jquery.contextMenu.js"></script>
+<link href="../../Scripts/jquery.contextmenu/jquery.contextMenu.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $.datepicker.setDefaults($.datepicker.regional['@(CultureHelper.GetCurrentCultureName())']);
+    $.timepicker.setDefaults($.timepicker.regional['@(CultureHelper.GetCurrentCultureName())']);
+    var relations = @(string.IsNullOrEmpty(relations) ? MvcHtmlString.Create("[]") : Html.Raw(relations));
+    var attachments = @(string.IsNullOrEmpty(attachments) ? MvcHtmlString.Create("[]") : Html.Raw(attachments));
+    var organization = @(string.IsNullOrEmpty(organization) ? MvcHtmlString.Create("[]") : Html.Raw(organization));
+    var maxFileSize = @ViewBag.FileUploadMaximumSizeBytes;
+    var acceptFileTypes = @ViewBag.FileUploadAllowedExtensions;
+    var fullname = '@Html.Raw(ViewBag.FullName as string)';
+    var username = '@Html.Raw(ViewBag.Username as string)';
+    var template = @(string.IsNullOrEmpty(ViewBag.Template) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.Template));
+    var patternDateForDatepicker, patternTimeForDatepicker;
+    var isCreate = '@Model.DocumentId.Equals(Guid.Empty)';
+    $(function() {
+        Globalize.culture('@(CultureHelper.GetCurrentCultureName())');
+        patternDateForDatepicker = Globalize.culture().calendar.patterns['d'].toLowerCase().replace('yyyy', 'yy');
+        patternTimeForDatepicker = Globalize.culture().calendar.patterns['t'].toLowerCase().replace('tt', 'TT');
+        
+        egov.cshtml.document.relations = relations;
+        egov.cshtml.document.transferType = @ViewBag.TransferTypes;
+        egov.cshtml.document.nodeCurrent = @(ViewBag.NodeCurrent == null ? 0 : (int)ViewBag.NodeCurrent);
+        egov.cshtml.document.isChangeExpireProcess = false;
+        egov.cshtml.document.transferplan = @(string.IsNullOrEmpty(ViewBag.DestinationPlan) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.DestinationPlan));
+        //Đánh lại index cho paper và fee
+        egov.cshtml.document.setTabIndexPaper();
+        egov.cshtml.document.setTabIndexFee();
+
+        egov.cshtml.document.initFileUpload(attachments, maxFileSize, acceptFileTypes, fullname, username);
+
+        egov.formtemplate.view.load('#layout', template);
+
+        loadForm();
+     
+        //$('input[type="text"]').setMask();
+        $("#Organization").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( organization, function( value ) {
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true
+        });
+
+        $("#Compendium").keypress(function(e){
+            e = e || window.event;
+            if ( e.keyCode == 13 ) {
+                e.preventDefault();
+            }
+        });
+
+        // set focus vào cuối cùng của trích yếu mặc định
+        $("#Compendium").focus();
+        $("#Compendium").val($("#Compendium").val());
+
+        $("#CategoryId").mousedown(function(e) {
+            e.preventDefault();
+            egov.cshtml.document.showCategories();
+        });
+
+        $("#DocTypeId").mousedown(function(e) {
+            e.preventDefault();
+            egov.cshtml.document.showDocType();
+        });
+
+        $("#InOutPlace").mousedown(function(e) {
+            e.preventDefault();
+            egov.cshtml.document.showInOutPlace(@(categoryBusiness == CategoryBusinessTypes.VbDen ? "true" : ""));
+        });
+
+        $("#StoreId").change(function() {
+            var id = $(this).val();
+            if (!id) {
+                $("#InOutCode").autocomplete("disable");
+            } else {
+                $.ajax({
+                    url: '/Document/GetInOutCode',
+                    data: {id: $(this).val()},
+                    success: function (data) {
+                        if (!data || data.length === 0) {
+                            $("#InOutCode").autocomplete("disable");
+                        } else {
+                            $("#InOutCode").autocomplete("enable");
+                            $("#InOutCode").autocomplete({
+                                minLength: 1,
+                                source: data,
+                                focus: function() {
+                                    return false;
+                                },
+                                selectFirst: true
+                            });
+                            $("#InOutCode").val(data[0]);
+                        }
+                    }
+                });
+            }
+        });
+        
+        $("#ListDocField").width($("#ListDocField").parent().width() + 20);
+        $("#ListDocField").multiselect({
+            selectedList: $("#ListDocField option").length,
+            noneSelectedText: ''
+        });
+
+        $("#ListKeyword").width($("#ListKeyword").parent().width() + 20);
+        $("#ListKeyword").multiselect({
+            selectedList: $("#ListKeyword option").length,
+            noneSelectedText: ''
+        });
+
+        $("body").keydown(function (e) {
+            if (e.ctrlKey && (e.keyCode == 65 || e.keyCode == 97)) {
+                e.preventDefault();
+            }
+        });
+        
+        $("#DateArrived").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:patternDateForDatepicker,
+            //showOn: "button",
+            buttonImage: '../../Content/Images/calendar.gif',
+            buttonImageOnly: true
+        });
+        
+        $("#DatePublished").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:patternDateForDatepicker,
+            //showOn: "button",
+            buttonImage: '../../Content/Images/calendar.gif',
+            buttonImageOnly: true
+        });
+
+        $("#DateResponse").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:patternDateForDatepicker,
+            //showOn: "button",
+            buttonImage: '../../Content/Images/calendar.gif',
+            buttonImageOnly: true
+        });
+
+        if('@Model.DateResponse.HasValue'=='True')
+        {
+            $("#DateResponse").datepicker("option", "showOn", "button");
+        }
+        
+        $('textarea, input, select').change(function() { 
+            egov.cshtml.document.isFormChange = true;
+        }); 
+
+        //Disable right click default
+        //$(document).bind("contextmenu",function(e){
+        //    e.preventDefault();
+        //    e.stopPropagation();
+        //});
+
+        $("#DateAppointed").datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            controlType: 'select',
+            buttonImage: "../../Content/Images/calendar.gif",
+            buttonImageOnly: true,
+            minDate: 0,
+            regional: 'vi',
+            dateFormat: patternDateForDatepicker,
+            timeFormat: patternTimeForDatepicker,
+            onSelect: function (selectedDate) {
+                if (egov.cshtml.document.isHoso) {
+                    egov.cshtml.document.setRangeAppointed(selectedDate);    
+                }
+            }
+        });
+        //$("#DateAppointed").datetimepicker("option", $.datepicker.regional['@(CultureHelper.GetCurrentCultureName())']);
+        //        $("#Comments_Content").autocomplete({
+        //            minLength: 1,
+        //            source: allCommonComments,
+        //            focus: function() {
+        //                return false;
+        //            },
+        //            selectFirst: true,
+        //            select: function(event, ui) {                
+        //                $(this).val(ui.item.label);
+        //                return false;
+        //            }
+        //        })        
+        //        .data("autocomplete")._renderItem = function(ul, item) {
+        //            return $("<li></li>")
+        //                .data("item.autocomplete", item)
+        //                .append("<a>" + item.label + "</a><span title='Xóa ý kiến' onclick='egov.cshtml.document.delComment("+item.value+",'"+item.label+"',this)' style='color:red;float:right;margin-right:2px;font-weight: bold;'>X</span>")
+        //                .appendTo(ul);
+        //        };
+
+        $("#Comments_Content").keypress(function(event){
+            if ( event.keyCode == 0 )
+            {
+                $(this).qtip({
+                    content:
+                    {
+                        text: function (event, api) {
+                            $.ajax({
+                                url: "/Document/GetCommonComments",
+                                Type: 'Get',
+                                data: {commoncomment:this.val() }
+                            })
+                            .then(function (content) {
+                                api.set('content.text', content);
+                            }, function (xhr, status, error) {
+                                api.set('content.text', status + ":" + error);
+                            });
+                        }
+                    },
+                    position: {
+                        my: "top left",
+                        at: "bottom left"
+                    },
+                    events: {
+                        render: function (event, api) {
+                            api.elements.target.toggle(this.show, this.hide);
+                        }
+                    },
+                    show: { event: 'focus', fixed: true, effect: false, delay: 0 },
+                    hide: { event: 'unfocus', fixed: true, effect: false, delay: 0 },
+                    style: { classes: 'qtip-light', tip: false, width: $("#Comments_Content").width() + 10}
+                });          
+                
+            }
+        });
+        
+        $.validator.setDefaults({
+            ignore: ""
+        });   
+    });
+    
+    $(document).ready(function(){
+        var frame=window.frameElement.name;
+        window.parent.frames[frame].egov.cshtml.document.createRelationsContext('#tblRelations tr');
+    });
+
+    function dateResponseChange(cb) {
+        if (cb.checked) {
+            $("#DateResponse").removeAttr('disabled');
+            $("#DateResponse").parent().find('.ui-datepicker-trigger').show();
+            $("#DateResponse").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat:patternDateForDatepicker,
+                //showOn: "button",
+                buttonImage: '../../Content/Images/calendar.gif',
+                buttonImageOnly: true
+            });
+        } else {
+            $("#DateResponse").attr("disabled", "disabled");
+            $("#DateResponse").parent().find('.ui-datepicker-trigger').hide();
+        }
+    }
+    
+    function pageLoad() {
+        //1: Khởi gán danh mục control và property từ eForm.Libdata vào object trong eForm.Lib
+        eForm.Lib.Init();
+        $('.sub_pnl_root').each(function () {
+            var h = 0;
+            $(this).children('.icontainer').each(function () {
+                h += $(this).height();
+            });
+            $(this).css('height', h + 20);
+        });
+    }
+
+    function loadForm(){
+        pageLoad();
+        setTimeout(function() {
+            egov.cshtml.document.loadContent(egov.cshtml.document.isCreatingDocument, false);
+        }, 300);
+    }
+
+    function showHTMLEditDoccumentContent(docCopyId)
+    {
+        var frame = window.frameElement.name;      
+        var htmlDoccontent=new window.parent.egov.document.editHTMLDocContent(docCopyId,frame);
+        htmlDoccontent.open();
+    }
+    function showAddRelations() {
+        var frame = window.frameElement.name;
+        var docRelation = new window.parent.egov.document.docRelations(frame);
+        docRelation.open();
+    }
+    
+    function showAttachment()
+    {
+        $("#fileupload").click();
+    }
+
+    function showDialogScan() {
+        var frame = window.frameElement.name;
+        window.parent.egov.cshtml.home.scan.showDialogScan(frame, $('#DocCode').val(), acceptFileTypes, fullname, username);
+    }
+    
+    function addMultiDocument() {
+        if (egov.cshtml.document.allowTransferMultiDocument) {
+            var frame = window.frameElement.name;
+            window.parent.egov.cshtml.home.transferMultiDocument.add(frame, egov.cshtml.document.doctypeId, egov.cshtml.document.isHoso, acceptFileTypes, fullname, username);
+        }
+    }
+
+    function showCommonComment() {
+        var $commonComments = new egov.document.commonComments();
+        $commonComments.open();
+    }
+
+    function openDocument(id, title) {
+        //window.parent.egov.cshtml.home.tab.add(id, title, null, egov.cshtml.home.tabIcons.document, function () {
+        //    egov.cshtml.home.listdocuments.updateIsViewed(id);
+        //});
+        window.parent.openDocument(id, title);
+    }
+
+    //Hàm xử lý chức năng cấp phép
+    function openLicense(docCopyId,businessName) {
+        var frame = window.frameElement.name;
+        var license = new window.parent.egov.document.license(docCopyId,businessName,frame);
+        license.open();
+    }
+</script>
+<script type="text/x-jquery-tmpl" id="attachmentTemplate">
+    <tr id="attachment${Id}" ondblclick="egov.cshtml.document.openAttachment(this)" class="attachment" data-filename="${Name}">
+        <td>
+            <span ext="${Extension}" class="icon-attachment {{if Extension == '7z'}}sevenz{{else}}${Extension}{{/if}}">
+                <span>${Name}</span>
+            </span>
+        </td>
+        <td>${Size}
+        </td>
+        <td>${Versions[0].Version}
+        </td>
+        <td>${Versions[0].User}
+        </td>
+    </tr>
+</script>
+<script type="text/x-jquery-tmpl" id="relationTemplate">
+    <tr>
+        <td>${Compendium}
+            <input name="Relations" class="relation-id" value="{RelationId:'${DocumentId}',DocumentCopyRelationId:${DocumentCopyId},RelationType:1}" type="hidden" />
+        </td>
+        <td>${DocCode}</td>
+        <td>${CitizenName}</td>
+        <td>${DateCreated}</td>
+        <td>${CategoryName}</td>
+    </tr>
+</script>
+<script type="text/x-jquery-tmpl" id="paperTemplate">
+    <li class="doc-paper">
+        <div class="label-field" style="width: 20px; margin-left: 0;">
+            <input type="checkbox" value="${DocPaperId}" class="paper-id" checked="checked" onclick="egov.cshtml.document.checkPaper(this) " />
+        </div>
+        <div class="field">
+            <input type="text" class="paper-name" title="${PaperName}" tabindex="" style="width: 80%;" value="${PaperName}" prev_val="" onkeyup="egov.cshtml.document.changePaper(this)" />
+            <input type="text" value="${Amount}" class="paper-amount" tabindex="" style="width: 16%; text-align: right" alt="integer" />
+        </div>
+    </li>
+</script>
+<script type="text/x-jquery-tmpl" id="feeTemplate">
+    <li class="doc-fee">
+        <div class="label-field" style="width: 20px; margin-left: 0;">
+            <input type="checkbox" value="${DocFeeId}" class="fee-id" checked="checked" onclick="egov.cshtml.document.checkFee(this)" />
+        </div>
+        <div class="field">
+            <input type="text" class="fee-name" title="${FeeName}" style="width: 70%;" value="${FeeName}" prev_val="" onkeyup="egov.cshtml.document.changeFee(this)" />
+            <span class="price-unit">Vnd</span>
+            <input type="text" value="${Price}" class="fee-price" onblur="egov.cshtml.document.getTotalFees()" style="width: 20%; text-align: right" alt="integer" />
+        </div>
+    </li>
+</script>
+<script type="text/x-jquery-tmpl" id="commonCommentTemplate">
+    <span onclick="egov.cshtml.document.setCommonSelected(this)" ondblclick="egov.cshtml.document.insertCommonContent($(this))" style="display: inline-table; width: 504px;">${Content}</span>
+    <span title="Xóa" onclick="egov.cshtml.document.deleteCommonComment(${CommonCommentId}, this)" style="color: red; cursor: pointer; display: none">X</span>
+</script>
+
+
+@Html.HiddenFor(model => model.DocumentId)
+@Html.HiddenFor(model => model.DocumentCopyId)
+@Html.HiddenFor(model => model.ResultStatus)
+
+<div id="layout" class="document-info">
+</div>
+<div class="document-extend">
+    @if (!Model.DocumentId.Equals(Guid.Empty))
+    {
+        <div class="process-status">
+            <div class="main-title">
+                <span>Tổng hợp tình trạng xử lý</span>
+            </div>
+            <div class="document-status">
+                <span><strong>@ViewBag.DocumentCopyStatusText</strong></span> <span>Kết quả xử lý cuối:
+                    <span>@(Model.IsSuccess == null ? "Chưa duyệt" : (Model.IsSuccess == true ? "Đồng ý" : "Từ chối"))</span></span>
+                <span>Người đang giữ: <span>@(ViewBag.CurrentUser ?? string.Empty)</span></span>
+                <span>Kết thúc: <span>@(Model.Status == 4 ? "Đã kết thúc" : "Đang xử lý")</span></span>
+                <span>Trả kết quả: <span>@(Model.IsReturned == true ? "Đã trả kết quả" : "Chưa (không) trả kết quả")</span></span>
+                <span>Giấy phép:
+                    @if (hasLicense)
+                    {
+                        <a href="#" style="color: blue;" onclick="openLicense(@Model.DocumentCopyId,'')">xem</a>
+                    }
+                    else
+                    {
+                        <span>không có</span>                 
+                    }
+                </span>
+            </div>
+            <div class="process-info">
+                <div class="status-title">
+                    <span>Ý kiến đồng xử lý (<span class="coProcess-count"></span>)</span>
+                </div>
+            </div>
+        </div>
+        <div class="comments">
+            <div class="main-title">
+                <span>Tổng hợp ý kiến giải quyết</span> <span class="view-all">@*<a href="#">Xem tất cả
+                    <span class="comment-count">10</span> ý kiến</a>*@ </span>
+            </div>
+        </div>
+    }
+    @{
+        Html.RenderPartial("_FormView", Model);
+    }
+</div>
+<div style="display: none">
+    <div id="wrapCompendium">
+        <div class="label-field">
+            @Html.LabelRequireFor(model => model.Compendium)
+            @Html.Hidden("DefaultCompendium", Model.Compendium)
+        </div>
+        <div class="field">
+            @Html.TextAreaFor(model => model.Compendium, new { rows = "2", cols = "20" })
+            @Html.ValidationMessageFor(model => model.Compendium)
+        </div>
+    </div>
+    <div id="wrapComment">
+        <div class="label-field">
+            <span>Ý kiến xử lý</span>
+        </div>
+        <div class="field">
+            @Html.TextAreaFor(model => model.Comments.Content, new { rows = "2", cols = "20" })
+        </div>
+    </div>
+    <div id="wrapDoctype">
+        <div class="label-field">
+            @Html.LabelFor(model => model.DocTypeId)
+        </div>
+        <div class="field">
+            @Html.DropDownList("DocTypeId", null, new { onchange = "document.location = '/Document/Create/' + this.value;" })
+        </div>
+    </div>
+    <div id="wrapCategory">
+        <div class="label-field">
+            @Html.LabelFor(model => model.CategoryId)
+        </div>
+        <div class="field">
+            @Html.DropDownList("CategoryId")
+        </div>
+    </div>
+    <div id="wrapUrgent">
+        <div class="label-field">
+            @Html.LabelFor(model => model.UrgentId)
+        </div>
+        <div class="field">
+            @Html.DropDownList("UrgentId")
+        </div>
+    </div>
+    <div id="wrapInOutPlace">
+        <div class="label-field">
+            @Html.LabelFor(model => model.InOutPlace)
+        </div>
+        <div class="field">
+            @Html.DropDownListFor(model => model.InOutPlace, ViewBag.ListInOutPlace as IEnumerable<SelectListItem>)
+            @Html.ValidationMessageFor(model => model.Keyword)
+        </div>
+    </div>
+    <div id="wrapDateAppointed">
+        <div class="label-field">
+            @Html.LabelFor(model => model.DateAppointed)
+        </div>
+        <div class="field">
+            @if ((bool)ViewBag.IsCreatingDocument)
+            {
+                if (categoryBusiness == CategoryBusinessTypes.Hsmc)
+                {
+                <div class="thuly" style="display: inline-block; float: left">
+                    <select onchange="egov.cshtml.document.getDateAppointed(this)" id="ddlDateAppoint"
+                        style="width: 50px">
+                        @for (var year = 1; year <= 365; year++)
+                        {
+                            <option value="@year" @(Model.ExpireProcess.ToString() == year.ToString() ? "selected='selected'" : "")>@year
+                            </option>
+                        }
+                    </select>
+                    <span style="margin-left: 10px;">Ngày</span>
+                </div>
+                }
+                @Html.TextBox("DateAppointed", Model.DateAppointed.HasValue ? Model.DateAppointed.Value.ToString("g") : "", new { style = "float: right; " + (categoryBusiness == CategoryBusinessTypes.Hsmc ? "width: 50%;" : "width: 100%;") })
+            }
+            else
+            {
+                <strong><span class="dateappoint">@Model.DateAppointed</span></strong>
+            }
+        </div>
+    </div>
+    <div id="wrapDateResponse">
+        <div class="label-field">
+            <span>Hồi báo</span>
+        </div>
+        <div class="field">
+            <div style="display: inline-block; margin-top: 4px">
+                <input type="checkbox" name="tabIndex" onchange="dateResponseChange(this)" @(Model.DateResponse.HasValue ? "checked='checked'" : "")  />&nbsp;Yêu
+                cầu hồi báo
+            </div>
+            <input name="DateResponse" class="tabIndex" id="DateResponse" @(Model.DateResponse.HasValue ? "" : "disabled='disabled'") style="width: 50%;float:right" type="text" value="@(Model.DateResponse.HasValue ? Model.DateResponse.Value.ToShortDateString() : DateTime.Now.ToShortDateString())"/>
+        </div>
+    </div>
+    <div id="wrapDocumentRelation">
+        <div class="relation">
+            <table class="table-main" id="tblRelations">
+                <colgroup>
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">Trích yếu văn bản liên quan
+                        </th>
+                        <th class="header">Số hiệu
+                        </th>
+                        <th class="header">Người xử lý
+                        </th>
+                        <th class="header">Ngày tạo
+                        </th>
+                        <th class="header">Hình thức
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RelationModels != null)
+                    {
+                        foreach (var doc in Model.RelationModels)
+                        { 
+                        <tr>
+                            <td>@doc.Compendium
+                                <input name="DocRelationId" value="@doc.RelationId " type="hidden" />
+                            </td>
+                            <td>@doc.DocCode
+                            </td>
+                            <td>@doc.CitizenName
+                            </td>
+                            <td>@doc.DateCreated.ToString()
+                            </td>
+                            <td>@doc.CategoryName
+                            </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="wrapAttachment">
+        <div class="file" id="divFiles">
+            <span style="display: none;">
+                <input id="fileupload" type="file" name="files" data-url="@Url.Action("UploadTemp", "Attachment")" multiple />
+            </span>
+            <table class="table-main" id="tblFiles">
+                <colgroup>
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 200px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">Tên tệp đính kèm
+                        </th>
+                        <th class="header">Kích thước
+                        </th>
+                        <th class="header">Phiên bản
+                        </th>
+                        <th class="header">Người cập nhật cuối
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @if (categoryBusiness == CategoryBusinessTypes.VbDen)
+    {
+        <div id="wrapOrganization">
+            <div class="label-field">
+                @Html.LabelRequireFor(model => model.Organization)
+            </div>
+            <div class="field">
+                @Html.EditorFor(model => model.Organization)
+                @Html.ValidationMessageFor(model => model.Organization)
+            </div>
+        </div>
+        <div id="wrapDocCode">
+            <div class="label-field">
+                <label for="DocCode">
+                    Số/ký hiệu</label>&nbsp;<span class="spanRequire">*</span>
+            </div>
+            <div class="field">
+                @Html.EditorFor(model => model.DocCode)
+                @*@Html.ValidationMessageFor(model => model.Compendium)*@
+            </div>
+        </div>
+        <div id="wrapDateArrived">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DateArrived)
+            </div>
+            <div class="field">
+                @Html.TextBox("DateArrived", Model.DateArrived.HasValue ? Model.DateArrived.Value.ToString("d") : "")
+            </div>
+        </div>
+        <div id="wrapDatePublished">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DatePublished)
+            </div>
+            <div class="field">
+                @Html.TextBox("DatePublished", Model.DatePublished.HasValue ? Model.DatePublished.Value.ToString("d") : "")
+            </div>
+        </div>
+        <div id="wrapStore">
+            <div class="label-field">
+                <label for="StoreId">
+                    Sổ văn bản</label>
+            </div>
+            <div class="field">
+                @Html.DropDownList("StoreId", "")
+            </div>
+        </div>
+        <div id="wrapInOutCode">
+            <div class="label-field">
+                @Html.LabelFor(model => model.InOutCode)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.InOutCode)
+            </div>
+        </div>
+        <div id="wrapSecurity">
+            <div class="label-field">
+                @Html.LabelFor(model => model.SecurityId)
+            </div>
+            <div class="field">
+                @Html.DropDownList("SecurityId")
+            </div>
+        </div>
+        <div id="wrapTotalPage">
+            <div class="label-field">
+                @Html.LabelFor(model => model.TotalPage)
+            </div>
+            <div class="field">
+                @Html.DropDownListFor(model => model.TotalPage, ViewBag.ListTotalPage as List<SelectListItem>, "Chọn số trang")
+                @Html.ValidationMessageFor(model => model.TotalPage)
+            </div>
+        </div>
+        <div id="wrapDocField">
+            <div class="label-field">
+                Lĩnh vực
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.DocFieldIds)
+                @Html.ListBox("ListDocField")
+                @Html.ValidationMessageFor(model => model.DocFieldIds)
+            </div>
+        </div>
+        <div id="wrapKeyword">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Keyword)
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.Keyword)
+                @Html.ListBox("ListKeyword")
+                @Html.ValidationMessageFor(model => model.Keyword)
+            </div>
+        </div>
+        <div id="wrapSendType">
+            <div class="label-field">
+                @Html.LabelFor(model => model.SendTypeId)
+            </div>
+            <div class="field">
+                @Html.DropDownListFor(model => model.SendTypeId, ViewBag.ListSendTypeId as IEnumerable<SelectListItem>, "Chọn hình thức gửi")
+                @Html.ValidationMessageFor(model => model.SendTypeId)
+            </div>
+        </div>
+    }
+    @if (categoryBusiness == CategoryBusinessTypes.Hsmc)
+    { 
+        <div id="wrapDocCode">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocCode)
+            </div>
+            <div class="field">
+                @Html.HiddenFor(model => model.DocCode)
+                <strong>@Html.DisplayFor(model => model.DocCode)</strong>
+            </div>
+        </div>
+        <div id="wrapCitizenName">
+            <div class="label-field">
+                @Html.LabelFor(model => model.CitizenName)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.CitizenName)
+                @Html.ValidationMessageFor(model => model.CitizenName)
+            </div>
+        </div>
+        <div id="wrapAddress">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Address)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Address)
+            </div>
+        </div>
+        <div id="wrapPhone">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Phone)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Phone, new { alt = "phone-vn" })
+                @Html.ValidationMessageFor(model => model.Phone)
+            </div>
+        </div>
+        <div id="wrapPapers">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocPapers)
+            </div>
+            <div class="field">
+                <ul class="papers">
+                    @if (Model.DocPapers.Any())
+                    {
+                        foreach (var paper in Model.DocPapers)
+                        {
+                        <li class="doc-paper">
+                            <div class="label-field" style="width: 20px; margin-left: 0;">
+                                <input type="checkbox" value="@paper.DocPaperId " @(paper.IsRequired ? "checked='checked'" : "") class="paper-id"/>
+                            </div>
+                            <div class="field">
+                                <span class="paper-name" style="width:80%" title="@paper.PaperName">@paper.PaperName</span>
+                                <input type="text" value="@paper.Amount" class="paper-amount" style="width: 16%"/>
+                            </div>
+                        </li>
+                        }
+                    }
+                    <li class="doc-paper">
+                        <div class="label-field" style="width: 20px; margin-left: 0;">
+                            <input type="checkbox" value="" checked='checked' class="paper-id" />
+                        </div>
+                        <div class="field">
+                            <input type="text" class="paper-name" title="" style="width: 80%" prev_val="" onkeyup="egov.cshtml.document.changePaper(this)" />
+                            <input type="text" value="1" class="paper-amount" style="width: 16%" alt="integer" />
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="wrapIdentityCard">
+            <div class="label-field">
+                @Html.LabelFor(model => model.IdentityCard)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.IdentityCard, new { alt = "cmnd" })
+                @Html.ValidationMessageFor(model => model.IdentityCard)
+            </div>
+        </div>
+        <div id="wrapEmail">
+            <div class="label-field">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="field">
+                @Html.TextBoxFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div id="wrapCommune">
+            <div class="label-field">
+                Xã phường
+            </div>
+            <div class="field">
+                <input type="text" class="tabIndex" tabindex="11" />
+            </div>
+        </div>
+        <div id="wrapFees">
+            <div class="label-field">
+                @Html.LabelFor(model => model.DocFees): <span id="totalFee" style="font-weight: bold">0</span> <b>Vnd</b>
+            </div>
+            <div class="field">
+                <ul class="fees">
+                    @if (Model.DocFees.Any())
+                    {
+                        foreach (var fee in Model.DocFees)
+                        {
+                        <li class="doc-fee">
+                            <div class="label-field" style="width: 20px; margin-left: 0;">
+                                <input  class="fee-id" onclick="egov.cshtml.document.checkFee(this)" type="checkbox" value="@fee.DocFeeId" @(fee.IsRequired ? "checked='checked'" : "")/>
+                            </div>
+                            <div class="field">
+                                <span class="fee-name" style="width: 70%" title="@fee.FeeName">@fee.FeeName</span>
+                                <span class="price-unit">Vnd</span>
+                                <input class="fee-price" onblur="egov.cshtml.document.getTotalFees()" type="text" value="@fee.Price" style="width: 20%"/>
+                            </div>
+                        </li>
+                        }
+                        <li class="doc-fee">
+                            <div class="label-field" style="width: 20px; margin-left: 0;">
+                                <input type="checkbox" value="" class="fee-id" checked="checked" onclick=" egov.cshtml.document.checkFee(this) " />
+                            </div>
+                            <div class="field">
+                                <input type="text" class="fee-name" style="width: 70%" title="" value="" prev_val=""
+                                    onkeyup="egov.cshtml.document.changeFee(this)" />
+                                <span class="price-unit">Vnd</span>
+                                <input type="text" value="0" class="fee-price" onblur="egov.cshtml.document.getTotalFees()"
+                                    style="width: 20%" alt="integer" />
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>

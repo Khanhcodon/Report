@@ -1,0 +1,1 @@
+alter table `form` add COLUMN `MappingMaDinhDanhCP` text DEFAULT null;

@@ -1,0 +1,812 @@
+﻿@model ProcessFunctionModel
+@{
+    var allTypes = ViewBag.AllTypes as string;
+    var columnSetting = ViewBag.ColumnSetting as string;
+    int type = (int)ViewBag.Type;
+    var allFilters = ViewBag.AllFilters as string;
+}
+
+@if (!IsDevEdition)
+{
+    <script src="../../../../Scripts/release/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/knockout/knockout-2.2.0.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/knockout/knockout.mapping-latest.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/knockout/knockout.validation.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js"></script>
+<script src="../../../../Scripts/release/bkav.egov/libs/waypoints.min.js"></script>
+}
+else
+{
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout-2.2.0.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.mapping-latest.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.validation.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/waypoints.min.js"></script>
+}
+<style type="text/css">
+    .validationMessage {
+        color: Red;
+    }
+
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto; /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    #sticky.stuck {
+        position: fixed;
+        bottom: 0;
+    }
+
+    .CodeMirror {
+        border: 1px solid #bbb;
+        font-size: 14px;
+        width: 500px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+    var allTypes = @(string.IsNullOrEmpty(allTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allTypes));
+    var columnSetting = @(string.IsNullOrEmpty(columnSetting) ? MvcHtmlString.Create("[]") : Html.Raw(columnSetting));
+    var selectedUserIds = @(string.IsNullOrEmpty(Model.UserHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.UserHasPermission));
+    var selectedDepartmentPositions = @(string.IsNullOrEmpty(Model.DepartmentPositionHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DepartmentPositionHasPermission));
+    var selectedPositionIds = @(string.IsNullOrEmpty(Model.PositionHasPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.PositionHasPermission));
+    var type = @type;
+    var allFilters= @(string.IsNullOrEmpty(allFilters) ? MvcHtmlString.Create("[]") : Html.Raw(allFilters));
+    $("#tblFilter > tbody").append($("#filterTemplate").tmpl(allFilters));
+
+    $("#submit").unbind( "click" );
+    $('#submit').click(function() {
+        $("#submit-function").click();
+    });
+
+    $(function() {
+        //$("#submit").unbind( "click" );
+        //$('#submit').click(function() {
+        //    $("#submit-function").click();
+        //});
+
+        if($('#right').data("layoutContainer")) {
+            $('#right').layout().destroy();
+        }
+
+        $('input[type="text"]').first().focus();
+        $('input.input-validation-error').first().focus();
+        var parentId = '0';
+        if($("#ParentId").val() != '') {
+            parentId = $("#ParentId").val();
+        }
+        $("#parentName").text($("#tree li[id=" + parentId + "] a:first").text());
+
+        $("#typeTemplate").tmpl(allTypes).appendTo("#ProcessFunctionTypeId");
+
+        $("#tblColumnSetting").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#tblFilter").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $('#Color').colorpicker({
+            parts: 'full',
+            title: egov.resources.processfunction.selectcolor || 'Chọn màu'
+        });
+
+        $('#right form:first').attr("data-bind", "submit: save");
+
+        $("#IsEnablePaging").change(function() {
+            if(this.checked) {
+                $(".paging").show();
+            } else {
+                $(".paging").hide();
+            }
+        });
+
+        $("#positionTemplate").tmpl(allPositions).appendTo("#position");
+
+        if(type == 0){
+            $("#selectedDepartmentPosition").autocomplete({
+                minLength: 1,
+                source: function( request, response ) {
+                    var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                    response( $.grep( allDepartments, function( value ) {
+                        value = value.label || value.value || value;
+                        return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                    }) );
+                },
+                focus: function() {
+                    return false;
+                },
+                selectFirst: true,
+                select: function(event, ui) {
+                    $("#selectedDepartmentPosition").val(ui.item.label);
+                    $("#idSelectedDepartment").val(ui.item.value);
+                    return false;
+                }
+            })
+            .data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+            };
+
+            $("#selectedUser").autocomplete({
+                minLength: 1,
+                source: function( request, response ) {
+                    var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                    response( $.grep( allUsers, function( value ) {
+                        value = value.label || value.value || value;
+                        return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                    }) );
+                },
+                focus: function() {
+                    return false;
+                },
+                selectFirst: true,
+                select: function(event, ui) {
+                    $("#selectedUser").val('');
+                    var exist = _.find(selectedUserIds, function(item) {
+                        return item === ui.item.value;
+                    });
+                    if (!exist) {
+                        var selected = _.find(allUsers, function(user) {
+                            return user.value === ui.item.value;
+                        });
+                        if (selected) {
+                            selectedUserIds.push(selected.value);
+                            var noresult = $("#tblPermissions tbody #noresult");
+                            if(noresult.length > 0) {
+                                noresult.remove();
+                            }
+                            $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.user'>Người dùng </span><input type='hidden' value='" + selected.value + "' name='UserIds' /></td><td>" + selected.label + "</td><td><a href='javascript:deleteUser(" + selected.value + ")'>Xóa</a></td></tr>");
+                            $("#tblPermissions").grid('refresh');
+                        }
+                    }
+                    return false;
+                }
+            })
+            .data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+            };
+        }
+
+        $("#addDepartmentPosition").click(function() {
+            var posId;
+            var noresult;
+            if($("#idSelectedDepartment").val() == '') {
+                posId = $("#position").val();
+                var posExist = _.find(selectedPositionIds, function(item) {
+                    return item == posId;
+                });
+                if(!posExist) {
+                    selectedPositionIds.push(posId);
+                    noresult = $("#tblPermissions tbody #noresult");
+                    if(noresult.length > 0) {
+                        noresult.remove();
+                    }
+                    $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.position'>Chức vụ </span><input type='hidden' value='" + posId + "' name='PositionIds' /></td><td>" + $("#position option[value=" + posId + "]").text() + "</td><td><a href='javascript:deletePosition(" + posId + ")'>Xóa</a></td></tr>");
+                    $("#tblPermissions").grid('refresh');
+                }
+            } else {
+                posId = $("#position").val();
+                var deptId = $("#idSelectedDepartment").val();
+                var deptPosExist = _.find(selectedDepartmentPositions, function(item) {
+                    return item.DepartmentId == deptId && item.PositionId == posId;
+                });
+                if(!deptPosExist) {
+                    var selected = _.find(allDepartments, function(dept) {
+                        return dept.value == deptId;
+                    });
+                    if (selected) {
+                        selectedDepartmentPositions.push({'DepartmentId': deptId, 'PositionId': posId});
+                        noresult = $("#tblPermissions tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.position1'>Phòng ban/Chức vụ </span><input type='hidden' value='" + deptId + "," + posId + "' name='DepartmentPositionIds' /></td><td>" + selected.label + "\\" + $("#position option[value=" + posId + "]").text() + "</td><td><a href='javascript:deleteDepartment(" + deptId + ", " + posId + ")' data-res='egov.resources.buttons.delete'>Xóa</a></td></tr>");
+                        $("#idSelectedDepartment").val('');
+                        $("#selectedDepartmentPosition").val('');
+                        $("#tblPermissions").grid('refresh');
+                    }
+                }
+            }
+        });
+
+        $("#selectedUser,#selectedDepartmentPosition").keypress(function(e) {
+            if(e.keyCode == 13) {
+                return false;
+            }
+            return true;
+        });
+
+        $.each(selectedDepartmentPositions, function(index, item) {
+            var department = _.find(allDepartments, function(dep) {
+                return dep.value == item.DepartmentId;
+            });
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item.PositionId;
+            });
+            if(department && position) {
+                $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.position1'>Phòng ban/Chức vụ </span><input type='hidden' value='" + item.DepartmentId + "," + item.PositionId + "' name='DepartmentPositionIds' /></td><td>" + department.label + "\\" + position.PositionName + "</td><td><a href='javascript:deleteDepartment(" + item.DepartmentId + ", " + item.PositionId + ")' data-res='egov.resources.buttons.delete'>Xóa</a></td></tr>");
+            }
+        });
+
+        $.each(selectedPositionIds, function(index, item) {
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item;
+            });
+            if(position) {
+                $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.position'>Chức vụ </span><input type='hidden' value='" + item + "' name='PositionIds' /></td><td>" + position.PositionName + "</td><td><a href='javascript:deletePosition(" + item + ")' data-res='egov.resources.buttons.delete'>Xóa</a></td></tr>");
+            }
+        });
+
+        $.each(selectedUserIds, function(index, item) {
+            var user = _.find(allUsers, function(u) {
+                return u.value == item;
+            });
+            if(user) {
+                $("#tblPermissions tbody").append("<tr><td><span data-res='egov.resources.processfunction.user'>Người dùng </span><input type='hidden' value='" + user.value + "' name='UserIds' /></td><td>" + user.label + "</td><td><a href='javascript:deleteUser(" + user.value + ")' data-res='egov.resources.buttons.delete'>Xóa</a></td></tr>");
+            }
+        });
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3' data-res='egov.resources.processfunction.all'>Tất cả</td></tr>");
+        }
+
+        $("#tblPermissions").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        var columnLine = function(lines, columnName, displayName, width, enableSort, sortName) {
+            var self = this;
+            self.columnName = columnName ? ko.observable(columnName).extend({ required: { message: '*' } }) : ko.observable().extend({ required: { message: '*' } }) ;
+            self.displayName = displayName ? ko.observable(displayName) : ko.observable();
+            self.width = ko.observable(width);
+            self.enableSort = ko.observable(enableSort);
+            self.sortName = ko.observable(sortName);
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+            self.background = ko.computed(function() {
+                var index = lines ? lines.indexOf(self) : 0;
+                return index % 2 == 1 ? 'whiteSmoke' : 'white';
+            });
+        };
+
+        var columns = function(array) {
+            var self = this;
+            self.columnLines = ko.observableArray([]);
+            if(array && $.isArray(array) && array.length > 0) {
+                array = _.sortBy(array, function(item) {
+                    return item.Order;
+                });
+                for(var i = 0; i < array.length; i ++) {
+                    self.columnLines.push(new columnLine(self.columnLines, array[i].ColumnName, array[i].DisplayName, array[i].Width, array[i].EnableSort, array[i].SortName));
+                }
+            }
+
+            self.disableSubmit = function(line, event) {
+                if(event.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            };
+
+            self.addColumn = function() {
+                self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false, null));
+                var allrow = $("#tblColumnSetting tbody tr");
+                allrow.eq(allrow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.keyEvent = function(line, event) {
+                if(line) {
+                    if(event.keyCode == 13) {
+                        var index = self.columnLines.indexOf(line);
+                        var allrow;
+                        if(index == self.columnLines().length - 1) {
+                            self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false, null));
+                            self.errors = ko.validation.group(self, { deep:true });
+                            allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(allrow.length - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        } else if(index > -1 && index < self.columnLines().length - 1){
+                            allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    } else if(event.keyCode == 38) {
+                        self.up(line, event);
+                    } else if(event.keyCode == 40) {
+                        self.down(line, event);
+                    }
+                }
+            };
+
+            self.removeColumn = function(line) {
+                self.columnLines.remove(line);
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.up = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index > 0) {
+                            var before = self.columnLines()[index - 1];
+                            var clone = new columnLine(self.columnLines, before.columnName(), before.displayName(), before.width(), before.enableSort(), before.sortName());//_.clone(self.columnLines()[index - 1]);
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort(), line.sortName());
+                            self.columnLines()[index - 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 38) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.down = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index < self.columnLines().length - 1) {
+                            var after = self.columnLines()[index + 1];
+                            var clone = new columnLine(self.columnLines, after.columnName(), after.displayName(), after.width(), after.enableSort(), after.sortName());
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort(), line.sortName());
+                            self.columnLines()[index + 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 40) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.save = function() {
+                isValid = validate(self);
+            };
+
+            self.errors = ko.validation.group(self, { deep:true });
+        };
+
+        ko.applyBindings(new columns(columnSetting), $("#right")[0]);
+
+        $("#contentRight").waypoint(function(direction) {
+            $("#sticky").toggleClass('stuck', direction === "up");
+        },{
+            offset: 'bottom-in-view'
+        });
+
+        $('#DateFilter').attr("disabled", !$('#IsDateFilter').is(":checked"));
+        $('#DateFilterView').attr("disabled", !$('#IsDateFilter').is(":checked"));
+        $("#IsDateFilter").click(function () {
+            $('#DateFilter').attr("disabled", !$(this).is(":checked"));
+            $('#DateFilterView').attr("disabled", !$(this).is(":checked"));
+        });
+    });
+
+    function validate(self) {
+        if(!$('form:first').validate().form()){
+            return false;
+        }
+
+        var nodeType = $("#ProcessFunctionTypeId").val();
+        if(self.errors().length == 0) {
+            var dataToSave = $.map(self.columnLines(), function(line) {
+                return line.columnName() ? {
+                    ColumnName: line.columnName(),
+                    DisplayName: line.displayName(),
+                    SortName: line.sortName(),
+                    Width: line.width() != '' ? line.width() : null,
+                    EnableSort: line.enableSort() ? line.enableSort() : false,
+                    Order: line.index()
+                } : undefined;
+            });
+            $("#ColumnSetting").val(JSON.stringify(dataToSave));
+            return true;
+        } else {
+            self.errors.showAllMessages();
+            eGovMessage.show(egov.resources.processfunction.failure || "Bạn chưa nhập đầy đủ thông tin trong phần cấu hình danh sách");
+            return false;
+        }
+    }
+
+    function deleteUser(id) {
+        selectedUserIds = _.reject(selectedUserIds, function(item) {
+            return item == id;
+        });
+        $('input[name="UserIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3' data-res='egov.resources.processfunction.all'>Tất cả</td></tr>");
+        }
+    }
+
+    function deletePosition(id) {
+        selectedPositionIds = _.reject(selectedPositionIds, function(item) {
+            return item == id;
+        });
+        $('input[name="PositionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3' data-res='egov.resources.processfunction.all'>Tất cả</td></tr>");
+        }
+    }
+
+    function deleteDepartment(deptid, posid) {
+        selectedDepartmentPositions = _.reject(selectedDepartmentPositions, function(item) {
+            return item.DepartmentId == deptid && item.Positionid == posid;
+        });
+        $('input[name="DepartmentPositionIds"][value="' + deptid + ',' + posid + '"]').parent().parent().remove();
+
+        if ($("#tblPermissions tbody tr").length == 0) {
+            $("#tblPermissions tbody").html("<tr id='noresult'><td colspan='3' data-res='egov.resources.processfunction.all'>Tất cả</td></tr>");
+        }
+    }
+
+    $(function(){
+        $("select,input[type=text],textarea,input[type=password]").addClass("form-control");
+    });
+</script>
+
+<script id="typeTemplate" type="text/x-jquery-tmpl">
+    <option value="${id}" @(Model.ProcessFunctionTypeId.HasValue ? "{{if id==" + Model.ProcessFunctionTypeId.Value + "}} selected='selected' {{/if}}" : "")>${name}</option>
+</script>
+
+<script id="groupTemplate" type="text/x-jquery-tmpl">
+    <option value="${id}" {{if id==" + @Model.ProcessFunctionGroupId + "}} selected='selected' {{/if}} >${name}</option>
+</script>
+
+<div id="contentRight">
+    @using (Ajax.BeginForm(Model.ProcessFunctionId == 0 ? "Create" : "Edit",
+        new AjaxOptions
+        {
+            HttpMethod = "Post",
+            OnSuccess = "onSaveSuccess",
+            OnBegin = "onSaveBegin"
+        }))
+    {
+        <div>
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ProcessFunctionId)
+            @Html.HiddenFor(model => model.ParentId)
+            @Html.HiddenFor(model => model.QueryLatest)
+            @Html.HiddenFor(model => model.QueryOlder)
+            @Html.HiddenFor(model => model.QueryItemRemove)
+            @Html.HiddenFor(model => model.QueryCountItemUnread)
+            @Html.HiddenFor(model => model.QueryPaging)
+            @Html.HiddenFor(model => model.QueryCountAllItems)
+            @if (Model.ProcessFunctionId == 0)
+            {
+                @Html.AntiForgeryToken("ProcessFunctionCreate")
+            }
+            else
+            {
+                @Html.AntiForgeryToken("ProcessFunctionEdit")
+            }
+            <table>
+                @if (Model.Type == 0)
+                {
+                    <tr>
+                        <td style="width: 200px;">
+                            Node cha:
+                        </td>
+                        <td>
+                            <span id="parentName"></span>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td style="width: 200px;">
+                        @Html.EgovLabelFor(model => model.Name):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </td>
+                </tr>
+                @if (Model.Type == 0)
+                {
+                    <tr>
+                        <td>
+                            @Html.EgovLabelFor(model => model.ProcessFunctionGroupId):
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.ProcessFunctionGroupId,
+                   ViewBag.AllGroups as List<SelectListItem>, Localizer("Bkav.eGovCloud.Areas.Admin.ProcessFunction.SelectDocumentStore"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProcessFunctionGroupId)
+                        </td>
+                    </tr>
+                }
+
+                @if (Model.Type == 0)
+                {
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.IsActivated):
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.IsActivated)
+                            @Html.ValidationMessageFor(model => model.IsActivated)
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.HasShowUnread)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HasShowUnread)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.HasShowTotal)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HasShowTotal)
+                    </td>
+                </tr>
+            </table>
+
+            @if (Model.ProcessFunctionId > 0)
+            {
+                <h4 data-res="egov.resources.processfunction.setupforfilterlist">Cấu hình danh sách bộ lọc cho node</h4>
+                <div>
+                    <table class="table-main table" id="tblFilter">
+                        <colgroup>
+                            <col />
+                            <col style="width: 100px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="header" data-res="egov.resources.tableheader.filtername">
+                                    Tên bộ lọc
+                                </th>
+                                <th class="header" data-res="egov.resources.tableheader.delete">
+                                    Xóa
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div>
+                    <button type="button" class="btn" data-res="egov.resources.buttons.addfilter" onclick="openDialog('@Url.Action("AddFilter", "ProcessFunction", new { id = Model.ProcessFunctionId })')">
+                        Thêm bộ lọc mới
+                    </button>
+                </div>
+                <hr />
+            }
+
+            <h5 data-res="egov.resources.processfunction.setupforsamelist">Cấu hình danh sách tương ứng với node</h5>
+            @Html.HiddenFor(model => model.ColumnSetting)
+            <div id="listColumn">
+                <table class="table-main table" id="tblColumnSetting">
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col style="width: 100px" />
+                        <col style="width: 150px" />
+                        <col />
+                        <col style="width: 80px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header" data-res="egov.resources.tableheader.columnname">
+                                Tên cột
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.displayname">
+                                Tên hiển thị
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.width">
+                                Chiều rộng
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.allowsort">
+                                Cho phép sắp xếp
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.sortcolumn">
+                                Cột sắp xếp
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.sort">
+                                Sắp xếp
+                            </th>
+                            <th class="header" data-res="egov.resources.tableheader.delete">
+                                Xóa
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind='foreach: columnLines'>
+                        <tr data-bind="style: { 'background-color': background() }">
+                            <td>
+                                <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                       style="width: 90%" />
+                            </td>
+                            <td>
+                                <input data-bind='value: displayName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                       style="width: 90%" />
+                            </td>
+                            <td>
+                                <input data-bind='value: width, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                       style="width: 90%" />
+                            </td>
+                            <td align="center">
+                                <input type="checkbox" data-bind="checked: enableSort" />
+                            </td>
+                            <td>
+                                <input data-bind='value: sortName, valueUpdate: "afterkeydown", enable: enableSort' />
+                            </td>
+                            <td align="center">
+                                <img src="@Url.Content("~/Content/Images/nav_up_green.png")" alt="Lên" data-bind='click: $parent.up' style="cursor: pointer" />
+                                <img src="@Url.Content("~/Content/Images/nav_down_blue.png")" alt="Xuống" data-bind='click: $parent.down' style="cursor: pointer" />
+                            </td>
+                            <td align="center">
+                                <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumn' style="cursor: pointer" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button type="button" data-bind='click: addColumn' class="btn" data-res="egov.resources.commonlabel.addcolumn">
+                    Thêm cột
+                </button>
+                <i style="font-size: 12px" data-res="egov.resources.processfunction.enternote">
+                    (Dùng phím enter để xuống dòng (nếu ở dòng
+                    cuối cùng thì thêm dòng mới), dùng phím lên xuống để sắp xếp cột)
+                </i>
+            </div>
+            <hr />
+
+            @if (Model.Type == 0)
+            {
+                <h4 data-res="egov.resources.processfunction.divrole">Phân quyền</h4>
+                <fieldset>
+                    <legend style="font-size: 15px;" data-res='egov.resources.processfunction.position1'>Phòng ban/Chức vụ</legend>
+                    <input type="text" id="selectedDepartmentPosition" style="width: 145px; display: inline" />
+                    <input type="hidden" id="idSelectedDepartment" />
+                    <select id="position" style="width: 200px; display: inline"></select>
+                    <input type="button" id="addDepartmentPosition" value="Thêm" style="display: inline" class="btn  " />
+                </fieldset>
+                <fieldset>
+                    <legend style="font-size: 15px;" data-res='egov.resources.processfunction.user'>Người dùng</legend>
+                    <input type="text" id="selectedUser" style="width: 400px" />
+                </fieldset>
+                <div id="permissions">
+                    <table class="table-main table" id="tblPermissions">
+                        <colgroup>
+                            <col style="width: 150px" />
+                            <col />
+                            <col style="width: 50px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="header" data-res='egov.resources.tableheader.type'>
+                                    Kiểu
+                                </th>
+                                <th class="header" data-res='egov.resources.tableheader.value'>
+                                    Giá trị
+                                </th>
+                                <th class="header" data-res='egov.resources.tableheader.delete'>
+                                    Xóa
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div id="sticky" class="stuck" style="display: none">
+            <input value="@(Model.ProcessFunctionId > 0 ? Localizer("Common.Button.Edit.Save") : Localizer( type="submit" id="submit-function" />>
+            <span id="message" style="color: red; display: none"></span>
+        </div>
+    }
+</div>
+
+<script>
+    function removeFilter(self,functionId,filterId){
+        eGovMessage.show(egov.resources.notifications.destroythisfilter || "Bạn muốn xóa bộ lọc này", egov.resources.notifications.post || "Thông báo",
+            eGovMessage.messageButtons.OkCancel,function(){
+                $.ajax({
+                    url: "@Url.Action("RemoveProcessFilter", "ProcessFunction")",
+                    type: "POST",
+                    data: {
+                        functionId:functionId,
+                        filterId:filterId
+                    },
+                    success: function (result) {
+                        if(result)  {
+                            if(result.result) {
+                                $( self).closest("tr").remove();
+                            }
+                            else{
+                                eGovMessage.notification(result.message,eGovMessage.messageTypes.error);
+                            }
+                        }
+                    },
+                    error:function(xhr){
+                        eGovMessage.notification(xhr.message,eGovMessage.messageTypes.error);}
+                });
+            }
+        );
+        }
+
+        function openDialog(url) {
+            $("#my-dialog").dialog({
+                title: egov.resources.processfunction.addnodefilter || "Thêm bộ lọc mới cho node",
+                width: 500,
+                height: 300,
+                resizable: false,
+                modal: true,
+                buttons: [
+                    {
+                        text: egov.resources.commonlabel.add || "Thêm",
+                        click: function() {
+                            updateFilter(@Model.ProcessFunctionId);
+                            $(this).dialog( "close" );
+                        }
+                    },
+                {
+                    text: egov.resources.commonlabel.cancel || "Hủy bỏ",
+                    click: function() {
+                        $(this).dialog( "close" );
+                    }
+                }
+                ],
+                open: function (event, ui) {
+                    $(this).load(url);
+                }
+            });
+            }
+</script>
+
+<div id="my-dialog"></div>
+
+<script id="filterTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${name}</td>
+        <td>
+            <a href="#" onclick="removeFilter(this,${functionId},${id});" data-res="egov.resources.buttons.delete">Xóa</a>
+        </td>
+    </tr>
+</script>

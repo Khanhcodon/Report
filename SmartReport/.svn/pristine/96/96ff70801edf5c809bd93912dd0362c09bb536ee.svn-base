@@ -1,0 +1,14 @@
+config: {  			
+	Ext: ".jpg",
+	FindText: "DungHA",
+	FindType: 1,	// 0: Tren xuong, 1: Duoi len
+	ImagePath: "C:\\Users\\Bkav\\AppData\\Local\\Temp\\BkavEgov\\1467366836294\\ImageSignatureTemp_0.jpg",
+	OffsetX: 0,  // Don vi: px; Can vi tri chen cks so voi vi tri FindText tim duoc
+	OffsetY: 0,  // -30 de sat vi tri text
+	PosType: 1, 	// 0: trai, 1: phai, 2: tren, 3: duoi so voi vi tri FindText tim duoc
+	SignType: 0,	// Loai ky: 0: Ky anh, 1: Ky text
+	TextInfor: 0,	// 0, 1: Co lay thong tin trong CKS va hien thi ra cung voi anh trong chu ki khong
+	Title: "ddd",
+	SignAuthor: "ThangLVb",
+	SignReason: "Test"
+}

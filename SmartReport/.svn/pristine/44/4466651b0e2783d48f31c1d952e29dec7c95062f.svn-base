@@ -1,0 +1,173 @@
+﻿@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.SmsOrMailSearchModel;
+    var smss = ViewBag.Smss as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.SmsModel>;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblSms").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblSms").openLink({ urlOpen: '/admin/SmsManager/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $('#tblSms input[name="ids"]').on("change", function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+                if ($('#tblSms input[name="ids"]:checked').length === $('#tblSms input[name="ids"]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").on("change", function () {
+            $('#tblSms input[name="ids"]').prop('checked', this.checked);
+            $('#tblSms input[name="ids"]').each(function () {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+            });
+        });
+    });
+
+</script>
+
+<form id="formdelete" style="display:none" action="@Url.Action("Delete")" method="POST">
+</form>
+
+<table class="table-main table" id="tblSms">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 150px" />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 30px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("SmsManager.Index.List.Column.PhoneNumber")
+            </th>
+            <th class="header">
+                @Localizer("SmsManager.Index.List.Column.Message")
+            </th>
+            <th class="header">
+                @Localizer("SmsManager.Index.List.Column.IsSent")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateCreated", Localizer("SmsManager.Index.List.Column.DateCreated"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+
+                                    FindText = search.FindText,
+                                    FromDate = search.FromDate,
+                                    IsSent = search.IsSent,
+                                    ToDate = search.ToDate,
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divSms",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Detail")
+            </th>
+            <th align="center" class="header">
+                <input type="checkbox" id="checkAll" data-restitle="egov.resources.buttons.selectAll" title="Chọn tất" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (smss != null && smss.Any())
+        {
+            foreach (var item in smss)
+            {
+                number++;
+            <tr data-id="@item.SmsId">
+                <td>
+                    @number
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+                <td>
+                    @item.Message
+                </td>
+                <td>
+                     @Localizer(item.IsSent ? "Customer.Sms.All.Sendted":"Customer.Sms.All.NotSent")
+                </td>
+                <td>
+                    @item.DateCreated.Value.ToString("dd/MM/yyyy hh:MM:ss")
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Detail.Button"), "Detail", new { Id = item.SmsId })
+                </td>
+                <td align="center">
+                    <input type="checkbox" name="ids" value="@item.SmsId" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  FindText = search.FindText,
+                                  FromDate = search.FromDate,
+                                  IsSent = search.IsSent,
+                                  ToDate = search.ToDate,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divSms",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+
+</table>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

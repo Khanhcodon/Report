@@ -1,0 +1,593 @@
+﻿@model MappingMaDinhDanh
+@{ Layout = "~/Areas/Admin/Views/DocTypeGov/_EditMainPlus.cshtml"; }
+<script src="https://cdn.jsdelivr.net/npm/table-to-json@1.0.0/lib/jquery.tabletojson.min.js" integrity="sha256-H8xrCe0tZFi/C2CgxkmiGksqVaxhW0PFcUKZJZo1yNU=" crossorigin="anonymous"></script>
+@*<div id="example-table"></div>*@
+<div class="col-md-12" style="width:100% !important;">
+    <div class="monthKeyArea">
+        <form id="timeKeyForm">
+            <select id="kyBaoCao" name="actionLevel" class="form-control">
+                <option value="">Chọn kỳ báo cáo</option>
+                <option value="yearSelected">Năm</option>
+                <option value="monthSelected">Tháng</option>
+                <option value="quarterSelected">Quý</option>
+                <option value="dateSelected">Ngày</option>
+            </select>
+            <div class="yearSelected">
+                <span> Năm</span>
+                <input type="number" minlength="4" maxlength="4" required class="form-control" id="yearInpput_yearSelected">
+            </div>
+            <div class="monthSelected">
+                <span> Năm</span>
+                <input type="number" minlength="4" maxlength="4" required class="form-control" name="yearInput_monthSelected" id="yearInput_monthSelected">
+                <span style="padding-left: 10px;"> Tháng</span>
+                <select name="monthInput_monthSelected" id="monthInput_monthSelected" class="form-control">
+                    @*<option value="">Chọn tháng</option>*@
+                    <option value="01" selected>Tháng 1</option>
+                    <option value="02">Tháng 2</option>
+                    <option value="03">Tháng 3</option>
+                    <option value="04">Tháng 4</option>
+                    <option value="05">Tháng 5</option>
+                    <option value="06">Tháng 6</option>
+                    <option value="07">Tháng 7</option>
+                    <option value="08">Tháng 8</option>
+                    <option value="09">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                </select>
+
+            </div>
+            <div class="quarterSelected">
+                <span> Năm</span>
+                <input required class="form-control" minlength="4" maxlength="4" type="number" name="yearInput_quarterSelected" id="yearInput_quarterSelected">
+                <span style="padding-left: 10px;"> Quý</span>
+                <select name="quarterInput_quarterSelected" id="quarterInput_quarterSelected" class="form-control">
+                    @*<option value="">Chọn tháng</option>*@
+                    <option value="1" selected>Quý 1</option>
+                    <option value="2">Quý 2</option>
+                    <option value="3">Quý 3</option>
+                    <option value="4">Quý 4</option>
+                </select>
+
+            </div>
+            <div class="dateSelected">
+                <span> Ngày</span>
+                <input required class="form-control datepicker" type="datetime" id="dateInput_dateSelected">
+            </div>
+            <button type="submit" disabled class="btn btn-primary form-save hidden">
+                <span class="icon icon-checkmark" style="font-size: 13px; margin-right: 5px;"></span>
+                <span class="text-uppercase">Chọn</span>
+            </button>
+        </form>
+    </div>
+    <div class="fieldContainer"> 
+    <div id="fieldOptionArea">
+
+    </div>
+    </div>
+    <div class="col-md-6">
+
+        <table id="tblMaChiTieu" class="table table-bordered mrg-0 resource-table" style="table-layout: fixed;">
+            @*<thead>
+                    <tr>
+                        <th data-override="machitieu" style="width:300px"> Mã chỉ tiêu</th>
+                        <th data-override="tenchitieu" style="width:250px"> Tên chỉ tiêu</th>
+                        <th data-override="madinhdanhdb" style="width:200px"> Mã định danh database</th>
+                    </tr>
+                </thead>
+                <tbody id="maChiTieuBody">
+                </tbody>*@
+        </table>
+        <br />
+    </div>
+    <div class="col-md-6" style="float:right;">
+
+        <table id="tbleMaDinhDanh" class="table table-bordered mrg-0 resource-table">
+            @*<thead>
+                    <tr>
+                        <th>Mã định danh database</th>
+                    </tr>
+                </thead>
+                <tbody id="madinhdanhBody">
+                </tbody>*@
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function GenerateTable() {
+
+                var madinhdanhJson = @Html.Raw(Json.Encode(Model.ListMaDinhDanhDB));
+                var mappingMaDinhDanh = @Html.Raw(Json.Encode(Model.MappingMaDinhDanhCP));
+                var madinhdanhObj = JSON.parse(madinhdanhJson);
+                //case chua tung mapping
+                if (mappingMaDinhDanh == '' || mappingMaDinhDanh == null) {
+                    var defineValueJson = @Html.Raw(Json.Encode(Model.ListDinhDanhCP));
+                    var maChiTieuObj = JSON.parse(defineValueJson);
+                    maChiTieuObj.data.forEach(item => {
+                        var newContent = '<tr> <td> ' + item[1] + '</td > ' +
+                            '<td>' + item[2] + '</td> ' +
+                            '<td  class="bk-droppable"> </td>' +
+                            '</tr>'
+                $("#tblMaChiTieu tbody").append(newContent);
+
+                    });
+                } else { //case da tung mapping
+                    var mappingMaDinhDanhJson = JSON.parse(mappingMaDinhDanh);
+                    mappingMaDinhDanhJson.forEach(item => {
+                        var newContent = '<tr> <td> ' + item.machitieu + '</td > ' +
+                            '<td>' + item.tenchitieu + '</td> ' +
+                            '<td class="bk-droppable">';
+                        if (item.madinhdanhdb && item.madinhdanhdb != null)
+                            newContent += '<div class="bk-draggable already-exist dropped">' + item.madinhdanhdb + '</div>';
+                            newContent += '</td></tr > ';
+
+                        $("#tblMaChiTieu tbody").append(newContent);
+                        madinhdanhObj = madinhdanhObj.filter(x => x.madinhdanh != item.madinhdanhdb);
+                    });
+                }
+
+                madinhdanhObj.forEach(item => {
+                    var newContent = "<tr> <td><div class='bk-draggable'> " + item.madinhdanh + "</div></td > " +
+                        "</tr>";
+                    $("#tbleMaDinhDanh tbody").append(newContent);
+                });
+
+    }
+    function ScrollDownEvent() {
+        var header = document.getElementById("tbleMaDinhDanh");
+        var tbody = document.getElementById("madinhdanhBody");
+        var sticky = header.offsetTop;
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+            //tbody.classList.add("fixed-position");
+
+        } else {
+            header.classList.remove("sticky");
+            //header.classList.remove("fixed-position");
+        }
+    }
+    function RegisterDragDropMaDinhDanhDB() {
+        $('#tbleMaDinhDanh .bk-draggable').draggable({
+            zIndex: 100,
+            appendTo: "body",
+            helper: "clone",
+        });
+
+    };
+    function RegisterDragDropMaDinhDanhCP() {
+        $('#tblMaChiTieu .bk-draggable').draggable({
+            zIndex: 100,
+            appendTo: "body",
+            helper: "clone",
+        });
+
+        $('#tblMaChiTieu .bk-droppable').droppable({
+            out: function (event, ui) {
+                //var self = ui;
+                if ($(ui.draggable).hasClass('dropped')) {
+
+                    //$('#tbleMaDinhDanh tbody').prepend("<tr><td>");
+                    //$("<div class='bk-draggable'></div>").text(ui.draggable.text()).prependTo($('#tbleMaDinhDanh tbody tr:first td')).draggable({
+                    //    appendTo: "body",
+                    //    helper: "clone"
+                    //});
+                    //$('#tbleMaDinhDanh tbody').prepend("</td></tr>");
+                    $("#madinhdanhBody td:contains('" + ui.draggable.text() + "')").parent().show();
+                    //$("#madinhdanhBody td[value='" + ui.draggable.text() + "']").show();
+                    $(ui.draggable).fadeOut(1000, function () {
+                        $(this).remove();
+                    });
+
+                    //$("<div class='bk-draggable'></div>").text(ui.draggable.text()).appendTo(trtd).draggable({
+                    //    appendTo: "body",
+                    //    helper: "clone"
+                    //}).appendTo($('#tbleMaDinhDanh tbody'))
+                    //    $(this).remove();
+                    //ui.draggable.remove();
+                    //ui.helper.off('mouseup').on('mouseup', function () {
+                    //    //$(this).parent().removeClass("ui-state-default");
+
+
+                    //});
+                }
+
+            },
+            activeClass: "ui-state-default",
+            drop: function (event, ui) {
+                //if (ui.draggable.is('.dropped')) return false;
+                //$(this).find(".placeholder").remove();
+                var item = $(this).find('.dropped');
+                if (item.length > 0) return false;
+               
+                $(ui.draggable).clone().appendTo(this).draggable({
+                    appendTo: "body",
+                    helper: "clone"
+                }).addClass('dropped');
+                $(ui.draggable).parent().hide();
+            }
+        });
+
+    };
+    function ResetAllTable() {
+        $("#tblMaChiTieu").empty();
+        $("#tbleMaDinhDanh").empty();
+        $('#fieldOptionArea').empty();
+    }
+    function RegisterScrollEvent() {
+        window.onscroll = function () { ScrollDownEvent() };
+
+    };
+    function validateForm(id) {
+        //var valid = $(id).validate().checkForm();
+        var valid = $(id).valid();
+        if (valid) {
+            $('.form-save').prop('disabled', false);
+            $('.form-save').removeClass('hidden');
+        } else {
+            $('.form-save').prop('disabled', 'disabled');
+            $('.form-save').addClass('hidden');
+        }
+    }
+    function HideAll() {
+        $('.yearSelected').css({ 'display': 'none' });
+        $('.monthSelected').css({ 'display': 'none' });
+        $('.quarterSelected').css({ 'display': 'none' });
+        $('.dateSelected').css({ 'display': 'none' });
+    }
+    function ShowInput(name) {
+        $('.' + name).css({ 'display': 'inline-block' });
+    }
+    var timeKey;
+    var maDinhDanhDB;
+    $(document).ready(function () {
+
+    $('#timeKeyForm').on('blur keyup change', 'input', function (event) {
+        validateForm('#timeKeyForm');
+    });
+
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+    });
+    var arrFieldOptions = [];
+    $(".tab-form").addClass("active");
+
+        $("#timeKeyForm").submit(function (event) {
+            arrFieldOptions = [];
+            event.preventDefault();
+
+            if (!($("#kyBaoCao").valid())) return false;
+
+            switch ($("#kyBaoCao").val()) {
+            case "yearSelected":
+                timeKey = $("#yearInpput_yearSelected").val();
+                break;
+            case "monthSelected":
+                timeKey = $("#yearInput_monthSelected").val() + $("#monthInput_monthSelected").val();
+                break;
+            case "quarterSelected":
+                timeKey = $("#yearInput_quarterSelected").val() + $("#quarterInput_quarterSelected").val();
+                break;
+            case "dateSelected":
+                var dateTime = new Date($("#dateInput_dateSelected").val());
+                timeKey = "" + dateTime.getFullYear() + "-"+ ("0" + dateTime.getDate()).slice(-2) + "-"+ ("0" + (dateTime.getMonth() + 1)).slice(-2);
+                //timeKey = $("#dateInput_dateSelected").val().replace('/', '');
+                break;
+            default: timeKey = "";
+                }
+             $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetFiledConfig")",
+                data: JSON.stringify({
+                    'timeKey': timeKey,
+                    'id': '@ViewBag.DoctypeId'
+                }),
+                contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                 success: function (response) {
+                     ResetAllTable();
+                     // bang ma chi tieu ben trai => DefineValueJson
+                     // bang ma dinh danh ben phai =>  result query
+                     var maDinhDanhCP;
+                     if (response.ListDinhDanhCP && response.ListDinhDanhCP != null) {
+                         maDinhDanhCP = JSON.parse(response.ListDinhDanhCP).data; // tu DefineValueJson
+                     }
+                     
+                     maDinhDanhDB = JSON.parse(response.ListMaDinhDanhDB); //result query
+                     var MappedMaDinhDanhCP = JSON.parse(response.MappingMaDinhDanhCP);
+                     if (maDinhDanhDB && maDinhDanhDB.length > 0) {
+                         arrFieldOptions = Object.getOwnPropertyNames(maDinhDanhDB[0]);
+                     }
+                     BuildMaDinhDanhDBTable(maDinhDanhDB);
+                    
+                     
+                     if (MappedMaDinhDanhCP == null || MappedMaDinhDanhCP == "") {
+                      
+                         BuildMaDinhDanhCPTable(maDinhDanhCP);
+                     }
+                     else {
+                         
+                         BuildMappedMaDinhDanhCP(MappedMaDinhDanhCP);
+                     }
+
+                    
+
+                     BuildFieldOptions(arrFieldOptions);
+                    }
+                });
+        });
+        //case da map
+        function BuildMappedMaDinhDanhCP(mappedMaDinhDanhCP) {
+            var content = "<thead ><tr>";
+            content += "<th data-override='madinhdanh'>" + "Mã định danh" + "</th>";
+            content += "<th data-override='tenmadinhdanh'>" + "Tên mã định danh" + "</th>";
+            content += "<th data-override='madinhdanhdb'>" + "Mapping mã định danh" + "</th>";
+            content += "</tr></thead>";
+            content += "<tbody id='maChiTieuBody' >";
+            //arrFieldOptions.forEach(item => {
+            //    if (item == "madinhdanhdb") {
+            //        content += "<th data-override='" + item + "'> " + item + "</th>";
+            //    } else {
+            //        content += "<th data-override='" + item + "' class='" + item + "'> " + item + "</th>";
+            //    }
+            //});
+
+            content += "</tr></thead>";
+            content += "<tbody id='maChiTieuBody'>";
+            mappedMaDinhDanhCP.forEach(item => {
+                //maDinhDanhDB = maDinhDanhDB.filter(x => x.madinhdanh != item.madinhdanhdb);
+                //maDinhDanhDB = maDinhDanhDB.filter(x => x.machitieu != item.madinhdanhdb);
+                if (item.madinhdanhdb != "")
+                $("#madinhdanhBody td:contains('" + item.madinhdanhdb + "')").parent().hide();
+                content += "<tr>";
+                for (const property in item) {
+                    if (property == 'madinhdanhdb') {
+                        //content += '<td class="bk-droppable"></td>';
+                        if (item[property] != "" && item[property] != null) {
+                            content += "<td class='bk-droppable'>";
+                            content += '<div class="bk-draggable already-exist dropped">' + item.madinhdanhdb + '</div>';
+                            content += "</td> ";
+                        }
+                        else {
+                            content += "<td class='bk-droppable '" + property + "'> " + item[property] + "</td>";
+                        }
+                    }
+                    else {
+                        content += "<td class='" + property + "'>" + item[property] + "</td>";
+                    }
+
+                }
+
+                content += "</tr>"
+
+                //content += "'<tr><td> ' + item.machitieu + '</td>'"
+            });
+
+            $("#tblMaChiTieu").append(content);
+            RegisterDragDropMaDinhDanhCP();
+        }
+        // tu cau query
+        //case chua map
+        function BuildMaDinhDanhDBTable(maDinhDanhDB) {
+            if (maDinhDanhDB && maDinhDanhDB.length > 0) {
+                var content = "<thead><tr>";
+                arrFieldOptions.forEach(item => {
+                    if (item == "machitieu") item = "madinhdanh";
+                    content += "<th class='" + item + "'> " + item + "</th>";
+                });
+
+                //content += "<th data-override='madinhdanhdb'> Mã định danh database</th>";
+
+                content += "</tr></thead>";
+                content += "<tbody id='madinhdanhBody' class='fixed-position'>";
+                maDinhDanhDB.forEach(item => {
+                    //content += '<tr> <td><div class="bk-draggable">' + item + '</div></td >'
+                    content += "<tr>"
+                    for (const property in item) {
+                        if (property == "madinhdanh") {
+                            content += "<td class= 'bk-draggable " + property + "'> " + item[property] + "</td>";
+                        }
+                        else if (property == "machitieu") {
+                            content += "<td class= 'bk-draggable madinhdanh'> " + item[property] + "</td>";
+                        }
+
+                        else {
+                            content += "<td class= '" + property + "'> " + item[property] + "</td>";
+                        }
+
+
+                    }
+                    //content += '<td class="bk-droppable"></td>';
+
+
+                    //content += "'<tr><td> ' + item.machitieu + '</td>'"
+                });
+                content += "</tr></tbody>"
+                $("#tbleMaDinhDanh").append(content);
+                RegisterDragDropMaDinhDanhDB();
+                RegisterScrollEvent();
+            }
+            else {
+                $("#tbleMaDinhDanh").html("Không có dữ liệu");
+            }
+            
+        }
+        //bang ben trai
+        function BuildMaDinhDanhCPTable(maDinhDanhCP) {
+            if (maDinhDanhCP && maDinhDanhCP != null && maDinhDanhCP != "") {
+                var content = "<thead ><tr>";
+                content += "<th data-override='madinhdanh'>" + "Mã định danh database" + "</th>";
+                content += "<th data-override='tenmadinhdanh'>" + "Tên mã định danh" + "</th>";
+                content += "<th data-override='madinhdanhdb'>" + "Mapping mã định danh" + "</th>";
+                content += "</tr></thead>";
+                content += "<tbody id='maChiTieuBody' >";
+
+                for (var i = 0; i < maDinhDanhCP.length; i++) {
+                    content += '<tr><td>' + maDinhDanhCP[i][1] + '</td >';
+                    content += '<td>' + maDinhDanhCP[i][2] + '</td >';
+                    content += '<td class="bk-droppable"></td></tr>';
+                }
+
+                content += "</tbody>"
+
+                $("#tblMaChiTieu").append(content);
+
+                RegisterDragDropMaDinhDanhCP();
+            }
+            else {
+                $("#tblMaChiTieu").html("Không có dữ liệu");
+            }
+           
+        }
+        function BuildFieldOptions(arrFieldOptions) {
+            arrFieldOptions.forEach(item => {
+                if (item == "machitieu") item = "madinhdanh";
+                var newOption = "<span>" + item + "</span>" + "<input " + ((item == 'madinhdanh' ||item =='machitieu') ? 'checked disabled' : '') + " type='checkbox' id='" + item + "' name='" + item + "'>";
+                $('#fieldOptionArea').append(newOption);
+            });
+            $("input:checkbox:not(:checked)").each(function () {
+                
+                var column = "table ." + $(this).attr("name");
+                
+                $(column).hide();
+            });
+
+            $("input:checkbox").click(function () {
+                var column = "table ." + $(this).attr("name");
+                //$("#madinhdanhBody").attr('style', 'display: table-row-group !important'); //css("display","")
+                $(column).toggle();
+                //$("#madinhdanhBody").attr('style', 'display: block !important'); //css("display","")
+            });
+        }
+        $('#kyBaoCao').change(function () {
+            HideAll();
+            ShowInput($(this).val());
+            validateForm('#timeKeyForm');
+        });
+        //GenerateTable();
+
+
+
+
+
+        $("#submit").on("click", function (event) {
+            event.preventDefault();
+            //var jsonMapping = JSON.stringify($('#tblMaChiTieu').tableToJSON());
+            var jsonMapping = JSON.stringify({ [timeKey]: $('#tblMaChiTieu').tableToJSON() });
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Config")",
+                data: JSON.stringify({
+                        'jsonMapping': jsonMapping,
+                    'id': '@ViewBag.DoctypeId'
+                }),
+                contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                success: function (response) {
+
+                    window.location.reload();
+
+                    }
+
+            });
+
+
+            });
+    });
+
+
+
+
+</script>
+
+<style>
+    .fieldContainer{
+        height:70px;
+    }
+   
+
+    table th {
+        word-break: break-word;
+    }
+
+    #tblMaChiTieu {
+        table-layout: fixed;
+    }
+    #fieldOptionArea {
+         width: 64%;
+		float: right;
+		height: 70px;
+		text-align: left;
+    }
+    #fieldOptionArea span {
+        margin-left: 20px;
+    }
+
+    #fieldOptionArea input {
+        margin-left: 5px;
+    }
+
+    #tbleMaDinhDanh {
+        width: 420px !important;
+		background:white;
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 420px;
+    }
+
+    .fixed-position {
+        height: 80vh;
+        overflow-x: hidden;
+        display: block;
+        overflow-y: scroll;
+    }
+    thead, tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table td {
+            word-break: break-all;
+            height: 50px;
+            vertical-align: middle !important;
+        }
+
+        .table .bk-draggable {
+            padding: 10px 0 10px 0;
+        }
+
+        .table .bk-droppable {
+            height: 50px !important;
+        }
+
+    .form-control {
+        width: 200px;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    .yearSelected, .monthSelected, .quarterSelected, .dateSelected {
+        display: none;
+        padding-left: 25px;
+    }
+
+    .monthKeyArea {
+        /*padding-left:15px;*/
+		text-align:right;
+    }
+
+    #kyBaoCao {
+        margin-bottom: 15px;
+        margin-left: 15px;
+    }
+</style>

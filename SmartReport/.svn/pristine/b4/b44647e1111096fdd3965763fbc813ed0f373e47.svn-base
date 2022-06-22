@@ -1,0 +1,39 @@
+﻿@model FilterModel
+@{
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+    var allDocFields = ViewBag.AllDocFields as IEnumerable<DocFieldModel>;
+    var allDocTypes = ViewBag.AllDocTypes as IEnumerable<DocTypeModel>;
+}
+
+<div style="margin-bottom: 4px;">
+    <span>Nghiệp vụ:</span>
+    <select id="categoryBusinessId" name="categoryBusinessId" style="width: 167px" onchange="doSubmit($(this).parents('form'));">
+        @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+        {
+            foreach (var categoryBusiness in allCategoryBusiness)
+            {
+            <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "") >@categoryBusiness.Text</option>
+            }
+        }
+    </select>
+    <span>Lĩnh vực:</span>
+    <select id="docFieldId" name="docFieldId" style="width: 165px" onchange="doSubmit($(this).parents('form'));">
+        @if (allDocFields != null && allDocFields.Any())
+        {
+            foreach (var docField in allDocFields)
+            {
+            <option value="@docField.DocFieldId" @(Model.DocFieldId != null && Model.DocFieldId == docField.DocFieldId ? "selected='selected'" : "")>@docField.DocFieldName</option>
+            }
+        }
+    </select>
+    <span>Loại hồ sơ:</span>
+    <select id="doctypeId" name="doctypeId" style="width: 165px" onchange="doSubmit($(this).parents('form'));">
+        @if (allDocTypes != null && allDocTypes.Any())
+        {
+            foreach (var doctype in allDocTypes)
+            {
+            <option value="@doctype.DocTypeId" @(Model.DocTypeId != null && Model.DocTypeId == doctype.DocTypeId ? "selected='selected'" : "")>@doctype.DocTypeName</option>
+            }
+        }
+    </select>
+</div>

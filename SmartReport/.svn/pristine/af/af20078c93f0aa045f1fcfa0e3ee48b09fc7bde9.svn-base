@@ -1,0 +1,298 @@
+﻿@model IEnumerable<DocTypeModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as DocTypeSearchModel;
+
+    // 20200210 VuHQ START
+    var categoryBusinessIdValue = ViewBag.CategoryBusinessIdValue;
+    var dicActionLevel = (ViewBag.ListActionLevel as List<SelectListItem>).ToDictionary(a => a.Value, a => a.Text);
+}
+<style>
+    .switch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+    }
+
+        .switch > input[type="checkbox"] {
+            display: none;
+        }
+
+        .switch > label {
+            cursor: pointer;
+            height: 0px;
+            position: relative;
+            width: 40px;
+            margin: 0;
+        }
+
+            .switch > label::before {
+                background: rgb(0, 0, 0);
+                box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+                border-radius: 8px;
+                content: '';
+                height: 16px;
+                margin-top: -8px;
+                position: absolute;
+                opacity: 0.3;
+                transition: all 0.4s ease-in-out;
+                width: 40px;
+            }
+
+            .switch > label::after {
+                background: rgb(255, 255, 255);
+                border-radius: 16px;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+                content: '';
+                height: 24px;
+                left: -4px;
+                margin-top: -8px;
+                position: absolute;
+                top: -4px;
+                transition: all 0.3s ease-in-out;
+                width: 24px;
+            }
+
+        .switch > input[type="checkbox"]:checked + label::before {
+            background: inherit;
+            opacity: 0.5;
+        }
+
+        .switch > input[type="checkbox"]:checked + label::after {
+            background: inherit;
+            left: 20px;
+        }
+
+    tr[class^=bg] > td {
+        background-color: transparent !important;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblDoctype").openLink({ urlOpen: '/admin/DocType/EditPlus' });
+
+
+    });
+
+    function openConfigEmbryonic(id) {
+        $("#configEmbryonicForm").removeClass('hidden');
+        $("#ereport").attr("src", "/admin/form/ConfigFormDoctype?id=" + id);
+        $("#configEmbryonicForm").dialog({
+            width: 1100,
+            height: 600,
+            buttons: [
+                {
+                    text: "Đóng",
+                    click: function () {
+                        $("#configEmbryonicForm").dialog("close");
+                        //var editor = $("#ereport")[0];
+                        //editor.contentWindow.docEditor.destroyEditor();
+                        //eGovMessage.show("Đang xử lý ...");
+                        //setTimeout(function () {
+                        //    $("#configEmbryonicForm").dialog("close");
+                        //}, 5000);
+                    }
+                }
+            ]
+        });
+    }
+
+    var listDocTypeIdStatus = {};
+    function onChangeActivated(el, docTypeId) {
+        if (listDocTypeIdStatus[docTypeId] === undefined) {
+            $(el).parents('tr').addClass('bg-warning');
+            listDocTypeIdStatus[docTypeId] = el.checked;
+        } else {
+            $(el).parents('tr').removeClass('bg-warning');
+            delete listDocTypeIdStatus[docTypeId];
+        }
+
+        $('#listDocTypeIdStatus').val(JSON.stringify(listDocTypeIdStatus));
+    }
+</script>
+
+<form action="@Url.Action("ChangeIsActivateBatch")" method="POST" class="pull-right" style="margin-top: -43px;">
+    <input type="hidden" id="listDocTypeIdStatus" name="sModel" />
+    <input type="hidden" id="categoryBusinessId" name="categoryBusinessId" value="@categoryBusinessIdValue" />
+    <button type="submit" class="btn btn-primary">
+        <span class="icon icon-checkmark" style="font-size: 13px; margin-right: 5px;"></span>
+        <span class="text-uppercase">Lưu trạng thái</span>
+    </button>
+</form>
+
+<table class="table table-striped table-bordered" id="tblDoctype">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Customer.DocType.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                Mã báo cáo
+            </th>
+            <th class="header">
+                Tên báo cáo
+            </th>
+            <th class="header">
+                Tiêu đề báo cáo
+            </th>
+            <th class="header">
+                Kỳ báo cáo
+            </th>
+            <th class="header  text-center">
+                Chi tiết
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Status.Label")
+            </th>
+            <th class="header text-center">
+                @Localizer("Customer.DocType.Index.List.Column.Delete")
+            </th>
+
+            @*HuyNP-21.7.2020-Task 1-Bổ sung chức năng với các eform sử dụng chung một biểu cho nhiều kỳ báo cáo (năm, quý, tháng,..) chỉ cần làm chuẩn 1 form cho 1 kỳ và copy được cho các kỳ tiếp theo-START*@
+            <th class="header text-center">
+                Sao chép
+            </th>
+            <th class="header text-center">
+                Xuất tệp
+            </th>
+            @*HuyNP-21.7.2020-Task 1-Bổ sung chức năng với các eform sử dụng chung một biểu cho nhiều kỳ báo cáo (năm, quý, tháng,..) chỉ cần làm chuẩn 1 form cho 1 kỳ và copy được cho các kỳ tiếp theo-END*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var docType in Model)
+            {
+                number += 1;
+        <tr data-id="@docType.DocTypeId">
+            <td>
+                @number
+            </td>
+            <td>
+                @docType.DocTypeCode
+            </td>
+            <td>
+                @docType.DocTypeName
+            </td>
+            <td>
+                @docType.CompendiumDefault
+            </td>
+            <td>
+                @if (dicActionLevel.ContainsKey(docType.ActionLevel.ToString()))
+                {
+                    @dicActionLevel[docType.ActionLevel.ToString()]
+                }
+            </td>
+            @*<td class="text-center">
+            *<a href="#" data-id="@docType.DocTypeId" onclick="openConfigEmbryonic('@docType.DocTypeId')">Chi tiết</a>
+            @Html.ActionLink("Sửa", "Edit", "DocType", new { id = docType.DocTypeId }, null)
+            @Html.ActionLink("Chi tiết", "Edit", new { Id = docType.DocTypeId })
+        </td>*@
+    @{  if (categoryBusinessIdValue == 8)
+        {
+            <td class="text-center">
+                @Html.ActionLink("Chi tiết", "EditExplicit", "DocType", new { id = docType.DocTypeId }, null)
+            </td>
+        }
+        else if (categoryBusinessIdValue == 16)
+        {
+            <td class="text-center">
+                @Html.ActionLink("Chi tiết", "EditReport", "DocType", new { id = docType.DocTypeId }, null)
+            </td>
+        }
+        else if (categoryBusinessIdValue == 32)
+        {
+            <td class="text-center">
+                @Html.ActionLink("Chi tiết", "EditGeneral", "DocType", new { id = docType.DocTypeId }, null)
+            </td>
+        }
+        else
+        {
+            <td class="text-center">
+                @*<a href="#" data-id="@docType.DocTypeId" onclick="openConfigEmbryonic('@docType.DocTypeId')">Chi tiết</a>*@
+                @Html.ActionLink("Chi tiết", "EditPlus", "DocType", new { id = docType.DocTypeId, categoryBusinessId = @categoryBusinessIdValue }, null)
+                @*@Html.ActionLink("Chi tiết", "Edit", new { Id = docType.DocTypeId })*@
+            </td>
+        } 
+    }
+        <td>
+            @*<input type="checkbox" value="@docType.IsActivated" @(docType.IsActivated ? "checked='checked'" : "") onchange="onChangeActived(this,@docType.DocTypeId);" />*@
+            <div class="switch" ondblclick="event.stopPropagation();">
+                <input id="switch-@number" name="IsActivated" type="checkbox" @(docType.IsActivated ? "checked='checked'" : "") onchange="onChangeActivated(this, '@docType.DocTypeId');" />
+                <label for="switch-@number" class="label-primary"></label>
+            </div>
+        </td>
+        <td class="text-center">
+            <a href="javascript:deleteDocType('@(docType.DocTypeId)')">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+            <form id="formdelete@(docType.DocTypeId)" style="display: none" action="@Url.Action("Delete", new { Id = docType.DocTypeId, categoryBusinessId = @categoryBusinessIdValue })" method="POST">
+                @Html.AntiForgeryToken()
+            </form>
+        </td>
+
+        @*HuyNP-21.7.2020-Task 1-Bổ sung chức năng với các eform sử dụng chung một biểu cho nhiều kỳ báo cáo (năm, quý, tháng,..) chỉ cần làm chuẩn 1 form cho 1 kỳ và copy được cho các kỳ tiếp theo-START*@
+        <td class="text-center">
+            <a href="javascript:(function(id){$('#formcopy' + id).submit();})('@(docType.DocTypeId)')">Copy</a>
+            <form id="formcopy@(docType.DocTypeId)" style="display: none" action="@Url.Action(categoryBusinessIdValue == 8?"CopyExplicit":"CopyPlus", new { Id = docType.DocTypeId, categoryBusinessId = @categoryBusinessIdValue })" method="POST">
+                @Html.AntiForgeryToken()
+            </form>
+        </td>
+        <td class="text-center">
+            <a href="javascript:(function(id){$('#formExportJson' + id).submit();})('@(docType.DocTypeId)')" download>Xuất dữ liệu</a>
+            <form id="formExportJson@(docType.DocTypeId)" style="display: none" action="@Url.Action("ExportJSON", new { Id = docType.DocTypeId, categoryBusinessId = @categoryBusinessIdValue })" method="POST">
+                @Html.AntiForgeryToken()
+            </form>
+        </td>
+        @*HuyNP-21.7.2020-Task 1-Bổ sung chức năng với các eform sử dụng chung một biểu cho nhiều kỳ báo cáo (năm, quý, tháng,..) chỉ cần làm chuẩn 1 form cho 1 kỳ và copy được cho các kỳ tiếp theo-END*@
+    </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="10">
+                    @Localizer("Customer.DocType.Index.List.Null")
+            </td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan ="10">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  docFieldId = search.DocFieldId,
+                                  categoryBusinessId = 4,
+                                  isActivated = search.IsActivated,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divListDocTypes",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div id="configEmbryonicForm" class="hidden">
+    <iframe id="ereport" src="" width="1050" height="577" style="border:none;"></iframe>
+</div>

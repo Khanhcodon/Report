@@ -1,0 +1,144 @@
+﻿@model IEnumerable<FormModel>
+    @{
+        ViewBag.Title = Localizer("Common.Form.Label.List");
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+
+    <script type="text/javascript">
+        $(function () {
+            $(".tab-form").addClass(" ui-tabs-selected ui-state-active");
+            $(".tab-form").siblings().removeClass(" ui-tabs-selected ui-state-active");
+            $('#FormGroupId, #FormTypeId').change(function () {
+                doSubmit($(this).parents('form:first'));
+            });
+
+            $("#btnSubmit").click(function () {
+                doSubmit($(this).parents('form:first'));
+            });
+        });
+        
+        function doSubmit(form) {
+            form.attr('action', '@Url.Action("GetForm")?pageSize=' + $('select[name=pageSize]:first').val());
+            form.submit();
+        }
+
+        function deleteForm(id) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Form.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+
+        function onBegin() {
+            $("#divList").blockpanel({ text: "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divList').unblockpanel();
+        }
+
+        function onFailure() {
+            alert("Có lỗi xảy ra");
+            $('#divList').unblockpanel();
+        }
+    </script>
+    <style>
+        #FormGroupId, #FormTypeId {
+            display: inline;
+            width: auto;
+        }
+    </style>
+
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span data-res="egov.resources.sitemap.form"></span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/admin/form/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+            <a class="btn  btn-default control-btn" href="/admin/form/CopyForm">
+                <span class="icon icon-copy"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.copy"></span>
+            </a>
+            <a class="btn  btn-default control-btn" href="/admin/form/import">
+                <span class="icon icon-checkmark"></span>
+                <span class="text-uppercase">Import</span>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-16">
+            <div id="divForm" class="bkavegov">
+
+                @Html.Partial("_Notifications")
+                @using (Ajax.BeginForm("GetForm", new AjaxOptions { UpdateTargetId = "divListForm", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+                {
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="" style="width: 75px">Nhóm: </label>
+                            <select id="FormGroupId" style="width: 255px;">
+                                <option value="0">@Localizer("Common.All.Label")</option>
+                                @foreach (var item in ViewBag.FormGroupId as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="width: 75px">@Localizer("Common.Form.Type"):</label>
+                            <select id="FormTypeId" style="width: 255px;">
+                                <option value="0">@Localizer("Common.All.Label")</option>
+                                @foreach (var item in ViewBag.FormTypeId as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="width: 75px">Từ khóa:</label>
+                            <input type="text" name="SearchKey" id="SearchKey" style="width: 300px" />
+                        </div>
+                    </div>
+                    <div class="form-inline" style="margin-top: 10px;">
+                        <div class="form-group">
+                            <label for="" style="width: 75px">Lĩnh vực:</label>
+                            <select id="DocFieldId" name="DocFieldId" style="width: 255px;">
+                                <option>@Localizer("Common.All.Label")</option>
+                                @foreach (var item in ViewBag.DocFieldId as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="width: 75px">Loại hồ sơ:</label>
+                            <select id="DocTypeId" name="DocTypeId" style="width: 255px;">
+                                <option>@Localizer("Common.All.Label")</option>
+                                @foreach (var item in ViewBag.DocTypeId as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="width: 75px"></label>
+                            <button type="button" class="btn btn-primary" id="btnSubmit">Tìm kiếm</button>
+                        </div>
+                    </div>
+                }
+                <div id="divListForm" style="padding-top: 10px;">
+                    @{
+                        Html.RenderPartial("_PartialList", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<TemplateModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Template.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allType = ViewBag.AllType as List<SelectListItem>;
+}
+
+@Html.Partial("_Head")
+
+<script type="text/javascript">
+    function deleteTemplate(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Template.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.Ok,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListTemplate").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListTemplate').unblockpanel();
+    }
+
+    function onFailure() {
+        $('#divListTemplate').unblockpanel();
+    }
+
+    function searchTemp(_this) {
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    $(function () {
+        $("#type").bind("change", function () {
+            searchTemp(this);
+            $("#form0").submit();
+        });
+    });
+
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-insert-template"></i>
+        <span data-res="egov.resources.sitemap.template"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/template/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+        @using (Ajax.BeginForm("Search", 
+            new AjaxOptions { UpdateTargetId = "divListTemplate", OnBegin = "onBegin",
+                OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+        {
+        @Html.DropDownList("type", allType, @Localizer("Common.All.Label"), new { style = "display:inline;width:150px" }) 
+       <input class="form-control" type="text" name="keySearch" id="keySearch" value="@(ViewBag.KeySearch ?? "")" style="display:inline;width:40%"/>
+    
+    <input class="btn" type="submit" id="search" onclick="searchTemp(this)"
+         value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+<div style="clear: both">
+</div>
+<br />
+     <div id="divListTemplate">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

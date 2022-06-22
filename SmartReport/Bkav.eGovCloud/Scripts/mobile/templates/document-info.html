@@ -1,0 +1,149 @@
+﻿
+<div class="document mdl-layout">
+    <div class="mdl-layout__content document-content">
+        <div class="detail-content">
+            <div class="document-form">
+                <div class="document-info" data-id="">
+                    <div class="document-info-template">
+                        <div class="mbsc-form-group-title">${Compendium}</div>
+                        <!--<div mbsc-form id="formEdit">
+        <div class="mbsc-form-group" style="margin:0.5em auto">
+            <label style="margin:0.5em auto">
+                Cơ quan báo cáo
+
+            </label>
+        </div>
+        <div class="mbsc-form-group" style="margin:0.5em auto">
+            <label style="margin:0.5em auto">
+                Kỳ báo cáo
+            </label>
+        </div>
+        <div class="mbsc-form-group-title">Nội dung báo cáo</div>
+    </div>-->
+                    </div>
+
+                    <div class="document-attachment-mobile" style="display: none;">
+                        <div>
+                            <div id="wrapAttachment">
+                                <ul class="mdl-list attachment-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-r-content">
+                        <div class="d-r-c-report">
+                            <div class="col-md-4    col-xs-5">
+                                <span class="d-r-c-label">Kỳ báo cáo : </span>
+                            </div>
+                            <div class="col-md-8   col-xs-7">
+                                Kỳ 10
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <hr />
+                        <div class="d-r-c-content">
+                            <div class="col-md-4    col-xs-5">
+                                <span class="d-r-c-label">Nội dung báo cáo</span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div id="divContentmobile" class="">
+                                <div mbsc-form id="formContentmbsc" style="background:unset;">
+                                    <!--<div class="mbsc-form-group">
+                <div class="mbsc-form-group-title">Hộ gia đình</div>
+                <label for="tenchuho">
+                    Tên chủ hộ
+                    <input id="tenchuho" type="text" placeholder="Tên chủ hộ" value="Nguyễn Việt dũng" />
+                </label>
+                <label class="mbsc-switch-primary">
+                    Là hộ nghèo
+                    <input type="checkbox" data-role="switch" name="hongheo" checked>
+                </label>
+                <label class="mbsc-switch-secondary">
+                    Sử dụng nước sạch
+                    <input type="checkbox" data-role="switch" name="chatluongnuocsinhhoatdangsudung_nuocsach"  checked>
+                </label>
+                <label class="mbsc-switch-success">
+                    Sử dụng nước hợp vệ sinh
+                    <input type="checkbox" data-role="switch" name="chatluongnuocsinhhoatdangsudung_nuochopvesinh" checked>
+                </label>
+                <label class="mbsc-switch-danger">
+                    Nguồn cấp nước nhỏ lẻ
+                    <input type="checkbox" data-role="switch" name="nguoncapnuoc_congtrinhcnnl"  checked>
+                </label>
+                <label class="mbsc-switch-warning">
+                    Nguồn cấp nước tập trung
+                    <input type="checkbox" data-role="switch" name="nguoncapnuoc_congtrinhcnnl" checked>
+                </label>
+            </div>-->
+
+                                </div>
+                                <div mbsc-form style="background-color:transparent">
+                                    <div class="mbsc-form-group" style="background-color:transparent">
+                                        <div class="mbsc-btn-group-block">
+                                            <button id="addItemForm">Thêm mới</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        </div>
+
+
+                            <!--<div id="wrapComments">
+            <div id="commentList" class="comment-list"></div>
+            <div class="viewAllComment hidden">
+                <span>Xem các ý kiến khác</span>
+            </div>
+        </div>-->
+                            <div id="divContent" class="document-contents"></div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+
+    <div class="fix-position-chat">
+        <div class="document-transfer active" style="display: none; padding:10px">
+            <div class="">
+                <!--<a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">camera_alt</i>
+                    <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">attachment</i>
+                    <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}">
+                    <i class="material-icons">add</i>
+                </a>
+                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect" for="insertComment${DocumentCopyId}" id="commonCommentList"></ul>-->
+                <div class="user-comment">
+                    <div style="background:rgba(0,0,0,0.3);position:relative; border-radius:30px; margin-right:60px;box-shadow:0 1px 0 #f0f0f0bf, 0 0 0 rgba(0,0,0,.8), 0 -1px 0 rgba(0,0,0,0.16);padding:0px 5px">
+                        <textarea id="Comment" name="Comment" rows="1" cols="20" placeholder="Ý kiến xử lý" style="background-color:transparent;color:white"></textarea>
+                       
+                        <a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon" style="position: absolute;  right: 10px;top:6px;">
+                            <i class="material-icons" style="color:#c5c5c5">camera_alt</i>
+                            <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                        </a>
+                        <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon" style="position: absolute;  right: 37px;top:6px;">
+                            <i class="material-icons" style="color:#c5c5c5">attachment</i>
+                            <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                        </a>
+                        <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}" style="position: absolute;  right: 10px;top:6px;">
+                            <i class="material-icons" style="color:#c5c5c5">add</i>
+                        </a>
+                    </div>
+                    <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect transferActions" for="btnTransfer${DocumentCopyId}">
+
+                    </ul>
+                    <span class="borcustom"><i class="material-icons">arrow_drop_down</i></span>
+                    <button id="btnTransfer${DocumentCopyId}" class="mdl-button mdl-js-button mdl-button--icon btnTransfer" href="#">
+                        <i class="material-icons" style="color: white">send</i>
+                    </button>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+

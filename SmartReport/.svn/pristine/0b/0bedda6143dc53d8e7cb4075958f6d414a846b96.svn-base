@@ -1,0 +1,63 @@
+﻿@using Bkav.eGovCloud.Entities.Customer
+@{
+    ViewBag.Title = Localizer("Common.Email.Setting.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var emailSettings = DependencyResolver.Current.GetService<Bkav.eGovCloud.Entities.Common.EmailSettings>();
+}
+<div class="bkavegov-content-title">
+    <h3>
+        @Localizer("Common.Email.Setting.Title")
+    </h3>
+</div>
+@if (string.IsNullOrWhiteSpace(emailSettings.SmtpServer)
+                    || string.IsNullOrWhiteSpace(emailSettings.SmtpPassword)
+                    || string.IsNullOrWhiteSpace(emailSettings.SmtpUsername)
+                    || emailSettings.SmtpPort <= 0)
+{
+    <img src="@Url.Content("~/Content/Images/yellow-warning.gif")" alt="" />
+    <h3>
+        @Localizer("Common.Email.Setting.Error")
+    </h3>
+}
+else
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#sendmail").click(function () {
+                showLoading(true);
+                $.post('@Url.Action("EmailSettings")', { email: $("#email").val() })
+                .done(function (data) {
+                    if (data) {
+                        if (data.success) {
+                            alert(egov.resources.notifications.emailSuccess);
+                        } else {
+                            alert(egov.resources.notifications.emailError);
+                        }
+                    }
+                })
+                .fail(function () {
+                    alert(egov.resources.notifications.sendEmailError);
+                })
+                .complete(function () {
+                    showLoading(false);
+                });
+            });
+        });
+
+        function showLoading(show) {
+            if (show) {
+                $("#imgLoader").show();
+                $("#formSendMail input").prop('disabled', true);
+            } else {
+                $("#imgLoader").hide();
+                $("#formSendMail input").prop('disabled', false);
+            }
+        }
+    </script>
+    <div id="formSendMail">
+        @Localizer("Common.Email.Setting.Label")
+        <input type="text" id="email" name="email" />&nbsp;<input id="sendmail" type="button" value="Gửi" />
+        &nbsp;&nbsp;
+        <img id="imgLoader" style="display: none" src="@Url.Content("~/Content/Images/ajax-loader.gif")" height="24" width="24" alt="" />
+    </div>
+}

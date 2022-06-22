@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ClientModel>
+@{
+    ViewBag.Title = Localizer("Common.Client.List.Label");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteClient(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Category.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function changeActived(id, _this) {
+        $.get("@Url.Action("SetActive")",
+            { id: id, actived: _this.checked },
+            function (result) {
+                if (result.error) {
+                    eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                } else if (result.success) {
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                }
+            });
+    }
+
+    function onBegin() {
+        $("#divListClient").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListClient').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListClient').unblockpanel();
+    }
+
+    function searchClient(_this) {
+        $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-lock-open"></i>
+        <span data-res="egov.resources.sitemap.client"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/client/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search", new AjaxOptions
+        {
+            UpdateTargetId = "divListClient",
+            OnBegin = "onBegin",
+            OnSuccess = "onSuccess",
+            OnFailure = "onFailure",
+            HttpMethod = "Get"
+        }))
+        {
+            <input type="text" class="form-control" name="key" id="key"
+             value="@(ViewBag.Name ?? "")" placeholder="Tìm kiếm" style="width:40%" />
+            <input type="submit" class="btn" id="search"
+             onclick="searchClient(this);"
+            value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+    </div>
+    <div id="divListClient">
+        @{
+            Html.RenderPartial("_List", Model);
+        }
+    </div>
+</div>

@@ -1,0 +1,151 @@
+﻿<div class="form-horizontal">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+                <label class="col-md-16 text-left" data-res="">Nội dung thực hiện trưng cầu</label>
+                <div class="col-md-16">
+                    <textarea class="form-control comment" rows="2" style="height: 75px">${Title}</textarea>
+                </div>
+            </div>
+            <div class="form-group form-group-sm" style="margin-bottom:0px;">
+                <div class="col-md-16" style="overflow: auto; max-height:145px">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col>
+                        </colgroup>
+                        <tbody class="listVoteDetail"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0px">
+                <div class="col-md-16 dg-view1"></div>
+            </div>
+            <div class="form-group" style="margin-bottom:0px">
+                <div class="col-md-16 dg-view"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+                <label class="col-md-16" data-res="" style="color: blue;">Thời gian cho ý kiến</label>
+            </div>
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+                <label class="col-md-6" data-res="">Ngày bắt đầu</label>
+                <div class="col-md-4">
+                    <input type="text" id="timeBegin" data-model="TimeBegin" class="form-control" style="width:80px" value="00:00">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="beginDate" class="form-control">
+                </div>
+            </div>
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+                <label class="col-md-6">Ngày kết thúc</label>
+                <div class="col-md-4">
+                    <input type="text" id="timeEnd" data-model="TimeEnd" class="form-control " style="width:80px" value="23:00">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="endDate" class="form-control">
+                </div>
+            </div>
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+                <label class="col-md-16 " data-res="" style="color: blue;">Tùy chọn trưng cầu ý kiến</label>
+            </div>
+            <div class="form-group form-group-sm" style="margin-bottom:0px">
+
+                <div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsMultiSelect" {{if IsMultiSelect}} checked {{/if}}>
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <label class="" for="IsMultiSelect" style="font-weight:normal">
+                        Cho phép mọi người chọn nhiều ý kiến
+                    </label>
+                </div>
+                <div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsPublic" {{if IsPublic}} checked {{/if}}>
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <label class="" for="IsPublic" style="font-weight:normal">
+                        Cho phép công khai người chọn ý kiến
+                    </label>
+                   
+                </div>
+                <div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsCommentDiff" {{if IsCommentDiff}} checked {{/if}}>
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <label class="" for="IsCommentDiff" style="font-weight:normal">
+                        Cho phép mọi người thêm ý kiến
+                    </label>
+                </div>
+                <div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsSyncUser" checked>
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <label class="" for="IsSyncUser" style="font-weight:normal">
+                        Những người tham ra cuộc trưng cầu sẽ được xem kết quả
+                    </label>
+                </div>
+                <div style="max-height:150px; overflow:auto" class="col-md-16">
+                    <div class="row">
+                        <div class="col-md-16" style="">
+                            <span class="bold" data-res=""id="titleVote">Danh sách tham gia bỏ phiếu và xem kết quả</span>
+                            <div class="private-anoun1">
+                                <ul class="list-group"></ul>
+                            </div>
+                        </div>
+                        <div class="col-md-16" style="display: none" >
+                            <span class="bold" data-res="">Danh sách xem kết quả</span>
+                            <div class="private-anoun">
+                                <ul class="list-group"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!--<div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsViewResultImmediately">
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <span class="">
+                        Cho phép mọi người xem kết quả ngay
+                    </span>
+                </div>
+                <div class="col-md-16">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="11" type="checkbox" id="IsNotify">
+                        <span class="document-color-1">
+                            <i class="icon-check"></i>
+                        </span>
+                    </label>
+                    <span class="">
+                        Người tham gia nhận được thông báo khi cuộc trưng cầu được tạo
+                    </span>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-16">
+        <div class="form-group" style="margin-bottom:0px">
+            <div class="col-md-16" style="max-height:200px; overflow:auto">
+                <span class="bold" data-res="" style="color: red" id="validateError"></span>
+            </div>
+        </div>
+    </div>
+</div>

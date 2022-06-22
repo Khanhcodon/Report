@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+}
+
+
+<div id="notificationFrame" data-app="notifications" class="egov-app trans trans-right">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header egov-header">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title">
+                    <span class="wraptext">
+                        <span class="header-title">
+                            Thông báo
+                        </span>
+                    </span>
+                </span>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer egov-leftmenu">
+            <div class="mdl-layout__drawer">
+                <div class="useroption main-bg-color">
+                    <img class="avatar" src="https://danhba.bkav.com/avatars/TienBV.bmp" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wraptext">Bùi Văn Tiến</div>
+                        <div class="wraptext fullmail">tienbv@bkav.com</div>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu5">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu5">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>
+                <div class="treelist">
+                    
+                </div>
+            </div>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="egov-maincontent">
+                <div class="no-element-content hidden">
+                    <div class="message">
+                        <span class="material-icons mdl-list__item-icon">notifications</span>
+                        <div style="font-size: 18px;">Không có thông báo</div>
+                        <div class="message-info"></div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div>
+                        <div class="notification-options">
+                            <div class="headerrow hidden">
+                                <select class="form-control" id="sl_type_notification">
+                                    <option value="0">Tất cả</option>
+                                    <option value="1">Văn bản</option>
+                                    <option value="2">Điều hành</option>
+                                    <option value="3">Chat</option>
+                                    <option value="4">Lịch</option>
+                                </select>
+                            </div>
+                            <span class="mdl-chip btnReadAll">
+                                <span class="mdl-chip__text">Đánh dấu tất cả là đã đọc</span>
+                            </span>
+                            <span class="mdl-chip btnCloseAll">
+                                <span class="mdl-chip__text">Xóa tất cả</span>
+                            </span>
+                        </div>
+                        <div id="notificationList">
+                            <div class="group-label" data-group="new">
+                                <span>Mới</span>
+                            </div>
+                            <div class="dataList" data-group="new">
+                                <ul class="mdl-list list-notification">
+                                    <li class="mdl-list__item mdl-list__item--three-line notify-item isnew " data-id="1" app="documents">
+                                        <span class="mdl-list__item-primary-content">
+                                            <i class="material-icons iconapp-name" app="documents">folder</i>
+                                            <span></span>
+                                            <span class="mdl-list__item-text-body">                                                
+                                            </span>
+                                        </span>
+                                        <span class="mdl-list__item-secondary-content">
+                                            <a class="mdl-list__item-secondary-action close-notify" href="#"><i class="material-icons">clear</i></a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="group-label" data-group="old">
+                                Trước đó
+                            </div>
+                            <div class="dataList" data-group="old">
+                                <ul class="mdl-list list-notification"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

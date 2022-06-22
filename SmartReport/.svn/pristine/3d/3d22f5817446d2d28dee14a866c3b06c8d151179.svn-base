@@ -1,0 +1,50 @@
+﻿@model FeeModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Update");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Fee.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-coin"></i>
+        <span data-res="egov.resources.sitemap.fee"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn btn-default control-btn" href="/admin/fee/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back" ></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.Partial("_CreateOrEdit", Model)
+        @Html.AntiForgeryToken()
+    </div>
+}
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.FeeId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

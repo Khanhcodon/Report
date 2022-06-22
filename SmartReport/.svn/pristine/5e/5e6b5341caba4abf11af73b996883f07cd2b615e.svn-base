@@ -1,0 +1,19 @@
+.leftRightDis{
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    justify-content: space-between;
+    position: relative;
+}
+
+.leftdisaggregation{
+    display: flex;
+    align-items: center;
+    align-items: flex-start;
+}
+
+.rightdisaggregation{
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+}

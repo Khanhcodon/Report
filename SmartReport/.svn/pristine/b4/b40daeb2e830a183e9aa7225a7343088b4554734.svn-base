@@ -1,0 +1,75 @@
+﻿@model WardModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Ward.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#CityCode").change(function (event) {
+            var cityCode = $(this).val();
+            $.get("@Url.Action("CityChange")",
+                { cityCode: cityCode },
+                function (result) {
+                    if (result) {
+                        $('#divWard #DistrictCode').empty();
+                        var AllDistrict = JSON.parse(result.AllDistrict);
+                        if (AllDistrict.length > 0) {
+                            $("#districtTemplate").tmpl(AllDistrict).appendTo("#divWard #DistrictCode");
+                        }
+                        $('#CityCodeCreateRecords').val(cityCode);
+                    }
+                }
+            )
+            .complete(function () {
+
+            })
+            .fail(function () {
+                eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+            });
+        });
+
+        $("#DistrictCode").change(function (event) {
+            var districtCode = $(this).val();
+            $.get("@Url.Action("DistrictChange")",
+                { districtCode: districtCode }
+            )
+            .complete(function () {
+
+            })
+            .fail(function () {
+                eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+            });
+        });
+    })
+</script>
+@using (Html.BeginForm())
+{
+    <div class="bkavegov-content-title">
+        <h3>Thêm mới xã/phường</h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink("Danh sách", "Index")</li>
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#">@Localizer("Common.Button.Create")</a></li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            <div id="divWard">
+                @Html.Partial("_Notifications")
+                @Html.Partial("_CreateOrEdit", Model)
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="CityCode" id="CityCodeCreateRecords" value="ViewBag.CitySelected" />
+            </div>
+            <div>
+                <button type="submit" name="save" value="save">@Localizer("Common.Button.Create.Save")</button>
+                <button type="button" onclick="location.href='/admin/Ward'">
+                    @Localizer("Common.Button.Back")</button>
+            </div>
+        </div>
+    </div>
+    <script id="districtTemplate" type="text/x-jquery-tmpl">
+        <option value="${DistrictCode}">${DistrictName}</option>
+    </script>
+}

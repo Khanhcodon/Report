@@ -1,0 +1,96 @@
+﻿@model IEnumerable<DocumentRelatedModel>
+    @{
+        var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    }
+    <script type="text/javascript">
+        $(function () {
+            $("#tblDocRelated").grid({
+                isResizeColumn: true,
+                isFixHeightContent: false
+            });
+            $("#tblDocRelated").openLink({ urlOpen: '/Admin/DocumentRelated/Edit' });
+
+            $(".table-main").addClass("table-bordered table-hover");
+        })
+    </script>
+    <table class="table-main table" id="tblDocRelated">
+        <colgroup>
+            <col style="width: 50px" />
+            @if (sortAndPage != null)
+            {
+                <col />
+            }
+            <col style="width: 200px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    @Localizer("DocumentRelated.Index.List.Column.Numbers")
+                </th>
+                @if (sortAndPage != null)
+                {
+                    <th class="header">
+                        @Ajax.SortLink("Name", Localizer("DocumentRelated.Index.List.Column.Name"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                            {
+                                page = sortAndPage.CurrentPage,
+                                pageSize = sortAndPage.PageSize,
+                                DocRelatedKey = ViewBag.DocRelatedKey,
+                            },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "divListDocRelated",
+                                OnBegin = "onBegin",
+                                OnSuccess = "onSuccess",
+                                OnFailure = "onFailure"
+                            })
+                    </th>
+                }
+                <th class="header">
+                    @Localizer("DocumentRelated.Index.List.Column.Edit")
+                </th>
+                <th class="header">
+                    @Localizer("DocumentRelated.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var stt = 0;
+                foreach (var doc in Model)
+                {
+                    stt += 1;
+                    <tr data-id="@doc.DocumentRelatedId">
+                        <td>
+                            @stt
+                        </td>
+                        <td class="td-filter">
+                            @doc.Name
+                        </td>
+                        <td>
+                            @Html.ActionLink(Localizer("DocumentRelated.Index.List.Column.Edit.Button"), "Edit", new { Id = doc.DocumentRelatedId })
+                        </td>
+                        <td>
+                            <a href="javascript:deleteDoc('@(doc.DocumentRelatedId)')">@Localizer("DocumentRelated.Index.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(doc.DocumentRelatedId)" style="display: none" action="@Url.Action("Delete", new { Id = doc.DocumentRelatedId })" method="POST">
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">
+                        @Localizer("DocumentRelated.Index.List.NullValue")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

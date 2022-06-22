@@ -1,0 +1,376 @@
+﻿@using System.Collections
+@using Bkav.eGovCloud.Areas.Admin.Models
+@model DocTypeFormModel
+@{
+    var isCreate = new Guid().CompareTo(@Model.Form.FormId) == 0;
+    var catalogs = ViewBag.Catalogs;
+
+    var templateKeys = ViewBag.TemplateKeys;
+
+    var reportKeys = ViewBag.ReportKeys as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
+}
+
+@Html.HiddenFor(model => model.Form.FormId)
+
+<style>
+    tr.spaceUnder > td {
+        padding-bottom: 1em;
+    }
+
+    .report-form {
+        width: 30%;
+        float: left;
+        margin: 0 10px 10px 0;
+    }
+
+    .card-shadow-success {
+        box-shadow: 0 0.46875rem 2.1875rem rgba(58,196,125,0.03), 0 0.9375rem 1.40625rem rgba(58,196,125,0.03), 0 0.25rem 0.53125rem rgba(58,196,125,0.05), 0 0.125rem 0.1875rem rgba(58,196,125,0.03);
+    }
+
+    .card {
+        height: 50px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(26,54,126,0.125);
+        border-radius: .25rem;
+    }
+
+    .widget-content .widget-content-wrapper {
+        display: block;
+        flex: 1;
+        position: relative;
+        align-items: center;
+        height: 50px;
+        vertical-align: middle;
+        line-height: 50px;
+        padding-left: .5em;
+        cursor: pointer;
+    }
+
+    .remove-report {
+        background-image: url("/Content/Images/Deny_16X16_Standard.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        text-decoration: none;
+        background-color: transparent;
+        outline: none;
+        width: 20px;
+        border: none;
+    }
+
+    .widget-left {
+        float: left;
+        height: 50px;
+    }
+
+    .widget-right {
+        float: right;
+        height: 50px;
+    }
+
+    #content-report {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 407px;
+    }
+</style>
+
+<table>
+    <tr class="spaceUnder">
+        <td style="width: 20%;">
+            @Html.LabelFor(model => model.Form.FormHeader)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Form.FormHeader, new { @class = "Form_FormHeader ckeditorText" })
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr class="spaceUnder">
+        <td style="padding-right: 1.5em">
+            <span>Template Key </span> <br />
+            <input id="search-input" class="form-control" />
+            <div id="tree" style="background-color: white; width: 100%; height: 250px; padding: 2px; overflow-x: hidden">
+            </div>
+            Report Key
+            <select onchange="reportKeyChange(this)" id="report-key" multiple style="height: 90%; width: 100%">
+
+                @foreach (var reportKey in reportKeys)
+                {
+                    <option value="@reportKey.Value" customAttribute="@reportKey.Text">
+                        @reportKey.Text
+                    </option>
+                }
+            </select>
+        </td>
+        <td style="text-align: unset;vertical-align: top;">
+            <div id="content-report">
+            </div>
+            @*@Html.TextAreaFor(model => model.Form.ExplicitTemplate, new { @class = "Form_ExplicitTemplate ckeditorText" })*@
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelFor(model => model.Form.FormFooter)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Form.FormFooter, new { @class = "Form_FormFooter ckeditorText", style = "margin-top: 10px" })
+        </td>
+    </tr>
+
+    @if (Model.Form.FormId != Guid.Empty)
+    {
+        <tr>
+            <td>
+                <input type="button" id="deleteForm" class="btn btn-danger" value="Xóa biêu mẫu" style="" />
+            </td>
+        </tr>
+    }
+</table>
+
+<textarea id="decode" style="display: none"></textarea>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<link href="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+<style src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/contents.css")"></style>
+<script src="~/Content/bkav.egov/libs/dist/jstree.min.js"></script>
+<link href="~/Content/bkav.egov/libs/dist/themes/default/style.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+
+    $(function() {
+        var ckeditorName = '';
+        CKEDITOR.editorConfig = function(config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 200;
+            config.toolbarCanCollapse = true;
+            config.removePlugins = 'image,forms';
+        };
+        CKEDITOR.replace('Form_FormHeader',
+            {
+                extraPlugins: 'ruler'
+            });
+        CKEDITOR.replace('Form_FormFooter',
+            {
+                extraPlugins: 'ruler'
+            });
+        CKEDITOR.on("instanceReady",
+            function(ev) {
+                var editor = ev.editor;
+
+                editor.on("focus",
+                    function(ev) {
+                        ckeditorName = editor.name;
+                    });
+            });
+        $('#queryTemplateKeys').change(function() {
+            CKEDITOR.instances[ckeditorName].insertHtml("<b>dsdad</b>");
+        });
+        var value = "@Model.Form.ExplicitTemplate".length == 0
+            ? JSON.parse("[]")
+            : JSON.parse("@Model.Form.ExplicitTemplate");
+        $.ajax({
+            url: "@Url.Action("GetExplicitTemplate")",
+            data: JSON.stringify({ values: value }),
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            success: function(response) {
+                if (response.success && response.result != null && response.result.length > 0) {
+                    $("#ReportKeyTemplate").tmpl(response.result).appendTo("#content-report");
+                }
+            }
+        });
+        $.ajax({
+            url: "@Url.Action("GetCategoryTemplateKey")",
+            data: {},
+            type: "POST",
+            success: function(response) {
+                if (response.success && response.result != null && response.result.length > 0) {
+                    var data = [];
+                    _.each(response.result,
+                        (c) => {
+                            var obj = {
+                                "id": `CategoryId_${c.CategoryId}`,
+                                "text": c.CategoryName,
+                                "icon": "/Content/Images/tree-icon.png",
+                                "children": []
+                            };
+                            if (c.ChidrenList != null && c.ChidrenList.length > 0) {
+                                _.each(c.ChidrenList,
+                                    (x) => {
+                                        obj.children.push({
+                                            "id": `${x.TemplateKeyId}`,
+                                            "text": x.Name,
+                                            "icon": "fa icon-leaf",
+                                            "children": []
+                                        });
+                                    });
+                            }
+                            data.push(obj);
+                        });
+                    $('#tree').on("select_node.jstree",
+                        function (evt, data) {
+                            if (ckeditorName == '') return;
+                            var check = false;
+                            _.each(CKEDITOR.instances[ckeditorName].getData().match(/@@@@(.*?)@@@@/gm),
+                                (x) => {
+                                    if (decodeHTML(x).replace("@@@@", "").replace("@@@@", "") === data.node.text) {
+                                        check = true;
+                                        return;
+                                    }
+                                });
+                            if (!data.node.id.includes("CategoryId") && !check ) {
+                                CKEDITOR.instances[ckeditorName].insertHtml(`@@@@${data.node.text}@@@@`);
+                            }
+                        }).jstree({
+                        'core': {
+                            "animation": 0,
+                            'check_callback': true,
+                            'multiple': false,
+                            "themes": { "stripes": true },
+                            'data': data
+                            },
+                        "search": {
+                            "case_sensitive": false,
+                            "show_only_matches": true
+                        },
+                            "plugins": ["dnd", "search"]
+                    });
+                }
+            }
+        });
+        $("#search-input").keyup(function () {
+            var searchString = $(this).val();
+            $('#tree').jstree('search', searchString);
+        });
+        $("#deleteForm").click(function(e) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Form.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function() {
+                    $.ajax({
+                        url: "/Admin/doctype/DeleteFormNRef?id=" + "@Model.Form.FormId" +
+                            "&docTypeId=" +
+                            "@Model.DocType.DocTypeId",
+                        type: 'GET',
+                        data: {}
+                    }).done(function(result) {
+                        if (result.success) {
+                            $.notify({
+                                    message: "Xóa biểu mẫu thành công"
+                                },
+                                {
+                                    type: 'success',
+                                    placement: {
+                                        from: "bottom",
+                                        align: "right"
+                                    }
+                                });
+                            location.href = "/Admin/docType/EditPlus/" + "@Model.DocType.DocTypeId";
+                        }
+                    });
+                }
+            );
+        });
+    });
+    function decodeHTML(text) {
+        return $("#decode")
+            .html(text)
+            .text();
+    }
+    function decode(str) {
+        return str.replace(/&#(\d+);/g,
+            function(match, dec) {
+                return String.fromCharCode(dec);
+            });
+    }
+    function removeReportKey(id) {
+        $(id).remove();
+    }
+    function reportKeyChange(e) {
+        const docTypeReportKey = {
+            Id: e.options[e.selectedIndex].value,
+            Name: e.options[e.selectedIndex].text
+        };
+        if (docTypeReportKey.Id !== '' && ($(`#ReportKeyId-${docTypeReportKey.Id}`).length === 0)) {
+            $("#ReportKeyTemplate").tmpl(docTypeReportKey).appendTo("#content-report");
+        }
+    }
+    function dataFeed(opts, callback) {
+        var templateKeys = JSON.parse('@Html.Raw(Json.Encode(templateKeys))');
+        var matchProperty = 'Name',
+            data = templateKeys.filter(function (item) {
+                return item[matchProperty].toLowerCase().indexOf(opts.query.toLowerCase()) == 0;
+            });
+
+        data = data.sort(function (a, b) {
+            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                sensitivity: 'accent'
+            });
+        });
+
+        callback(data);
+    }
+
+    function dataFeedTable(opts, callback) {
+        var templateKeys = JSON.parse('@Html.Raw(Json.Encode(templateKeys))');
+        var matchProperty = 'Name',
+            data = templateKeys.filter(function (item) {
+                return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+            });
+
+        data = data.sort(function (a, b) {
+            return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                sensitivity: 'accent'
+            });
+        });
+
+        callback(data);
+    }
+</script>
+<script id="treeTemplate" type="text/x-jquery-tmpl">
+    <li id="${id}" class="jstree-${state} {{if isHSMC}} jstree-checked {{/if}}" t title="${name}">
+        <a data-ajax="true" data-ajax-method="Get" data-ajax-begin="onBegin" data-ajax-failure="onFailure" data-ajax-success="onSuccess" data-ajax-update="#right" data-ajax-mode="replace" href="@Url.Action("Edit")/${id}" style="{{if color}}color:${color}{{/if}}">${name}</a>
+        {{if children}}
+        <ul>
+            {{tmpl(children) "#treeTemplate"}}
+        </ul>
+        {{/if}}
+    </li>
+</script>
+<script id="ReportKeyTemplate" type="text/x-jquery-tmpl">
+    <div id="ReportKeyId-${Id}" class="report-form">
+        <div class="card-shadow-success text-left card">
+            <div class="widget-content">
+                <div class="widget-content-wrapper">
+                    <div class="widget-left">
+                        <div class="text-success">${Name}</div>
+                    </div>
+                    <div class="widget-right">
+                        <input type="button" class="remove-report" onclick="removeReportKey('#ReportKeyId-${Id}')" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input name="Form.ReportKeyId" type="hidden" value="${Id}" class="form-control" />
+    </div>
+</script>
+

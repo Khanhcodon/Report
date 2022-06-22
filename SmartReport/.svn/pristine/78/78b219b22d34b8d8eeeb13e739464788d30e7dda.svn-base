@@ -1,0 +1,346 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    window.document.domain = '@ViewBag.ParentDomain';
+</script>
+
+<meta name="viewport" content="width=device-width" />
+<title>OverView</title>
+<link href="../Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link href="../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../Content/bkav.egov/overview.css" rel="stylesheet" />
+
+<script src="../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jquery.ui.datepicker-vi-VN.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/backbone/backbone-1.3.3.min.js"></script>
+<script src="../Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+
+<div class="alert alert-success" role="alert">Đang xử lý...</div>
+
+<div class="overview">
+    <div class="condition">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Giám sát</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span id="dateConditionCurrent">Trong tuần</span> <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" id="dateConditions">
+                                <li><a href="#" type="1">Trong ngày</a></li>
+                                <li><a href="#" type="2">Trong tuần</a></li>
+                                <li><a href="#" type="3">Trong tháng</a></li>
+                                <li><a href="#" type="4">Trong quý</a></li>
+                                <li><a href="#" type="5">Trong năm</a></li>
+                                <li><a href="#" type="6">Tùy chọn thời gian</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="navbar-form navbar-right">
+                        <div class="form-group form-group-sm">
+                            <input type="text" class="form-control input-sm" placeholder="Từ ngày" id="from">
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <input type="text" class="form-control input-sm" placeholder="Đến ngày" id="to">
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm hidden" id="btnReport">Xem thống kê</button>
+                    </div>
+                    <div class="navbar-form navbar-right statistics-time">
+                        <select id="monthSelect" class="form-control input-sm hidden">
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                        <select id="quarterSelect" class="form-control input-sm hidden">
+                            <option value="1">Quý 1</option>
+                            <option value="2">Quý 2</option>
+                            <option value="3">Quý 3</option>
+                            <option value="4">Quý 4</option>
+                        </select>
+                        <select id="yearSelect" class="form-control input-sm hidden"></select>
+                    </div>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="overview-title">
+            Danh sách hồ sơ, văn bản đang xử lý - <span class="overdue-total total"></span>
+        </div>
+        <div>
+            <table class="table table-bordered table-hover document-overdue" id="docOverdue">
+                <colgroup>
+                    <col style="width: 150px" />
+                    <col />
+                    <col />
+                    <col style="width: 130px" />
+                    <col style="width: 130px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    @if (IsHoSoMotCuaEdition)
+                    {
+                        <tr>
+                            <th>Mã hồ sơ</th>
+                            <th>Tên công dân</th>
+                            <th>Tên hồ sơ</th>
+                            <th>Hạn giữ / tổng</th>
+                            <th>Hạn xử lý / tổng</th>
+                            <th>Xem</th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>Số ký hiệu</th>
+                            <th>Trích yếu</th>
+                            <th>Hạn giữ / tổng</th>
+                            <th>Hạn xử lý / tổng</th>
+                            <th>Xem</th>
+                        </tr>
+                    }
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="overview-title">
+            Danh sách hồ sơ, văn bản theo dõi tiến độ - <span class="follow-total total"></span>
+            <select class="form-control input-sm pull-right" style="width: 150px" id="filterFollow">
+                <option value="0">Tất cả</option>
+                <option value="1" selected>Có đặt hạn</option>
+                <option value="2">Không đặt hạn</option>
+            </select>
+        </div>
+        <div>
+            <table class="table table-bordered table-hover document-follow" id="followDocument">
+                <colgroup>
+                    <col style="width: 150px" />
+                    <col style="width: 150px" />
+                    <col />
+                    <col style="width: 130px" />
+                    <col style="width: 130px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        @if (IsHoSoMotCuaEdition)
+                        {
+                            <th>Người xử lý</th>
+                            <th>Mã hồ sơ</th>
+                            <th>Tên công dân</th>
+                            <th>Tên hồ sơ</th>
+                            <th>Hạn</th>
+                            <th>Xem</th>
+                        }
+                        else
+                        {
+                            <th>Người xử lý</th>
+                            <th>Số ký hiệu</th>
+                            <th>Trích yếu</th>
+                            <th>Hạn</th>
+                            <th>Xem</th>
+                        }
+                    </tr>
+
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="overview-title">
+            Danh sách hồ sơ, văn bản cần đôn đốc - <span class="otherOverdue-total total"></span>
+        </div>
+        <div>
+            <div class="overview-filters">
+                <p class="navbar-text navbar-left">Lọc theo: </p>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <select class="form-control input-sm" id="ddlFilterDocTypes" style="width: 170px">
+                            <option value="0">Loại hồ sơ</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select class="form-control input-sm" id="ddlFilterDepartments" style="width: 170px">
+                            <option value="0">Phòng ban</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select class="form-control input-sm" id="ddlFilterUsers" style="width: 170px">
+                            <option value="0">Người dùng</option>
+                        </select>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <select class="form-control input-sm" id="ddlGroupBy" style="width: 170px">
+                            <option value="1">Loại hồ sơ</option>
+                            <option value="2" selected>Phòng ban</option>
+                            <option value="3">Người dùng</option>
+                        </select>
+                    </li>
+                </ul>
+                <p class="navbar-text navbar-right">Nhóm theo: </p>
+            </div>
+            <table class="table table-bordered table-hover document-overdue" id="docOtherOverdue">
+                <colgroup>
+                    <col style="width: 110px" />
+                    <col style="width: 80px" />
+                    <col style="width: 150px" />
+                    <col />
+                    <col />
+                    <col />
+                    <col style="width: 130px" />
+                    <col style="width: 130px" />
+                </colgroup>
+                <thead>
+                    @if (IsHoSoMotCuaEdition)
+                    {
+                        <tr>
+                            <th>Người đang giữ</th>
+                            <th>Số lượng</th>
+                            <th>Mã hồ sơ</th>
+                            <th>Tên công dân</th>
+                            <th class="doctype-col">Loại hồ sơ</th>
+                            <th class="dept-col">Phòng ban xử lý</th>
+                            <th>Hạn giữ / tổng</th>
+                            <th>Hạn xử lý / tổng</th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>Người đang giữ</th>
+                            <th>Số lượng</th>
+                            <th>Số ký hiệu</th>
+                            <th>Trích yếu</th>
+                            <th class="doctype-col">Loại văn bản</th>
+                            <th class="dept-col">Phòng ban xử lý</th>
+                            <th>Hạn giữ / tổng</th>
+                            <th>Hạn xử lý / tổng</th>
+                        </tr>
+                    }
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-jquery-tmpl" id="overduesTemp">
+    @if (!IsHoSoMotCuaEdition)
+    {
+        <tr class="${color}">
+            <td>${DocCode}</td>
+            <td>{{html unescape(Compendium)}}</td>
+            <td class="text-center">${CurrentNodeKeepTime}/${CurrentNodePermitTime}</td>
+            <td class="text-center">${TotalKeepTime}/${TotalPermitTime}</td>
+            <td class="text-center"><a href="#" class="btn btn-xs btn-info btn-viewDocument" data-group="follow" value="${DocumentCopyId}">Xem</a></td>
+        </tr>
+    }
+    else
+    {
+        <tr class="${color}">
+            <td>${DocCode}</td>
+            <td>${CitizenName}</td>
+            <td>${DoctypeName}</td>
+            <td class="text-center">${CurrentNodeKeepTime}/${CurrentNodePermitTime}</td>
+            <td class="text-center">${TotalKeepTime}/${TotalPermitTime}</td>
+            <td class="text-center"><a href="#" class="btn btn-xs btn-info btn-viewDocument" data-group="follow" value="${DocumentCopyId}">Xem</a></td>
+        </tr>
+    }
+</script>
+
+<script type="text/x-jquery-tmpl" id="followTemp">
+    @if (IsHoSoMotCuaEdition)
+    {
+        <tr class="${color}">
+            <td>${DocCode}</td>
+            <td>${CitizenName}</td>
+            <td>${DoctypeName}</td>
+            <td>${CurrentUser}</td>
+            <td class="text-center follow-dateappointed">${parseDate(DateAppointed, "dd/MM/yyyy")}</td>
+            <td class="text-center"><a href="#" class="btn btn-xs btn-info btn-viewDocument" data-group="follow" value="${DocumentCopyId}">Xem</a></td>
+        </tr>
+    }
+    else
+    {
+        <tr class="${color}">
+            <td class="text-center">
+                <b>${CurrentUser}</b>
+            </td>
+            <td>${DocCode}</td>
+            <td>${Compendium}</td>
+            <td class="text-center follow-dateappointed">${DateAppointed}</td>
+            <td class="text-center"><a href="#" class="btn btn-xs btn-info btn-viewDocument" data-group="follow" value="${DocumentCopyId}">Xem</a></td>
+        </tr>
+    }
+</script>
+
+<script type="text/x-jquery-tmpl" id="otherOverduesTemp">
+    {{each(group, docs) $data}}
+    <tr>
+        <td rowspan="${docs.length + 1}" class="text-center">
+            <b>${group}</b>
+        </td>
+        <td rowspan="${docs.length + 1}" class="text-center">
+            ${docs.length}
+        </td>
+    </tr>
+    {{each docs}}
+    @if (IsHoSoMotCuaEdition)
+    {
+        <tr class="${color}">
+            <td>${DocCode}</td>
+            <td>{{html unescape(Compendium)}}</td>
+            <td class="doctype-col">${Compendium}</td>
+            <td class="dept-col">${CurrentDepartmentExt}</td>
+            <td class="text-center">${CurrentNodeKeepTime}/${CurrentNodePermitTime}</td>
+            <td class="text-center">${TotalKeepTime}/${TotalPermitTime}</td>
+        </tr>
+    }
+    else
+    {
+        <tr class="${color}">
+            <td>${DocCode}</td>
+            <td>{{html unescape(Compendium)}}</td>
+            <td class="doctype-col">${DoctypeName}</td>
+            <td class="dept-col">${CurrentDepartmentExt}</td>
+            <td class="text-center">${CurrentNodeKeepTime}/${CurrentNodePermitTime}</td>
+            <td class="text-center">${TotalKeepTime}/${TotalPermitTime}</td>
+        </tr>
+    }
+    {{/each}}
+    {{/each}}
+</script>
+
+<script src="../Scripts/bkav.egov/overview/overview_config.js"></script>
+<script src="../Scripts/bkav.egov/overview/overview_private.js"></script>

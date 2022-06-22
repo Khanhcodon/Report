@@ -1,0 +1,546 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CA506352-51FE-4E84-8AE3-F133D6CB0400}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bkav.eGovCloud.Core</RootNamespace>
+    <AssemblyName>Bkav.eGovCloud.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;HoSoMotCuaEdition</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanQuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaQuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;HoSoMotCuaEdition,QuanTriTapTrungEdition</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\QuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Release|AnyCPU'">
+    <OutputPath>bin\HoSoMotCuaEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;HoSoMotCuaEdition</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaQuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;HoSoMotCuaEdition,QuanTriTapTrungEdition</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Release|AnyCPU'">
+    <OutputPath>bin\XuLyVanBanEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanQuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BkavVersion|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\BkavVersion\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test - TrinhNVd|AnyCPU'">
+    <OutputPath>bin\Test - TrinhNVd\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Smart|AnyCPU'">
+    <OutputPath>bin\Smart\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.92.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.92.1\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Enyim.Caching, Version=2.16.0.0, Culture=neutral, PublicKeyToken=cec98615db04012e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnyimMemcached.2.16.0\lib\net35\Enyim.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fasterflect">
+      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net40\FastMember.Signed.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\iTextSharp.5.5.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenPop, Version=2.0.6.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenPop.2.0.6.2\lib\net20\OpenPop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="S22.Imap, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\S22.Imap.3.6.0.0\lib\net40\S22.Imap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Spire.Doc, Version=3.7.13.2, Culture=neutral, PublicKeyToken=19cd8b2d76b7209e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CustomPackages\Spire.PDFConverter\Bin\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.1.1.2, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CustomPackages\Spire.PDFConverter\Bin\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CustomPackages\Web.MVC.3001\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tesseract, Version=3.0.2.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tesseract.3.0.2.0\lib\net40\Tesseract.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Words.NET">
+      <HintPath>..\libraries\bin\Xceed.Words.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\ConfigFieldAttribute.cs" />
+    <Compile Include="Attributes\DirectoryExistAttribute.cs" />
+    <Compile Include="Attributes\FileExistAttribute.cs" />
+    <Compile Include="Attributes\InitializationHelper.cs" />
+    <Compile Include="Attributes\PostRetrievalProcessingAttribute.cs" />
+    <Compile Include="Attributes\PreRetrievalProcessingAttribute.cs" />
+    <Compile Include="Bmail\BmailFolderCustomCompare.cs" />
+    <Compile Include="Bmail\SOAP\MailSoapHelper.cs" />
+    <Compile Include="Bmail\SOAP\MailSoapSearchResponse.cs" />
+    <Compile Include="Caching\CacheExtensions.cs" />
+    <Compile Include="Caching\ICache.cs" />
+    <Compile Include="Caching\ICacheManager.cs" />
+    <Compile Include="Caching\MemCached.cs" />
+    <Compile Include="Caching\MemoryCacheManager.cs" />
+    <Compile Include="Caching\NamespaceDoc.cs" />
+    <Compile Include="Caching\StaticCache.cs" />
+    <Compile Include="Data\DataSettings.cs" />
+    <Compile Include="Data\SsoSettings.cs" />
+    <Compile Include="Document\DocumentCopyTypes.cs" />
+    <Compile Include="Document\DocumentUtils.cs" />
+    <Compile Include="Document\DocTypePermissions.cs" />
+    <Compile Include="Document\DocumentPermissions.cs" />
+    <Compile Include="Document\NamespaceDoc.cs" />
+    <Compile Include="Domain\eVersion.cs" />
+    <Compile Include="Domain\License\LicenseHelper.cs" />
+    <Compile Include="Domain\License\LicenseInfo.cs" />
+    <Compile Include="Domain\License\LicenseSettings.cs" />
+    <Compile Include="Domain\License\WmiHelper.cs" />
+    <Compile Include="eGovVersions.cs" />
+    <Compile Include="Infrastructure\AppDomainTypeFinder.cs" />
+    <Compile Include="Infrastructure\IStartupTask.cs" />
+    <Compile Include="Infrastructure\ITypeFinder.cs" />
+    <Compile Include="Logging\StaticLog.cs" />
+    <Compile Include="Mail\Entities\MailInfo.cs" />
+    <Compile Include="Mail\MailPop3IMapUtil.cs" />
+    <Compile Include="ReadFile\CustomTextExtractionStrategy.cs" />
+    <Compile Include="ReadFile\Docx4Net.cs" />
+    <Compile Include="ReadFile\ImageToText.cs" />
+    <Compile Include="ReadFile\DocxDataParser.cs" />
+    <Compile Include="ReadFile\ToolFile.cs" />
+    <Compile Include="ReadFile\ToolObject.cs" />
+    <Compile Include="Statistic\OverdueStatusType.cs" />
+    <Compile Include="Statistic\StatisticUtil.cs" />
+    <Compile Include="DynamicForm\DynamicFormParser.cs" />
+    <Compile Include="DynamicForm\NamespaceDoc.cs" />
+    <Compile Include="Attributes\CreateDirectoryAttribute.cs" />
+    <Compile Include="Document\ViewPermissionException.cs" />
+    <Compile Include="FileSystem\FileManager.cs" />
+    <Compile Include="FileSystem\FileType.cs" />
+    <Compile Include="Attributes\ResolveAbsolutePathAttribute.cs" />
+    <Compile Include="FileSystem\ResourceLocation.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="FileSystem\History\HistoryBase.cs" />
+    <Compile Include="FileSystem\History\HistoryPath.cs" />
+    <Compile Include="FileSystem\History\HistoryPathExtension.cs" />
+    <Compile Include="FileSystem\History\HistoryPathUtil.cs" />
+    <Compile Include="FileSystem\History\HistoryProcess.cs" />
+    <Compile Include="FileSystem\History\HistoryThongbao.cs" />
+    <Compile Include="FileSystem\History\HistoryXinykien.cs" />
+    <Compile Include="FileSystem\History\UserReceives.cs" />
+    <Compile Include="DynamicForm\ControlService.cs" />
+    <Compile Include="DynamicForm\DynamicFormExtension.cs" />
+    <Compile Include="DynamicForm\DynamicFormHelper.cs" />
+    <Compile Include="DynamicForm\EErrors.cs" />
+    <Compile Include="DynamicForm\Entities\Control.cs" />
+    <Compile Include="DynamicForm\Entities\ControlProperty.cs" />
+    <Compile Include="DynamicForm\Entities\DataTables.cs" />
+    <Compile Include="DynamicForm\Entities\PropertyValue.cs" />
+    <Compile Include="DynamicForm\Entities\Property.cs" />
+    <Compile Include="DynamicForm\Enum\ControlType.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsCatalog.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsCatalogItem.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsCatalogSelected.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsControl.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsDocument.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsDocumentItem.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsFormModel.cs" />
+    <Compile Include="DynamicForm\JsEntities\JsProperty.cs" />
+    <Compile Include="Exceptions\EgovException.cs" />
+    <Compile Include="Fakes\Extensions.cs" />
+    <Compile Include="Fakes\FakeHttpContext.cs" />
+    <Compile Include="Fakes\FakeHttpRequest.cs" />
+    <Compile Include="Fakes\FakeHttpResponse.cs" />
+    <Compile Include="Fakes\FakeHttpSessionState.cs" />
+    <Compile Include="Fakes\FakeIdentity.cs" />
+    <Compile Include="Fakes\FakePrincipal.cs" />
+    <Compile Include="GenericListTypeConverter.cs" />
+    <Compile Include="FileSystem\History\UserReceivesBase.cs" />
+    <Compile Include="FileSystem\History\UserReceiveThongbaos.cs" />
+    <Compile Include="FileSystem\History\UserReceiveXinykiens.cs" />
+    <Compile Include="License\LicenseUtil.cs" />
+    <Compile Include="Lunar\Entities\LunarDateExt.cs" />
+    <Compile Include="Lunar\Entities\LunarDate.cs" />
+    <Compile Include="Lunar\LunarUtils.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Razor\MyCustomTemplateBase.cs" />
+    <Compile Include="Razor\RazorEngineUtil.cs" />
+    <Compile Include="ReadFile\Debenu Pdf\DebenuPDFLibraryDLL1011.cs" />
+    <Compile Include="ReadFile\DocxParser.cs" />
+    <Compile Include="ReadFile\Doc\BitUtils.cs" />
+    <Compile Include="ReadFile\Doc\FileOffset.cs" />
+    <Compile Include="ReadFile\Doc\FileOffsetCollection.cs" />
+    <Compile Include="ReadFile\Doc\PieceDescriptor.cs" />
+    <Compile Include="ReadFile\Doc\PieceDescriptorCollection.cs" />
+    <Compile Include="ReadFile\HTMLtoDOCX.cs" />
+    <Compile Include="ReadFile\Native\Enums.cs" />
+    <Compile Include="ReadFile\Native\Guids.cs" />
+    <Compile Include="ReadFile\Native\IEnumSTATSTG.cs" />
+    <Compile Include="ReadFile\Native\IStorage.cs" />
+    <Compile Include="ReadFile\Native\NativeMethods.cs" />
+    <Compile Include="ReadFile\Native\Structs.cs" />
+    <Compile Include="ReadFile\Ole\OleStorage.cs" />
+    <Compile Include="ReadFile\Ole\OleStream.cs" />
+    <Compile Include="ReadFile\PdfParser.cs" />
+    <Compile Include="ReadFile\DocParser.cs" />
+    <Compile Include="ReadFile\PdfToImage32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadFile\PdfToImage64.cs" />
+    <Compile Include="ReadFile\XlsxParser.cs" />
+    <Compile Include="Report\ReportUtil.cs" />
+    <Compile Include="Template\DatabaseValueAttribute.cs" />
+    <Compile Include="Template\Enum\TemplatePermission.cs" />
+    <Compile Include="Template\TemplateUtil.cs" />
+    <Compile Include="FileSystem\DirectoryUtil.cs" />
+    <Compile Include="FileSystem\FileUtil.cs" />
+    <Compile Include="Utils\ActionDisposable.cs" />
+    <Compile Include="Utils\ArrayExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\EncryptionHelper.cs" />
+    <Compile Include="Utils\JWTUtil.cs" />
+    <Compile Include="Utils\MergeObject.cs" />
+    <Compile Include="Utils\ListExtension.cs" />
+    <Compile Include="Utils\NaturalComparer.cs" />
+    <Compile Include="Utils\Request\Entities\DeviceOS.cs" />
+    <Compile Include="Utils\CommonHelper.cs" />
+    <Compile Include="Utils\ConvertHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\DateTimeExtension.cs" />
+    <Compile Include="Utils\GuidExtension.cs" />
+    <Compile Include="Utils\HasBase64.cs" />
+    <Compile Include="Utils\JsonNetCurrencyConverter.cs" />
+    <Compile Include="Utils\EnumHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\ExpressionHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\Generate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\JsonNetFloatingPointConverter.cs" />
+    <Compile Include="Utils\Json2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\ParameterRebinder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\Request\RequestExtension.cs" />
+    <Compile Include="Utils\StreamExtension.cs" />
+    <Compile Include="Utils\StringExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\Threadings\LockExtensions.cs" />
+    <Compile Include="Utils\Threadings\ReadLockDisposable.cs" />
+    <Compile Include="Utils\Threadings\UpgradeableReadLockDisposable.cs" />
+    <Compile Include="Utils\Threadings\WriteLockDisposable.cs" />
+    <Compile Include="Utils\WebHelper.cs" />
+    <Compile Include="Utils\WmiHelper.cs" />
+    <Compile Include="Validation\NamespaceDoc.cs" />
+    <Compile Include="Validation\ValidateExtension.cs" />
+    <Compile Include="Validation\ValidationExpression.cs" />
+    <Compile Include="Workflow\Constant\PositionUser.cs" />
+    <Compile Include="Workflow\Constant\RelationUser.cs" />
+    <Compile Include="Workflow\Exception\ActionNotFoundException.cs" />
+    <Compile Include="Workflow\Exception\WorkflowFormatException.cs" />
+    <Compile Include="Workflow\Entities\Action.cs" />
+    <Compile Include="Workflow\Entities\Address.cs" />
+    <Compile Include="Workflow\Entities\LevelQuery.cs" />
+    <Compile Include="Workflow\Entities\Node.cs" />
+    <Compile Include="Workflow\Entities\Path.cs" />
+    <Compile Include="Workflow\Entities\PositionQuery.cs" />
+    <Compile Include="Workflow\Entities\QueryBase.cs" />
+    <Compile Include="Workflow\Entities\RelationQuery.cs" />
+    <Compile Include="Workflow\Entities\UserDepartmentPosition.cs" />
+    <Compile Include="Workflow\Entities\UserQuery.cs" />
+    <Compile Include="Workflow\Enum\ActionSpecial.cs" />
+    <Compile Include="Workflow\Enum\ActionType.cs" />
+    <Compile Include="Workflow\Enum\NodePermissions.cs" />
+    <Compile Include="Workflow\Enum\NodeType.cs" />
+    <Compile Include="Workflow\Enum\PositionType.cs" />
+    <Compile Include="Workflow\Enum\QueryType.cs" />
+    <Compile Include="Workflow\Enum\RelationType.cs" />
+    <Compile Include="Workflow\Extensions\WorkflowExtension.cs" />
+    <Compile Include="Workflow\NamespaceDoc.cs" />
+    <Compile Include="Workflow\Exception\WorkflowNotFoundException.cs" />
+    <Compile Include="Workflow\WorkflowUtil.cs" />
+    <Compile Include="Worktime\Entities\Holiday.cs" />
+    <Compile Include="Worktime\Entities\HourMinute.cs" />
+    <Compile Include="Worktime\Entities\WorktimeOfDay.cs" />
+    <Compile Include="Worktime\Entities\WorkTimeType.cs" />
+    <Compile Include="Worktime\NamespaceDoc.cs" />
+    <Compile Include="Worktime\WorktimeUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DynamicForm\Database\eForm.Libdata.js" />
+    <Content Include="x64\liblept172.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\libtesseract304.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\liblept172.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\libtesseract304.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Report\HtmlExtension\" />
+    <Folder Include="Sms\" />
+    <Folder Include="Supplementary\Entities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Word">
+      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

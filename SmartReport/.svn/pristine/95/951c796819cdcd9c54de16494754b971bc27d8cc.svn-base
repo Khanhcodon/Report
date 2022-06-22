@@ -1,0 +1,90 @@
+﻿
+<div id="scanPanel" class="dialog-obj">
+    <div id="scanLayout">
+        <div id="scanPreview" class="col-md-10">
+            <div id="imagePreviewPanel" style="width: 100%; height: 410px; overflow: auto;padding: 15px; background: gray;">
+
+            </div>
+
+            <div id="pagingPreview" style="padding-top: 5px;">
+                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                        <td style="text-align: left">
+                            <input type="checkbox" id="addToContent" disabled="disabled" />
+                            <span data-res="egov.resources.scan.addToContent">Đưa vào nội dung</span>
+                        </td>
+                        <td style="text-align: right">
+                            <span id="pagePosition"><span data-res="egov.resources.scan.pagePosition">trang</span> 0 />0</span>
+                            <input id="preImage" type="button" value="<<" disabled="disabled" data-restitle="egov.resources.scan.preImage" title="Ảnh trước" class="btn btn-default" />&nbsp;<input id="nextImage" type="button" value=">>" disabled="disabled"
+                                                                                                                                                                                                    data-restitle="egov.resources.scan.nextImage" title="Ảnh sau" class="btn btn-default" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="scanConfig" class="col-md-6">
+            <fieldset>
+                <div class="">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Chọn máy scan</label><br />
+                        <select id="listScanner" class="form-control input-sm"></select>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="exampleInputEmail1">Kiểu màu / Độ phân giải</label>
+                        <div>
+                            <select id="pixeltype" class="form-control input-sm" style="width: 45%; display: inline;">
+                                <option value="2" data-res="egov.resources.scan.pixeltype2">Màu</option>
+                                <option value="1" data-res="egov.resources.scan.pixeltype0">Màu xám</option>
+                                <option value="0" data-res="egov.resources.scan.pixeltype1">Màu đen trắng</option>
+                            </select>
+                            <select id="resolution" class="form-control input-sm pull-right" style="width: 45%;">
+                                <option value="75" data-res="egov.resources.scan.resolution75">75 dpi</option>
+                                <option value="100" data-res="egov.resources.scan.resolution100">100 dpi</option>
+                                <option value="150" selected data-res="egov.resources.scan.resolution150">150 dpi</option>
+                                <option value="200" data-res="egov.resources.scan.resolution200">200 dpi</option>
+                                <option value="300" data-res="egov.resources.scan.resolution300">300 dpi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="duplex" /> Quét 2 mặt
+                    </label>
+                    <label class="checkbox-inline" style="margin-left: 0">
+                        <input type="checkbox" id="showui" /> Sử dụng giao diện của nhà sản xuất
+                    </label>
+
+                    <div class="form-group form-group-sm">
+                        <label for="exampleInputEmail1">Tên tệp</label>
+                        <input type="text" id="filename" value="image" class="form-control input-sm" />
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="exampleInputEmail1">Lưu tệp dạng</label>
+                        <select id="imageformat" class="form-control input-sm">
+                            <!--<option value="2" data-res="egov.resources.scan.imageformatJPEG">JPEG</option>
+                            <option value="13" data-res="egov.resources.scan.imageformatPNG">PNG</option>
+                            <option value="25" data-res="egov.resources.scan.imageformatGIF">GIF</option>
+                            <option value="18" data-res="egov.resources.scan.imageformatTIFF">TIFF</option>
+                            <option value="0" data-res="egov.resources.scan.imageformatBMP">BMP</option>-->
+                            <option value="0">Ảnh</option>
+                            <option value="PDF" selected>PDF</option>
+                            <!--<option value="DOC" data-res="egov.resources.scan.imageformatDOC">Ms Word</option>-->
+                        </select>
+                    </div>
+
+                    <div>
+                        <input type="button" data-res="egov.resources.scan.acquire" value="Quét ảnh" id="acquire" class="btn btn-primary" />
+
+                        <input id="removeAllImageScan" type="button" value="Xóa tất cả" disabled="disabled" class="btn btn-default pull-right" />
+                        <input id="removeImageScan" type="button" value="Xóa" disabled="disabled" class="btn btn-default pull-right" />
+                    </div>
+                    <p>
+                        <span class="label label-warning scan-info"></span>
+                    </p>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

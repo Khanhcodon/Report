@@ -1,0 +1,148 @@
+﻿@model IEnumerable<TimeJobModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.TimeJob.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+}
+    <style>
+        tr.running{
+            background: #fcfcc0;
+        }
+    </style>
+
+<script type="text/javascript">
+    function deleteTimeJob(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Store.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    $(function () {
+        $("#tblTimer").openLink({ urlOpen: '/admin/TimeJob/Edit' });
+        $(".chkActive").click(function () {
+            $.ajax({
+                url: "TimeJob/Active",
+                type: "POST",
+                data: { id: $(this).closest("tr").attr("data-id") }
+            })
+        });
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-stopwatch"></i>
+        <span data-res="egov.resources.sitemap.egovjob"></span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="/admin/TimeJob/RunDVC">
+            <span class="text-uppercase">Gửi dữ liệu lên DVC Viettel</span>
+        </a>
+        <a class="btn btn-warning control-btn" href="/admin/TimeJob/RerunAll">
+            <span class="icon icon-spinner5"></span>
+            <span class="text-uppercase">Chạy lại toàn bộ</span>
+        </a>
+        <a class="btn  btn-warning control-btn" href="/admin/TimeJob/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">Tạo mới</span>
+        </a>
+    </div>
+</div>
+          @Html.Partial("_Notifications")
+<div class="">
+    <table id="tblTimer" class="table table-hover" style="width: 100%">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 100px" />
+            <col style="width: 150px" />
+            <col style="width: 200px" />
+            <col style="width: 200px" />
+            <col style="width: 100px" />
+            <col style="width: 70px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.Name")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.ScheduleTypeString")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.TimerJobType")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.DateLastJobRun")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.DateNextJobStartBefore")
+                </th>
+                <th>
+                    @Localizer("TimeJob.Index.List.Column.IsActivated")
+                </th>
+                <th>
+                    Chạy lại
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (Bkav.eGovCloud.Areas.Admin.Models.TimeJobModel timeJob in Model)
+                {
+                    number++;
+                    <tr data-id="@timeJob.TimeJobId" class="@(timeJob.IsRunning ? "running" : "")">
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @timeJob.Name
+                        </td>
+                        <td>
+                            @timeJob.ScheduleTypeString
+                        </td>
+                    <td>
+                        @timeJob.TimerJobTypeString
+                    </td>
+                    <td>@(timeJob.DateLastJobRun == null ? "" : timeJob.DateLastJobRun.Value.ToString("hh:mm dd/MM/yyyy"))</td>
+                    <td>
+                        @timeJob.DateNextJobStartBefore.ToString("hh:mm dd/MM/yyyy")
+                    </td>
+                    <td class="text-center">
+                        <input class="chkActive" type="checkbox" @(timeJob.IsActive ? "checked='checked'" : "")  />
+                    </td>
+                    <td class="text-center">
+                        <a href="@Url.Action("Rerun", new { Id = timeJob.TimeJobId })"><span class="icon icon-history2"></span></a>
+                    </td>
+                    <td class="text-center">
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = timeJob.TimeJobId })
+                    </td>
+                    <td class="text-center">
+                        <a href="javascript:deleteTimeJob(@(timeJob.TimeJobId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(timeJob.TimeJobId)" style="display: none"
+                                action="@Url.Action("Delete", new { Id = timeJob.TimeJobId })"
+                                method="POST">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

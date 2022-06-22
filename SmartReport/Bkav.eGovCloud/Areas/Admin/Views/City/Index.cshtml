@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CityModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.City.Title.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    function deleteCity(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.City.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListCity").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListCity').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListCity').unblockpanel();
+    }
+
+    function onSearch(_this) {
+        $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())
+    }
+</script>
+<div class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-users2"></i>
+            <span>@Localizer("Bkav.eGovCloud.Areas.Admin.City.Title.List")</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/admin/citizen/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("Search", new AjaxOptions
+{
+    UpdateTargetId = "divListCity",
+    OnBegin = "onBegin",
+    OnSuccess = "onSuccess",
+    OnFailure = "onFailure",
+    HttpMethod = "Get"
+}))
+    {
+        <input type="text" name="cityname" id="cityname"
+        value="@(ViewBag.CityName ?? "")" class="form-control" style="width:40%; display:inline"
+        placeholder="@Localizer("Bkav.eGovCloud.Areas.Admin.City.Index.Search.Fields.CityName.Label")" />
+
+        <input type="submit" id="search" onclick="onSearch(this)"
+        class="btn" value="@Localizer("Common.Resource.Index.Search.Button.Search")"style="display:inline" />
+    }
+
+    <br />
+    <div id="divListCity">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

@@ -1,0 +1,498 @@
+﻿@model Bkav.eGovCloud.Models.DocumentOnlineModel
+@{
+    Layout = null;
+}
+<link href="../../Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link href="../../Content/bootstrap.min.css" rel="stylesheet" />
+<link href="../../Content/DocumentOnline.css" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/eForm/css/eformTn.css" rel="stylesheet" />
+
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-1.7.2.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/knockout/knockout-2.2.0.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/jquery/jquery.global.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/jsutilt.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Libdata.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Controls.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Lib.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.DB.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Tool.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/Resize.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.applet.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.compiler.js"></script>
+<script src="../../Scripts/bkav.egov/util/fb_installer.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.js"></script>
+
+<style>
+    .error {
+        display: none;
+        margin-left: 10px;
+    }
+
+    .error_show {
+        color: red;
+        margin-left: 10px;
+    }
+</style>
+<script>
+    var jsonModel = @(string.IsNullOrEmpty(@Model.Json) ? MvcHtmlString.Create("{}") : Html.Raw(@Model.Json));
+    var totalResult= "@ViewBag.Result";
+    $(function () {
+        $(".reg-left div:not(.reg-left-title)").click(function () {
+            $(".reg-left div").removeClass("selected");
+            $(this).addClass("selected");
+            var id = $(this).attr("id");
+            $(".reg-right > div").hide();
+            $("." + id).show();
+        });
+        $(".reg-back-btn").click(function () {
+            var backStep = $(event.target).closest(".step").index() + 1;
+            $(".reg-left div").removeClass("selected");
+            $(".reg-left div:nth-child(" + backStep + ")").addClass("selected");
+            $(".reg-right > div").hide();
+            $(".reg-right > div:nth-child(" + (backStep - 1) + ")").show();
+        });
+        $(".reg-next-btn").click(function () {
+            var nextStep = $(this).closest(".step").index() + 3;
+            $(".reg-left div").removeClass("selected");
+            $(".reg-left div:nth-child(" + nextStep + ")").addClass("selected");
+            $(".reg-right > div").hide();
+            $(".reg-right > div:nth-child(" + (nextStep - 1) + ")").show();
+        });
+        
+        $("#no-sign").click(function () {
+            if(saveJsonSerialize()){
+                $("form").submit();
+            }
+        });
+        $("#sign").click(function () {
+            $(".reg-left div").removeClass("selected");
+            $(".reg-right > div").hide();
+            $(".reg-left #final-step").addClass("selected");
+            $(".reg-right > .final-step").show();
+            signFile(function(){
+            });
+        });
+        getForm($("#forms"));
+        $(".step").hide();
+        
+        if(totalResult=="True"){
+            $(".reg-left div").removeClass("selected");
+            $("#final-step").addClass("selected");
+            $(".final-step").show();
+        }else {
+            $(".reg-left div").removeClass("selected");
+            $("#first-step").addClass("selected");
+            $(".first-step").show();
+        }
+    });
+
+    var saveJsonSerialize = function () {
+        if (!validateAll()) {
+            return false;
+        }
+        jsonSerializeAll();
+        return true;
+    };
+
+    var bindForm = function (model, divRoot, isView) {
+        // Khởi tạo efTools
+        eForm.Lib.Init();
+        eForm.efTools.init(null, divRoot, model.formid);
+        // Tạo danh mục catatalog
+        fformModel.fromCatalog(model.collections); // egate.compiler.js
+        // Chuẩn bị view cho form động + tạo database cho form động từ model.schema
+        if (isView) {
+            eForm.efTools.ViewForm(model.schema, model.maxRow); // eForm.Tool.js
+        }
+        else {
+            eForm.efTools.LoadForm(model.schema, model.maxRow); // eForm.Tool.js
+        }
+        // Chuẩn bị model cho form động
+        var partModel = fformModel.fromSchema(eForm.database.GetAll(model.formid), model.formid); // egate.compiler.js
+        $.extend(fformModel, partModel);
+        //// Dùng knockoutjs gắn view + model vào với nhau để hiển thị lên web.
+        ko.applyBindings(fformModel, document.getElementById(divRoot));
+    };
+
+    var getForm = function (target) {
+        for (var i = 0; i < jsonModel.length; i++) {
+            var itemModel = {
+                collections: jsonModel[i].JssCatalog,
+                schema: jsonModel[i].JssForm,
+                formid: jsonModel[i].FormId,
+                maxRow: jsonModel[i].MaxRow
+            };
+            target.addClass("pnl_root sub_pnl_root").append("<div id='div" + jsonModel[i].FormId + "'></div>")
+            bindForm(itemModel, "div" + jsonModel[i].FormId, false);
+        }
+    };
+
+    var validateAll = function () {
+        var isValid = true;
+        var invalidObj = null;
+        $('.ffield').each(function () {
+            $(this).blur();
+        });
+        $('.cssErr').each(function () {
+            if ($(this).css('display') != 'none' && isValid) {
+                invalidObj = $(this);
+                isValid = false;
+            }
+        });
+        if (!isValid) {
+            $('#' + invalidObj.attr('controlValidate')).focus();
+            return false;
+        }
+        return true;
+    };
+
+    var jsonSerializeAll = function () {
+        var contentObj = $("#forms");
+        contentObj.each(function () {
+            var formObj = $(this).parent();
+            var formTmp = formObj.find("#Json").val();
+            var result = [];
+            if (formTmp != "") {
+                var json = JSON.parse(formTmp);
+                for (var i = 0; i < json.length; i++) {
+                    var json = JSON.parse(formTmp);
+                    var formJson = "{";
+                    var docFieldJson = eForm.database.JsonSerialize3(json[i].FormId);
+                    formJson += "\"FormId\": \"" + json[i].FormId + "\",";
+                    formJson += "\"GlobalCode\":\"" + json[i].GlobalCode + "\",";
+                    formJson += "\"Description\":\"" + json[i].Description + "\",";
+                    formJson += "\"DocFieldJson\":" + docFieldJson;
+                    formJson += "}";
+                    var form = JSON.parse("{}");
+                    form.Content = formJson;
+                    form.ContentName = $(this).parent().find(".subformTitle .formName").text();
+                    form.FormTypeId = 2;
+                    form.IsMain = $(this).parent().attr("id") == "mainForm";
+                    result.push(formJson);
+                }
+                formObj.find("#Json").val("["+result+"]");
+            }
+        });
+    };
+    function myFunction() {
+        var x = document.getElementById("mySelect").value;
+        document.getElementById('file_name').value = this.value.split('\\').pop().split('/').pop();
+    };
+    function closeSelf() {
+        parent.window.postMessage("removetheiframe", "*");
+    }
+
+    var plugin,
+        pluginName="eOfficePlus";
+
+    var signFile=function(callback){
+        if (!plugin && $("#egovPlugin").length === 0) {
+            if (FireBreath.isPluginInstalled(pluginName)) {
+                $("body").append(FireBreath.injectPlugin(pluginName, "egovPlugin", function () {
+                    plugin = document.getElementById('egovPlugin');
+                    signFile(callback);
+                }));
+            } else {
+                showDialogDownloadPlugin(pluginName, function () {
+                    signFile(callback);
+                });
+            }
+        } else {
+            var filePdfAddNew = [];
+            var config, idxCert;
+            var _signFile = function (item) {
+                /// <summary>
+                /// Tạo function để ký file để dùng lại
+                /// </summary>
+                /// <param name="item">file cần ký</param>
+                var arr=[];
+                arr.push({
+                    FindText: ".",
+                    FindType: 1,
+                    ImagePath: "",
+                    OffsetX: 0,
+                    OffsetY: 0,
+                    PosType: 3,
+                    SignType: 1,
+                    TextInfor: 1,
+                    Title: "Sign",
+                });
+                config = { ConfigSignPDFList: arr };
+                if (item.Ext === 'doc' || item.Ext === 'docx') {
+                    var data=serializeDoc();
+                    var content = plugin.signWord(item.Id, 'FileTemp_' + item.Id + '_sign.pdf', data.PersonInfo, data.PersonInfo, '1', JSON.stringify(config), idxCert);
+                    if (content != '') {
+                        filePdfAddNew.push({ id: '' + item.Id, name: item.Name.substring(0, item.Name.indexOf('.' + item.Ext)) + '.pdf', value: content });
+                    }
+                } else if (item.Ext === 'pdf') {
+                    var data=serializeDoc();
+                    var content = plugin.signPDF(item.Name, data.PersonInfo, data.PersonInfo, '1', JSON.stringify(config), idxCert);
+                    if (content != '') {
+                        filePdfAddNew.push({ id: '' + item.Id, name: item.Name.substring(0, item.Name.indexOf('.' + item.Ext)) + '.pdf', value: content });
+                    }
+                }
+            };
+            if(saveJsonSerialize()){
+                $.post('ConvertToPdfForSign',{
+                    docTypeId:$("#DocTypeId").val(),
+                    form:escape($("#Json").val())
+                }).success(function(result){
+                    if(result.length>0){
+                        config = { ConfigSignPDFList: result.signatureConfig };
+                        idxCert = plugin.getCertIndex();
+                        if (idxCert > -1) {
+                            $.each(result, function (i, item) {
+                                var filesize = plugin.writeFileBase64(item.Name, item.Data, false);
+                                _signFile(item);
+                            });
+
+                            if (filePdfAddNew.length > 0) {
+                                _uploadSignedFile(filePdfAddNew, function () {
+                                    if (typeof callback === "function") {
+                                        callback();
+                                    }
+                                });
+                            }
+                        } else {
+                            if (typeof callback === "function") {
+                                callback();
+                            }
+                        }
+                    }
+                }).fail(function(error){
+                });
+            }
+        }
+    };
+
+    var _readFileIntoDataUrl= function (fileInfo) {
+        var loader = $.Deferred(),
+            fReader = new FileReader();
+        fReader.onload = function (e) {
+            loader.resolve(e.target.result);
+        };
+        fReader.onerror = loader.reject;
+        fReader.onprogress = loader.notify;
+        fReader.readAsDataURL(fileInfo);
+        return loader.promise();
+    };
+
+    var DocumentOnline={
+        DocTypeId:null,
+        PersonInfo:null,
+        IdCard:null,
+        Email:null,
+        Phone:null,
+        Address:null,
+        Json:null,
+        //PostedFiles:[],
+    }
+
+    var serializeDoc=function(){
+        var docModel= DocumentOnline;
+        for(var attr in DocumentOnline){
+            var control = $('[name="' + attr + '"]');
+            if (control.length > 0) {
+                var val = control.val();
+                docModel[attr]=val;
+            }
+        }
+        return docModel;
+    }
+
+    var _uploadSignedFile= function (filePdfAddNew, callback) {
+        /// <summary>
+        /// Upload file đã ký lên
+        /// </summary>
+        /// <param name="filePdfAddNew">danh sách file đã ký</param>
+        /// <param name="callback">function callback(bàn giao)</param>
+        $.post('@Url.Action("UploadTempScan", "Attachment")',{
+            files: JSON.stringify(filePdfAddNew)
+        }).success(function(filesData){
+            var data=serializeDoc();
+            $.post('@Url.Action("RegisterSigned", "DocumentOnline")',{
+                model:JSON.stringify(data),
+                files:JSON.stringify(filesData)
+            }).success(function(result ){
+                debugger;
+            });
+        });
+    };
+
+    var showDialogDownloadPlugin= function (pluginName, callback) {
+        /// <summary>
+        /// Hiển thị dialog yêu cầu tải về plugin để mở file.
+        /// </summary>
+        /// <param name="pluginName">Tên plugin</param>
+        /// <param name="callback">Hàm thực thi sau khi cài đặt thành công.</param>
+
+        var _div = $('<div><p style="font-size:16px;font-weight:bold;">Bạn chưa cài đặt plugin</p><p>Bạn cần tải về và cài đặt plugin này để sử dụng chức năng mở tệp đính kèm và quét ảnh</p><p style="color:red">Nếu bạn vẫn thấy thông báo này sau khi cài đặt plugin, hãy khởi động lại trình duyệt</p><center><div style="text-align:center;width:180px"><input type="button" value="Tải về và cài đặt" /><div id="imgDownloadingPlugin" style="float:left;display:none"><img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" /></div><div id="msgDowloadingPlugin" style="float:left;padding-top:5px;display:none">&nbsp;Đang chờ cài đặt plugin...</div></div></center></div>');
+        _div.find('input').bind('click', function () {
+            var self = this;
+            parent.window.postMessage("downloadPlugin", "*");
+            $(self).hide();
+            $(self).siblings('div').show();
+            _div.find('#imgDownloadingPlugin').show();
+            _div.find('#msgDowloadingPlugin').show();
+            FireBreath.waitForInstall(pluginName, function () {
+                dialog.close();
+                if (callback && typeof (callback) === 'function') {
+                    callback();
+                }
+            });
+        });
+        _div.dialog({
+            width: '800px',
+            resizable: false,
+            title: "Tải plugin",
+            buttons: [
+                {
+                    text: "Close",
+                    click: function () {
+                        _div.dialog('destroy');
+                    }
+                }
+            ]
+        });
+    }
+</script>
+<div class="reg-left col-md-3">
+    <div class="reg-left-title">ĐĂNG KÝ HỒ SƠ TRỰC TUYẾN</div>
+    <div id="first-step" class="selected">Bước 1: Khai báo thông tin</div>
+    <div id="second-step">Bước 2: Khai báo mẫu đăng ký</div>
+    <div id="third-step">Bước 3: Gửi hồ sơ</div>
+    @*<div id="fourth-step">Ký và gửi</div>*@
+    <div id="final-step">Bước 4: Hoàn tất đăng ký</div>
+    <div id="reg-cancel" onclick="closeSelf()">Hủy Đăng Ký</div>
+</div>
+@using (Html.BeginForm("Register", "DocumentOnline", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="reg-right col-md-9">
+        <div class="first-step step">
+            <div class="form-group">
+                <label><span style="color: Red">(*)  Thông tin bắt buộc phải nhập</span></label>
+            </div>
+            <div class="form-group">
+                <label>@Localizer("Common.DocumentOnline.FirstStep.Field.FullName.Label")<span style="color: Red; font-size: 11px;">(*)</span>
+                </label>
+                <div>
+                    @Html.HiddenFor(model => model.DocTypeId)
+                    @Html.TextBoxFor(model => model.PersonInfo, new { @class = "form-control", @placeholder = Localizer("Common.DocumentOnline.FirstStep.Field.FullName.Label") })
+                    <span id="person" value="0"></span>
+                    @Html.ValidationMessageFor(model => model.PersonInfo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>@Localizer("Common.DocumentOnline.FirstStep.Field.IdCardNumber.Label")<span style="color: Red; font-size: 11px;">(*)</span></label>
+                <div>@Html.TextBoxFor(model => model.IdCard, new { @class = "form-control", @placeholder = Localizer("Common.DocumentOnline.FirstStep.Field.IdCardNumber.Placeholder") })
+                    <span id="idcard" value="0"></span>
+                    @Html.ValidationMessageFor(model => model.IdCard, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>
+                    @Localizer("Common.DocumentOnline.FirstStep.Field.Email.Label")
+                </label>
+                <div>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = Localizer("Common.DocumentOnline.FirstStep.Field.Email.Label") })
+                    <span id="email" value="0"></span>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>
+                    @Localizer("Common.DocumentOnline.FirstStep.Field.PhoneNumber.Label")<span style="color: Red; font-size: 11px;">(*)</span>
+                </label>
+                <div>
+                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = Localizer("Common.DocumentOnline.FirstStep.Field.PhoneNumber.Label") })
+                    <span id="phone" value="0"></span>
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>@Localizer("Common.DocumentOnline.FirstStep.Field.Address.Label")</label>
+                <div>
+                    @Html.TextAreaFor(model => model.Address, new { @class = "form-control", @placeholder = Localizer("Common.DocumentOnline.FirstStep.Field.Address.Label") })
+                    <span id="address" value="0"></span>
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="button" value="Tiếp" class="btn reg-next-btn" style="float: right; margin-right: 150px" />
+            </div>
+        </div>
+        <div class="second-step step">
+            <label><span style="color: Red">(*)  Thông tin bắt buộc phải nhập</span></label>
+            @Html.HiddenFor(model => model.Json)
+            <div id="forms"></div>
+            <div class="form-group" style="clear: both">
+                <input type="button" value="Quay lại" class="btn reg-back-btn" style="margin-left: 25%;" />
+                <input type="button" value="Tiếp" class="btn reg-next-btn" style="float: right; margin-right: 150px" />
+            </div>
+        </div>
+        <div class="third-step step">
+            <div class="form-group">
+                <div class="reg-step-head">Hồ sơ yêu cầu các giấy tờ đính kèm sau, vui lòng tải file đính kèm lên</div>
+                <div class="reg-step-body">
+                    <style>
+                        li {
+                            list-style-type: none;
+                        }
+                    </style>
+                    @if (Model.DocType != null && Model.DocType.DoctypePapers.Any())
+                    {
+                        <ul>
+                            @foreach (var paper in Model.DocType.DoctypePapers)
+                            {
+                                <li>Bản scan @paper.Paper.PaperName
+                                </li>
+                            }
+                        </ul>
+@*<input type="file" class="PostedFiles" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />*@
+                        @Html.TextBoxFor(model => model.PostedFiles, new { type = "file", multiple = "multiple" })
+                        //@Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    }
+                    else
+                    {
+                        <span>Không có giấy tờ cần kèm theo</span>
+                        @Html.TextBoxFor(model => model.PostedFiles, new { type = "file", multiple = "multiple",style="display:none" })
+                    }
+                </div>
+                <div class="reg-step-head" style="padding-top: 50px;">Chú ý</div>
+                <div class="reg-step-body">
+                    <span>Nếu <strong>Đăng ký thông thường</strong> Quý khách vui lòng nhấn <strong>Gửi Đăng Ký</strong> Để hoàn tất việc gửi hồ sơ</span>
+                    <span>Nếu <strong>Dùng chữ ký số</strong> Quý khách vui lòng nhấn <strong>Gửi Đăng Ký</strong> Để hoàn tất việc gửi hồ sơ</span>
+                </div>
+                <div class="btn" id="no-sign" style="margin-left: 25%;">Gửi Đăng Ký</div>
+                <div class="btn" id="sign" style="float: right; margin-right: 150px">Ký và Gửi Đăng Ký</div>
+            </div>
+        </div>
+        @*        <div class="fourth-step step">
+            <div class="form-group">
+                <input type="button" value="Quay lại" class="btn reg-back-btn" style="margin-left: 25%;" />
+                <input type="button" value="Tiếp" class="btn reg-next-btn" style="float: right; margin-right: 150px" />
+            </div>
+        </div>*@
+        <div class="final-step step">
+            <div class="reg-step-head">Ông / Bà đã đăng ký hồ sơ thành công</div>
+            <div class="reg-step-head blur">Thông tin hồ sơ</div>
+            <div class="reg-step-body">
+                <span>Mã hồ sơ tạm thời: <strong>@Html.DisplayFor(model => model.DocCode)</strong></span>
+                <span>( Mã hồ sơ chính sẽ được cấp lại ngay sau khi cơ quan một cửa chấp nhận xử lý hồ sơ của Ông / Bà )</span>
+                <span>Thời gian xử lý hồ sơ: trong vòng <strong>7 ngày</strong> kể từ ngày hồ sơ được chấp nhận xử lý tại cơ quan một cửa.</span>
+            </div>
+            <div class="reg-step-head blur">Công việc cần làm tiếp theo</div>
+            <div class="reg-step-body">
+                <span>Ông / Bà sẽ nhận được một Thư điện tử thông báo về Mã hồ sơ và Ngày giờ hẹn trả chính thức cho hồ sơ đã đăng ký nếu hồ sơ được cơ quan một cửa chấp nhận xử lý.</span>
+                <span>Hoặc Ông / Bà sẽ nhận được Thư điện tử từ chối chấp nhận xử lý và Lý do từ chối xử lý hồ sơ từ Cơ quan một cửa nếu hồ sơ không đạt yêu cầu</span>
+                <span>Ông / Bà sẽ nhận được một Thư điện tử thông báo về Mã hồ sơ và Ngày giờ hẹn trả chính thức cho hồ sơ đã đăng ký nếu hồ sơ được cơ quan một cửa chấp nhận xử lý.</span>
+            </div>
+            <div class="form-group">
+                <input type="button" id="reg-end-btn" class="btn" style="float: right; margin-right: 150px" value="Hoàn tất đăng ký" onclick="closeSelf()" />
+            </div>
+        </div>
+    </div>
+}

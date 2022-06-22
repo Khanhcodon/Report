@@ -1,0 +1,43 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.ConfigInMySqlModel
+@using (Html.BeginForm("ConfigInSqlServer", "BackupRestoreConfig", FormMethod.Get, new { name = "otherConfig" }))
+{
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+
+    @Html.ValidationSummary(true)
+
+    <table class="common-config" style="width: 100%">
+        <tr>
+            <td style="width: 200px">
+                @Html.LabelFor(model => model.HasGetTrigger):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasGetTrigger)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.HasGetFunctionAndProcedure):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasGetFunctionAndProcedure)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.WorkingDirectory):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.WorkingDirectory,
+                new Dictionary<string, object> {
+                          {"class","form-control valid"},
+                          {"data-val","true"},
+                          {"style","width:90%"},
+                          {"data-val-required","Không được để trống"}
+                })
+                @Html.ValidationMessageFor(model => model.WorkingDirectory)
+            </td>
+        </tr>
+    </table>
+}

@@ -1,0 +1,104 @@
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+DoctypeScheduleStart
+DocTypeScheduler
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection doctypeschedule
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+SmsStart
+DocTypeScheduler
+SendEmailJobStart
+error connection doctypeschedule
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+SendEmailJobStart
+DocTypeScheduler
+SmsStart
+error connection doctypeschedule
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+DoctypeScheduleStart
+DocTypeScheduler
+error connection doctypeschedule
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+SendEmailJobStart
+error connection doctypeschedule
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 

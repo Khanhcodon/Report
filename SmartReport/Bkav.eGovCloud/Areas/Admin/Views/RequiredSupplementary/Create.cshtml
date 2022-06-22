@@ -1,0 +1,93 @@
+﻿@model RequiredSupplementaryModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.RequiredSupplementaryModel.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDocFields = ViewBag.AllDocFields as string;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+}
+<script type="text/javascript">
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var docfieldSelected = @(Model.DocFieldId.HasValue ? Model.DocFieldId.Value : 0);
+    var doctypeSelected = '@Model.DocTypeId';
+    $(function() {
+        changeCategoryBusiness(docfieldSelected);
+        changeDocField(doctypeSelected);
+
+        $("#CategoryBusinessId").change(function () {
+            changeCategoryBusiness();
+            changeDocField();
+        });
+        $("#DocFieldId").change(function () {
+            changeDocField();
+        });
+    });
+
+    function changeCategoryBusiness(selected) {
+        var categoryBusinessId = parseInt($('#CategoryBusinessId').val());
+        var docfields = _.filter(allDocFields, function(item) {
+            return (item.CategoryBusinessId & categoryBusinessId) === categoryBusinessId;
+        });
+        $("#DocFieldId").html('<option value="0">@Localizer("egov.resources.commonlabel.other")</option>');
+        $.each(docfields, function(i, item) {
+            $("#DocFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+        });
+        if (selected) {
+            $('#DocFieldId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function changeDocField(selected) {
+        var docfieldId = parseInt($('#DocFieldId').val());
+        var categoryBusinessId = parseInt($('#CategoryBusinessId').val());
+        var doctypes;
+        if (docfieldId > 0) {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return item.DocFieldId === docfieldId && item.CategoryBusinessId === categoryBusinessId;
+            });
+        } else {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return item.CategoryBusinessId === categoryBusinessId && !item.DocFieldId;
+            });
+        }
+        $("#DocTypeId").html('');
+        $.each(doctypes, function(i, item) {
+            $("#DocTypeId").append('<option value="' + item.DocTypeId + '">' + item.DocTypeName + '</option>');
+        });
+        if (selected) {
+            $('#DocTypeId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+</script>
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-folder"></i>
+        <span data-res="egov.resources.sitemap.requiredSupplementary"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/requiredSupplementary/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        <div id="divCreatePaper">
+            @Html.Partial("_Notifications")
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+}

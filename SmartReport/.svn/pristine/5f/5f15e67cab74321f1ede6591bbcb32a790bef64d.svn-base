@@ -1,0 +1,118 @@
+﻿@model IEnumerable<ReportRuleModel>
+    @{
+        ViewBag.Title = "Văn bản quy định";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+    <link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+
+    <link href="~/Content/datatable/datatables.min.css" rel="stylesheet" />
+    <script src="~/Content/datatable/datatables.min.js"></script>
+    <script type="text/javascript">
+        function deleteReportMode(id) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.ReportMode.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.OkCancel,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+        //$(document).ready(function () {
+        //    var collapsedGroups = {};
+
+        //    var table = $('#example').DataTable({
+        //        order: [[0, 'asc']],
+        //        rowGroup: {
+        //            // Uses the 'row group' plugin
+        //            dataSrc: 1,
+        //            startRender: function (rows, group) {
+        //                var collapsed = !!collapsedGroups[group];
+
+        //                rows.nodes().each(function (r) {
+        //                    r.style.display = collapsed ? 'none' : '';
+        //                });
+
+        //                // Add category name to the <tr>. NOTE: Hardcoded colspan
+        //                return $('<tr/>')
+        //                    .append('<td colspan="8">' + group + ' (' + rows.count() + ')</td>')
+        //                    .attr('data-name', group)
+        //                    .toggleClass('collapsed', collapsed);
+        //            }
+        //        }
+        //    });
+        //});
+    </script>
+    @Html.Partial("_Notifications")
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span data-res="egov.resources.sitemap.reportmode">Văn bản quy định</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/Admin/ReportRule/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-md-16">
+            <div id="divForm" class="bkavegov">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã văn bản quy định</th>
+                            <th>Tên văn bản quy định</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            var i = 0;
+                            foreach (var report in Model)
+                            {
+                                <tr>
+                                    <td><span class="text-dark">@(i + 1)</span></td>
+                                    <td><span class="text-dark">@report.Code</span></td>
+                                    <td><span class="text-dark">@report.Name</span></td>
+                                    <td>
+                                        <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right: 5px" href="@Url.Action("Edit", new { Id = report.ReportRuleId})">Sửa</a>
+                                        <a class="text-right btn btn-danger btn-xs pull-left text-white" onclick="deleteReportMode('@report.ReportRuleId')">Xóa</a>
+                                        <form id="formdelete@(report.ReportRuleId)" style="display: none" action="@Url.Action("Delete", new {Id = report.ReportRuleId})" method="POST">
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable({
+                "language": {
+                    "lengthMenu": "Hiển thị dòng/trang: _MENU_ ",
+                    "zeroRecords": "Không có dữ liệu nào!",
+                    "info": "Trang _PAGE_ / _PAGES_",
+                    "infoEmpty": "Không tìm thấy dữ liệu!",
+                    "infoFiltered": "(Đã tìm từ _MAX_ dòng)",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Trang đầu tiên",
+                        "last": "Trang cuối cùng",
+                        "next": "Trang sau",
+                        "previous": "Trang trước"
+                    },
+                }
+            });
+        })
+    </script>

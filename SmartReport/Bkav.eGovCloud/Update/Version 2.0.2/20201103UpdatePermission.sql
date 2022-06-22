@@ -1,0 +1,321 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : eform
+Source Server Version : 50540
+Source Host           : localhost:3306
+Source Database       : eform
+
+Target Server Type    : MYSQL
+Target Server Version : 50540
+File Encoding         : 65001
+
+Date: 2020-11-03 10:32:06
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `permission`
+-- ----------------------------
+DROP TABLE IF EXISTS `permission`;
+CREATE TABLE `permission` (
+  `PermissionId` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id quyền',
+  `PermissionKey` varchar(64) CHARACTER SET ascii NOT NULL COMMENT 'Mã quyền',
+  `PermissionName` varchar(128) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Tên quyền',
+  `ModuleName` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `Description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`PermissionId`),
+  UNIQUE KEY `IX_Permission_PermissionCode` (`PermissionKey`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=296 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Bảng thông tin các quyền';
+
+-- ----------------------------
+-- Records of permission
+-- ----------------------------
+INSERT INTO `permission` VALUES ('1', 'WelcomeIndex', 'Trang chủ Admin', 'Trang chủ quản trị', 'Cho phép người dùng vào trang quản trị hay không');
+INSERT INTO `permission` VALUES ('7', 'ApprovedExtensionTime', 'Duyệt gia hạn xử lý', 'Quản trị quyền nghiệp vụ User', 'Cho phép người dùng duyệt gia hạn xử lý');
+INSERT INTO `permission` VALUES ('8', 'ActivityLogIndex', 'Danh sách các log lỗi', 'Quản trị các log lỗi ', 'Cho phép người dùng xem danh sách các log lỗi');
+INSERT INTO `permission` VALUES ('9', 'ActivityLogDelete', 'Xóa các log lỗi', 'Quản trị các log lỗi', 'Cho phép người dùng xóa các log lỗi');
+INSERT INTO `permission` VALUES ('10', 'AddressIndex', 'Danh sách các địa chỉ', 'Quản lý địa chỉ', 'Cho phép người dùng xem danh sách các đị chỉ');
+INSERT INTO `permission` VALUES ('11', 'AddressCreate', 'Thêm mới địa chỉ', 'Quản lý địa chỉ', 'Cho phép người dùng thêm mới địa chỉ');
+INSERT INTO `permission` VALUES ('12', 'AddressEdit', 'Chỉnh sửa địa chỉ', 'Quản lý địa chỉ', 'Cho phép người dùng chỉnh sửa địa chỉ');
+INSERT INTO `permission` VALUES ('13', 'AddressDelete', 'Xóa địa chỉ', 'Quản lý địa chỉ', 'Cho phép người dùng xóa địa chỉ');
+INSERT INTO `permission` VALUES ('14', 'AuthorizeIndex', 'Danh sách ủy quyền', 'Quản lý ủy quyền', 'Cho phép người dùng xem các ủy quyền');
+INSERT INTO `permission` VALUES ('15', 'AuthorizeCreate', 'Thêm mới ủy quyền', 'Quản lý ủy quyền', 'Cho phép người dùng thêm mới ủy quyền');
+INSERT INTO `permission` VALUES ('16', 'AuthorizeEdit', 'Chỉnh sửa ủy quyền', 'Quản lý ủy quyền', 'Cho phép người dung chỉnh sửa ủy quyền');
+INSERT INTO `permission` VALUES ('17', 'AuthorizeDelete', 'Xóa ủy quyền', 'Quản lý ủy quyền', 'Cho phép người dùng xóa ủy quyền');
+INSERT INTO `permission` VALUES ('18', 'BusinessTypeIndex', 'Danh sách loại hình doanh nghiệp', 'Quản lý loại hình doanh nghiệp', 'Cho phép người dùng xem loại hình doanh nghiệp');
+INSERT INTO `permission` VALUES ('19', 'BusinessTypeCreate', 'Thêm mới loại hình doanh nghiệp', 'Quản lý loại hình doanh nghiệp', 'Cho phép người dùng tạo mới loại hình doanh nghiệp');
+INSERT INTO `permission` VALUES ('20', 'BusinessTypeEdit', 'Chỉnh sửa loại hình doanh nghiệp', 'Quản lý loại hình doanh nghiệp', 'Cho phép người dùng chỉnh sửa loại hình doanh nghiệp');
+INSERT INTO `permission` VALUES ('21', 'BusinessTypeDelete', 'Xóa loại hình doanh nghiệp', 'Quản lý loại hình doanh nghiệp', 'Cho phép người dùng xóa loại hình doanh nghiệp');
+INSERT INTO `permission` VALUES ('22', 'CatalogIndex', 'Danh sách danh mục tùy chọn', 'Quản lý danh mục tùy chọn', 'Cho phép người dùng xem danh mục tùy chọn');
+INSERT INTO `permission` VALUES ('23', 'CatalogCreate', 'Thêm mới danh mục tùy chọn', 'Quản lý danh mục tùy chọn', 'Cho phép người dùng tạo mới danh mục tùy chọn');
+INSERT INTO `permission` VALUES ('24', 'CatalogEdit', 'Chỉnh sửa danh mục tùy chọn', 'Quản lý danh mục tùy chọn', 'Cho phép người dùng chỉnh sửa danh mục tùy chọn');
+INSERT INTO `permission` VALUES ('25', 'CatalogDelete', 'Xóa danh mục tuỳ chọn', 'Quản lý danh mục tùy chọn', 'Cho phép người dùng xóa danh mục tự chọn');
+INSERT INTO `permission` VALUES ('26', 'CategoryBusinessIndex', 'Danh sách nghiệp vụ', 'Quản lý nghiệp vụ', 'Cho phép người dùng xem danh sách nghiệp vụ');
+INSERT INTO `permission` VALUES ('27', 'CategoryBusinessConfigTemplate', 'Cấu hình nghiệp vụ', 'Quản lý nghiệp vụ', 'Cho phép người dùng cấu hình nghiệp vụ');
+INSERT INTO `permission` VALUES ('28', 'CategoryIndex', 'Danh sách thế loại', 'Quản lý thể loại', 'Cho phép người dung xem danh sách thể loại');
+INSERT INTO `permission` VALUES ('29', 'CategoryCreate', 'Thêm mới thể loại ', 'Quản lý thể loại', 'cho phép nghười dùng tạo mới thể loại');
+INSERT INTO `permission` VALUES ('30', 'CategoryEdit', 'Chỉnh sửa thể loại', 'Quản lý thể loại', 'Cho phép người dùng chỉnh sửa thể loại');
+INSERT INTO `permission` VALUES ('31', 'CategoryDelete', 'Xóa thể loại', 'Quản lý thể loại', 'Cho phép người dùng xóa thể loại');
+INSERT INTO `permission` VALUES ('32', 'CityIndex', 'Danh sách tỉnh/thành phố', 'Quản lý tỉnh/thành phố', 'Cho phép người dùng xem danh sách tỉnh/thành phố');
+INSERT INTO `permission` VALUES ('33', 'CityCreate', 'Thêm mới tỉnh/thành phố', 'Quản lý tỉnh/thành phố', 'Cho phép người dùng tạo mới tỉnh/thành phố');
+INSERT INTO `permission` VALUES ('34', 'CityEdit', 'Chỉnh sửa tỉnh/thành phố', 'Quản lý tỉnh/thành phố', 'Cho phép người dùng chỉnh sửa tỉnh thành phố');
+INSERT INTO `permission` VALUES ('35', 'CityDelete', 'Xóa tỉnh/thành phố', 'Quản lý tỉnh/thành phố', 'Cho phép người dùng xóa tỉnh/thành phố');
+INSERT INTO `permission` VALUES ('36', 'CodeIndex', 'Danh sách bảng mã', 'Quản lý bảng mã', 'Cho phép người dùng xem danh sách bảng mã');
+INSERT INTO `permission` VALUES ('37', 'CodeCreate', 'Thêm mới bảng mã', 'Quản lý bảng mã', 'Chp phép người dùng tạo mới bảng mã');
+INSERT INTO `permission` VALUES ('38', 'CodeEdit', 'Chỉnh sửa bảng mã ', 'Quản lý bảng mã', 'Cho phép người dùng chỉnh sửa bảng mã');
+INSERT INTO `permission` VALUES ('39', 'CodeDelete', 'Xóa bảng mã', 'Quản lý bảng mã', 'Cho phép người dùng xóa bảng mã');
+INSERT INTO `permission` VALUES ('40', 'DepartmentIndex', 'Danh sách phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng xem danh sách phong ban');
+INSERT INTO `permission` VALUES ('41', 'DepartmentGetDetailById', 'Chi tiết phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng xem chi tiế t phòng ban');
+INSERT INTO `permission` VALUES ('42', 'DepartmentCreateTree', 'Thêm mới phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng tạo mới phòng ban');
+INSERT INTO `permission` VALUES ('43', 'DepartmentUpdateTree', 'Chỉnh sửa phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng chỉnh sửa phòng ban');
+INSERT INTO `permission` VALUES ('44', 'DepartmentMoveData', 'Di chuyển phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng di chuyển phòng ban');
+INSERT INTO `permission` VALUES ('45', 'DepartmentDeleteTree', 'Xóa phòng ban', 'Quản lý phòng ban', 'Cho phép người dùng xóa phòng ban');
+INSERT INTO `permission` VALUES ('46', 'DiagnoseIndex', 'Danh sách Diagnose ', 'Quản lý Diagnose', 'Cho phép người dùng xem danh sách Diagnose');
+INSERT INTO `permission` VALUES ('47', 'DiagnoseCookie', 'Xem cookie ', 'Quản lý Diagnose', 'Cho phép người dùng xem thông tin lưu ở cookie');
+INSERT INTO `permission` VALUES ('48', 'DiagnoseEmailSettings', 'Cấu hình Email', 'Quản lý Diagnose', null);
+INSERT INTO `permission` VALUES ('49', 'DistrictIndex', 'Danh sách quận/huyện', 'Quản lý quận/huyện', 'Cho phép người dùng xem danh sách quận huyện');
+INSERT INTO `permission` VALUES ('50', 'DistrictCreate', 'Thêm mới quận/huyên', 'Quản lý quận/huyện', 'Cho phép người dùng tạo mới quận/huyện');
+INSERT INTO `permission` VALUES ('51', 'DistrictEdit', 'Chỉnh sửa quận/huyện', 'Quản lý quận/huyên', 'Cho phép người dùng chỉnh sửa quận/huyện');
+INSERT INTO `permission` VALUES ('52', 'DistrictDelete', 'Xóa quận /huyện', 'Quản lý quận/huyện', 'Cho phép người dùng xóa quận/huyện');
+INSERT INTO `permission` VALUES ('53', 'DocFieldIndex', 'Danh sách lĩnh vực', 'Quản lý lĩnh vực', 'Cho phép người dùng xem danh sách lĩnh vực');
+INSERT INTO `permission` VALUES ('54', 'DocFieldCreate', 'Thêm mới lĩnh vực', 'Quản lý lĩnh vực', 'Cho phép người dùng thêm mới lĩnh vực');
+INSERT INTO `permission` VALUES ('55', 'DocFieldEdit', 'Chỉnh sửa lĩnh vực', 'Quản lý lĩnh vực', 'Cho phép người dùng chỉnh sửa lĩnh vực');
+INSERT INTO `permission` VALUES ('56', 'DocFieldDelete', 'Xóa lĩnh vực', 'Quản lý lĩnh vực', 'Cho phép người dùng xóa lĩnh vực');
+INSERT INTO `permission` VALUES ('57', 'DocTypeIndex', 'Danh sách loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng xem danh sách loại văn bản');
+INSERT INTO `permission` VALUES ('58', 'DocTypeCreate', 'Thêm mới loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng tạo mới loại văn bản');
+INSERT INTO `permission` VALUES ('59', 'DocTypeEdit', 'Chỉnh sửa loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng chỉnh sửa loại văn bản');
+INSERT INTO `permission` VALUES ('60', 'DocTypeForm', 'Danh sách mẫu loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng xem danh sách mẫu văn bản');
+INSERT INTO `permission` VALUES ('61', 'DocTypeAddForm', 'Thêm mới mẫu cho loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng thêm mới mẫu cho loại văn bản');
+INSERT INTO `permission` VALUES ('62', 'DocTypeDelete', 'Xóa loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng xóa loại văn bản');
+INSERT INTO `permission` VALUES ('63', 'DocTypeDeleteForm', 'Xóa mẫu loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng xóa mẫu của loại văn bản');
+INSERT INTO `permission` VALUES ('64', 'DocTypeWorkflow', 'Quy trình làm việc', 'Cấu hình quy trình', 'Cho phép người dùng vào cấu hình quy trình');
+INSERT INTO `permission` VALUES ('65', 'DoctypeConfigWorkflow', 'Cấu hình quy trình làm việc', 'Cấu hình quy trình', 'Cho phép người dùng cấu hình quy trình');
+INSERT INTO `permission` VALUES ('66', 'DocTypeCreateWorkflow', 'Tạo mới quy trình', 'Cấu hình quy trình', 'Cho phép người dùng tạo mới quy trình');
+INSERT INTO `permission` VALUES ('67', 'DocTypeCopyWorkflow', 'Sao chép quy trình', 'Cấu hình quy trình', 'Cho phép người dùng sao chép quy trình');
+INSERT INTO `permission` VALUES ('68', 'DocTypeUpdateWorkflow', 'Cập nhật quy trình', 'Cấu hình quy trình', 'Cho phép người dùng cập nhật chỉnh sửa quy trình');
+INSERT INTO `permission` VALUES ('69', 'DocTypeDeleteWorkflow', 'Xóa quy trình', 'Cấu hình quy trình', 'Cho phép người dùng xóa quy trình');
+INSERT INTO `permission` VALUES ('70', 'DoctypeSaveWorkflow', 'Lưu quy trình', 'Cấu hình quy trình', 'Cho phép người dùng lưu lại quy trình');
+INSERT INTO `permission` VALUES ('71', 'DocTypeSetIsActiveWorkflow', 'Thiết lập hoạt động của quy trình', 'Cấu hình quy trình', 'Cho phép người dung thay đổi hoạt đọng của quy trình');
+INSERT INTO `permission` VALUES ('72', 'DoctypeCategoryBusinessChange', 'Thay đổi loại quy trình', 'Cấu hình quy trình', 'Cho phép người dùng thây đổi loại quy trình');
+INSERT INTO `permission` VALUES ('73', 'DoctypeChangeIsPrimary', 'thay đổi thiết lập quy trình chính', 'Cấu hình quy trình', 'Cho phép người dùng thay đổi thiết lập quy trình chính');
+INSERT INTO `permission` VALUES ('74', 'DoctypeChangeIsActive', 'Thay đổi hoạt động của mẫu loại văn abrn', 'Quản lý loại văn bản', 'Cho phép người dung thay đổi hoạt động của mẫu loại văn bản');
+INSERT INTO `permission` VALUES ('75', 'DoctypeUpdateForm', 'Cập nhật mẫu cho loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng cập nhật mẫu loại văn bản');
+INSERT INTO `permission` VALUES ('76', 'DoctypeConfigTemplateWorkflow', 'Cấu hình mẫu cho  quy trình', 'Cấu hình quy trình', 'Cho phép người dùng cấu hình mẫu cho quy trình');
+INSERT INTO `permission` VALUES ('77', 'DoctypeConfigTemplateNode', 'Cấu hình node cho quy trình', 'Cấu hình quy trình', 'Cho phép người dùng vào cấu hình node cho quy trình');
+INSERT INTO `permission` VALUES ('78', 'DoctypeEmbryonicForm', 'Danh sách mẫu phôi của loại văn bản', 'Cấu hình mẫu phôi  cho loại văn bản', 'Cho phép người dùng vào xem danh sách mãu phôi theo loại văn bản');
+INSERT INTO `permission` VALUES ('79', 'DoctypeDeleteEmbryonicForm', 'Xóa mẫu phôi của loại văn bản', 'Cấu hình mẫu phôi cho loại văn bản', 'Cho phép người dùng xóa mẫu phôi cho loại văn bản');
+INSERT INTO `permission` VALUES ('80', 'DoctypeUpdateDocTypeEmbryonic', 'Cập nhật mẫu phôi cho loại văn bản', 'Cấu hình mẫu phôi cho loại văn bản', 'Cho phép người dùng cập nhật lại mẫu phỗi ho loại văn bẳn');
+INSERT INTO `permission` VALUES ('81', 'DoctypeChangeDocTypeEmbryonic', 'Thay đổi trạng thái kich hoạt cho mẫu phôi', 'Cấu hình mẫu phôi cho loại văn bản', 'Cho phép người dùng thay đổi trạng thái kich hoạt mẫu phô cho loại văn bản');
+INSERT INTO `permission` VALUES ('82', 'EmbryonicFormIndex', 'Danh sách mẫu phôi', 'Cấu hình mẫu phôi', 'Cho phép người dùng vào xem danh sách mẫu phôi');
+INSERT INTO `permission` VALUES ('83', 'EmbryonicFormCreate', 'Thêm mới mẫu phôi', 'Cấu hình mẫu phôi', 'Cho phép người dung thêm mới mẫu phôi');
+INSERT INTO `permission` VALUES ('84', 'EmbryonicFormEdit', 'Chỉnh sửa mẫu phôi', 'Cấu hình mẫu phôi', 'Cho phép người dùng vào chỉnh sửa cập nhật mẫu phôi');
+INSERT INTO `permission` VALUES ('85', 'EmbryonicFormDelete', 'Xóa mẫu phôi', 'Cấu hình mẫu phôi', 'Cho phép người dùng xóa mẫu phôi');
+INSERT INTO `permission` VALUES ('86', 'EmbryonicFormUploadFileInEmbryonicForm', 'Upload file báo cacso cho mẫu phôi', 'Cấu hình mẫu phôi', 'Cho phép người dùng upload file báo cáo  cho mẫu phôi');
+INSERT INTO `permission` VALUES ('87', 'EmbryonicFormConfigEmbryonicForm', 'Cấu hình truy vấn cho mẫu báo cáo', 'Cấu hình mẫu phôi', 'Cho phép người dùng vào cấu hình câu truy vẫn cho mẫu phôi');
+INSERT INTO `permission` VALUES ('88', 'FeeIndex', 'Danh sách lệ phí', 'Cấu hình lệ phí', 'Cho phép người dùng vào xem danh sách lê phí');
+INSERT INTO `permission` VALUES ('89', 'FeeCreate', 'Thêm mới lệ phí', 'Cấu hình lệ phí', 'Cho phép người dùng thêm mới lệ phí');
+INSERT INTO `permission` VALUES ('90', 'FeeEdit', 'Cập nhật chỉnh sửa lệ phí', 'Cấu hình lệ phí', 'Cho phép người dùng chỉnh sửa cập nhật lại lệ phí');
+INSERT INTO `permission` VALUES ('91', 'FeeDelete', 'Xóa lệ phí', 'Cấu hình lệ phí', 'Cho phép người dùng xóa cấu hình lệ phí');
+INSERT INTO `permission` VALUES ('92', 'FormIndex', 'Danh sách biểu mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng xem danh sahcs biểu mẫu');
+INSERT INTO `permission` VALUES ('93', 'FormCreate', 'Thêm mới biểu mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng thêm mới biểu mẫu');
+INSERT INTO `permission` VALUES ('94', 'FormEdit', 'Chỉnh sửa biểu mẫu', 'Cấu hình biểu mẫu', ' Cho phép người dùng chỉnh sửa cập nhật biểu mẫu');
+INSERT INTO `permission` VALUES ('95', 'FormDelete', 'Xóa biều mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng xóa biểu mẫu');
+INSERT INTO `permission` VALUES ('96', 'FormConfigForm', 'Cấu hình biểu mẫu động', 'Cấu hình biểu mẫu', 'Cho phép người dùng cấu hình biểu mẫu động');
+INSERT INTO `permission` VALUES ('97', 'FormConfigTemplate', 'Cấu hình biểu mẫu html', 'Cấu hình biểu mẫu', 'Cho phép người dùng vào cấu hình biểu mẫu html');
+INSERT INTO `permission` VALUES ('98', 'FormCopyForm', 'Sao chép biểu mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng sao chép biểu mẫu');
+INSERT INTO `permission` VALUES ('99', 'FormSave', 'Lưu cấu hình biểu mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng lưu cấu hình biểu mẫu');
+INSERT INTO `permission` VALUES ('100', 'FormSaveTemplate', 'Lưu mẫu bieur mẫu', 'Cấu hình biểu mẫu', 'Cho phép người dùng lưu mẫu biểu mẫu');
+INSERT INTO `permission` VALUES ('101', 'FormGroupIndex', 'Danh sách nhóm biểu mẫu', 'Cấu hình nhóm biểu mẫu', 'Cho phép người dùng xem nhóm biều mẫu');
+INSERT INTO `permission` VALUES ('102', 'FormGroupCreate', 'Thêm mới nhóm biểu mẫu', 'Cấu hình nhóm biểu mẫu', 'Cho phép người dùng thêm  mới nhóm biểu mẫu');
+INSERT INTO `permission` VALUES ('103', 'FormGroupEdit', 'Chỉnh sửa nhóm biểu mẫu', 'Cấu hình nhóm biểu mẫu', 'Cho phép người dùng chỉnh sửa nhóm biểu mẫu');
+INSERT INTO `permission` VALUES ('104', 'FormGroupDelete', 'Xóa nhóm bieru mẫu', 'Cấu hình nhóm biểu mẫu', 'Cho phép người dùng xóa nhóm biểu mẫu');
+INSERT INTO `permission` VALUES ('105', 'IncreaseIndex', 'Danh sách nhảy số', 'Cấu hình nhảy số', 'Cho phép người dùng vào xem danh sách nhảy số');
+INSERT INTO `permission` VALUES ('106', 'IncreaseCreate', 'Thêm mới nhảy số', 'Cấu hình nhảy số', 'Cho phép người dùng vào tạo mới danh sách nhảy số');
+INSERT INTO `permission` VALUES ('107', 'IncreaseEdit', 'Chỉnh sửa nhảy số', 'Cấu hình nhảy số', 'Cho phép người dùng chỉnh sửa nhảy số');
+INSERT INTO `permission` VALUES ('108', 'IncreaseDelete', 'Xóa nhảy số', 'Cấu hình nhảy số', 'Cho phép người dùng xóa nhảy số');
+INSERT INTO `permission` VALUES ('109', 'InfomationIndex', 'Thông tin về cơ quan', 'Thông tin cơ quan', 'Cho phép người dùng xem thông tin về cơ quan');
+INSERT INTO `permission` VALUES ('110', 'InfomationCreate', 'Thêm mới thông tin về cơ quan', 'Thông tin cơ quan', 'Cho phép người dung thêm mới thông tin cơ quan');
+INSERT INTO `permission` VALUES ('111', 'InfomationEdit', 'Chỉnh sửa thông tin cơ quan', 'Thông tin cơ quan', 'Cho phép người dùng chỉnh sửa thông tin cơ quan');
+INSERT INTO `permission` VALUES ('112', 'JobTitlesIndex', 'Danh sách chức danh', 'Quản lý chức danh', 'Cho phép người dùng vào xem danh sách chưc danh');
+INSERT INTO `permission` VALUES ('113', 'JobTitlesCreate', 'Thêm mới chức danh', 'Quản lý chức danh', 'Cho phép người dùng tạo mới chức danh');
+INSERT INTO `permission` VALUES ('114', 'JobTitlesEdit', 'Chỉnh sửa chức danh', 'Quản lý chức danh', 'Cho phép người dùng chỉnh sửa chức danh');
+INSERT INTO `permission` VALUES ('115', 'JobTitlesDelete', 'Xóa chức danh', 'Quản lý chức danh', 'Cho phép người dung xóa chức danh');
+INSERT INTO `permission` VALUES ('116', 'JobTitlesUpdatePriority', 'Cập nhật thứ tự ưu tiên cho chức danh', 'Quản lý chức danh', 'Cho phép người dùng cập nhật thứ tự ưu tiên cho chức danh');
+INSERT INTO `permission` VALUES ('117', 'KeyWordIndex', 'Danh sách từ khoa', 'Quản lý từ khóa', 'Cho phép người dùng xem danh sách từ khóa');
+INSERT INTO `permission` VALUES ('118', 'KeyWordCreate', 'Thêm mới từ khóa', 'Quản lý từ khóa', 'Cho phép người dùng thêm mới từ khóa');
+INSERT INTO `permission` VALUES ('119', 'KeyWordEdit', 'Chỉnh sửa ừ khóa', 'Quản lý từ khóa', 'Cho phép người dùng chỉnh sửa từ khóa');
+INSERT INTO `permission` VALUES ('120', 'KeyWordDelete', 'Xóa từ khóa', 'Quản lý từ khóa', 'Cho phép người dùng xóa từ khóa');
+INSERT INTO `permission` VALUES ('121', 'LogIndex', 'Danh sách nhật ký hệ thống', 'Quản lý nhật ký hệ thống', 'Cho phép người dùng xem danh sách nhật ký hệ thống');
+INSERT INTO `permission` VALUES ('122', 'LogView', 'Xem nhật ký', 'Quản lý nhật ký hệ thống', 'Cho phép người dùng xem nhật ký hệ thống');
+INSERT INTO `permission` VALUES ('123', 'LogClearLog', 'Làm sạch nhật ký', 'Quản lý nhật ký hệ thống', 'Cho phép người dùng làm sạch nhật ký hệ thống');
+INSERT INTO `permission` VALUES ('124', 'LogDelete', 'Xóa nhật ký hệ thống', 'Quản lý nhật ký hệ thống', 'Cho phép người dùng xóa nhật ký hệ thống');
+INSERT INTO `permission` VALUES ('125', 'LogDeleteCheckBox', 'Xóa nhiều bản ghi nhật ký', 'Quản lý nhật ký hệ thống', 'Cho phép người dùng xóa nhiều bản ghi nhật ký');
+INSERT INTO `permission` VALUES ('126', 'PaperIndex', 'Danh sách giấy tờ', 'Quản lý giấy tờ', 'Cho phép người dùng xem danh sách giấy tờ');
+INSERT INTO `permission` VALUES ('127', 'PaperCreate', 'Thêm mới giấy tờ', 'Quản lý giấy tờ', 'Cho phép người dùng thêm mới giấy tờ');
+INSERT INTO `permission` VALUES ('128', 'PaperEdit', 'Chỉnh sửa giấy tờ', 'Quản lý giấy tờ', 'Cho phép người dùng chỉnh sửa giấy tờ');
+INSERT INTO `permission` VALUES ('129', 'PaperDelete', 'Xóa giấy tờ', 'Quản lý giấy tờ', 'Cho phép người dùng xóa giấy tờ');
+INSERT INTO `permission` VALUES ('130', 'PositionIndex', 'Danh sách chức vụ', 'Quản lý chức vụ', 'Cho phép người dùng xem danh sách chức vự');
+INSERT INTO `permission` VALUES ('131', 'PositionCreate', 'Thêm chức vụ', 'Quản lý chức vụ', 'Cho phép người dùng thêm chức vụ');
+INSERT INTO `permission` VALUES ('132', 'PositionEdit', 'Chỉnh sửa chức vụ', 'Quản lý chức vụ', 'Cho phép người dùng chỉnh sửa chức vụ');
+INSERT INTO `permission` VALUES ('133', 'PositionDelete', 'Xóa chức vụ', 'Quản lý chức vụ', 'Cho phép người dùng xóa chức vụ');
+INSERT INTO `permission` VALUES ('134', 'PositionUpdatePriority', 'Cập nhật thứ tự ưu tiên', 'Quản lý chức vụ', 'Cho phép người dùng cập nhật lại thứ tự ưu tiên');
+INSERT INTO `permission` VALUES ('135', 'PrinterIndex', 'Danh sách các máy in', 'Quản lý máy in', 'Cho phép người dùng vào xem danh sách thứ tự ưu tiên');
+INSERT INTO `permission` VALUES ('136', 'PrinterCreate', 'Thêm mới máy in', 'Quản lý máy in', 'Cho phép người dùng thêm mới máy in');
+INSERT INTO `permission` VALUES ('137', 'PrinterEdit', 'Chỉnh sửa máy in', 'Quản lý máy in', 'Cho phép người dùng chỉnh sửa máy in');
+INSERT INTO `permission` VALUES ('138', 'PrinterDelete', 'Xóa máy in', 'Quản lý máy in', 'Cho phép người dùng xóa máy in');
+INSERT INTO `permission` VALUES ('139', 'ProcessFunctionIndex', 'Danh sách cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng vào xem danh sách cây văn bản');
+INSERT INTO `permission` VALUES ('140', 'ProcessFunctionCreate', 'Thêm mới cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng thêm mới cây văn bản');
+INSERT INTO `permission` VALUES ('141', 'ProcessFunctionEdit', 'Chỉnh sửa cấu hình cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng chỉnh sửa cây văn bản');
+INSERT INTO `permission` VALUES ('142', 'ProcessFunctionDelete', 'Xóa cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng xóa cây văn bản');
+INSERT INTO `permission` VALUES ('143', 'ProcessFunctionMove', 'Di chyển cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng di chuyển cây văn bản');
+INSERT INTO `permission` VALUES ('144', 'ProcessFunctionPaste', 'Paste cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng dán cây văn bản');
+INSERT INTO `permission` VALUES ('145', 'ProcessFunctionSettingColumn', 'Cấu hình cột cho cây văn bản', 'Cấu hình cây văn bản', 'Cho phép người dùng cấu hình cột hiển thị cho cây văn bản');
+INSERT INTO `permission` VALUES ('146', 'ProcessFunctionListFunctionType', 'Danh sách các node của cây văn bản', 'Cấu hình kiểu node', 'Cho phép người dùng xem các kiểu node');
+INSERT INTO `permission` VALUES ('147', 'ProcessFunctionCreateFunctionType', 'Thêm mới kiểu node', 'Cấu hình kiểu node', 'Cho phép người dùng thêm mới kiểu node');
+INSERT INTO `permission` VALUES ('148', 'ProcessFunctionEditFunctionType', 'Chỉnh sửa kiểu node', 'Cấu hình kiểu node', 'Cho phép người dùng chỉnh sửa kiểu node');
+INSERT INTO `permission` VALUES ('149', 'ProcessFunctionDeleteFunctionType', 'Xóa kiểu node', 'Cấu hình kiểu node', 'Cho phép ngườ dùng xóa kiểu node');
+INSERT INTO `permission` VALUES ('150', 'ResourceIndex', 'Danh sách các chuỗi tài nguyên', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng xem danh sách chuỗi tài nguyên');
+INSERT INTO `permission` VALUES ('151', 'ResourceCreate', 'Thêm mới chuỗi tài nguyên', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng thêm mới chuỗi tài nguyên');
+INSERT INTO `permission` VALUES ('152', 'ResourceEdit', 'Chỉnh sửa chuỗi tài nguyên', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng chỉnh sửa chuỗi tài nguyên');
+INSERT INTO `permission` VALUES ('153', 'ResourceDelete', 'Xóa chuỗi tài nguyên', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng xóa chuỗi tài nguyên');
+INSERT INTO `permission` VALUES ('154', 'ResourceExport', 'Xuất ra danh sách chuỗi tài nguyên dang json', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng xuất danh sách chuỗi tài nguyên ra file json');
+INSERT INTO `permission` VALUES ('155', 'ResourceImport', 'Thêm danh sách chuỗi tài nguyên từ file json', 'Quản lý chuỗi tài nguyên', 'Cho phép người dùng nhập thêm chuỗi tài nguyên từ file json');
+INSERT INTO `permission` VALUES ('156', 'RoleIndex', 'Danh sách vai trò', 'Quản lý vai trò', 'Cho phép người dùng xem danh sách vai trò của người dùng');
+INSERT INTO `permission` VALUES ('157', 'RoleCreate', 'Thêm mới vai trò', 'Quản lý vai trò', 'Cho phép người dùng thêm mới trò');
+INSERT INTO `permission` VALUES ('158', 'RoleEdit', 'Chỉnh sửa vai trò', 'Quản lý vai trò', 'Cho phép người dùng chỉnh sửa vai trò');
+INSERT INTO `permission` VALUES ('159', 'RoleDelete', 'Xóa vai trò', 'Quản lý vai trò', 'Cho phép người dùng xoá vai trò');
+INSERT INTO `permission` VALUES ('160', 'SettingIndex', 'Quản lý cấu hình', 'Quản lý cấu hình', 'Cho phép người dùng vào xem các chức năng cấu hình');
+INSERT INTO `permission` VALUES ('161', 'SettingGeneral', 'Thiết lập hệ thống', 'Quản lý cấu hình', 'Cho phép người dùng vào thiết lập hệ thống');
+INSERT INTO `permission` VALUES ('162', 'SettingFileUpload', 'Cấu hình tệp đính kèm', 'Quản lý cấu hình', 'Cho phép người dùng vào thiết lập cac laoij tệp đính kèm');
+INSERT INTO `permission` VALUES ('163', 'SettingEmail', 'Cấu hình email', 'Quản lý cấu hình', 'Cho phép người dùng vào thiết lập gửi mail');
+INSERT INTO `permission` VALUES ('164', 'SettingAuthentication', 'Cấu hình xác thực', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình xác thực');
+INSERT INTO `permission` VALUES ('165', 'SettingPasswordPolicy', 'Cấu hình chính sách mật khẩu', 'Quản lý cấu hình', 'Cho phép người dùng vào cấu hình chính sách mật khẩu');
+INSERT INTO `permission` VALUES ('166', 'SettingFileLocation', 'Danh sách cấu hình vị trí lưu file', 'Quản lý cấu hình', 'Cho phép người dung vào xem danh sách vị trí lưu file');
+INSERT INTO `permission` VALUES ('167', 'SettingCreateFileLocation', 'Tạo mới vị trí lưu file', 'Quản lý cấu hình', 'Cho phép người dùng tạo mới vịt rí lưu file');
+INSERT INTO `permission` VALUES ('168', 'SettingEditFileLocation', 'Chỉnh sửa vị trí lưu file', 'Quản lý cấu hình', 'Cho phép người dùng chỉnh sửa vị trí lưu file');
+INSERT INTO `permission` VALUES ('169', 'SettingDeleteFileLocation', 'Xóa vị trí lứu file', 'Quản lý cấu hình', 'Cho phép người dùng xóa vị trí lưu file');
+INSERT INTO `permission` VALUES ('170', 'SettingSearch', 'Cấu hình tìm kiếm hồ sơ, văn bản', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình tìm kiếm hồ sơ, văn bản');
+INSERT INTO `permission` VALUES ('171', 'SettingImage', 'Cấu hình chèn ảnh', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình chen ảnh');
+INSERT INTO `permission` VALUES ('172', 'SettingSms', 'Cấu hình gửi tin nhắn', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình gửi tin nhắn');
+INSERT INTO `permission` VALUES ('173', 'StoreIndex', 'Danh sách sổ hồ sơ', 'Quản lý sổ hồ sơ', 'Cho phép người dùng vào xem danh sách sổ hồ sơ');
+INSERT INTO `permission` VALUES ('174', 'StoreCreate', 'Thêm mới sổ hồ sơ', 'Quản lý sổ hồ sơ', 'Cho phép người dùng thêm mới sổ hồ sơ');
+INSERT INTO `permission` VALUES ('175', 'StoreEdit', 'Chỉnh sửa sổ hồ sơ', 'Quản lý sổ hồ sơ', 'Cho phép người dùng chỉnh sửa sổ hồ sơ');
+INSERT INTO `permission` VALUES ('176', 'StoreDelete', 'Xóa sổ hồ sơ', 'Quản lý sổ hồ sơ', 'Cho phép người dùng xóa sổ hồ sơ');
+INSERT INTO `permission` VALUES ('177', 'TemplateIndex', 'Danh sách mẫu phiếu ', 'Quản lý mẫu phiếu', 'Cho phép người dùng xem danh sách mẫu phiếu');
+INSERT INTO `permission` VALUES ('178', 'TemplateCreate', 'Thêm mới mẫu phiếu', 'Quản lý mẫu phiếu', 'Cho phép người dùng thêm mới mẫu phiếu');
+INSERT INTO `permission` VALUES ('179', 'TemplateEdit', 'Chỉnh sửa mẫu phiếu', 'Quản lý mẫu phiếu', 'Cho phép người dùng chỉnh sửa mẫu phiếu');
+INSERT INTO `permission` VALUES ('180', 'TemplateDelete', 'Xóa mẫu phiếu', 'Quản lý mẫu phiếu', 'Cho phép người dùng xóa mẫu phiếu');
+INSERT INTO `permission` VALUES ('181', 'TemplateConfig', 'Cấu hình mẫu phiếu', 'Quản lý mẫu phiếu', 'Cho phép người dùng cấu hình mẫu phiếu');
+INSERT INTO `permission` VALUES ('182', 'TemplateKeyIndex', 'Danh sách các key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người  dùng xem danh sách key của mẫu phiếu');
+INSERT INTO `permission` VALUES ('183', 'TemplateKeyCreate', 'Thêm mới key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng thêm mới key  mẫu phiếu');
+INSERT INTO `permission` VALUES ('184', 'TemplateKeyEdit', 'Chỉnh sửa key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng chỉnh sửa key mẫu phiếu');
+INSERT INTO `permission` VALUES ('185', 'TemplateKeyDelete', 'Xóa key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng xóa key mẫu phiếu');
+INSERT INTO `permission` VALUES ('186', 'TemplateKeyCustomKey', 'Custom Key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng custom key mẫu phiếu');
+INSERT INTO `permission` VALUES ('187', 'TimeIndex', 'Cấu hình thời gian làm việc', 'Quản lý thời gian làm việc', 'Cho phép người dùng cấu hình thời gian làm việc');
+INSERT INTO `permission` VALUES ('188', 'TimeCreate', 'Thêm ngày nghỉ', 'Quản lý thời gian làm việc', 'Cho phép người dùng thêm ngày nghỉ');
+INSERT INTO `permission` VALUES ('189', 'TimeEdit', 'Chỉnh sửa ngày nghỉ', 'Quản lý thời gian làm việc', 'Cho phép người dùng chỉnh sửa ngày nghỉ');
+INSERT INTO `permission` VALUES ('190', 'TimeDelete', 'Xóa ngày nghỉ', 'Quản lý thời gian làm việc', 'Cho phép người dùng xóa ngày nghỉ');
+INSERT INTO `permission` VALUES ('191', 'TimeWorkTime', 'Cấu hình giờ hành chính', 'Quản lý thời gian làm việc', 'Cho phép người dùng cấu hình giờ hành chính');
+INSERT INTO `permission` VALUES ('192', 'TimeDateWorkOffset', 'Danh sách ngày làm bù', 'Quản lý thời gian làm việc', 'Cho phép người dùng vào xem danh sách thời gian làm bù');
+INSERT INTO `permission` VALUES ('193', 'TimeCreateDateWorkOffset', 'Thêm mới ngày làm bù', 'Quản lý thời gian làm việc', 'Cho phép người dùng thêm mới thời gian làm bù');
+INSERT INTO `permission` VALUES ('194', 'TimeEditDateWorkOffset', 'Chỉnh sửa thời gian làm bù', 'Quản lý thời gian làm việc', 'Cho phép người dùng chỉnh  sửa thời gian làm bù');
+INSERT INTO `permission` VALUES ('195', 'TimeDeleteDateWorkOffset', 'Xóa thời gian làm bù', 'Quản lý thời gian làm việc', 'Cho phép người dùng xóa thòi gian làm bù');
+INSERT INTO `permission` VALUES ('196', 'TransferTypeIndex', 'Danh sách hình thức vận chuyển ', 'Quản lý hình thức vận chuyển', 'Cho phép người dùng xem danh sách hình thức vận chuyển');
+INSERT INTO `permission` VALUES ('197', 'TransferTypeCreate', 'Thêm mới hình thức vận chuyển ', 'Quản lý hình thức vận chuyển', 'Cho phép người dùng thêm mới hình thức vận chuyển');
+INSERT INTO `permission` VALUES ('198', 'TransferTypeEdit', 'Chỉnh sửa hình thức vận chuyển', 'Quản lý hình thức vận chuyển', 'Cho phép người dùng chỉnh sửa hình thức vận chuyển');
+INSERT INTO `permission` VALUES ('199', 'TransferTypeDelete', 'Xóa hình thức vận chuyển', 'Quản lý hình thức vận chuyển', 'Cho phép người dùng xóa hình thức vận chuyển');
+INSERT INTO `permission` VALUES ('200', 'UserIndex', 'Danh sách cán bộ', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng xem danh sách cán bộ');
+INSERT INTO `permission` VALUES ('201', 'UserCreate', 'Thêm mới cán bộ', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng thêm mới cán bộ');
+INSERT INTO `permission` VALUES ('202', 'UserEdit', 'Chỉnh sửa thông tin cán bộ', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng chỉnh sửa thông tin cán bộ');
+INSERT INTO `permission` VALUES ('203', 'UserDelete', 'Xóa cán bộ', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng vào xóa cán bộ');
+INSERT INTO `permission` VALUES ('204', 'UserResetPassword', 'Reset mật khẩu', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng reset lại mật khẩu ');
+INSERT INTO `permission` VALUES ('205', 'UserImportUserFromLdap', 'Thêm mơi người dung qua Ldap', 'Quản lý cán bộ(người dùng)', 'Cho phép người dùng thêm mới cán bộ(người dùng ) qua Ldap');
+INSERT INTO `permission` VALUES ('206', 'WardIndex', 'Danh sách xã/phường', 'Quản lý xã/phường', 'Cho phép người dùng xem danh sách xã/phường');
+INSERT INTO `permission` VALUES ('207', 'WardCreate', 'Thêm mới xã/phường', 'Quản lý xã/phường', 'Cho phép người dùn thêm mới xã/ phường');
+INSERT INTO `permission` VALUES ('208', 'WardEdit', 'Cập nhật thông tin xã/phường', 'Quản lý xã/phường', 'Cho phép người dùng cập nhật thồng tin xã/phường');
+INSERT INTO `permission` VALUES ('209', 'WardDelete', 'Xóa xã/phường', 'Quản lý xã/phường', 'Cho phép người dùng xóa xã/phường');
+INSERT INTO `permission` VALUES ('210', 'ReportIndex', 'Quản lý báo cáo', 'Quản lý báo cáo', 'Quản lý báo cáo');
+INSERT INTO `permission` VALUES ('211', 'ReportCreate', 'Thêm mới báo cáo', 'Quản lý báo cáo', 'Cho phép người dung thêm mới báo cáo');
+INSERT INTO `permission` VALUES ('212', 'ReportEdit', 'Cập nhật báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng cập nhật thông tin báo cáo');
+INSERT INTO `permission` VALUES ('213', 'ReportDelete', 'Xóa báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng xóa báo cáo');
+INSERT INTO `permission` VALUES ('214', 'ReportCopy', 'Sao chép báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng sao chép báo cáo');
+INSERT INTO `permission` VALUES ('215', 'ReportListGroup', 'Danh sách nhóm báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng xem danh sach nhóm báo cáo');
+INSERT INTO `permission` VALUES ('216', 'ReportCreateGroup', 'Thêm mới nhóm báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng thêm mới nhóm báo cáo');
+INSERT INTO `permission` VALUES ('217', 'ReportEditGroup', 'Chỉnh sửa nhóm báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng  chỉnh sửa nhóm báo cáo');
+INSERT INTO `permission` VALUES ('218', 'ReportDeleteGroup', 'Xóa nhóm báo cáo', 'Quản lý báo cáo', 'Cho phép người dùng xóa nhóm báo cáo');
+INSERT INTO `permission` VALUES ('219', 'RequiredSupplementaryIndex', 'Danh sách yêu cầu bổ sung', 'Yêu cầu bổ sung', 'Cho phép người dùng xem danh sách các yêu cầu bổ sung');
+INSERT INTO `permission` VALUES ('220', 'RequiredSupplementaryCreate', 'Thêm yêu cầu bổ sung', 'Yêu cầu bổ sung', 'Cho phép người dùng thêm yêu cầu bổ sung');
+INSERT INTO `permission` VALUES ('221', 'RequiredSupplementaryEdit', 'Sửa yêu cầu bổ sung', 'Yêu cầu bổ sung', 'Cho phép người dùng sửa yêu cầu bổ sung');
+INSERT INTO `permission` VALUES ('222', 'RequiredSupplementaryDelete', 'Xóa yêu cầu bổ sung', 'Yêu cầu bổ sung', 'Cho phép người dùng xóa yêu cầu bổ sung');
+INSERT INTO `permission` VALUES ('223', 'SettingLanguage', 'Cấu hình ngôn ngữ', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình ngôn ngữ');
+INSERT INTO `permission` VALUES ('224', 'SettingTransfer', 'Cấu hình liên thông với hệ thống khác', 'Quản lý cấu hình', 'Cho phép người dùng cấu hình liên thông với hệ thống khác');
+INSERT INTO `permission` VALUES ('225', 'ApiPermission', 'Quản lý API', 'Quản lý API', 'Cho phép người dùng quản lý API');
+INSERT INTO `permission` VALUES ('226', 'EditEgovJob', 'Quản lý timer job', 'Quản lý timer job', 'Cho phép người dùng quản lý timer job');
+INSERT INTO `permission` VALUES ('227', 'TalkingPeopleNormalIndex', 'KNTC - Cán bộ tiếp dân', 'KNTC - Cán bộ tiếp dân', 'KNTC - Cán bộ tiếp dân');
+INSERT INTO `permission` VALUES ('228', 'TalkingPeopleMasterIndex', 'KNTC - Lãnh đạo tiếp dân', 'KNTC - Lãnh đạo tiếp dân', 'KNTC - Lãnh đạo tiếp dân');
+INSERT INTO `permission` VALUES ('229', 'TemplateConfigTemplate', 'Cấu hình mẫu phiếu in ', 'Cấu hình mẫu phiếu in', 'Cấu hình mẫu phiếu in');
+INSERT INTO `permission` VALUES ('230', 'TemplateSaveTemplate', 'Lưu cấu hình mẫu phiếu in', 'Lưu cấu hình mẫu phiếu in', 'Lưu cấu hình mẫu phiếu in');
+INSERT INTO `permission` VALUES ('231', 'DomainIndex', 'Quản lý domain', 'Quản lý domain', 'Cho phép quản trị cấp cao quản lý domain');
+INSERT INTO `permission` VALUES ('232', 'SettingConnection', 'Cấu hình liên thông đến hệ thống khác', 'Quản lý cấu hình', 'Cấu hình liên thông đến hệ thống khác');
+INSERT INTO `permission` VALUES ('233', 'SettingConnectionSetting', 'Cấu hình chuỗi kết nối đến CSDL', 'Quản lý kết nối', 'Quản lý kết nối');
+INSERT INTO `permission` VALUES ('234', 'SettingNotification', 'Cấu hình thông báo', 'Cấu hình thông báo', 'Cấu hình thông báo');
+INSERT INTO `permission` VALUES ('235', 'DocTypeCreatePlus', 'Thêm mới loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng tạo mới loại văn bản Plus');
+INSERT INTO `permission` VALUES ('236', 'DocTypeEditPlus', 'Chỉnh sửa loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng chỉnh sửa loại văn bản Plus');
+INSERT INTO `permission` VALUES ('237', 'DocTypeFormPlus', 'Danh sách mẫu loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng xem danh sách mẫu văn bản Plus');
+INSERT INTO `permission` VALUES ('238', 'DocTypeCreateExplicit', 'Thêm mới loại văn bản tường minh', 'Quản lý loại văn bản', 'Cho phép người dùng tạo mới loại văn bản tường minh');
+INSERT INTO `permission` VALUES ('239', 'DocTypeEditExplicit', 'Chỉnh sửa loại văn bản tường minh', 'Quản lý loại văn bản', 'Cho phép người dùng chỉnh sửa loại văn bản tường minh');
+INSERT INTO `permission` VALUES ('240', 'DocTypeCreateReport', 'Thêm mới loại văn bản danh sách', 'Quản lý loại văn bản', 'Cho phép người dùng tạo mới loại văn bản danh sách');
+INSERT INTO `permission` VALUES ('241', 'DocTypeEditReport', 'Chỉnh sửa loại văn bản danh sách', 'Quản lý loại văn bản', 'Cho phép người dùng chỉnh sửa loại văn bản danh sách');
+INSERT INTO `permission` VALUES ('242', 'ReportKeyIndex', 'Danh sách các key báo cáo', 'Quản lý key báo cáo', 'Cho phép người dùng xem danh sách key của báo cáo');
+INSERT INTO `permission` VALUES ('243', 'DocumentRelatedIndex', 'Danh sách DocumentRelated', 'Quản lý văn bản liên quan', 'Cho phép người dùng xem danh sách văn bản liên quan');
+INSERT INTO `permission` VALUES ('244', 'DocumentRelatedCreate', 'Thêm mới DocumentRelated', 'Quản lý văn bản liên quan', 'Cho phép người dùng thêm mới văn bản liên quan');
+INSERT INTO `permission` VALUES ('245', 'DocumentRelatedEdit', 'Chỉnh sửa DocumentRelated', 'Quản lý văn bản liên quan', 'Cho phép người dùng chỉnh sửa văn bản liên quan');
+INSERT INTO `permission` VALUES ('246', 'DataSourceIndex', 'Danh sách DataSource', 'Quản lý DataSource', 'Cho phép người dùng xem danh sách DataSource');
+INSERT INTO `permission` VALUES ('247', 'DataSourceCreate', 'Thêm mới DataSource', 'Quản lý DataSource', 'Cho phép người dùng thêm mới DataSource');
+INSERT INTO `permission` VALUES ('248', 'DataSourceEdit', 'Chỉnh sửa DataSource', 'Quản lý DataSource', 'Cho phép người dùng chỉnh sửa DataSource');
+INSERT INTO `permission` VALUES ('249', 'ReportQueryGroupCreate', 'Thêm mới nhóm truy vấn báo cáo', 'Quản lý nhóm truy vấn báo cáo', 'Cho phép người dùng tạo mới nhóm truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('251', 'ReportQueryGroupDelete', 'Xóa nhóm truy vấn báo cáo', 'Quản lý truy nhóm truy vấn báo cáo', 'Cho phép người dùng xóa nhóm truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('252', 'ReportQueryGroupEdit', 'Chỉnh sửa nhóm truy vấn báo cáo', 'Quản lý nhóm truy vấn báo cáo', 'Cho phép người dùng chỉnh sửa nhóm truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('253', 'ReportQueryGroupIndex', 'Danh sách nhóm truy vấn báo cáo', 'Quản lý nhóm truy vấn báo cáo', 'Cho phép người dùng xem danh sách nhóm truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('254', 'ReportQueryCreate', 'Thêm mới truy vấn báo cáo', 'Quản lý truy vấn báo cáo', 'Cho phép người dùng tạo mới truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('255', 'ReportQueryDelete', 'Xóa truy vấn báo cáo', 'Quản lý truy vấn báo cáo', 'Cho phép người dùng xóa truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('256', 'ReportQueryEdit', 'Chỉnh sửa truy vấn báo cáo', 'Quản lý truy vấn báo cáo', 'Cho phép người dùng chỉnh sửa truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('257', 'ReportQueryIndex', 'Danh sách truy vấn báo cáo', 'Quản lý truy vấn báo cáo', 'Cho phép người dùng xem danh sách truy vấn báo cáo');
+INSERT INTO `permission` VALUES ('258', 'TemplateKeyPlusIndex', 'Danh sách các key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người  dùng xem danh sách key của mẫu phiếu');
+INSERT INTO `permission` VALUES ('259', 'TemplateKeyPlusCreate', 'Thêm mới key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng thêm mới key  mẫu phiếu');
+INSERT INTO `permission` VALUES ('260', 'TemplateKeyPlusEdit', 'Chỉnh sửa key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng chỉnh sửa key mẫu phiếu');
+INSERT INTO `permission` VALUES ('261', 'TemplateKeyPlusDelete', 'Xóa key mẫu phiếu', 'Quản lý key mẫu phiếu', 'Cho phép người dùng xóa key mẫu phiếu');
+INSERT INTO `permission` VALUES ('262', 'IndicatorCatalogIndex', 'Danh sách chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng xem danh sách chỉ tiêu');
+INSERT INTO `permission` VALUES ('263', 'IndicatorCatalogCreate', 'Thêm mới chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng thêm mới chỉ tiêu');
+INSERT INTO `permission` VALUES ('264', 'IndicatorCatalogEdit', 'Chỉnh sửa chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng chỉnh sửa chỉ tiêu');
+INSERT INTO `permission` VALUES ('265', 'IndicatorCatalogDelete', 'Xóa chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng xóa chỉ tiêu');
+INSERT INTO `permission` VALUES ('266', 'IndicatorCatalogValueIndex', 'Danh sách chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng xem danh sách chỉ tiêu');
+INSERT INTO `permission` VALUES ('267', 'IndicatorCatalogValueCreate', 'Thêm mới chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng thêm mới chỉ tiêu');
+INSERT INTO `permission` VALUES ('268', 'IndicatorCatalogValueEdit', 'Chỉnh sửa chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng chỉnh sửa chỉ tiêu');
+INSERT INTO `permission` VALUES ('269', 'IndicatorCatalogValueDelete', 'Xóa chỉ tiêu', 'Quản lý chỉ tiêu', 'Cho phép người dùng xóa chỉ tiêu');
+INSERT INTO `permission` VALUES ('270', 'ReportModeIndex', 'Danh sách chế độ báo cáo', 'Chế độ báo cáo', 'Cho phép người dùng xem danh sách chế độ báo cáo');
+INSERT INTO `permission` VALUES ('271', 'ReportModeCreate', 'Thêm mới chế độ báo cáo', 'Chế độ báo cáo', 'Cho phép người dùng thêm mới chế độ báo cáo');
+INSERT INTO `permission` VALUES ('272', 'ReportModeEdit', 'Chỉnh sửa chế độ báo cáo', 'Chế độ báo cáo', 'Cho phép người dùng chỉnh sửa chế độ báo cáo');
+INSERT INTO `permission` VALUES ('273', 'ReportModeDelete', 'Xóa chế độ báo cáo', 'Chế độ báo cáo', 'Cho phép người dùng xóa chế độ báo cáo');
+INSERT INTO `permission` VALUES ('274', 'ActionLevelIndex', 'Danh sách kỳ báo cáo', 'Quản lý kỳ báo cáo', 'Cho phép người dùng xem danh sách kỳ báo cáo');
+INSERT INTO `permission` VALUES ('275', 'ActionLevelCreate', 'Thêm mới kỳ báo cáo', 'Quản lý kỳ báo cáo', 'Cho phép người dùng tạo mới kỳ báo cáo');
+INSERT INTO `permission` VALUES ('276', 'ActionLevelEdit', 'Chỉnh sửa kỳ báo cáo', 'Quản lý kỳ báo cáo', 'Cho phép người dùng chỉnh sửa kỳ báo cáo');
+INSERT INTO `permission` VALUES ('277', 'ActionLevelDelete', 'Xóa kỳ báo cáo', 'Quản lý kỳ báo cáo', 'Cho phép người dùng xóa kỳ báo cáo');
+INSERT INTO `permission` VALUES ('278', 'DocTypeCopyPlus', 'Sao chép loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng sao chép văn bản Plus');
+INSERT INTO `permission` VALUES ('279', 'DocTypeCopyExplicit', 'Sao chép loại văn bản tường minh', 'Quản lý loại văn bản', 'Cho phép người dùng sao chép văn bản tường minh');
+INSERT INTO `permission` VALUES ('280', 'DocTypeExportJSON', 'Xuất JSON loại văn bản', 'Quản lý loại văn bản', 'Cho phép người dùng xuất JSON văn bản');
+INSERT INTO `permission` VALUES ('283', 'DocTypeChangeIsActivateBatch', 'Lưu trạng thái hàng loạt', 'Quản lý loại văn bản', 'Cho phép người dùng lưu trạng thái hàng loạt');
+INSERT INTO `permission` VALUES ('284', 'SurveyCatalogValueIndex', 'Danh sách chỉ tiêu khảo sát', 'Quản lý chỉ tiêu khảo sát', 'Cho phép người dùng xem danh sách chỉ tiêu khảo sát');
+INSERT INTO `permission` VALUES ('285', 'SurveyCatalogValueCreate', 'Thêm mới chỉ tiêu khảo sát', 'Quản lý chỉ tiêu khảo sát', 'Cho phép người dùng thêm mới chỉ tiêu khảo sát');
+INSERT INTO `permission` VALUES ('286', 'SurveyCatalogValueEdit', 'Chỉnh sửa chỉ tiêu khảo sát', 'Quản lý chỉ tiêu khảo sát', 'Cho phép người dùng chỉnh sửa chỉ tiêu khảo sát');
+INSERT INTO `permission` VALUES ('287', 'SurveyCatalogValueDelete', 'Xóa chỉ tiêu khảo sát', 'Quản lý chỉ tiêu khảo sát', 'Cho phép người dùng xóa chỉ tiêu khảo sát');
+INSERT INTO `permission` VALUES ('288', 'SurveyCatalogIndex', 'Danh sách danh mục khảo sát', 'Quản lý danh mục khảo sát', 'Cho phép người dùng xem danh sách danh mục khảo sát');
+INSERT INTO `permission` VALUES ('289', 'SurveyCatalogCreate', 'Thêm mới danh mục khảo sát', 'Quản lý danh mục khảo sát', 'Cho phép người dùng thêm mới danh mục khảo sát');
+INSERT INTO `permission` VALUES ('290', 'SurveyCatalogEdit', 'Chỉnh sửa danh mục khảo sát', 'Quản lý danh mục khảo sát', 'Cho phép người dùng chỉnh sửa danh mục khảo sát');
+INSERT INTO `permission` VALUES ('291', 'SurveyCatalogDelete', 'Xóa danh mục khảo sát', 'Quản lý danh mục khảo sát', 'Cho phép người dùng xóa danh mục khảo sát');
+INSERT INTO `permission` VALUES ('292', 'ReportRuleIndex', 'Danh sách văn bản quy định', 'Văn bản quy định', 'Cho phép người dùng xem văn bản quy định');
+INSERT INTO `permission` VALUES ('293', 'ReportRuleCreate', 'Thêm mới văn bản quy định', 'Văn bản quy định', 'Cho phép người dùng tạo văn bản quy định');
+INSERT INTO `permission` VALUES ('294', 'ReportRuleEdit', 'Sửa văn bản quy định', 'Văn bản quy định', 'Cho phép người dùng sửa văn bản quy định');
+INSERT INTO `permission` VALUES ('295', 'ReportRuleDelete', 'Xóa văn bản quy định', 'Văn bản quy định', 'Cho phép người dùng xóa văn bản quy định');

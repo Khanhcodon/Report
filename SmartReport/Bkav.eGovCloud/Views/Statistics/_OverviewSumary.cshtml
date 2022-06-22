@@ -1,0 +1,240 @@
+﻿@{
+    Layout = null;
+}
+
+@*End Overview*@
+<div class="overview-title">Tình trạng xử lý hồ sơ</div>
+<div class="overview-filters">
+    <div class="pull-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <select class="form-control input-sm" id="ddlGroupBy" style="width: 170px">
+                    <option value="DocTypeName ">Loại văn bản</option>
+                    <option value="CurrentDepartmentName" selected>Phòng ban</option>
+                    <option value="UserCurrentName">Người xử lý</option>
+                    @*<option value="CategoryName">Hình thức văn bản</option>*@
+                </select>
+            </li>
+        </ul>
+        <p class="navbar-text navbar-right">Nhóm theo: </p>
+    </div>
+</div>
+<div class="overview-barchart">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body" style="position: relative">
+                    <div class="doughnutChar-result">
+                        <span class="doughnutChar-result-numb"></span><br />
+                        Đúng hạn
+                    </div>
+                    <canvas id="DoughnutChar" height="210"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <canvas id="barOverview" class="bar-overview" height="250"></canvas>
+        </div>
+    </div>
+</div>
+
+@*Ghi chú*@
+<div style="text-align: center">
+    <span>
+        <span style="display: inline-block; background: #48B9DD; width: 30px; height: 12px"></span>
+        Đúng hạn
+    </span>
+    <span>
+        <span style="display: inline-block; background: #FF5F11; width: 30px; height: 12px"></span>
+        quá hạn
+    </span>
+    <span>
+        <span style="display: inline-block; background: #42CC80; width: 30px; height: 12px; margin-left: 10px;"></span><span></span>
+        Chưa đến hạn
+    </span>
+</div>
+
+@*Thống kê tổng quan*@
+<div class="overview-title">
+    Thống kê tổng quát   
+</div>
+<div>
+    <div class="overview-filters">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Tải về <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="total">
+                <li><a href="#" id="btnExportWord">Ms Word</a></li>
+                <li><a href="#" id="btnExportPdf">Pdf</a></li>
+                <li><a href="#" id="btnExportExcel">Excel</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="overview-statistics">
+        <table class="table table-bordered table-hover table-striped" id="statisticDetail">
+            <colgroup>
+                <col style="width: 50px;">
+                <col>
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+            </colgroup>
+
+            <thead>
+                <tr role="row">
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2" class="statistic-detail-officeName">Đơn vị</th>
+                    <th rowspan="2">Tồn kỳ trước</th>
+                    <th rowspan="2">Nhận trong kỳ</th>
+                    <th rowspan="2">Tổng</th>
+                    <th colspan="5" rowspan="1">Đã giải quyết</th>
+                    <th colspan="5" rowspan="1">Chưa giải quyết</th>
+                    <th colspan="2" rowspan="1">Tại VPUB tỉnh</th>
+                </tr>
+                <tr role="row">
+                    <th>Tổng</th>
+                    <th class="">Đúng hẹn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th class="">Trễ hẹn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th>Tổng</th>
+                    <th class="">Quá hạn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th class="">Chưa đến hạn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th>Trễ hẹn</th>
+                    <th>Quá hạn</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@*Thống kê chi tiết*@
+<div class="processingDocs">
+    <div class="overview-title">
+        Giám sát xử lý văn bản, hồ sơ @*- <span class="otherOverdue-total total"></span>*@
+    </div>
+    <div>
+        <div class="overview-filters">
+            <p class="navbar-text navbar-left">Lọc theo: </p>
+            <ul class="nav navbar-nav">
+                <li>
+                    <select class="form-control input-sm" id="ddlFilterStatus" style="width: 120px">
+                        <option value="0">Tất cả</option>
+                        <option value="1">Đang xử lý</option>
+                    </select>
+                </li>
+                <li>
+                    <select class="form-control input-sm" id="ddlFilterDocTypes" style="width: 170px">
+                        <option value="0">Loại hồ sơ</option>
+                    </select>
+                </li>
+                <li>
+                    <select class="form-control input-sm" id="ddlFilterDepartments" style="width: 170px">
+                        <option value="0">Phòng ban</option>
+                    </select>
+                </li>
+                <li>
+                    <select class="form-control input-sm" id="ddlFilterUsers" style="width: 170px">
+                        <option value="0">Người dùng</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <table class="table table-bordered document-overdue" id="docOtherOverdue">
+            <colgroup>
+                <col style="width: 100px" />
+                <col style="width: 70px" />
+                <col style="width: 120px" />
+                <col />
+                <col style="width: 150px" />
+                <col style="width: 150px" />
+                <col style="width: 130px" />
+                <col style="width: 130px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Người giữ</th>
+                    <th>Số lượng</th>
+                    <th>Số ký hiệu</th>
+                    <th>Trích yếu</th>
+                    <th>Kỳ báo cáo</th>         
+                    <th>Người tạo báo cáo</th>
+                    <th>Ngày gửi</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script type="text/x-jquery-tmpl" id="statisticTemp">
+    <tr>
+        <td class="text-center">${Stt}</td>
+        <td>${Name}</td>
+        <td class="text-right">${PreExtisting}</td>
+        <td class="text-right">${NewReception}</td>
+        <td class="text-right"><b>${Total}</b></td>
+        <td class="text-right">${Resolved}</td>
+        <td class="text-right info">${SolvedInTime}</td>
+        <td class="text-right">${SolvedInTimePercent}</td>
+        <td class="text-right danger">${SolvedLate}</td>
+        <td class="text-right">${SolvedLatePercent}</td>
+        <td class="text-right">${UnResolved}</td>
+        <td class="text-right danger">${PendingLate}</td>
+        <td class="text-right">${PendingLatePercent}</td>
+        <td class="text-right success">${Pending}</td>
+        <td class="text-right">${PendingPercent}</td>
+        <td class="text-right danger">${TreHenVPUB}</td>
+        <td class="text-right">${QuaHanVPUB}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="statisticSumTemp">
+    <tr class="bold" style="font-weight: bold;">
+        <td colspan="2" class="text-right">${Name}</td>
+        <td class="text-right">${PreExtisting}</td>
+        <td class="text-right">${NewReception}</td>
+        <td class="text-right">${Total}</td>
+        <td class="text-right">${Resolved}</td>
+        <td class="text-right info">${SolvedInTime}</td>
+        <td class="text-right">${SolvedInTimePercent}%</td>
+        <td class="text-right danger">${SolvedLate}</td>
+        <td class="text-right">${SolvedLatePercent}%</td>
+        <td class="text-right">${UnResolved}</td>
+        <td class="text-right danger">${PendingLate}</td>
+        <td class="text-right">${PendingLatePercent}%</td>
+        <td class="text-right success">${Pending}</td>
+        <td class="text-right">${PendingPercent}%</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="statisticOverdueTemp">
+    <tr class="{{if OverdueType == 0}}warning{{else OverdueType < 0}}danger{{/if}}">
+        <td class="text-center">${$item.dataArrayIndex($item.data)}</td>
+        <td>${Compendium}</td>
+        <td class="text-center">${CitizenName}</td>
+        <td class="text-center">${DateCreated}</td>
+        <td class="text-center">${DateAppointed}</td>
+        <td class="text-center">${UserCurrentName}</td>
+        <td>${CurrentDepartment}</td>
+        <td class="text-center">${TotalKeepTime}/${TotalPermitTime}</td>
+    </tr>
+</script>

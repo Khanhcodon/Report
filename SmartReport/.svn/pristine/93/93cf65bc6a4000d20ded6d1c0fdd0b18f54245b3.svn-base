@@ -1,0 +1,2 @@
+insert into resource VALUES(NULL, "Bkav.eGovCloud.Areas.Admin.IndicatorCatalogValue.Imported","Import dữ liệu thành công !");
+insert into resource VALUES(NULL, "Bkav.eGovCloud.Areas.Admin.IndicatorCatalogValue.ImportFaild","Đã có lỗi xảy ra!");

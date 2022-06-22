@@ -1,0 +1,319 @@
+﻿@model AuthorizeModel
+@using Bkav.eGovCloud.Entities
+@Html.ValidationSummary(true)
+@{
+    var allUsers = ViewBag.AllUsers as string;
+    var allPermission = ViewBag.AllPermission as List<SelectListItem>;
+    var allDocFields = ViewBag.AllDocFields as string;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+}
+<style>
+    .grid-content {
+        overflow: auto!important;
+        height: 600px;
+    }
+</style>
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>    
+    <link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.css" rel="stylesheet" />
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.js"></script>
+
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var authorizedUserId = @Model.AuthorizedUserId;
+    var authorizeUserId = @Model.AuthorizeUserId;
+    var doctypeSelected = @(string.IsNullOrEmpty(Model.DocTypeId) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DocTypeId));
+    
+    $(function () {
+        $('#tablist a').bind("click", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            $("#tabChilds .tab").hide();
+            $(id).show();
+        });
+
+        $("#AuthorizeUserName").focus();
+        $("#chooseDateBegin, #chooseDateEnd").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        $(".date").on('change',function(){
+            var _el= $(this).data('for');
+            var value = $(_el).val().split(' ')[1];
+            $(_el).val($(this).val()+' '+value);
+        })
+
+        $("#chooseTimeBegin, #chooseTimeEnd").timepicker({'timeFormat': 'H:i:s' });
+        $(".time").on('change',function(){
+            var _el= $(this).data('for');
+            var value = $(_el).val().split(' ')[0];
+            $(_el).val(value +' '+$(this).val());
+        });
+
+        $("#AuthorizedUserName, #AuthorizeUserName").autocomplete({
+            minLength: 1,
+            source: function(request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allUsers, function( value ) {
+                    return matcher.test( value.label ) 
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.label ) );
+                }) );
+            },
+            selectFirst: true,
+            focus: function() {
+                return false;
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.label);
+                if(this.name == 'AuthorizedUserName'){
+                    $("#AuthorizedUserId").val(ui.item.value);
+                }else if(this.name == 'AuthorizeUserName'){
+                    $("#AuthorizeUserId").val(ui.item.value);
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };  
+        
+        $("#CategoryBusinessId").on("change",function () {
+            changeCategoryBusiness($(this).val());
+        });
+
+        $("#DocFieldId").on("change",function () {
+            if ($(this).val()) {
+                var docFieldId = $(this).val();
+                var categoryBusinessId = $("#CategoryBusinessId").val();
+                if (categoryBusinessId) {
+                    $('#tblDoctypes tbody tr[data-categorybusiness=' + categoryBusinessId + '][data-docfield!=' + docFieldId + ']').hide();
+                    $('#tblDoctypes tbody tr[data-categorybusiness=' + categoryBusinessId + '][data-docfield=' + docFieldId + ']').show();
+                } else {
+                    $('#tblDoctypes tbody tr[data-docfield!=' + docFieldId + ']').hide();
+                    $('#tblDoctypes tbody tr[data-docfield=' + docFieldId + ']').show();
+                }
+            } else {
+                changeCategoryBusiness($("#CategoryBusinessId").val());
+            }
+        });
+
+        $.each(allDocFields, function(i, item) {
+            $("#DocFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+        });
+
+        $.each(allDocTypes, function(i, item) {
+            $('#tblDoctypes tbody').append('<tr data-categorybusiness="' + item.CategoryBusinessId + '" data-docfield="' + (item.DocFieldId ? item.DocFieldId : '') + '"><td><label><input type="checkbox" name="DocTypes" value="' + item.DocTypeId + '" />&nbsp;' + item.DocTypeName + '</label></td></tr>');
+        });
+
+        $.each(doctypeSelected, function(i, item) {
+            $('#tblDoctypes input[value=' + item + ']').prop('checked', true);
+        });
+
+        //$('#tblDoctypes').grid({
+        //    isResizeColumn: false,
+        //    isFixHeightContent: false
+        //});
+        
+        $("#chbAll").on("change",function () {
+            $("#tblDoctypes input[type=checkbox]").prop('checked', this.checked);
+            var docTypeIdArr=[];
+            $("#tblDoctypes input[type=checkbox]:checked").each(function() {
+                docTypeIdArr.push($(this).val());
+            });
+            $("#DocTypeId").val(docTypeIdArr.length > 0 ? JSON.stringify(docTypeIdArr):'');
+        });
+
+        $("#tblDoctypes input[type=checkbox]").on("change",function() {
+            if (this.checked) {
+                if ($("#tblDoctypes input[type=checkbox]:checked").length === allDocTypes.length) {
+                    $("#chbAll").prop('checked', true);
+                }
+            } else {
+                $("#chbAll").prop('checked', false);
+            }
+
+            var docTypeIdArr=[];
+            $("#tblDoctypes input[type=checkbox]:checked").each(function() {
+                docTypeIdArr.push($(this).val());
+            });
+
+            if( $("#tblDoctypes input[type=checkbox]").length==docTypeIdArr.length)  {
+                $("#chbAll").prop('checked', true);
+            }
+
+            $("#DocTypeId").val(docTypeIdArr.length > 0 ? JSON.stringify(docTypeIdArr):'');
+        });
+
+    });
+    
+    function changeCategoryBusiness(value) {
+        if (value) {
+            var categoryBusinessId = parseInt(value);
+            var docfields = _.filter(allDocFields, function(item) {
+                return (item.CategoryBusinessId & categoryBusinessId) === categoryBusinessId;
+            });
+            $("#DocFieldId").html('<option value="">'+'@Localizer("Bkav.eGovCloud.Areas.Admin.Docfield.List")'+'</option>');
+            $.each(docfields, function(i, item) {
+                $("#DocFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+            });
+            $('#tblDoctypes tbody tr[data-categorybusiness!=' + categoryBusinessId + ']').hide();
+            $('#tblDoctypes tbody tr[data-categorybusiness=' + categoryBusinessId + ']').show();
+        } else {
+            $('#tblDoctypes tbody tr').show();
+            $("#DocFieldId").html('<option value="">'+'@Localizer("Bkav.eGovCloud.Areas.Admin.Docfield.List")'+'</option>');
+            $.each(allDocFields, function(i, item) {
+                $("#DocFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+            });
+        }
+    }
+</script>
+
+@Html.HiddenFor(model => model.AuthorizeId)
+@Html.HiddenFor(model => model.DocTypeId)
+
+<div id="tabChilds" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom: 20px;">
+        <li class="active"><a href="#authorizeTab" role="tab" data-toggle="tab">@Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Title")</a> </li>
+        <li><a href="#doctypeTab" role="tab" data-toggle="tab">@Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Doctype.Title")</a> </li>
+    </ul>
+
+    <div id="authorizeTab" class="tab">
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 20%">
+                    @Html.LabelRequireFor(model => model.AuthorizeUserId):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AuthorizeUserName)
+                    @Html.ValidationMessageFor(model => model.AuthorizeUserName)
+                    @Html.ValidationMessageFor(model => model.AuthorizeUserId)
+                    @Html.HiddenFor(model => model.AuthorizeUserId)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.AuthorizedUserId):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.AuthorizedUserName)
+                    @Html.ValidationMessageFor(model => model.AuthorizedUserName)
+                    @Html.ValidationMessageFor(model => model.AuthorizedUserId)
+                    @Html.HiddenFor(model => model.AuthorizedUserId)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.DateBegin):
+                </td>
+                <td>
+                    <input data-for="#DateBegin" type="text" name="chooseDateBegin" id="chooseDateBegin"
+                        style="width: 120px; display: inline" value="@Model.DateBegin.ToString("dd/MM/yyyy")" class="date" />
+                    <input data-for="#DateBegin" type="text" name="chooseTimeBegin" id="chooseTimeBegin"
+                         style="width: 100px; display: inline"  value="@Model.DateBegin.ToString("hh:mm:ss")" class="time" />
+                    @Html.Hidden("DateBegin", Model.DateBegin.ToString("dd/MM/yyyy hh:mm:ss"))
+                    @Html.ValidationMessageFor(model => model.DateBegin)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.DateEnd):
+                </td>
+                <td>
+                    <input data-for="#DateEnd" type="text" name="chooseDateEnd" id="chooseDateEnd"
+                        style="width: 120px; display: inline" value="@Model.DateEnd.ToString("dd/MM/yyyy")"class="date" />
+                    <input data-for="#DateEnd" type="text" name="chooseTimeEnd" id="chooseTimeEnd"
+                        style="width: 100px; display: inline" value="@Model.DateEnd.ToString("hh:mm:ss")"  class="time"/>
+                    @Html.Hidden("DateEnd", Model.DateEnd.ToString("dd/MM/yyyy hh:mm:ss"))
+                    @Html.ValidationMessageFor(model => model.DateEnd)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.Permission):
+                </td>
+                <td>
+                    @if (allPermission != null && allPermission.Any())
+                    {
+                        foreach (var permission in allPermission)
+                        {
+                            var permissionValue = Convert.ToInt32(permission.Value);
+                        <label>
+                            <input type="checkbox" name="Permissions" value="@permission.Value" 
+                              @((Model.AuthorizeId <= 0 && permission.Selected) || Model.PermissionTypesInEnum.HasFlag((PermissionTypes)permissionValue) ? "checked='checked'" : "")/>
+
+                            @permission.Text
+                        </label> @:&nbsp;&nbsp;
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.Permissions)
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Active)</td>
+                <td>
+                    @Html.CheckBoxFor(model => model.Active)
+                </td>
+            </tr>
+            @if (Model.AuthorizeId == 0)
+            {
+                <tr>
+                    <td>@Html.LabelFor(model => model.HasDeleteExist)</td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.HasDeleteExist)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Note):
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.Note)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="doctypeTab" style="display: none" class="tab">
+        <table>
+            <tr>
+                <td>
+                    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.CreateOrEdit.Fields.CategoryBusinessId.Label"):</span>
+                    @Html.DropDownList("CategoryBusinessId", ViewBag.CategoryBusinessId as List<SelectListItem>, Localizer("Bkav.eGovCloud.Areas.Admin.CategoryBusiness.Dropdownlist"))</td>
+                <td>
+                    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Fee.CreateOrEdit.Fields.DocFieldId.Label"):</span>
+                    <select id="DocFieldId" name="DocFieldId" style="width: 260px;">
+                        <option value="0">@Localizer("Bkav.eGovCloud.Areas.Admin.Docfield.List")</option>
+                    </select></td>
+            </tr>
+        </table>
+        <br />
+
+        <table id="tblDoctypes" class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="chbAll" />&nbsp;@Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.ChooseAll")</label>
+                    </td>
+                </tr>
+            </thead>
+            <tbody style="overflow: auto">
+            </tbody>
+        </table>
+    </div>
+</div>

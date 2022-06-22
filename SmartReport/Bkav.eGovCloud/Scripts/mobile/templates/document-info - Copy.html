@@ -1,0 +1,130 @@
+﻿
+<div class="document mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <span class="mdl-layout-title doctypeName">
+            </span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link btnFinish hidden" href="">Kết thúc</a>
+                <a class="mdl-navigation__link btnUndoTransfer hidden">Lấy lại</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mdl-layout__content document-content">
+        <div class="detail-content">
+            <div class="document-form">
+                <div class="document-info" data-id="">
+                    <div class="document-info-template">
+                        <div mbsc-form id="formEdit">
+                            <div class="mbsc-form-group-title">${Compendium}</div>
+                            <div class="mbsc-form-group" style="margin:0.5em auto">
+                                <label style="margin:0.5em auto">
+                                    Cơ quan báo cáo
+                                    <select name="City" id="chooseInOutPlace" data-label-style="stacked" data-input-style="box" value="${InOutPlace}"></select>
+                                </label>
+                            </div>
+                            <div class="mbsc-form-group" style="margin:0.5em auto">
+                                <label style="margin:0.5em auto">
+                                    Kỳ báo cáo
+                                    <select name="DatePublished" id="DatePublished" data-label-style="stacked" data-input-style="box" value="${DatePulished}"></select>
+                                </label>
+                            </div>
+                            <div class="mbsc-form-group-title">Nội dung báo cáo</div>
+                        </div>
+                    </div>
+                  
+                    <div class="document-attachment-mobile" style="display: none;">
+                        <div>
+                            <div id="wrapAttachment">
+                                <ul class="mdl-list attachment-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div id="divContentmobile" class="">
+                      
+
+                        <div mbsc-form id="formContentmbsc">
+                            <!--<div class="mbsc-form-group">
+                                <div class="mbsc-form-group-title">Hộ gia đình</div>
+                                <label for="tenchuho">
+                                    Tên chủ hộ
+                                    <input id="tenchuho" type="text" placeholder="Tên chủ hộ" value="Nguyễn Việt dũng" />
+                                </label>
+                                <label class="mbsc-switch-primary">
+                                    Là hộ nghèo
+                                    <input type="checkbox" data-role="switch" name="hongheo" checked>
+                                </label>
+                                <label class="mbsc-switch-secondary">
+                                    Sử dụng nước sạch
+                                    <input type="checkbox" data-role="switch" name="chatluongnuocsinhhoatdangsudung_nuocsach"  checked>
+                                </label>
+                                <label class="mbsc-switch-success">
+                                    Sử dụng nước hợp vệ sinh
+                                    <input type="checkbox" data-role="switch" name="chatluongnuocsinhhoatdangsudung_nuochopvesinh" checked>
+                                </label>
+                                <label class="mbsc-switch-danger">
+                                    Nguồn cấp nước nhỏ lẻ
+                                    <input type="checkbox" data-role="switch" name="nguoncapnuoc_congtrinhcnnl"  checked>
+                                </label>
+                                <label class="mbsc-switch-warning">
+                                    Nguồn cấp nước tập trung
+                                    <input type="checkbox" data-role="switch" name="nguoncapnuoc_congtrinhcnnl" checked>
+                                </label>
+                            </div>-->
+                        
+                        </div>
+                        <div mbsc-form>
+                            <div class="mbsc-form-group">
+                                <div class="mbsc-btn-group-block">
+                                    <button id="addItemForm">Thêm mới</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="wrapComments">
+                        <div id="commentList" class="comment-list"></div>
+                        <div class="viewAllComment hidden">
+                            <span>Xem các ý kiến khác</span>
+                        </div>
+                    </div>
+                    <div id="divContent" class="document-contents"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fix-position-chat">
+        <div class="document-transfer active" style="display: none">
+            <div class="">
+                <img class="avatar" src="{{html egov.setting.user.avatar}}" alt="avatar">
+                <span class="user-name">{{html egov.setting.user.fullName}}</span>
+                <a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">camera_alt</i>
+                    <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">attachment</i>
+                    <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}">
+                    <i class="material-icons">add</i>
+                </a>
+                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect" for="insertComment${DocumentCopyId}" id="commonCommentList"></ul>
+                <div class="user-comment">
+                    <textarea id="Comment" name="Comment" rows="1" cols="20" placeholder="Nhập ý kiến xử lý..."></textarea>
+                    <button id="btnTransfer${DocumentCopyId}" class="mdl-button mdl-js-button mdl-button--icon btnTransfer" href="#">
+                        <i class="material-icons" style="color: #008299">send</i>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect transferActions" for="btnTransfer${DocumentCopyId}"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@model EgovJobModel
+@{
+    ViewBag.Title = Localizer("Common.Button.Edit.Save");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(@Localizer("Common.Button.List"), "Index", null, new { @id = "index" })</li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    @using (Html.BeginForm())
+    {
+        <div id="tabs" class="bkavegov">
+            <script type="text/javascript">
+                $(function () {
+                    $('input.input-validation-error').first().focus();
+                    $("form").submit(function () {
+                        $(this).find('input.input-validation-error').first().focus();
+                    });
+                })
+            </script>
+            <style>
+                .form-control {
+                    width: 80%;
+                }
+            </style>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.LastRun)
+            @Html.HiddenFor(model => model.JobType)
+            @Html.HiddenFor(model => model.NextRun)
+            @Html.HiddenFor(model => model.LastModified)
+            <table>
+                <tr>
+                    <td class="col-md-2" style="padding-left: 0;">
+                        @Html.EgovLabelFor(model => model.Name):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.Interval):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Interval)
+                        @Html.ValidationMessageFor(model => model.Interval)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.IsActivated):
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsActivated)
+                        @Html.ValidationMessageFor(model => model.IsActivated)
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>

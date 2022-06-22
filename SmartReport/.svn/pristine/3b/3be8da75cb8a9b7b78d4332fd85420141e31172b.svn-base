@@ -1,0 +1,50 @@
+﻿@model ReportGroupModel
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#Name").focus();
+    });
+</script>
+
+@Html.HiddenFor(model => model.ReportGroupId)
+<table>
+    <tr>
+        <td style="width: 25%;">
+            @Html.LabelRequireFor(model => model.Name)</td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.FieldName) </td>
+        <td>
+            @Html.TextBoxFor(model => model.FieldName)
+            @Html.ValidationMessageFor(model => model.FieldName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.FieldDisplay)</td>
+        <td>
+            @Html.TextBoxFor(model => model.FieldDisplay)
+            @Html.ValidationMessageFor(model => model.FieldDisplay)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.Query) </td>
+        <td>
+            @Html.TextAreaFor(model => model.Query)
+            @Html.ValidationMessageFor(model => model.Query)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsReport) @Html.LabelFor(model => model.IsReport)
+        </td>
+    </tr>
+</table>

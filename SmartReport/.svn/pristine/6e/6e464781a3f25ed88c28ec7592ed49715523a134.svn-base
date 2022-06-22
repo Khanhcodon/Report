@@ -1,0 +1,354 @@
+﻿@model InCatalogValueModel
+@{
+    ViewBag.Title = "Quản lý chỉ tiêu";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border leftRightDis">
+                    <div class="leftdisaggregation">
+                        <h3 class="box-title">Quản lý chỉ tiêu đơn vị</h3>
+                    </div>
+                </div>
+                <div class="box-body row rightIncatalog">
+                    <div class="col-lg-5 col-sm-6 col-md-5"> 
+                        <div class="">
+                            <div class="m-portlet__head-caption">
+                                <h3>Chỉ tiêu đơn vị</h3>
+                            </div>
+                            <div class="m-portlet__head-tools" style="float: right;">
+                                
+                                <input type="search" id="indicatorTree_search" value="" align="left" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;width: 100%;margin-right: 4px;" placeholder="Tìm kiếm chỉ tiêu">
+                                <a class="popup-with-form btn btn-block btn-successs" id="tagFormInCatalogValue" href="#myFormIncatalogValue"  style="background-color:aquamarine;width: 80px;margin-right: 4px;">
+                                    <i class="fa fa-plus-square"></i> Thêm
+                                </a>
+                                <button type="button" id="DeleteIndicatroTree" class="btn btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+                            </div>                                   
+                        </div>
+                        <br />
+
+                        <!--form-->
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myFormIncatalogValue", @class = "mfp-hide white-popup-block myForm" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.AntiForgeryToken()
+
+                            <h1 style="text-align: center;">Thông tin chỉ tiêu</h1>
+                            <br />
+                            <div class="m-form m-form--fit m-form--label-align-right">
+                                <div class="m-portlet__body">
+                                    <div class="row m-row--no-padding m-row--col-separator-sm">
+                                        <div class="col-sm-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Mã chỉ tiêu</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <input type="text" class="form-control" id="txtCode_FIELD_IncataLogValue" name="InCatalogValueCode" placeholder="Mã chỉ tiêu">
+                                                    @Html.ValidationMessageFor(model => model.InCatalogValueCode)
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Tên chỉ tiêu</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <input type="text" class="form-control" id="txtNAME_FIELD_IncataLogValue" name="InCatalogValueName" placeholder="Tên chỉ tiêu">
+                                                    @Html.ValidationMessageFor(model => model.InCatalogValueName)
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Chỉ tiêu cha</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <select class="form-control  w-p100" id="ParentId" name="ParentId" data-width="100%">
+                                                        @if (ViewBag.ListParentCatalogValue != null)
+                                                        {
+                                                            foreach (var listCa in ViewBag.ListParentCatalogValue as IEnumerable<SelectListItem>)
+                                                            {
+                                                                <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    @Html.ValidationMessageFor(model => model.ParentId)
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Loại số liệu</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">     
+                                                    <select class="form-control  w-p100" id="TypeSelect" name="Type" data-width="100%">
+                                                        @if (ViewBag.ListDataType != null)
+                                                        {
+                                                            foreach (var listCa in ViewBag.ListDataType as IEnumerable<SelectListItem>)
+                                                            {
+                                                                <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    @Html.ValidationMessageFor(model => model.Type)
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Đơn vị tính</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <select class="form-control  w-p100" id="UnitSelect" name="Unit" data-width="100%">
+                                                        @if (ViewBag.ListUnits != null)
+                                                        {
+                                                            foreach (var listCa in ViewBag.ListUnits as IEnumerable<SelectListItem>)
+                                                            {
+                                                                <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    @Html.ValidationMessageFor(model => model.Unit)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Mô tả</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <input type="text" class="form-control" id="Description" name="Description" placeholder="Mô tả">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Kỳ công bố</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <select class="form-control  w-p100" id="" name="" data-width="100%"></select> @*PeriodTypeIds*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Danh mục phân tổ</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <select class="form-control  w-p100 js-example-basic-multiple" id="InCatalogIdReplace" name="InCatalogIdReplace" data-width="100%">
+                                                        @if (ViewBag.ListIncataLog != null)
+                                                        {
+                                                            foreach (var listCa in ViewBag.ListIncataLog as IEnumerable<SelectListItem>)
+                                                            {
+                                                                <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Sử dụng</label>
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="IsActivated_In" name="Active" value="true">
+                                                        <label class="form-check-label" for="IsActivated_In">Sử dụng</label>
+                                                    </div>
+                                                    <input type="checkbox"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-form-label col-sm-4 col-md-4 col-lg-4">Chỉ tiêu phụ thuộc</label> @*DisTypeIds*@
+                                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                                    <input type="text" class="form-control" id="" name="" placeholder="Mô tả">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row m-row--no-padding m-row--col-separator-sm">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-form-label col-sm-4">Giới hạn</label>
+                                                    <div class="col-sm-3">
+                                                        <input class="form-control" name="Threshold_min" id="Threshold_min"  type="text" placeholder="Nhỏ nhất"> @*Threshold_min*@
+                                                        @Html.ValidationMessageFor(model => model.Threshold_min)
+                                                    </div>
+                                                    <label class="col-form-label col-sm-2">Đến</label>
+                                                    <div class="col-sm-3">
+                                                        <input class="form-control" name="Threshold_max" id="Threshold_max" type="text" placeholder="Lớn nhất"> @*Threshold_max*@
+                                                        @Html.ValidationMessageFor(model => model.Threshold_max)
+                                                    </div>
+                                                </div>
+
+                                                <div id="formAggregation">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-form-label col-sm-4">Tổng hợp theo địa bàn/đơn vị</label>
+                                                        <div class="col-form-label col-sm-8">
+                                                            <label class="m-checkbox m-checkbox--state-success">
+                                                                <input type="checkbox" id="AllowAggregation" name="AllowAggregation" value="true"> @*AllowAggregation*@
+                                                                <label class="form-check-label" for="AllowAggregation">Cho phép tổng hợp theo địa bàn/đơn vị</label> 
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-form-label col-sm-4">Hàm tổng hợp</label>
+                                                        <div class="col-sm-8 col-md-8 col-lg-8">
+                                                            <select ui-v="" class="form-control" tabindex="-98" name="AggregationFormula" id="AggregationFormula" style="width: 100%">
+                                                                <option value="">[Không có]</option>
+                                                                <option value="SUM">Tổng: SUM(X)</option>
+                                                                <option value="PRODUCT">Tích: PRODUCT(X)</option>
+                                                                <option value="AVERAGE">Trung bình cộng: AVERAGE(X)</option>
+                                                                <option value="MEDIAN">Trung vị: MEDIAN(X)</option>
+                                                                <option value="MODE">Tần suất lớn nhất: MODE(X)</option>
+                                                                <option value="MIN">Số nhỏ nhất: MIN(X)</option>
+                                                                <option value="MAX">Số lớn nhất: MAX(X)</option>
+                                                                <option value="LARGE">Lớn thứ k: LARGE(X, k)</option>
+                                                                <option value="SMALL">Nhỏ thứ k: SMALL(X, k)</option>
+                                                                <option value="COUNT">Số lượng: COUNT(X)</option>
+                                                                <option value="STDEV">Độ lệch chuẩn: STDEV(X)</option>
+                                                                <option value="VAR">Phương sai: VAR(X)</option>
+                                                                <option value="PERCENTILE">Phân vị thứ k: PERCENTILE(X, k)</option>
+                                                                <option value="QUARTILE">Tứ phân vị k: QUARTILE(X, k)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-form-label col-sm-4">Số kỳ</label>
+                                                        <div class="col-sm-8">
+                                                            <input class="form-control m-input" type="text" value="1" min="1" max="12" id="NumberPeriodReplace" name="NumberPeriodReplace">
+                                                            <span class="m-form__help">
+                                                                Là số lượng các kỳ trước để lấy trung bình cộng số liệu dùng thay thế số liệu kỳ tổng hợp nếu kỳ đó ko có số liệu.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-form-label col-sm-4">Tổng hợp theo kỳ</label>
+                                                        <div class="col-form-label col-sm-8">
+                                                            <label class="m-checkbox m-checkbox--state-success">
+                                                                <input type="checkbox" name="AllowAggregationByPeriod" id="AllowAggregationByPeriod" value="true">
+                                                                <label class="form-check-label" for="AllowAggregationByPeriod">Cho phép tổng hợp theo kỳ</label>         
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btnAddsValue" id="btnAddIncatalogValue" style="padding-top: 10px; float:right">
+                                        <span class="-ap icon icon-plus3"></span> Lưu lại
+                                    </button>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(model => model.InCatalogValueId)
+                            @Html.HiddenFor(model => model.Level)
+                            @Html.HiddenFor(model => model.InCatalogIds)
+                            @Html.HiddenFor(model => model.InCatalogId)
+                        }
+                        <div class="m-portlet__bodyTree">
+                            <h3>Chọn danh mục chỉ tiêu</h3>
+                            <div class="selectOption">
+                                <select class="form-control  w-p100" id="IncataLogIdTree" name="IncataLogIdTree" data-width="100%">
+                                    @if (ViewBag.ListIncataLog != null)
+                                    {
+                                        foreach (var listCa in ViewBag.ListIncataLog as IEnumerable<SelectListItem>)
+                                        {
+                                            <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        <br />
+                        <div id="treeIncatalog">
+
+                        </div>
+                                    
+                    </div>
+                    <div class="col-lg-7 col-sm-6 col-md-5">
+                        <div>
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <span class="m-portlet__head-icon">
+                                            <i class="flaticon-information"></i>
+                                        </span>
+                                        <h3 class="m-portlet__head-text">
+                                            Thông tin chỉ tiêu
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__head-tools" style="padding-bottom: 35px;display: flex;flex-direction: row-reverse;">  
+                                    <button type="button" id="EditDivRight" class="btn btn-behance btn-danger"><i class="fa fa-times-circle"></i> Sửa</button>
+                                    @using (Html.BeginForm("ExportToExcel", "IndicatorTree", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormImportIndicatorTree" }))
+                                    {
+                                        @Html.Raw(ViewBag.Error)
+                                        <div style="height: 33px;padding-right: 3px;">
+                                            <label class="custom-file-upload">
+                                                <input type="file" name="excelfile" />
+                                                <i class="fa fa-cloud-upload"></i> Import Excel
+                                            </label>
+                                        </div>
+                                        <br />
+                                        <input type="submit" class="btn btn-brown" value="Lưu File" />
+                                    }
+                                    <a href="/Reports/TemplateIndicatorTree.xlsx" style="font-style: italic; color: #008ae6">
+                                        <span class="fa fa-download"></span> Download file mẫu
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="dettailRight" id="appendDiv">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<script type="text/x-jquery-tmpl" id="templaceDetailRight">
+    <h3 class="m--font-info h333">
+    <span style="font-weight: normal;"><b>${inCode}</b> ${inName}</span>
+    </h3>
+    <div class="m-demo">
+        <div class="m-demo__preview">
+            <div class="m-list-search">
+                <div class="m-list-search__results">
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Mã chỉ tiêu: <b>${inCode}</b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Tên chỉ tiêu: <b>${inName}</b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Đơn vị tính: <b>${UnitName}</b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Chỉ tiêu cha: <b>${ParentName}</b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Loại phân tổ thường dùng: <b></b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Các kỳ thường dùng: <b></b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Loại chỉ tiêu: <b>${TypeDes}</b></span>
+                    </a>
+                    <a href="javascript:;" class="m-list-search__result-item">
+                        <span class="m-list-search__result-item-icon"><i class="la la-long-arrow-right m--font-success"></i></span>
+                        <span class="m-list-search__result-item-text">Mô tả: <b>${DescriptionName}</b></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+ 
+<link href="~/Content/admin/IndicatorTree/style.css" rel="stylesheet" />
+<script src="~/Scripts/admin/indicatorTree/indicatorTree.js"></script>
+<script src="~/Scripts/admin/indicatorTree/btnClick.js"></script>
+<script type="text/javascript">
+    var checkErrorParent = "@ViewBag.ErrorParent";
+    if (checkErrorParent == "") { 
+    } else {
+        swal("Error!", "Chưa tạo mã chỉ tiêu: " + checkErrorParent, "success");
+    }
+</script>

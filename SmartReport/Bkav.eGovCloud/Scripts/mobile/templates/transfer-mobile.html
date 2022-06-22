@@ -1,0 +1,51 @@
+﻿<!--<div class="result-view" style="position: relative;">
+    <span class="result-label">Cơ quan Báo cáo:</span>
+    <div class="user-filter" style="display: inline-block;">
+        <div class="user-receiveds" style="float: left;">
+            <span class=""><input type="text" id="fromUser" value="Sở Giáo dục và Đào tạo" readonly /></span>
+            <span class="material-icons" style="float: right; position: absolute; right: 5px;">arrow_drop_down</span>
+        </div>
+    </div>
+</div>-->
+<div class="result-view" style="position: relative;">
+    <span class="result-label">Gửi Báo cáo tới:</span>
+    <div class="user-filter" style="display: inline-block;">
+        <div class="user-receiveds" style="float: left;">
+            <span class="searchUser"><input type="text" id="searchUser" /></span>
+        </div>
+
+        <!-- Colored FAB button with ripple -->
+        <button type="button" id="btn_transfer_extends" class="btn btn-default dropdown-toggle"
+                data-target="#user_transfer_extends" style="height: 25px; position: absolute; right: 16px;border: none;outline:none;">
+            <span class="material-icons">person_add</span>
+        </button>
+    </div>
+</div>
+<div class="user-xlc">
+</div>
+
+<ul style="max-height:200px; overflow-y: auto;" class="listUsers mdl-list"></ul>
+
+<div id="user_transfer_extends" style="display:none;">
+    <div class="box_donggui result-view">
+        <span class="result-label">Đồng gửi: </span>
+        <div class="user-filter" style="display: inline-block;">
+            <div class="user-dg" style="float:left;">
+                <span class="searchUsrDg"><input type="text" class="txt_filter_allUser" id="txt_searchdg" /></span>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default btn-clear-dg-tb" style="display:none;" data-target="searchUsrDg"><i class="material-icons" style="height:16px;width:16px;font-size: 16px;">&#xE14C;</i></button>
+
+    </div>
+    <div class="box_thongbao result-view">
+        <span class="result-label">Thông báo: </span>
+        <div class="user-filter" style="display: inline-block;">
+            <div class="user-tb" style="float:left;">
+                <span class="searchUsrTb"><input type="text" class="txt_filter_allUser" id="txt_searchtb" /></span>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default btn-clear-dg-tb" style="display:none;" data-target="searchUsrTb"><i class="material-icons" style="height:16px;width:16px;font-size: 16px;">&#xE14C;</i></button>
+
+    </div>
+
+</div>

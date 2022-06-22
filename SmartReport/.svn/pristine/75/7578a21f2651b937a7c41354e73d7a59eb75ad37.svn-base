@@ -1,0 +1,37 @@
+﻿@model ScopeAreaModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ScopeArea.Create");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js"></script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-lock3"></i>
+        <span data-res="egov.resources.sitemap.scopearea"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/scopearea/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        <div class="bkavegov">
+            @Html.Partial("_Notifications")
+            @Html.Partial("_CreateOrEdit", Model)
+        </div>
+    </div>
+}

@@ -1,0 +1,23 @@
+﻿@using Bkav.EReport.HtmlExtension
+@{
+    var template = ViewBag.Template as string;
+    var reportData = ViewBag.ReportData as Bkav.EReport.Entity.ReportData;
+    var group = ViewBag.Group as string;
+}
+
+<style>
+    .warring {
+        padding: 5px;
+        margin: 10px;
+        color: red;
+    }
+</style>
+
+<div class="report">
+    @Html.Hidden("ReportId")
+
+    @if (reportData != null && !string.IsNullOrWhiteSpace(template))
+    {
+        @Html.EReport(template, reportData, group);
+    }
+</div>

@@ -1,0 +1,71 @@
+﻿<!--<div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList">
+    <i class="material-icons">arrow_back</i>
+</div>-->
+<div class="mdl-layout-spacer"></div>
+{{if isShowReplyAll }}
+<button id="ReplyMore" class="btnReplyMore mdl-button mdl-js-button mdl-button--icon pull-right">
+    <i class="material-icons">reply_all</i>
+</button>
+{{/if}}
+{{if isShowReply }}
+<button id="ReplyBT" class="btnReply mdl-button mdl-js-button mdl-button--icon pull-right">
+    <i class="material-icons">reply</i>
+</button>
+{{/if}}
+{{if isShowForward }}
+<button class="mdl-button mdl-js-button mdl-button--icon pull-right" id="btnforward">
+    <i class="material-icons">forward</i>
+</button>
+{{/if}}
+
+
+{{if isShowEdit }}
+<button class="mdl-button mdl-js-button mdl-button--icon hidden pull-right" id="btnedit">
+    <i class="material-icons">mode_edit</i>
+</button>
+{{/if}}
+<li class="mdl-button mdl-js-button mdl-button--icon pull-right" id="btndelete">
+    <i class="material-icons">delete</i>
+</li>
+{{if isShowDeletePer }}
+<button class="mdl-button mdl-js-button mdl-button--icon pull-right" id="btndeleteper">
+    <i class="material-icons">delete_forever</i>
+</button>
+{{/if}}
+
+<button id="btnMailOption_${mailId}" class="mdl-button mdl-js-button mdl-button--icon hidden pull-right">
+    <i class="material-icons">more_vert</i>
+</button>
+
+<!--<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect moreOptions" for="btnMailOption_${mailId}">
+    {{if isShowForward }}
+    <li class="mdl-menu__item" id="btnforward">
+        <a href="#" data-res="bmail.resources.toolbar.forward">Chuyển tiếp</a>
+    </li>
+    {{/if}}
+    {{if isShowSpam }}
+    <li class="mdl-menu__item" id="btnspam">
+        <a href="#" data-res="bmail.resources.toolbar.spam">Đánh dấu là Spam</a>
+    </li>
+    {{/if}}
+    {{if isShowUnSpam }}
+    <li class="mdl-menu__item" id="btnunspam">
+        <a href="#" data-res="bmail.resources.toolbar.unspam">Bỏ đánh dấu là Spam</a>
+    </li>
+    {{/if}}
+    {{if isShowUnread }}
+    <li class="mdl-menu__item" id="btnunread">
+        <a href="#" data-res="bmail.resources.toolbar.unread">Đánh dấu là chưa đọc</a>
+    </li>
+    {{/if}}
+    {{if isShowDelete }}
+    <li class="mdl-menu__item" id="btndelete">
+        <a data-res="bmail.resources.toolbar.delete"></a>
+    </li>
+    {{/if}}
+    {{if isShowRestore }}
+    <li class="mdl-menu__item" id="btnrestore">
+        <a href="#" data-res="bmail.resources.toolbar.restore">Khôi phục mail đã xóa</a>
+    </li>
+    {{/if}}
+</ul>-->

@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="overview-title">
+    Danh sách văn bản, hồ sơ liên thông- <span class="lienthong-total total"></span>
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tải về <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="lienthong">
+            <li><a href="#" id="btnExportWord">Ms Word</a></li>
+            <li><a href="#" id="btnExportPdf">Pdf</a></li>
+            <li><a href="#" id="btnExportExcel">Excel</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered table-hover document-overdue" id="docLienThong">
+        <colgroup>
+            <col style="width: 150px" />
+            <col />
+            <col style="width: 300px" />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 150px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Số ký hiệu</th>
+                <th>Trích yếu</th>
+                <th>Địa chỉ nhận</th>
+                <th>Ngày gửi</th>
+                <th>Ngày phản hồi</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script type="text/x-jquery-tmpl" id="lienThongTemp">
+    <tr>
+        <td class="text-center" rowspan="${Children.length + 1}">${DocCode}</td>
+        <td rowspan="${Children.length + 1}">{{html unescape(Compendium)}}</td>
+        <td class="text-left">${Address}</td>
+        <td class="text-center">${DatePublished}</td>
+        <td class="text-center">${DateResponsed}</td>
+        <td class="text-left">${Note}</td>
+    </tr>
+    {{each Children}}
+        <tr>
+            <td class="text-left">${Address}</td>
+            <td class="text-center">${DatePublished}</td>
+            <td class="text-center">${DateResponsed}</td>
+            <td class="text-left">${Note}</td>
+        </tr>
+    {{/each}}
+</script>

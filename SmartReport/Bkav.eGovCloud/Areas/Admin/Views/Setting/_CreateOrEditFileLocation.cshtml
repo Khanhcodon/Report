@@ -1,0 +1,38 @@
+﻿@model FileLocationModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.FileLocationId)
+@Html.AntiForgeryToken()
+<script>
+    $(function () {
+        $("#FileLocationAddress").focus();
+    });
+</script>
+<table class="form">
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.FileLocationAddress):
+        </td>
+        <td>
+            @Html.EditorFor(model => model.FileLocationAddress)
+          <div style="display:block"> @Html.ValidationMessageFor(model => model.FileLocationAddress)</div> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelHintFor(model => model.FileLocationType):
+        </td>
+        <td>
+            @Html.EditorFor(model => model.FileLocationType)
+            @Html.ValidationMessageFor(model => model.FileLocationType)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelHintFor(model => model.IsActivated):
+        </td>
+        <td>
+            @Html.EditorFor(model => model.IsActivated)
+            @Html.ValidationMessageFor(model => model.IsActivated)
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,21 @@
+﻿<li class="list-group-item">
+    <div class="row">
+        <div class="col-xs-16 col-sm-16 bold highlight-color comment-user">
+            <!--<label class="bold highlight-color comment-user">
+                ${UserSend.fullname}</label>-->
+            ${UserSend.fullname}
+        </div>
+        <div class="col-xs-16 col-sm-16" style="margin-left: 15px;">
+            <div>
+                <span>{{if CommentId === 0}}
+                    <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                    {{else Content.Content == ''}}
+                    ...
+                    {{else}}
+                    <span class="ellipsis xtest">${Content.Content}</span>
+                    {{/if}}
+                </span>
+            </div>
+        </div>
+    </div>
+</li>

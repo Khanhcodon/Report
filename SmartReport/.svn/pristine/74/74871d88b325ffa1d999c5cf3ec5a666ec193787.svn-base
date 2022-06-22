@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Send">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWarning">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="accounts" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="groups" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="attachSMSId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWarningResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWarningResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithServiceType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="serviceType" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithServiceTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWithServiceTypeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriority">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriorityResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWithPriorityResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriorityByType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="serviceTypeId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriorityByTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWithPriorityByTypeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriorityByTypeBNI">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="serviceTypeId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="attachSMSId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWithPriorityByTypeBNIResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWithPriorityByTypeBNIResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSchedule">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="account" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="timeSend" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendScheduleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendScheduleResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendReturnID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tonumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendReturnIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendReturnIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResult">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sms_id" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResultResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetResultResult" type="tns:Result" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Result">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="isSent" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="retryNumber" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="StaticsSpecialSim">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="startTime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="endTime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="serviceTypeId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StaticsSpecialSimResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StaticsSpecialSimResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="Result" nillable="true" type="tns:Result" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SendSoapIn">
+    <wsdl:part name="parameters" element="tns:Send" />
+  </wsdl:message>
+  <wsdl:message name="SendSoapOut">
+    <wsdl:part name="parameters" element="tns:SendResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWarningSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWarning" />
+  </wsdl:message>
+  <wsdl:message name="SendWarningSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWarningResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWithServiceTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWithServiceType" />
+  </wsdl:message>
+  <wsdl:message name="SendWithServiceTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWithServiceTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPrioritySoapIn">
+    <wsdl:part name="parameters" element="tns:SendWithPriority" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPrioritySoapOut">
+    <wsdl:part name="parameters" element="tns:SendWithPriorityResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWithPriorityByType" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWithPriorityByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeBNISoapIn">
+    <wsdl:part name="parameters" element="tns:SendWithPriorityByTypeBNI" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeBNISoapOut">
+    <wsdl:part name="parameters" element="tns:SendWithPriorityByTypeBNIResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendScheduleSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSchedule" />
+  </wsdl:message>
+  <wsdl:message name="SendScheduleSoapOut">
+    <wsdl:part name="parameters" element="tns:SendScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendReturnIDSoapIn">
+    <wsdl:part name="parameters" element="tns:SendReturnID" />
+  </wsdl:message>
+  <wsdl:message name="SendReturnIDSoapOut">
+    <wsdl:part name="parameters" element="tns:SendReturnIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetResultSoapIn">
+    <wsdl:part name="parameters" element="tns:GetResult" />
+  </wsdl:message>
+  <wsdl:message name="GetResultSoapOut">
+    <wsdl:part name="parameters" element="tns:GetResultResponse" />
+  </wsdl:message>
+  <wsdl:message name="StaticsSpecialSimSoapIn">
+    <wsdl:part name="parameters" element="tns:StaticsSpecialSim" />
+  </wsdl:message>
+  <wsdl:message name="StaticsSpecialSimSoapOut">
+    <wsdl:part name="parameters" element="tns:StaticsSpecialSimResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendHttpGetIn">
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWarningHttpGetIn">
+    <wsdl:part name="content" type="s:string" />
+    <wsdl:part name="accounts" type="s:string" />
+    <wsdl:part name="groups" type="s:string" />
+    <wsdl:part name="attachSMSId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWarningHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithServiceTypeHttpGetIn">
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="serviceType" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithServiceTypeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityHttpGetIn">
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeHttpGetIn">
+    <wsdl:part name="serviceTypeId" type="s:string" />
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeBNIHttpGetIn">
+    <wsdl:part name="serviceTypeId" type="s:string" />
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="attachSMSId" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWithPriorityByTypeBNIHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendScheduleHttpGetIn">
+    <wsdl:part name="content" type="s:string" />
+    <wsdl:part name="account" type="s:string" />
+    <wsdl:part name="timeSend" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendScheduleHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendReturnIDHttpGetIn">
+    <wsdl:part name="Content" type="s:string" />
+    <wsdl:part name="tonumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendReturnIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultHttpGetIn">
+    <wsdl:part name="sms_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultHttpGetOut">
+    <wsdl:part name="Body" element="tns:Result" />
+  </wsdl:message>
+  <wsdl:message name="StaticsSpecialSimHttpGetIn">
+    <wsdl:part name="startTime" type="s:string" />
+    <wsdl:part name="endTime" type="s:string" />
+    <wsdl:part name="serviceTypeId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="StaticsSpecialSimHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="SMSServiceSoap">
+    <wsdl:operation name="Send">
+      <wsdl:input message="tns:SendSoapIn" />
+      <wsdl:output message="tns:SendSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWarning">
+      <wsdl:input message="tns:SendWarningSoapIn" />
+      <wsdl:output message="tns:SendWarningSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithServiceType">
+      <wsdl:input message="tns:SendWithServiceTypeSoapIn" />
+      <wsdl:output message="tns:SendWithServiceTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriority">
+      <wsdl:input message="tns:SendWithPrioritySoapIn" />
+      <wsdl:output message="tns:SendWithPrioritySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByType">
+      <wsdl:input message="tns:SendWithPriorityByTypeSoapIn" />
+      <wsdl:output message="tns:SendWithPriorityByTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByTypeBNI">
+      <wsdl:input message="tns:SendWithPriorityByTypeBNISoapIn" />
+      <wsdl:output message="tns:SendWithPriorityByTypeBNISoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSchedule">
+      <wsdl:input message="tns:SendScheduleSoapIn" />
+      <wsdl:output message="tns:SendScheduleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendReturnID">
+      <wsdl:input message="tns:SendReturnIDSoapIn" />
+      <wsdl:output message="tns:SendReturnIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <wsdl:input message="tns:GetResultSoapIn" />
+      <wsdl:output message="tns:GetResultSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="StaticsSpecialSim">
+      <wsdl:input message="tns:StaticsSpecialSimSoapIn" />
+      <wsdl:output message="tns:StaticsSpecialSimSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SMSServiceHttpGet">
+    <wsdl:operation name="Send">
+      <wsdl:input message="tns:SendHttpGetIn" />
+      <wsdl:output message="tns:SendHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWarning">
+      <wsdl:input message="tns:SendWarningHttpGetIn" />
+      <wsdl:output message="tns:SendWarningHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithServiceType">
+      <wsdl:input message="tns:SendWithServiceTypeHttpGetIn" />
+      <wsdl:output message="tns:SendWithServiceTypeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriority">
+      <wsdl:input message="tns:SendWithPriorityHttpGetIn" />
+      <wsdl:output message="tns:SendWithPriorityHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByType">
+      <wsdl:input message="tns:SendWithPriorityByTypeHttpGetIn" />
+      <wsdl:output message="tns:SendWithPriorityByTypeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByTypeBNI">
+      <wsdl:input message="tns:SendWithPriorityByTypeBNIHttpGetIn" />
+      <wsdl:output message="tns:SendWithPriorityByTypeBNIHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSchedule">
+      <wsdl:input message="tns:SendScheduleHttpGetIn" />
+      <wsdl:output message="tns:SendScheduleHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendReturnID">
+      <wsdl:input message="tns:SendReturnIDHttpGetIn" />
+      <wsdl:output message="tns:SendReturnIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <wsdl:input message="tns:GetResultHttpGetIn" />
+      <wsdl:output message="tns:GetResultHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="StaticsSpecialSim">
+      <wsdl:input message="tns:StaticsSpecialSimHttpGetIn" />
+      <wsdl:output message="tns:StaticsSpecialSimHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SMSServiceSoap" type="tns:SMSServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Send">
+      <soap:operation soapAction="http://tempuri.org/Send" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWarning">
+      <soap:operation soapAction="http://tempuri.org/SendWarning" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithServiceType">
+      <soap:operation soapAction="http://tempuri.org/SendWithServiceType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriority">
+      <soap:operation soapAction="http://tempuri.org/SendWithPriority" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByType">
+      <soap:operation soapAction="http://tempuri.org/SendWithPriorityByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByTypeBNI">
+      <soap:operation soapAction="http://tempuri.org/SendWithPriorityByTypeBNI" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSchedule">
+      <soap:operation soapAction="http://tempuri.org/SendSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendReturnID">
+      <soap:operation soapAction="http://tempuri.org/SendReturnID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <soap:operation soapAction="http://tempuri.org/GetResult" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StaticsSpecialSim">
+      <soap:operation soapAction="http://tempuri.org/StaticsSpecialSim" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SMSServiceSoap12" type="tns:SMSServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Send">
+      <soap12:operation soapAction="http://tempuri.org/Send" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWarning">
+      <soap12:operation soapAction="http://tempuri.org/SendWarning" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithServiceType">
+      <soap12:operation soapAction="http://tempuri.org/SendWithServiceType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriority">
+      <soap12:operation soapAction="http://tempuri.org/SendWithPriority" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByType">
+      <soap12:operation soapAction="http://tempuri.org/SendWithPriorityByType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByTypeBNI">
+      <soap12:operation soapAction="http://tempuri.org/SendWithPriorityByTypeBNI" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSchedule">
+      <soap12:operation soapAction="http://tempuri.org/SendSchedule" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendReturnID">
+      <soap12:operation soapAction="http://tempuri.org/SendReturnID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <soap12:operation soapAction="http://tempuri.org/GetResult" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StaticsSpecialSim">
+      <soap12:operation soapAction="http://tempuri.org/StaticsSpecialSim" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SMSServiceHttpGet" type="tns:SMSServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="Send">
+      <http:operation location="/Send" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWarning">
+      <http:operation location="/SendWarning" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithServiceType">
+      <http:operation location="/SendWithServiceType" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriority">
+      <http:operation location="/SendWithPriority" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByType">
+      <http:operation location="/SendWithPriorityByType" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWithPriorityByTypeBNI">
+      <http:operation location="/SendWithPriorityByTypeBNI" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSchedule">
+      <http:operation location="/SendSchedule" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendReturnID">
+      <http:operation location="/SendReturnID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <http:operation location="/GetResult" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StaticsSpecialSim">
+      <http:operation location="/StaticsSpecialSim" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SMSService">
+    <wsdl:port name="SMSServiceSoap" binding="tns:SMSServiceSoap">
+      <soap:address location="http://bsg.bkav.com:8113/SMSService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SMSServiceSoap12" binding="tns:SMSServiceSoap12">
+      <soap12:address location="http://bsg.bkav.com:8113/SMSService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SMSServiceHttpGet" binding="tns:SMSServiceHttpGet">
+      <http:address location="http://bsg.bkav.com:8113/SMSService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

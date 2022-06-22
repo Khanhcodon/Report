@@ -1,0 +1,807 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Xem trước tệp đính kèm</title>
+
+    <link href="../../Content/bkav.egov/egovmain.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bkav.egov/mvendor.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.fileDownload.min.js"></script>
+    @*<!-- Bootstrap 4.1.3-->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap 4.1.3-->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- jQuery 3 -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>*@
+   
+    <style type="text/css">
+        body, html {
+            /*background: rgba(0, 0, 0, 0.55);*/
+        }
+        .backGr{
+            background: rgba(0, 0, 0, 0.55);
+        }
+        .preview {
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-content {
+            z-index: 11;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+            .preview-content::-webkit-scrollbar-thumb {
+                background: #ede2e2;
+            }
+
+        .preview-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to bottom,rgba(0,0,0,0.65) 0,transparent 100%);
+            padding: 10px 0;
+            color: white;
+            z-index: 11;
+            font-size: 17px;
+            line-height: 17px;
+        }
+
+            .preview-header .btn-default {
+                background: transparent;
+                color: white;
+                border: none;
+            }
+
+                .preview-header .btn-default:hover {
+                    background-color: #9e9b9b;
+                }
+
+        .content {
+            text-align: center;
+            margin-top: 65px;
+        }
+
+            .content .page {
+                margin-bottom: 10px;
+                -webkit-transition-property: left,top,width,height;
+                -moz-transition-property: left,top,width,height;
+                -o-transition-property: left,top,width,height;
+                transition-property: left,top,width,height;
+                -webkit-transition-duration: .218s;
+                -moz-transition-duration: .218s;
+                -o-transition-duration: .218s;
+                transition-duration: .218s;
+                -webkit-transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+                -moz-transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+                -o-transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+                transition-timing-function: cubic-bezier(0.0,0.0,0.2,1);
+            }
+
+            .content.pdf > .page {
+                min-height: 1200px;
+            }
+
+            .content img {
+                width: 80%;
+                max-width: 100%;
+            }
+
+            .content.zoom img {
+                width: 88%;
+            }
+
+            .content.zoom2 img {
+                width: 95%;
+            }
+
+        .btn-previous, .btn-next {
+            position: absolute;
+            top: 50%;
+            margin-top: -15px;
+            width: 50px;
+            z-index: 11;
+            outline: none !important;
+        }
+
+            .btn-previous .btn, .btn-next .btn {
+                border-radius: 50%;
+                width: 45px;
+                height: 45px;
+            }
+
+        .btn-previous {
+            left: 0;
+        }
+
+        .btn-next {
+            right: 15px;
+        }
+
+        .preview .btn-primary {
+            background: rgba(0,0,0,0.75);
+            border: none;
+            outline: none !important;
+        }
+
+            .preview .btn-primary:hover {
+                background-color: #244ffb;
+                border-color: #0435f7;
+            }
+
+        .preview-footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 11;
+            font-size: 15px;
+        }
+
+        .preview .preview-footer .btn-primary:hover {
+            background: rgba(0,0,0,0.75);
+            border: none;
+        }
+
+        div#zooming .btn {
+            font-size: 14px;
+            padding: 0 5px;
+            height: 11px;
+            line-height: 9px;
+        }
+
+        #currentFileName {
+            display: inline-block;
+            width: 450px;
+            white-space: nowrap;
+            text-align: right;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+        }
+
+        #openDesktop {
+            position: absolute;
+            z-index: 12;
+            top: 50%;
+            left: 50%;
+            margin-top: -15px;
+            margin-left: -56px;
+            font-size: 14px;
+        }
+
+        .qtip-dark {
+            background: rgba(0,0,0,0.75);
+            border-color: #000;
+            color: white;
+        }
+
+        .loading {
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            height: 55px;
+        }
+
+        .preview-header, .preview-footer, .btn-next, .btn-previous {
+            opacity: 1;
+            -moz-transition: opacity 2s;
+            -o-transition: opacity 2s;
+            -webkit-transition: opacity 2s;
+            transition: opacity 2s;
+        }
+
+        .hidding {
+            opacity: 0;
+        }
+
+        .loadError {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -240px;
+            margin-top: -50px;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @@media (max-width : 767px) {
+            body, html {
+                background: rgba(0, 0, 0, 0.45);
+                min-width: initial;
+            }
+
+            .content .page {
+                width: 100%;
+            }
+
+            .qtip {
+                display: none !important;
+            }
+
+            .content img {
+                width: 100%;
+            }
+        }
+        .table td, .table th {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .htBold{
+        font-weight: bold !important;
+    }
+
+    .htCenter{
+        text-align: center !important;
+        vertical-align: middle !important;
+        color: #2d2929;
+    }
+    .htMiddle {
+        vertical-align: middle !important;
+        color: #2d2929;
+    }
+    .htRight{
+        text-align: right !important;
+    }
+    .htLeft{
+        text-align: left !important;
+    }
+    .textRight{
+        text-align: right !important;
+    }
+    .firstVisibleColumn{
+        border-left: 1px solid #ccc !important;
+    }
+    .htDimmed {
+        color: #777 !important;
+    }
+    .border-bottom{
+        border-bottom: 2px solid black !important;
+    }
+     .border-top{
+         border-top: 2px solid black !important;
+     }
+    .border-left{
+        border-left: 2px solid black !important;
+    }
+     .border-right{
+         border-right: 2px solid black !important;
+     }
+     .border-all{
+         border: 1px solid black !important;
+     }
+     #divExcelToHTML{
+         overflow: scroll;
+         height: 800px;
+     }
+     .text-alignRight{
+         text-align: right !important;
+     }
+     .checkHight{
+         height: 5%;
+     }
+    </style>
+
+    <script type="text/javascript">
+        var attachmentPreview = {
+            attachments: @Html.Raw(ViewBag.Attachments),
+            documentId: '@ViewBag.DocumentId',
+            currentId: '@ViewBag.CurrentFileId',
+            documentId: '@ViewBag.DocumentId',
+            currentIndex: 0,
+            totalAttachments: 0,
+            totalPreview: 0,
+            scrollItems: [],
+            fromTop: Math.max(document.documentElement.clientHeight, window.innerHeight || 0) / 2
+        };
+
+        document.domain = "@ViewBag.ParentDomain";
+
+        $(function(){
+            var attachment,
+                currentId = attachmentPreview.currentId,
+                attachments = attachmentPreview.attachments;
+
+            attachmentPreview.totalAttachments = attachments.length;
+
+            if(currentId == '' || currentId == undefined){
+                attachment = _.first(attachments);
+            }else{
+                attachment = getAttachment(currentId);
+            }
+
+            attachmentPreview.currentIndex = attachment == null? 0 : attachments.indexOf(attachment);
+            showAttachment(attachment);
+
+            $("#previous").click(function(){
+                if(attachmentPreview.currentIndex === 0){
+                    return;
+                }
+
+                attachmentPreview.currentIndex--;
+                attachment = attachments[attachmentPreview.currentIndex];
+                showAttachment(attachment);
+            });
+
+            $("#next").click(function(){
+                if(attachmentPreview.currentIndex === attachmentPreview.totalAttachments - 1){
+                    return;
+                }
+
+                attachmentPreview.currentIndex++;
+                attachment = attachments[attachmentPreview.currentIndex];
+                showAttachment(attachment);
+            });
+
+            $("#zoomIn").click(function(){
+                if($(".content").is(".zoom2")){
+                    $(".content").removeClass("zoom2");
+                }else{
+                    $(".content").removeClass("zoom");
+                }
+            });
+
+            $("#zoomOut").click(function(){
+                if($(".content").is(".zoom")){
+                    $(".content").addClass("zoom2");
+                }else{
+                    $(".content").addClass("zoom");
+                }
+            });
+
+            $(".btnDownload").click(function(){
+                download(attachmentPreview.currentId);
+            });
+
+            $("#print").click(function(){
+                print(attachmentPreview.currentId);
+            });
+
+            $("#closePreview").click(function(){
+                close();
+            });
+
+            $("#closeFile").click(function(){
+                closeSmalFile();
+            });
+
+            $("#openDesktop").click(function(){
+                if(window.top != undefined && _.isFunction(window.top.openFileInDesktop)){
+                    window.top.openFileInDesktop(attachmentPreview.currentId);
+                }
+            });
+
+            $(document).keydown(function(e){
+                var keyCode = e.keyCode | e.which;
+                switch(keyCode){
+                    case 37:  // left
+                        debugger
+                        $("#previous").click();
+                        break;
+                    case 39: // right
+                        $("#next").click();
+                        break;
+                    case 38: // Up
+                        previousPage();
+                        e.preventDefault();
+                        break;
+                    case 40: // Down
+                        nextPage();
+                        e.preventDefault();
+                        break;
+                    case 27: // Escape
+                        $("#closePreview").click();
+                        break;
+                    default: break;
+                }
+            });
+
+            $(document).mousemove(function(e){
+                $(".preview-header, .preview-footer, .btn-next, .btn-previous").removeClass("hidding");
+            });
+
+            showTooltip();
+
+            var hiddingInterval = setInterval(function(){
+                $(".preview-header, .preview-footer, .btn-next, .btn-previous").addClass("hidding");
+            }, 6 * 1000);
+
+            //renderApiToGlobal();
+        });
+
+        function showAttachment(attachment){  
+            var totalAttachments = attachmentPreview.totalAttachments;
+            var currentIndex = attachmentPreview.currentIndex;
+
+            $("#fileViewer > .page").remove();
+            $("#fileViewer").scrollTop(0);
+            $(".loadError").hide();
+
+            if(attachment == undefined){
+                return;
+            }
+
+            var name = attachment.AttachmentName;
+            changeHeader(attachment.AttachmentName);
+            changePreviousNext();
+
+            if(attachment.IsSuccess == false){
+                showError(attachment);
+                return;
+            }
+
+            var previewFiles = attachment.PreviewFiles;
+
+            if(attachment.IsPdfFile){
+                $("#fileViewer").addClass("isPdf");
+            }else{
+                $("#fileViewer").removeClass("isPdf");
+            }
+
+            attachmentPreview.currentId = attachment.AttachmentId;
+            attachment.loading = false;
+            if(!previewFiles){
+                lazyLoad(attachment);
+                return;
+            }
+
+            attachmentPreview.totalPreview = previewFiles.length;
+
+            changeFooter(1, attachment.TotalPages);
+
+            showImages(previewFiles, attachment, 1);
+
+            if(attachment.currentPage){
+                document.location.href = "#" + attachment.currentPage;
+            }else{
+                attachment.currentPage = "1"; // trang đầu
+            }
+        }
+
+        function showError(attachment){
+            if(attachment.IsSuccess == true){
+                return;
+            }
+
+            $(".loadError").show();
+        }
+
+        function showTooltip(){
+            $(".btn").qtip({
+                position: {
+                    my: 'top center',
+                    at: 'bottom center'
+                },style: {
+                    classes: 'qtip-dark',
+                    tip: false
+                },
+                adjust: {y: 10}
+            });
+            $(".preview-footer .btn").qtip({
+                position: {
+                    my: 'bottom center',
+                    at: 'top center'
+                },style: {
+                    classes: 'qtip-dark',
+                    tip: false
+                },
+                adjust: {y: 10}
+            });
+        }
+
+        function detechScoll(attachment){
+            $(".preview-content").off("scroll");
+            $(".preview-content").scroll(function(){
+                var cur = attachmentPreview.scrollItems.map(function(){
+                    if ($(this).offset().top < attachmentPreview.fromTop)
+                        return this;
+                });
+
+                cur = cur[cur.length-1];
+
+                var page = parseInt($(cur).attr("page"));
+                attachment.currentPage = page;
+
+                changeFooter(page, attachment.TotalPages);
+
+                if(page === attachmentPreview.totalPreview && page < attachment.TotalPages && attachment.IsSuccess == true){
+                    lazyLoad(attachment);
+                }
+            });
+        }
+
+        function lazyLoad(attachment){
+            if(attachment.loading){
+                return;
+            }
+
+            var $loading = $(".preview-content .loading");
+
+            attachment.PreviewFiles = attachment.PreviewFiles || [];
+
+            var data = {
+                documentId: attachmentPreview.documentId,
+                attachmentId: attachmentPreview.currentId,
+                fromPage:attachment.PreviewFiles.length + 1,
+                fileName: attachment.AttachmentName
+            };
+
+            $.ajax({
+                url: "/AttachmentPreview/GetPages",
+                data: data,
+                beforeSend: function(){
+                    attachment.loading = true;
+                    $loading.show();
+                },
+                success: function(result){
+                    //show html
+                    if(result.checkTypeFile == ".xls" || result.checkTypeFile == ".xlsx"){
+                        $('.preview').addClass("checkHight");
+                        $('#divExcelToHTML').html(result.HtmlOutput);
+                    }else{
+                        //$('.bodyFile').addClass("backGr");
+                    }
+                    
+                    var attachmentId = result.AttachmentId;
+                    var loadingAttachment = getAttachment(attachmentId);
+                    loadingAttachment.IsSuccess = result.IsSuccess;
+                    if(loadingAttachment.IsSuccess == false){
+                        showError(loadingAttachment);
+                        return;
+                    }
+                    //newPreviewFiles = result.Files;
+                    listFilesBase64 = result.Base64OutputString;
+                    loadingAttachment.TotalPages = result.Total;
+                    loadingAttachment.PdfFile = result.PdfOutput;
+                    loadingAttachment.PreviewFiles = _.union(loadingAttachment.PreviewFiles, listFilesBase64);
+
+                    if(attachmentId === attachmentPreview.currentId){
+                        changeFooter(data.fromPage, attachment.TotalPages);
+                        //showImages(newPreviewFiles, attachment, data.fromPage);
+                        showImages(listFilesBase64,attachment,data.fromPage);
+                    }
+                },
+                complete: function(){
+                    attachment.loading = false;
+                    $loading.hide();
+                }
+            });
+        }
+
+        function download(attachmentId){
+            var downloadLink = '/Attachment/DownloadAttachment?id=' + attachmentId;
+            var link = downloadLink,
+                html,
+                json;
+
+            $.fileDownload(link, {
+                successCallback: function () {
+                },
+                failCallback: function (response) {
+                }
+            });
+        }
+
+        function print(attachmentId){
+            var attachment = getAttachment(attachmentId);
+
+            if(attachment == undefined || attachment.PdfFile == undefined || attachment.PdfFile === ""){
+                return;
+            }
+
+            var pdfFile = attachment.PdfFile;
+            var openFile = window.open("/AttachmentPreview/print?file=" + pdfFile + "&print=true", "_blank");
+        }
+
+        function close(){
+            var documentId = attachmentPreview.documentId;
+            if(window.top && typeof window.top.closeFilePreviewDialog === "function"){
+                var deleteTempFrame = $("<iframe>").attr("src", "/AttachmentPreview/DeleteTemp?documentId=" + documentId).css("display", "none");
+                deleteTempFrame.load(function(){
+                    deleteTempFrame.remove();
+                });
+                $("body", window.top.document).append(deleteTempFrame);
+
+                window.top.closeFilePreviewDialog(documentId);
+            }
+        }
+
+        function closeSmalFile(){
+            
+        }
+
+        function previousPage(){
+            return gotoPage(false);
+        }
+
+        function nextPage(){
+            return gotoPage(true);
+        }
+
+        function gotoPage(isNext){
+            var currentAtt = attachmentPreview.attachments[attachmentPreview.currentIndex];
+            if(currentAtt == undefined){
+                return;
+            }
+
+            var currentPage = $("#" + currentAtt.currentPage);
+            if(currentPage == undefined || currentPage.length === 0){
+                return;
+            }
+
+            var toPage = isNext? currentPage.next() : currentPage.prev();
+            var scrollToElement = toPage.length > 0? toPage.attr("id") : currentPage.attr("id");
+            document.location.href = "#" + scrollToElement;
+
+            return false;
+        }
+
+        function changePreviousNext(){
+            $(".btn-next, .btn-previous").removeClass("hidding");
+            if(attachmentPreview.totalAttachments === 1){
+                $("#next, #previous").hide();
+                return;
+            }
+
+            if(attachmentPreview.currentIndex === 0){
+                $("#previous").hide();
+                if(attachmentPreview.totalAttachments === 2){
+                    $("#next").show();
+                }
+            }else if(attachmentPreview.currentIndex === attachmentPreview.totalAttachments - 1){
+                $("#next").hide();
+                if(attachmentPreview.totalAttachments === 2){
+                    $("#previous").show();
+                }
+            }else{
+                $("#next, #previous").show();
+            }
+        }
+
+        function changeHeader(name){
+            $(".preview-header").removeClass("hidding");
+            var totalAttachments = attachmentPreview.totalAttachments;
+            var currentIndex = attachmentPreview.currentIndex;
+
+            $("#currentFileName").text(name);
+            $("#currentAttach").text((currentIndex + 1) + "/" + totalAttachments);
+        }
+
+        function changeFooter(currentPage, total){
+            $(".preview-footer").removeClass("hidding");
+            $("#currentPage").text(currentPage);
+            $("#totalPage").text(total);
+        }
+
+        function showImages(listFile, attachment, fromPage){
+            var data = _.map(listFile, function(file){
+                return {
+                    file: file,
+                    page: fromPage++,
+                    name: attachment.AttachmentName
+                };
+            });
+
+            $.tmpl($("#imgTemp"), data).appendTo("#fileViewer");
+
+            attachmentPreview.scrollItems = $("#fileViewer .page").not(".loading");
+            attachmentPreview.totalPreview = attachment.PreviewFiles.length;
+
+            detechScoll(attachment);
+        }
+
+        function renderApiToGlobal(){
+            var top = window.top;
+            if(top != undefined && typeof top.closeFilePreviewDialog != "function"){
+                top.closeFilePreviewDialog = function(documentId){
+                    var frame = $("#filePreviewDialog iframe", top.document);
+                    if(frame.length > 0){
+                        frame.remove();
+                    }
+                    var closeButton = $("#btnCloseFilePreviewDialog", top.document);
+                    closeButton.click();
+                }
+            }
+        }
+
+        function getAttachment(attachmentId){
+            return _.find(attachmentPreview.attachments, function(a){
+                return a.AttachmentId == attachmentId;
+            });
+        }
+
+        //function sendMessage(){
+        //    parent.postMessage('Send Okkkk','*');
+        //}
+        //sendMessage();
+        
+    </script>
+</head>
+<body class="bodyFile">
+    
+    <div class="preview">
+        <div class="preview-header"> 
+            <div class="container-fluid">
+                <div class="pull-left preview-filename">  
+                    <button class="btn btn-danger btn-xs" title="Đóng" id="closePreview" style="margin-left: 45px;">
+                        <span class="icon icon-cross"></span>
+                    </button>                 
+                    <span><span id="currentAttach">3/4</span> tệp </span>
+                </div>
+                <button type="button" class="hidden-xs btn btn-primary" id="openDesktop">Mở trên Desktop</button>
+                <div class="pull-right">
+                    <span id="currentFileName" class="hidden-xs"></span>
+                    <button class="btn btn-default btnDownload" title="Tải về" id="download">
+                        <span class="icon icon-download3"></span>
+                    </button>
+                    <button class="btn btn-default hidden-xs" title="In" id="print">
+                        <span class="icon icon-print"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn btn-previous" id="previous">
+            <button class="btn btn-primary" title="Tệp trước"><span class="icon icon-arrow-left10"></span></button>
+        </div>
+
+        <div class="preview-content">
+            <div class="container-fluid">
+                <div class="content" id="fileViewer">
+
+                </div>
+                <div class="loading-css loading">
+                    <div></div>
+                </div>
+                <div class="loadError">
+                    <div style="margin-bottom: 15px;">Không thể mở tệp hiện tại, bạn vui lòng nhấn Tải về để xem.</div>
+                    <button class="btn btn-primary btnDownload" title="Tải về" id="download">
+                        <span class="icon icon-download3"></span>
+                        Tải về
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn btn-next" id="next">
+            <button class="btn btn-primary" title="Tệp tiếp theo"><span class="icon icon-uniE89B"></span></button>
+        </div>
+
+        <div class="preview-footer">
+            <div class="btn-group btn-group-md" role="group">
+                <div class="btn btn-primary" id="paging">
+                    <span>Trang</span>
+                    <span id="currentPage">1</span>
+                    <span>/</span>
+                    <span id="totalPage">1</span>
+                </div>
+                <div class="btn btn-primary hidden-xs" id="zooming">
+                    <span class="btn btn-xs icon-minus4" title="Thu nhỏ" id="zoomIn"></span>
+                    <span class="btn btn-xs icon-plus4" title="Phóng to" id="zoomOut"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="divExcelToHTML">Test</div>
+    <script type="text/x-jquery-tmpl" id="imgTemp">
+        <div class="page" title="${name} - Trang ${page}" page='${page}' id='${page}'>
+            <img src='${file}' alt='${name}' />
+        </div>
+    </script>
+    @*<script src="~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>*@
+</body>
+</html>

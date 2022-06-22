@@ -1,0 +1,106 @@
+﻿@model IEnumerable<BackupRestoreFileConfigModel>
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreFileConfig.Title.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+}
+
+<script type="text/javascript">
+    function deleteConfig(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.BackupRestoreFileConfig.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    $(function () {
+        $("#tblBackupRestoreFileConfig").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblBackupRestoreFileConfig").openLink({ urlOpen: '/admin/BackupRestoreFileConfig/Edit' });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.backuprestorefileconfig"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/BackupRestoreFileConfig/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div>
+    <table id="tblBackupRestoreFileConfig" class="table table-hover table-bordered">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 100px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th>
+                    @Localizer("BackupRestoreFileConfig.Index.List.Column.Directory")
+                </th>
+                <th>
+                    @Localizer("BackupRestoreFileConfig.Index.List.Column.Detail")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    number++;
+                <tr data-id="@item.BackupRestoreFileConfigId">
+                    <td>
+                        @number
+                    </td>
+                    <td>
+                        @item.Directory
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("BackupRestoreFileConfig.Index.List.Column.Detail"), "Detail", new { Id = item.BackupRestoreFileConfigId })
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = item.BackupRestoreFileConfigId })
+                    </td>
+                    <td>
+                        <a href="javascript:deleteConfig(@(item.BackupRestoreFileConfigId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(item.BackupRestoreFileConfigId)" style="display: none"
+                             action="@Url.Action("Delete", new { Id = item.BackupRestoreFileConfigId })"
+                             method="POST">
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@Html.Partial("_Notifications")

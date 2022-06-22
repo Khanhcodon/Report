@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        $("#back").bind("click", function () {
+            var backUrl = "/admin";
+            if (action != "Index") {
+                backUrl = backUrl + "/" + controller;
+            }
+            $(location).attr('href', backUrl);
+        });
+        if (action == "Index") {
+            $(".left-content ul li a#index").addClass("selected");
+            $(".control-btn").remove();
+        }
+        if (action != "Edit") {
+            $("#delete").remove();
+        }
+        if (action == "Create") {
+            $(".left-content ul li a#create").addClass("selected");
+        }
+    });
+</script>
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Common.Button.List"), "Index", null, new { @id = "index" })</li>
+        <li>@Html.ActionLink(Localizer("Common.Button.Create"), "Create", null, new { @id = "create" })</li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    @RenderBody()
+</div>
+

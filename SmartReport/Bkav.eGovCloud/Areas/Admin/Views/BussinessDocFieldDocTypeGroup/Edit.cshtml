@@ -1,0 +1,26 @@
+﻿@model BussinessDocFieldDocTypeGroupModel
+@{
+    ViewBag.Title = Localizer("Admin.Title.BussinessDocFieldDocTypeGroup.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Store.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+
+@Html.Partial("_Notifications")
+@{
+    Html.RenderPartial("_CreateOrEdit", Model);
+}

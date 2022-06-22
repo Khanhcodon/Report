@@ -1,0 +1,285 @@
+﻿@using Bkav.eGovCloud.Web.Framework.Utility
+@using Bkav.eGovCloud.Core.Utils
+@using Bkav.eGovCloud.Entities.Enum
+@model Bkav.eGovCloud.Models.ReportCriteriaModel
+@{
+    Layout = null;
+    ViewBag.Title = "Báo cáo thống kê";
+    var type = typeof(DateTimeReport);
+    
+    var IsExport = Convert.ToBoolean(ViewBag.IsExport);
+    var _resourceService = System.Web.Mvc.DependencyResolver.Current.GetService<Bkav.eGovCloud.Business.Common.ResourceBll>();
+    var Times = _resourceService.GetNameAndDescription<DateTimeReport>().Select(t => new
+        {
+            name = t.Value,
+            id = t.Key
+        }).Stringify();
+}
+
+<link href="@Url.Content("~/Content/bkav.egov/bkav.egov.report.viewer.css")" rel="stylesheet" />
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jPrint.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.datepicker-vi-VN.js")"></script>
+
+<script type="text/javascript">
+    var times = @Html.Raw(Times);
+    var tuyChon= '@DateTimeReport.TuyChon';
+    var time= '@Model.Time';
+    $("input.datetime").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+
+    if(tuyChon == time){
+        $("#timepicker").show();
+    }
+
+    $(function () {
+        $("#Time").change(function () {
+            if ($(this).val() == tuyChon) {
+                $(".datetime").show();
+            } else {
+                $(".datetime").hide();
+            }
+        });
+
+        $("#report").layout({
+            resizable: false,
+            closable: false,
+            north__size: 42,
+            north__spacing_open: 0,
+            spacing_closed: 2,
+            north__paneSelector: "#toolbar",
+            center__paneSelector: "#reportViewer"
+        });
+
+        getReport();
+
+        var exportToolbar = {
+            items: {
+                time: {
+                    name: egov.resources.report.view + ': @(_resourceService.GetEnumDescription<DateTimeReport>((DateTimeReport)Model.Time))',
+                    "class": 'btn btn-default btn-timepicker',
+                    dropdownItems: {
+                        items: times,
+                        callback: function(key, options) {
+                            debugger
+                            $(".btn-timepicker em").text("Xem: " + times[key].name);
+                            $("#Time").val(times[key].id);
+                            getReport();
+                            if(times[key].id != tuyChon){
+                                $("#timepicker").hide();
+                            }
+                            else{
+                                $("#timepicker").show();
+                            }
+                        }
+                    }
+                },
+                groups: {
+                    name: egov.resources.report.group + ': @ViewBag.GroupName',
+                    "class": 'btn btn-default btn-group',
+                    dropdownItemsLazyLoading: {
+                        url: '@Url.Action("GetGroups", "ReportViewer")',
+                        data: { id: '@ViewBag.ReportId'},
+                        type: 'POST',
+                        onBuildDropdownItems: function (data) {
+                            var options = {
+                                items:{}
+                            };
+
+                            if (data.length === 0) {
+                                options.items.notfound = {
+                                    name: name,
+                                    icon: ''
+                                };
+                                return options;
+                            }
+
+                            for (var j = 0; j < data.length; j++) {
+                                options.items[data[j].ReportGroupId] = {
+                                    name: data[j].Name,
+                                    icon: ''
+                                };
+                            }
+                            options.callback = function (key, option) {
+                                $(".btn-group em").text(egov.resources.report.group + option.items[key].name);
+                                $("#GroupId").val(key);
+                                getReport();
+                            };
+                            return options;
+                        },
+                        onError: function () {
+                            eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+                        }
+                    }
+                },
+                print: {
+                    name: egov.resources.report.print,
+                    "class": "btn btn-default pull-right btn-print print",
+                    callback: function(){
+                        print();
+                    }
+                },
+                export1: {
+                    name: egov.resources.report.exprort,
+                    "class": 'btn btn-default pull-right btn-export',
+                    dropdownItems: {
+                        items: {
+                            "msword": { name: "Ms Word", icon: "word" },
+                            "msexcel": { name: "Ms Excel", icon: "excel" },
+                            "pdf": { name: "Pdf", icon: "pdf" },
+                            "sep1": "---------",
+                            "crystal": { name: "Crystal", icon: "crystal" }
+                        },
+                        callback: function(key){
+                            exportCallback(key);
+                        }
+                    }
+                }
+            }
+        };
+
+        $('.div-criteria').egovToolbar(exportToolbar);
+
+        $('body').bindResources();
+    });
+
+    function getReport() {
+        if ($("#Time").val() == undefined || $("#Time").val() == "") {
+            eGovMessage.show(egov.resources.report.chosseReportDate);
+            return false;
+        }
+                
+        $("form").submit();
+    }
+
+    function exportToWord() {
+        if ($("#Time").val() == undefined || $("#Time").val() == "") {
+            eGovMessage.show(egov.resources.report.chosseReportDate);
+            return;
+        }
+        var data = getData();
+        window.open('/ReportViewer/ExportToWord/?ReportId='+data.ReportId+'&time=' + data.Time + '&fromDate=' + data.FromDate + '&toDate=' + data.ToDate + '&groupId=' + (isNaN(data.GroupId) ? 0 : data.GroupId) + '&treeGroupValue=' + data.treeGroupValue + '&treeGroupName=' + data.treeGroupName + '&treeDisplayName=' + data.treeDisplayName);
+    }
+
+    function exportToExcel() {
+        if ($("#Time").val() == undefined || $("#Time").val() == "") {
+            eGovMessage.show(egov.resources.report.chosseReportDate);
+            return;
+        }
+        var data = getData();
+        window.open('/ReportViewer/ExportToExcel/?reportId='+data.ReportId+'&time=' + data.Time + '&fromDate=' + data.FromDate + '&toDate=' + data.ToDate + '&groupId=' + data.GroupId + '&treeGroupValue=' + data.treeGroupValue + '&treeGroupName=' + data.treeGroupName + '&treeDisplayName=' + data.treeDisplayName);
+    }
+
+    function openCrystal() {
+        if ($("#Time").val() == undefined || $("#Time").val() == "") {
+            eGovMessage.show(egov.resources.report.chosseReportDate);
+            return;
+        }
+
+        var data =getData();
+
+        var url = '/ReportViewer/ExportToCrystal/?reportId='+data.ReportId+'&time=' + data.Time + '&fromDate=' + data.FromDate + '&toDate=' + data.ToDate + '&groupId=' + data.GroupId + '&treeGroupValue=' + data.treeGroupValue + '&treeGroupName=' + data.treeGroupName + '&treeDisplayName=' + data.treeDisplayName;
+        
+        window.open(url);
+    }
+
+    function exportToPdf() {
+        if ($("#Time").val() == undefined || $("#Time").val() == "") {
+            eGovMessage.show(egov.resources.report.chosseReportDate);
+            return;
+        }
+        var data =getData();
+        window.open('/ReportViewer/ExportToPdf/?reportId='+data.ReportId+'&time=' + data.Time + '&fromDate=' + data.FromDate + '&toDate=' + data.ToDate + '&groupId=' + data.GroupId + '&treeGroupValue=' + data.treeGroupValue + '&treeGroupName=' + data.treeGroupName + '&treeDisplayName=' + data.treeDisplayName);
+    }
+
+    function exportCallback(key){
+        var isExport= @(IsExport ? "true" : "false");
+        switch(key){
+            case "msword":
+                isExport ? exportToWord():function(){  eGovMessage.show(egov.resources.report.notSupportExportToWord);};
+                break;
+            case "msexcel":
+                isExport ? exportToExcel():function(){  eGovMessage.show(egov.resources.report.notSupportExportToExcel); };
+                break
+            case "pdf":
+                isExport ? exportToPdf():function(){ eGovMessage.show(egov.resources.report.notSupportExportToPDF);};
+                break;
+            default:
+                isExport ? openCrystal():function(){ eGovMessage.show(egov.resources.report.notSupportExportToCrystal); };
+                break;
+        }
+    }
+
+    function print() {
+        try{
+            if($(".report-viewer").length <= 0){
+                return;
+            }
+
+            var printHtml = $(".report-viewer")[0].outerHTML;
+            var divPrint = $("<div>").html(printHtml);
+            divPrint.find("tr.pager").remove();
+            divPrint.jqprint();
+        }
+        catch(ex){}
+    }
+
+    function getData(){
+        debugger
+        var fromVal = $("[name='FromDate']").val();
+        var toVal = $("[name='ToDate']").val();
+        if(fromVal != ""){
+            fromVal = Globalize.parseDate(fromVal, "dd/MM/yyyy");
+        }
+        if(toVal != ""){
+            toVal = Globalize.parseDate(toVal, "dd/MM/yyyy");
+        }
+
+        var data = {
+            ReportId: @ViewBag.ReportId ,
+            Time: $("#Time").val(),
+            FromDate: fromVal == "" ? "" : fromVal.toISOString(),
+            ToDate: toVal == ""? "" : toVal.toISOString(),
+            GroupId: isNaN(parseInt($("#GroupId").val())) ? 0 : parseInt($("#GroupId").val()),
+            treeGroupName: "@ViewBag.TreeGroupName",
+            treeGroupValue: "@ViewBag.TreeGroupValue",
+            treeDisplayName: $('#tree .jstree-clicked:first').text().trim()
+        };
+
+        return data;
+    }
+
+</script>
+<div id="report" style="width: 100%; height: 100%;">
+    @using (Ajax.BeginForm("Report", new AjaxOptions
+    {
+        UpdateTargetId = "reportViewer",
+        HttpMethod = "POST",
+        OnSuccess = "onSuccess",
+        OnBegin = "onBegin",
+        OnFailure = "onFailure"
+    }))
+    {
+        @Html.Hidden("ReportId", ViewBag.ReportId as string)
+        <div class="div-criteria toolbar-outer" id="toolbar">
+            @Html.Hidden("Time", Model.Time)
+            @Html.Hidden("GroupId", Model.GroupId)
+            @Html.Hidden("SortBy", Model.SortBy)
+            @Html.Hidden("IsDesc", Model.IsDesc)
+            @Html.Hidden("TreeGroupValue", ViewBag.TreeGroupValue as string)
+            @Html.Hidden("TreeGroupName", ViewBag.TreeGroupName as string)
+            @Html.Hidden("TreeDisplayName", ViewBag.TreeDisplayName as string)
+            <div id="timepicker" style="display: none; float: right; margin-right: 30px;">
+                <span class="datetime">@Localizer("Setting.WorkTime.Fields.StartTime.Label") </span>
+                <input type="text" name="FromDate" class="input-sm datetime" value="@(Model.FromDate.HasValue ? Model.FromDate.Value.ToString("dd/MM/yyyy") : string.Empty)" />
+                <span class="datetime">@Localizer("Setting.WorkTime.Fields.EndTime.Label") </span>
+                <input type="text" name="ToDate" class="input-sm datetime" value="@(Model.ToDate.HasValue ? Model.ToDate.Value.ToString("dd/MM/yyyy") : string.Empty)" />
+                <input type="submit" value="Xem" class="toolbar-btn btn btn-sm" />
+            </div>
+        </div>
+    }
+    <div id="reportViewer">
+    </div>
+</div>

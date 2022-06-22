@@ -1,0 +1,232 @@
+﻿@model Ad_UnitModel
+@{
+    ViewBag.Title = "Quản lý đơn vị";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border leftRightDis">
+                    <div class="leftdisaggregation">
+                        <h4 style="font-weight:400" class="box-title">Danh sách đơn vị tính</h4>
+                    </div>
+                    <div class="rightdisaggregation">
+                        <a href="/Reports/TemplateUnit.xlsx" style="font-style: italic; color: #008ae6;width: 100%;">
+                            <span class="fa fa-download"></span> Download file mẫu
+                        </a>
+                        @using (Html.BeginForm("ExportToExcel", "Unit", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormImportUnit" }))
+                        {
+                            @Html.Raw(ViewBag.Error)
+                            <div style="height: 33px;margin-right: 4px;">
+                                <label class="custom-file-upload">
+                                    <input type="file" name="excelfile" />
+                                    <i class="fa fa-cloud-upload"></i> Import Excel
+                                </label>
+                            </div>
+                            <br />
+                            <input type="submit" class="btn btn-brown" value="Lưu File" />
+                        }
+
+
+                        <a class="popup-with-form btn btn-block" id="tagForm" href="#myFormUnit" style="background-color:aquamarine;margin-right: 4px;">
+                            <i class="fa fa-plus-square"></i> Thêm
+                        </a>
+                        <button type="button" id="deleteMulUnit" class="btn btn-block btn-danger" ><i class="fa fa-times-circle"></i> Xóa</button>
+                        <!-- form itself -->
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myFormUnit", @class = "mfp-hide white-popup-block" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.AntiForgeryToken()
+                            <h1>Thêm đơn vị</h1>
+                            <fieldset style="border:0;">
+                                <div class="form-group">
+                                    <label class="control-label" for="inputUnit">Đơn vị tính</label>
+                                    <br />
+                                    <input type="text" class="form-control" id="txtNAME_FIELD_Unit" name="Unit" placeholder="Đơn vị tính">
+                                    @Html.ValidationMessageFor(model => model.Unit)
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="inputEx">Quy đổi</label>
+                                    <br />
+                                    <input type="text" class="form-control" id="txtEX_FIELD_Unit" name="Exchange" placeholder="Quy đổi">
+                                    @Html.ValidationMessageFor(model => model.Exchange)
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="inputOr">Đơn vị gốc</label>
+                                    <br />
+                                    <input type="text" class="form-control" id="txtOR_FIELD_Unit" name="OriginalUnit" placeholder="Đơn vị gốc">
+                                    @Html.ValidationMessageFor(model => model.OriginalUnit)
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="textarea">Mô tả</label>
+                                    <br>
+                                    <textarea class="form-control" id="txtDES_FIELD_Unit" name="Description" placeholder="Mô tả" rows="7"></textarea>
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="IsActivated_Unit" name="Use" value="true" checked>
+                                    <label class="form-check-label" for="IsActivated_Unit">Sử dụng</label>
+                                </div>
+                                <button class="btn btn-primary" id="btnAddUnit" style="padding-top: 10px; float:right">
+                                    <span class="-ap icon icon-plus3"></span> Lưu lại
+                                </button>
+                            </fieldset>
+                            @Html.HiddenFor(model => model.IdUnit)
+                        }
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="unitTable" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="checkBoxAllsUnit" name="checkBoxAll" class="custom-checkbox form-check-input labelThead" />
+                                        <label class="form-check-label" for="checkBoxAllsUnit"></label>
+                                    </th>
+                                    <th hidden class="text-center">ID</th>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Đơn vị tính</th>
+                                    <th class="text-center">Quy đổi</th>
+                                    <th class="text-center">Đơn vị gốc</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Sử dụng</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Ad_UnitModels != null)
+                                {
+                                    var stt = 0;
+                                    foreach (var item in Model.Ad_UnitModels)
+                                    {
+                                        <tr class="checkId">
+                                            <td class="tdInDi">
+                                                <input type="checkbox" id="@item.IdUnit" name="@item.IdUnit" value="@item.IdUnit"
+                                                        class="custom-checkbox form-check-input chkCheckBoxId" />
+                                                <label class="form-check-label labelIndicatorID" for="@item.IdUnit"></label>
+                                            </td>
+                                            <td hidden class="text-center">@item.IdUnit</td>
+                                            <td class="text-center">@(stt + 1)</td>
+                                            <td class="text-center">@item.Unit</td>
+                                            <td class="text-center">@item.Exchange</td>
+                                            <td class="text-center">@item.OriginalUnit</td>
+                                            <td class="text-center">@item.Description</td>
+                                            <td class="text-center">
+                                                @if (item.Use == true)
+                                                {
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="@item.Use" disabled>
+                                                    <label style="cursor:not-allowed" for="md_checkbox_27"></label>
+                                                }
+                                                else
+                                                {
+
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="@item.Use" disabled>
+                                                    <label style="cursor:not-allowed" for="md_checkbox_27"></label>
+                                                }
+                                            </td>
+                                            <td class="text-center" style="font-size: 23px;">
+
+                                                <i onclick="EditIndicator('@item.IdUnit')" class="far fa-edit" title="Sửa đơn vị" aria-hidden="true" style="font-size:15px; color:#000000;cursor:pointer"></i>
+                                                <i onclick="RemoveIndicator('@item.IdUnit')" class="far fa-trash-alt" title="Xóa đơn vị" aria-hidden="true" style="color: #000000;cursor:pointer;font-size:15px;"></i>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+ 
+
+            <!--Style-->
+    <link href="~/Content/admin/unit/Style.css" rel="stylesheet" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="~/Scripts/admin/unit/Unit.js"></script>
+    <script type="text/javascript">
+        var checkSuccess = "@ViewBag.Success";
+        var checkError = "@ViewBag.Success";
+        if (checkSuccess == "SS") {
+            swal("Thành công!", "Import File Excel Thành công", "success");
+        } else if (checkError == "ER") {
+            swal("Error!", "Có lỗi trong quá trình Import File", "warring");
+        }
+
+        function EditIndicator(auId) {
+            $.ajax({
+                url: '/Unit/Edit',
+                data: { id: auId },
+                success: function (result) {
+                    var auId = result.IdUnit;
+                    var auUnit = result.Unit;
+                    var auEx = result.Exchange;
+                    var auOru = result.OriginalUnit;
+                    var auDes = result.Description;
+                    var auUse = result.Use;
+                    $('#IdUnit').val(auId);
+                    $('#txtNAME_FIELD_Unit').val(auUnit);
+                    $('#txtEX_FIELD_Unit').val(auEx);
+                    $('#txtOR_FIELD_Unit').val(auOru);
+                    $('#txtDES_FIELD_Unit').val(auDes);
+                    $('#IsActivated_Unit').attr('checked', auUse);
+                    $('#tagForm').click();
+                },
+                error: function (xhr) { },
+                complete: function () {
+                }
+            });
+        }
+        function RemoveIndicator(auId) {
+            swal({
+                title: "",
+                text: "Bạn có thực sự muốn xóa không!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes',
+                cancelButtonText: "No",
+
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: '/Unit/Remove',
+                        data: { id: auId },
+                        success: function (result) {
+                            if (result.isActive == true) {
+                                swal("Thành công!", "Xóa tiêu thức thành công", "success");
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 1000)
+                            } else if (result.isActive == false) {
+                                swal("Error!", "Loại số liệu đã tồn tại trong chỉ tiêu", "success");
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 1000)
+                            }
+                        },
+                        error: function (xhr) { },
+                        complete: function () {
+
+                        }
+                    });
+                } else {
+                    setTimeout(function () {
+                        swal("Hủy bỏ", "Hủy bỏ thành công :)", "error");
+                    }, 1000)
+
+                }
+            })  
+        }
+    </script>

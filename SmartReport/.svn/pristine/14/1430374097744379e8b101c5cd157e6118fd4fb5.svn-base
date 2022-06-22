@@ -1,0 +1,104 @@
+﻿@model BackupRestoreFileConfigModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreFileConfig.Title.Detail");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var shareFolderList = ViewBag.FolderShareList as List<SelectListItem>;
+}
+<style>
+    .input-group {
+        width: 80%;
+    }
+</style>
+<script src="../../../../Scripts/bkav.egov/libs/json2.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.backuprestorefileconfig"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-default control-btn" href="/admin/BackupRestoreFileConfig/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <fieldset>
+        <legend>Thông tin</legend>
+        <table id="timeJobInfo" style="width: 100%">
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.Domain):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Domain, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.FileName):
+                </td>
+                <td>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.FileName, new { @class = "form-control", disabled = "disabled" })
+                        <span class="input-group-addon" id="basic-addon2">@(Model.FileName)_yyyyMMddHHmmss.zip</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.Directory):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Directory, new { disabled = "disabled" })
+                </td>
+            </tr>
+            
+        </table>
+    </fieldset>
+    <hr />
+
+    <fieldset>
+        <legend>@Localizer("Admin.BackupRestoreFileConfig.Title.BackupFile")</legend>
+        @using (Html.BeginForm("Backup", "BackupRestoreFileConfig", new { id = Model.BackupRestoreFileConfigId }, FormMethod.Post))
+        {
+            <input type="submit" value="@Localizer("Common.Button.Backup")" />
+        }
+    </fieldset>
+    <hr />
+    <fieldset>
+        <legend>@Localizer("Admin.BackupRestoreFileConfig.Title.RestoreFile")</legend>
+        @using (Html.BeginForm("Restore", "BackupRestoreFileConfig", new { id = Model.BackupRestoreFileConfigId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.ValidationSummary(true)
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 200px;">
+                        @Localizer("Common.Button.UnzipPassword"):
+                    </td>
+                    <td>
+                        @Html.Password("unzipPassword")
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 200px;"></td>
+                    <td>
+                        <input type="file" name="fileRestore" id="fileRestore" />
+                        @Html.ValidationMessage("fileRestore")
+                        <div><span class="spanRequire">@Localizer("Customer.BackupRestoreFile.ChosseFileRestore")</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br />
+                        <input type="submit" value="@Localizer("Common.Button.Restore")" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </fieldset>
+</div>

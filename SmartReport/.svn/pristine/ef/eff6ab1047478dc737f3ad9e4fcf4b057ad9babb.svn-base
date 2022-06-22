@@ -1,0 +1,290 @@
+﻿@{
+    Layout = null;
+    var otps = ViewBag.Otps as IEnumerable<Bkav.eGovCloud.Entities.Customer.Otp>;
+    var mailOtp = otps.SingleOrDefault(o => o.Email != null && o.Email != "");
+    var smsOtp = otps.SingleOrDefault(o => o.Sms != null && o.Sms != "");
+}
+
+<style>
+    .input-sm {
+        font-size: 13px;
+    }
+
+    .btn-set,
+    .btn-activemail {
+        color: #1e90ff;
+        border: none;
+    }
+
+    .btn-set {
+        display: none;
+    }
+
+    .editting .btn-set {
+        display: inline-block;
+    }
+
+    #Email, #Sms {
+        border: none;
+    }
+
+    .editting #Email, .editting #Sms {
+        border: 1px solid #ccc;
+    }
+
+    .editting .btn-edit {
+        display: none;
+    }
+
+    .hint {
+        color: #bdbdbd;
+    }
+
+    .disabled a.btn-edit {
+        display: none;
+    }
+
+    .active-email {
+        padding: 0 15px;
+    }
+
+        .active-email input {
+            width: 200px;
+        }
+
+    .active-sms {
+        padding: 0 15px;
+    }
+
+        .active-sms input {
+            width: 200px;
+        }
+</style>
+
+<div id="resultparent">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Thiết lập đặt lại mật khẩu</h3>
+        </div>
+        <div class="panel-body">
+            <span>Thiết lập các hình thức bạn có thể sử dụng để đặt lại mật khẩu trong trường hợp bạn quên mật khẩu và muốn đặt lại.</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div>
+                    <span style="color: #e84343">Bạn cần nhập mật khẩu hiện tại nếu muốn thiết lập lại.</span>
+                    <input type="password" name="Password" id="Password" class="form-control input-sm" placeholder="Nhập mật khẩu hiện tại" style="width: 300px;" />
+                </div>
+                <br />
+            </li>
+            <li class="list-group-item">
+                <div>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="enableEmail" value="true" checked onchange="setActive()"> Sử dụng địa chỉ email
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="enableSms" value="true" onchange="setActive()"> Sử dụng số điện thoại
+                    </label>
+                </div>
+                <br />
+            </li>
+            <li class="list-group-item disabled" id="emailSetting">
+                <div class="media">
+                    <h5 class="media-heading">Thư điện tử (eMail)</h5>
+                    <div class="hint">
+                        Hệ thống sẽ gửi thư điện tử chứa đường dẫn đặt lại mật khẩu tới địa chỉ này.
+                    </div>
+                    <div style="padding: 0 15px;">
+                        <label>
+                            <input type="email" value="@(mailOtp == null? "" : mailOtp.Email)" class="form-control input-sm" id="Email" readonly />
+                        </label>
+                        <a class="btn btn-default btn-sm btn-set" id="setEmail" href="#" role="button">
+                            <span class="icon icon-checkmark"></span>
+                        </a>
+                        <span class="pull-right">
+                            <a href="#" class="btn btn-edit" style="color: #1e90ff">Đặt lại</a>
+                        </span>
+                    </div>
+                    <div class="active-email hidden">
+                        Hệ thống đã gửi thư điện tử chứa mã xác nhận tới địa chỉ trên, vui lòng nhập mã xác nhận vào ô bên dưới đây.
+                        <div>
+                            <label>
+                                <input type="email" value="" class="form-control input-sm" id="ActiveEmail" />
+                            </label>
+                            <a class="btn btn-default btn-sm btn-activemail" id="setEmail" href="#" role="button">
+                                <span class="icon icon-checkmark"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </li>
+            <li class="list-group-item disabled" id="smsSetting">
+                <div class="media">
+                    <h5 class="media-heading">Tin nhắn văn bản (SMS)</h5>
+                    <div class="hint">Hệ thống sẽ gửi tin nhắn văn bản chứa đường dẫn đặt lại mật khẩu tới số điện thoại này.</div>
+                    <div style="padding: 0 15px;">
+                        <label>
+                            <input type="text" value="@(mailOtp == null? "" : mailOtp.Sms)" class="form-control input-sm" id="Sms" readonly />
+                        </label>
+                        <a class="btn btn-default btn-sm btn-set" id="setSms" href="#" role="button">
+                            <span class="icon icon-checkmark"></span>
+                        </a>
+                        <span class="pull-right">
+                            <a href="#" class="btn btn-edit" style="color: #1e90ff">Đặt lại</a>
+                        </span>
+                    </div>
+                    <div class="active-sms hidden">
+                        Hệ thống đã gửi tin nhắn chứa mã xác nhận tới số điện thoại trên, vui lòng nhập mã xác nhận vào ô bên dưới đây.
+                        <div>
+                            <label>
+                                <input type="number" value="" class="form-control input-sm" id="ActiveSms" />
+                            </label>
+                            <a class="btn btn-default btn-sm btn-activesms" id="setSms" href="#" role="button">
+                                <span class="icon icon-checkmark"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        setActive();
+
+        $("#emailSetting a.btn-edit").click(function () {
+            $("#emailSetting input").removeAttr("readonly");
+            $("#emailSetting input").focus();
+            $("#emailSetting").addClass("editting");
+        });
+
+        $("#smsSetting a.btn-edit").click(function () {
+            $("#smsSetting input").removeAttr("readonly");
+            $("#smsSetting input").focus();
+            $("#smsSetting").addClass("editting");
+        });
+
+        $("#setEmail").click(function () {
+            $("#emailSetting").removeClass("editting");
+            $("#Email").attr("readonly", "readonly");
+
+            sendActiveMail();
+        });
+
+        $("#setSms").click(function () {
+            $("#smsSetting").removeClass("editting");
+            $("#Sms").attr("readonly", "readonly");
+            sendActiveSms();
+        });
+
+        $(".btn-activemail").click(function () {
+            activeEmail();
+        });
+        $(".btn-activesms").click(function () {
+            activeSms();
+        });
+    });
+
+    function setActive() {
+        if ($("#enableEmail").is(":checked")) {
+            $("#emailSetting").removeClass("disabled");
+        } else {
+            $("#emailSetting").addClass("disabled");
+        }
+
+        if ($("#enableSms").is(":checked")) {
+            $("#smsSetting").removeClass("disabled");
+        } else {
+            $("#smsSetting").addClass("disabled");
+        }
+    }
+
+    function sendActiveMail() {
+        var email = $("#Email").val();
+        var pass = $("#Password").val();
+        $.ajax({
+            url: "/Account/SendActiveMail",
+            type: "Post",
+            data: {
+                email: email,
+                pass: pass
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    alert(result.message);
+                    return;
+                }
+
+                $(".active-email").removeClass("hidden");
+            }
+        });
+    }
+
+    function sendActiveSms() {
+        debugger
+        var sms = $("#Sms").val();
+        var pass = $("#Password").val();
+        $.ajax({
+            url: "/Account/SendActiveSms",
+            type: "Post",
+            data: {
+                phone: sms,
+                pass: pass
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    alert(result.message);
+                    return;
+                }
+
+                $(".active-sms").removeClass("hidden");
+            }
+        });
+    }
+
+    function activeEmail() {
+        var email = $("#Email").val();
+        var code = $("#ActiveEmail").val();
+        $.ajax({
+            url: "/Account/ActiveOtpMail",
+            type: "Post",
+            data: {
+                email: email,
+                code: code
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    alert(result.message);
+                    return;
+                }
+
+                $(".active-email").addClass("hidden");
+            }
+        });
+    }
+
+    function activeSms() {
+        var sms = $("#Sms").val();
+        var code = $("#ActiveSms").val();
+        $.ajax({
+            url: "/Account/ActiveOtpSms",
+            type: "Post",
+            data: {
+                phone: sms,
+                code : code
+            },
+            success: function(result){
+                if (result.success == false) {
+                    alert(result.message);
+                    return;
+                }
+
+                $(".active-sms").addClass("hidden");
+            }
+        });
+    }
+</script>

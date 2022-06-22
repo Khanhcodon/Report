@@ -1,0 +1,271 @@
+﻿@{
+    Layout = null;
+    var ajaxOption = new AjaxOptions
+    {
+        UpdateTargetId = "divSearchResult",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "GET"
+    };
+}
+<style type="text/css">
+    #divSearchResult, #divAdded {
+        width: 351px;
+        display: inline-block;
+        float: left;
+    }
+
+    .grid-content {
+        height: 166px;
+    }
+
+    #divButton {
+        display: inline-block;
+        width: 80px;
+        float: left;
+    }
+
+    #btAdd, #btRemove {
+        margin-left: 15px;
+        width: 50px;
+        background-color: blue;
+        border: none;
+        color: white;
+        font-weight: bold;
+    }
+
+    #btAdd {
+        margin-top: 70px;
+    }
+
+    .row-selected {
+        background-color: antiquewhite;
+    }
+
+    #listRelations tr td, #listRelationsAdded tr td {
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+</style>
+@*<script src="@Url.Content("~/Scripts/bkav.utilities.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.nicescroll.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/eForm/jquery/jquery.meio.mask.js")"></script>*@
+
+<script type="text/javascript">
+    var rowIndex = 0;
+    var heightDialog;
+    function refreshgrid() {
+        $('#listRelations tbody tr').unbind('click');
+        $('#listRelations tbody tr').click(function (e) {
+            $('#listRelationsAdded tbody tr').removeClass('highlight-row');
+            e.preventDefault();
+            bindRowClick(this, '#listRelations', e);
+        });
+        $('#listRelationsAdded tbody tr').unbind('click');
+        $('#listRelationsAdded tbody tr').click(function (e) {
+            $('#listRelationsAdded tbody tr').removeClass('highlight-row');
+            e.preventDefault();
+            bindRowClick(this, '#listRelationsAdded', e);
+        });
+    }
+
+    function bindRowClick(row, idtable, e) {
+        var $row = $(row);
+        if (e.shiftKey) {
+            //Shift-Click
+            var currentIndex = $row.index();
+            var beginRow = rowIndex <= currentIndex ? rowIndex : currentIndex;
+            var endRow = rowIndex <= currentIndex ? currentIndex : rowIndex;
+
+            for (var i = beginRow; i <= endRow; i++) {
+                var $rowShift = $(idtable + ' tbody tr:eq(' + i + ')');
+                $rowShift.addClass('highlight-row');
+            }
+
+            $(idtable + ' tbody tr').each(function (idx, item) {
+                var index = $(item).index();
+                if (index > endRow || index < beginRow) {
+                    $(item).removeClass('highlight-row');
+                }
+            });
+            return;
+        } else if (e.ctrlKey) {
+            //Ctrl+Click
+            rowIndex = $row.index();
+            if ($row.hasClass("highlight-row")) {
+                $row.removeClass('highlight-row');
+            } else {
+                $row.addClass('highlight-row');
+            }
+            return;
+        } else {
+            rowIndex = $row.index();
+            $row.addClass("highlight-row");
+            $row.siblings('tr').removeClass('highlight-row');
+        }
+    }
+
+    function addDocument() {
+        var $selected = $("#listRelations").find(".highlight-row");
+        if ($selected.length > 0) {
+            $selected.removeClass("highlight-row");
+            $("#listRelationsAdded tbody").append($selected);
+        }
+        $("#listRelations").grid('refresh');
+        $("#listRelationsAdded").grid('refresh');
+        refreshgrid();
+        $('.grid-content').getNiceScroll().resize();
+    }
+
+    function removeDocument() {
+        var $selected = $("#listRelationsAdded").find(".highlight-row");
+        if ($selected.length > 0) {
+            $selected.removeClass("highlight-row");
+            $("#listRelations tbody").append($selected);
+        }
+        $("#listRelations").grid('refresh');
+        $("#listRelationsAdded").grid('refresh');
+        refreshgrid();
+        $('.grid-content').getNiceScroll().resize();
+    }
+
+    function addRelations(childName) {
+        var docs = $("#listRelationsAdded tr");
+        var frame = document.getElementById(childName).contentWindow;
+        frame.egov.cshtml.document.addRelations(docs);
+        //$("#dialogTmpl").dialog("close");
+    }
+
+    $(function () {
+        setTimeout(function () {
+            $("#listRelations").grid({
+                isResizeColumn: true,
+                isFixHeightContent: true,
+                isAutoHideScroll: false,
+                height: 150
+            });
+
+            $("#listRelationsAdded").grid({
+                isResizeColumn: true,
+                isFixHeightContent: true,
+                isAutoHideScroll: false,
+                height: 150
+            });
+        }, 10);
+        $('#formSearchRelation .search-advance').hide();
+        $('#formSearchRelation #checkAdvance').change(function () {
+            if (this.checked) {
+                heightDialog = $('#dialogFindRelation').height();
+                $('#formSearchRelation .search-advance').show();
+                $('#dialogFindRelation').height(507);
+            } else {
+                $('#formSearchRelation .search-advance').hide();
+                $('#dialogFindRelation').height(heightDialog);
+            }
+            $("#dialogFindRelation").dialog({
+                position: { 'my': 'center', 'at': 'center' }
+            });
+        });
+    });
+</script>
+<div id="divOption">
+    @using (Ajax.BeginForm("SearchDocuments", "Document", ajaxOption, new { name = "FindRelation", id = "formSearchRelation" }))
+    {
+        Html.RenderPartial("~/Views/Search/_SearchAdvange.cshtml", (new Bkav.eGovCloud.Models.SearchAdvangeModel { FormId = "#formSearchRelation" }));
+        <div class="div-row">
+            <div class="div-col1">
+                <span>
+                    <input type="checkbox" id="checkAdvance" />
+                    Tìm kiếm nâng cao</span>
+            </div>
+            <div class="div-col2">
+                <div style="text-align: right">
+                    <input type="submit" id="btnSearch" value="Tìm kiếm" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div id="divSearchResult">
+    <table class="table-main unselectable" id="listRelations">
+        <colgroup>
+            <col style="width: 150px;" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">Trích yếu
+                </th>
+                <th class="header">Số ký hiệu
+                </th>
+                <th class="header">Số đến
+                </th>
+                <th class="header">Người xử lý
+                </th>
+                <th class="header">Nơi nhận văn bản/Cơ quan ban hành
+                </th>
+                <th class="header">Ngày đến/Ngày ban hành
+                </th>
+                <th class="header">Ngày văn bản
+                </th>
+                <th class="header">Hình thức văn bản
+                </th>
+                <th class="header">người ký
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div id="divButton">
+    <input type="button" value=">>" id="btAdd" title="Thêm hs/vb" onclick="addDocument()" />
+    <input type="button" value="<<" id="btRemove" title="Hủy hs/vb" onclick="removeDocument()" />
+</div>
+<div id="divAdded">
+    <table class="table-main unselectable" id="listRelationsAdded">
+        <colgroup>
+            <col style="width: 150px;" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">Trích yếu
+                </th>
+                <th class="header">Số ký hiệu
+                </th>
+                <th class="header">Số đến
+                </th>
+                <th class="header">Người xử lý
+                </th>
+                <th class="header">Nơi nhận văn bản/Cơ quan ban hành
+                </th>
+                <th class="header">Ngày đến/Ngày ban hành
+                </th>
+                <th class="header">Ngày văn bản
+                </th>
+                <th class="header">Hình thức văn bản
+                </th>
+                <th class="header">người ký
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>

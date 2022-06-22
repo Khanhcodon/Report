@@ -1,0 +1,209 @@
+﻿@model DepartmentModel
+@{
+    ViewBag.Title = Localizer("Admin.Department.Label");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allUsers = ViewBag.AllUsers as string;
+    var allJobTitless = ViewBag.AllJobTitless as string;
+    var allPositions = ViewBag.AllPositions as string;
+    var isAdminDepartmentUser = (bool)ViewBag.IsAdminDepartmentUser;
+}
+
+    <link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css")" rel="stylesheet" />
+    
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/jquery.jstree.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<style>
+    table tr {
+        user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .selected {
+        color: red;
+    }
+
+    div#divListDepartments {
+        overflow: auto;
+        border-right: 1px;
+    }
+
+    .ui-layout-resizer-west {
+        background: gray;
+    }
+</style>
+<script type="text/javascript">
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allJobTitless = @(string.IsNullOrEmpty(allJobTitless) ? MvcHtmlString.Create("[]") : Html.Raw(allJobTitless));
+    var allPositions = @(string.IsNullOrEmpty(allPositions) ? MvcHtmlString.Create("[]") : Html.Raw(allPositions));
+    $(function () {
+        $('#container-tree').layout({
+            west__size:		'240',
+            west__spacing_open: 1,
+            resizable: false,
+            closable:  false,
+            spacing_open:1,
+            slidable:  false
+        });
+        debugger
+        if(allDepartments.length > 0) {
+            $('#divTreeDeptUserForAll').empty();
+        } else{
+            selectedNode();
+        }
+
+        @if (isAdminDepartmentUser)
+        {
+            <text>egov.utilities.jstree.bindJsTreeForAdminDepartment($("#divTreeDeptUserForAll"),true,allDepartments);</text>
+        }
+        else
+        {
+            <text>
+        egov.utilities.jstree.bindJsTree($("#divTreeDeptUserForAll"),false,false,true,allDepartments, []);
+
+        $('#divTreeDeptUserForAll').bind("loaded.jstree", function (event, data) { 
+            data.inst.select_node('ul > li:first'); 
+        });
+
+        </text>
+        }
+
+        $("#divTreeDeptUserForAll").bind("select_node.jstree", function(e, data){
+            var selectedObj = data.rslt.obj;
+            var nodeId = selectedObj.attr("id");
+            var rel = selectedObj.attr("rel");
+            if(rel =="dept" || rel=="dept-deactivated")
+            {
+                selectedNode(nodeId,selectedObj);
+            }
+        });
+
+        $('#divTreeDeptUserForAll').bind("move_node.jstree", function (e, data) {
+            var deptRoot = _.find(allDepartments, function (node) {
+                return node.parentid === 0;
+            });
+
+            if(deptRoot){
+                var token = $("input[name='__RequestVerificationToken']", '#formUpdate').val();
+                data.rslt.o.each(function () {
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        url: "/Department/MoveData",
+                        data: {
+                            "id": data.rslt.o.attr("id"),
+                            "target": data.rslt.r.attr("id"),
+                            "position": data.rslt.p.toString(),
+                            "parentid" : deptRoot.value,
+                            __RequestVerificationToken: token
+                        },
+                        error: function(){
+                            $.jstree.rollback(data.rlbk);
+                            alert('@Localizer("Common.Error")');
+                        }
+                    });
+                });
+            }
+        });
+
+        $.contextMenu({
+            selector: '#divTreeDeptUserForAll  ul li',
+            zIndex: 3,
+            build:function($triggerElement, event) {
+             
+                var options = {
+                    items: {
+                        "addNode":{
+                            name: "@Localizer("Department.CreateOrEdit.CreateDepartment")",
+                            icon: "add",
+                            callback: function() { 
+                                var id  = $(this).attr('id');
+                                $("#divTreeDeptUserForAll").jstree("deselect_node");
+                                $("#divTreeDeptUserForAll").jstree("select_node", '#' +id);
+                                selectedNode(id);
+                            }
+                        },
+                        "removeNode": {
+                            name: "@Localizer("Department.CreateOrEdit.DeleteDepartment")",
+                            icon: "delete",
+                            callback: function() {                                
+                                var id  = $(this).attr('id');
+                                deleteNode(id);
+                            }
+                        }
+                    }
+                };
+                return options;
+            }});   
+    });
+
+    function selectedNode(nodeId,selectedObj) {
+        $.ajax({
+            url: "Department/GetDetailById",
+            data: {id:nodeId},
+            beforeSend: function(){
+                $("#divDepartment").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+            },
+            success: function(result){
+                $("#divCreateOrUpdateDept").html(result);
+                if(selectedObj){
+                    $('#parentDepartmentName').text(selectedObj.parents('li:first').children('a').text());
+                }else{
+                    $('#parentDepartmentName').text($('#divTreeDeptUserForAll').jstree('get_selected').parents('li:first').children('a').text());
+                }
+                $("#divDepartment").unblockpanel();
+            }
+        });
+    }
+
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-house"></i>
+        <span data-res="egov.resources.sitemap.department"></span>
+    </div>
+    <div class="options">
+    </div>
+</div>
+<div id="container-tree" style="height: 100%; width: 99%; margin-left: 2px; min-height: 700px">
+    <div id="divListDepartments" class="ui-layout-west ui-corner-all">
+        <div id="divTreeDeptUserForAll" style="background: white; padding: 0;">
+            <div style="text-align: left; padding-top: 5px">
+                <b data-res="egov.resources.deparment.nodata">Chưa có phòng ban</b>
+            </div>
+        </div>
+    </div>
+    <div id="divCreateOrUpdateDept" class="ui-layout-center ui-corner-all" style="overflow: auto">
+    </div>
+</div>
+
+<div id="dialog" style="background: white; padding: 0; display: none">
+    <div class="col-md-16">
+        <div class="col-md-16 choseJob">
+            <b data-res="egov.resources.deparment.choosejobtitle">Chọn chức danh</b>
+            <br />
+            <select id="jobs" name="jobs" style="width: 100%"></select>
+        </div>
+
+        <div class="col-md-16 chosePos">
+            <b data-res="egov.resources.deparment.chooseposition">Chọn chức vụ</b>
+            <br />
+            <select id="pos" name="pos" style="width: 100%"></select>
+        </div>
+    </div>
+</div>
+<script id="tmpPosItem" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>
+
+<script id="tmpJobItem" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>

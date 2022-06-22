@@ -1,0 +1,16 @@
+﻿@using Bkav.eGovCloud.Web.Framework.Utility
+@{
+    
+    ViewBag.Cultures = new List<SelectListItem> {new SelectListItem {Text = "Việt Nam", Value = "vi-VN", Selected = CultureHelper.GetCurrentCultureName() == "vi-VN"},
+                                                 new SelectListItem {Text = "English", Value = "en-US", Selected = CultureHelper.GetCurrentCultureName() == "en-US"}};
+}
+
+<script type="text/javascript">
+    function changeCurrentCulture(sender) {
+        $.cookie("_culture", $(sender).val(), { expires: 365, path: '/' });
+        window.location.reload();
+    };
+</script>
+<div style="margin-top: 5px;">
+    @Html.DropDownList("Cultures", null, new { onchange = "changeCurrentCulture(this)", @class = "cultureCss" })
+</div>

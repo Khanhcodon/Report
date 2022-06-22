@@ -1,0 +1,32 @@
+﻿
+<div class="">
+    <div class="form-group">
+        <label class="form-label">
+            Ý kiến xử lý
+        </label>
+        <textarea class="form-control" id="comment" rows="2"></textarea>
+    </div>
+    <div class="form-group hidden">
+        <label class="form-label">
+            Hạn xử lý
+        </label>
+        <input type="text" class="datetime form-control" id="dateAppointed" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Chọn cơ quan nhận</label>
+        <div class="form-group">
+            <input type="text" class="form-control" id="searchAddress" />
+        </div>
+        <ul class="list-group address-list">
+            {{each addresses}}
+            <li class="list-group-item address-item" data-name="${Name}">
+                <input type="checkbox" id="address${AddressId}" value="${AddressId}" />
+                <label for="address${AddressId}">
+                    <span>${Name}</span>
+                    <span> - ${AddressString}</span>
+                </label>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

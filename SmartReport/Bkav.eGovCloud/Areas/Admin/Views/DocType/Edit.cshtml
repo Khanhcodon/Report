@@ -1,0 +1,22 @@
+﻿@model DocTypeModel
+@using Bkav.eGovCloud.Entities
+@{
+    ViewBag.Title = Localizer("Common.Doctype.Label.Edit");
+    Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+    
+}
+<script type="text/javascript">
+    $(function () {
+        egov.utilities.checkbox.checkAndUnCheckAll($("#checkAllStore"), $(".checkItemStore"));
+
+        $(".tab-doctype").addClass("active");
+        $(".tab-doctype").siblings().removeClass(" ui-tabs-selected ui-state-active");
+    });
+
+</script>
+    @using (Html.BeginForm())
+    {
+        Html.RenderPartial("_CreateOrEditHsmc", Model);
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="CategoryBusinessId" value="@Model.CategoryBusinessId"/>
+    }

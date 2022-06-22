@@ -1,0 +1,16 @@
+﻿@model HolidayModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Time.Edit");
+    Layout = Layout = "~/Areas/Admin/Views/Time/_TimeLayout.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        $("#holiday a").addClass("selected");
+    });
+</script>
+
+@using (Html.BeginForm("Edit", "Time"))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+    @Html.AntiForgeryToken()
+}

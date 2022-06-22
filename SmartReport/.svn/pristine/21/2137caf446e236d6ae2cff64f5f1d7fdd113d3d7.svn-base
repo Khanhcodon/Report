@@ -1,0 +1,118 @@
+﻿@{
+    var allEmbryonicForm = ViewBag.AllEmbryonicForm as string;
+}
+<script>
+    $(function () {
+        var allEmbryonicForm=@(string.IsNullOrEmpty(allEmbryonicForm) ? MvcHtmlString.Create("[]") : Html.Raw(allEmbryonicForm));
+
+        $('#tbListEmbryonicForm #checkAll').change(function () {
+            $('#tbListEmbryonicForm tbody input[type=checkbox]').prop('checked', $(this).prop('checked'));
+        });
+
+        $("#tbListEmbryonicForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        bindEmbryonicForm(allEmbryonicForm);
+    });
+
+    var existEmbryonicFormId=[];
+    function bindEmbryonicForm (embryonicForms) {
+        $("#embryonicFormName").autocomplete({
+            minLength: 1,
+            source: embryonicForms,
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#embryonicFormName").val('');
+                var exist = _.find(existEmbryonicFormId, function (id) {
+                    return id === ui.item.value;
+                });
+                if (!exist) {
+                    existEmbryonicFormId.push(ui.item.value);
+                    addEmbryonicForm(ui.item);
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $(".ui-autocomplete-input").bind("autocompleteopen", function () {
+            var autocomplete = $(this).data("autocomplete"), menu = autocomplete.menu;
+            if (!autocomplete.options.selectFirst) {
+                return;
+            }
+            menu.activate($.Event({ type: "mousehover" }), menu.element.children().first());
+        });
+    };
+
+    function addEmbryonicForm (item) {
+        var $newtr = $('<tr></tr>');
+        $newtr.append('<td>' + item.label + '</td>');
+        var $newtdDelete = $('<td style="width:30px"></td>');
+        var $a = $('<a href="javascript:void(0)">' + egov.resources.buttons.delete + '</a>');
+        $a.click(function () {
+            $(this).parents('tr:first').remove();
+            existEmbryonicForm = _.reject(existEmbryonicFormId, function (id) {
+                return id === item.value;
+            });
+        });
+        $newtdDelete.append($a);
+        $newtr.append($newtdDelete);
+        $('#tblEmbryonicForm').append($newtr);
+        $("#panelEmbryonicForm").getNiceScroll().resize();
+    };
+
+    function updateEmbryonicForm(docTypeId)
+    {
+        var token= $("input[name='__RequestVerificationToken']","#DocTypeUpdateDocTypeEmbryonic").val();
+        $.ajax({
+            url: "/admin/DocType/UpdateDocTypeEmbryonic",
+            data: {
+                docTypeId:docTypeId,
+                embryonicIds: existEmbryonicFormId},
+            type:"POST",
+            traditional: true,
+            success: function (result) {
+                if(result.success){
+                    window.location.reload(true);
+                }
+                else{
+                    eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                }
+            }
+        });
+    }
+</script>
+
+<div id="DocTypeUpdateDocTypeEmbryonic" style="display: none">
+    @Html.AntiForgeryToken()
+</div>
+<table style="width: 100%">
+    <tbody>
+        <tr>
+            <td style="width: 100px" data-res="egov.resources.doctype.embryonicformname">Tên mẫu phôi:
+            </td>
+            <td>
+                <input type="text" id="embryonicFormName" style="width: 298px">
+            </td>
+        </tr>
+        <tr>
+            <td data-res="egov.resources.doctype.embryonicformlist">Danh sách các mẫu phôi:</td>
+            <td>
+                <div id="panelEmbryonicForm" style="height: 150px; border: 1px solid rgb(171, 173, 179); width: 300px; overflow: hidden; outline: none;" tabindex="5003">
+                    <table id="tblEmbryonicForm" style="width: 100%">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

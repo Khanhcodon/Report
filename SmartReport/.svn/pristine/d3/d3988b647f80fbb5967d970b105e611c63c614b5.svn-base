@@ -1,0 +1,184 @@
+﻿<style type="text/css">
+    .div-result {
+        height: 150px;
+    }
+
+    #key-collection, #key-import {
+        height: 100%;
+        width: 336px;
+        float: left;
+        border: 1px solid #b8b8b8;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .key-get {
+        width: 74px;
+        height: 100%;
+        float: left;
+    }
+
+        .key-get input {
+            border: none;
+            background-color: rgb(52, 84, 255);
+            color: white;
+            width: 45px;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+
+    .selected {
+        background-color: aliceblue;
+    }
+
+    .editor-label {
+        font-weight: bold;
+    }
+
+    .key-element {
+        margin-left: 10px;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 71%;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function getDoctypes() {
+        var docfieldId = $("#Docfields").val();
+        var token = $('[name=__RequestVerificationToken]').val();
+        if (docfieldId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetDocTypes", "TemplateKey")',
+                type: "POST",
+                data: { docfieldId: docfieldId },
+                success: function (result) {
+                    $("#ddlDoctypes").html("<option data-res='egov.resources.templatekey.selectdocument'>Chọn loại hồ sơ</option>");
+                    if (result.success) {
+                        var doctypes = JSON.parse(result.success);
+                        for (var i = 0; i < doctypes.length; i++) {
+                            var doctype = doctypes[i];
+                            var $option = $("<option>");
+                            $option.attr("value", doctype.Value).text(doctype.Text);
+                            $("#ddlDoctypes").append($option);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function getForms() {
+        var doctypeId = $("#ddlDoctypes").val();
+        if (doctypeId != "") {
+            $.ajax({
+                url: '@Url.Action("GetForms", "TemplateKey")',
+                type: "POST",
+                data: { doctypeId: doctypeId },
+                success: function (result) {
+                    $("#ddlForms").html("<option data-res='egov.resources.templatekey.selecttemplate'>Chọn biểu mẫu</option>");
+                    if (result.success) {
+                        var forms = JSON.parse(result.success);
+                        for (var i = 0; i < forms.length; i++) {
+                            var $option = $("<option>");
+                            $option.attr("value", forms[i].Value).text(forms[i].Text);
+                            $("#ddlForms").append($option);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function getKey() {
+        var formId = $("#ddlForms").val();
+        if (formId != "") {
+            $.ajax({
+                url: '@Url.Action("GetKeys", "TemplateKey")',
+                type: "POST",
+                data: { formId: formId },
+                success: function (result) {
+                    $("#key-collection").html("");
+                    if (result.success) {
+                        var keys = JSON.parse(result.success);
+                        for (var i = 0; i < keys.length; i++) {
+                            var $key = $("<div>");
+                            $key.attr("onclick", "selectKey(this)").addClass("key-element");
+                            $key.append($("<input>").attr("type", "hidden").val(JSON.stringify(keys[i])));
+                            $key.append($("<span>").text(keys[i].Name));
+                            $("#key-collection").append($key);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function selectKey(_this) {
+        $(_this).addClass("selected");
+        $(_this).siblings().removeClass("selected");
+    }
+
+    function move() {
+        var selectedKey = $("#key-collection .selected");
+        if (selectedKey.length == 0) {
+            selectedKey = $("#key-collection .key-element").first();
+        }
+        $("#key-import").append(selectedKey);
+        selectedKey.removeClass("selected");
+    }
+
+    function removeKey() {
+        var selectedKey = $("#key-import .selected");
+        if (selectedKey.length == 0) {
+            selectedKey = $("#key-import .key-element").first();
+        }
+        selectedKey.removeClass("selected");
+        $("#key-collection").append(selectedKey);
+    }
+</script>
+<table>
+    <tr>
+        <td class="editor-label" style="width:14%" data-res='egov.resources.templatekey.selectdocfield'>Chọn lĩnh vực</td>
+        <td class="editor-field">@Html.DropDownList("Docfields", null, Localizer("Customer.DocType.CreateOrEdit.Fields.DocFieldId.Label"), new { onchange = "getDoctypes()" })</td>
+    </tr>
+    <tr>
+        <td class="editor-label" data-res='egov.resources.templatekey.selectdocument'>
+            Chọn loại hồ sơ
+        </td>
+        <td class="editor-field">
+            <select id="ddlDoctypes" onchange="getForms()">
+                <option data-res='egov.resources.templatekey.selectdocument'>Chọn loại hồ sơ</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="editor-label" data-res='egov.resources.templatekey.selecttemplate'>
+            Chọn biểu mẫu
+        </td>
+        <td class="editor-field">
+            <select id="ddlForms">
+                <option value="" data-res='egov.resources.templatekey.selecttemplate'>Chọn biểu mẫu</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" value="Lấy Key" onclick="getKey()" style="margin-top: 10px;" /></td>
+    </tr>
+    <tr>
+        <td class="div-result" colspan="2">
+            <div id="key-collection">
+            </div>
+            <div class="key-get">
+                <input type="button" value=">>" style="margin-top: 35px;" onclick="move()" data-restitle="egov.resources.commonlabel.add" title="Thêm" />
+                <input type="button" value="<<" style="background-color: #f44;" onclick="removeKey()" data-restitle="egov.resources.commonlabel.reject" title="Bỏ" />
+            </div>
+            <div id="key-import">
+            </div>
+        </td>
+    </tr>
+</table>

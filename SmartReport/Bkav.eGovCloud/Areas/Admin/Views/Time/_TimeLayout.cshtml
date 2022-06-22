@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.css" rel="stylesheet" />
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").remove();
+    });
+    function activeTab(tab) {
+        tab.addClass(" ui-tabs-selected ui-state-active");
+        tab.siblings().removeClass(" ui-tabs-selected ui-state-active");
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-clock3"></i>
+        <span data-res="egov.resources.sitemap.time"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/time/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div class="col-md-3 left-content">
+    <ul>
+        <li id="workday">
+            @Html.ActionLink(Localizer("Common.Time.WorkDate"), "Index", new { isList = true })
+        </li>
+        <li id="workTime">
+            @Html.ActionLink(Localizer("Common.Time.ExTime"), "WorkTime")
+        </li>
+        <li id="holiday">
+            @Html.ActionLink(Localizer("Common.Time.DolidayDate"), "Index", new { isList = false })
+        </li>
+        <li id="addholiday">
+            @Html.ActionLink(Localizer("Common.Time.AddHolidayDate"), "Create")
+        </li>
+        <li id="dateworkoffset">
+            @Html.ActionLink(Localizer("Common.Time.DateWorkOffset"), "DateWorkOffset")
+        </li>
+        <li id="adddateworkoffset">
+            @Html.ActionLink(Localizer("Common.Time.CreateDateWorkOffset"), "CreateDateWorkOffset")
+        </li>
+    </ul>
+</div>
+<div class="col-md-13 right-content" id="divList">
+    @RenderBody()
+</div>

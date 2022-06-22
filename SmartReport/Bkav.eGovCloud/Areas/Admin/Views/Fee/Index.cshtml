@@ -1,0 +1,116 @@
+﻿@model IEnumerable<FeeModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDocFields = ViewBag.AllDocFields as string;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+    var search = ViewBag.Search as FeeSearchModel;
+}
+<script type="text/javascript">
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var docfieldSelected = '@search.DocFieldId';
+    var doctypeSelected = '@search.DocTypeId';
+
+    $(function () {
+        bindDocField(docfieldSelected);
+        changeDocField(doctypeSelected);
+
+        $("#DocFieldId").change(function () {
+            changeDocField();
+            $(this).parent().submit();
+        });
+        $("#DocTypeId").change(function () {
+            $(this).parent().submit();
+        });
+    });
+
+    function bindDocField(selected) {
+        $("#DocFieldId").html('<option value="0">'+ '@Localizer("Common.All.Label")' +'</option>');
+        $.each(allDocFields, function(i, item) {
+            $("#DocFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+        });
+
+        if (selected) {
+            $('#DocFieldId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function changeDocField(selected) {
+        $("#DocTypeId").html('');
+        var docfieldId = parseInt($('#DocFieldId').val());
+        var doctypes;
+
+        if (docfieldId > 0) {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return item.DocFieldId == docfieldId;
+            });
+        }else{
+            $("#DocTypeId").html('<option value="@Guid.Empty">'+ '@Localizer("Common.All.Label")' +'</option>');
+            doctypes = allDocTypes;
+        }
+
+        $.each(doctypes, function(i, item) {
+            $("#DocTypeId").append('<option value="' + item.DocTypeId + '">' + item.DocTypeName + '</option>');
+        });
+
+        if (selected) {
+            $('#DocTypeId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function onBegin() {
+        $("#divListFee").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {$('tr th').css("line-height", "2.5");
+        $('#divListFee').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListFee').unblockpanel();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-coin"></i>
+        <span data-res="egov.resources.sitemap.fee"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/fee/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search",
+            new AjaxOptions
+            {
+                UpdateTargetId = "divListFee",
+                OnBegin = "onBegin",
+                OnSuccess = "onSuccess",
+                OnFailure = "onFailure",
+                HttpMethod = "Get"
+            }))
+    {
+        <div style="margin-bottom: 4px;">
+            @* <span>@Localizer("Customer.DocType.CreateOrEdit.Fields.CategoryBusinessCode.Label") :</span>
+            @Html.DropDownList("CategoryBusinessId", null, new { @style = "width: 180px;display:inline" })*@
+            <span>@Localizer("Customer.DocType.CreateOrEdit.Fields.DocFieldId.Label") :</span>
+            <select id="DocFieldId" name="DocFieldId" style="width: 180px; display: inline">
+            </select>
+            <span>@Localizer("Admin.Template.CreateOrEdit.Fields.DoctypeId.Label"):</span>
+            <select id="DocTypeId" name="DocTypeId" style="width: 180px; display: inline">
+            </select>
+        </div>
+    }
+    <br />
+    <div id="divListFee">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

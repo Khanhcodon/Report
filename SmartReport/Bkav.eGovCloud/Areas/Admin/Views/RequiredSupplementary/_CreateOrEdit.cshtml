@@ -1,0 +1,50 @@
+﻿@model RequiredSupplementaryModel
+
+@Html.HiddenFor(model => model.RequiredSupplementaryId)
+@Html.ValidationSummary(true)
+<style type="text/css">
+    #create-or-edit-paper-table select {
+        width:304px;
+    }
+    #create-or-edit-paper-table input[type=text] {
+        width:300px;
+    }
+</style>
+
+
+<table id="create-or-edit-paper-table">
+    @if (Model.RequiredSupplementaryId == 0)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DocFieldId):
+            </td>
+            <td>
+                <select id="DocFieldId" name="DocFieldId">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DocTypeId):
+            </td>
+            <td>
+                <select id="DocTypeId" name="DocTypeId">
+                </select>
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.RequiredSupplementaryId)
+    }
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Name):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+</table>

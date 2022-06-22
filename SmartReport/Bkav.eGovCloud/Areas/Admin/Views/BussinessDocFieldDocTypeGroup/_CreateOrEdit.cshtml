@@ -1,0 +1,137 @@
+﻿@model BussinessDocFieldDocTypeGroupModel
+@{
+    var allBussiness = ViewBag.AllBussiness as List<SelectListItem>;
+    var allDocField = ViewBag.AllDocField as string;
+    var allDocType = ViewBag.AllDocType as string;
+}
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+<script>
+    var allDocField= @(string.IsNullOrEmpty(allDocField) ? MvcHtmlString.Create("[]") : Html.Raw(allDocField));
+
+    var allDocType= @(string.IsNullOrEmpty(allDocType) ? MvcHtmlString.Create("[]") : Html.Raw(allDocType));
+
+    $(function(){
+        bindViewDocField(@Model.CategoryBusinessId);
+        bindViewDocType(@Model.CategoryBusinessId);
+       
+        @if(Model.BussinessDocFieldDocTypeGroupId>0)
+        {
+          <text>
+                $("#DocFieldId").val('@Model.DocFieldId');
+                $("#DocTypeId").val('@Model.DocTypeId');
+           </text>
+        }
+
+        $("#DocFieldId").on("change",function(){
+            bindViewDocType($("#CategoryBusinessId").val(),$(this).val());
+        });
+
+        $("#CategoryBusinessId").on("change",function(){
+            bindViewDocField($(this).val());
+            bindViewDocType($(this).val());
+        });
+    });
+
+    function bindViewDocField(categoryBusinessId){
+        if(allDocField.length>0){
+            var list= _.filter(allDocField,function(item){
+                return item.categoryBusinessId == parseInt(categoryBusinessId);
+            });
+
+            $("#DocFieldId option[value!='']").remove();
+            $("#DocFieldId").append($("#templateOption").tmpl(list));
+        }
+    }
+
+    function bindViewDocType(categoryBusinessId, docFieldId){
+        if(allDocField.length > 0 && allDocType.length>0 ){
+            var list= _.filter(allDocType,function(item){
+                return item.categoryBusinessId == parseInt(categoryBusinessId)
+                    && ((docFieldId == null ||docFieldId==''
+                    || item.docFieldId ==null|| item.docFieldId =='')
+                    || item.docFieldId == parseInt(docFieldId));
+            });
+
+            $("#DocTypeId option[value!='']").remove();
+            $("#DocTypeId").append($("#templateOption").tmpl(list));
+        }
+    }
+
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-stopwatch"></i>
+        <span data-res="egov.resources.sitemap.egovjob"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/BussinessDocFieldDocTypeGroup/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @using (Html.BeginForm(Model.BussinessDocFieldDocTypeGroupId == 0 ? "Create" : "Edit"))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.BussinessDocFieldDocTypeGroupId)
+        <table id="timeJobInfo" style="width: 100%">
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelRequireFor(model => model.Name):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.IsActived):
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.IsActived)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CategoryBusinessId):
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.CategoryBusinessId, allBussiness)
+                    @Html.ValidationMessageFor(model => model.CategoryBusinessId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.DocFieldId):
+                </td>
+                <td>
+                    <select id="DocFieldId" name="DocFieldId">
+                        <option value="">@Localizer("Common.All.Label")</option>
+                    </select>
+                </td>
+                <tr>
+                    <td>
+
+                        @Html.LabelFor(model => model.DocTypeId):
+                    </td>
+                    <td>
+                        <select id="DocTypeId" name="DocTypeId">
+                            <option value="">@Localizer("Common.All.Label")</option>
+                        </select>
+                    </td>
+                </tr>
+        </table>
+    }
+</div>
+
+<script id="templateOption" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>

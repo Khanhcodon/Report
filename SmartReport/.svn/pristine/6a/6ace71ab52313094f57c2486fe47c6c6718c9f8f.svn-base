@@ -1,0 +1,43 @@
+﻿@model SmsModel
+@{
+    ViewBag.Title = Localizer("Admin.Sms.Title.View");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-left: 20px">
+    <h2>@Localizer("Admin.Sms.Title.View")</h2>
+    <table>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.DateCreated):
+            </td>
+            <td><b>@( Model.DateCreated.HasValue ? Model.DateCreated.Value.ToString("dd/MM/yyyy hh:mm:ss tt") : "")</b></td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.PhoneNumber):</td>
+            <td><b>@Model.PhoneNumber</b></td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.Message):</td>
+            <td>@Model.Message</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.IsSent):</td>
+            <td><b>@(Model.IsSent ? "Đã gửi" : "Chưa gửi")</b></td>
+        </tr>
+        @if (Model.IsSent)
+        {   <tr>
+            <td>
+                @Html.LabelFor(model => model.DateSend):</td>
+            <td><b>@( Model.DateSend.HasValue
+            ? Model.DateSend.Value.ToString("dd/MM/yyyy hh:mm:ss tt") : "")</b></td>
+        </tr>
+        
+        }
+    </table>
+
+    <p>
+        <button type="button" onclick="location.href='@Url.Action("Index")'">@Localizer("Common.Button.Back")</button>
+    </p>
+
+</div>

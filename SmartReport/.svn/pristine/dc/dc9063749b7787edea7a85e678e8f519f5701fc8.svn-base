@@ -1,0 +1,46 @@
+﻿<style>
+#listVoteDialogTable tbody {
+    display:block;
+    height:250px;
+    overflow:auto;
+}
+#listVoteDialogTable > thead, #listVoteDialogTable>tbody>tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+#listVoteDialogTable > thead {
+    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+}
+table#listVoteDialogTable {
+}
+</style>
+<div class="form-horizontal" id="listVoteDialog">
+    <div class="row">
+        <div class="col-md-16">
+            <div class="form-group form-group-sm">
+                <div class="col-md-16" style="overflow: auto;">
+                    <table class="table table-hover" style="display:block" id="listVoteDialogTable">
+                        <colgroup>
+                            <col>
+                            <col style="width: 150px">
+                            <col style="width: 100px">
+                            <col style="width: 100px;text-align:center">
+                            <col style="width: 100px;text-align:center">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th data-res="" style="">Chủ đề</th>
+                                <th data-res="" style="text-align:right; width: 150px">Ngày Tháng</th>
+                                <th data-res="" style="width: 100px">Người Soạn</th>
+                                <th data-res="" style="width: 100px;text-align:center">Đang diễn ra</th>
+                                <th data-res="" style="width: 100px;text-align:center">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="listVote" style="display:block; overflow: auto; max-height:200px"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

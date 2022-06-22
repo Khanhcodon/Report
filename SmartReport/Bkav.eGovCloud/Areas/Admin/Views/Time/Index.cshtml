@@ -1,0 +1,161 @@
+﻿@model IEnumerable<HolidayModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Time.Index");
+    Layout = "~/Areas/Admin/Views/Time/_TimeLayout.cshtml";
+    bool? type = (bool?)ViewBag.Type;
+}
+
+<style type="text/css">
+    #timework li {
+        display: inline-block;
+        margin-right: 10px;
+        width: 85px;
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .workday {
+        background-color: blue;
+    }
+
+    .holiday {
+        background-color: red;
+    }
+
+    #Years {
+        width: auto;
+        display: inline;
+    }
+</style>
+<script type="text/javascript">
+    var isList = @(ViewBag.IsList ? 1 : 0);
+   var typeValue= '@(type.HasValue?(type.Value?"true":"false"):"")';
+    var weekends = @(Html.Raw(ViewBag.Weekend));
+    $(function () {
+        $(".options").remove();
+        $("#timework li").each(function() {
+            var dayofWeek = $(this).attr("id");
+            if(weekends.indexOf(dayofWeek) >= 0) {
+                setHoliday(dayofWeek, $(this));
+            }
+        });
+        $("#type").val(typeValue);
+        $("#timework li").click(function () {
+            var _this = $(this);
+            var dayofWeek = _this.attr("id");
+            var class1 = _this.attr("class");
+            var isWeekend = (class1 == undefined || class1.indexOf("holiday") < 0) ? true : false;
+            if($(".workday").length == 1 && isWeekend)
+            {
+                return;
+            }
+            var token = $('input[name=__RequestVerificationToken]','#TimeSetHoliday').val();
+            $.ajax({
+                url: '@Url.Action("SetHoliday", "Time")',
+                type: "POST",
+                data: { "dayOfWeek": dayofWeek, "isWeekend": isWeekend,__RequestVerificationToken:token},
+                success: function(result) {
+                    if (result) {
+                        if (isWeekend) {
+                            setHoliday(dayofWeek, _this);
+                        } else {
+                            setWorkDay(dayofWeek, _this);
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    alert(xhr.statusText);
+                }
+            });
+        });
+        $("#Years").change(function(){
+            onchangeValue();
+        });
+
+        if(isList == 1) {
+            $("#workday a").addClass("selected");
+        } else {
+            $("#holiday a").addClass("selected");
+        }
+    });
+
+    function onchangeValue(){
+        var year = $("#Years").val();
+        var type=  $("#type").val(); 
+        var href='/admin/Time?year='+year+'&isList=false';
+      
+        if(type!=null && type!="")
+            href = href+'&type='+type;
+      
+        document.location = href;
+    }
+
+    function setHoliday(dayofWeek, _this) {
+        if(dayofWeek == "Saturday")
+        {
+            $(".saturdayTime").hide();
+        }
+        $(_this).removeClass("workday");
+        $(_this).addClass("holiday");
+    }
+
+    function setWorkDay(dayofWeek, _this) {
+        if(dayofWeek == "Saturday")
+        {
+            $(".saturdayTime").show();
+        }
+        $(_this).addClass("workday");
+        $(_this).removeClass("holiday");
+    }
+
+    function deleteTime(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Time.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.OkCancel,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+</script>
+
+@if (ViewBag.IsList)
+{
+    <p><strong data-res="egov.resources.time.weekworktime">Thời gian làm việc trong tuần</strong></p>
+  <div id="TimeSetHoliday" style="display:none"> @Html.AntiForgeryToken() </div>
+    <p>@ViewBag.Day</p>
+    <ul id="timework">
+        <li id="Monday" class="workday" data-res="egov.resources.commonlabel.time.mon"></li>
+        <li id="Tuesday" class="workday" data-res="egov.resources.commonlabel.time.tue"></li>
+        <li id="Wednesday" class="workday" data-res="egov.resources.commonlabel.time.wed"></li>
+        <li id="Thursday" class="workday" data-res="egov.resources.commonlabel.time.thi"></li>
+        <li id="Friday" class="workday" data-res="egov.resources.commonlabel.time.fri"></li>
+        <li id="Saturday" class="workday" data-res="egov.resources.commonlabel.time.sat"></li>
+        <li id="Sunday" class="workday" data-res="egov.resources.commonlabel.time.sun"></li>
+    </ul>
+}
+else
+{
+     @Html.Partial("_Notifications")
+    <div>
+        <span data-res="egov.resources.time.listofrestday"></span> 
+        @Html.DropDownList("Years")
+
+        &nbsp;&nbsp;
+          <span data-res="egov.resources.time.state">Trạng thái</span> 
+        <select id="type" name="type" class="form-control" style="display:inline;width:130px" onchange="onchangeValue();">
+            <option value="" data-res="egov.resources.time.tatca">Tất cả</option>
+             <option value="true" data-res="egov.resources.time.nghibu">Nghỉ bù</option>
+             <option value="false" data-res="egov.resources.time.nghile">Nghỉ lễ</option>
+        </select>
+
+    </div>
+    Html.RenderPartial("_PartialList", Model);
+}

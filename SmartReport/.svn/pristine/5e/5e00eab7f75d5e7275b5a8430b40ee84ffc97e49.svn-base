@@ -1,0 +1,114 @@
+﻿@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bkav eGov</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
+    <meta name="apple-mobile-web-app-title" content="Bkav eGov">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/fonts-googleapis/css-roboto-300-400-500-700.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/Content/fonts-googleapis/icon-material-icons.css")">
+
+    <link href="../Content/bkav.egov/material.min.css" rel="stylesheet" />
+
+    <link href="../Content/bkav.egov/datepicker.css" rel="stylesheet" />
+
+    <link href="../Content/bkav.egov/mobile.css?v=34" rel="stylesheet" />
+
+    <link href="../Content/bkav.egov/mobileform.css" rel="stylesheet" />
+    <link href="../Content/Mobile/forms-mobile/css/mobiscroll.jquery.min.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+    <style src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/contents.css")"></style>
+    <script type="text/javascript">
+        var notifyOpen = "@Html.Raw( ViewBag.NotifyOpen)";
+        if (notifyOpen.length > 0) {
+            window.notifyOpen = JSON.parse(notifyOpen.toLowerCase().replace(/'/g, "\""));
+        }
+
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener('WebViewJavascriptBridgeReady', function () {
+                    callback(WebViewJavascriptBridge)
+                }, false)
+            }
+        }
+
+        connectWebViewJavascriptBridge(function (bridge) {
+            /* Init your app here */
+            bridge.init(function (message, responseCallback) {
+                if (egov && egov.mobile && egov.mobile.notification) {
+                    egov.mobile.notification.openDocumentNotity(message);
+                }
+                //alert('Thông điệp: ' + message)
+                if (responseCallback) {
+                    responseCallback("Right back atcha")
+                }
+            })
+        });
+
+    </script>
+</head>
+<body>
+    <div class="egov mcontainer">
+        @*Trạng thái xử lý*@
+        <div id="processBar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="display: none;"></div>
+
+        <div id="main-page" class="trans trans-left display egov-main">
+            <div class="app-view">
+                @RenderBody()
+                <div class="egov-footer">
+                    @*@Html.Partial("_AppMenu")*@
+                </div>
+            </div>           
+        </div>
+
+        @*Mở mail, văn bản*@
+        <div class="detail-page dataDetail trans trans-right">
+            <div class="bmail-dataDetail hidden" id="mail-detail" data-app="bmail"></div>
+            <div class="bmail-compose hidden" id="mail-compose" data-app="compose"></div>
+
+            <div class="documents documents-dataDetail hidden" data-app="documents" id="document-detail"></div>
+
+            <div class="calendar calendar-detail hidden" data-app="calendar" id="calendar-detail"></div>
+
+            <div class="chat-detail hidden" data-app="chat" id="chatDetail"></div>
+        </div>
+
+        <div class="info-page trans trans-right">
+
+        </div>
+
+        @Html.Partial("_DocumentDetail")
+
+
+        @Html.Partial("_Search")
+
+        @*Mở dialog*@
+        @Html.Partial("_Dialog")
+
+        @*Status*@
+        @*https://getmdl.io/components/index.html#snackbar-section*@
+        <div id="mobileStatus" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
+        </div>
+
+    </div>
+
+    <script defer src="@Url.Content("~/Scripts/mobile/libs/mdl/material.min.js")"></script>
+    <script src="/Scripts/bkav.egov/libs/jsonform/jsonform.js"></script>
+    <script src="../Scripts/require.js" data-main="../Scripts/mobile/app.js?v=ffeefe"></script>
+</body>
+</html>

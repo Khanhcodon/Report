@@ -1,0 +1,61 @@
+﻿{{if viewIconBangiao}}
+<!--<button id="btnTransfer_${docId}" class="btnTransfer mdl-button mdl-js-button mdl-button--icon">
+    <i class="material-icons">send</i>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect transferActions" for="btnTransfer_${docId}"></ul>-->
+{{/if}}
+
+<button id="moreOptions_${docId}" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+    <i class="material-icons">more_vert</i>
+</button>
+
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect moreOptions" for="moreOptions_${docId}">
+    {{if viewIconXinykien}}
+    <li class="mdl-menu__item">
+        <a class="btnQuestion" href="#">
+            <span data-res="egov.resources.document.viewIconXinykien"></span>
+        </a>
+    </li>
+    {{/if}}
+
+    {{if viewIconHuyVanBan}}
+    <li class="mdl-menu__item">
+        <a class="btnDestroy" href="#">
+            <span data-res="egov.resources.document.viewIconHuyVanBan"></span>
+        </a>
+    </li>
+    {{/if}}
+
+    {{if viewIconTiepNhanBoSung}}
+    <li class="mdl-menu__item">
+        <a class="dropdown-toggle" href="#">
+            <span data-res="egov.resources.document.viewIconTiepNhanBoSung"></span>
+        </a>
+    </li>
+    {{/if}}
+
+    {{if viewIconTraKetQua}}
+    <li class="mdl-menu__item">
+        <a class="dropdown-toggle" href="#">
+            <span data-res="egov.resources.document.viewIconTraKetQua"></span>
+        </a>
+    </li>
+    {{/if}}
+
+    {{if viewIconKetthuc}}
+    <li class="mdl-menu__item">
+        <a class="btnFinish" href="#">
+            <span data-res="egov.resources.document.btnFinish"></span>
+        </a>
+    </li>
+    {{/if}}
+
+    {{if viewIconBangiao}}
+    <li class="mdl-menu__item">
+        <a href="#" class="btnInsertAttachment">
+            <span data-res="egov.resources.toolbar.attachment"></span>
+        </a>
+        <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+    </li>
+    {{/if}}
+</ul>

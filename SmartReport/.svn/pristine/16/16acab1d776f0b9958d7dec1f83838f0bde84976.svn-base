@@ -1,0 +1,100 @@
+﻿
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnBackSearch" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <span class="mdl-layout-title wrap-text">
+                <!--20191218 VuHQ START SUPPORT TaiDA-->
+                <span class="header-title" style="padding-top: 10px">Tìm kiếm</span>
+                <!--Tìm kiếm văn bản-->
+            </span>
+        </div>
+    </header>
+
+    <div class="mdl-layout__content" style="background: url(../../Content/Images/home/back-ipad.jpg)">
+        <div class="document-search-page">
+            <div class="mbsc-mobiscroll" style="padding-bottom: 10px;">
+                <div class="search-conditions">
+                    <div class="mbsc-form-group">
+                        <label for="compendium" class="mbsc-control-w mbsc-input">
+                            <span class="mbsc-label" title="Trích yếu">Trích yếu</span>
+                            <span class="mbsc-input-wrap" id="compendium-parent">
+                                <input id="compendium" type="text" placeholder="Nhập từ khóa" class="mbsc-control">
+                                <span class="mbsc-input-fill"></span>
+                            </span>
+                            <a id="search-show-hide-advance"><i class="material-icons">keyboard_arrow_down</i></a>
+                            
+                        </label>
+                        <label for="doccode" class="mbsc-control-w mbsc-input" id="search-input-skh" style="display:none">
+                            <span class="mbsc-label" title="Số ký hiệu">Số ký hiệu</span>
+                            <span class="mbsc-input-wrap">
+                                <input id="doccode" type="text" class="mbsc-control">
+                                <span class="mbsc-input-fill"></span>
+                            </span>
+                        </label> 
+                        <label for="inoutcode" class="mbsc-control-w mbsc-input" id="search-input-sd" style="display:none">
+                            <span class="mbsc-label" title="Số đến">Số đến</span>
+                            <span class="mbsc-input-wrap">
+                                <input id="inoutcode" type="text" class="mbsc-control">
+                                <span class="mbsc-input-fill"></span>
+                            </span>
+                        </label>
+                        <div style="text-align: center; padding-top: 20px">
+                            <button class="btnSearch" id="btnSearch">
+                                Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                    <!--<table class="mdl-data-table mdl-js-data-table" style="width: 100%; background-color: unset !important">
+                        <tbody>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric" style="width: 100px;">Trích yếu:</td>
+                                <td>
+                                    <input type="text" id="compendium" placeholder="nhập từ khóa" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">Số ký hiệu:</td>
+                                <td>
+                                    <input type="text" id="doccode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">Số đến:</td>
+                                <td>
+                                    <input type="text" id="inoutcode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="mdl-data-table__cell--non-numeric">
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="btnSearch">
+                                        Tìm kiếm
+                                    </button>
+
+                                    <span class="total-result">
+                                        0 Kết quả
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>-->
+                </div>
+            </div>
+            <hr style="height:1px;border-top:1px solid #DBDBDB; margin: 0px 0px 0px 0px !important" />
+            <div style="background: rgba(0,0,0,.06);">
+                <div class="search-result">
+                    <!--<div class="group-label" style="color: white">
+                        Kết quả tìm kiếm
+                    </div>-->
+                    <div id="searchResult">
+                        <ul class="mdl-list mdl-grid"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

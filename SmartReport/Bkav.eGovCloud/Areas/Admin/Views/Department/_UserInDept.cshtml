@@ -1,0 +1,429 @@
+﻿@{
+    var selectedUsers = ViewBag.SelectedUsers as string;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var selectedUsers = @(string.IsNullOrEmpty(selectedUsers) ? MvcHtmlString.Create("[]") : Html.Raw(selectedUsers));
+
+    $(function() {
+        $("#selectedUser").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedUser").val('');
+                $("input[name='" + ui.item.value + "']").attr("checked", "");
+                var exist = _.find(selectedUsers, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUsers.push(selected);
+                        var noresult = $("#tblUser tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedUserTemplate")
+                        .tmpl(selected, {
+                            getNumbers: function() {
+                                return selectedUsers.length;
+                            }
+                        })
+                        .appendTo("#tblUser tbody");
+                        $("input[name=UserJobTitlesPositionIds]:last")
+                            .val(ui.item.value + "," + $("#jobtitles" + ui.item.value + " option:first").val() + "," + $("#positions" + ui.item.value + " option:first").val() + ",false,false,false");
+                        $(document).bindResources();
+                    }
+                }
+                $("#tblUser").tableSelect();
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#selectedUser").keypress(function(e) {
+            if(e.keyCode == 13) {
+                return false;
+            }
+            return true;
+        });
+
+        if(selectedUsers.length === 0) {
+            $("#tblUser tbody").append("<tr id='noresult'><td colspan='5' data-res='egov.resources.deparment.nouser'>Chưa có người dùng nào</td></tr>");
+        } else {
+            var numbers = 1;
+            selectedUsers = _.sortBy(selectedUsers, function(user) {
+                return user.username;
+            });
+            for(var i = 0;i<selectedUsers.length;i++)
+            {
+                var existUser = _.find(allUsers, function(user) {
+                    return user.value === selectedUsers[i].value;
+                });
+                if(existUser)
+                {
+                    selectedUsers[i].label = existUser.username + " - " + existUser.fullname;
+                    selectedUsers[i].fullname = existUser.fullname;
+                    selectedUsers[i].username = existUser.username;
+                }
+            }
+
+            $("#selectedUserTemplate")
+                .tmpl(selectedUsers, {
+                    getNumbers: function() {
+                        return numbers++;
+                    }
+                })
+                .appendTo("#tblUser tbody");
+        }
+
+        ///Tạo seleted
+        $("#tblUser").tableSelect({tableCallback : function(){
+            $(".table-main").addClass("table-bordered table-hover");
+            bindContextmenu();
+        }});
+    });
+
+    function removeUser(id) {
+        selectedUsers = _.reject(selectedUsers, function(user) {
+            return user.value === id;
+        });
+        if(selectedUsers.length > 0) {
+            $("#tblUser tbody").find("tr#"+id).remove();
+            $("#tblUser tbody tr td:first-child").each(function(index, el) {
+                $(el).text(index + 1);
+            });
+        } else {
+            $("#tblUser tbody").html("<tr id='noresult'><td colspan='5'data-res='egov.resources.deparment.nouser'>Chưa có người dùng nào</td></tr>");
+        }
+    }
+
+    function onChangeProp(id){
+        var $hidden = $("#tblUser tbody tr#" + id +" input[name='UserJobTitlesPositionIds']");
+        var positionId =$("#tblUser tbody tr#" + id+" select#positions"+ id).val();
+        var jobTitlesId =$("#tblUser tbody tr#" + id+" select#jobtitles"+ id).val();
+        var isPrimary= $("#tblUser tbody tr#" + id + " input[name='isPrimary'][type=checkbox]").prop('checked');
+        var isAdmin= $("#tblUser tbody tr#" + id + " input[name='isAdmin'][type=checkbox]").prop('checked');
+        var hasReceiveDocument = $("#tblUser tbody tr#" + id + " input[name='hasReceiveDocument'][type=checkbox]").prop('checked');
+        $hidden.val(id + "," + jobTitlesId + "," + positionId + "," + isPrimary + ","+ isAdmin + ","+hasReceiveDocument);
+    }
+
+    function bindContextmenu() {
+        var selector = "#tblUser tbody tr.selected";
+        $.contextMenu('destroy', selector);
+        $.contextMenu({
+            selector: selector,
+            trigger: 'right',
+            build: function () {
+                var items = {
+                    posJob: {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Department.UpdatePositionJobTitle")",
+                        icon: "add",
+                        callback: function () {
+                            showDialog(displayType.showPosAndJob);
+                        }
+                    },
+                    pos: {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Department.UpdatePosition")",
+                        icon: "add",
+                        callback: function () {
+                            showDialog(displayType.showPos);
+                        }
+                    },
+                    job: {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Department.UpdateJobTitle")",
+                        icon: "add",
+                        callback: function () {
+                            showDialog(displayType.showjob);
+                        }
+                    }
+                };
+
+                return {
+                    items: items
+                };
+            }
+        });
+    }
+
+    function getUserIdsSelected() {
+        var selector = "#tblUser tbody tr.selected";
+        var listIds = [];
+        $(selector).each(function (i, item) {
+            var id = $(item).attr("id");
+            listIds.push(parseInt(id));
+        });
+        return listIds;
+    }
+
+    var displayType={
+        showPos:1,
+        showjob:2,
+        showPosAndJob:3
+    };
+
+    function showDialog(type) {
+        var $dialog = $("#dialog");
+        $dialog.dialog({
+            title: "@Localizer("Bkav.eGovCloud.Areas.Admin.Department.AddPositionJobTitle")",
+            modal: true,
+            width: 400,
+            height: 250,
+            open: function () {
+                $('.chosePos').hide();
+                $('.choseJob').hide();
+                $("#pos").empty();
+                $("#jobs").empty();
+
+                if(type == displayType.showPos){
+                    $('.chosePos').show();
+                    $("#pos").append($('#tmpPosItem').tmpl(allPositions));
+                }
+                else if(type == displayType.showjob ){
+                    $('.choseJob').show();
+                    $("#jobs").append($('#tmpJobItem').tmpl(allJobTitless));
+                }
+                else if(type == displayType.showPosAndJob){
+                    $('.chosePos').show();
+                    $('.choseJob').show();
+                    $("#pos").append($('#tmpPosItem').tmpl(allPositions));
+                    $("#jobs") .append($('#tmpJobItem').tmpl(allJobTitless));
+                }
+            },
+            buttons: {
+                "Lưu": function () {
+                    var userIds = getUserIdsSelected();
+                    if (userIds.length <= 0) {
+                        eGovMessage.show("@Localizer("Bkav.eGovCloud.Areas.Admin.Department.NoChooseUser")", null, eGovMessage.messageButtons.Ok, null);
+                        return;
+                    }
+
+                    var posId = parseInt($("#pos").val());
+                    var jobId= parseInt($("#jobs").val());
+                    var deptId = parseInt($("#DepartmentId").val());
+                    var _this = $(this);
+
+                    //Chọn cả chức vụ chức danh
+                    if(type == displayType.showPosAndJob){
+                        addUserDeptPosJobs(userIds, deptId, posId, jobId,
+                            function (message) {
+                                eGovMessage.notification(message, eGovMessage.messageTypes.success);
+                                _this.dialog("destroy");
+                                selectedNode(deptId);
+                            });
+                    }
+                        //Chọn chức danh
+                    else  if(type == displayType.showjob){
+                        addUserDeptJobs(userIds, deptId, jobId,
+                            function (message) {
+                                eGovMessage.notification(message, eGovMessage.messageTypes.success);
+                                _this.dialog("destroy");
+                                selectedNode(deptId);
+                            });
+                    }
+                        //Chọn chức vụ
+                    else  if(type == displayType.showPos){
+                        addUserDeptPos(userIds, deptId, posId,
+                              function (message) {
+                                  eGovMessage.notification(message, eGovMessage.messageTypes.success);
+                                  _this.dialog("destroy");
+                                  selectedNode(deptId);
+                              });
+                    }
+                },
+                "Hủy": function () {
+                    $(this).dialog("destroy");
+                }
+            }
+        });
+    }
+
+    function addUserDeptPosJobs(userIds, deptId, posId, jobId, callback) {
+        if(jobId <= 0 || posId <= 0){
+            eGovMessage.show("@Localizer("Bkav.eGovCloud.Areas.Admin.Department.ChooseToUpdate")", null, eGovMessage.messageButtons.Ok, null);
+            return;
+        }
+
+        $.ajax({
+            traditional: true,
+            url: "/Department/AddUserDeptPosJob",
+            type: "post",
+            data: {
+                userIds: userIds,
+                deptId: deptId,
+                posId: posId,
+                jobId: jobId
+            },
+            success: function (result) {
+                if (result.result) {
+                    if (typeof callback === 'function') {
+                        callback(result.message);
+                    }
+                } else {
+                    eGovMessage.show(result.message, null, eGovMessage.messageButtons.Ok, null);
+                }
+            }
+        });
+    }
+
+    function addUserDeptPos(userIds, deptId, posId, callback) {
+        if( posId <= 0){
+            eGovMessage.show("@Localizer("Bkav.eGovCloud.Areas.Admin.Department.ChoosePositionToUpdate")", null, eGovMessage.messageButtons.Ok, null);
+            return;
+        }
+
+        $.ajax({
+            traditional: true,
+            url: "/Department/AddUserDeptPos",
+            type: "post",
+            data: {
+                userIds: userIds,
+                deptId: deptId,
+                posId: posId
+            },
+            success: function (result) {
+                if (result.result) {
+                    if (typeof callback === 'function') {
+                        callback(result.message);
+                    }
+                } else {
+                    eGovMessage.show(result.message, null, eGovMessage.messageButtons.Ok, null);
+                }
+            }
+        });
+    }
+
+    function addUserDeptJobs(userIds, deptId, jobId, callback) {
+        if(jobId <= 0 ) {
+            eGovMessage.show("@Localizer("Bkav.eGovCloud.Areas.Admin.Department.ChooseJobtitleToUpdate")", null, eGovMessage.messageButtons.Ok, null);
+            return;
+        }
+
+        $.ajax({
+            traditional: true,
+            url: "/Department/AddUserDeptJob",
+            type: "post",
+            data: {
+                userIds: userIds,
+                deptId: deptId,
+                jobId: jobId
+            },
+            success: function (result) {
+                if (result.result) {
+                    if (typeof callback === 'function') {
+                        callback(result.message);
+                    }
+                } else {
+                    eGovMessage.show(result.message, null, eGovMessage.messageButtons.Ok, null);
+                }
+            }
+        });
+    }
+</script>
+
+<div style="height: 24px" data-res="egov.resources.deparment.listuser">
+    Danh sách user thuộc phòng ban
+</div>
+<table class="table-main table" id="tblUser">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" data-res="egov.resources.tableheader.stt">
+            </th>
+            <th class="header" data-res="egov.resources.deparment.fullname">
+                Họ tên
+            </th>
+            <th class="header" data-res="egov.resources.deparment.jobtitle">
+                Chức danh
+            </th>
+            <th class="header" data-res="egov.resources.deparment.position">
+                Chức vụ
+            </th>
+            <th class="header" data-res="egov.resources.deparment.isprimary">
+                Phòng chính
+            </th>
+            <th class="header" data-res="egov.resources.deparment.isadmin">
+                Quản trị
+            </th>
+            <th class="header">
+                Nhận VB đến
+            </th>
+            <th class="header" data-res="egov.resources.tableheader.delete">
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script id="selectedUserTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td>
+            ${fullname} - ${username}
+            <input type="hidden" name="UserJobTitlesPositionIds"
+                   value="${value},${firstjobtitlesid},${firstpositionid},${isprimary},${isadmin},${hasReceiveDocument}" />
+        </td>
+        <td>
+            <select id="jobtitles${value}" style="width:100%"
+                    onchange="javascript:onChangeProp(${value});" selected="${firstjobtitlesid}" class="required">
+                {{each allJobTitless}}
+                {{if value==firstjobtitlesid}}
+                <option value="${value}" selected="selected">${label}</option>
+                {{else}}
+                <option value="${value}">${label}</option>
+                {{/if}}
+                {{/each}}
+            </select>
+        </td>
+        <td>
+            <select id="positions${value}" style="width:100%"
+                    onchange="javascript:onChangeProp(${value});"
+                    selected="${firstpositionid}" class="required">
+                {{each allPositions}}
+                {{if value==firstpositionid}}
+                <option value="${value}" selected="selected">${label}</option>
+                {{else}}
+                <option value="${value}">${label}</option>
+                {{/if}}
+                {{/each}}
+            </select>
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox" name="isPrimary" onchange="onChangeProp(${value})" {{if isprimary }} checked="checked" {{/if}} />
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox" name="isAdmin" onchange="onChangeProp(${value})" {{if isadmin }} checked="checked" {{/if}} />
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox" name="hasReceiveDocument" onchange="onChangeProp(${value})" {{if hasReceiveDocument }} checked="checked" {{/if}} />
+        </td>
+        <td style="text-align: center"><a href="javascript:removeUser(${value})" data-res="egov.resources.commonlabel.delete"></a></td>
+    </tr>
+</script>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

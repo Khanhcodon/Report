@@ -1,0 +1,39 @@
+﻿<div class="documentRenewals">
+    <div class="form-group form-group-sm hidden">
+        <label class="radio-inline">
+            <input type="radio" name="renewalsType" value="1" checked>
+            <span data-res="egov.resources.document.renewals.renewalsDocOverdue">Gia hạn hẹn trả hồ sơ</span>
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="renewalsType" value="2">
+            <span data-res="egov.resources.document.renewals.renewalsStaffOverdue">Gia hạn xử lý cá nhân</span>
+        </label>
+    </div>
+    <div class="form-group form-group-sm">
+        <label >Lý do thay đổi hạn xử lý</label>
+        <textarea class="form-control renewalsComment" rows="3"></textarea>
+    </div>
+    <div class="form-group form-group-sm">
+        <label data-res="egov.resources.document.renewals.newDateAppoint">Hạn xử lý mới</label>
+        <div class="row">
+            <div class="col-md-8">
+                <input type="text" class="form-control renewalsTime" value="${timeAppointed}" />
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control renewalsDate" value="${dateAppointed}">
+            </div>
+        </div>
+    </div>
+    <div class="form-group form-group-sm hidden" id="printers">
+        <label data-res="egov.resources.document.renewals.printTemplate">Chọn phiếu in</label>
+        <select class="form-control ddlPrintTemplate" {{if !printTemplates.length}} disabled {{/if}}>
+            {{if !printTemplates.length}}
+            <option data-res="egov.resources.document.renewals.noPrintTemplate"></option>
+            {{else}}
+            {{each printTemplates}}
+            <option value="${TemplateId}">${Name}</option>
+            {{/each}}
+            {{/if}}
+        </select>
+    </div>
+</div>

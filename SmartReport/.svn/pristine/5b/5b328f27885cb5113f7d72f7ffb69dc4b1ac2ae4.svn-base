@@ -1,0 +1,24 @@
+﻿
+
+<div class="group-label">
+    <span>${Date}</span>
+</div>
+<ul class="mdl-list list-calendar">
+    {{each Calendars}}
+    <li class="mdl-list__item mdl-list__item--three-line" data-id="${CalendarId}">
+        <span class="mdl-list__item-primary-content">
+            <span class="mdl-list__item-avatar mdl-list__item-icon beginTime">
+                {{if Minutes == "00" }}
+                <span style="margin-top: 11px; display:inline-block">${Hour}h</span>
+                {{else}}
+                <span>${Hour}</span><br /><span>${Minutes}</span>
+                {{/if}}
+            </span>
+            <span>${Place} - {{html UserPrimaryPublish}}</span>
+            <span class="mdl-list__item-text-body">
+                ${Title}
+            </span>
+        </span>
+    </li>
+    {{/each}}
+</ul>

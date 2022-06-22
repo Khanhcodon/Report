@@ -1,0 +1,355 @@
+﻿@{
+    ViewBag.Title = "eGovCloud";
+    var version = "567657657";
+    var emoticons = ViewBag.Emoticons as string;
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetUserLangCode();
+}
+@*Dùng bundle để optimization css, js file để tăng tốc, comment lại để dễ dàng debug
+    nếu không cần debug có thể bỏ đoạn khai báo bên dưới thay bằng 2 dòng khai báo này*@
+@*@System.Web.Optimization.Styles.Render("~/Content/mainCss")
+    @System.Web.Optimization.Scripts.Render("~/bundles/mainScript")*@
+<link href="../../Content/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="../../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../../Content/bootstrap/css/bootstrap-theme.css" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bkav.egov/egov.main.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bkav.egov/egov.color.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bkav.egov/egov.custom.css")" rel="stylesheet" />
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/signalR/jquery.signalR-1.2.1.min.js")"></script>
+<script src="@Url.Content("~/signalr/hubs")"></script>
+<script src="@Url.Content("~/Content/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery-tmpl.modified.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/util/bkav.utilities.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/notify/desktop-notify.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/modernizr.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.js")"></script>
+<script src="../Scripts/bkav.egov/libs/hashbase64.js"></script>
+<script src="../../Scripts/bkav.egov/util/egov.shortkey.main.js"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).bindResources();
+        egov = egov || {};
+        egov.isAdmin = "@ViewBag.IsAdmin" == "True";
+        egov.emoticons = @(string.IsNullOrEmpty(emoticons) ? MvcHtmlString.Create("[]") : Html.Raw(emoticons));
+
+        //// Miniprofiler
+        //var interval = setInterval(function () {
+        //    var profiler = $("div.profiler-result").parent();
+        //    if (profiler.length > 0) {
+        //        clearInterval(interval);
+        //        profiler.css({ 'margin-left': 10 - profiler.width() + 'px' }).hover(function () {
+        //            profiler.css({ 'margin-left': '0px' });
+        //        }, function () {
+        //            profiler.css({ 'margin-left': 10 - profiler.width() + 'px' });
+        //        });
+        //    }
+        //}, 100);
+    });
+</script>
+
+<div class="egov full-height main-frame">
+    <div id="colorTheme" class="bmail-theme full-height">
+        <div class="panel-container full-height">
+            <div class="west-panel site-menu">
+                <div class="list-group menu-items">
+                    <a href="#" class="list-group-item menu main-menu" data-toggle="dropdown">
+                        <div class="clock-circle" style="visibility: hidden;">
+                            <div class="clock-face">
+                                <div class="clock-hour-3"></div>
+                                <div class="clock-hour-6"></div>
+                                <div class="clock-hour-9"></div>
+                                <div class="clock-hour-12"></div>
+                                <div id="hour" class="clock-hour" style="transform: rotate(265.716666666667deg);"></div>
+                                <div id="minute" class="clock-minute" style="transform: rotate(308.6deg);"></div>
+                                <div id="second" class="clock-second" style="transform: rotate(156deg);"></div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item bmail active" data-theme="bmail-theme" data-ng-app="bmail" data-restitle="egov.resources.bmail">
+                        @*<img src="../Content/bkav.egov/icon egov/egov-01.png"/>
+                        Mail*@
+                        <span class="icon icon-mail5"></span>
+                    </a>
+                    <a href="#" class="list-group-item egov document" data-theme="egov-theme" data-ng-app="documents" data-restitle="egov.resources.documentslabel">
+                        <span class="icon icon-folder-open"></span>
+                    </a>
+                    <a href="#" class="list-group-item chat" data-theme="chat-theme" data-ng-app="chat" data-restitle="egov.resources.chat">
+                        
+                        <span class="icon icon-chat"></span>
+                    </a>
+                    <a href="#" class="list-group-item calendar" data-theme="calendar-theme" data-ng-app="calendar" data-restitle="egov.resources.calendar">
+                        <span class="icon icon-calendar"></span>
+                    </a>
+                    <a href="#" class="list-group-item report" data-theme="calendar-theme" data-ng-app="report" data-restitle="egov.resources.report">
+                        <span class="icon icon-calendar"></span>
+                    </a>
+                    <a href="#" class="list-group-item kntc hidden" data-theme="kntc-theme" data-ng-app="kntc" data-restitle="egov.resources.kntc">
+                        <span class="icon icon-book2"></span>
+                    </a>
+                    <a href="#" class="list-group-item overall" data-theme="calendar-theme" data-ng-app="overall" data-restitle="egov.resources.report">
+                        <span class="icon icon-calendar"></span>
+                    </a>
+                       <a href="#" class="list-group-item statistics" data-theme="calendar-theme" data-ng-app="statistics" data-restitle="egov.resources.report">
+                        <span class="icon icon-calendar"></span>
+                    </a>
+                    <a href="#" class="list-group-item links" data-theme="links-theme" data-ng-app="links" data-restitle="egov.resources.links">
+                        <span class="icon icon-link2"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="center-panel full-height">
+                <div class="row site-header">
+                    <nav class="navbar navbar-default main-nav header-nav" role="navigation">
+
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a href="#" class="img-menu" data-ng-show="1">
+                                    <img src="../Content/bkav.egov/images/menu-focus.png" width="20" />
+                                </a>
+                            </li>
+                            <li class="module">
+                                <a href="#" class="not-hover">
+                                    <span data-res="egov.resources.news"></span>
+                                </a>
+                            </li>
+                            <li class="li-create-new">
+                                <a href="#" class="create-new dropdown-toggle" data-toggle="dropdown">
+                                    <span class="create-new-icon icon-plus4"></span>
+                                    <span class="create-new-label" data-res="egov.resources.newEmail"></span>
+                                </a>
+                                <ul class="dropdown-menu new-doctypes">
+                                    <li style="position: relative;">
+                                        <a href="#" class="btnImagePacket">
+                                            <span class="icon icon-paperclip"></span>
+                                            <span data-res="egov.resources.imagePacket"></span>
+                                        </a>
+                                        <input type="file" class="imagePacketUpload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;  position: absolute; top: 0; width: 100%;opacity: 0;height: 100%;" />
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <ul class="pinnedDocTypes">
+                                            <li class="divider"></li>
+                                        </ul>
+                                    </li>
+                                    <li class="commonDocTypes">
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="pull-left div-bmail-notify" title="Thông báo mail" data-restitle="egov.resources.mailNotifications">
+                                <a href="#" class="ripple-ef icon-mail5 dropdown-toggle" data-toggle="dropdown">
+                                    <span class="notify-count" data-count="0"></span>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <ul class="notification"> </ul>
+                                </div>
+                            </li>
+
+                            <li class="pull-left div-eGov-notify" data-restitle="egov.resources.documentNotifications">
+                                <a href="#" class="ripple-ef icon-bell2 dropdown-toggle" data-toggle="dropdown">
+                                    <span class="notify-count" data-count="0"></span>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <ul class="notification"> </ul>
+                                </div>
+                            </li>
+
+                            <li class="pull-left div-chat-notify" title="Trò chuyện" data-restitle="egov.resources.chatNotifications">
+                                <a href="#" class="ripple-ef icon-chat dropdown-toggle" data-toggle="dropdown">
+                                    <span class="notify-count" data-count="0"></span>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <ul class="notification"> </ul>
+                                </div>
+                            </li>
+
+                            <li class="pull-left mudim-icon" data-restitle="egov.resources.main.gtv" style="display:none">
+                                <a href="#">
+                                    <span class="typing">E</span>
+                                </a>
+                            </li>
+
+                            <li class="pull-left user-option">
+                                <a href="#" class="" data-toggle="dropdown">
+                                    <span class="user-name">@ViewBag.Username</span>
+                                    <img class="avatar" src="@ViewBag.Avatar">
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+                                    {
+                                        <li>
+                                            <a id="administrator" href="/Admin">
+                                                <span class="icon icon-cog2"></span>
+                                                <span data-res="egov.resources.administrator"></span>
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                    }
+                                    <li id="setting">
+                                        <a href="/Home/Setting" data-toggle="modal" data-target="#settingDialog">
+                                            <span class="icon icon-cog"></span>
+                                            <span data-res="egov.resources.config"></span>
+                                        </a>
+                                    </li>
+                                    <li id="feedback">
+                                        <a href="#">
+                                            <span class="icon icon-reply"></span>
+                                            <span data-res="egov.resources.reply"></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://bds.bkav.com/FileUpload/5453/eGovDesktopSetup.exe">
+                                            <span class="icon icon-download"></span>
+                                            <span data-res="egov.resources.downloaddesktopversion"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="small-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.smallSize"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="medium-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.mediumSize"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="large-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.largeSize"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="2">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.underPreview"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="1">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.rightPreview"></span>
+
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="0">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.hidePreview"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li id="resetSystem">
+                                        <a href="#">
+                                            <span class="icon icon-loop2"></span>
+                                            <span data-res="egov.resources.reload"></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id="logout" href="account/logout">
+                                            <span class="icon icon-switch"></span>
+                                            <span data-res="egov.resources.logout"></span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="navbar-form navbar-right form-search in" id="form0">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input class="search-query form-control" name="query" id="MainSearchQuery" type="text"
+                                           data-respholder="egov.resources.placeholderSearch"
+                                           placeholder="Tìm kiếm thông tin hồ sơ, văn bản, tệp đính kèm">
+                                    <input class="search-type" name="type" id="MainSearchType" type="hidden" value="1">
+                                    <div class="input-group-btn search-btn">
+                                        <button type="submit" class="btn btn-default"><span class="icon-search2"></span></button>
+                                    </div>
+                                    <div class="input-group-btn search-type-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a role="menuitem" tabindex="-1" href="#" data-value="1" data-res="egov.resources.searchDocument"></a></li>
+                                            <li><a role="menuitem" tabindex="-1" href="#" data-value="2" data-res="egov.resources.searchFile"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="row site-center">
+                    <div class="site-content full-height">
+                        <div class="bmail" id="div-bmail">
+                        </div>
+                        <div class="documents" style="display: none;" id="div-document">
+                        </div>
+                        <div style="display: none;" id="div-chat">
+                        </div>
+                        <div style="display: none;" id="div-calendar">
+                        </div>
+                        <div style="display: none;" id="div-report">
+                        </div>
+                        <div style="display: none" id="div-links"></div>
+                        <div style="display: none" id="div-statistics"></div>
+                        <div style="display: none" id="div-overall"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-list hidden-xs">
+            <div class="chat-list-hidden" chat-items="0">
+                <div class="list-group dropup">
+                    <a class="list-group-item dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="icon-chat"></span>
+                        <span class="badge chat-items">0</span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="settingDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 1000px; height: 650px">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="alert"></div>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/backbone/backbone-min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/main/egov.helper.js?v=" + version)"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/main/egov.notification.js?v=" + version)"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/main/egov.hub.js?v=" + version)"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/main/main.js?v=" + version)"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/mudim-minorfixed.js")"></script>
+

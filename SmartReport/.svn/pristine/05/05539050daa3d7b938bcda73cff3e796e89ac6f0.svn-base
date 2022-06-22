@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+    ViewBag.Title = "Dong bo";
+}
+
+   <div class="row">
+       <div class="col-md-4">
+           <center>
+               @using (Html.BeginForm("SyncAll", "Setting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+               {
+                <div>
+                    <p style="font-weight:800">Chọn tệp Json (.json) </p>
+                    <strong style="color:red">@ViewBag.Error1</strong>
+                    <input type="file" name="jsonFile1" />
+                    <input class="btn btn-success" style="margin-top:10px" type="submit" value="Đồng bộ Positions"  />
+                </div>
+               }
+           </center>
+       </div>
+       <div class="col-md-4">
+           <center>
+               @using (Html.BeginForm("SyncDe", "Setting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+               {
+                <div>
+                    <p style="font-weight:800">Chọn tệp Json (.json) </p>
+                    <strong style="color:red">@ViewBag.Error</strong>
+                    <input type="file" name="jsonFile" />
+                    <input class="btn btn-primary" style="margin-top:10px" type="submit"  value="Đồng bộ Departments"  />
+                </div>
+               }
+           </center>
+       </div>
+       <div class="col-md-4">
+           <center>
+               @using (Html.BeginForm("SyncUser", "Setting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+               {
+                   <div>
+                       <p style="font-weight:800">Chọn tệp Json (.json) </p>
+                       <strong style="color:red">@ViewBag.Error2</strong>
+                       <input type="file" name="jsonFile2" />
+                       <input class="btn btn-warning" style="margin-top:10px" type="submit" value="Đồng bộ Users" />
+                   </div>
+               }
+           </center>
+       </div>
+       <div class="col-md-4">
+           <center>
+               @using (Html.BeginForm("SyncUserDepaert", "Setting", FormMethod.Post))
+               {
+                     <input class="btn btn-danger" style="margin-top:10px" type="submit" value="Đồng bộ" />
+               }
+           </center>
+       </div>
+        @*<div>
+            @foreach (var item in @ViewBag.test)
+            {
+
+                <label>posid:</label><p>@item.posID</p>
+                <label>userid:</label><span>@item.userID</span>
+                <label>departid:</label><span>@item.departID</span>
+                <label>departextid:</label><span>@item.departIDExt</span>
+                <label>string dep:</label><span>@item.departmentID</span>
+                <label>string pos:</label><span>@item.positionID</span>
+                <hr />
+            }
+        </div>*@
+   </div>
+
+   
+
+@*@foreach (var i in @ViewBag.lstName)
+{
+    <p>@i</p>
+}*@

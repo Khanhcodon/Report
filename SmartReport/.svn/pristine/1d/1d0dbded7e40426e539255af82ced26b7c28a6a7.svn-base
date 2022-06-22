@@ -1,0 +1,313 @@
+﻿/**
+  * Use for page: system/doctype/DesignForm.aspx
+  *	Basic Layout Theme
+  * 
+  *	This theme uses the default layout class-names for all classes
+  *	Add any 'custom class-names', from options: paneClass, resizerClass, togglerClass
+  */
+.ui-layout-pane
+{
+    /* all 'panes' */
+    background: #FFF;
+    border: 1px solid #BBB;
+    padding: 0;
+    overflow: auto;
+}
+
+.ui-layout-east
+{
+    overflow-y: scroll;
+}
+
+.ui-layout-resizer
+{
+    /* all 'resizer-bars' */
+    background: #E3EEFF;
+}
+
+.ui-layout-toggler
+{
+    /* all 'toggler-buttons' */
+    background: #79AFF2;
+}
+
+.ui-layout-north
+{
+}
+
+/**
+	     *	ALL CSS below is only for cosmetic and demo purposes
+	     *	Nothing here affects the appearance of the layout
+	     */
+
+body
+{
+    font-family: Arial, sans-serif;
+    font-size: 0.85em;
+}
+
+p
+{
+    margin: 1em 0;
+}
+
+/*
+	     *	Rules below are for simulated drop-down/pop-up lists
+	     */
+
+ul
+{
+    /* rules common to BOTH inner and outer UL */
+    z-index: 100000;
+    margin: 1ex 0;
+    padding: 0;
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid Black; /* rules for outer UL only */
+    width: 15ex;
+    position: relative;
+}
+
+    ul li
+    {
+        background-color: #EEE;
+        padding: 0.15em 1em 0.3em 5px;
+    }
+
+    ul ul
+    {
+        display: none;
+        position: absolute;
+        width: 100%;
+        left: -1px; /* Pop-Up */
+        bottom: 0;
+        margin: 0;
+        margin-bottom: 1.55em;
+    }
+
+.ui-layout-north ul ul
+{
+    /* Drop-Down */
+    bottom: auto;
+    margin: 0;
+    margin-top: 1.45em;
+}
+
+ul ul li
+{
+    padding: 3px 1em 3px 5px;
+}
+
+    ul ul li:hover
+    {
+        background-color: #FF9;
+    }
+
+ul li:hover ul
+{
+    display: block;
+    background-color: #EEE;
+}
+
+.divNormal
+{
+    font-family: Arial,Verdana, Tahoma;
+    text-align: left;
+    padding: 0 100px;
+    width: 700px;
+}
+
+html
+{
+    overflow: hidden;
+}
+
+body
+{
+    height: 100%;
+    overflow: hidden;
+}
+
+.bigWrapper
+{
+    background-color: #E3EEFF;
+    overflow: hidden;
+}
+
+.titleBox
+{
+    clear: both;
+    background-color: #E3EEFF;
+    height: 25px;
+}
+
+.leftBox
+{
+    background-color: White;
+    float: left;
+    width: 320px;
+    border-right: 5px solid #E3EEFF;
+}
+
+.rightBox
+{
+    background-color: White;
+    float: left;
+}
+
+.propertyBox
+{
+    float: left;
+    position: relative;
+}
+
+.separator
+{
+    background-color: #E3EEFF;
+    width: 5px;
+}
+
+.designBox
+{
+}
+
+.divHeader
+{
+    font-size: 14px;
+    font-family: Arial,Verdana, Tahoma;
+    font-weight: bold;
+    text-align: right;
+    color: #838280;
+    padding: 4px 20px;
+}
+
+    .divHeader a
+    {
+        color: Gray;
+        text-decoration: none;
+    }
+
+        .divHeader a:hover
+        {
+            color: Gray;
+            text-decoration: underline;
+        }
+
+.basicGroup, .styleGroup, .advanceGroup
+{
+}
+
+    .basicGroup > h4, .styleGroup > h4, .advanceGroup > h4
+    {
+        background-color: #E3EEFF;
+        border-bottom: 1px solid #BFDBFF;
+        border-top: 1px solid #BFDBFF;
+        clear: both;
+        padding: 5px 10px;
+        color: #00156E;
+        cursor: pointer;
+        float: none;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .basicGroup > h4
+    {
+        margin-top: 0;
+    }
+
+.basicGroup
+{
+}
+
+.styleGroup
+{
+}
+
+.advanceGroup
+{
+}
+
+#btnSaveTMP, #btnSave, #btnUpdate, #btnAddRow, #btnRemove, #btnGrid, #btnNumber
+{
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border-style: none;
+    cursor: pointer;
+    height: 20px;
+    padding-left: 18px;
+    padding-right: 0;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-color: transparent;
+    color: #00156E;
+    font-size: 13px;
+}
+
+    #btnSaveTMP:hover, #btnSave:hover, #btnUpdate:hover, #btnAddRow:hover, #btnRemove:hover, #btnGrid:hover, #btnNumber:hover
+    {
+        text-decoration: underline;
+    }
+
+#btnSaveTMP
+{
+    background-image: url("normal/temporary32.png");
+}
+
+#btnSave
+{
+    background-image: url("normal/save24.png");
+}
+
+#btnUpdate
+{
+    background-image: url("normal/update24.png");
+}
+
+#btnAddRow
+{
+    background-image: url("normal/newrow32.png");
+}
+
+#btnRemove
+{
+    background-image: url("normal/delete22.png");
+    /*position: absolute;
+            top: 115px;
+            right: 45px;*/
+}
+
+#btnGrid
+{
+    margin-right: 15px;
+    background-image: url("normal/table32.png");
+    float: left;
+}
+
+#btnNumber
+{
+    margin-right: 15px;
+    background-image: url("normal/enum24.png");
+    float: left;
+}
+
+.iRowNumber
+{
+    color: gray;
+    position: absolute;
+    right: -16px;
+    font-size: 12px;
+    visibility: hidden;
+    bottom: 8px;
+    text-decoration: underline;
+}
+
+#pnl_root .icontainer.rowBorder
+{
+    border-color: White;
+}
+
+.rowNumber
+{
+    visibility: visible;
+}

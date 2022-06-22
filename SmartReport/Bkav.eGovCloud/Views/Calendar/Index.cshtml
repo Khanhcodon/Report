@@ -1,0 +1,71 @@
+﻿@{
+    Layout = "_CalendarLayout.cshtml";
+}
+
+<div>
+    <div class="toolbar">
+        <a href="#" id="export" class="btn btn-primary btn-xs pull-right" style="margin-left: 10px;">
+            Tải về
+        </a>
+        <input type="button" id="printerPage" class="btn btn-default btn-xs pull-right" value="In Lịch" />
+    </div>
+    <div class="row">
+        <ul class="pager"id="spinTime">
+            <li>
+                <a href="#" id="prevTime" style="border:none"> << </a>
+            </li>
+            <li>
+                <span style="border:none" id="stringDate">
+                    Hôm nay
+                </span>
+            </li>
+            <li>
+                <a href="#" id="nextTime" style="border:none"> >> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="viewCalendar">
+        <div class="head-top-calender">
+            <h5 class="boldtext pull-left">
+                @ViewBag.OfficeName
+            </h5>
+            <span class="calendarTime" style="margin-top: 8px; font-weight: bold; float: right;">
+
+            </span>
+        </div>
+
+        <div>
+            <table class="table table-bordered table-hover" style="width: 100%; border-collapse:collapse;">
+                <colgroup>
+                    <col style="width: 100px" />
+                    <col style="width: 250px" />
+                    <col style="width: 100px" />
+                    <col style="width: 120px" />
+                    <col style="width: 130px" />
+                    <col style="width: 120px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 70px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Ngày</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Nội dung</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Đơn vị chuẩn bị</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">LĐ UBND</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Thành phần tham gia</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">LĐ VP</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Địa điểm</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Cv Chuẩn bị</th>
+                        <th style="border: 1px solid #e7e9fd; padding: 8px;">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_calendar">
+                    <tr>
+                        <td colspan="8" style="border: 1px solid #e7e9fd; padding: 8px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

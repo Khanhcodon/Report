@@ -1,0 +1,477 @@
+﻿@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@using StackExchange.Profiling
+@{
+    ViewBag.Title = "eForm";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetUserLangCode();
+    var allTreeGroups = ViewBag.AllTreeGroups as IEnumerable<Bkav.eGovCloud.Models.TreeGroupModel>;
+}
+
+@*<link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style_btc.css">*@
+<link href="../../Content/bkav.egov/egovdocument.min.css" rel="stylesheet" />
+<link href="~/Content/bkav.egov/style.menu.report.css" rel="stylesheet" />
+<link href="@Url.Content("~/Content/offline/offline." + @lang + ".css")" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/bkav/editor/css/bmailEditor.css" rel="stylesheet" />
+<link href="../../Content/bkav.egov/datepicker.css" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js?v=22")"></script>
+<link href="../../Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/Scripts/bkav.egov/libs/linq/linq.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+
+@*<script src="~/Scripts/bkav.egov/libs/jquery/jquery.scrollsync.js"></script>*@
+
+<script src="/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js"></script>
+<style src="/Scripts/bkav.egov/libs/ckeditor-v4/contents.css"></style>
+
+@*<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts.src.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.src.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/exporting.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/funnel.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/solid-gauge.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/accessibility.js"></script>
+
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.complete.js"></script>
+<link href="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.min.css" rel="stylesheet" />
+<script src="/Scripts/bkav.egov/libs/highchart_editor/integrations/ckeditor.js" type="text/javascript" charset="utf-8"></script>*@
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ace.min.js")" type="text/javascript" charset="utf-8"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ext-language_tools.js")" type="text/javascript" charset="utf-8"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout-3.4.0.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.ko.js")"></script>
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.css")" type="text/css" rel="stylesheet" />
+<script src="../Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.js"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="../Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.pdf.js"></script>
+<link href="~/Content/bkav.egov/egov.survey-custom.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/plotly-latest.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/wordcloud2.js")"></script>
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.analytics.css")" type="text/css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.analytics.js")"></script>
+
+<script src="/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js"></script>
+<style src="/Scripts/bkav.egov/libs/ckeditor-v4/contents.css"></style>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/exporting.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/funnel.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/solid-gauge.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/accessibility.js"></script>
+
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.complete.js"></script>
+<link href="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.min.css" rel="stylesheet" />
+<script src="/Scripts/bkav.egov/libs/highchart_editor/integrations/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Scripts/bkav.egov/libs/mammoth/mammoth.browser.min.js"></script>
+<style type="text/css">
+    /*.system-tree > ul.nav li > a {
+        padding: 8px;
+        font-size: 15px;
+        position: relative;
+    }*/
+
+    .badge {
+        display: inline-block;
+        width: 20px;
+        height: 18px;
+        line-height: 19px;
+        border-radius: 5px;
+        color: white !important;
+    }
+
+    .user-profile {
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e3e3e3;
+    }
+
+        .user-profile .avatar {
+            border-radius: 50%;
+            width: 75px;
+        }
+
+        .user-profile .full-name {
+            font-size: 20px;
+            padding: 10px 0;
+        }
+
+    .table-hover > tbody > tr > td {
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    #ulTabs > li > a {
+        font-size: 15px;
+        border-radius: 5px;
+    }
+
+    .actionLevel > .selected {
+        border: blue solid 2px;
+        font-weight: bold;
+    }
+
+    .handsontable table thead th {
+        white-space: pre-wrap;
+        vertical-align: middle;
+        max-width: 300px;
+    }
+
+    .bars-left.hidden-bar {
+        display: none;
+    }
+</style>
+<div class="egov full-height" id="content-agv">
+    <div class="row full-height">
+        <div class="col-md-3 sidebar-item bars-left" style="padding-right: 0; height: 100%;" ;>
+            <aside class="main-sidebar">
+                <!-- sidebar -->
+                <section class="sidebar">
+                    @*<div class="user-profile">
+                            <img class="avatar" src="@Url.Content(ViewBag.Avatar) " />
+                            <div class="full-name">
+                                <button class="btn btn-success" id="btnCreateReport">Tạo báo cáo</button>
+                            </div>
+                        </div>*@
+                    <nav role="navigation" class="system-tree center-menu">
+                        @*calc(100vh - 13vh);*@
+                        <ul class="nav nav-pills nav-stacked" id="menu-document" style="overflow-y: auto; height: calc(100vh);">
+                            @foreach (var item in allTreeGroups)
+                            {
+                                var nodeId = "child" + item.TreeGroupId;
+                                var groupid = "group_" + item.TreeGroupId;
+                                var target = "#" + nodeId;
+
+                                <li id="@groupid" style="white-space: normal; /*border-bottom: 0.5px solid #95b0e0*/">
+                                    <a class="list-group-item is-group" data-toggle="collapse"
+                                       data-parent="#menu-document" data-target="@target"
+                                       href="#" onclick="btnToggleTree('@groupid')">
+                                        <span class="node-name" style="float:none;">@(item.IsShowUserFullName ? ViewBag.FullName : item.TreeGroupName)</span>
+                                        <span class="badge reload qtooltip icon-spinner6"
+                                              data-restitle="egov.resources.index.reload"></span>
+                                        <span class="pull-right-container btnToggleTree" onclick="btnToggleTree('@groupid')" style="cursor: default">
+                                            @*<i class="fa fa-angle-right pull-right"></i>*@
+                                        </span>
+                                    </a>
+                                    <ul id="@nodeId" data-id="@item.TreeGroupId"
+                                        class="nav panel-collapse collapse in" role="menu" style="clear: both;"></ul>
+                                </li>
+                            }
+                            <li id="menuSearch" style="white-space: normal;" class="menu-open">
+                                <a class="list-group-item is-group" data-toggle="collapse"
+                                   data-parent="#menu-document" data-target="#menuSearch"
+                                   href="#" onclick="btnToggleTree('group_menuSearch')">
+                                    <span class="node-name" style="float:none">Chức năng</span>
+                                    <span class="badge reload qtooltip icon-spinner6"
+                                          data-restitle="egov.resources.index.reload"></span>
+                                    <span class="pull-right-container btnToggleTree" onclick="btnToggleTree('group_menuSearch')" style="cursor: default">
+                                        @*<i class="fa fa-angle-right pull-right"></i>*@
+                                    </span>
+                                </a>
+                                <ul data-id=""
+                                    class="nav panel-collapse collapse in" role="menu" style="clear: both;">
+                                    <li class="mdl-list__item" id="searchMenuNav" data-parentid="0">
+                                        <a href="#" class="list-group-item  active" style="" data-open="false" data-params="[]">
+                                            <img src="~/Content/Images/home/ic_zoom.png" style="width: 16px;" alt="">
+                                            <span class="node-name wraptext" style="padding-left: 12px;color: #ffffff">Tra cứu</span>
+                                            <span class="badge qtooltip totalUnread" data-totalunread="0" data-total="0" title=""></span>
+
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </section>
+            </aside>
+        </div>
+        <div class="col-md-13 full-height bars-right" id="documentProcessing" style="padding-left: 0;">
+            <div class="app-list row hidden">
+                <div class="flex-container" style="display: flex;
+                     flex-wrap: wrap;
+                     justify-content: space-around;
+                     align-content: space-between;
+                     align-items: flex-start;
+                     padding-bottom: 10px;" id="typeListRow">
+                    <div>
+                        <div class="panel panel-default actionLevel selected" data-id="1">
+                            <div class="panel-heading" style="padding: 10px 5px;">
+                                <img src="/Content/bkav.egov/times/ico-nam.png" alt="" />
+                                Báo cáo Năm <span class="badge" style="background-color: #007bff;">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-list row" style="background: #F8F8F8; width: 100%; height: 65px;margin: 0;">
+                @*<div class="flex-container" style="display: flex;flex-wrap: wrap;justify-content: space-around;align-content: space-between;align-items: flex-start;padding-bottom: 10px;" id="typeListRow">
+                        <div>
+                            <div class="panel panel-default actionLevel selected" data-id="1">
+                                <div class="panel-heading" style="padding: 10px 5px;">
+                                    <img src="/Content/bkav.egov/times/ico-nam.png" alt="" />
+                                    Báo cáo Năm <span class="badge" style="background-color: #007bff;">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                @*data-respholder="egov.resources.placeholderSearch"*@
+                <div class="search-nav">
+                    <div class="pull-left">
+                        @*<div class="input-group input-group-sm grp-search">*@
+                        <button class="btn-bars"></button>
+                        <ul class="grp-search">
+                            @*<li><button class="btn-bars"></button></li>*@
+                            <li><img src="/Content/Images/home/ic_zoom.png" alt="" style="width: 20px; height: 20px;" /></li>
+                            <li>
+                                <input class="search-query form-control" type="text"
+                                       placeholder="Tìm kiếm...">
+                            </li>
+                            <li class="search-btn"><input type="button" class="btn-search" /></li>
+                        </ul>
+                        @*<img src="/Content/Images/home/ic_zoom.png" alt=""/>
+                            <input class="search-query form-control" type="text"
+                                   placeholder="Tìm kiếm...">
+                            <div class="input-group-btn search-btn">
+                                <input type="button" class="btn-search"/>
+                            </div>*@
+                    </div>
+                    <div class="pull-right">
+                        <ul class="create-report">
+                            <li>
+                                <button class="btn bg-btn" id="btnConfigSurvey">
+                                    <img src="/Content/Images/home/ic_settings.png" alt="" />
+                                    Cấu hình phiếu khảo sát
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn bg-btn" id="btnCreateReport">
+                                    <img src="/Content/Images/home/create.png" alt="" />
+                                    Lập báo cáo
+                                </button>
+                            </li>
+                            <li class="hidden">
+                                <button class="btn bg-btn">
+                                    <img src="/Content/Images/home/create.png" alt="" />
+                                    Báo cáo tổng hợp
+                                </button>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="center-panel center full-height" id="center">
+                <ul id="ulTabs" class="nav nav-tabs" role="tablist"></ul>
+                <div class="full-height" id="tabContents">
+                    <div class="full-height document-process tab-content" id="documentProcess">
+                        <div class="document-process-main full-height">
+                            <div id="documentList" class="document-list">
+                            </div>
+                        </div>
+                        <div class="preview-below document-process-preview">
+                            <div class="document-preview document-preview-below"></div>
+                        </div>
+                        <div class="preview-right document-process-preview">
+                            <div class="document-preview document-preview-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*20200311 START modal compare data*@
+<style>
+    .handsontable table thead th {
+        white-space: pre-line;
+    }
+
+    .htBold {
+        font-weight: bold;
+    }
+
+    .htItalic {
+        font-style: italic;
+    }
+
+    .htStrike {
+        text-decoration: line-through;
+    }
+
+    #beforData > .ht_master.handsontable > .wtHolder {
+        /*max-height: 150px !important;*/
+    }
+
+    #afterData > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    .modal-body {
+        height: 1000px;
+    }
+
+    .modal .modal-body > div.class1 {
+        height: unset;
+    }
+
+    .modal-dialog {
+        width: 95%;
+        margin: 30px auto;
+    }
+
+    #beforeData, #afterData {
+        float: left;
+        width: calc(100% - 22px) !important;
+        height: 400px;
+        overflow: auto;
+    }
+
+    .gray {
+        background-color: #E8E8E8 !important;
+    }
+
+    .htYellow {
+        background-color: yellow !important;
+    }
+
+    .htRed {
+        background-color: red !important;
+    }
+
+    .htGreen {
+        background-color: lightgreen !important;
+    }
+
+    #scroll-com {
+        float: left;
+        width: 100%;
+        overflow-x: auto;
+        height: 17px;
+        margin-top: 10px;
+    }
+
+        #scroll-com #c2-content {
+            height: 17px;
+        }
+
+    #scroll-left {
+        float: left;
+        width: 17px;
+        overflow-y: auto;
+        overflow-x: scroll;
+        margin-left: 5px;
+    }
+
+        #scroll-left #left-content {
+            height: 300px;
+            width: 17px;
+        }
+</style>
+
+@*<script src="~/Scripts/bkav.egov/libs/diff_match/diff_match_patch.js"></script>*@
+<script src="~/Scripts/bkav.egov/libs/ckeditor-v4/adapters/htmldiff.js"></script>
+<style>
+    ins {
+        text-decoration: none;
+        background-color: #d4fcbc;
+    }
+
+    del {
+        text-decoration: line-through;
+        background-color: #fbb6c2;
+        color: #555;
+    }
+</style>
+<div id="compareModal" class="modal fade">
+    <div class="modal-dialog" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 id="modal-label">So sánh dữ liệu</h4>
+            </div>
+            <div class="modal-body">
+                <div id="outputdiv"></div>
+                <br />
+                <div style="font-weight: bold" class="class1 lblAfterData">
+                </div>
+                <br />
+                <div id="afterData" class="container-data"> </div>
+                <div id="scroll-left">
+                    <div id="left-content">
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div style="font-weight: bold" class="class1 lblBeforeData">
+                </div>
+                <br />
+                <div id="beforeData" class="container-data"> </div>
+                <div id="scroll-com">
+                    <div id="c2-content">
+                    </div>
+                </div>
+                <br />
+
+                @*VuHQ 20191105 REQ-02*@
+            </div>
+        </div>
+    </div>
+</div>
+@*20200311 END modal compare data*@
+
+<div class="alert egov-status" id="egovStatus">
+</div>
+
+@{
+    Html.RenderPartial("_Tokens");
+}
+
+<script>
+    egov.resources.avatar.path = "@ViewBag.AvatarPath";
+    //document.domain = '@ViewBag.ParentDomain';
+    egov.userid = @ViewBag.UserId;
+    function btnToggleTree(id) {
+        if (id.includes('group')) {
+            if (!$(`#menu-document > li#${id}`).hasClass("menu-open"))
+                $(`#menu-document > li#${id}`).addClass("menu-open");
+            else
+                $(`#menu-document > li#${id}`).removeClass("menu-open");
+        } else {
+            if (!$(`#menu-document > li > ul > li#${id}`).hasClass("menu-open"))
+                $(`#menu-document > li > ul > li#${id}`).addClass("menu-open");
+            else
+                $(`#menu-document > li > ul > li#${id}`).removeClass("menu-open");
+        }
+    }
+
+    $(function() {
+        //$(".btn-bars").on("click",
+        //    function() {
+        //        if (!$(".bars-left").hasClass("hidden-bar")) {
+        //            $(".bars-left").addClass("hidden-bar");
+        //            $(".bars-right").removeClass("col-md-13");
+        //            $(".bars-right").addClass("col-md-16");
+        //            $(".bars-right").css("padding-left", "15px");
+        //        } else {
+        //            $(".bars-left").removeClass("hidden-bar");
+        //            $(".bars-right").addClass("col-md-13");
+        //            $(".bars-right").removeClass("col-md-16");
+        //            $(".bars-right").css("padding-left", "0");
+        //        }
+        //    });
+    });
+</script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jspdf/jspdf.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.1.0.min.js")"></script>
+<script src="/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/languages.min.js")"></script>
+@*<script src="/Scripts/bkav.egov/libs/linq/linq.min.js"></script>*@
+<script src="/Scripts/require.js" data-main="@Url.Content("/Scripts/bkav.egov/mainreport.js?v=1s2")"></script>

@@ -1,0 +1,24 @@
+﻿<div class="row">
+    <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 transfer-avatar">
+        <img src="${avatar}" alt="${fullname}" width="28" class="img-rounded" />
+    </div>
+    <div class="hidden-xs col-sm-13 col-md-13 col-lg-13 wraptext transfer-info">
+        <div class="transfer-user">
+            <span class="user-fullname hidden-xs">${fullname} - ${username}</span>
+            <span class="user-position">${position}</span>
+            <span class="user-department">${department}</span>
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 transfer-info chkdoc">
+        <label class="checkbox document-color main-process qtooltip" title="Xử lý chính" data-restitle="egov.resources.document.transfer.xlc">
+            <input name="checkbox[]" value="${value}" type="checkbox">
+            <span class="document-color-1"><i class="icon-check"></i></span>
+        </label>
+    </div>
+    <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 transfer-info chkdoc hidden">
+        <label class="checkbox document-color co-process qtooltip" title="Đồng xử lý" data-restitle="egov.resources.document.transfer.dxl">
+            <input name="checkbox[]" value="${value}" type="checkbox">
+            <span class="document-color-1"><i class="icon-check"></i></span>
+        </label>
+    </div>
+</div> 

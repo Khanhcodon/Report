@@ -1,0 +1,176 @@
+﻿<tr>
+    <td>
+        <div class="svd_wrap_elements">
+            <survey-widget>
+                <div class="sv_main sv_bootstrap_css">
+                    <form onsubmit="return false;">
+                        <div class="sv_custom_header"></div>
+                        <div class="sv_container">
+                            <div class="panel-body card-block mt-4 svd-property-editor-survey">
+                                <div>
+                                    <div class="svd-property-editor-survey-page">
+                                        <div class="sv_row">
+                                            <div class="sv_qstn svd-survey-nopadding question-alias" style="flex: 1 1 15%; min-width: 50px; max-width: initial; width: 15%; padding-right: 20px;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <input type="text" size="25" placeholder="Nhập tên tiêu chí" aria-required="true" aria-label="Nhập tên tiêu chí" class="form-control ${$data.alias ? 'visited' : ''}" name="alias" value="${alias}" required autocomplete="off">
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sv_qstn svd-survey-nopadding question-name" style="padding-right: 20px; flex: 1 1 30%; width: 30%; min-width: 50px; max-width: initial;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    {{if $data.addRow}}
+                                                    <div>
+                                                        <select aria-label="questionName" class="form-control" name="name">
+                                                            <option value="">Chọn câu hỏi...</option>
+                                                            {{each(i) questions}}
+                                                            <option value="${name}">${name}</option>
+                                                            {{/each}}
+                                                        </select>
+                                                    </div>
+                                                    {{else}}
+                                                    <div class="form-control">${name}</div>
+                                                    <input type="hidden" name="name" value="${name}">
+                                                    {{/if}}
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sv_qstn svd-survey-nopadding question-formula" style="padding-right: 20px; flex: 1 1 15%; width: 15%; min-width: 50px; max-width: initial;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <div>
+                                                        <select aria-label="questionFormula" class="form-control" name="formula" value="${formula}" ${$data.addRow ? 'disabled' : ''}>
+                                                            <option value="">Chọn công thức... </option>
+                                                            <option value="sum" ${$data.formula == 'sum' ? 'selected' : ''}>Tổng</option>
+                                                            <option value="count" ${$data.formula == 'count' ? 'selected' : ''}>Đếm</option>
+                                                            <option value="avg" ${$data.formula == 'avg' ? 'selected' : ''}>Trung bình</option>
+                                                            <option value="min" ${$data.formula == 'min' ? 'selected' : ''}>Nhỏ nhất</option>
+                                                            <option value="max" ${$data.formula == 'max' ? 'selected' : ''}>Lớn nhất</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sv_qstn svd-survey-nopadding operator" style="flex: 1 1 15%; width: 15%; min-width: 50px; max-width: initial; padding-right: 20px;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <div>
+                                                        <select aria-label="operator" class="form-control" name="operator" value="${operator}" ${$data.addRow ? 'disabled' : ''}>
+                                                            <option value="">Chọn điều kiện...</option>
+                                                            <option value="empty"           ${$data.operator == 'empty'             ? 'selected' : '' }>trống</option>
+                                                            <option value="notempty"        ${$data.operator == 'notempty'          ? 'selected' : '' }>không trống</option>
+                                                            <option value="equal"           ${$data.operator == 'equal'             ? 'selected' : '' }>bằng</option>
+                                                            <option value="notequal"        ${$data.operator == 'notequal'          ? 'selected' : '' }>không bằng</option>
+                                                            <option value="contains"        ${$data.operator == 'contains'          ? 'selected' : '' } ${type != 'text' && type != 'advance' && type != 'checkbox' ? 'disabled' : ''}>chứa</option>
+                                                            <option value="notcontains"     ${$data.operator == 'notcontains'       ? 'selected' : '' } ${type != 'text' && type != 'advance' && type != 'checkbox' ? 'disabled' : ''}>không chứa</option>
+                                                            <option value="anyof"           ${$data.operator == 'anyof'             ? 'selected' : '' } ${type == 'text' || type == 'advance'                       ? 'disabled' : ''}>bất kỳ</option>
+                                                            <option value="allof"           ${$data.operator == 'allof'             ? 'selected' : '' } ${type != 'checkbox'                                        ? 'disabled' : ''}>tất cả</option>
+                                                            <option value="greater"         ${$data.operator == 'greater'           ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>lớn hơn</option>
+                                                            <option value="less"            ${$data.operator == 'less'              ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>nhỏ hơn</option>
+                                                            <option value="greaterorequal"  ${$data.operator == 'greaterorequal'    ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>lớn hơn hoặc bằng</option>
+                                                            <option value="lessorequal"     ${$data.operator == 'lessorequal'       ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>nhỏ hơn hoặc bằng</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{if $data.addRow || type == 'text' || type == 'advance'}}
+                                            <div class="sv_qstn svd-survey-nopadding question-value" style="flex: 1 1 25%; min-width: 50px; max-width: initial; width: 25%; padding-right: 20px;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <input type="text" size="25" placeholder="" aria-required="true" aria-label="Hãy nhập/chọn giá trị" class="form-control" name="value" value="${value}"
+                                                           ${$data.addRow || $data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{else type == 'checkbox' && $data.operator != 'contains' && $data.operator != 'notcontains' || type != 'checkbox' && $data.operator == 'anyof'}}
+                                            {{else}}
+                                            <div class="sv_qstn svd-survey-nopadding question-value" style="flex: 1 1 25%; min-width: 50px; max-width: initial; width: 25%; padding-right: 20px;">
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <div>
+                                                        <select aria-label="Hãy nhập/chọn giá trị" class="form-control" name="value" value="${value}" ${$data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+                                                            <option value="">Chọn giá trị...</option>
+                                                            {{each(i) choices}}
+                                                            <option value="${value}" ${$data.value == value ? 'selected' : '' }>${text}</option>
+                                                            {{/each}}
+                                                        </select>
+                                                    </div>
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                        {{if type == 'checkbox' && $data.operator != 'contains' && $data.operator != 'notcontains' || type != 'checkbox' && $data.operator == 'anyof'}}
+                                        <div class="sv_row">
+                                            <div class="sv_qstn svd-survey-nopadding question-value" role="group" aria-labelledby="sq_249_ariaTitle" style="flex: 1 1 100%; width: 100%; min-width: 50px; max-width: initial; padding-right: 20px;">
+                                                <div>
+                                                    <h5 aria-label="Hãy nhập/chọn giá trị">
+                                                        <span style="position: static;">Hãy nhập/chọn giá trị</span>
+                                                        <span class="sv_q_required_text"></span>
+                                                    </h5>
+                                                    <div class="small">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                    <fieldset class="sv_qcbc sv_qcbx form-inline">
+                                                        <legend aria-label="Hãy nhập/chọn giá trị"></legend>
+                                                        {{each(i) choices}}
+                                                        <div class="checkbox sv-q-col-1 undefined">
+                                                            <label>
+                                                                <input type="checkbox" name="value_${value}" aria-required="true" aria-label="${text}" ${($data.value || []).indexOf(value) >= 0 ? 'checked' : ''}
+                                                                       ${$data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+                                                                <span class="checkbox-material">
+                                                                    <svg viewBox="0 0 24 24" class="sv-hidden">
+                                                                        <path d="M5,13l2-2l3,3l7-7l2,2l-9,9L5,13z"></path>
+                                                                    </svg>
+                                                                    <span class="check"></span>
+                                                                </span>
+                                                                <span title="${text}">
+                                                                    <span style="position: static;">${text}</span>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                        {{/each}}
+                                                    </fieldset>
+                                                    <div class="small" style="display: none;">
+                                                        <span style="position: static;"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sv_hidden_field" style="display: none;">
+                            <input type="hidden" name="type" value="${type}">
+                            <input type="submit">
+                        </div>
+                    </form>
+                </div>
+            </survey-widget>
+        </div>
+    </td>
+    <td>
+        <span class="svd-propertyeditor-condition-item-delete-icon" title="Xoá" tabindex="0">
+            <svg-icon class="svd-danger-icon icon-actiondelete"><svg class="svd-svg-icon" style="width: 16px; height: 16px;"><use xlink:href="#icon-actiondelete"></use></svg></svg-icon>
+        </span>
+    </td>
+</tr>

@@ -1,0 +1,195 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.SearchSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Search");
+    Layout = "_SettingLayout.cshtml";
+    var allUsers = ViewBag.AllUsers as string;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allPositions = ViewBag.AllPositions as string;
+
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+
+<script>
+
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allPositions = @(string.IsNullOrEmpty(allPositions) ? MvcHtmlString.Create("[]") : Html.Raw(allPositions));
+    var currentUsersIds= "@Model.UserIds";
+    var currentDepartmentIds=@(string.IsNullOrEmpty(Model.DepartmentPositions) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DepartmentPositions));
+    var users=[];
+    var deptPositions=[];
+    var types={
+        user:"Người dùng",
+        dept:"Phòng ban"
+    }
+    $(function () {
+        allPositions.unshift({
+            value: 0,
+            label: "Tất cả"
+        })
+        var currentUsers=_.filter(allUsers,function(item){
+            return currentUsersIds.indexOf(item.value)>-1
+        });
+        $.each(currentUsers, function () {
+            users.push({
+                type: types.user,
+                value: this.value,
+                label: this.label
+            });
+        });
+        $.each(currentDepartmentIds, function (i,deptPos) {
+            var dept=_.find(allDepartments,function(item){
+                return item.value==deptPos.DepartmentId;
+            });
+            var pos=_.find(allPositions,function(item){
+                return item.value==deptPos.PositionId;
+            });
+            deptPositions.push({
+                type: types.dept,
+                value: {
+                    DepartmentId: dept.value,
+                    PositionId: pos.value,
+                },
+                label: dept.label + "\\" + pos.label
+            })
+        });
+        bindDefaultValues();
+        $.each(allPositions, function () {
+            var option = $('<option>').attr('value', this.value).html(this.label);
+            $('#positionList').append(option);
+        });
+        var selectedDept;
+        $("#departmentList").autocomplete({
+            source: allDepartments,
+            autoFocus: true,
+            autoSelectFirst: true,
+            select: function (event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+                selectedDept = ui.item;
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            ul.addClass('dropdown-menu');
+            return $("<li>")
+                .data("item.autocomplete", item)
+                .append("<a href='#'>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#userList").autocomplete({
+            source: allUsers,
+            autoFocus: true,
+            autoSelectFirst: true,
+            select: function (event, ui) {
+                event.preventDefault();
+                $(this).val("");
+                users.push({
+                    type: types.user,
+                    value: ui.item.value,
+                    label: ui.item.label
+                });
+                bindDefaultValues();
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            ul.addClass('dropdown-menu');
+            return $("<li>")
+                .data("item.autocomplete", item)
+                .append("<a href='#'>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $("#addDept").click(function () {
+            if (selectedDept) {
+                deptPositions.push({
+                    type: types.dept,
+                    value: {
+                        DepartmentId: selectedDept.value,
+                        PositionId: $("#positionList").val()
+                    },
+                    label: selectedDept.label + "\\" + $("#positionList option:selected").text()
+                })
+            }
+            bindDefaultValues();
+        });
+    });
+    function bindDefaultValues() {
+        var $body = $("#defaultValues tbody");
+        $body.empty();
+        if (users.length > 0) {
+            $("input[name=UserIds]").val(JSON.stringify(_.pluck(users, "value")));
+        }
+        if (deptPositions.length > 0) {
+            $("input[name=DepartmentPositions]").val(JSON.stringify(_.pluck(deptPositions, "value")));
+        }
+        var defaultValues = users.concat(deptPositions);
+        $.each(defaultValues, function () {
+            var tr = "<tr><td>" + this.type + "</td><td>" + this.label + "<td><td><td></tr>";
+            $body.append(tr);
+        });
+    }
+</script>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td style="padding-left: 0; width: 23%">
+                        @Html.LabelRequireFor(model => model.ServerUrl):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.ServerUrl)
+                        @Html.ValidationMessageFor(model => model.ServerUrl)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 0; width: 23%">
+                        @Html.LabelRequireFor(model => model.NumberSelected):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.NumberSelected)
+                        @Html.ValidationMessageFor(model => model.NumberSelected)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Phân quyền:</label>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Phòng ban" style="width: 30%; float: left; margin-right: 5px;" id="departmentList" />
+                        <select style="width: 30%; float: left; margin-right: 5px;" id="positionList">
+                        </select>
+                        <input type="button" value="Thêm" class="btn" id="addDept" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="text" placeholder="Cán bộ" id="userList" /></td>
+                    @Html.HiddenFor(model => model.UserIds)
+                    @Html.HiddenFor(model => model.DepartmentPositions)
+                </tr>
+            </table>
+            <table class="table table-bodered" id="defaultValues">
+                <colgroup>
+                    <col style="width: 150px" />
+                    <col />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Kiểu</th>
+                        <th>Giá trị</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        }
+    </div>
+</div>

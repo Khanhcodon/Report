@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.SearchViewModel>
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#listRelations").grid({
+            isResizeColumn: true,
+            isFixHeightContent: true,
+            isAutoHideScroll: false,
+            height: 150
+        });
+        refreshgrid();
+        $('#listRelations').getNiceScroll().remove();
+        $('#listRelations').niceScroll();
+    });
+</script>
+<table class="table-main unselectable" id="listRelations">
+    <colgroup>
+        <col style="width: 150px;" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 200px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">Trích yếu
+            </th>
+            <th class="header">Số ký hiệu
+            </th>
+            <th class="header">Số đến
+            </th>
+            <th class="header">Người xử lý
+            </th>
+            <th class="header">Nơi nhận văn bản/Cơ quan ban hành
+            </th>
+            <th class="header">Ngày đến/Ngày ban hành
+            </th>
+            <th class="header">Ngày văn bản
+            </th>
+            <th class="header">Hình thức văn bản
+            </th>
+            <th class="header">người ký
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var document in Model)
+            {
+            <tr ondblclick="return openDocument('@document.DocumentCopyId', '@document.Compendium');">
+                <td>
+                    @document.Compendium
+                    <input type="hidden" value='{"RelationId" : "@document.DocumentId", "DocumentCopyRelationId" : @document.DocumentCopyId, "RelationType" : 1}' name="Relations" class="relation-id"/>
+                </td>
+                <td>
+                    @document.DocCode
+                </td>
+                <td>
+                    @document.InOutCode
+                    @*Số đến*@
+                </td>
+                <td>
+                    @document.LastUserComment
+                    @*người sử lý *@
+                    
+                </td>
+                <td>
+                    @* Nơi nhận văn bản/Cơ quan ban hành *@
+                     @document.Address
+                </td>
+                <td>
+                    @* Ngày đến/Ngày ban hành *@
+                     @(document.DateArrived.HasValue ? document.DateArrived.Value.ToShortDateString() : string.Empty)
+                </td>
+                <td>@*Ngày văn bản*@
+                    @document.DateCreated.ToShortDateString()
+                </td>
+                <td>@*Hình thức văn bản*@
+                    @document.CategoryName
+                </td>
+                <td>@*người ký*@
+                     @document.UserSuccess
+                </td>
+
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Không có hồ sơ nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

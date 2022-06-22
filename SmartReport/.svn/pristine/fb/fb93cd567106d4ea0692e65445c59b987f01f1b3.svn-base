@@ -1,0 +1,190 @@
+﻿@model IEnumerable<TemplateKeyModel>
+    @{
+        var specialKeys = ViewBag.SpecialKeys as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.TemplateKeyModel>;
+        var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+        var listPageSize = ViewBag.ListPageSize as List<int>;
+        var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    }
+    <script type="text/javascript">
+        $(function () {
+            $("#tblTemplate").grid({
+                isResizeColumn: true,
+                isFixHeightContent: false
+            });
+            $(".table-main").addClass("table-bordered table-hover");
+        });
+    </script>
+
+    <h4 id="btnCustomkey">@Localizer("Common.Resource.Customkey.EnumKey")</h4>
+    <table class="table-main table" id="tblTemplate">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 250px" />
+            <col style="width: 100px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th class="header">
+                    @Ajax.SortLink("Name", Localizer("Common.TemplateKey.Index.List.Column.keySearch"),
+        sortAndPage.SortBy, sortAndPage.IsSortDescending,
+        "SortAndPaging", "sort asc", "sort desc",
+        new
+        {
+            page = sortAndPage.CurrentPage,
+            pageSize = sortAndPage.PageSize,
+            searchKey = ViewBag.KeySearch,
+        },
+        new AjaxOptions
+        {
+            UpdateTargetId = "divListKey",
+            OnBegin = "onBegin",
+            OnSuccess = "onSuccess",
+            OnFailure = "onFailure"
+        })
+                </th>
+                <th class="header" data-res="egov.resources.templatekey.keycode">
+                </th>
+                <th class="header text-center">
+                    @Localizer("Common.TemplateKey.Index.List.Column.IsActive")
+                </th>
+                <th class="header text-center">
+                    @Localizer("Common.TemplateKey.Index.List.Column.Edit")
+                </th>
+                <th class="header text-center">
+                    @Localizer("Common.TemplateKey.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var key in Model)
+                {
+                    number += 1;
+                    <tr data-id="">
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @key.Name
+                        </td>
+                        <td>
+                            @key.Code
+                        </td>
+                        <td class=" text-center">
+                            <input disabled="disabled" type="checkbox" @(key.IsActive ? "checked = 'checked'" : "") />
+                        </td>
+                        <td class="text-center">
+                            @if (key.Type != (int)Bkav.eGovCloud.Entities.TemplateKeyType.Special)
+                            {
+                                @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = key.TemplateKeyId });
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (key.Type != (int)Bkav.eGovCloud.Entities.TemplateKeyType.Special)
+                            {
+                                <a href="javascript:deleteTemplateKey(@(key.TemplateKeyId))">@Localizer("Bkav.eGovCloud.Areas.Admin.TemplateKey.Index.List.Column.Delete.Button")</a>
+                                <form id="formdelete@(key.TemplateKeyId)" style="display: none" action="@Url.Action("Delete", new { Id = key.TemplateKeyId })" method="POST">
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" data-res="egov.resources.templatekey.nokey">
+                        Không có key nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  resourceKey = ViewBag.KeySearch,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divListKey",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <br /><br /><br />
+    <hr style="clear: both; width: 100%;" />
+    <h4 id="btnEnumkey">@Localizer("Common.Resource.TemplateKey.EnumKey")</h4>
+    <table class="table-main table" id="tblSepecialTemplate">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 250px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th class="header">
+                    @Localizer("Common.TemplateKey.Index.List.Column.keySearch")
+                </th>
+                <th class="header" data-res="egov.resources.templatekey.keycode">
+                </th>
+                <th class="header text-center">
+                    @Localizer("Common.TemplateKey.Index.List.Column.IsActive")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (specialKeys != null && specialKeys.Any())
+            {
+                foreach (var key in specialKeys)
+                {
+                    number += 1;
+                    <tr data-id="">
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @key.Name
+                        </td>
+                        <td>
+                            @key.Code
+                        </td>
+                        <td class=" text-center">
+                            <input disabled="disabled" type="checkbox" checked='checked' />
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" data-res="egov.resources.templatekey.nokey">
+                        Không có key nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

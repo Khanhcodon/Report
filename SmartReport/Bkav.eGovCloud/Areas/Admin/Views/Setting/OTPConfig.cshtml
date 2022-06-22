@@ -1,0 +1,246 @@
+﻿@model OTPSettingsModel
+@{
+    ViewBag.Title = Localizer("Cập nhật mẫu kích hoạt");
+    Layout = "_SettingLayout.cshtml";
+    var templates = ViewBag.Templates as string;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script>
+    var templates =  @(string.IsNullOrEmpty(templates) ? MvcHtmlString.Create("[]") : Html.Raw(templates));
+    var type={
+        phieuin:1,
+        mail:2,
+        sms:3,
+    };
+
+    function openDialog(inType,inReset) {
+        $("#my-dialog").dialog({
+            width: 600,
+            height: 400,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#tblOptions tbody").empty();
+                var filter= _.filter(templates,function(item){
+                    return item.type == inType;
+                });
+
+                $("#tmplTemplate").tmpl(filter).appendTo($("#tblOptions tbody"));
+                $("#tmplTemplateNotSelected").tmpl({}).appendTo($("#tblOptions tbody"));
+
+            },
+            buttons: [
+                {
+                    text: egov.resources.buttons.select || "Chọn",
+                    click: function () {
+                        if($("[name=ChoosseTemplateId]:checked").length>0){
+                            var valueSelected=$("[name=ChoosseTemplateId]:checked").val();
+                            var find = _.find(templates, function(item){
+                                return item.value == valueSelected;
+                            });
+
+                            if(find){
+                                if(inType == type.sms){
+                                    if(inReset ==1){
+                                        $("#nameTempSmsReset").text(find.label);
+                                        $("#ResetPassSmsTemplateId").val(find.value);
+                                        $("#ResetPassSmsTemplateName").val(find.label);
+                                    }
+                                    else{
+                                        $("#nameTempSmsActive").text(find.label);
+                                        $("#ActiveSmsTemplateId").val(find.value);
+                                        $("#ActiveSmsTemplateName").val(find.label);
+                                    }
+                                }
+                                else if(inType == type.mail){
+                                    if(inReset == 1){
+                                        $("#nameTempMailReset").text(find.label);
+                                        $("#ResetPassMailTemplateId").val(find.value);
+                                        $("#ResetPassMailTemplateName").val(find.label);
+                                    }
+                                    else
+                                    {
+                                        $("#nameTempMailActive").text(find.label);
+                                        $("#ActiveMailTemplateId").val(find.value);
+                                        $("#ActiveMailTemplateName").val(find.label);
+                                    }
+                                }
+                            }else{
+                                if(inType == type.sms){
+                                    if(inReset == 1)
+                                    {
+                                        $("#nameTempSmsReset").text(egov.resources.notify.nouse);
+                                        $("#ResetPassSmsTemplateId").val(0);
+                                        $("#ResetPassSmsTemplateName").val('');
+                                    }
+                                    else
+                                    {
+                                        $("#nameTempSmsActive").text(egov.resources.notify.nouse);
+                                        $("#ActiveSmsTemplateId").val(0);
+                                        $("#ActiveSmsTemplateName").val('');
+                                    }
+                                }
+                                else if(inType == type.mail){
+                                    if(inReset == 1)
+                                    {
+                                        $("#nameTempMailReset").text(egov.resources.notify.nouse);
+                                        $("#ResetPassMailTemplateId").val(0);
+                                        $("#ResetPassMailTemplateName").val('');
+                                    }
+                                    else
+                                    {
+                                        $("#nameTempMailActive").text(egov.resources.notify.nouse);
+                                        $("#ActiveMailTemplateId").val(0);
+                                        $("#ActiveMailTemplateName").val('');
+                                    }
+                                }
+                            }
+                        }
+                        $("#my-dialog").dialog("close");
+                    }
+                }]
+        });
+    }
+
+    $(function(){
+        $("#submit").click(function () {
+            $("form").attr('action', '@Url.Action("OTPConfig")');
+            $('form').submit();
+        });
+
+        $('.bkavegov').on('keydown', '.phone-number', function(e){-1!==$.inArray(e.keyCode,[46,8,9,27,13,110,190])||/65|67|86|88/.test(e.keyCode)&&(!0===e.ctrlKey||!0===e.metaKey)||35<=e.keyCode&&40>=e.keyCode||(e.shiftKey||48>e.keyCode||57<e.keyCode)&&(96>e.keyCode||105<e.keyCode)&&e.preventDefault()});
+    });
+</script>
+
+@Html.Partial("_Notifications")
+
+@using (Html.BeginForm("OTPConfig", "Setting", FormMethod.Post))
+{
+    @*@Html.HiddenFor(model => model.Key)
+        @Html.HiddenFor(model => model.Id)*@
+    <div id="tabs" class="bkavegov" style="width:50%">
+
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Kích hoạt tài khoản</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 30%">
+                    @Html.LabelFor(model => model.TimeLimit)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.TimeLimit, new { @class = "form-control phone-number" })
+                    <span>phút</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 30%">
+                    @Html.LabelFor(model => model.ActiveSmsTemplateName)
+                </td>
+                <td>
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(3,0);"
+                               value="@Localizer("NotifyConfig.CreateOrEdit.Fields.SmsTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempSmsActive">
+                        @Html.DisplayFor(model => model.ActiveSmsTemplateName)
+                    </div>
+                    @Html.HiddenFor(model => model.ActiveSmsTemplateId)
+                    @Html.HiddenFor(model => model.ActiveSmsTemplateName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 30%">
+                    @Html.LabelFor(model => model.ActiveMailTemplateName)
+                </td>
+                <td>
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(2,0);"
+                               value="@Localizer("NotifyConfig.CreateOrEdit.Fields.MailTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempMailActive">@Html.DisplayFor(model => model.ActiveMailTemplateName)</div>
+                    @Html.HiddenFor(model => model.ActiveMailTemplateId)
+                    @Html.HiddenFor(model => model.ActiveMailTemplateName)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Đổi mật khẩu</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 30%">
+                    @Html.LabelFor(model => model.ResetPassSmsTemplateName)
+                </td>
+                <td>
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(3,1);"
+                               value="@Localizer("NotifyConfig.CreateOrEdit.Fields.SmsTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempSmsReset">
+                        @Html.DisplayFor(model => model.ResetPassSmsTemplateName)
+                    </div>
+                    @Html.HiddenFor(model => model.ResetPassSmsTemplateId)
+                    @Html.HiddenFor(model => model.ResetPassSmsTemplateName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 30%">
+                    @Html.LabelFor(model => model.ResetPassMailTemplateName)
+                </td>
+                <td>
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(2,1);"
+                               value="@Localizer("NotifyConfig.CreateOrEdit.Fields.MailTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempMailReset">@Html.DisplayFor(model => model.ResetPassMailTemplateName)</div>
+                    @Html.HiddenFor(model => model.ResetPassMailTemplateId)
+                    @Html.HiddenFor(model => model.ResetPassMailTemplateName)
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+<div id="my-dialog" style="display: none">
+    <table id="tblOptions" class="table table-hover">
+        <thead>
+            <tr>
+                <th data-res="egov.resources.tableheader.formname">Tên mẫu</th>
+                <th data-res="egov.resources.tableheader.type">Kiểu</th>
+                <th data-res="egov.resources.tableheader.select" class="text-center">Chọn</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script id="tmplTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${label}</td>
+        <td>    
+            {{if type==2}}
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Notify.Email")
+            {{else}}
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Notify.SMS")
+            {{/if}}
+        </td>
+        <td style="text-align: center">
+            <input type="radio" name="ChoosseTemplateId" value="${value}" />
+        </td>
+    </tr>
+</script>
+
+<script id="tmplTemplateNotSelected" type="text/x-jquery-tmpl">
+    <tr>
+        <td colspan="2" data-res="egov.resources.notify.nouse">Không sử dụng</td>
+        <td style="text-align: center">
+            <input type="radio" name="ChoosseTemplateId" value="0" />
+        </td>
+    </tr>
+</script>

@@ -1,0 +1,108 @@
+﻿@model Bkav.eGovCloud.Models.BusinessLicenseModel
+@{
+    ViewBag.Title = "Thêm mới giấy phép";
+    Layout = null;
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<link type="text/css" href="@Url.Content("~/Scripts/jquery.ui.layout/layout-default-latest.css")" rel="stylesheet"/>
+<link type="text/css" href="@Url.Content("~/Scripts/jquery.contextmenu/jquery.contextMenu.css")" rel="stylesheet"/>
+<link type="text/css" href="@Url.Content("~/Scripts/jquery.colorpicker/jquery.colorpicker.css")" rel="stylesheet"/>
+<link href="@Url.Content("~/Scripts/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/MicrosoftAjax.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.22.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.ui.layout/jquery.layout-latest.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/jquery.jstree.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/_lib/jquery.cookie.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jstree_pre1.0_fix_1/_lib/jquery.hotkeys.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.contextmenu/jquery.contextMenu.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/underscore.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bkav.utilities.js")" type="text/javascript" ></script>
+<script src="@Url.Content("~/Scripts/bkav.blockpanel.js")" type="text/javascript"></script>
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.fileupload.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="../../../../Scripts/jquery.fileDownload.js"></script>
+<script type="text/javascript">
+    $(function () { 
+        $("#BusinessTypeId").change(function (event) {
+            var businessTypeId = $(this).val();
+            $.get("@Url.Action("BusinessTypeChange")", 
+                { businessTypeId: businessTypeId },
+                function (result) {
+                    if(result) 
+                    {
+                        $('#divBusinessLicense #BusinessId').empty();                   
+                        var AllBusiness = JSON.parse(result.AllBusiness);                            
+                        if(AllBusiness.length>0)
+                        {
+                            $("#businessTemplate").tmpl(AllBusiness).appendTo("#divBusinessLicense #BusinessId");
+                        }                         
+                    }
+                }
+            )
+            .complete(function () {                
+            })
+            .fail(function () {
+                messageTemp({ message: 'Có lỗi xảy ra', type: 'error' });
+            });
+        });  
+        
+        $("#DocFieldId").change(function (event) {
+            var docFieldId = $(this).val();
+            $.get("@Url.Action("DocFieldChange")", 
+                { docFieldId: docFieldId },
+                function (result) {
+                    if(result) 
+                    {
+                        $('#divBusinessLicense #DocTypeId').empty();                   
+                        var AllDocType = JSON.parse(result.AllDocType);                            
+                        if(AllDocType.length>0)
+                        {
+                            $("#doctypeTemplate").tmpl(AllDocType).appendTo("#divBusinessLicense #DocTypeId");
+                        }                         
+                    }
+                }
+            )
+            .complete(function () {                
+            })
+            .fail(function () {
+                messageTemp({ message: 'Có lỗi xảy ra', type: 'error' });
+            });
+        });  
+        
+    })
+</script>
+@using (Html.BeginForm())
+{
+    <div class="bkavegov-content-title">
+        <h3>
+            Thêm mới giấy phép</h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink("Danh sách", "Index")</li>
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#">@Localizer("Common.Button.Create")</a></li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            <div id="divBusinessLicense">
+                @Html.Partial("_Notifications")
+                @Html.Partial("_CreateOrEdit", Model)
+            </div>
+            <div>
+                <button type="submit" name="save" value="save">@Localizer("Common.Button.Create.Save")</button>
+            </div>
+        </div>
+    </div>
+    <script id="businessTemplate" type="text/x-jquery-tmpl"> 
+    <option value="${BusinessId}">${BusinessName}</option>
+    </script>
+    <script id="doctypeTemplate" type="text/x-jquery-tmpl"> 
+    <option value="${DocTypeId}">${DocTypeName}</option>
+    </script>
+    
+}

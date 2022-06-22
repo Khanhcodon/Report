@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../images/bg/favicon.ico">
+
+    <title>Eform</title>
+
+    <!-- Bootstrap 4.1.3-->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap extend-->
+    <link href="~/Scripts/generalreport/main/css/bootstrap-extend.css" rel="stylesheet" />
+
+    <!-- daterange picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+    <!-- bootstrap datepicker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link href="~/Scripts/generalreport/assets/vendor_plugins/iCheck/all.css" rel="stylesheet" />
+
+    <!-- Bootstrap Color Picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap time Picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+    <!-- Select2 -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Theme style -->
+    <link href="~/Scripts/generalreport/main/css/master_style.css" rel="stylesheet" />
+
+    <!-- Unique_Admin skins -->
+    <link href="~/Scripts/generalreport/main/css/skins/_all-skins.css" rel="stylesheet" />
+    <link href="~/Content/searchdocument/style.css" rel="stylesheet" />
+    <style>
+        #ViewFiles tbody tr td i:hover{
+            color: #a41a1a !important;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="ifameFileOrReport">
+        @if (ViewBag.checkFile == 1)
+        {
+            // exit file
+            <h3 style="text-align:center">Danh sách File Báo cáo</h3>
+            if (ViewBag.CountAtt == 1)
+            {
+                <i hidden id="autoClickCheck" onclick="ViewDetailSearchCheckFile('@ViewBag.DocId', '@ViewBag.AttId')"></i>
+            }
+            else
+            {
+                
+                <a href="#" class="BackFile fa fa fa-backward fa-hover" target="_self" title="Quay lại" rel="follow, index" style="color:cornflowerblue;text-decoration: underline;padding-left: 14px;font-size: 14px;">Quay lại</a>
+                <div class="table-responsive col-lg-12 col-sm-6 col-md-5">
+                    <table id="ViewFiles" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="font-weight: 700;">Xem Chi Tiết</th>
+                                <th class="text-center" style="font-weight: 700;">STT</th>
+                                <th class="text-center" style="font-weight: 700;">Tên File Báo Cáo</th>
+                                <th class="text-center" style="font-weight: 700;">Ngày tạo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.ListAttachFile != null)
+                            {
+                                var stt = 0;
+                                foreach (var item in (IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ObjAtt>)ViewBag.ListAttachFile)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <i onclick="ViewDetailFile('@item.DocumentId', '@item.AttachmentId')" class="fa fa-eye-slash fa-hover" title="Xem chi tiết File" style="color: blue;"></i>
+                                        </td>
+                                        <td class="text-center">@(stt + 1)</td>
+                                        <td class="text-center">@item.AttachmentName</td>
+                                        <td class="text-center">@item.CreatedOnDate</td>
+                                    </tr>
+                                    stt++;
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div id="ViewFile">
+                <div id="ViewFileAtt" style="height: 100%;">
+
+                </div>
+            </div>         
+        }
+        else if (ViewBag.checkFile == 0)
+        {
+            // render data report
+            <h3 style="text-align:center;">@ViewBag.NameReport</h3>
+            <i hidden id="autoClick" onclick="ViewDetailSearch('@ViewBag.ListDocument')"></i>
+
+            <div class="box-body no-padding" id="BodyContentSearch">
+                <div class="col-12 HeaderContent">
+                    <div class="HeaderContentBody">
+
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div class="table" id="bodyContentSearch">
+                        <table border="1" cellspacing="0" class="table table-bordered table-hover table-main persist-area table-striped" id="tblListSearch">
+                            <colgroup></colgroup>
+                            <thead>
+                                <tr class="persist-header"></tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 FooterContent">
+                    <div class="FooterContentBody">
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade right" id="ViewFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header-full-width modal-header text-center" id="fixTopView" style="height: 85px !important;border-bottom: none !important;">
+                    <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close" id="closeModal">
+                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="" id="ViewFileAtt" style="height: 100%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery 3 -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <!-- Bootstrap 4.1.3-->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/select2/dist/js/select2.full.js"></script>
+
+    <!-- InputMask -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+
+    <!-- date-range-picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/moment/min/moment.min.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- bootstrap datepicker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- bootstrap color picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+
+    <!-- bootstrap time picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <!-- SlimScroll -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- iCheck 1.0.1 -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/iCheck/icheck.min.js"></script>
+
+    <!-- FastClick -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/generalreport/main/js/template.js"></script>
+
+    <!-- Unique_Admin for advanced form element -->
+    <script src="~/Scripts/generalreport/main/js/pages/advanced-form-element.js"></script>
+
+    <script src="~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+    <script src="~/Scripts/bkav.egov/views/searchdocument/ViewDetailSearch.js"></script>
+</body>
+</html>
+

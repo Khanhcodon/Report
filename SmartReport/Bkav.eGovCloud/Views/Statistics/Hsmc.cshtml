@@ -1,0 +1,641 @@
+﻿@using StackExchange.Profiling
+@{
+    Layout = null;
+    var offices = ViewBag.Offices as IEnumerable<Bkav.eGovCloud.Controllers.StatisticsController.Office>;
+    var officeStr = Newtonsoft.Json.JsonConvert.SerializeObject(offices);
+
+    var isQuanTriTapTrung = (bool)ViewBag.IsQuanTriTapTrung;
+}
+
+<script>
+    var eGovOverview = {};
+    eGovOverview.offices = @Html.Raw(officeStr);
+</script>
+<style>
+    .custab{
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-shadow: 3px 3px 2px #ccc;
+    transition: 0.5s;
+    }
+    .custab > tbody > tr >td{
+        font-size: 12px;
+    }
+    .custabs > tbody > tr >td{
+        font-size: 12px;
+    }
+    .custab > thead > tr >th{
+        font-size: 12px;
+    }
+</style>
+<meta name="viewport" content="width=device-width" />
+<title>Giám sát</title>
+
+<link href="../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link href="../Content/bkav.egov/overview.css" rel="stylesheet" />
+
+<script src="../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jquery.ui.datepicker-vi-VN.js"></script>
+<script src="../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+@*<script src="../Scripts/bkav.egov/libs/backbone/backbone-1.3.3.min.js"></script>*@
+<script src="../Scripts/bkav.egov/libs/chart/Chart.min.js"></script>
+<script src="../Scripts/bkav.egov/util/bt.util.date.js"></script>
+
+<div class="alert alert-success" role="alert">Đang xử lý...</div>
+
+<div class="overview">
+
+    <div class="condition">
+        @Html.Partial("_Header")
+    </div>
+
+    <div class="container-fluid">
+        <div class="">
+            <div class="row overview-total">
+                <div class="col-sm-3">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview selected" data-app="sumary">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                    </g>
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,41 22,46 27,45 42,30 38,26 	" />
+                                <line fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" x1="39" y1="33" x2="35" y2="29" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-total-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS xử lý trong kỳ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-success">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="dunghan">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                    </g>
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="23,36 30,43
+	                                    43,30 " />
+                                </svg>
+
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-resolved-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS đúng hạn
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-success">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="trehen">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                    </g>
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="23,36 30,43
+	                                    43,30 " />
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-resolvedLate-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS trễ hạn
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="chuadenhan">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                    </g>
+                                <path fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" d="M24,36c0,4.418,3.582,9,8,9h4" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="33,49 36,45
+	                                    33,41 " />
+                                <path fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" d="M42,36c0-4.418-3.582-9-8-9h-4" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="33,23 30,27
+	                                    33,31 " />
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-pending-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS chưa đến hạn
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="quahan">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                </g>
+                                <circle fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" cx="32" cy="36" r="9" />
+                                <line fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" x1="25.834" y1="29.834" x2="38.166" y2="42.166" />
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-overdue-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS quá hạn
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row overview-total">
+                <div class="col-sm-3">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="lienthong">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                </g>
+                                <circle fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" cx="32" cy="36" r="9" />
+                                <line fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" x1="25.834" y1="29.834" x2="38.166" y2="42.166" />
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-lienthong-total"></span>
+                                </div>
+                                <div class="overview-type">
+                                    HS liên thông
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body office-overview" data-app="dkqm">
+                            <div class="overview-icon">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 48 48" xml:space="preserve">
+                                <g>
+                                <polygon fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15 	" />
+                                <polyline fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" points="9,15 23,15 23,1 	" />
+                                </g>
+                                <circle fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" cx="32" cy="36" r="9" />
+                                <line fill="none" stroke="white" stroke-width="2" stroke-miterlimit="10" x1="25.834" y1="29.834" x2="38.166" y2="42.166" />
+                                </svg>
+                            </div>
+                            <div class="overview-separator"></div>
+                            <div class="overview-detail">
+                                <div class="overview-numb">
+                                    <span class="doc-dkqm-total">0</span>
+                                </div>
+                                <div class="overview-type">
+                                    HS Trực tuyến
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-result">
+            <div class="overview-sumary">
+                @Html.Partial("_OverviewSumary")
+            </div>
+
+            <div class="overview-dunghan">
+                @Html.Partial("_DungHan")
+            </div>
+
+            <div class="overview-trehen">
+                @Html.Partial("_TreHen")
+            </div>
+
+            <div class="overview-chuadenhan">
+                @Html.Partial("_ChuaDenhan")
+            </div>
+
+            <div class="overview-quahan">
+                @Html.Partial("_QuaHan")
+            </div>
+
+            <div class="overview-lienthong">
+                @Html.Partial("_LienThong")
+            </div>
+
+            <div class="overview-dkqm">
+                @Html.Partial("_Dkqm")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-jquery-tmpl" id="documentcopy-detail">
+    <div class="container-fluid list-group preview-info">
+        <div class="form-horizontal" style="font-size:12px;padding:10px 15px;">
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.Compendium">Trích yếu</label>
+                <div class="col-md-13">
+                    ${Compendium}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DocCode">Số ký hiệu</label>
+                <div class="col-md-6">
+                    ${DocCode}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.Category">Hình thức</label>
+                <div class="col-md-4">
+                    ${CategoryName}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DocType">Loại văn bản</label>
+                <div class="col-md-13">
+                    ${DocTypeName}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.Urgent.name">Độ khẩn</label>
+                <div class="col-md-6">
+                    {{if UrgentId==1}}<span data-res="egov.resources.document.Urgent.normal"></span>{{/if}}
+                    {{if UrgentId==2}}<span data-res="egov.resources.document.Urgent.fast"></span>{{/if}}
+                    {{if UrgentId==3}}<span data-res="egov.resources.document.Urgent.important"></span>{{/if}}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.Urgent.name">Số đến đi</label>
+                <div class="col-md-4">
+                    ${InOutCode}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DateCreated">Ngày văn bản</label>
+                <div class="col-md-6">
+                    ${DateCreated}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DateResponse">Ngày hẹn trả</label>
+                <div class="col-md-4">
+                    ${DateAppointed}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.InOutPlace">Đơn vị</label>
+                <div class="col-md-6">
+                    ${InOutPlace}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.TotalPage">Số trang</label>
+                <div class="col-md-4">
+                    {{if TotalPage<=0 }}
+                    0
+                    {{else}}
+                    ${TotalPage}
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0">
+                <label class="col-md-3 text-left" data-res="egov.resources.search.CurrentUser">Người đang giữ</label>
+                <div class="col-md-6">
+                    ${UserCurrentFullName}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DateReceived">Ngày tiếp nhận</label>
+                <div class="col-md-4">
+                    ${DateReceived}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;font-size:12px;">
+                <label class="col-md-3 text-left" data-res="egov.resources.search.status">Trạng thái văn bản</label>
+                <div class="col-md-6">
+                    {{if DocCopyStatus==1}}<span data-res="egov.resources.search.status1"></span>{{/if}}
+                    {{if DocCopyStatus==2}}<span data-res="egov.resources.search.status2"></span>{{/if}}
+                    {{if DocCopyStatus==4}}<span data-res="egov.resources.search.status4"></span>{{/if}}
+                    {{if DocCopyStatus==8}}<span data-res="egov.resources.search.status8"></span>{{/if}}
+                    {{if DocCopyStatus==16}}<span data-res="egov.resources.search.status16"></span>{{/if}}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.documentQuickView.Result">Kết quả xử lý</label>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;font-size:12px;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.Approvers">Người ký</label>
+                <div class="col-md-6">
+                    ${UserNameSuccess}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DateSuccess">Ngày ký duyệt</label>
+                <div class="col-md-4">
+                    ${DateSuccess}
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;font-size:12px;">
+                <label class="col-md-3 text-left" data-res="egov.resources.document.UserNameReturned">Người trả kết quả</label>
+                <div class="col-md-6">
+                    ${UserNameReturned}
+                </div>
+                <label class="col-md-3 text-left" data-res="egov.resources.document.DateReturned">Ngày kết thúc</label>
+                <div class="col-md-4">
+                    ${DateReturned}
+                </div>
+            </div>
+
+            {{if SupplementaryModels.length > 0}}
+            <div class="form-group form-group-sm" style="font-size:12px;">
+                <label class="col-md-3 text-left">Yêu cầu bổ sung</label><br />
+                <div class="col-md-13" style="width:100%">
+                    <table class="table table-bordered table-hover table-striped" style="font-size:12px">
+                        <tr>
+                            <td>Nội dung yêu cầu</td>
+                            <td>Người yêu cầu</td>
+                            <td>Ngày yêu cầu</td>
+                        </tr>
+                        {{each SupplementaryModels}}
+                        <tr>
+                            <td width="60%">${Details}</td>
+                            <td width="20%">${UserSendName}</td>
+                            <td width="20%">${DateSend}</td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+            {{/if}}
+
+            {{if LienThongs.length > 0}}
+            <div class="form-group form-group-sm" style="margin-bottom: 0;font-size:12px;">
+                <label class="col-md-3 text-left">Tiến độ liên thông</label>
+                <div class="col-md-13" style="width:100%">
+                    <table class="table table-bordered table-hover table-striped" style="font-size:12px;">
+                        <tr>
+                            <td>Địa chỉ</td>
+                            <td>Ngày gửi</td>
+                            <td>Ngày phản hồi</td>
+                            <td>Ghi chú</td>
+                        </tr>
+                        {{each LienThongs}}
+                        <tr>
+                            <td>${AddressName}</td>
+                            <td>${DateSent}</td>
+                            <td>${DateResponsed}</td>
+                            <td>${Note}</td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+            {{/if}}
+
+            <div class="form-group form-group-sm" style="margin-bottom: 0;">
+                <label class="col-md-3 text-left">Ý kiến xử lý</label><br />
+                <div>
+                    <ul id="coCommentList" class="commentList" style="padding:0;"></ul>
+                </div>
+                <div class="col-md-13" style="width:100%">
+                    <ul id="commentList" class="commentList" style="padding:0;"></ul>
+                </div>
+            </div>
+
+        </div>
+
+</script>
+
+
+<div class="modal fade" id="detailModal" tabindex="" role="dialog" aria-labelledby="" aria-hidden="true" style="width:800px; left: 50%;transform: translateX(-50%);margin-top:20px">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="formDetail" style="padding:0px">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-jquery-tmpl" id="documentcopy-detail-process">
+    <div class="panel panel-primary" style="margin-bottom:0px">
+        <div class="panel-heading" style="padding:10px">
+            <span class="panel-title" style="font-size:12px;font-weight:bold">Thông tin chi tiết xử lý hồ sơ</span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class=" col-md-16 col-lg-16 hidden-xs hidden-sm">
+                    <table class="table table-user-information document-overdue custabs">
+                        <colgroup>
+                            <col style="width:100px" />
+                            <col />  
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td>Số ký hiệu</td>
+                                <td>${DocCode}</td>
+                            </tr>
+                            <tr>
+                                <td>Tên công dân</td>
+                                <td>${CitizenName}</td>
+                            </tr>
+                            <tr>
+                                <td>Loại hồ sơ</td>
+                                <td>${DocTypeName}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-md-16 col-lg-16 hidden-xs hidden-sm">
+                    <table class="table table-user-information document-overdue custab">
+                        <thead>
+                            <tr>
+                                <th>Người xử lý</th>
+                                <th>Ngày tiếp nhận</th>
+                                <th>Ngày xử lý</th>
+                                <th>Hạn xử lý</th>
+                                <th>Tình trạng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{each ListTimeLine}}
+                            <tr {{if IsOverdue}}class="danger"{{/if}}>
+                                <td>${UserCurrentName}</td>
+                                <td>${DateCreated}</td>
+                                <td>${DateFinished}</td>
+                                <td>${DateAppointed}</td>
+                                {{if IsOverdue}}
+                                <td>Quá hạn</td>
+                                {{else}}
+                                <td>Đúng hạn</td>
+                                {{/if}}
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+</script>
+
+
+<script type="text/x-jquery-tmpl" id="otherOverduesTemp">
+    {{each(group, docs) data}}
+    <tr style="display:none;" group="${groupText}">
+        <td rowspan="${docs.length + 1}" class="text-center" style="color: #1164db">
+            ${group}
+        </td>
+        <td rowspan="${docs.length + 1}" class="text-center">
+            ${docs.length}
+        </td>
+    </tr>
+    {{each docs}}
+    <tr class="${color}" group="${groupText}" style="display:none;">
+        <td>${DocCode}</td>
+        <td>{{html unescape(Compendium)}}</td>
+        <td class="doctype-col">${KyBaoCao}</td>
+        <td class="text-center">${UserCreatedName}</td>
+        <td class="text-center">${DateCreated}</td>
+        <td class="text-center">{{if IsProcessing}}Đang xử lý{{else}}Đã kết thúc{{/if}}</td>
+    </tr>
+    {{/each}}
+    {{/each}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="commentTemp">
+    <li class="list-group-item">
+        <div class="comment-item">
+            <div class="comment-avatar">
+                <img src="${avatar}" alt="" class="avatar img-rounded" onerror="imageError(this)" />
+            </div>
+            <div class="comment-content">
+                <div>
+                    <div class="comment-detail">
+                   0     {{if CommentId === 0}}
+                        <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                        {{else}}
+                        <span class="wraptext ellipsis">
+                            <span class='comment-received'>
+                                <b>${UserSend.fullname} </b>
+                            </span> <span class="comment-description">${Description}</span>
+                        </span>
+                        {{/if}}
+                        <div class="comment-date pull-right">
+                            ${DateCreatedString}
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-detail">
+                    <div>
+                        {{if CommentId === 0}}
+                        <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                        {{else Content.Content == ''}}
+                        ...
+                        {{else}}
+                        <span class="ellipsis" style="font-size: 14px;">${Content.Content}</span>
+                        {{/if}}
+                    </div>
+                    {{if Children.length == 0 && Content.Transfers.length > 0}}
+                    <div class="target-comment">
+                        {{each Content.Transfers}}
+                        {{if label !== ""}}
+                        {{if type=="1"}}
+                        <span data-res="egov.resources.document.xlcLabel" class="target-label"></span>
+                        <span style="">${label}</span>
+                        {{else type=="2"}}
+                        <span data-res="egov.resources.document.dxlLabel" class="target-label"></span>
+                        <span style="">${label}</span>
+                        {{else type=="3"}}
+                        <span data-res="egov.resources.document.thongbaoLabel" class="target-label"></span>
+                        <span style="">${label}</span>
+                        {{else type=="4"}}
+                        <span data-res="egov.resources.document.xykLabel" class="target-label"></span>
+                        <span style="">${label}</span>
+                        {{else type=="5"}}
+                        <span data-res="egov.resources.document.gsLabel" class="target-label">Giám sát</span>
+                        <span style="">${label}</span>
+                        {{else type=="0"}}
+                        <span data-res="egov.resources.document.publish" class="target-label">Nơi nhận:</span>
+                        <span style="">${label}</span>
+                        {{/if}}
+                        <br />
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    {{else}}
+                    <div class="commentChirdren row">
+                        <div class="child${CommentId}"></div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </li>
+</script>
+
+<script src="../Scripts/bkav.egov/util/bt.util.string.min.js"></script>
+<script src="../Scripts/bkav.egov/overview/overview.js?v=cc"></script>
+<link href="../Content/bkav.egov/egov.document.css" rel="stylesheet">

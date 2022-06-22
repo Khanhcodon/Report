@@ -1,0 +1,184 @@
+﻿@model IEnumerable<JobTitlesModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var allJobs = ViewBag.AllJobs as string;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+<style>
+    .selected {
+        color: red;
+    }
+</style>
+<script type="text/javascript">
+    var allJobs = @(string.IsNullOrEmpty(allJobs) ? MvcHtmlString.Create("[]") : Html.Raw(allJobs));
+
+    function getPosition(element) {
+        var xPosition = 0;
+        var yPosition = 0;
+
+        while(element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+        return { x: xPosition, y: yPosition };
+    }
+
+    var fixHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $(function () {
+        $("#tblJobtitles").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblJobtitles").openLink({ urlOpen: '/admin/JobTitles/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $("#tblJobtitles tbody").sortable({
+            helper: fixHelper,
+            update: function () {
+                $('.connectedSortable').each(function () {
+                    $(this).find('td:first').html($(this).index() + 1);
+                });
+            }
+        }).disableSelection();
+
+        $("#findJob").autocomplete({
+            minLength: 1,
+            source: function(request, response ) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response($.grep(allJobs, function( item ) {
+                    return matcher.test( item.label ) || matcher.test( egov.utilities.string.stripVietnameseChars( item.label ) );
+                }));
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                var exist = _.find(allJobs, function(user) {
+                    return user.value == ui.item.value;
+                });
+
+                if (exist) {
+                    $("#findJob").val(exist.label);
+                    var _el = $("#tblJobtitles tr[id="+exist.value+"]");
+                    if( _el.hasClass("selected")){
+                        _el.removeClass("selected");
+                    }else{
+                        _el.addClass("selected");
+                    }
+
+                    var pos = getPosition(document.getElementById(exist.value));
+                    window.scrollTo(pos.x, pos.y);
+                }
+
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $('#enableDragDrop').click(function () {
+            var self = this;
+            var jobtitles = [];
+            $('.connectedSortable').each(function () {
+                var id = parseInt($(this).attr('id'));
+                jobtitles.push(id);
+            });
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdatePriority", "JobTitles")',
+                data: JSON.stringify({ ids: jobtitles }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
+                        if (data.error) {
+                            eGovMessage.notification(data.error, eGovMessage.messageTypes.error);
+                        } else if (data.success) {
+                            eGovMessage.notification(data.success, eGovMessage.messageTypes.error);
+                        }
+                    }
+                },
+                error: function () {
+                    eGovMessage.notification(egov.resources.buttons.sorterror, eGovMessage.messageTypes.error);
+                }
+            });
+
+        });
+    });
+</script>
+<div>
+    <input  type="text" name="findJob" id="findJob" class="form-control" style="width:40%;display:inline"  placeholder="@Localizer("Admin.Job.Find.Placeholder")" />
+    <input class="btn" type="button" id="enableDragDrop" value="Sắp xếp lại thứ tự" data-res="egov.resources.buttons.orderedsort" title="Cho phép sắp xếp thứ tự bằng cách kéo thả" data-restitle="egov.resources.buttons.orderedsort" style="float: right; display: inline" />
+</div>
+<div class="clear" style="margin-bottom: 20px"></div>
+<div>
+    @Localizer("Admin.Jobtitles.Sort.Label")
+</div>
+<table class="table-main table" id="tblJobtitles">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Customer.JobTitles.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+            @Localizer("Customer.JobTitles.Index.List.Column.JobTitlesName")
+            <th class="header text-center">
+                @Localizer("Customer.JobTitles.Index.List.Column.Edit")
+            </th>
+            <th class="header text-center">
+                @Localizer("Customer.JobTitles.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var job in Model)
+            {
+                number += 1;
+            <tr class="connectedSortable" id="@(job.JobTitlesId)">
+                <td>@number
+                </td>
+                <td>@job.JobTitlesName
+                </td>
+                <td class="text-center">
+                    @Html.ActionLink(Localizer("Customer.JobTitles.Index.List.Column.Edit.Button"), "Edit", new { Id = job.JobTitlesId })
+                </td>
+                <td class="text-center">
+                    <a href="javascript:deleteResource(@(job.JobTitlesId))">@Localizer("Customer.JobTitles.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(job.JobTitlesId)" style="display: none"
+                         action="@Url.Action("Delete", new { Id = job.JobTitlesId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.jobtitles.nodata">Không có chức danh nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

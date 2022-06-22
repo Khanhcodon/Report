@@ -1,0 +1,111 @@
+﻿@model CategoryDisaggreationModel
+@{
+    ViewBag.Title = "Quản lý địa bàn phòng ban";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+
+    
+    <style>
+        .jstree-themeicon {
+            font-size: 19px;
+            color: #188ef4;
+        }
+
+        .modal.fade.modal-right .modal-dialog {
+            width: 50%;
+        }
+    </style>
+    <!--Style-->
+    <link href="~/Content/admin/disaggregation/style.css" rel="stylesheet" />
+    <link href="~/Scripts/generalreport/main/css/style.css" rel="stylesheet" />
+    <script src="~/Scripts/admin/localityDepartment/localityDepartment.js"></script>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">Phòng ban</h4>
+                        <div class="box-controls pull-right">
+                            <div class="box-header-actions">
+                                <label class="switch switch-border switch-info">
+                                    <input type="checkbox" checked="">
+                                    <span class="switch-indicator"></span>
+                                    <span class="switch-description"></span>
+                                </label>
+                                <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                    <input type="text" name="s" id="searchDepartment" placeholder="Tên phòng ban">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box-body">
+                        <div id="departmentTree"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">Địa bàn quản lý</h4>
+                        <div class="box-controls pull-right">
+                            <div class="box-header-actions">
+                                <label class="switch switch-border switch-info">
+                                    <input type="checkbox" checked="">
+                                    <span class="switch-locality"></span>
+                                    <span class="switch-description"></span>
+                                </label>
+                                <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                    <input type="text" id="searchLocality" name="s" placeholder="Tên địa bàn">
+                                </div>
+                                <button class="btn btn-sm btn-primary" id="ChooseLocality">Chọn địa bàn</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body" id="localityBodyTree">
+                        <div id="locality"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal modal-right fade" id="modalLocality" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chọn địa bàn</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Địa bàn quản lý</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" id="searchChooseLocality" name="s" placeholder="Tên địa bàn">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-body" id="bodyTree">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" id="btnSaveLocality" class="btn btn-bold btn-pure btn-primary float-right">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+ 
+    

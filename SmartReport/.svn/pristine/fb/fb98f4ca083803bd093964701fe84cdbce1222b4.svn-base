@@ -1,0 +1,61 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.ConfigInSqlServerModel
+
+<script type="text/javascript">
+    $(function () {
+        $("input[type='radio'][name='chooseType'][value='0']").on("click", function () {
+            $("#DaySetBackup").removeAttr("disabled").val("");
+            $("#DateTimeSetBackup").attr("disabled", "disabled").val("");
+        });
+
+        $("input[type='radio'][name='chooseType'][value='1']").on("click", function () {
+            $("#DateTimeSetBackup").removeAttr("disabled").val("");
+            $("#DaySetBackup").attr("disabled", "disabled").val("");
+        });
+
+        $("#DaySetBackup").on("keypress", function (e) {
+            if (e.keyCode >= 48 && e.keyCode <= 57) {
+                return true;
+            }
+            return false;
+        });
+
+        $("#DateTimeSetBackup").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+
+</script>
+
+@using (Html.BeginForm("ConfigInSqlServer", "BackupRestoreConfig", FormMethod.Get, new { name = "otherConfig" }))
+{
+    @Html.ValidationSummary(true)   
+    <table class="common-config">
+        <tr>
+            <td>
+                <label>
+                    <input type="radio" name="chooseType" value="0" checked="checked" />
+                    @Html.LabelFor(model => model.DaySetBackup)
+                </label>
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DaySetBackup)
+                @Html.ValidationMessageFor(model => model.DaySetBackup)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>
+                    <input type="radio" name="chooseType" value="1" />
+                    @Html.LabelFor(model => model.DateTimeSetBackup)
+                </label>
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DateTimeSetBackup, new { disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.DateTimeSetBackup)
+            </td>
+        </tr>
+    </table>
+}

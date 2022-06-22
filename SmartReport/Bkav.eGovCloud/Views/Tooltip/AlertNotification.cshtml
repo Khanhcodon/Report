@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.UserNotifyModel>
+@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    function openDocumentInNotify(id, title) {
+        $('#AlertNotifier').qtip('hide');
+        openDocument(id, title);
+    }
+</script>
+
+<div class="document-process-notification">
+    <span>fjalsfjd</span>
+    @if (Model.Any())
+    {
+        foreach (var notify in Model)
+        {
+        <span>
+            <a href="#" onclick="openDocumentInNotify('@notify.DocumentCopyId', '@notify.Compendium')">
+                <img src="@Url.Content(notify.UserSendAvatar)" alt="@notify.UserSend" />
+                <label>@Html.Raw(notify.Content)</label>
+            </a>
+            <span>@notify.SentDate.ToString("hh:mm dd/MM/yyyy");</span>
+        </span>
+        }
+    }
+    else
+    {
+        <span>
+            <a href="#">Không có thông báo nào
+            </a>
+        </span>
+    }
+</div>

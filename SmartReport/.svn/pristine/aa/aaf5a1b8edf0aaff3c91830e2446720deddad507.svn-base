@@ -1,0 +1,1622 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    #Comment::placeholder {
+          color: white;
+        }
+    .mdl-menu__container .mdl-menu__item {
+        max-width: none;
+    }
+
+    .mdl-menu__container.is-visible {
+        right: 15px !important;
+    }
+
+    .mdl-menu__outline.mdl-menu--top-right {
+        display: none;
+    }
+
+    .mdl-menu__container .mdl-menu {
+        clip: rect(0px, 350px, 160px, 0px) !important;
+        background: white;
+        z-index: 99999;
+    }
+
+    @@media (min-width: 840px){
+        .mdl-cell--8-col, .mdl-cell--8-col-desktop.mdl-cell--8-col-desktop {
+            width: 66.6666666667%;
+        }
+    } 
+
+    .mdl-layout__drawer-right {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    width: 240px;
+    height: 92%;
+    max-height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+    box-sizing: border-box;
+    border-right: 1px solid #e0e0e0;
+    background: #fafafa;
+    -webkit-transform: translateX(250px);
+    -ms-transform: translateX(250px);
+    transform: translateX(250px);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    will-change: transform;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    -webkit-transition-property: -webkit-transform;
+    transition-property: transform;
+    color: #424242;
+    overflow: visible;
+    overflow-y: auto;
+    z-index: 5;
+}
+
+.active {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);  
+}
+
+.mdl-layout__obfuscator-right {
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 4;
+    visibility: hidden;
+    -webkit-transition-property: background-color;
+    transition-property: background-color;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.mdl-layout__drawer-right.active~.mdl-layout__obfuscator-right {
+    background-color: rgba(0,0,0,.5);
+    visibility: visible;
+}
+
+.mdl-layout__drawer-right>.mdl-layout-title {
+    line-height: 56px;
+    padding-left: 16px;
+}
+
+.mbsc-mobiscroll-dark .mbsc-input input, .mbsc-mobiscroll-dark .mbsc-input textarea {
+    border-bottom: 1px solid #ffffff61;
+    color: #d1d1d1;
+}
+
+.mbsc-mobiscroll .mbsc-input .mbsc-label {
+    position: absolute;
+    top: 0;
+    font-size: .95em;
+}
+
+    .d-r-header{
+        font-size:48px;
+        font-weight:bold;
+        color:#fff;
+        text-align:center;
+        text-transform:uppercase;
+        line-height:65px;
+        margin-top:60px;
+    }
+    .mdl-layout-head, .header-title, .mdl-layout-inext {
+        display:inline-block;
+        padding-left:5px;
+        font-size:18px;
+    }
+        .mdl-layout-inext{padding:0px 10px;}
+    .material-icons{font-size:18px;color:#FFFF;}
+    .mdl-button {
+        height: 21px;
+        width: 71px;
+        font-size: 10px !important;
+        text-transform: unset !important;
+        padding-left:11px;
+    }
+
+    /*20191218 VuHQ START SUPPORT TAIDA*/
+    /*#btnSearch {
+        background: #2139FF
+    }*/
+    #notif {
+        margin-left:4px;
+        /*20191218 VuHQ START SUPPORT TAIDA*/
+        /*background: #F3A032*/
+    }
+        #notif img {
+            width: 13px;
+            left: 6px;
+            position: absolute;
+            top: 2px;
+        
+    }
+    #btnSearch i{
+        top: 10px;
+        left: 11px;
+    }
+    .material-icons-addnew {
+        background: url(../../Content/Images/home/addnew.png) no-repeat;
+        height: 13px;
+        width: 13px;
+        position: absolute;
+        top: 1px;
+        left: 1px;
+    }
+
+    .mdl-button--icon {
+        border-radius: 40px 40px 40px 40px;
+    }
+    .d-r-content {
+        background: rgba(21, 41, 109,0.76);
+        border: 1px solid #FFF;
+        width: 100%;
+        padding: 50px;
+        color: #FFF;
+        box-shadow: 0 9px 6px 0px #000;
+    }
+    .c-header {
+        background-color: unset !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-left:0px!important;
+    }
+    #menu-document .c-header {
+        margin-right: 20px;
+    }
+    .mdl-list__item-avatar, .mdl-list__item-avatar.material-icons {
+        width: 20px;
+        height: 20px;
+        background: #C1C1C1;
+        margin-left: 10px;
+        margin-right: 26px;
+    }
+    .unread {
+        background: #FE69EA!important;
+    }
+    #menu-document li.active {
+        background: rgba(0, 19, 57, 0.5)!important;
+    }
+    .mdl-list__item-icon {
+        font-size: 30px !important;
+        height: 30px !important;
+        width: 30px !important;
+    }
+    .node-count {
+        background: #FFF;
+        color: #3F51B5!important;
+        border-radius: 7px 7px 7px 7px;
+        padding: 4px;
+        font-weight:bold;
+    }
+    .active .node-count {
+        color: #FFF!important;
+        border: 2px solid #FFF;
+        background: unset;
+    }
+    .treemenu .mdl-list .material-icons {
+        margin-right: 30px;
+    }
+    .name-info{font-size:56px;display:inline-block;color:#FFF;}
+    .d-a-edit{margin-left:100px; display:inline-block;border:2px solid #FFF;border-radius:50%;}
+    .d-a-item-icon{font-size:25px;padding:5px;}
+    .d-a-info {
+        padding-left: 136px;
+        padding-top: 115px;
+    }
+    .d-a-email {
+        padding-left: 136px;
+        font-size: 30px;
+        color: #FFF;
+    }
+    #menu-document .mdl-list__item {
+        padding-top: 0px !important;
+        padding-left: 68px !important;
+        padding-bottom: 0px !important;
+        padding-right: 0px !important
+    }
+    #menu-document .is-group {
+        padding-top: 0px !important;
+        padding-left: 16px !important;
+        padding-bottom: 0px !important;
+        padding-right: 0px !important
+    }
+    .mdl-border, .mdl-border-child {
+        border-top: 1px solid #D1D1D1;
+        padding-top: 8px!important;
+        padding-bottom:8px!important;
+        width: 100%;
+        display: flex;
+    }
+    .mdl-border-child{
+        padding-left:7px;
+    }
+    .d-r-c-label {
+        color: #7C9DD2
+    }
+    .mdl-list{padding:0px!important}
+    #list-document1 .mdl-list__item-sub-title{line-height:38px!important;}
+    .mdl-layout{position:unset!important;}
+    .documents-detail{position:relative;}
+    .document-transfer{background:unset!important;}
+
+    #Comment::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+       opacity:0.44;
+    }
+
+    #Comment::-moz-placeholder { /* Firefox 19+ */
+        opacity: 0.44;
+    }
+
+    #Comment:-ms-input-placeholder { /* IE 10+ */
+        opacity: 0.44;
+    }
+
+    #Comment:-moz-placeholder { /* Firefox 18- */
+        opacity: 0.44;
+    }
+
+    @@media screen and (min-device-width : 768px)  {
+
+        #btnSearch {
+            background: #2139FF
+        }
+        #notif {
+            background: #F3A032
+        }
+        .is-mobile, .backtoListMobile {
+            display: none !important;
+        }
+
+        #menuDocument .list-document1 {
+            display: none !important;
+        }
+
+        #menu-document .is-group {
+            display: none !important;
+        }
+
+        .documents-detail {
+            font-size: 13px;
+            /*background: rgba(21, 41, 109,0.76);*/
+            margin: 30px !important;
+        }
+
+            .documents-detail .document-info {
+                background: unset !important;
+            }
+
+                .documents-detail .document-info .d-r-content {
+                    background: rgba(21, 41, 109,0.76) !important;
+                    border: 1px solid #FFF !important;
+                    padding: 20px !important;
+                    height:960px !important;
+                    overflow: auto !important;
+                }
+
+                .detail-content .document-form {
+                    height: unset !important;
+                }
+
+
+
+        .mdl-layout__header-row {
+            padding: 0 0 0 4px !important;
+        }
+
+        /*.mdl-layout__drawer-button{position:relative!important;}*/
+        span.mdl-layout-title {
+            width: 60%;
+            margin-left: unset !important;/*8%;*/
+            margin-right: 2%;
+        }
+
+        .document-account {
+            height: 80px !important;
+        }
+
+        .name-info {
+            font-size: 20px;
+            display: inline-block;
+            color: #FFF;
+        }
+
+        .d-a-item-icon {
+            font-size: 15px;
+            padding: 2px 4px;
+        }
+
+        .d-a-edit {
+            margin-left: 10px;
+            border: 1px solid #FFF;
+        }
+
+        .d-a-email {
+            padding-left: 36px;
+            font-size: 15px;
+            color: #FFF;
+        }
+
+        .d-a-info {
+            padding-left: 36px;
+            padding-top: 15px;
+        }
+
+        .c-header {
+            width: 25px !important;
+            height: 25px !important;
+            margin-top: 8px;
+        }
+
+        .treemenu li span {
+            font-size: 13px !important;
+            line-height: 20px !important;
+        }
+
+        #menu-document .mdl-list__item {
+            padding-left: 0px !important;
+        }
+
+        #menu-document .is-group {
+            padding-left: 5px !important;
+        }
+
+        .treemenu .mdl-list .material-icons, #menu-document .c-header {
+            margin-right: 2px !important;
+            margin-left: 4px !important;
+        }
+
+        .treemenu .mdl-list__item-icon, .treemenu .mdl-list__item-secondary-action {
+            margin-top: 13px;
+        }
+
+        .mdl-list__item-avatar, .mdl-list__item-avatar.material-icons {
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
+            margin-right: 26px;
+            margin-bottom: 25px;
+        }
+
+        .mbsc-form-group-title {
+            margin: 20px 0px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            text-align: left;
+            text-transform: uppercase;
+            background: unset !important;
+            padding-left: 10px;
+        }
+
+        .d-r-content {
+            border: 0px !important;
+            padding: 5px;
+            box-shadow: unset;
+            background: unset;
+        }
+
+        .mdl-cell {
+            /*width: 100% !important;*/
+            margin: 0px !important;
+        }
+
+        #compendium-parent {
+            width: 95% !important;
+        }
+
+        .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: 13px;
+        }
+
+        .document-info .mbsc-input-wrap {
+            display: inline-block;
+            width: 15%;
+        }
+
+        .mbsc-mobiscroll-dark .mbsc-input input, .mbsc-mobiscroll-dark .mbsc-input textarea {
+            border-bottom: none;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .mbsc-mobiscroll .mbsc-input {
+            margin: 0px;
+        }
+
+        /*.mdl-cell--4-col {
+            width: 100%;
+        }*/
+
+        .dataIpad .document-transfer .btnTransfer {
+            top: 5px;
+        }
+
+        #Comment {
+            padding-left: 10px;
+        }
+
+        .fix-position-chat {
+            bottom: 14px;
+        }
+
+        hr {
+            border-top: 1px solid rgba(255,255,255,.36);
+        }
+
+        .mdl-layout__drawer-right {
+            top: 64px;
+            width: 50%;
+            -webkit-transform: translateX(100%);
+            -ms-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+        .mdl-layout__drawer-right .mdl-menu__item {
+            max-width: unset !important;
+        }
+        .document-search-page .search-result li {
+            border-bottom: solid 1px white;
+            margin: 0 4px 0 4px !important;
+        }
+        .mdl-layout-head {
+            padding-left: 60px !important
+        }
+
+        .active {
+            -webkit-transform: translateX(0) !important;
+            -ms-transform: translateX(0) !important;
+            transform: translateX(0) !important;
+        }
+
+        .mdl-left-img {
+            width: 20px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .mbsc-form-group {
+            margin: 15px !important;
+        }
+
+        ul.mdl-menu {
+            background: #15296D !important;
+            border: 1px solid rgba(255,255,255,.54);
+        }
+
+        ul.mdl-menu {
+            /*padding: unset !important;*/
+            min-width: unset !important;
+            right: -15px;
+        }
+
+            ul.mdl-menu li.mdl-menu__item {
+                background: #15296D !important;
+                color: #FFF !important;
+                height: unset !important;
+                line-height: unset !important;
+            }
+
+        .btnTransfer i:hover, .btnTransfer i:visited, .btnTransfer i:active {
+            color: #EFEB08 !important;
+        }
+
+        .transfer-dialog {
+            width: 100% !important;
+            background: #15296D;
+            color: #FFF;
+            box-shadow: 0px 9px 6px #000;
+        }
+
+            .user-received-item, .user-received-item span, .transfer-dialog .result-view .result-label {
+                color: #FFF !important;
+            }
+
+            .transfer-dialog .result-view .result-label {
+                color: #FFF;
+            }
+
+        .mdl-checkbox__box-outline {
+            border: 2px solid rgba(255,255,255,.36);
+        }
+
+        .borcustom {
+            display: inline;
+            position: absolute;
+            top: -23px;
+            right: 33px;
+            width: 20px;
+            height: 20px;
+            z-index: 0;
+            border: none;
+            display: none;
+        }
+
+            .borcustom.is-visible {
+                display: block !important;
+            }
+
+            .borcustom i {
+                color: #FFF !important;
+                opacity: 0.54;
+                font-size: 30px;
+            }
+
+        .mdl-menu__container.is-visible {
+            bottom: 44px !important;
+        }
+
+        /*
+                taida - 171219
+            */
+        #search-show-hide-advance {
+            position: absolute;
+            top: 26px;
+            right: -2px;
+            width: 30px;
+            height: 30px;
+            line-height: 31px;
+        }
+
+        .document-infoCreate #divContent, .document-info #divContent {
+            display: none !important;
+        }
+
+        .document-infoCreate .mbsc-form-group {
+            margin: 12px 20px 4px 20px;
+        }
+
+        .document-infoCreate .mbsc-control-w.mbsc-input {
+            margin-top: 20px;
+        }
+
+        .document-infoCreate .mbsc-input-wrap {
+            display: block;
+            width: 15%;
+            padding: 0px 12px 0px 12px;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-input {
+        }
+
+            .document-infoCreate .mbsc-mobiscroll .mbsc-input .mbsc-label ~ .mbsc-input-wrap {
+                padding-top: unset !important;
+                width: 100%;
+                height: 30px;
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 15px;
+            }
+
+        .document-infoCreate .mbsc-mobiscroll-dark .mbsc-input input, .mbsc-mobiscroll-dark .mbsc-input textarea {
+            border-bottom: none;
+            text-align: left;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: unset;
+            color: white;
+        }
+
+        .document-infoCreate #addItemForm {
+            /*width: 50%;*/
+            text-transform: none !important;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid white !important;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: inherit;
+            margin: auto !important;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-btn-group-block {
+            margin: unset !important;
+        }
+
+        header.mdl-layout__header {
+            background: url(../../Content/Images/home/bg-header.png);
+        }
+
+        #btn_transfer_extends {
+            background-color: transparent !important;
+        }
+
+        #searchUser {
+            background-color: transparent;
+            color: white;
+        }
+
+        .transfer-dialog .result-view {
+            border: 1px solid #ffffff !important;
+            border-top: 0 !important;
+            border-left: 0 !important;
+            border-right: 0 !important;
+            margin-bottom: 20px !important;
+        }
+
+        .transfer-dialog .btnSend {
+            background-image: linear-gradient(to bottom, #0099FF 0%, #0066FF 100%);
+            width: 150px;
+            height: 40px;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+        }
+
+        .transfer-dialog .close {
+            background-image: linear-gradient(to bottom, #C1C1C1 0%, #5D5D5D 100%);
+            width: 150px;
+            height: 40px;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+            /*margin-right: -75px;*/
+        }
+
+        .transfer-dialog .mdl-checkbox__box-outline {
+            border: 2px solid #fff !important;
+            background: unset !important;
+        }
+
+        .transfer-dialog .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+            border: 2px solid #fff !important;
+            background: #fff url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgdmVyc2lvbj0iMS4xIgogICB2aWV3Qm94PSIwIDAgMSAxIgogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4KICA8cGF0aAogICAgIGQ9Ik0gMC4wNDAzODA1OSwwLjYyNjc3NjcgMC4xNDY0NDY2MSwwLjUyMDcxMDY4IDAuNDI5Mjg5MzIsMC44MDM1NTMzOSAwLjMyMzIyMzMsMC45MDk2MTk0MSB6IE0gMC4yMTcxNTcyOSwwLjgwMzU1MzM5IDAuODUzNTUzMzksMC4xNjcxNTcyOSAwLjk1OTYxOTQxLDAuMjczMjIzMyAwLjMyMzIyMzMsMC45MDk2MTk0MSB6IgogICAgIGlkPSJyZWN0Mzc4MCIKICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lIiAvPgo8L3N2Zz4K");
+        }
+
+        .transfer-dialog .listUsers .mdl-list__item-avatar {
+            height: 35px;
+            width: 35px;
+        }
+
+        .transfer-dialog .mdl-dialog__title {
+            display: none !important;
+        }
+
+        .transfer-dialog .result-view .result-label {
+            color: #7C9DD2 !important;
+        }
+
+        .transfer-dialog .btn-clear-dg-tb {
+            height: 25px;
+            position: absolute;
+            right: 45px;
+            background: transparent;
+        }
+
+        .transfer-dialog .searchUsrDg, .searchUsrTb {
+            color: white;
+        }
+
+        .transfer-dialog .user-result {
+            margin-right: 3px !important;
+        }
+
+        .transfer-dialog .btn-clear-dg-tb {
+            position: unset;
+            float: right;
+            display: none;
+        }
+
+        .dataDetail span.mdl-layout-title {
+            margin-left: 45px !important;
+        }
+
+        #txt_searchdg, #txt_searchtb {
+            color: white !important;
+        }
+
+        #fromUser {
+            width: unset !important;
+            background-color: transparent !important;
+            color: white !important;
+        }
+
+        #btn_transfer_extends {
+            right: 0 !important;
+        }
+
+        #txt_searchdg, #txt_searchtb {
+            background-color: transparent !important;
+        }
+
+        .transfer-dialog .result-view .user-filter {
+            max-width: 65% !important;
+        }
+
+        .egov-leftmenu .mdl-list__item-primary-content {
+            width: 90% !important;
+            margin-left: 5px !important;
+            margin-right: 5px !important;
+        }
+
+        #search-document-detail span.mdl-layout-title {
+            width: 85% !important;
+        }
+        /*20191218 VuHQ START - SUPPORT*/
+        .document-search-page .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: unset;
+            color: white;
+        }
+
+            .document-search-page .mbsc-mobiscroll .mbsc-input .mbsc-label ~ .mbsc-input-wrap {
+                padding-top: unset !important;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 100%;
+                height: 30px;
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 15px;
+                margin-bottom: 10px;
+            }
+
+        #compendium::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium::-moz-placeholder { /* Firefox 19+ */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium:-ms-input-placeholder { /* IE 10+ */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium:-moz-placeholder { /* Firefox 18- */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        .document-search-page .mbsc-mobiscroll .mbsc-input input, .mbsc-mobiscroll .mbsc-input textarea {
+            border: unset !important;
+            color: white !important;
+        }
+
+        .document-search-page .btnSearch {
+            background-image: linear-gradient(to bottom, #0099FF 0%, #0066FF 100%) !important;
+            width: 150px !important;
+            height: 40px;
+            border: none;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+        }
+        /*20191218 VuHQ END - SUPPORT*/
+    }
+    @@media screen and (max-device-width : 767px) {
+
+        #compendium-parent {
+            width: 88% !important;
+        }
+        .mdl-layout-head, .mdl-layout-inext, /*.mdl-layout__drawer-button,*/ .no-mobile, .mdl-left-img {
+            display: none;
+        }
+
+        #menuDocument .list-document1 {
+            display: none !important;
+        }
+
+        #menu-document .is-group {
+            display: none !important;
+        }
+
+        #btnbacktolistMobile {
+            display: none;
+            position: absolute;
+            height: 48px;
+            width: 48px;
+            text-align: center;
+            font-size: 26px;
+            line-height: 56px;
+            font-family: Helvetica,Arial,sans-serif;
+            margin: auto;
+            top: 4px;
+        }
+
+        .documents-detail {
+            font-size: 13px;
+            background: rgba(21, 41, 109,0.76);
+        }
+
+        .mdl-layout__header-row {
+            padding: 0 0 0 4px;
+        }
+
+        #btnSearch, #notif, #btnMenuLeft {
+            background: unset;
+            width: 40px;
+            height: 48px;
+        }
+
+            #btnSearch.btnSearch {
+                height: 40px !important;
+            }
+
+            #btnSearch i {
+                top: unset;
+                left: unset;
+            }
+
+            #notif img {
+                top: unset;
+                left: unset;
+                position: unset;
+            }
+
+        #notif {
+            margin-right: 10px;
+        }
+
+        .mdl-layout__header-row .mdl-button {
+            padding-left: unset !important;
+        }
+
+        .is-mobile {
+            display: block;
+        }
+        /*.mdl-layout__drawer-button{position:relative!important;}*/
+        span.mdl-layout-title {
+            width: 60%;
+            margin-left: 8%;
+            margin-right: 2%;
+        }
+
+        .document-account {
+            height: 80px !important;
+        }
+
+        .name-info {
+            font-size: 20px;
+            display: inline-block;
+            color: #FFF;
+        }
+
+        .d-a-item-icon {
+            font-size: 15px;
+            padding: 2px 4px;
+        }
+
+        .d-a-edit {
+            margin-left: 10px;
+            border: 1px solid #FFF;
+        }
+
+        .d-a-email {
+            padding-left: 36px;
+            font-size: 15px;
+            color: #FFF;
+        }
+
+        .d-a-info {
+            padding-left: 36px;
+            padding-top: 15px;
+        }
+
+        .c-header {
+            width: 25px !important;
+            height: 25px !important;
+            margin-top: 8px;
+        }
+
+        .treemenu li span {
+            font-size: 13px !important;
+            line-height: 20px !important;
+        }
+
+        #menu-document .mdl-list__item {
+            padding-left: 0px !important;
+        }
+
+        #menu-document .is-group {
+            padding-left: 5px !important;
+        }
+
+        .treemenu .mdl-list .material-icons, #menu-document .c-header {
+            margin-right: 2px !important;
+            margin-left: 4px !important;
+        }
+
+        .treemenu .mdl-list__item-icon, .treemenu .mdl-list__item-secondary-action {
+            margin-top: 13px;
+        }
+
+        .mdl-list__item-avatar, .mdl-list__item-avatar.material-icons {
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
+            margin-right: 26px;
+            margin-bottom: 25px;
+        }
+
+        .mbsc-form-group-title {
+            margin: 20px 0px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            text-align: left;
+            text-transform: uppercase;
+            background: unset !important;
+            padding-left: 10px;
+        }
+
+        .d-r-content {
+            border: 0px !important;
+            padding: 5px;
+            box-shadow: unset;
+            background: unset;
+        }
+
+        .mdl-cell {
+            width: 100% !important;
+            margin: 0px !important;
+        }
+
+        .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: 13px;
+        }
+
+        .document-info .mbsc-input-wrap {
+            display: inline-block;
+            width: 15%;
+        }
+
+        .mbsc-mobiscroll-dark .mbsc-input input, .mbsc-mobiscroll-dark .mbsc-input textarea {
+            border-bottom: none;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .mbsc-mobiscroll .mbsc-input {
+            margin: 0px;
+        }
+
+        .mdl-cell--4-col {
+            width: 100%;
+        }
+
+        .dataIpad .document-transfer .btnTransfer {
+            top: 5px;
+        }
+
+        #Comment {
+            padding-left: 10px;
+        }
+
+        .fix-position-chat {
+            bottom: 14px;
+        }
+
+        hr {
+            border-top: 1px solid rgba(255,255,255,.36);
+        }
+
+        .mdl-layout__drawer-right {
+            top: 64px;
+            width: 100%;
+            -webkit-transform: translateX(100%);
+            -ms-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+
+        .mdl-layout-head, .header-title, .mdl-layout-inext {
+            font-size: 16px;
+        }
+
+        .egov .backtoListMobile {
+            width: 48px;
+            display: block;
+            height: 48px;
+        }
+
+        .active {
+            -webkit-transform: translateX(0) !important;
+            -ms-transform: translateX(0) !important;
+            transform: translateX(0) !important;
+        }
+
+        .mdl-left-img {
+            width: 20px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .mbsc-form-group {
+            margin: 15px !important;
+        }
+
+        ul.mdl-menu {
+            background: #15296D !important;
+            border: 1px solid rgba(255,255,255,.54);
+        }
+
+        ul.mdl-menu {
+            /*padding: unset !important;*/
+            min-width: unset !important;
+            right: -15px;
+        }
+
+            ul.mdl-menu li.mdl-menu__item {
+                background: #15296D !important;
+                color: #FFF !important;
+                height: unset !important;
+                line-height: unset !important;
+            }
+
+        .btnTransfer i:hover, .btnTransfer i:visited, .btnTransfer i:active {
+            color: #EFEB08 !important;
+        }
+
+        .transfer-dialog {
+            width: 100% !important;
+            background: #15296D;
+            color: #FFF;
+            box-shadow: 0px 9px 6px #000;
+        }
+
+            .user-received-item, .user-received-item span, .transfer-dialog .result-view .result-label {
+                color: #FFF !important;
+            }
+
+            .transfer-dialog .result-view .result-label {
+                color: #FFF;
+            }
+
+        .mdl-checkbox__box-outline {
+            border: 2px solid rgba(255,255,255,.36);
+        }
+
+        .borcustom {
+            display: inline;
+            position: absolute;
+            top: -23px;
+            right: 33px;
+            width: 20px;
+            height: 20px;
+            z-index: 0;
+            border: none;
+            display: none;
+        }
+
+            .borcustom.is-visible {
+                display: block !important;
+            }
+
+            .borcustom i {
+                color: #FFF !important;
+                opacity: 0.54;
+                font-size: 30px;
+            }
+
+        .mdl-menu__container.is-visible {
+            bottom: 44px !important;
+        }
+
+        /*
+                taida - 171219
+            */
+        #search-show-hide-advance {
+            position: absolute;
+            top: 26px;
+            right: -2px;
+            width: 30px;
+            height: 30px;
+            line-height: 31px;
+        }
+
+        .document-infoCreate #divContent, .document-info #divContent {
+            display: none !important;
+        }
+
+        .document-infoCreate .mbsc-form-group {
+            margin: 12px 20px 4px 20px;
+        }
+
+        .document-infoCreate .mbsc-control-w.mbsc-input {
+            margin-top: 20px;
+        }
+
+        .document-infoCreate .mbsc-input-wrap {
+            display: block;
+            width: 15%;
+            padding: 0px 12px 0px 12px;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-input {
+        }
+
+            .document-infoCreate .mbsc-mobiscroll .mbsc-input .mbsc-label ~ .mbsc-input-wrap {
+                padding-top: unset !important;
+                width: 100%;
+                height: 30px;
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 15px;
+            }
+
+        .document-infoCreate .mbsc-mobiscroll-dark .mbsc-input input, .mbsc-mobiscroll-dark .mbsc-input textarea {
+            border-bottom: none;
+            text-align: left;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: unset;
+            color: white;
+        }
+
+        .document-infoCreate #addItemForm {
+            /*width: 50%;*/
+            text-transform: none !important;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid white !important;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: inherit;
+            margin: auto !important;
+        }
+
+        .document-infoCreate .mbsc-mobiscroll .mbsc-btn-group-block {
+            margin: unset !important;
+        }
+
+        header.mdl-layout__header {
+            background: url(../../Content/Images/home/bg-header.png);
+        }
+
+        #btn_transfer_extends {
+            background-color: transparent !important;
+        }
+
+        #searchUser {
+            background-color: transparent;
+            color: white;
+        }
+
+        .transfer-dialog .result-view {
+            border: 1px solid #ffffff !important;
+            border-top: 0 !important;
+            border-left: 0 !important;
+            border-right: 0 !important;
+            margin-bottom: 20px !important;
+        }
+
+        .transfer-dialog .btnSend {
+            background-image: linear-gradient(to bottom, #0099FF 0%, #0066FF 100%);
+            width: 150px;
+            height: 40px;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+        }
+
+        .transfer-dialog .close {
+            background-image: linear-gradient(to bottom, #C1C1C1 0%, #5D5D5D 100%);
+            width: 150px;
+            height: 40px;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+            /*margin-right: -75px;*/
+        }
+
+        .transfer-dialog .mdl-checkbox__box-outline {
+            border: 2px solid #fff !important;
+            background: unset !important;
+        }
+
+        .transfer-dialog .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+            border: 2px solid #fff !important;
+            background: #fff url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgdmVyc2lvbj0iMS4xIgogICB2aWV3Qm94PSIwIDAgMSAxIgogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4KICA8cGF0aAogICAgIGQ9Ik0gMC4wNDAzODA1OSwwLjYyNjc3NjcgMC4xNDY0NDY2MSwwLjUyMDcxMDY4IDAuNDI5Mjg5MzIsMC44MDM1NTMzOSAwLjMyMzIyMzMsMC45MDk2MTk0MSB6IE0gMC4yMTcxNTcyOSwwLjgwMzU1MzM5IDAuODUzNTUzMzksMC4xNjcxNTcyOSAwLjk1OTYxOTQxLDAuMjczMjIzMyAwLjMyMzIyMzMsMC45MDk2MTk0MSB6IgogICAgIGlkPSJyZWN0Mzc4MCIKICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lIiAvPgo8L3N2Zz4K");
+        }
+
+        .transfer-dialog .listUsers .mdl-list__item-avatar {
+            height: 35px;
+            width: 35px;
+        }
+
+        .transfer-dialog .mdl-dialog__title {
+            display: none !important;
+        }
+
+        .transfer-dialog .result-view .result-label {
+            color: #7C9DD2 !important;
+        }
+
+        .transfer-dialog .btn-clear-dg-tb {
+            height: 25px;
+            position: absolute;
+            right: 45px;
+            background: transparent;
+        }
+
+        .transfer-dialog .searchUsrDg, .searchUsrTb {
+            color: white;
+        }
+
+        .transfer-dialog .user-result {
+            margin-right: 3px !important;
+        }
+
+        .transfer-dialog .btn-clear-dg-tb {
+            position: unset;
+            float: right;
+            display: none;
+        }
+
+        .dataDetail span.mdl-layout-title {
+            margin-left: 48px;
+        }
+
+        #txt_searchdg, #txt_searchtb {
+            color: white !important;
+        }
+
+        #fromUser {
+            width: unset !important;
+            background-color: transparent !important;
+            color: white !important;
+        }
+
+        #btn_transfer_extends {
+            right: 0 !important;
+        }
+
+        #txt_searchdg, #txt_searchtb {
+            background-color: transparent !important;
+        }
+
+        .transfer-dialog .result-view .user-filter {
+            max-width: 65% !important;
+        }
+
+        .egov-leftmenu .mdl-list__item-primary-content {
+            width: 90% !important;
+            margin-left: 5px !important;
+            margin-right: 5px !important;
+        }
+
+        #search-document-detail .document-info div {
+            background: unset !important;
+        }
+
+        #search-document-detail span.mdl-layout-title {
+            width: 85% !important;
+        }
+        /*20191218 VuHQ START - SUPPORT*/
+        .document-search-page .mbsc-mobiscroll .mbsc-input .mbsc-label {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            position: unset;
+            top: unset;
+            width: 80%;
+            font-size: 13px;
+            line-height: unset;
+            color: white;
+        }
+
+            .document-search-page .mbsc-mobiscroll .mbsc-input .mbsc-label ~ .mbsc-input-wrap {
+                padding-top: unset !important;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 100%;
+                height: 30px;
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 15px;
+                margin-bottom: 10px;
+            }
+
+        #compendium::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium::-moz-placeholder { /* Firefox 19+ */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium:-ms-input-placeholder { /* IE 10+ */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        #compendium:-moz-placeholder { /* Firefox 18- */
+            opacity: 0.44;
+            color: #fff;
+        }
+
+        .document-search-page .mbsc-mobiscroll .mbsc-input input, .mbsc-mobiscroll .mbsc-input textarea {
+            border: unset !important;
+            color: white !important;
+        }
+
+        .document-search-page .btnSearch {
+            background-image: linear-gradient(to bottom, #0099FF 0%, #0066FF 100%) !important;
+            width: 150px !important;
+            height: 40px;
+            border: none;
+            border-radius: 20px;
+            text-transform: uppercase !important;
+            color: white;
+            font-size: 15px !important;
+            margin: auto;
+        }
+        /*20191218 VuHQ END - SUPPORT*/
+    }
+</style>
+
+<div id="documentFrame" data-theme="documents" data-app="documents" class="egov-app trans trans-left" style="background:url(../../Content/Images/home/back-ipad.jpg)">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header egov-header" style="padding:3px 0px;height:64px; color:white; background:url(../../Content/Images/home/bg-header.png)">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu" style="color:black;">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display:none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <div aria-expanded="false" id="btnbacktolistMobile" role="button" tabindex="0" class="backtoListMobile" data-id="0">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-head">
+                    Gửi báo cáo
+                </span>
+                <span class="mdl-layout-inext"> > </span>
+                <span class="mdl-layout-title wrap-text">
+                    <span class="header-title">
+                        Xử lý báo cáo
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="btnSearch" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <i class="material-icons">
+                        search
+                    </i> <span class="no-mobile"> Tìm kiếm</span>
+                </button>
+                <button id="notif" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <img src="../../Content/Images/home/addnew.png" /> <span class="no-mobile"> Tạo mới</span>
+                </button>
+                @*<button id="btnMenuLeft" class="mdl-button mdl-js-button mdl-button--icon pull-right is-mobile mdl-layout__drawer-button " aria-expanded="false" role="button" tabindex="0" data-badge="0">
+                    <i class="material-icons">
+                        more_vert
+                    </i>
+                </button>*@
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer egov-leftmenu" style="background:url(../../Content/Images/home/bg-menu-left.png);width:930px;">
+            <div class="mdl-layout__drawer" style="width:930px;background:unset" >
+                <div class="treelist">
+                    <nav class="treemenu">
+                        <div class="documents documents-dataTree" data-app="documents">
+                            <div class="document-account" style="background:url(../../Content/Images/home/bg-account.png);height: 334px;">
+                                <div class="document-account-info" style="background:rgba(0,0,0,0.66);height:100%;">
+                                    <div class="d-a-info">
+                                        <span id="menu-username" class="name-info"> Nguyễn Phi Kiên</span>
+                                        <div class="d-a-edit" style="float: right;margin-right: 10px;">
+                                            <span id="mobile-user-action" class="material-icons d-a-item-icon">create</span>
+                                            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                                for="mobile-user-action">
+                                                <li id="menu-logout" class="mdl-menu__item">Đăng xuất</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="menu-email" class="d-a-email">kiennp@bkav.gov.vn</div>
+                                </div>
+                            </div>
+                            <ul id="menu-document" class="mdl-list autoscroll-y"></ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="mdl-layout__drawer-right" style="background: url(../../Content/Images/home/back-ipad.jpg);">
+            <ul class="demo-list-item mdl-list" id="listNewDocument">
+            </ul>
+        </div>
+        <main class="mdl-layout__content" style="overflow:hidden">
+            <div class="egov-maincontent" id="egovMaincontent">
+                <div class="no-element-content hidden" style="background-color:transparent !important">
+                    <div class="message">
+                        <span class="material-icons mdl-list__item-icon"></span>
+                        <div style="font-size: 18px;">Không có báo cáo nào</div>
+                        <div class="message-info"></div>
+                    </div>
+                </div>
+                <div class="page-content" style="padding:0px">
+                    <div class="mdl-grid" style="padding: 0px">
+                        <div class="mdl-cell--4-col mdl-shadow--4dp" >
+                            <div class="dataList" id="menuDocument" data-group="normal" style="overflow:auto">
+                                <div class="list-document1" style="width:100%;">
+
+                                </div>
+                                    <ul class="mdl-list list-group list-document">
+                                        @*<li class="mdl-list__item mdl-list__item--two-line   active" data-id="1501" style="background-color:transparent;box-shadow:0 0.5px 0 #f0f0f0bf, 0 0 0 rgba(0,0,0,.8), 0 -1px 0 rgba(0,0,0,0.16);">
+                                                <span class="mdl-list__item-primary-content">
+                                                    <img class="mdl-list__item-avatar user-avatar c-header" src="../../Content/Images/home/list.png" alt="">
+                                                    <span class="mdl-list__item-sub-title" style="color: white; overflow-wrap: break-word;">
+                                                        Báo cáo kinh tế xã hội 10 tháng
+                                                        đầu năm 2019
+                                                    </span>
+                                                    <span class="mdl-list__item-sub-title" style="color: rgb(209, 209, 209); font-size: 12px; overflow-wrap: break-word;"> 03/10/2019</span>
+                                                </span>
+                                            </li>
+
+                                            <li class="mdl-list__item mdl-list__item--two-line " data-id="1501" style="        background-color: transparent;
+                box-shadow: 0 0.5px 0 #f0f0f0bf, 0 0 0 rgba(0,0,0,.8), 0 -1px 0 rgba(0,0,0,0.16);">
+                                                <span class="mdl-list__item-primary-content">
+                                                    <div class="mdl-list__item-avatar user-avatar"  alt=""></div>
+                                                    <span class="mdl-list__item-sub-title" style="color: white; overflow-wrap: break-word;">
+                                                        Báo cáo kinh tế xã hội 10 tháng
+                                                        đầu năm 2019
+                                                    </span>
+                                                    <span class="mdl-list__item-sub-title" style="        color: rgb(209, 209, 209);
+                font-size: 12px;
+                overflow-wrap: break-word;"> 03/10/2019</span>
+                                                </span>
+                                            </li>
+                                            <li class="mdl-list__item mdl-list__item--two-line " data-id="1501" style="background-color:transparent;box-shadow:0 0.5px 0 #f0f0f0bf, 0 0 0 rgba(0,0,0,.8), 0 -1px 0 rgba(0,0,0,0.16);">
+                                                <span class="mdl-list__item-primary-content">
+                                                    <div class="mdl-list__item-avatar user-avatar unread"  alt=""></div>
+                                                    <span class="mdl-list__item-sub-title" style="color: white; overflow-wrap: break-word;">
+                                                        Báo cáo kinh tế xã hội 10 tháng
+                                                        đầu năm 2019
+                                                    </span>
+                                                    <span class="mdl-list__item-sub-title" style="color: rgb(209, 209, 209); font-size: 12px; overflow-wrap: break-word;"> 03/10/2019</span>
+                                                </span>
+                                            </li>*@
+                                    </ul>
+                            </div>
+                        </div>
+                        <div class="mdl-cell mdl-cell--8-col" style="margin-bottom: 0px;margin-top: 0px;">
+                                <div class="documents-detail dataIpad"></div>
+                               @*<div class="documents-right">
+                                    <div class="d-r-header">
+                                        Báo cáo kinh tế xã hội 10 tháng đầu năm 2019
+                                    </div>
+                                    <div class="d-r-content">
+                                        <div class="d-r-c-title">
+                                            <div class="col-md-4">
+                                                <span class="d-r-c-label">Cơ quan báo cáo</span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                Sở giáo dục và Đào tạo
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <hr />
+                                        <div class="d-r-c-report">
+                                            <div class="col-md-4">
+                                                <span class="d-r-c-label">Kỳ báo cáo : </span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                Kỳ 10
+                                            </div>
+                                            <div class="clearfix"></div>
+                                         </div>
+                                            <hr />
+                                            <div class="d-r-c-content">
+                                                <p class="d-r-c-label">Nội dung báo cáo</p>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">Tổng thu NS TP t2 (Tỷ đồng)</div>
+                                                    <div class="col-md-7">1009</div>
+                                                </div>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">Lũy kế</div>
+                                                    <div class="col-md-7">121.1</div>
+                                                </div>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">So với cùng kỳ (%)</div>
+                                                    <div class="col-md-7">212</div>
+                                                </div>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">Tổng thu NS TP được hưởng</div>
+                                                    <div class="col-md-7">212</div>
+                                                </div>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">Lũy kế</div>
+                                                    <div class="col-md-7">121.1</div>
+                                                </div>
+                                                <div class="d-r-c-child">
+                                                    <div class="col-md-5">So với cùng kỳ</div>
+                                                    <div class="col-md-7">121.1</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div class="mdl-layout__obfuscator-right"></div>
+    </div>
+
+</div>

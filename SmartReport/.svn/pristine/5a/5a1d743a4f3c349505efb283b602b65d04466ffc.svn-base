@@ -1,0 +1,15 @@
+﻿<div class="row full-height">
+    <div class="col-md-16">
+        <span class="bold" data-res="egov.resources.document.StorePrivate"></span>
+    </div>
+    <div class="col-md-16">
+        <ul class="list-group storePrivates"></ul>
+    </div>
+    <div class="col-md-16">
+        <span class="bold" data-res="egov.resources.document.StoreShare"></span>
+    </div>
+    <div class="col-md-16">
+        <ul class="list-group storeShares"></ul>
+    </div>
+</div>
+

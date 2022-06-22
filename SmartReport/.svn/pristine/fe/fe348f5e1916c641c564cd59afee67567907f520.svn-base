@@ -1,0 +1,40 @@
+﻿
+<div class="total-online">
+    <span class="count-online">0</span> hoạt động
+</div>
+<div id="chatContact">
+    <div class="contact-group">
+        <div class="contact-group-name">Liên hệ gần đây</div>
+        <div class="contact-group-data" id="contact-recents">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <img src="/Content/bkav.egov/images/ajax-loader.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-group">
+        <div class="contact-group-name">Nhóm</div>
+        <div class="contact-group-data" id="contact-groups">
+            <div class="list-group">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-group">
+        <div class="contact-group-name">Liên hệ khác</div>
+        <div class="contact-group-data" id="contact-others">
+            <div class="list-group">                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact-search">
+    <div class="input-group input-group-sm">
+        <span class="input-group-addon icon-search2" id="sizing-addon3"></span>
+        <input type="text" class="form-control" placeholder="Tìm kiếm" aria-describedby="sizing-addon3" id="contactSearch">
+        <span class="input-group-addon icon-tab" title="Ẩn hiện khung chat" id="toggleChat"></span>
+    </div>
+</div>

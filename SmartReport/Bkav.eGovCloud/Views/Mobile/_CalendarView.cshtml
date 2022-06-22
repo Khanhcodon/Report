@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+}
+
+<div id="calendarFrame" data-app="calendar" class="egov-app trans trans-right calendar-container">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header egov-header">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title">
+                    <span class="wraptext">
+                        <span class="header-title">
+                            Lịch công tác
+                        </span>
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="btnAddCalendar" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <i class="material-icons">create</i>
+                </button>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer egov-leftmenu">
+            <div class="mdl-layout__drawer">
+                <div class="useroption main-bg-color">
+                    <img class="avatar" src="https://danhba.bkav.com/avatars/TienBV.bmp" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wraptext">Bùi Văn Tiến</div>
+                        <div class="wraptext fullmail">tienbv@bkav.com</div>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu2">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu2">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>
+                <div class="treelist">
+                    <nav class="treemenu">
+                        <ul id="menu-calendar" class="mdl-list autoscroll-y">
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/Calendar/GetDaily">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">calendar_today</i>
+                                    <span class="node-name">Lịch trong ngày</span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect active" data-url="/Calendar/GetWeekly">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">calendar_today</i>
+                                    <span class="node-name">Lịch trong tuần</span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/Calendar/GetMonthly">
+                                <i class="material-icons mdl-list__item-icon">calendar_today</i>
+                                <span class="node-name">Lịch trong tháng</span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <main class="mdl-layout__content egov-maincontent">
+            <div class="egov-maincontent">
+                <div class="no-element-content hidden">
+                    <div class="message">
+                        <span class="material-icons mdl-list__item-icon">perm_contact_calendar</span>
+                        <div style="font-size: 18px;">Không có lịch trong</div>
+                        <div class="message-info"></div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div>
+                        Lịch cơ quan
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

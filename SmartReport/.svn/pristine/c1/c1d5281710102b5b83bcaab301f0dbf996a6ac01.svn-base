@@ -1,0 +1,148 @@
+﻿<div class="supp-receive-main">
+    {{if message}}
+    <span style="font-weight: bold;font-size: 12px; color: #5C5CF7">${message}</span>
+    {{/if}}
+    <input type="hidden" name="DocumentCopyId" value="${Supplementary.DocumentCopyId}" />
+    <input type="hidden" name="DocumentId" value="${Supplementary.DocumentId}" />
+
+    {{if currentRequire}}
+    <input type="hidden" value="${currentRequire.SupplementaryDetailId}" id="currentDetailId" />
+    {{else}}
+    <input type="hidden" value="0" id="currentDetailId" />
+    {{/if}}
+
+    <div style="margin-bottom: 10px"><strong data-res="egov.resources.document.supplementary.title"></strong></div>
+    {{each model}}
+    <div class="supp-item">
+        <div class="container-fluid">
+            {{if (currentRequire && SupplementaryDetailId == currentRequire.SupplementaryDetailId && !HasReceiveSupplementary)}}
+            <div class="row">
+                <textarea id="suppComment" class="form-control" data-placeholer="egov.resources.document.supplementary.requiredTitle">${Comment}</textarea>
+                <a href="#" class="removeRequired" data-res="egov.resources.document.supplementary.removeRequired" style="color: blue"></a>
+            </div>
+            {{else}}
+            <div class="row">
+                <span class="col-md-12">
+                    - ${UserSendName}:
+                    <span class="comment-${SupplementaryDetailId}">${Comment}</span>
+                </span>
+                <span class="col-md-4 text-right">${DateSend}</span>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{/each}}
+
+    {{if (Supplementary.SupplementaryId == 0 || !currentRequire) && !HasReceiveSupplementary}}
+    <textarea id="suppComment" class="form-control" data-placeholder="egov.resources.document.supplementary.requiredTitle">${Comment}</textarea>
+    {{/if}}
+
+    <div class="supp-info">
+        <div class="paper-fee row">
+            <div class="div-paper col-md-8">
+                <span>
+                    <b><span data-res="egov.resources.document.supplementary.paper">Giấy tờ</span></b>
+                    <span class="doctypeManager pull-right" style="color: dodgerblue"> - Quản lý giấy tờ, lệ phí</span>
+                </span>
+                <ul class="ul-papers list-group">
+                    {{each Papers}}
+                    <li class="list-group-item clearfix">
+                        <input class="paper-id" id="paper${PaperId}" type="checkbox" value="${PaperId}" {{if IsRequired}} checked {{/if}} {{if HasReceiveSupplementary}} {{/if}} />
+                        <label class="paper-name" for="paper${PaperId}">${PaperName}</label>
+                        <input class="paper-amount form-control pull-right" type="text" value="${Amount}" />
+                    </li>
+                    {{/each}}
+                    {{if !HasReceiveSupplementary}}
+                    <li class="list-group-item clearfix">
+                        <input class="paper-id pull-left" type="checkbox" value="0" checked />
+                        <input class="paper-name form-control pull-left" data-respholder="egov.resources.document.supplementary.addPaper" />
+                        <input class="paper-amount form-control pull-right" type="text" value="1" />
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+            <div class="div-fee col-md-8">
+                <span>
+                    <b><span data-res="egov.resources.document.supplementary.fee">Lệ phí</span></b>
+                </span>
+                <ul class="ul-fees list-group">
+                    {{each Fee}}
+                    <li class="list-group-item clearfix">
+                        <input class="fee-id" id="fee${FeeId}" type="checkbox" value="${FeeId}" {{if IsRequired}} checked {{/if}} {{if HasReceiveSupplementary}} {{/if}} />
+                        <label class="fee-name" for="fee${FeeId}">${FeeName}</label>
+                        <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                        <input class="fee-price pull-right form-control" type="text" value="${Price}" />
+                    </li>
+                    {{/each}}
+                    {{if !HasReceiveSupplementary}}
+                    <li class="list-group-item clearfix">
+                        <input class="fee-id pull-left" type="checkbox" value="0" checked />
+                        <input class="fee-name form-control pull-left" data-respholder="egov.resources.document.supplementary.addFee" />
+                        <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                        <input class="fee-price form-control pull-right" type="text" value="0" />
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {{if HasReceiveSupplementary}}
+    <div>
+        <strong data-res="egov.resources.document.supplementary.requiredTitle">Thông tin bổ sung</strong>
+        <span style="color: red; margin-bottom: 5px; margin-left: 20px;">
+            <input type="checkbox" id="IsUnsuccess" {{if Supplementary.IsSuccess == false && Supplementary.UserReceivedId}} checked {{/if}} />
+            <b><label data-res="egov.resources.document.supplementary.noAdditional" for="IsUnsuccess"></label></b>
+        </span>
+    </div>
+    <div>
+        <div class="">
+            <div class="">
+                <textarea id="suppComment" class="form-control" data-placeholer="egov.resources.document.supplementary.requiredTitle">${Supplementary.CommentReceived}</textarea>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="supp-info">
+        <div class="row">
+            <div class="col-md-8">
+                <div><strong data-res="egov.resources.document.supplementary.newDateAppointed">Tính ngày hẹn trả</strong></div>
+                <div class="supp-type">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <select class="form-control input-sm" id="ddlSuppType" {{if HasReceiveSupplementary}} disabled{{/if}}>
+                                <option value="1" data-res="egov.resources.document.supplementary.supplementType.renew" selected></option>
+                                <option value="2" data-res="egov.resources.document.supplementary.supplementType.continue"></option>
+                                <option value="3" data-res="egov.resources.document.supplementary.supplementType.add"></option>
+                            </select>
+                        </div>
+                        {{if HasReceiveSupplementary}}
+                        <div class="col-md-9">
+                            <span data-res="egov.resources.document.supplementary.dateAppointed"></span>
+                            <b><span class="form-control-static pull-right" id="newDateAppointed">${Supplementary.NewDateAppointed}</span></b>
+                        </div>
+                        {{else}}
+                        <div class="col-md-9">
+                            <span data-res="egov.resources.document.supplementary.addDay" class="offset-day"></span>
+                            <input type="text" class="form-control added offset-day input-sm pull-right" value="${Supplementary.OffsetDay}" />
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                {{if HasReceiveSupplementary}}
+                <div><strong data-res="egov.resources.document.supplementary.printTemplate">Mẫu in</strong></div>
+                <div>
+                    <select class="form-control input-sm" id="ddlTemplate">
+                        {{each PrintTemplates}}
+                        <option value="${TemplateId}">${Name}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>

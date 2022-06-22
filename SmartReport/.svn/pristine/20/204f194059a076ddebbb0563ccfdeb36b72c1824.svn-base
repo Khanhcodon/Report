@@ -1,0 +1,2 @@
+﻿<p>Xin chào bạn @ViewBag.Username - @ViewBag.FullName</p>
+<p>Mật khẩu mới của bạn là: @ViewBag.Password</p>

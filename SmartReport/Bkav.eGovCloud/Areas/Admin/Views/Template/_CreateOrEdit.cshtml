@@ -1,0 +1,159 @@
+﻿@model TemplateModel
+@{
+    var permissions = ViewBag.Permissions as List<SelectListItem>;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<style type="text/css">
+    .ul-permissions > li {
+        float: left;
+        margin-right: 30px;
+        width: 250px;
+    }
+</style>
+
+<script type="text/javascript">
+    var isCreated=@(Model.TemplateId == 0 ? "true" : "false");
+    $(function () {
+
+        if(isCreated){
+            checkAllPermissions();
+        }
+
+        $("input[name=Type]").each(function(){
+            $(this).change(function(){
+                if($(this).val() == 2){
+                    $('.mail').show();
+                }else{
+                    $('.mail').hide();
+                }
+            });
+        });
+    });
+
+    function checkAllPermissions() {
+        var checkAll = $("#checkAll").prop("checked");
+        $(".ul-permissions li.item :checkbox").prop("checked", checkAll);
+    }
+
+    function checkPermission() {
+        if ($(".ul-permissions li.item :checkbox[checked='checked']").length == 0) {
+            $("#checkAll").prop("checked", false);
+        }
+        else {
+            var check = $(".ul-permissions li.item :checkbox[checked='checked']").length == $(".ul-permissions li.item :checkbox").length;
+            $("#checkAll").prop("checked", check);
+        }
+    }
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.TemplateId)
+
+<table>
+    <tr>
+        <td style="width: 130px">
+            @Html.LabelRequireFor(model => model.Name):
+        </td>
+        <td colspan="2">
+            @Html.TextBoxFor(model => model.Name, new { @style = "width:80%" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocFieldId):
+        </td>
+        <td colspan="2">
+            @Html.DropDownList("DocfieldId", null, Localizer("Customer.DocFields.CreateOrEdit.Fields.AllField"), new { @style = "width:80%" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Type):
+        </td>
+        <td colspan="2">
+            <label>
+                @Html.RadioButton("Type", 1, true) <span data-res="egov.resources.template.printorder">Phiếu in</span>
+            </label>
+            &nbsp;  &nbsp;
+            <label>@Html.RadioButton("Type", 2) <span data-res="egov.resources.commonlabel.email"></span></label>
+            &nbsp;  &nbsp;
+            <label>@Html.RadioButton("Type", 3) <span data-res="egov.resources.commonlabel.sms"></span></label>
+            &nbsp;  &nbsp;
+            <label>@Html.RadioButton("Type", 4) <span data-res="egov.resources.commonlabel.printorderxlvb"></span></label>
+        </td>
+    </tr>
+    <tr class="mail" style = "@(Model.Type != 2 ? "display:none" : "")">
+        <td>
+            @Html.LabelRequireFor(model => model.TitleMail):
+        </td>
+        <td colspan="2">
+            @Html.TextBoxFor(model => model.TitleMail, new { @style = "width:80%" })
+            @Html.ValidationMessageFor(model => model.TitleMail)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Permission):
+        </td>
+        <td>
+            <ul class="ul-permissions">
+                <li class="checkAll">
+                    <label>
+                        <input type="checkbox" name="Permissions" value="0" onchange="checkAllPermissions()"
+                               id="checkAll" @(Model.Permission == 0 ? "checked" : "") />
+                        <span data-res="egov.resources.commonlabel.all"></span>
+                    </label>
+                </li>
+                @foreach (var per in permissions)
+                {
+                    var permis = int.Parse(per.Value);
+                    <li class="item">
+                        <label>
+                            <input name="Permissions" type="checkbox" @((Model.Permission & permis) == permis ? "checked = 'checked'" : "") value="@per.Value" onchange="checkPermission()" />
+                            @per.Text
+                        </label>
+                    </li>
+                }
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CommonTemplates):
+        </td>
+        <td>
+            <ul class="ul-commonTemplate">
+                @foreach (var temp in ViewBag.CommonTemplates as List<SelectListItem>)
+                {
+                    var t = int.Parse(temp.Value);
+                    <li class="item">
+                        <label>
+                            <input name="CommonTemplates" type="checkbox" @((Model.CommonTemplate & t) == t ? "checked = 'checked'" : "") value="@temp.Value" />
+                            @temp.Text
+                        </label>
+                    </li>
+                }
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsActive):
+        </td>
+        <td>
+            @Html.EditorFor(model => model.IsActive)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Sql):
+        </td>
+        <td colspan="2">
+            @Html.TextAreaFor(model => model.Sql, new { @style = "width:80%;height:150px;" })
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,216 @@
+﻿@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.BackupRestoreHistorySearchModel;
+    var historys = ViewBag.Historys as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.BackupRestoreHistoryModel>;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblHistory").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $('#tblHistory input[name="ids"]').on("change", function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+
+                if ($('#tblHistory input[name="ids"]:checked').length === $('#tblHistory input[name="ids"]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").on("change", function () {
+            $('#tblHistory input[name="ids"]').prop('checked', this.checked);
+            if (this.checked) {
+                $('#tblHistory input[name="ids"]').each(function () {
+                    if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                        $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                    }
+                });
+            }
+            else {
+                $('#formdelete input[name="ids"]').remove();
+            }
+        });
+    });
+
+</script>
+
+<form id="formdelete" style="display:none" action="@Url.Action("Delete")" method="POST">
+</form>
+
+<table class="table-main table" id="tblHistory">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 30px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("Domain", Localizer("BackupRestoreHistory.Index.List.Column.Domain"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    Domain = search.Domain,
+                                    FromDate = search.FromDate,
+                                    ToDate = search.ToDate,
+                                    Type = search.Type
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestore",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("BackupRestoreHistory.Index.List.Column.Ip")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("IsBackup", Localizer("BackupRestoreHistory.Index.List.Column.IsBackup"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    Domain = search.Domain,
+                                    FromDate = search.FromDate,
+                                    ToDate = search.ToDate,
+                                    Type = search.Type
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestore",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("BackupRestoreHistory.Index.List.Column.IsSuccessed")
+            </th>
+            <th class="header">
+                @Localizer("BackupRestoreHistory.Index.List.Column.Description")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateCreated", Localizer("BackupRestoreHistory.Index.List.Column.DateCreated"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    Domain = search.Domain,
+                                    FromDate = search.FromDate,
+                                    ToDate = search.ToDate,
+                                    Type = search.Type
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestore",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header text-center">
+                <input type="checkbox" id="checkAll" data-restitle="egov.resources.buttons.selectAll" title="Chọn tất" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (historys != null && historys.Any())
+        {
+            foreach (var item in historys)
+            {
+                number++;
+            <tr data-id="@item.BackupRestoreHistoryId">
+                <td>
+                    @number
+                </td>
+                <td>
+                    @item.Domain
+                </td>
+                <td>
+                    @item.Ip
+                </td>
+                <td>
+                    @(item.IsBackup ? "Backup" : "Restore")
+                </td>
+                <td>
+                    @(item.IsSuccessed ? "Success" : "Error")
+                </td>
+                <td>
+                    @item.Description
+                </td>
+                <td>
+                    @item.DateCreated.ToString("dd/MM/yyyy hh:MM:ss")
+                </td>
+                <td class="text-center">
+                    <input type="checkbox" name="ids" value="@item.BackupRestoreHistoryId" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="8">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  Domain = search.Domain,
+                                  FromDate = search.FromDate,
+                                  ToDate = search.ToDate,
+                                  Type = search.Type,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divBackupRestore",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+
+</table>
+

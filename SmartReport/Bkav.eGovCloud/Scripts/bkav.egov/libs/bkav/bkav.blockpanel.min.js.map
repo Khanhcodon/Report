@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"bkav.blockpanel.min.js",
+"lineCount":1,
+"mappings":"CAAC,QAAS,CAACA,CAAD,CAAI,CACV,GAAI,OAAQA,CAAG,EAAI,YACf,KAAM,wEAAwE,CAElFC,MAAMC,GAAIC,WAAc,CAAEC,QAAS,CAACC,CAAD,CAAW,CAe1C,IAIIC,EAIAC,CARe,CAdnBC,WAAWC,aAAa,CAACJ,CAAQK,KAAK,CAAEF,WAAWG,aAAaC,WAAxC,CAAoD,CAC5E,MAF0C,CAqD7C,CAEDX,MAAMC,GAAIW,aAAgB,CAAEC,QAAS,CAAA,CAAG,CACpCN,WAAWC,aAAa,CAAC,MAAD,CAAQ,CAChC,MAFoC,CA3D9B,EAsEZ,CAACM,MAAMd,OAAP,CAAe",
+"sources":["bkav.blockpanel.js"],
+"names":["$","jQuery","fn","blockpanel","jQuery.fn.blockpanel","settings","padding","message","eGovMessage","notification","text","messageTypes","processing","unblockpanel","jQuery.fn.unblockpanel","window"]
+}

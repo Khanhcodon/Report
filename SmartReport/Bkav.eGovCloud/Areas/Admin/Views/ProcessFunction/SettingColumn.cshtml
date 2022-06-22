@@ -1,0 +1,318 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.SettingColumn");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDocType = ViewBag.AllDocType as string;
+    var columnSetting = ViewBag.ColumnSetting as string;
+}
+<div class="bkavegov-content-title">
+    <h3>@Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.SettingColumn")</h3>
+</div>
+
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout-3.3.0.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.mapping-latest.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.validation.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<style type="text/css">
+    .validationMessage {
+        color: Red;
+    }
+</style>
+<script type="text/javascript">
+    var allDocType = @(string.IsNullOrEmpty(allDocType) ? MvcHtmlString.Create("[]") : Html.Raw(allDocType));
+    var columnSetting = @(string.IsNullOrEmpty(columnSetting) ? MvcHtmlString.Create("[]") : Html.Raw(columnSetting));
+
+    $(function () {
+        $("#doctypeTemplate").tmpl(allDocType).appendTo("#doctypeId");
+
+        $("#AllDocField").change(function() {
+            var value = $(this).val();
+            if(value == '') {
+                $("#doctypeId").html('<option value="" data-res="egov.resources.processfunction.alldocument">---Tất cả loại văn bản, hồ sơ---</option>');
+                $("#doctypeTemplate").tmpl(allDocType).appendTo("#doctypeId");
+            } else {
+                var doctype = _.filter(allDocType, function(item) {
+                    return item.docfieldId && item.docfieldId == value;
+                });
+                $("#doctypeId").html('<option value="" data-res="egov.resources.processfunction.alldocument">---Tất cả loại văn bản, hồ sơ---</option>');
+                $("#doctypeTemplate").tmpl(doctype).appendTo("#doctypeId");
+            }
+
+            getSetting(value, $("#doctypeId").val());
+        });
+
+        $("#doctypeId").change(function() {
+            var value = $(this).val();
+            getSetting($("#AllDocField").val(), value);
+        });
+
+        var getSetting = function(docfieldId, doctypeId) {
+            $.get('@Url.Action("GetProcessFunctionColumnSetting")',
+                {
+                    id: @ViewBag.Id,
+                    docfieldId: docfieldId,
+                    doctypeId: doctypeId
+                },
+                function (result) {
+                    if(result) {
+                        if(result.error) {
+                            eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                        } else {
+                            ko.cleanNode(document.getElementById("settingColumn"));
+                            $("#tblColumnSetting tbody").html($("#template tbody").html());
+                            ko.applyBindings(new columns(JSON.parse(result.setting)), document.getElementById("settingColumn"));
+                        }
+                    }
+                }
+            );
+        };
+
+        $("#tblColumnSetting tbody").html($("#template tbody").html());
+
+        $("#tblColumnSetting").grid({
+            isResizeColumn: true,
+            isFixHeightContent: true
+        });
+
+        var columnLine = function(lines, columnName, displayName, width, enableSort) {
+            var self = this;
+            self.columnName = columnName ? ko.observable(columnName).extend({ required: { message: '*' } }) : ko.observable().extend({ required: { message: '*' } }) ;
+            self.displayName = displayName ? ko.observable(displayName) : ko.observable();
+            self.width = width ? ko.observable(width) : ko.observable(100);
+            self.enableSort = ko.observable(enableSort);
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+            self.background = ko.computed(function() {
+                var index = lines ? lines.indexOf(self) : 0;
+                return index % 2 == 1 ? 'whiteSmoke' : 'white';
+            });
+        };
+
+        var columns = function(array) {
+            var self = this;
+            self.columnLines = ko.observableArray([]);
+            if(array && $.isArray(array) && array.length > 0) {
+                array = _.sortBy(array, function(item) {
+                    return item.Order;
+                });
+                for(var i = 0; i < array.length; i ++) {
+                    self.columnLines.push(new columnLine(self.columnLines, array[i].ColumnName, array[i].DisplayName, array[i].Width, array[i].EnableSort));
+                }
+            } else {
+                self.columnLines.push(new columnLine(self.columnLines));
+            }
+
+            self.disableSubmit = function(line, event) {
+                if(event.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            };
+
+            self.addColumn = function() {
+                self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false));
+                var allrow = $("#tblColumnSetting tbody tr");
+                allrow.eq(allrow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.keyEvent = function(line, event) {
+                if(line) {
+                    if(event.keyCode == 13) {
+                        var index = self.columnLines.indexOf(line);
+                        if(index == self.columnLines().length - 1) {
+                            self.columnLines.push(new columnLine(self.columnLines, null, null, 100, false));
+                            self.errors = ko.validation.group(self, { deep:true });
+                            var allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(allrow.length - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        } else if(index > -1 && index < self.columnLines().length - 1){
+                            var allrow = $("#tblColumnSetting tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    } else if(event.keyCode == 38) {
+                        self.up(line, event);
+                    } else if(event.keyCode == 40) {
+                        self.down(line, event);
+                    }
+                }
+            };
+
+            self.removeColumn = function(line) {
+                self.columnLines.remove(line);
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.up = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index > 0) {
+                            var before = self.columnLines()[index - 1];
+                            var clone = new columnLine(self.columnLines, before.columnName(), before.displayName(), before.width(), before.enableSort());//_.clone(self.columnLines()[index - 1]);
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort());
+                            self.columnLines()[index - 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 38) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.down = function(line, event) {
+                if(line) {
+                    var index = self.columnLines.indexOf(line);
+                    if(index > -1) {
+                        if(index < self.columnLines().length - 1) {
+                            var after = self.columnLines()[index + 1];
+                            var clone = new columnLine(self.columnLines, after.columnName(), after.displayName(), after.width(), after.enableSort());
+                            var cloneLine = new columnLine(self.columnLines, line.columnName(), line.displayName(), line.width(), line.enableSort());
+                            self.columnLines()[index + 1] = cloneLine;
+                            self.columnLines()[index] = clone;
+                            self.columnLines(self.columnLines());
+                            self.errors = ko.validation.group(self, { deep:true });
+                            if(event && event.keyCode == 40) {
+                                var allrow = $("#tblColumnSetting tbody tr");
+                                if(allrow) {
+                                    allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.save = function() {
+                if(self.errors().length == 0) {
+                    var dataToSave = $.map(self.columnLines(), function(line) {
+                        return line.columnName() ? {
+                            ColumnName: line.columnName(),
+                            DisplayName: line.displayName(),
+                            Width: line.width(),
+                            EnableSort: line.enableSort(),
+                            Order: line.index()
+                        } : undefined;
+                    });
+                    var token = $('input[name=__RequestVerificationToken]','#ProcessFunctionSaveSettingColumn').val();
+                    $.post('@Url.Action("SaveSettingColumn")',
+                        {
+                            id: @ViewBag.Id,
+                            content: JSON.stringify(dataToSave),
+                            docfieldId: $("#AllDocField").val(),
+                            doctypeId: $("#doctypeId").val(),
+                            __RequestVerificationToken:token
+                        },
+                        function(result) {
+                            if(result) {
+                                if(result.error) {
+                                    eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                                } else {
+                                    eGovMessage.notification(result.message, eGovMessage.messageTypes.success);
+                                }
+                            }
+                        }
+                    );
+                } else {
+                    self.errors.showAllMessages();
+                    eGovMessage.show(egov.resources.processfunction.someinfoisrequired || "Bạn chưa nhập đầy đủ thông tin trong phần cấu hình danh sách");
+                }
+            };
+
+            self.errors = ko.validation.group(self, { deep:true });
+        };
+
+        ko.applyBindings(new columns(columnSetting), document.getElementById("settingColumn"));
+    });
+</script>
+<script id="doctypeTemplate" type="text/x-jquery-tmpl">
+    <option value="${id}">${name}</option>
+</script>
+<p>
+    <div id="ProcessFunctionSaveSettingColumn" style="display: none">@Html.AntiForgeryToken()</div>
+
+    @Html.DropDownList("AllDocField", "---Tất cả lĩnh vực---")
+    <select id="doctypeId">
+        <option value="" data-res="egov.resources.processfunction.alldocument">---Tất cả loại văn bản, hồ sơ---</option>
+    </select>
+</p>
+<div id="settingColumn">
+    <table class="table-main table" id="tblColumnSetting">
+        <colgroup>
+            <col />
+            <col />
+            <col />
+            <col style="width: 150px" />
+            <col style="width: 80px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header" data-res="egov.resources.tableheader.columnname">Tên cột
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.displayname">Tên hiển thị
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.width">Chiều rộng
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.allowsort">Cho phép sắp xếp
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.sortcolumn">Cột sắp xếp
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.sort">Sắp xếp
+                </th>
+                <th class="header" data-res="egov.resources.tableheader.delete">Xóa
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind='foreach: columnLines'></tbody>
+    </table>
+    <button type="button" data-bind='click: addColumn' data-res="egov.resources.commonlabel.addcolumn">
+        Thêm cột
+    </button>
+    <i style="font-size: 12px" data-res="egov.resources.processfunction.enternote">(Dùng phím enter để xuống dòng (nếu ở dòng
+        cuối cùng thì thêm dòng mới), dùng phím lên xuống để sắp xếp cột)
+    </i>
+    <hr />
+    <input value="Lưu" data-res="egov.resources.buttons.save" type="submit" data-bind='click: save' />
+    &nbsp;
+    <button type="button" onclick="location.href='@Url.Action("Index")'">@Localizer("Common.Button.Back")</button>
+</div>
+<table id="template" style="display: none">
+    <tbody>
+        <tr data-bind="style: { 'background-color': background() }">
+            <td>
+                <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                    style="width: 90%" />
+            </td>
+            <td>
+                <input data-bind='value: displayName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                    style="width: 90%" />
+            </td>
+            <td>
+                <input data-bind='value: width, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                    style="width: 90%" />
+            </td>
+            <td align="center">
+                <input type="checkbox" data-bind="checked: enableSort" />
+            </td>
+            <td align="center">
+                <img src="@Url.Content("~/Content/Images/nav_up_green.png")" alt="Lên" data-bind='click: $parent.up' style="cursor: pointer" />
+                <img src="@Url.Content("~/Content/Images/nav_down_blue.png")" alt="Xuống" data-bind='click: $parent.down' style="cursor: pointer" />
+            </td>
+            <td align="center">
+                <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumn' style="cursor: pointer" />
+            </td>
+        </tr>
+    </tbody>
+</table>

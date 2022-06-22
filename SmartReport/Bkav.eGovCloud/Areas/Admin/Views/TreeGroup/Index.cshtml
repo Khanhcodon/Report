@@ -1,0 +1,170 @@
+﻿@model IEnumerable<TreeGroupModel>
+@{
+    ViewBag.Title = Localizer("Admin.TreeGroup.Title.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+}
+
+<script type="text/javascript">
+    var fixHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $(function () {
+        $("#tblTreeGroups").openLink({ urlOpen: '/admin/TreeGroup/Edit' });
+
+        $(".table-main").addClass("table-bordered table-hover");
+        $("#tblTreeGroups tbody").sortable({
+            helper: fixHelper,
+            update: function () {
+                $('.connectedSortable').each(function () {
+                    $(this).find('td:first').html($(this).index() + 1);
+                });
+            }
+        }).disableSelection();
+
+        $('#enableDragDrop').on("click", function () {
+            var self = $(this);
+            var treeGroupIds = [];
+            $('.connectedSortable').each(function () {
+                var id = parseInt($(this).attr('data-id'));
+                treeGroupIds.push(id);
+            });
+
+            if (treeGroupIds.length <= 0)
+                return;
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdatePriority")',
+                traditional: true,
+                data: { treeGroupIds: treeGroupIds },
+                success: function (data) {
+                    if (data) {
+                        if (data.error) {
+                            eGovMessage.notification(data.error, eGovMessage.messageTypes.error);
+                        } else if (data.success) {
+                            eGovMessage.notification(data.success, eGovMessage.messageTypes.success);
+                        }
+                    }
+                },
+                error: function () {
+                    eGovMessage.notification("sorterror", eGovMessage.messageTypes.error);
+                }
+            });
+        });
+    })
+
+    function deleteConfig(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.TreeGroup.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+
+        function onChangeActived(_el, id) {
+            var data = {
+                isActived: _el.checked,
+                id: id
+            };
+
+            $.post("@Url.Action("ChangeActived")", data, function (result) {
+                if (result.error)
+                    eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                else if (result.success)
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+            });
+        }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-list2"></i>
+        <span data-res="egov.resources.sitemap.treeGroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/treeGroup/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-16 right-content">
+        <input class="btn" type="button" id="enableDragDrop" value="orderedsort" data-value="orderedsort" title="Cho phép sắp xếp thứ tự bằng cách kéo thả" data-res="egov.resources.buttons.orderedsort" data-restitle="egov.resources.position.orderedsort" />
+        <div class="clear" style="margin-bottom: 20px"></div>
+        <span>*: <span data-res="egov.resources.buttons.orderedSortHint"></span></span>
+        <table id="tblTreeGroups" class="table table-hover table-bordered">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col style="width: 100px" />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        @Localizer("Common.Resource.Index.List.Column.Numbers")
+                    </th>
+                    <th>
+                        @Localizer("TreeGroup.Index.List.Column.TreeGroupName")
+                    </th>
+                    <th>
+                        @Localizer("TreeGroup.Index.List.Column.IsActived")
+                    </th>
+                    <th>
+                        @Localizer("Common.Resource.Index.List.Column.Edit")
+                    </th>
+                    <th>
+                        @Localizer("Common.Resource.Index.List.Column.Delete")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        number++;
+                    <tr class="connectedSortable" data-id="@(item.TreeGroupId)">
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @item.TreeGroupName
+                        </td>
+                        <td>
+                            <input type="checkbox" value="@item.IsActived" @(item.IsActived ? "checked='checked'" : "") onchange="onChangeActived(this,@item.TreeGroupId);" />
+                        </td>
+                        <td>
+                            @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = item.TreeGroupId })
+                        </td>
+                        <td>
+                            <a href="javascript:deleteConfig(@(item.TreeGroupId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(item.TreeGroupId)" style="display: none"
+                                          action="@Url.Action("Delete", new { Id = item.TreeGroupId })"
+                                          method="POST">
+                            </form>
+                        </td>
+                    </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Không có dữ liệu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@Html.Partial("_Notifications")

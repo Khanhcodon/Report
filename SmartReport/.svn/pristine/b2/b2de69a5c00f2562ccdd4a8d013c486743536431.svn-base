@@ -1,0 +1,56 @@
+﻿@{ Layout = "~/Areas/Admin/Views/DocTypeGov/_Main.cshtml"; }
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">$(function () {
+        //$("#divForm").tabs({ selected: 1 });
+        egov.utilities.checkbox.checkAndUnCheckAll($("#checkAllStore"), $(".checkItemStore"));
+
+        $(".checkItemStore").change(function () {
+            var strStoreIds = "";
+            $(".checkItemStore").each(function () {
+                if ($(this).is(':checked')) {
+                    strStoreIds = strStoreIds == "" ? strStoreIds + $(this).attr('id') : strStoreIds + ';' + $(this).attr('id');
+                }
+            });
+            $("#StoreIds").val(strStoreIds);
+        });
+
+        $(".tabs .tab-menu").addClass(" ui-tabs-selected ui-state-active");
+        $(".tabs .tab-add").removeClass(" ui-tabs-selected ui-state-active");
+    });</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span>Loại báo cáo</span>
+    </div>
+    <div class="options">
+        <!--<a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>-->
+        <a class="btn  btn-default control-btn" href="/admin/doctypegov/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabsChild" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist">
+        <li class="tab-doctype">@Html.ActionLink(Localizer("DocType.CreateOrEdit.Tab.ViewAndEdit"), "EditPlus", "DocTypeGov", new { id = ViewBag.DoctypeId }, null)</li>
+        <li class="tab-form">@Html.ActionLink("Cấu hình", "Config", "DocTypeGov", new { id = ViewBag.DoctypeId }, null)</li>
+        <li class="tab-workflow">@Html.ActionLink(Localizer("DocType.CreateOrEdit.Tab.Workflow"), "DocTypeWorkflowPlus", "DocTypeGov", new { id = ViewBag.DoctypeId }, null)</li>
+    </ul>
+    <div style="padding-top: 10px;">
+        @RenderBody()
+    </div>
+</div>
+<div class="section-footer">
+    <div class="options" style="float: right;">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+    </div>
+</div>

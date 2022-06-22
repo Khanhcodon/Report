@@ -1,0 +1,228 @@
+﻿@model IEnumerable<WorkflowModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as WorkflowSearchModel;
+}
+
+<script type="text/javascript">
+    var copyId = null;
+    $(function () {
+        $("#tblWorkflows").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#tblWorkflows").openLink({ urlOpen: '/admin/Workflow/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+
+        ///Tạo seleted
+        $("#tblWorkflows").tableSelect({
+            tableCallback: function () {
+                $(".table-main").addClass("table-bordered table-hover");
+                bindContextmenu();
+            }
+        });
+    });
+
+    function bindContextmenu() {
+        var selector = "#tblWorkflows tbody tr.selected";
+        $.contextMenu('destroy', selector);
+        $.contextMenu({
+            selector: selector,
+            trigger: 'right',
+            build: function () {
+                var items = {                   
+                    configWorkflow: {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ConfigWorkflow")",
+                        icon: "edit",
+                        callback: function () {
+                            openConfigWorkflow($(this).data('id'));
+                        }
+                    },
+                    copyWorkflow: {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Copy")",
+                        icon: "copy",
+                        callback: function () {
+                            copyId = parseInt($(this).data('id'));
+                        }
+                    }
+                };
+
+                if (copyId) {
+                    items["sep1"] = "---------";
+                    items["pasteWorkflow"] = {
+                        name: "@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Paste")",
+                        icon: "paste",
+                        callback: function () {
+                            copyWorkflow(copyId);
+                        }
+                    }
+                }
+
+                return {
+                    items: items
+                };
+            }
+        });
+    }
+
+    function copyWorkflow(id) {     
+        $.post("/Admin/Workflow/CopyWorkflow", { id: id })
+            .done(function (result) {
+                if (result.error) {
+                    eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                }
+                else if (result.success) {
+                    copyId = null;
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                    document.location = "/admin/workflow/Index";
+                }
+            });
+    }
+
+    function changeActive(id, _this) {
+        $.contextMenu('destroy', "#tblWorkflows tbody tr.selected");
+        var status = $(_this).prop("checked");
+        $.post("/Admin/Workflow/ChangeStatus",{ workflowId: id, status: status })
+            .done(function (result) {
+                if (result.error) {
+                    eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                }
+                else if (result.success) {
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                }
+            });
+    }
+
+</script>
+
+<table class="table-main table" id="tblWorkflows">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+       @* <col style="width: 100px" />*@
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("WorkflowName", Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.WorkflowName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                    {
+                                        page = sortAndPage.CurrentPage,
+                                        pageSize = sortAndPage.PageSize,
+                                        IsActivated = search.IsActivated,
+                                        WorkflowName = search.WorkflowName,
+                                        DocFieldId = search.DocFieldId,
+                                        DocTypeId = search.DocTypeId
+                                    },
+                                new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divListWorkflows",
+                                        OnBegin = "onBegin",
+                                        OnSuccess = "onSuccess",
+                                        OnFailure = "onFailure"
+                                    })
+            </th>
+            <th class="header text-center">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.IsActivated")
+            </th>
+           @* <th class="header text-center">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.Template")
+            </th>*@
+            <th class="header text-center">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.ConfigWorkflow")
+            </th>
+            <th class="header text-center">
+                @Localizer("Common.Button.Edit")
+            </th>
+            <th class="header text-center">
+                @Localizer("Common.Button.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                number += 1;
+            <tr data-id="@item.WorkflowId">
+                <td>@number
+                </td>
+                <td>@item.WorkflowName
+                </td>
+                <td style="text-align:center">
+                    <input type="checkbox"  
+                         @(item.IsActivated ? "checked='checked'" : "")
+                         onchange="changeActive(@item.WorkflowId,this)"/>
+                </td>
+                @*<td style="text-align:center">
+                    <a href="javascript:openConfigTemplate(@item.WorkflowId)">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.Config")</a>
+                </td>*@
+                <td style="text-align:center">
+                    <a href="javascript:openConfigWorkflow(@item.WorkflowId)">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.Config")</a>
+                </td>    
+                <td style="text-align:center">
+                    @Html.ActionLink(Localizer("Common.Button.Edit"), "Edit",
+                    new { Id = item.WorkflowId })
+                </td>
+                <td style="text-align:center">
+                    <a href="javascript:deleteWorkflow(@(item.WorkflowId))">
+                        @Localizer("Common.Button.Delete")</a>
+                    <form id="formdelete@(item.WorkflowId)" style="display: none"
+                         action="@Url.Action("Delete", new { Id = item.WorkflowId })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.NoData")
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      IsActivated = search.IsActivated,
+                                      WorkflowName = search.WorkflowName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending,
+                                      DocFieldId = search.DocFieldId,
+                                      DocTypeId = search.DocTypeId
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListWorkflows",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

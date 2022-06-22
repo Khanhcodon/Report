@@ -1,0 +1,53 @@
+﻿@model BackupRestoreHistoryModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreHistory.Title.View");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#delete2").on("click", function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Customer.BackupRestoreHistory.ConfirmMessage"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+
+</script>
+<div style="margin-left: 20px">
+    <h2 data-restitle="egov.resources.log.detail">Chi tiết nhật ký</h2>
+    <p>
+        @Html.LabelFor(model => model.DateCreated): @Model.DateCreated.ToString("dd/MM/yyyy hh:mm:ss tt")
+    </p>
+    <p>
+        @Html.LabelFor(model => model.Domain): @Model.Domain
+    </p>
+    <p>
+        @Html.LabelFor(model => model.Account): @Model.Account
+    </p>
+    <p>
+        @Html.LabelFor(model => model.Ip): @Model.Ip
+    </p>
+    <p>
+        @Html.LabelFor(model => model.IsBackup): @(Model.IsBackup ? "Backup" : "Restore")
+    </p>
+    <p>
+        @Html.LabelFor(model => model.IsDatabaseFile): @(Model.IsDatabaseFile ? "Database File" : " File")
+    </p>
+    <p>
+        @Model.Description
+    </p>
+    <p>
+        <button type="button" onclick="location.href='@Url.Action("Index")'">@Localizer("Common.Button.Back")</button>
+        <button type="button" id="delete2">@Localizer("Common.Button.Delete")</button>
+    </p>
+    <form id="formdelete" style="display: none" 
+        action="@Url.Action("Delete")" method="POST">
+        <input  type="hidden" name="Ids" value="@Model.BackupRestoreHistoryId"/>
+    </form>
+</div>

@@ -1,0 +1,3 @@
+﻿<p>Xin chào bạn @ViewBag.FullName</p>
+<p>Tên đăng nhập: @ViewBag.Username</p>
+<p>Mật khẩu: @ViewBag.Password</p>

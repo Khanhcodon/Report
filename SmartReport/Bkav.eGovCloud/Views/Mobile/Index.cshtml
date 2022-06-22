@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "eGov Cloud";
+    Layout = "_LayoutMobile.cshtml";
+}
+
+<script type="text/javascript">
+    var egov = egov || {};
+
+    egov.openingNotify = @Html.Raw(ViewBag.Notification);
+</script>
+
+@Html.Partial("_DocumentView")
+
+@Html.Partial("_Tokens")

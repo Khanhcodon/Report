@@ -1,0 +1,120 @@
+﻿@{
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    @Html.Partial("_CalendarHead")
+</head>
+<body>
+    <div class="col-sm-16">
+        <button id="printcalendar" class="btn btn-info">
+            In Lịch
+        </button>
+    </div>
+    <div class="row">
+        <div class="col-sm-16">
+            <table class="table table-bordered">
+                <colgroup>
+                    <col style="width: 65px" />
+                    <col style="width:135px" />
+                    <col style="" />
+                    <col style="width:200px" />
+                    <col style="width:100px" />
+                    <col style="width:100px" />
+                    <col style="width:100px" />
+                </colgroup>
+                <thead style="border: solid 2px #DDD">
+                    <tr>
+                        <th style="text-align:center;border-right: solid 1px #DDD" class="">Ngày</th>
+                        <th class=" thead-style">Thời Gian</th>
+                        <th class=" thead-style">Nội dung</th>
+                        <th class=" thead-style">Thành phần</th>
+                        <th class="thead-style">Đơn vị chủ trì</th>
+                        <th class="thead-style">Địa điểm</th>
+                        <th class="thead-style col-sm-2">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_calendar" style=""></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $("#printcalendar").click(function () {
+            $(this).hide();
+            window.print();
+        })
+        var htmltmpl = '<tr> <td class="ngay"></td><td class="noidung"colspan="6"><table class="table calendar_day"><colgroup><col style="width:131px" /><col style="" /><col style="width:200px" /><col style="width:100px" /><col style="width:100px" /><col style="width:96px" /></colgroup></table> </td> </tr>';
+        function getDataofWeek(strweek, stryear) {
+            $.ajax({
+                type: 'Get',
+                url: 'ViewCalendarofWeek',
+                dataType: 'json',
+                data: { week: Number(strweek), year: stryear },
+                success: function (data) {
+                    var week = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+                    $("#tbody_calendar").html('');
+                    for (var i = 1; i < 7; i++) {
+                        $("#tbody_calendar").append(htmltmpl);
+                        $(".ngay:last").append("<span>" + week[i] + "</span><br><span>" + convertDate(w2date(stryear, strweek, i - 1)) + "</span>");
+
+                        var obj = JSON.parse(data);
+
+                        for (var index = 0; index < obj.length; index++) {
+                            var strDateBegin = obj[index].BeginTime.substring(0, 10);
+                            var dateBegin = new Date(new Date(strDateBegin).toDateString());
+                            var strDateEnd = obj[index].EndTime.substring(0, 10);
+                            var dateEnd = new Date(new Date(strDateEnd).toDateString());
+
+                            if (dateBegin.getTime() <= w2date(stryear, strweek, i - 1).getTime() && dateEnd.getTime() >= w2date(stryear, strweek, i - 1)) {
+                                $("#calendarTemplate").tmpl(obj[index], {
+                                    settime: function (timer1, timer2) {
+                                        if (timer1 == null) {
+                                            return '?';
+                                        } else {
+                                            if (timer1.split("T")[0] == timer2.split("T")[0]) {
+                                                return timer1.split("T")[1].substring(0, 5);
+                                            } else {
+                                                return timer1.split("T")[1].substring(0, 5) + " " + convertDate(new Date(timer1.split("T")[0]));
+                                            }
+                                        }
+                                    },
+                                    showUser: function (text) {
+                                        return text.replace(/, /g, ",").replace(/,/g, ", ");
+                                    }
+                                }).appendTo(".calendar_day:last");
+                            }
+                        }
+                    }
+                },
+                error: function (ex) {
+                }
+            });
+        }
+        $(document).ready(function () {
+            var week = @ViewBag.Week
+
+            var year = @ViewBag.Year
+            getDataofWeek(week , year);
+        })
+    </script>
+    <script id="calendarTemplate" type="text/x-jQuery-tmpl">
+        <tr style="border-bottom: solid 2px #b7e3e8">
+            <td class="" style="text-align: center; border-right: solid 1px #b7e3e8;">
+                <img src="/Content/bkav.egov/images/calendar_img/clock.png" width="17" height="17" />
+                ${$item.settime(BeginTime, EndTime)} - ${$item.settime(EndTime, BeginTime)}
+            </td>
+            <td class="" style=" text-align: left; border-right: solid 1px #b7e3e8;"> ${Title}</td>
+            <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${$item.showUser(DepartmentPrimary)}</td>
+            <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${UserJoin}</td>
+            <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${Location}</td>
+            <td class="" style="text-align: left;">${Note}</td>
+        </tr>
+    </script>
+</body>
+</html>

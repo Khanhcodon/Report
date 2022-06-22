@@ -1,0 +1,733 @@
+﻿@model StoreModel
+@using Bkav.eGovCloud.Core.Utils;
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.StoreId)
+@{
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allUsers = ViewBag.AllUsers as string;
+    var allUserDeparts = ViewBag.AllUserDepartmentJobTitlesPosition as string;
+    var selectedUsers = ViewBag.SelectedUsers as string;
+    var allCodes = ViewBag.AllCodes as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.CodeModel>;
+    var selectedCode = ViewBag.SelectedCode as IEnumerable<int>;
+    var userNameResponsible = ViewBag.UserNameResponsible as string;
+    var departmentResponsible = ViewBag.DepartmentResponsible as string;
+    var alldocFields = ViewBag.Docfields as string;
+    var allCodesJson = allCodes.Stringify();
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-layout-latest.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/jquery.jstree.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js")"></script>
+
+<script type="text/javascript">
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allUserDeparts = @(string.IsNullOrEmpty(allUserDeparts) ? MvcHtmlString.Create("[]") : Html.Raw(allUserDeparts));
+    var alldocFields = @(string.IsNullOrEmpty(alldocFields) ? MvcHtmlString.Create("[]") : Html.Raw(alldocFields));
+    var selectedUserIds = @(string.IsNullOrEmpty(selectedUsers) ? MvcHtmlString.Create("[]") : Html.Raw(selectedUsers));
+    var allCodes=@(string.IsNullOrEmpty(allCodesJson) ? MvcHtmlString.Create("[]") : Html.Raw(allCodesJson));
+
+    var selectedUsers = [];
+    var checkLoadDeptTreeForJobtitles = false;
+    var selectedDocfieldIds=[];
+    var selectedDocfields=[];
+    function openDialogDepartment() {
+        $("#dialogBoxOfJobTitles").dialog({
+            title:'Chọn phòng ban'
+                ,   width:		274
+                ,	height:		300
+                ,   resizable: false
+                ,	autoOpen:	true
+                ,	closeOnEsc:	true
+                ,   modal:      true
+                ,  position:  {
+                    my: 'right top',
+                    at: 'right bottom',
+                    of: $('#imgSelectDeptForJobtitles')
+                }
+                , open: function() {
+                    // var dialogLayout = $("#dialogBoxOfJobTitles").layout();
+                    if(!checkLoadDeptTreeForJobtitles)
+                    {
+                        $("#deparmentForJobtitlesSetting").html('');
+                        egov.utilities.jstree.bindJsTree($("#deparmentForJobtitlesSetting"),false,false,false,allDepartments,allUsers);
+                        $("#dialogBoxOfJobTitles").mousedown(function() {
+                            $("#deparmentForJobtitlesSetting").bind("select_node.jstree", function (e, data) {
+                                $("#DepartmentName").val(data.rslt.obj.children('a').text().trim());
+                                $("input[name='DepartmentId']").val(data.rslt.obj.attr("id").trim());
+                                $("#dialogBoxOfJobTitles").dialog('close');
+                            }).delegate("a", "click", function (e) { e.preventDefault(); });
+                        });
+                    }
+                }
+        });
+    }
+
+    function openDialogUserDepartment() {
+        $("#dialogBoxOfUserDepart").dialog({
+            title:'Chọn phòng ban'
+                ,   width:		400
+                ,	height:		400
+                ,   resizable: false
+                ,	autoOpen:	true
+                ,	closeOnEsc:	true
+                ,   modal:      true
+                ,  position:  {
+                    my: 'right top',
+                    at: 'right bottom',
+                    of: $('#selectUserStore')
+                }
+                , open: function() {
+                    // var dialogLayout = $("#dialogBoxOfJobTitles").layout();
+                    if(!checkLoadDeptTreeForJobtitles)
+                    {
+                        $("#deparmentForUserDepart").html('');
+                        egov.utilities.jstree.bindJsTree($("#deparmentForUserDepart"),true,true,false,allDepartments,allUsers, allUserDeparts);
+                        $("#dialogBoxOfJobTitles").mousedown(function() {
+                            $("#deparmentForUserDepart").bind("select_node.jstree", function (e, data) {
+                                $("#DepartmentName").val(data.rslt.obj.children('a').text().trim());
+                                $("input[name='DepartmentId']").val(data.rslt.obj.attr("id").trim());
+                                $("#dialogBoxOfJobTitles").dialog('close');
+                            }).delegate("a", "click", function (e) { e.preventDefault(); });
+                        });
+                    } 
+                }
+        });
+    }
+
+
+    $(function () {
+        $("form:first").submit(function () {
+            var strCodeIds = [];
+            $(".checkItemCode").each(function () {
+                if ($(this).is(':checked')) {
+                    strCodeIds.push($(this).attr('id'));
+                }
+            });
+
+            $("#CodeIds").val(JSON.stringify(strCodeIds));
+        });
+
+        $("#tblCodeForStore").grid({
+            isFixHeightContent: true,
+            height: 392,
+            isResizeColumn: true
+        });
+
+        $("input.checkItemCode").on('change', function () {
+            //var $this = $(this);
+            //var row = $this.closest('tr');
+            //if ($this.prop('checked')) { // move to top
+            //    row.insertBefore(row.parent().find('tr:first-child'));
+            //}
+            //else { // move to bottom
+            //    row.insertAfter(row.parent().find('tr:last-child'));
+            //}
+        });
+
+        $('input.checkItemDefault').on('change', function() {
+            //var checked = $(this).closest('tr').find("input.checkItemCode").prop('checked');
+            //if(checked){
+            //    $('input.checkItemDefault').not(this).prop('checked', false);
+
+            //    var codeId = $(this).attr("id");
+            //    if (codeId) {
+            //        $("#DefaultCodeId").val(codeId);
+            //    }
+            //}else{
+            //    $(this).prop('checked',false);
+            //}
+        });
+
+        egov.utilities.checkbox.checkAndUnCheckAll($("#checkAllCode"), $(".checkItemCode"));
+
+        $("#imgSelectDeptForJobtitles").bind('click',function() {
+            openDialogDepartment();
+        });
+
+        $("#DepartmentName").click(function(){
+            openDialogDepartment();
+        });
+
+        $("#selectUserStore").click(function(){
+            openDialogUserDepartment();
+        });
+
+        $("#CategoryBusinessId").change(function(){
+            autoCompleteDocField();
+        });
+
+        $("#UserNameResponsible").keyup(function(){
+            if ($("input[name='UserId']").val() !== '') {
+                if($(this).val() == '')
+                {
+                    $("#tblUser tbody tr#" + $("input[name='UserId']").val() + " #pts"+$("input[name='UserId']").val()).find("span").remove();
+                    $("input[name='UserId']").val('');
+                }
+            }
+            return false;
+        });
+
+        //Tìm kiếm dạng autocomplete để lấy user phụ trách, đồng thời add vào danh sách người xem
+        $("#UserNameResponsible").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#UserNameResponsible").val(ui.item.fullname);
+                var userId = $("input[name='UserId']").val();
+                if(userId != ""){
+                    $("#tblUser tbody tr#" + userId + " #pts" + userId).find("span").remove();
+                }
+                var exist = _.find(selectedUsers, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if(!exist)
+                {
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUsers.push(selected);
+                        var noresult = $("#tblUser tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedUserResponsibleTemplate")
+                        .tmpl(selected, {
+                            getNumbers: function() {
+                                return selectedUsers.length;
+                            }
+                        })
+                        .appendTo("#tblUser tbody");
+                    }
+                }
+                else
+                {
+                    $("#tblUser tbody tr#" + ui.item.value + " #pts"+ui.item.value).append("<span style='color:red' data-res='egov.resources.store.pts'>(Phụ trách sổ)</span>");
+                }
+                $("input[name='UserId']").val(ui.item.value);
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        //
+        //Tìm kiếm dạng autocomplete và add user vào danh sách người xem hồ sơ
+        $("#selectedUser").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedUser").val('');
+                $("input[name='" + ui.item.value + "']").attr("checked", "");
+                var exist = _.find(selectedUsers, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUsers.push(selected);
+                        var noresult = $("#tblUser tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedUserTemplate")
+                        .tmpl(selected, {
+                            getNumbers: function() {
+                                return selectedUsers.length;
+                            }
+                        })
+                        .appendTo("#tblUser tbody");
+                    }
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        if($("input[name=DocFieldIds]").val() !== ""){
+            selectedDocfieldIds=JSON.parse($("input[name=DocFieldIds]").val());
+            selectedDocfields=_.filter(alldocFields,function(item){
+                return selectedDocfieldIds.indexOf(parseInt(item.value))>-1;
+            });
+
+            _.each(selectedDocfields,function(item){
+                $("#docFieldTemplate")
+                        .tmpl(item, {
+                            getNumbers: function() {
+                                return selectedDocfields.length;
+                            }
+                        })
+                        .appendTo("#tblDocField tbody");
+            });
+        }
+
+        autoCompleteDocField();
+        autoCompleteCodeForStore();
+
+        $("#selectedUser, #UserNameResponsible").keypress(function(e) {
+            if(e.keyCode == 13) {
+                return false;
+            }
+            return true;
+        });
+
+        if(selectedUserIds.length === 0) {
+            $("#tblUser tbody").append("<tr id='noresult'><td colspan='5' data-res='egov.resources.store.nouser'></td></tr>");
+        } else {
+            var numbers = 1;
+            _.filter(allUsers,function(user) {
+                if( _.indexOf(selectedUserIds, user.value) > -1){
+                    user.isMain = user.value == '@Model.UserId';
+                    selectedUsers.push(user);
+                }
+            });
+
+            selectedUsers = _.sortBy(selectedUsers, function(user) {
+                return !user.isMain;
+            });
+
+            $("#selectedUserTemplate")
+                .tmpl(selectedUsers, {
+                    getNumbers: function() {
+                        return numbers++;
+                    }
+                })
+                .appendTo("#tblUser tbody");
+        }
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+    });
+
+    function removeUser(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Store.ConfirmDeleteUser"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    selectedUsers = _.reject(selectedUsers, function(user) {
+                        return user.value === id;
+                    });
+                    if(selectedUsers.length > 0) {
+                        $("#tblUser tbody").find("tr#"+id).remove();
+                        $("#tblUser tbody tr td:first-child").each(function(index, el) {
+                            $(el).text(index + 1);
+                        });
+                    } else {
+                        $("#tblUser tbody").html("<tr id='noresult'><td colspan='5' data-res='egov.resources.store.nouser'></td></tr>");
+                    }
+                }
+            );
+    }
+
+    function removeDocFields(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Store.ConfirmDocField"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                selectedDocfields = _.reject(selectedDocfields, function(user) {
+                    return user.value === id;
+                });
+                $("input[name=DocFieldIds]").val(JSON.stringify(_.pluck(selectedDocfields,"value")));
+                if(selectedDocfields.length > 0) {
+                    //$("#tblUser tbody tr#" + id).remove();
+                    $("#tblDocField tbody").find("tr#"+id).remove();
+                    $("#tblDocField tbody tr td:first-child").each(function(index, el) {
+                        $(el).text(index + 1);
+                    });
+                } else {
+                    $("#tblDocField tbody").html("<tr id='noresult'><td colspan='5' data-res='egov.resources.store.nouser'></td></tr>");
+                }
+            }
+        );
+    }
+
+    function autoCompleteDocField(){
+        var selectedCategory=$("#CategoryBusinessId").val();
+        $("#addDocFields").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( alldocFields, function( value ) {
+                    return matcher.test( value.label )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.label ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#addDocFields").val('');
+                var selected = _.find(alldocFields, function(item) {
+                    return item.value === ui.item.value;
+                });
+                if (selected) {
+                    selectedDocfields.push(selected);
+                    $("input[name=DocFieldIds]").val(JSON.stringify(_.pluck(selectedDocfields,"value")));
+                    var noresult = $("#tblDocField tbody #noresult");
+                    if(noresult.length > 0) {
+                        noresult.remove();
+                    }
+                    $("#docFieldTemplate")
+                    .tmpl(selected, {
+                        getNumbers: function() {
+                            return selectedDocfields.length;
+                        }
+                    })
+                    .appendTo("#tblDocField tbody");
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+    }
+
+    function autoCompleteCodeForStore(){
+        $("#findCodeForStore").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response($.grep(allCodes, function( value) {
+                    return matcher.test( value.CodeName )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.CodeName ) );
+                }));
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                var _el=  $("#tblCodeForStore tbody tr").find("#"+ui.item.CodeId);
+                var checked= _el.prop("checked");
+                _el.prop("checked",!checked);
+
+                $("#findCodeForStore").val('');
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.CodeName  +"( "+ item.Template+")"+ "</a>")
+                .appendTo(ul);
+        };
+    }
+</script>
+<input type="hidden" name="DefaultCodeId" id="DefaultCodeId" value="@Model.DefaultCodeId" />
+<table id="create-or-edit-store-table" width="100%">
+    <colgroup>
+        <col style="width: 190px" />
+        <col style="width: 285px" />
+    </colgroup>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CategoryBusinessName):
+    </td>
+    <td>
+        <select id="CategoryBusinessId" name="CategoryBusinessId" style="width: 277px">
+            @foreach (var categoryBusiness in ViewBag.AllCategoryBusiness as List<SelectListItem>)
+            {
+                <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "")>@categoryBusiness.Text</option>
+            }
+        </select>
+    </td>
+    <td rowspan="6" valign="top">
+        <div style="font-weight: normal; margin-bottom: 5px;" data-res="egov.resources.store.tempforstore">
+        </div>
+        <div>
+            <input type="text" id="findCodeForStore" class="form-control" />
+        </div>
+        <input type="hidden" id="CodeIds" name="CodeIds" />
+        <table class="table-main table" id="tblCodeForStore">
+            <colgroup>
+                <col />
+                <col style="width: 80px" />
+                <col style="width: 80px" />
+                <col style="width: 150px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header">
+                        <span data-res="egov.resources.store.alltempname"></span>
+                    </th>
+                    <th>
+                        Mặc định
+                    </th>
+                    <th>
+                        @if (allCodes != null && allCodes.Any() && selectedCode != null && selectedCode.Any() && allCodes.Count() == selectedCode.Count())
+                        {
+                            <input type="checkbox" checked="checked" id="checkAllCode" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="checkAllCode" />
+                        }
+                        Kích hoạt
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Code.Index.List.Column.Template")
+                    </th>
+                    <th>
+                        Xem
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (allCodes != null && allCodes.Any())
+                {
+                    foreach (var code in allCodes)
+                    {
+                        <tr data-codeid="@code.CodeId">
+                            <td>
+                                @code.CodeName
+                            </td>
+                            <td>
+                                @if (selectedCode != null && selectedCode.Any())
+                                {
+                                    if (code.IsDefault)
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="IsDefault" checked="checked" class="checkItemDefault" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="IsDefault" class="checkItemDefault" />
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="IsDefault" class="checkItemDefault" />
+                                }
+                            </td>
+                            <td>
+                                @if (selectedCode != null && selectedCode.Any())
+                                {
+                                    if (code.Checked)
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="CodeIds" checked="checked" class="checkItemCode" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="CodeIds" class="checkItemCode" />
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-id="@code.CodeId" id="@code.CodeId" name="CodeIds" class="checkItemCode" />
+                                }
+                            </td>
+                            <td>
+                                @code.Template
+                            </td>
+                            <td>
+                                <a href="/admin/code/edit/@code.CodeId">Xem</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" data-res="egov.resources.store.notemp">
+                            Không tồn tại mẫu nào!
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelRequireFor(model => model.StoreName):
+    </td>
+    <td>
+        @Html.TextBoxFor(model => model.StoreName, new { style = "width:277px" })
+        @Html.ValidationMessageFor(model => model.StoreName)
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelFor(model => model.UserId):
+    </td>
+    <td>
+        <input id="UserNameResponsible" style="width: 277px" value="@userNameResponsible" type="text" />
+        <input type="hidden" name="UserId" value="@(Model.UserId == null ? "" : Model.UserId.ToString())" />
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelFor(model => model.DepartmentId):
+    </td>
+    <td>
+        <div style="border: 1px solid #DDDDDD; display: inline-block; width: 277px; height: 24px; background: #f0f0f0;">
+            <input id="DepartmentName" readonly="readonly" style="width: 254px;border:none;height:22px" value="@departmentResponsible" />
+            <img alt='' id="imgSelectDeptForJobtitles" src="@Url.Content("~/Content/Images/drop-hidden.png")" style="cursor: pointer;margin-top: -2px;vertical-align: middle;" />
+            <input type="hidden" name="DepartmentId" value="@(Model.DepartmentId == null ? "" : Model.DepartmentId.ToString())" />
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelFor(model => model.Description):
+    </td>
+    <td>
+        @Html.TextAreaFor(model => model.Description, new { style = "width:277px" })
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <div style="margin: 3px 0 5px 0;">@Localizer("Bkav.eGovCloud.Areas.Admin.Store.CreateOrEdit.Fields.ListUserViewStore.Label")</div>
+        <div class="divUserViewStore">
+            <p>
+                <span data-res="egov.resources.store.delete"></span>
+                <span data-res="egov.resources.store.addstoreviewer">Thêm người xem sổ</span>:
+                <input id="selectedUser" style="width: 250px" />
+                <span class="btn btn-info btn-sm" id="selectUserStore">thêm</span>
+            </p>
+            <div class="grid">
+                <div class="grid-header">
+                    <div class="grid-header-wrap">
+                        <table class="table-main table-bordered">
+                            <colgroup>
+                                <col style="width: 50px" />
+                                <col style="width: 150px" />
+                                <col style="width: 150px" />
+                                <col style="width: 50px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header  text-center" data-res="egov.resources.tableheader.stt"></th>
+                                    <th class="header" data-res="egov.resources.user.username"></th>
+                                    <th class="header" data-res="egov.resources.user.fullname"></th>
+                                    <th class="header  text-center" data-res="egov.resources.tableheader.delete"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible; height: 150px;">
+                    <table class="table-main table table-bordered table-hover" id="tblUser">
+                        <colgroup>
+                            <col style="width: 50px" />
+                            <col style="width: 150px" />
+                            <col style="width: 150px" />
+                            <col style="width: 50px" />
+                        </colgroup>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="divDocFields">
+            <p>
+                @Html.HiddenFor(model => model.DocFieldIds)
+                <span data-res="egov.resources.store.addDocFields"></span>:
+                <input id="addDocFields" style="width: 317px" />
+            </p>
+        </div>
+        <div class="grid">
+            <div class="grid-header">
+                <div class="grid-header-wrap">
+                    <table class="table-main table-bordered">
+                        <colgroup>
+                            <col style="width: 50px" />
+                            <col style="width: 300px" />
+                            <col style="width: 50px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="header  text-center" data-res="egov.resources.tableheader.stt"></th>
+                                <th class="header" data-res="egov.resources.store.docField"></th>
+                                <th class="header text-center" data-res="egov.resources.tableheader.delete"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="grid-content" style="overflow-x: auto; overflow-y: visible; height: 150px;">
+                <table class="table-main table table-bordered table-hover" id="tblDocField">
+                    <colgroup>
+                        <col style="width: 50px" />
+                        <col style="width: 300px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </td>
+</tr>
+</table>
+<div id="dialogBoxOfJobTitles">
+    <div id="deparmentForJobtitlesSetting" style="padding: 0px; background: #ffffff;">
+    </div>
+</div>
+<div id="dialogBoxOfUserDepart">
+    <div id="deparmentForUserDepart" style="padding: 0px; background: #ffffff;">
+    </div>
+</div>
+<script id="selectedUserTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td id="pts${value}">
+            ${username}
+            {{if value== $("input[name='UserId']").val()}}
+            <span style="color: red" data-res="egov.resources.store.pts">(Phụ trách sổ)</span>
+            {{/if}}
+            <input type="hidden" name="ListUserViewIds" value="${value}" />
+        </td>
+        <td>${fullname}</td>
+        <td style="text-align: center"><a href="javascript:removeUser(${value})" data-res="egov.resources.tableheader.delete">Xóa</a></td>
+    </tr>
+</script>
+<script id="selectedUserResponsibleTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td id="pts${value}">
+            ${username}<span style="color: red" data-res="egov.resources.store.pts">(Phụ trách sổ)</span>
+            <input type="hidden" name="ListUserViewIds" value="${value}" />
+        </td>
+        <td>${fullname}</td>
+        <td style="text-align: center"><a href="javascript:removeUser(${value})" data-res="egov.resources.tableheader.delete">Xóa</a></td>
+    </tr>
+</script>
+<script id="docFieldTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td id="pts${value}">
+            ${label}
+        <td style="text-align: center"><a href="javascript:removeDocFields(${value})" data-res="egov.resources.tableheader.delete">Xóa</a></td>
+    </tr>
+</script>

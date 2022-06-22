@@ -1,0 +1,63 @@
+﻿@model LicenseModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.License.Index");
+}
+
+<style>
+    .table td {
+        padding: 5px 8px !important;
+    }
+</style>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span data-res="egov.resources.sitemap.license">Bản quyền</span>
+    </div>
+
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="/admin/license/Activate">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">Kích hoạt bản quyền</span>
+        </a>
+    </div>    
+</div>
+<div>
+    <table class="table table-hover">
+        <colgroup>
+            <col style="width:120px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td data-res="egov.resources.license.customername" style="font-weight: bold">
+                <b>Khách hàng</b>
+            </td>
+            <td>@Html.DisplayFor(model => model.CustomerName)</td>
+        </tr>
+        <tr>
+            <td data-res="egov.resources.license.phone" style="font-weight: bold">
+                <b>Số điện thoại</b>
+            </td>
+            <td>@Html.DisplayFor(model => model.Phone)</td>
+        </tr>
+        <tr>
+            <td data-res="egov.resources.license.Email" style="font-weight: bold">
+                <b>Email</b>
+            </td>
+            <td>@Html.DisplayFor(model => model.Email)</td>
+        </tr>
+        <tr>
+            <td data-res="egov.resources.license.ToDate" style="font-weight: bold">
+                <b>Ngày hết hạn</b>
+            </td>
+            <td>@Model.ToDate.ToString("d")</td>
+        </tr>
+        <tr>
+            <td data-res="egov.resources.license.TotalUser" style="font-weight: bold">
+                <b>Số tài khoản</b>
+            </td>
+            <td>@Html.DisplayFor(model => model.TotalUser) user</td>
+        </tr>
+    </table>
+</div>

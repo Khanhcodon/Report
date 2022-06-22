@@ -1,0 +1,154 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.AuthorizeModel>
+    @{
+        int number = 0;
+    }
+
+    <script>
+        function deleteAuthorize(id) {
+            $('#deleteAuthorize').modal({
+                backdrop: false,
+                show: true,
+                keyboard: true
+            });
+
+            $('#deleteAuthorize button.btn-primary').unbind('click').bind('click', function () {
+                var token = $("input[name='__RequestVerificationToken']", "#DeleteAuthorize").val();
+                $.ajax({
+                    url: "/Account/DeleteAuthorize",
+                    type: "Post",
+                    data: { id: id, __RequestVerificationToken: token },
+                    success: function (result) {
+                        if (result.success) {
+                            $("#tbAuthorize tbody tr input[id=" + id + "]").closest('tr').remove();
+                            if ($("#tbAuthorize tbody tr").length === 0) {
+                                $("#tbAuthorize tbody").append('<tr><td colspan="7">' + egov.resources.setting.authorize.table.body.noData + '</td> </tr>');
+                            }
+                            $('#deleteAuthorize').modal('hide');
+                            alert(result.message);
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    }
+                });
+            });
+
+            $('#deleteAuthorize button.btn-cancel').unbind('click').bind('click', function () {
+                $('#deleteAuthorize').modal('hide');
+            });
+        }
+
+        $(function () {
+            $(document).bindResources();
+        })
+    </script>
+    <div id="dialog"></div>
+    <div id="result"></div>
+    <div class="Hb qd" style="max-width: 750px; margin: 0">
+        <div id="DeleteAuthorize" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+        <button>
+            <a data-ajax="true" data-ajax-method="GET"
+               data-ajax-mode="replace"
+               data-ajax-update="#menuRight"
+               href="/Account/CreateAuthorize"
+               data-res="egov.resources.setting.authorize.labelCreate">
+            </a>
+
+        </button>
+        <table id="tbAuthorize" class="table table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.stt">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.userReceive">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.startDate">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.endDate">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.state">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.edit">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.authorize.table.header.delete">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        number += 1;
+                        <tr>
+                            <td>
+                                @number
+                            </td>
+                            <td>
+                                <input type="hidden" value="@item.AuthorizeId" id="@item.AuthorizeId" />
+                                <input type="hidden" value="@item.AuthorizedUserName" />
+                                @item.AuthorizedUserName
+                            </td>
+                            <td>
+                                @item.DateBeginShort
+                            </td>
+                            <td>@item.DateEndShort</td>
+                            <td>
+                                @item.HasDateLine
+                            </td>
+                            <td style="text-align: center">
+                                @Ajax.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "EditAuthorize", new { id = item.AuthorizeId }, new AjaxOptions
+                        {
+                            HttpMethod = "GET",
+                            UpdateTargetId = "menuRight"
+                        })
+                            </td>
+                            <td style="text-align: center">
+                                <a href="javascript:deleteAuthorize(@item.AuthorizeId)">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" data-res="egov.resources.setting.authorize.table.body.noData">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal modal2" id="deleteAuthorize" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width: 300px; height: 150px; position: absolute; top: 25%; left: 40%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" data-res="egov.resources.setting.authorize.titleDialogDelete">
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <b data-res="egov.resources.setting.authorize.confirmDelete">
+                    </b>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal2" type="button" data-res="egov.resources.setting.authorize.btnSubmitDelete">
+                    </button>
+                    <button type="button" class="btn btn-default btn-cancel " data-dismiss="modal2" data-res="egov.resources.setting.authorize.btnCancelDelete">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

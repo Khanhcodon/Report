@@ -1,0 +1,2 @@
+﻿(function(n){n.validator.addMethod("vnDatetime",function(t,i,r){if(t==null||t=="")return!0;var u=n("#"+r.propertyname).val();return(Globalize.culture("vi-VN"),Globalize.parseDate(u))?!0:!1});n.validator.unobtrusive.adapters.add("vndatetime",["propertyname"],function(n){n.rules.vnDatetime=n.params;n.message&&(n.messages.vnDatetime=n.message)})})(jQuery);
+//# sourceMappingURL=bkav.validate.datetime.min.js.map

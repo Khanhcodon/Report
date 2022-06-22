@@ -1,0 +1,50 @@
+﻿<div class="">
+    <div class="list-group-item preview-compendium">
+        <div class="wraptext">
+            <span class="icon icon-info2"></span>
+            ${compendium}
+        </div>
+    </div>
+</div>
+<div class="container-fluid list-group preview-info">
+    <div class="row">
+        <div class="text-center">
+            <h4 data-res="egov.resources.documentQuickView.belowDocumentSum"></h4>
+        </div>
+    </div>
+    <div class="row list-group-item">
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.Comment"></div>
+        <div class="col-md-14">
+            {{if lastComment != null}}
+                <b>${lastComment.user}</b> <span data-res="egov.resources.documentQuickView.timeComment"></span> ${lastComment.date}<br>
+                <b>${lastComment.content}</b>
+            {{/if}}
+        </div>
+    </div>
+    <div class="row list-group-item">
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.Category"></div>
+        <div class="col-md-6 ">${docType}</div>
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.Docfield"></div>
+        <div class="col-md-6 ">${docfield}</div>
+    </div>
+    <div class="row list-group-item">
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.DocCode"></div>
+        <div class="col-md-6 ">${docCode}</div>
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.Result"></div>
+        <div class="col-md-6 "></div>
+    </div>
+    <div class="row list-group-item">
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.Sign"></div>
+        <div class="col-md-6 ">${approver}</div>
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.LastUserComment"></div>
+        <div class="col-md-6 ">${lastUser}</div>
+    </div>
+    <div class="row list-group-item hidden">
+        <div class="col-md-2" data-res="egov.resources.documentQuickView.TotalPage"></div>
+        <div class="col-md-6 ">${totalPage}</div>
+    </div>
+    <div class="row list-group-item">
+        <div class="col-md-2" >Nơi nhận:</div>
+        <div class="col-md-14 " style="white-space: pre-line;">${processinfo}</div>
+    </div>
+</div>

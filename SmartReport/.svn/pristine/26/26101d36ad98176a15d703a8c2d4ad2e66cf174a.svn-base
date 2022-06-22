@@ -1,0 +1,139 @@
+﻿@model IEnumerable<DistrictModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var itemSelected = ViewBag.Selected;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblDistrict").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblDistrict").openLink({ urlOpen: '/admin/District/Edit' });
+    });
+</script>
+<table class="table-main table" id="tblDistrict">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DistrictName", Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.DistrictName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        cityCode = itemSelected,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListDistrict",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DistrictCode", Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.DistrictCode"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        cityCode = itemSelected
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListDistrict",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+             <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Ward")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var district in Model)
+            {
+                number += 1;
+            <tr data-id="@district.DistrictId">
+                <td>@number
+                </td>
+                <td>@district.DistrictName
+                </td>
+                <td>@district.DistrictCode
+                </td>
+                <td style="text-align: center;">
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.AddWard"), "Create", "Ward", new { districtCode = district.DistrictCode }, null)
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Edit.Button"), "Edit", new { Id = district.DistrictId })
+                </td>
+                <td>
+                    <a href="javascript:deleteDistrict(@(district.DistrictId))">@Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(district.DistrictId)" style="display: none" action="@Url.Action("Delete", new { Id = district.DistrictId })" method="POST">
+                         @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">
+                   @Localizer("Bkav.eGovCloud.Areas.Admin.District.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      cityCode = itemSelected,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListDistrict",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

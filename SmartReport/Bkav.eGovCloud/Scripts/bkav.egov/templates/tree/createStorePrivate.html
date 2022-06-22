@@ -1,0 +1,58 @@
+﻿<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label class="col-md-4 control-label" for="storePrivateName" 
+            data-res="egov.resources.storePrivate.storePrivateName">Tên hồ sơ:</label>
+        <div class="col-md-12">
+            <textarea id="storePrivateName" name="storePrivateName" style="height: 40px"
+                 class="form-control" type="text" value="${name}" 
+                data-respholder="egov.resources.storePrivate.storePrivateNameWarning" rows="3">${name}</textarea>
+            <span class="field-validation-error" style="display: none" 
+                data-res="egov.resources.storePrivate.storePrivateNameWarning"></span>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-md-4 control-label" for="storePrivateName">Người tạo:</label>
+        <div class="col-md-12">
+            <p class="form-control-static">${userCreatedName}</p>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-md-4 control-label" for="userJoined"
+             data-res="egov.resources.storePrivate.userJoined">Người tham gia:</label>
+        <div class="col-md-12">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="userJoined" name="userJoined" style="z-index: 1060;">
+                <div class="input-group-btn">
+                    <button type="button" id="dgUsers" class="btn btn-default dropdown-toggle" data-target="#StorePrivateFilterDepartment" style="height:25px;"><span class="caret"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-md-4 control-label" for=""></label>
+        <div class="col-md-12">
+            <div id="panelUserJoined" class="form-control" style="height: 150px;">
+                <table id="tblUserJoined" style="width: 100%">
+                    {{each joinedUsers}}
+                    <tr>
+                        <td>${name}</td>
+                        <td>
+                            <a href="#" class="del-joined" value="${id}">Xóa</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-md-4 control-label" for="descStorePrivate"
+             data-res="egov.resources.storePrivate.descStorePrivate">Ghi chú:</label>
+        <div class="col-md-12">
+            <textarea cols="2" id="descStorePrivate" name="descStorePrivate" class="form-control" style="height:60px" >${descStorePrivate}</textarea>
+        </div>
+    </div>
+</div>
+
+<div class="filterDeparment" id="StorePrivateFilterDepartment" style="display: none;">
+</div>

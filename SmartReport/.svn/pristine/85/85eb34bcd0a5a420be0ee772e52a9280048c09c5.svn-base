@@ -1,0 +1,344 @@
+﻿@using Bkav.eGovCloud.Entities.Enum
+@model DocTypeTimeJobModel
+@{
+    ViewBag.DayOfWeek = new List<SelectListItem>
+    {
+        new SelectListItem{ Text = DayOfWeek.Monday.ToString(), Value = DayOfWeek.Monday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Tuesday.ToString(), Value = DayOfWeek.Tuesday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Wednesday.ToString(), Value = DayOfWeek.Wednesday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Thursday.ToString(), Value = DayOfWeek.Thursday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Friday.ToString(), Value = DayOfWeek.Friday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Saturday.ToString(), Value = DayOfWeek.Saturday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Sunday.ToString(), Value = DayOfWeek.Sunday.ToString()}
+    };
+
+    var allScheduleTypeDueDate = ViewBag.AllScheduleTypeDueDate as List<SelectListItem>;
+}
+<style type="text/css">
+    .schedule-config input {
+        width: 50px;
+        display: inline-block !important;
+    }
+</style>
+<script type="text/javascript">
+    var configDueDate = @(Html.Raw(Model.ScheduleConfigDueDate));
+    $(function () {
+        $("#TimeJob_IsActiveAlert").bind("change", function () {
+            var inf = $(this).parent().parent().siblings();
+            if ($(this).is(":checked")) {
+                inf.show();
+            } else {
+                inf.hide();
+            }
+        });
+
+        $("#TimeJob_ScheduleTypeEnumDueDate").bind("change",function () {
+            var inf = $("." + $(this).val());
+            inf.show();
+            inf.siblings().hide();
+        });
+
+        $("#byDayOfWeekDueDate").bind("change",function () {
+            $(this).parent().find(">div." + $(this).val()).show();
+            $(this).parent().find(">div").not("." + $(this).val()).hide();
+        });
+
+        rebindScheduleConfigDueDate(configDueDate);
+        $('.number').attr("maxlength","2");
+        $('.number').bind('keypress',function(event){
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        });
+    });
+
+    function rebindScheduleConfigDueDate(configDueDate) {
+        var type = configDueDate.Type;
+        switch (type) {
+            case "@DocTypeScheduleTypeDueDate.HangNgayDueDate":
+                $(".@DocTypeScheduleTypeDueDate.HangNgayDueDate .from-hour").val(configDueDate.FromHour);
+                $(".@DocTypeScheduleTypeDueDate.HangNgayDueDate .from-minute").val(configDueDate.FromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangTuanDueDate":
+                $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-dayofweek").val(configDueDate.FromDayOfWeek);
+                $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-hour").val(configDueDate.FromHour);
+                $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-minute").val(configDueDate.FromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangThangDueDate":
+                $("#byDayOfWeekDueDate").val(configDueDate.ByDayOfWeek);
+                if (configDueDate.ByDayOfWeek === "day") {
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day").show();
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek").hide();
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .from-dayofmonth").val(configDueDate.FromDayOfMonth);
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day .from-hour").val(configDueDate.FromHour);
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day .from-minute").val(configDueDate.FromMinute);
+                }
+                else {
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek").show();
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day").hide();
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .to-dayofweek").val(configDueDate.DayOfWeek);
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .weekofmonth").val(configDueDate.WeekOfMonth);
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .from-hour").val(configDueDate.FromHour);
+                    $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .from-minute").val(configDueDate.FromMinute);
+                }
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangQuyDueDate":
+                $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .monthofquarter").val(configDueDate.MonthOfQuarter);
+                $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-dayofmonth").val(configDueDate.FromDayOfMonth);
+                $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-hour").val(configDueDate.FromHour);
+                $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-minute").val(configDueDate.FromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangNamDueDate":
+                $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-month").val(configDueDate.FromMonth);
+                $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-dayofmonth").val(configDueDate.FromDayOfMonth);
+                $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-hour").val(configDueDate.FromHour);
+                $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-minute").val(configDueDate.FromMinute);
+                break;
+            default:
+                break;
+        }
+    }
+
+    function beforeSubmitDueDate() {
+        var scheduleConfigDueDate = {};
+        scheduleConfigDueDate.Type = $("#TimeJob_ScheduleTypeEnumDueDate").val();
+
+        if (!validInput(scheduleConfigDueDate.Type)) {
+            alert("Bạn chưa nhập đúng dữ liệu");
+            return false;
+        }
+
+        switch (scheduleConfigDueDate.Type) {
+            case "@DocTypeScheduleTypeDueDate.HangNgayDueDate":
+                var fromHour = $(".@DocTypeScheduleTypeDueDate.HangNgayDueDate .from-hour").val();
+                var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangNgayDueDate .from-minute").val();
+                scheduleConfigDueDate.FromHour =parseInt( fromHour);
+                scheduleConfigDueDate.FromMinute =parseInt( fromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangTuanDueDate":
+                var fromDayOfWeek = $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-dayofweek").val();
+                var fromHour = $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-hour").val();
+                var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangTuanDueDate .from-minute").val();
+
+                scheduleConfigDueDate.FromDayOfWeek = fromDayOfWeek;
+                scheduleConfigDueDate.FromHour = parseInt(fromHour);
+                scheduleConfigDueDate.FromMinute = parseInt(fromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangThangDueDate":
+                var byDayOfWeek = $("#byDayOfWeekDueDate").val();
+                scheduleConfigDueDate.ByDayOfWeek = byDayOfWeek;
+                if (scheduleConfigDueDate.ByDayOfWeek === "day") {
+                    var fromDayOfMonth = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .from-dayofmonth").val();
+                    var fromHour = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day .from-hour").val();
+                    var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .day .from-minute").val();
+
+                    scheduleConfigDueDate.FromDayOfMonth = fromDayOfMonth;
+                    scheduleConfigDueDate.FromHour = parseInt(fromHour);
+                    scheduleConfigDueDate.FromMinute =parseInt( fromMinute);
+                }
+                else {
+                    var dayOfWeek = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .to-dayofweek").val();
+                    var weekOfMonth = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .weekofmonth").val();
+                    var fromHour = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .from-hour").val();
+                    var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangThangDueDate .dayofweek .from-minute").val();
+
+                    scheduleConfigDueDate.DayOfWeek = dayOfWeek;
+                    scheduleConfigDueDate.WeekOfMonth = weekOfMonth;
+                    scheduleConfigDueDate.FromHour = parseInt(fromHour);
+                    scheduleConfigDueDate.FromMinute = parseInt(fromMinute);
+                }
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangQuyDueDate":
+                var monthOfQuarter = $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .monthofquarter").val();
+                var fromDayOfMonth = $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-dayofmonth").val();
+                var fromHour = $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-hour").val();
+                var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangQuyDueDate .from-minute").val();
+
+                scheduleConfigDueDate.MonthOfQuarter = monthOfQuarter;
+                scheduleConfigDueDate.FromDayOfMonth = fromDayOfMonth;
+                scheduleConfigDueDate.FromHour = parseInt(fromHour);
+                scheduleConfigDueDate.FromMinute = parseInt(fromMinute);
+                break;
+            case "@DocTypeScheduleTypeDueDate.HangNamDueDate":
+                var fromMonth= $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-month").val();
+                var fromDayOfMonth = $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-dayofmonth").val();
+                var fromHour = $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-hour").val();
+                var fromMinute = $(".@DocTypeScheduleTypeDueDate.HangNamDueDate .from-minute").val();
+
+                scheduleConfigDueDate.FromMonth= fromMonth;
+                scheduleConfigDueDate.FromDayOfMonth = fromDayOfMonth;
+                scheduleConfigDueDate.FromHour = parseInt(fromHour);
+                scheduleConfigDueDate.FromMinute = parseInt(fromMinute);
+                break;
+        }
+
+        $("#ScheduleConfigDueDate").val(JSON.stringify(scheduleConfigDueDate));
+        return true;
+    }
+
+    function validInput(type) {
+        var result = true;
+        $(".schedule-config ." + type + " input").each(function () {
+            var value = parseInt($(this).val());
+            if (isNaN(value)) {
+                result = false;
+            }
+            if ($(this).hasClass("minute") && (value < 0 || value > 59)) {
+                result = false;
+            }
+            if ($(this).hasClass("hour") && (value < 0 || value > 23)) {
+                result = false;
+            }
+            if ($(this).hasClass("minute") && (value < 0 || value > 59)) {
+                result = false;
+            }
+        });
+        return result;
+    }
+</script>
+
+<div id="tabsDueDate" class="bkavegov">
+    @Html.HiddenFor(model => model.ScheduleConfigDueDate, new { Name = "TimeJob.ScheduleConfigDueDate" })
+    @Html.HiddenFor(model => model.DocTypeTimeJobId, new { Name = "TimeJob.DocTypeTimeJobId" })
+    @Html.HiddenFor(model => model.DocTypeId, new { Name = "TimeJob.DocTypeId" })
+    <table id="timeJobInfoDate" style="width: 100%">
+        <tr>
+            <td style="width: 20%"></td>
+            <td>
+                @Html.CheckBox("TimeJob.IsActiveAlert", Model.IsActiveAlert)
+                @Html.Label("IsActiveAlert", "Báo cáo theo sắp đến hạn")
+            </td>
+        </tr>
+        <tr style="@(Model.IsActiveAlert ? "" : "display: none")">
+            <td>Cấu hình thời điểm kích hoạt chu kỳ</td>
+            <td>
+                @Html.DropDownList("TimeJob.ScheduleTypeEnumDueDate", allScheduleTypeDueDate) 
+                @* ?????ScheduleTypeEnumDueDate *@
+            </td>
+        </tr>
+        <tr class="schedule-config" style="@(Model.IsActiveAlert ? "" : "display: none")">
+            <td>Thời gian kích hoạt đến hạn:</td>
+            <td>
+                <div class="@DocTypeScheduleTypeDueDate.HangNgayDueDate" style="@(Model.ScheduleTypeEnumDueDate == DocTypeScheduleTypeDueDate.HangNgayDueDate ? "" : "display: none")">
+                    <b>Thực thi hàng ngày</b>
+                    <br />
+                    <div>
+                        Vào lúc
+                        <input type="text" value="0" class="from-hour hour number" />
+                        giờ
+                        <input type="text" value="0" class="from-minute minute number" />
+                        phút
+
+                    </div>
+                </div>
+
+                <div class="@DocTypeScheduleTypeDueDate.HangTuanDueDate" style="@(Model.ScheduleTypeEnumDueDate == DocTypeScheduleTypeDueDate.HangTuanDueDate ? "" : "display: none")">
+                    <b>Thực thi hàng tuần</b>
+                    <br />
+                    <div style="display: inline-flex;">
+                        &nbsp;  Vào thứ &nbsp; @Html.DropDownList("DayOfWeek", null, new { @class = "from-dayofweek", style = "width: 150px" })&nbsp; lúc&nbsp;
+                        <input type="text" value="1" class="from-hour hour number" />
+                        &nbsp;   giờ &nbsp;
+                        <input type="text" value="1" class="from-minute minute number" />
+                        &nbsp;  phút&nbsp;
+                    </div>
+                </div>
+
+                <div class="@DocTypeScheduleTypeDueDate.HangThangDueDate" style="@(Model.ScheduleTypeEnumDueDate == DocTypeScheduleTypeDueDate.HangThangDueDate ? "" : "display: none")">
+                    <b>Thực thi hàng tháng theo </b>
+                    <select id="byDayOfWeekDueDate">
+                        <option value="day">Ngày</option>
+                        <option value="dayofweek">Thứ</option>
+                    </select>
+                    <div class="day">
+                        <div style="display: inline-flex;">
+                            &nbsp; Vào ngày mùng &nbsp;
+                            <select class="from-dayofmonth">
+                                @for (var i = 1; i < 32; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                            &nbsp; lúc&nbsp;
+                            <input type="text" value="1" class="from-hour hour number" />
+                            &nbsp; giờ&nbsp;
+                            <input type="text" value="1" class="from-minute minute number" />
+                            &nbsp;  phút&nbsp;
+                        </div>
+                    </div>
+
+                    <div class="dayofweek" style="display: none">
+                        Vào thứ @Html.DropDownList("DayOfWeek", null, new { @class = "to-dayofweek" }) của
+                        <select class="weekofmonth" style="width: 150px">
+                            <option value="1">Tuần đầu tiên</option>
+                            <option value="2">Tuần thứ 2</option>
+                            <option value="3">Tuần thứ 3</option>
+                            <option value="4">Tuần thứ 4</option>
+                        </select>
+                        của tháng
+                        <br />
+                        Lúc
+                        <input type="text" value="1" class="from-hour hour number" />
+                        giờ
+                        <input type="text" value="1" class="from-minute minute number" />
+                        phút
+                    </div>
+                </div>
+
+                <div class="@DocTypeScheduleTypeDueDate.HangQuyDueDate" style="@(Model.ScheduleTypeEnumDueDate == DocTypeScheduleTypeDueDate.HangQuyDueDate ? "" : "display: none")">
+                    <div style="display: inline-flex; align-items: baseline;">
+                        &nbsp;  Vào  &nbsp;
+                        <select class="monthofquarter" style="width: 150px">
+                            <option value="1">Tháng đầu tiên</option>
+                            <option value="2">Tháng thứ 2</option>
+                            <option value="3">Tháng thứ 3</option>
+                        </select>
+                        &nbsp;  của quý  &nbsp;
+                    </div>
+                    <br />
+                    <div style="display: inline-flex; align-items: baseline;">
+                        &nbsp;  Ngày  &nbsp;
+                        <select class="from-dayofmonth" style="width: 150px">
+                            @for (var i = 1; i < 32; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        &nbsp;  lúc  &nbsp;
+                        <input type="text" value="1" class="from-hour hour number" />
+                        &nbsp;  giờ  &nbsp;
+                        <input type="text" value="1" class="from-minute minute number" />
+                        &nbsp;  phút  &nbsp;
+                    </div>
+                </div>
+
+                <div class="@DocTypeScheduleTypeDueDate.HangNamDueDate" style="@(Model.ScheduleTypeEnumDueDate == DocTypeScheduleTypeDueDate.HangNamDueDate ? "" : "display: none")">
+                    <div style="display: inline-flex;">
+                        &nbsp;  Vào tháng  &nbsp;
+                        <select class="from-month">
+                            @for (var i = 1; i < 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+
+                        &nbsp;  ngày  &nbsp;
+                        <select class="from-dayofmonth">
+                            @for (var i = 1; i < 32; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        &nbsp; lúc&nbsp;
+                        <input type="text" value="1" class="from-hour hour number" />
+                        &nbsp; giờ&nbsp;
+                        <input type="text" value="1" class="from-minute minute number" />
+                        &nbsp;  phút&nbsp;
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

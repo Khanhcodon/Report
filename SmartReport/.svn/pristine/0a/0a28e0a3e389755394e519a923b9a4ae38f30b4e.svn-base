@@ -1,0 +1,426 @@
+﻿@using Bkav.eGovCloud.Core.Utils;
+@model RoleModel
+@{
+    var allUsers = ViewBag.AllUsers as string;
+    var selectedUsers = ViewBag.SelectedUsers as string;
+    var permissionsSelected = ViewBag.PermissionsSelected as string;
+    var permissionsInSystem = ViewBag.PermissionsInSystem as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.PermissionModel>;
+
+    var permissionsInSystemArr = permissionsInSystem.Select(p => new { p.PermissionId, p.PermissionName }).Stringify();
+}
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.RoleId)
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+</style>
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var selectedUserIds = @(string.IsNullOrEmpty(selectedUsers) ? MvcHtmlString.Create("[]") : Html.Raw(selectedUsers));
+    var permissionsInSystemArr = @(string.IsNullOrEmpty(permissionsInSystemArr) ? MvcHtmlString.Create("[]") : Html.Raw(permissionsInSystemArr));
+    var selectedUsers = [];
+
+    $(function() { 
+        $('input.input-validation-error').first().focus();        
+        
+        var roleKeyRecent;  //gia tri roleKey gần nhất
+        var checkErrorRoleKey = false;//không có lỗi tồn tại mã nhóm
+        $("#RoleKey").focus(function(){            
+            roleKeyRecent = $(this).val();
+        });
+
+        $("#RoleKey").focusout(function(){
+            var oldRoleKey = "@(Model.RoleKey)";
+            if($(this).val() != oldRoleKey){
+                if($(this).val() != "" && $(this).val() != roleKeyRecent
+                    && $(this).hasClass("input-validation-error") == false){ 
+                    //nếu giá trị thay đổi và không có lỗi gì trước đó
+                    var roleKey = $(this).val();
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: '@Url.Action("IsExistRoleKey")',
+                        data: { roleKey: roleKey, oldRoleKey: oldRoleKey},
+                        success: function(data) {                         
+                            if(typeof data.error != 'undefined')  {
+                                $("#RoleKey").siblings("span.field-validation-valid").html(data.error).css({color:'red'}).show();
+                                $("#RoleKey").addClass("input-validation-error");
+                                checkErrorRoleKey = true;
+                            }
+                            else if(typeof data.success != 'undefined')  {
+                                $("#RoleKey").siblings("span.field-validation-valid").html("").hide();
+                                $("#RoleKey").removeClass("input-validation-error");
+                                checkErrorRoleKey = false;
+                            }
+                        }
+                    });                
+                }else if(checkErrorRoleKey && $("#RoleKey").valid()){
+                    $("#RoleKey").siblings('span.field-validation-valid').html("@Localizer("Role.CreateOrEdit.Fields.RoleKey.Exist")").css({color:'red'}).show();
+                    $("#RoleKey").addClass("input-validation-error"); 
+                    return false;
+                }
+        }
+        });
+
+        $("#selectedUser").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedUser").val('');
+                var exist = _.find(selectedUsers, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUsers.push(selected);
+                        var noresult = $("#tblUser tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedUserTemplate")
+                            .tmpl(selected, { 
+                                getNumbers: function() {
+                                    return selectedUsers.length;
+                                }
+                            })
+                            .appendTo("#tblUser tbody");
+                        $("#tblUser").grid('refresh');
+                    }
+                }
+                return false;
+            }
+        })
+            .data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+            };
+
+        $("#selectedUser").keypress(function(e) {
+            if(e.keyCode == 13) {
+                return false;
+            }
+            return true;
+        });
+        
+        if(selectedUserIds == null || (selectedUserIds != null && selectedUserIds.length == 0)) {
+            $("#tblUser tbody").append("<tr id='noresult'><td colspan='5' data-res='egov.resources.role.nodata'>Chưa có người dùng nào</td></tr>");
+        } else {
+            var numbers = 1;
+            selectedUsers = _.filter(allUsers,
+                function(user) {
+                    return _.indexOf(selectedUserIds, user.value) > -1;
+                });
+            selectedUsers = _.sortBy(selectedUsers, function(user) {
+                return user.username;
+            });
+
+            $("#selectedUserTemplate")
+                .tmpl(selectedUsers, { 
+                    getNumbers: function() {
+                        return numbers++;
+                    }
+                })
+                .appendTo("#tblUser tbody");
+        }
+
+        //$("#tblUser").grid({
+        //    isResizeColumn: false,
+        //    isFixHeightContent: false
+        //});
+
+        //$("#tblPermission").grid({
+        //    isResizeColumn: false,
+        //    isFixHeightContent: false
+        //});
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+
+function removeUser(id) {
+    selectedUsers = _.reject(selectedUsers, function(user) {
+        return user.value === id;
+    });
+    if(selectedUsers.length > 0) {
+        $("#tblUser tbody tr#" + id).remove();
+        $("#tblUser tbody tr td:first-child").each(function(index, el) {
+            $(el).text(index + 1);
+        });
+    } else {
+        $("#tblUser tbody").html("<tr id='noresult'><td colspan='5' data-res='egov.resources.role.nodata'>Chưa có người dùng nào</td></tr>");
+    }
+    $("#tblUser").grid('refresh');
+}
+</script>
+
+<script type="text/javascript">
+    var images = {
+        "IgnorePermissionIds": "@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")",
+        "GrantPermissionIds": "@Url.Content("~/Content/Images/Grant_16X16_Standard.png")"
+    };
+    var tooltips = {
+        "IgnorePermissionIds": "",
+        "GrantPermissionIds":  "@("Common.Allow")"
+    };
+
+    $(function() {
+        var permissionsSelected = @(string.IsNullOrEmpty(permissionsSelected) ? MvcHtmlString.Create("[]") : Html.Raw(permissionsSelected));
+
+        var allHidden = $("input[name=IgnorePermissionIds]");
+        $.each(permissionsSelected, function(index, permission) {
+            var hidden = _.find(allHidden, function(item) {
+                return item.value == permission.PermissionId;
+            });
+            if(hidden) {
+                var checkbox = $(hidden).siblings("img");
+                if(permission.AllowAccess) {
+                    $(hidden).attr("name", "GrantPermissionIds");
+                    checkbox.attr("src", images.GrantPermissionIds);
+                    checkbox.attr("alt", tooltips.GrantPermissionIds);
+                }
+            }
+        });
+
+        $(".check").click(function() {
+            var hidden = $(this).siblings("input");
+            if(hidden.attr("name") == "IgnorePermissionIds") {
+                hidden.attr("name", "GrantPermissionIds");
+                this.src = images.GrantPermissionIds;
+                this.alt = tooltips.GrantPermissionIds;
+            } else if(hidden.attr("name") == "GrantPermissionIds") {
+                hidden.attr("name", "IgnorePermissionIds");
+                this.src = images.IgnorePermissionIds;
+                this.alt = tooltips.IgnorePermissionIds;
+            }
+        });
+
+        $('#tablist a').bind("click", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            $("#tabsChild>div").hide();
+            $(id).show();
+            $(id).find('input[type=text]').first().focus();
+        });
+
+        $("#findRole").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( permissionsInSystemArr, function( value ) {
+                    return matcher.test( value.PermissionName )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.PermissionName ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#findRole").val('');
+                var exist = _.find(permissionsInSystemArr, function(user) {
+                    return user.PermissionId === ui.item.PermissionId;
+                });
+
+                if (exist) {
+                    var isAdd = $("#addOrRemoveRole").prop("checked");
+                    var _el= $("#tblPermission tr[data-roldid='"+exist.PermissionId+"']").find('.check');
+                    if(_el){
+                        var hidden = $(_el).siblings("input");
+                        if(isAdd){  
+                            if(hidden.attr("name") == "IgnorePermissionIds") {
+                                hidden.attr("name", "GrantPermissionIds");
+                                $(_el).attr('src' , images.GrantPermissionIds)
+                                    . attr( 'alt' ,tooltips.GrantPermissionIds);
+                            } 
+                        }
+                        else{
+                            if(hidden.attr("name") == "GrantPermissionIds") {
+                                hidden.attr("name", "IgnorePermissionIds");
+                                $(_el).attr('src' , images.IgnorePermissionIds)
+                                    . attr( 'alt' ,tooltips.IgnorePermissionIds);
+                            }
+                        }                        
+                    }                  
+                }
+                return false;
+            }
+        })
+           .data("autocomplete")._renderItem = function(ul, item) {
+               return $("<li></li>")
+                   .data("item.autocomplete", item)
+                   .append("<a>" + item.PermissionName + "</a>")
+                   .appendTo(ul);
+           };
+    });
+</script>
+<style>
+    .tab {
+        margin-top: 20px;
+    }
+</style>
+<div id="tabsChild" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist">
+        <li class="active"><a href="#tabs-1" role="tab" data-toggle="tab">@Localizer("Role.CreateOrEdit.Tab.Role")</a></li>
+        <li><a href="#tabs-2" role="tab" data-toggle="tab">@Localizer("Role.CreateOrEdit.Tab.User")</a></li>
+        <li><a href="#tabs-3" role="tab" data-toggle="tab">@Localizer("Role.CreateOrEdit.Tab.Permission")</a></li>
+    </ul>
+    <div id="tabs-1" class="tab">
+        <table>
+            <tr>
+                <td style="width: 20%">
+                    @Html.EgovLabelFor(model => model.RoleKey, true):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.RoleKey)
+                    @Html.ValidationMessageFor(model => model.RoleKey)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.EgovLabelFor(model => model.RoleName, true):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.RoleName)
+                    @Html.ValidationMessageFor(model => model.RoleName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.EgovLabelFor(model => model.Description, true):
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.Description)
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.IsAutoAssignment):
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsAutoAssignment)
+                    @Html.ValidationMessageFor(model => model.IsAutoAssignment)
+                </td>
+            </tr>
+            @if (Model.RoleId > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.LabelHintFor(model => model.IsActivated):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.IsActivated)
+                        @Html.ValidationMessageFor(model => model.IsActivated)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="tabs-2" class="tab" style="display: none">
+        <p>
+            @Localizer("Role.CreateOrEdit.Fields.SelectedUser.Label"):
+            <input id="selectedUser" class="form-control" style="display: inline; width: 60%"  type="text"/>
+        </p>
+        <div id="divListRoles">
+            <table class="table-main table" id="tblUser">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col style="width: 200px" />
+                    <col />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.tableheader.stt"></th>
+                        <th class="header" data-res="egov.resources.user.username"></th>
+                        <th class="header" data-res="egov.resources.user.fullname"></th>
+                        <th class="header text-center" data-res="egov.resources.tableheader.delete"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="tabs-3" class="tab" style="display: none">
+        <p>
+            <span data-res="egov.resources.role.rolename">Tên quyền</span>:
+            <input type="text" id="findRole" name="findRole" style="width: 30%; display: inline" />
+            <label>
+                <span data-res="egov.resources.tableheader.addordelete">Thêm/bỏ</span>:
+            <input type="checkbox" name="addOrRemoveRole" id="addOrRemoveRole"
+                checked="checked" style="display: inline" /></label>
+        </p>
+        <table class="table-main table" id="tblPermission">
+            <colgroup>
+                <col style="width: 250px" />
+                <col />
+                <col style="width: 60px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res="egov.resources.role.rolename"></th>
+                    <th class="header" data-res="egov.resources.tableheader.description"></th>
+                    <th class="header" data-res="egov.resources.tableheader.select"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (permissionsInSystem != null && permissionsInSystem.Any())
+                {
+                    var groups = permissionsInSystem.GroupBy(p => p.ModuleName);
+                    foreach (var group in groups)
+                    {
+                    <tr>
+                        <td colspan="3">
+                            <i><b>@group.Key</b></i>
+                        </td>
+                    </tr>
+                        foreach (var permission in group)
+                        {
+                    <tr data-roldid="@permission.PermissionId">
+                        <td>@permission.PermissionName
+                        </td>
+                        <td>@permission.Description
+                        </td>
+                        <td style="text-align: center">
+                            <img src="@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")" alt="" class="check" />
+                            <input type="hidden" value="@permission.PermissionId" name="IgnorePermissionIds"/>
+                        </td>
+                    </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script id="selectedUserTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td>${username}<input type="hidden" name="UserIds" value="${value}" /></td>
+        <td>${fullname}</td>
+        <td style="text-align: center">
+            <a href="javascript:removeUser(${value})"
+                data-res="egov.resources.tableheader.delete">@Localizer("Common.Button.Delete")</a></td>
+    </tr>
+</script>

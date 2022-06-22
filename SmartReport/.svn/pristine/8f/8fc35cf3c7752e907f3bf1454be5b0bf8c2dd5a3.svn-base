@@ -1,0 +1,50 @@
+﻿@model ProcessFunctionTypeModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.EditFunctionType");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout-3.3.0.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.mapping-latest.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/knockout/knockout.validation.js"></script>
+<script type="text/javascript">
+    function deleteType(id) {
+        eGovMessage.show(
+            '@Localizer("Common.Confirm.Delete")',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete").submit();
+            }
+        );
+    }
+</script>
+@using (Html.BeginForm())
+{
+    <div class="bkavegov-content-title">
+        <h3 data-res="egov.resources.processfunction.updatenodetype">Cập nhật loại node</h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.SetupNode"), "Index")</li>
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.NodeList"), "ListFunctionType")</li>
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "CreateFunctionType")</li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            @Html.Partial("_CreateOrEditFunctionType", Model)
+            @Html.AntiForgeryToken()
+            <div>
+                <button type="submit" name="save" value="save">@Localizer("Common.Button.Save")</button>
+                <button type="button" id="delete" name="delete" value="delete" onclick="deleteType(@Model.ProcessFunctionTypeId)">@Localizer("Common.Button.Delete")</button>
+                <button type="button" onclick="location.href='@Url.Action("ListFunctionType")'">@Localizer("Common.Button.Back")</button>
+            </div>
+        </div>
+    </div>
+}
+<form id="formdelete" style="display: none" action="@Url.Action("DeleteFunctionType", new { Id = Model.ProcessFunctionTypeId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

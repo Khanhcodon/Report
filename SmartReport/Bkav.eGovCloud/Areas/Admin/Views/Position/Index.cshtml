@@ -1,0 +1,53 @@
+﻿@model IEnumerable<PositionModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Position.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteResource(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Customer.Position.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListPositions").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListPositions').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListPositions').unblockpanel();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user4"></i>
+        <span data-res="egov.resources.sitemap.position"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/position/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div id="divListPositions">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

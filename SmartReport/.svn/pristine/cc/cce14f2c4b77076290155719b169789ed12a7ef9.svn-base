@@ -1,0 +1,287 @@
+﻿@{
+    Layout = null;
+}
+
+@*Lưu ý: giữ nguyên style inline để export*@
+
+<script type="text/x-jquery-tmpl" id="xlvb_overview">
+    <tr class="text-center {{if IsParent}}isParent{{/if}}" style="{{if IsParent}}text-align: center; font-weight: bold; color: #4242c5;{{/if}}" data-type="${TypeStatistics}" data-dept="${ParrentName}" data-click="{{if TypeStatistics == 1}}department{{else}}user{{/if}}">
+        <td style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">${Name}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${PreExtisting}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${PreExtisting_Overdue}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${NewReception}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalSolved}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime_DeBiet}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime_XuLy}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate_DeBiet}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate_XuLy}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalPending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${PendingLate}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_overview_basic">
+    <tr class="text-center {{if IsParent}}isParent{{/if}}" style="{{if IsParent}}text-align: center; font-weight: bold; color: #4242c5;{{/if}} {{if !IsShowAll }}display:none;{{/if}} " data-type="${TypeStatistics}" data-dept="${ParrentName}" data-click="{{if TypeStatistics == 1}}department{{else}}user{{/if}}" data-userid="${UserId}">
+        <td style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">${Name}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${NewReception}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalSolved}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalPending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${Pending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${PendingLate}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_tong_hoibao">
+    <tr class="text-center {{if IsParent}}isParent{{/if}}" style="{{if IsParent}}text-align: center; font-weight: bold; color: #4242c5;{{/if}}" data-type="1" data-click="addresshoibao" data-addressname="${Name}">
+        <td style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">${Name}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${NewReception}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalSolved}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalPending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${Pending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${PendingLate}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_tong_di_hoibao">
+    <tr class="text-center {{if IsParent}}isParent{{/if}}" style="{{if IsParent}}text-align: center; font-weight: bold; color: #4242c5;{{/if}} {{if !IsShowAll }}display:none;{{/if}} " data-type="${TypeStatistics}" data-dept="${ParrentName}" data-click="{{if TypeStatistics == 1}}vbdi{{else}}vbdiuser{{/if}}" data-userid="${UserId}">
+        <td style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">${Name}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${Total}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${NewReception}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalSolved}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalPending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${Pending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${PendingLate}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_tong_hb">
+    <tr class="text-center {{if IsParent}}isParent{{/if}}" style="{{if IsParent}}text-align: center; font-weight: bold; color: #4242c5;{{/if}} {{if !IsShowAll }}display:none;{{/if}} " data-type="${TypeStatistics}" data-dept="${ParrentName}" data-click="hoibao" data-userid="${UserId}">
+        <td style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">${Name}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center; ">${NewReception}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalSolved}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedInTime}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${SolvedLate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${TotalPending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${Pending}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px; text-align: center;">${PendingLate}</td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_overview_detail">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}" data-id="overview">
+        <td colspan="10">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}hidden{{/if}}" group-data="${GroupName}" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserFullName}</td>        
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${FromDate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DateOverdue}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${StatusName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${StatusDXLName}</td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_overview_detail_1">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="10">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserFullName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${FromDate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DateOverdue}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDate}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${StatusName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${StatusDXLName}</td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_phathanh">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="8">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserSuccess}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ProcessInfo}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${InOutPlace}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;"></td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_hoibao">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="11">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}hidden{{/if}}" group-data="${GroupName}" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AnswerDocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode} <br/> ngày ${DatePublished} </td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        @*<td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>*@
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCodeResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_hoibao_1">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="11">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AnswerDocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode} <br /> ngày ${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCodeResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_hoibao_di">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="11">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}hidden{{/if}}" group-data="${GroupName}" style="font-weight: bold; color: #000000;" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserSuccess}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+    {{each  ListResponse }}
+    <tr class="{{if GroupName}}hidden{{/if}}" group-data="${GroupName}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${$data.Index + 1}.${$index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserSuccess}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCodeResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+
+    {{/each}}
+    {{/if}}
+</script>
+
+
+
+<script type="text/x-jquery-tmpl" id="xlvb_hoibao_di_1">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="11">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}" style="font-weight: bold; color: #000000;" data-click="document" data-doccopyid="${DocumentCopyId}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserSuccess}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+    {{each  ListResponse }}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${$data.Index + 1}.${$index + 1}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AddressName}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${UserSuccess}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ToDateResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCodeResponsed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${RequireResponseStatusName}</td>
+    </tr>
+
+    {{/each}}
+    {{/if}}
+</script>
+
+
+<script type="text/x-jquery-tmpl" id="xlvb_sovbden">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="9">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}">
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DateArrived}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${InOutCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Organization}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DocCode}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DatePublished}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${Compendium}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${ProcessInfo}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${DateAppointed}</td>
+        <td style="border: 1px solid #e7e9fd;padding: 5px 8px;">${AnswerDocCode}</td>
+    </tr>
+    {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="xlvb_sovbdi">
+    {{if IsGroup}}
+    <tr class="isParent" group-by="${GroupName}" style="font-weight: bold; color: #4242c5;" data-count="${GroupCount}">
+        <td colspan="7">${GroupName} (${GroupCount})</td>
+    </tr>
+    {{else}}
+    <tr class="{{if GroupName}}{{/if}}" group-data="${GroupName}">
+        <td>${DatePublished}</td>
+        <td>${DocCode}</td>
+        <td>${Compendium}</td>
+        <td>${UserSuccess}</td>
+        <td>${ProcessInfo}</td>
+        <td>${InOutPlace}</td>
+        <td></td>
+    </tr>
+    {{/if}}
+</script>

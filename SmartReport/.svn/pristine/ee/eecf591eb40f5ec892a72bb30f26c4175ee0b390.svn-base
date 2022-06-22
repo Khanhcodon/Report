@@ -1,0 +1,215 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="home-statictis">
+    <div class="xlvb-stat">
+        <div class="content-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Tổng hợp xử lý văn bản</div>
+                <div class="panel-body">
+                    <div class="col-md-5">
+                        <div class="lookup-statistic" id="xlvb_statisticTotal">
+                            <div class="statistic-label">
+                                <div>
+                                    <span class="statistic-time"></span>
+                                    <a href="#" class="statistic-detail">
+                                        <i class="material-icons" style="font-size: 14px;">chevron_right</i>
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="statistic-piechat" style="margin-top: 0px;">
+                                <div class="statistic-percen"></div>
+                                <div class="statistic-process">Đúng hẹn</div>
+                            </div>
+                            <div id="xlvb_piechart" style="margin-top: 30px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-1 col-md-10">
+                        <div id="xlvb_columnChart" style="height: 300px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hsmc-stat">
+        <div class="content-body">
+            <div class="panel panel-success">
+                <div class="panel-heading">Tổng hợp xử lý Hồ sơ một cửa</div>
+                <div class="panel-body">
+                    <div class="col-md-5">
+                        <div class="lookup-statistic" id="statisticTotal">
+                            <div class="statistic-label">
+                                <div>
+                                    <span class="statistic-time"></span>
+                                    <a href="#" class="statistic-detail">
+                                        <i class="material-icons" style="font-size: 14px;">chevron_right</i>
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="statistic-piechat">
+                                <div class="statistic-percen"></div>
+                                <div class="statistic-process">Đúng hẹn</div>
+                            </div>
+                            <div id="hsmc_piechart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-2 col-md-9">
+                        <div class="lookup-statistic-office" data-ride="carousel" id="statisticOffice">
+
+                            <ol class="carousel-indicators"></ol>
+
+                            <div class="carousel-inner">
+
+                            </div>
+
+                            <a class="left carousel-control" href="#statisticOffice" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            </a>
+                            <a class="right carousel-control" href="#statisticOffice" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <div class="loader" style="display:none">
+                            <svg width='60px' height='60px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default">
+                                <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(0 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(30 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.08333333333333333s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(60 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.16666666666666666s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(90 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.25s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(120 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.3333333333333333s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(150 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.4166666666666667s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(180 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(210 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5833333333333334s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(240 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.6666666666666666s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(270 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.75s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(300 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.8333333333333334s' repeatCount='indefinite' /></rect>
+                                <rect x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(330 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.9166666666666666s' repeatCount='indefinite' /></rect>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dvc-stat">
+        <div class="content-body">
+            <div class="panel panel-info">
+                <div class="panel-heading">Tình hình Đăng ký hồ sơ trực tuyến</div>
+                <div class="panel-body">
+                    <div class="col-md-5">
+                        <div class="lookup-statistic" id="dvc_statisticTotal">
+                            <div class="statistic-label">
+                                <div>
+                                    <span class="statistic-time"></span>
+                                    <a href="#" class="statistic-detail">
+                                        <i class="material-icons" style="font-size: 14px;">chevron_right</i>
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="statistic-piechat" style="margin-top: 0px;">
+                                <div class="statistic-percen"></div>
+                                <div class="statistic-process">Đúng hẹn</div>
+                            </div>
+                            <div id="dvc_piechart" style="margin-top: 30px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-1 col-md-10">
+                        <div id="dvc_columnChart" style="height: 300px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bmm-stat">
+        <div class="panel panel-warning">
+            <div class="panel-heading">Nhiệm vụ</div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+    <div class="vote-stat">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Tổng hợp đánh giá</div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    google.load("visualization", "1", {
+        packages: ["corechart", "bar"], callback: function () {
+            homeStatictis.showHsmc();
+            homeStatictis.showDvc();
+            homeStatictis.showXlvb();
+        }
+    });
+</script>
+
+
+<script type="text/x-jquery-tmpl" id="statisticTemp">
+    <div class="statistic-label">
+        ${OfficeName}
+    </div>
+    {{if error}}
+    <div style="color:red">Không lấy được dữ liệu báo cáo</div>
+    {{else}}
+    <div class="row">
+        <div class="col-md-8">
+            <b>Tổng số hồ sơ:<span class="badge">${Statistic.Total}</span></b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            Tồn kỳ trước:<span class="badge">${Statistic.PreExtisting}</span>
+        </div>
+        <div class="col-md-8">
+            Nhận trong kỳ:<span class="badge">${Statistic.NewReception}</span>
+        </div>
+    </div>
+    <div class="row statistic-document">
+        <div class="col-md-8">
+            <div>
+                Đã xử lý:
+                <span class="badge undue">${Statistic.TotalSolved}</span>
+            </div>
+            <div class="percen-bar">
+                <div class="undue" style="width: ${Statistic.SolvedInTimePercent}%"></div>
+                <div class="overdue" style="width: ${Statistic.SolvedLatePercent}%"></div>
+            </div>
+            <div>
+                Đúng hẹn:
+                <span class="badge undue">${Statistic.SolvedInTime}</span>
+            </div>
+            <div>
+                Trễ hẹn:
+                <span class="badge overdue">${Statistic.SolvedLate}</span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div>
+                Chưa xử lý:
+                <span class="badge overdue">${Statistic.TotalPending}</span>
+            </div>
+            <div class="percen-bar">
+                <div class="undue" style="width: ${Statistic.PendingPercent}%"></div>
+                <div class="overdue" style="width: ${Statistic.PendingLatePercent}%"></div>
+            </div>
+            <div>
+                Trong hạn:
+                <span class="badge undue">${Statistic.Pending}</span>
+            </div>
+            <div>
+                Quá hạn:
+                <span class="badge overdue">${Statistic.PendingLate}</span>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</script>

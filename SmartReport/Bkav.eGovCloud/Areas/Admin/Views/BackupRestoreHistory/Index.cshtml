@@ -1,0 +1,224 @@
+﻿@model BackupRestoreHistorySearchModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreHistory.Title.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var exist = (bool)ViewBag.ExistFile;
+}
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.min.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('input[type="submit"]').first().focus();
+        $('#deleteHistorys').bind("click", function () {
+            if ($("#formdelete input[name=ids]").length > 0) {
+                eGovMessage.show(
+                    '@Html.Raw(Localizer("Customer.BackupRestoreHistory.ConfirmMessage"))',
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $("#formdelete").submit();
+                    }
+                );
+            } else {
+                eGovMessage.show("@Localizer("Customer.BackupRestoreHistory.NotSelectToDelete")");
+            }
+        });
+
+        $("#FromDate,#ToDate").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var filename = data.files[0].name;
+                if (filename.indexOf(".rpt", filename - ".rpt".length) !== -1) {
+                    data.submit();
+                }
+                else {
+                    eGovMessage.notification("@Localizer("Admin.Report.Upload.Extention.RPTOnly")", eGovMessage.messageTypes.error);
+                }
+            },
+            done: function (e, data) {
+                var result = data.result;
+                if (result.success) {
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                }
+                else if (result.error) {
+                    eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                }
+            },
+            fail: function (e, data) {
+                eGovMessage.notification("@Localizer("Common.Error.DownloadFile")", eGovMessage.messageTypes.error);
+            }
+        });
+    });
+
+        function onBegin() {
+            $("#divBackupRestore").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divBackupRestore').unblockpanel();
+        }
+
+        function onFailure() {
+            eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            $('#divBackupRestore').unblockpanel();
+        }
+
+        function searchHistory(_el) {
+            var action = '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val();
+            $(_el).parent().attr('action', action);
+        }
+
+        function onSubmit(_el) {
+            searchHistory(_el);
+            $(_el).parent().submit();
+        }
+
+        function download() {
+            var link = '@Url.Action("Download", "BackupRestoreHistory")';
+            $.fileDownload(link, {
+                failCallback: function (response) {
+                    var html = $(response);
+                    try {
+                        var json = JSON.parse(html.text());
+                        alert(json.error);
+                    } catch (e) {
+                        alert('@Html.Raw(Localizer("Common.Error.DownloadFile"))');
+                    }
+                }
+            });
+        }
+
+        function getData() {
+            var data = {
+                Domain: $("#Domain").val(),
+                Type: $("#Type").val(),
+                FromDate: $("#FromDate").val(),
+                ToDate: $("#ToDate").val()
+            };
+
+            return data;
+        }
+
+        function exportToFile(_this) {
+            var type = $(_this).val();
+            if (type == null || type == '') {
+                return;
+            }
+
+            var data = getData();
+            data.exportKey = type;
+            var selectedIds = [];
+            $("#tblHistory input[name='ids']").each(function () {
+                if ($(this).prop('checked')) {
+                    selectedIds.push(parseInt($(this).attr('value')));
+                }
+            });
+
+            data.selectedIds = JSON.stringify(selectedIds);
+            var link = '@Url.Action("ExportToFile", "BackupRestoreHistory")';
+            $.fileDownload(link, {
+                data: data,
+                httpMethod: "Post",
+                failCallback: function (response) {
+                    var html = $(response);
+                    try {
+                        var json = JSON.parse(html.text());
+                        alert(json.error);
+                    } catch (e) {
+                        alert('@Html.Raw(Localizer("Common.Error.DownloadFile"))');
+                    }
+                }
+            });
+        }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-database"></i>
+        <span data-res="egov.resources.sitemap.backuprestorehistory"></span>
+    </div>
+
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="/admin/BackupRestoreHistory/create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+        <a class="btn control-btn btn-warning" id="deleteHistorys" href="#">
+            <span class="icon icon-close"></span>
+            <span class="text-uppercase">@Localizer("Common.Button.Delete")</span>
+        </a>
+    </div>
+</div>
+<div>
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search", null, new AjaxOptions
+    {
+        UpdateTargetId = "divBackupRestore",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }, new { @id = "formSearch", @class = "form-inline" }))
+    {
+        @Html.LabelFor(model => model.Domain)
+        @Html.TextBoxFor(model => model.Domain, new { @style = "width: 300px;margin-left:5px;margin-right:5px;" })
+        @Html.LabelFor(model => model.Type)
+
+        <select id="Type" name="Type" style="width: 100px; margin-left: 5px; margin-right: 5px;" onchange="onSubmit(this);">
+            <option value="">@Localizer("Common.All.Label")</option>
+            <option value="True" @((Model.Type.HasValue && Model.Type.Value) ? "selected" : "")>Backup</option>
+            <option value="False" @((Model.Type.HasValue && !Model.Type.Value) ? "selected" : "")>Restore</option>
+        </select>
+
+        @Html.LabelFor(model => model.FromDate)
+        @Html.TextBoxFor(model => model.FromDate, new { @style = "width: 100px;margin-left:5px;margin-right:5px;" })
+        @Html.LabelFor(model => model.ToDate)
+        @Html.TextBoxFor(model => model.ToDate, new { @style = "width: 100px;margin-left:5px" })
+
+        <input type="submit" value="@Localizer("Common.Log.Index.Search.Button.Search")" class="btn" onclick="searchHistory(this)" />
+    }
+
+    <br />
+    <div id="divBackupRestore">
+        @Html.Partial("_PartialList")
+    </div>
+
+    <div style="clear: both"></div>
+    <div class="function" style="clear: both; position: absolute; display: inline; width: 100%">
+        <input class="btn" type="button" value="@Localizer("Admin.BackupRestoreHistory.UploadFile")" onclick="$('#upload').click()" />
+        <input class="btn" type="file" name="file" id="upload" style="display: none;"
+            data-url="@Url.Action("Upload", "BackupRestoreHistory")" accept="*.rpt" />
+        @if (exist)
+        {
+            <input class="btn" type="button" value="@Localizer("Admin.BackupRestoreHistory.DownloadFile")" name="download" onclick="download()" />
+            @:&nbsp;
+            <p style="display: inline">@Localizer("Admin.BackupRestoreHistory.ExportToFile"): </p>
+            <select class=" form-control" onchange="exportToFile(this)" style="display: inline; width: 150px">
+                <option value="">@Localizer("Common.Choose.Label")</option>
+                <option value="WORD">WORD</option>
+                <option value="EXCELL">EXCELL</option>
+                <option value="PDF">PDF</option>
+            </select>
+        }
+    </div>
+</div>

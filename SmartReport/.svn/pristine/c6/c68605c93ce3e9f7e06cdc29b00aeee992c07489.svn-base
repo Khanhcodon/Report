@@ -1,0 +1,177 @@
+﻿@model IEnumerable<FormModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as FormSearchModel;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#delete").remove();
+        $("#tblForm@(ViewData["isPrimary"])").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblForm@(ViewData["isPrimary"])").openLink({ urlOpen: '/admin/Form/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+</script>
+<table class="table-main table table-hover" id="tblForm@(ViewData["isPrimary"])">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 80px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" data-res="egov.resources.tableheader.STT">
+                Stt
+            </th>
+            <th class="header">
+             @Ajax.SortLink("FormName", Localizer("Common.Form.Index.List.Column.FormName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        search = search,
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListForm",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Ajax.SortLink("IsActivated", Localizer("Common.Form.Index.List.Column.IsActivated"),
+                    sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                    "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        search = search,
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListForm",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header" data-res="egov.resources.form.config">
+                Cấu hình
+            </th>
+            <th class="header" data-res="egov.resources.tableheader.edit">
+            </th>
+            <th class="header" data-res="egov.resources.tableheader.delete">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var form in Model)
+            {
+                number += 1;
+            <tr data-id="@form.FormId">
+                <td>@number
+                </td>
+                <td class="td-filter">@form.FormName
+                </td>
+                <td>
+                    @if (form.IsActivated == 1)
+                    {
+                       @:<span data-res="egov.resources.form.status1">đang sử dụng</span>
+                    }
+                    else if (form.IsActivated == 2)
+                    {
+                         @:<span data-res="egov.resources.form.status2">không sử dụng</span>
+                    }
+                    else
+                    {
+                         @:<span data-res="egov.resources.form.status3">mẫu lưu tạm</span>
+                    }
+                </td>
+                <td>
+                    @{
+                    var url = string.Empty;
+                    if (form.FormTypeId == 1)
+                    {
+                        url = Url.Action("ConfigTemplate", new { id = form.FormId });
+                    }
+                    else if (form.FormTypeId == 2)
+                    {
+                        url = Url.Action("ConfigForm", new { id = form.FormId });
+                    }
+                    
+                   var openner = url == string.Empty ? "" :
+                     "window.open(" + url + ", 'DialogName', 'height=800, width=1000, modal=yes, alwaysRaised=yes')";
+                    }
+                    @if (form.FormTypeId == 1 || form.FormTypeId == 2)
+                    {
+                        <a href="#" onclick="window.open('@url', 'DialogName', 'height=1000, width=1200, modal=yes, alwaysRaised=yes')" data-res="egov.resources.form.config">
+                            Cấu hình
+                        </a>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Catalog.Index.List.Column.Edit.Button"), "Edit", new { Id = form.FormId })
+                </td>
+                <td>
+
+                    <a href="javascript:deleteForm('@(form.FormId)')">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(form.FormId)" style="display: none" action="@Url.Action("Delete", new { Id = form.FormId })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" data-res="egov.resources.form.config">
+                    Không có mẫu nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                <div class="grid-pager grid-pager-wrap grid-pager-bottom" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  FormGroupId = search.FormGroupId,
+                                  FormTypeId = search.FormTypeId,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divListForm",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    <script>
+        $(function () {
+            $("body").bindResources();
+        });
+
+    </script>

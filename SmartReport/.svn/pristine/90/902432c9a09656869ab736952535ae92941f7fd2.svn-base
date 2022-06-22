@@ -1,0 +1,17 @@
+﻿<a class="wraptext{{if totalDocumentUnread > 0}} totalUnread{{/if}}" data-open="false" href="#">
+    <span class="material-icons {{if state == 'closed'}}closed{{/if}} menu-icon pull-left" {{if state == 'closed'}} 
+          data-toggle="collapse" data-parent="#child${parentId}" data-target="#child${functionId}" {{/if}}>chevron_right</span>
+    <span class="badge qtooltip totalUnread" data-totalunread="${totalDocumentUnread}" title="${totalDocumentUnread} chưa đọc / ${totalDocument} văn bản">
+        {{if totalDocumentUnread > 0}}
+        {{if totalDocumentUnread > 99}}
+        99+
+        {{else}}
+        ${totalDocumentUnread}
+        {{/if}}
+        {{/if}}
+    </span>
+    <span>${name}</span>
+</a>
+{{if state == 'closed'}}
+<ul class="mdl-list" id="child${functionId}" role="menu"></ul>
+{{/if}} 

@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "eGov Cloud";
+    ViewBag.IsShowNotify = true;
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+    var hasOnlineRegistration = (bool)ViewBag.HasOnlineRegistration;
+    var allTreeGroups = ViewBag.AllTreeGroups as IEnumerable<Bkav.eGovCloud.Models.TreeGroupModel>;
+
+}
+
+<div class="col-xs-16 col-sm-5 dataList">
+    <div class="navbar main-bg-color" id="multiselectionbar">
+    </div>
+    <div class="bmail bmail-dataList" id="mailListWrap" data-app="bmail">
+    </div>
+    <div class="documents documents-dataList" id="documentList" data-app="documents">
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("_Tokens");
+}

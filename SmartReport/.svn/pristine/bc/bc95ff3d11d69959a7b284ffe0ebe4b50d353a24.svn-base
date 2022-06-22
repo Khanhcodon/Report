@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $(".releaseNotes").load("../Update/ReleaseNotes.html");
+
+        $(".btn-viewReleaseNote").click(function () {
+            $(".releaseNotes").toggleClass("hidden");
+        });
+    });
+</script>
+<div class="header"></div>
+<div class="container">
+    <h5>
+        Thông tin phiên bản
+    </h5>
+
+    <form class="form-horizontal" method="post" action="Update">
+        <div class="">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Phiên bản hiện tại</label>
+                <div class="col-md-4">
+                    <input type="text" class="form-control input-sm" readonly value="@ViewBag.AppVersion" />
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Phiên bản mới nhất</label>
+                <div class="col-md-4">
+                    <input type="text" class="form-control input-sm" readonly value="@ViewBag.CurrentVersion" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+                <div><a href="#" class="btn btn-xs btn-info btn-viewReleaseNote">Release Notes</a></div>
+                <div class="releaseNotes hidden">
+
+                </div>
+        </div>
+    </form>
+</div>

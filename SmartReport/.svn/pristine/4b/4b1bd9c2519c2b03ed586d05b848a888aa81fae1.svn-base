@@ -1,0 +1,45 @@
+﻿
+<div class="panel panel-info document" data-id="${DocumentCopyId}" id="doc-${DocumentCopyId}">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            ${Compendium}
+            <a href="#" style="float:right; color: red; font-size:11.5px;" class="btnRemove">Bỏ qua</a>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div>
+            ${CategoryName} - ${CategoryBusinessId == 1? Organization : InOutPlace}
+            <div style="float:right;">
+                <label>Số ký hiệu: </label> ${DocCode}
+                {{if CategoryBusinessId == 1}}
+                <label style="margin-left: 30px;">Số đến: </label> ${InOutCode}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="document-attachment" style="padding: 0 15px;">
+        <div>
+            <div id="wrapAttachment">
+                <ul class="list-group attachment-multi" style="display: flex;flex-wrap: wrap;">
+                   
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <ul class="commentList commentList-multi list-group" id="commentList">
+            <li class="list-group-item">
+                <div class="comment-item">
+                    <div class="comment-avatar">
+                        <img src="" alt="" class="avatar img-rounded" onerror="imageError(this)" />
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-detail">
+                            <textarea class="form-control comment" style="border:none;resize:none; padding: 0;" rows="1" placeholder="Nhập ý kiến xử lý"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,691 @@
+﻿@model DocTypeModel
+@{
+    ViewBag.Title = Localizer("Common.Doctype.Label.List");
+    Layout = "~/Areas/Admin/Views/DocType/_Main.cshtml";
+    var listMenu = new List<SurveyList>();
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout-3.4.0.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.ko.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ace.min.js")" type="text/javascript" charset="utf-8"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ext-language_tools.js")" type="text/javascript" charset="utf-8"></script>
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.css")" type="text/css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.js")"></script>
+<link href="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+<style src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/contents.css")"></style>
+<script src="~/Content/bkav.egov/libs/dist/jstree.min.js"></script>
+<link href="~/Content/bkav.egov/libs/dist/themes/default/style.min.css" rel="stylesheet" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/exporting.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/funnel.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/solid-gauge.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/accessibility.js"></script>
+
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.complete.js"></script>
+<link href="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.min.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/integrations/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+<link href="~/Scripts/bkav.egov/libs/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+<style>
+    body .container {
+        height: auto !important;
+    }
+
+        body .container #content {
+            padding: 15px 10px 0px 30px !important;
+        }
+
+    .input-group {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .input-group-append {
+        margin-left: -1px;
+    }
+
+    .input-group-append, .input-group-prepend {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .filter-header {
+        height: 40px;
+        padding: 0;
+    }
+
+        .filter-header a {
+            color: #ffffff
+        }
+
+            .filter-header a p {
+                vertical-align: middle;
+                line-height: 40px;
+                margin-left: 5px;
+            }
+
+    .input-group > .form-control {
+        position: relative;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        width: 1%;
+        margin-bottom: 0;
+        height: 38px;
+    }
+
+    div#survey-list {
+        max-height: 712px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    ul.list-group {
+        margin-top: 5px;
+        height: 662px;
+        overflow-y: auto;
+        margin-bottom: 0;
+    }
+
+        ul.list-group li {
+            margin-bottom: 2px;
+            min-height: 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+            ul.list-group li p {
+                word-break: break-word;
+                max-width: calc(100% - 35px);
+                margin-bottom: 0;
+            }
+
+            ul.list-group li .group-action {
+                position: absolute;
+                right: 10px;
+                z-index: 3;
+                display: none
+            }
+
+    .list-group .list-group-item:hover .group-action {
+        display: block;
+    }
+
+    ul.list-group li .group-action .icon-remove2 {
+        color: #ff0000;
+    }
+
+    .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus, .list-group .list-group-item:hover {
+        z-index: 2;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        cursor: pointer;
+    }
+
+    #exTab .nav-pills {
+        border-bottom: 2px solid #007bff;
+    }
+
+        #exTab .nav-pills > li > a {
+            border-radius: 4px 4px 0 0;
+            padding: 9px 15px;
+        }
+
+        #exTab .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+            color: #fff;
+            background-color: #007bff;
+        }
+
+    /*#exTab .tab-content {
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 620px;
+    }*/
+
+    #exTab .tab-content .tab-pane:last-child {
+        padding-top: 20px;
+    }
+
+    .svd_commercial_container {
+        display: none;
+    }
+
+    #surveyLogic ul li:first-child {
+        display: none;
+    }
+    /*#surveyLogic .panel.card.svd_content div:first-child {
+        display: none;
+    }*/
+
+    svd-designer-container .col-sm-12 {
+        width: 100%;
+    }
+
+    ul.pagination {
+        margin: 5px 0 0 0 !important;
+    }
+
+        ul.pagination li {
+            display: inline;
+        }
+
+    div#tab-survers {
+        max-height: 800px;
+        overflow-y: auto;
+    }
+</style>
+<div id="notificationSuccess" style="display: none;">
+</div>
+<div id="notificationError" style="display: none;">
+</div>
+<div class="section-header">
+    <div class="title">
+        <i class="icon-docs"></i>
+        <span data-res="egov.resources.sitemap.doctype"></span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="javascript:void(0)" id="refresh">
+            <span class="text-uppercase">Làm mới</span>
+        </a>
+        <a class="btn btn-warning control-btn" id="saveSurvey" href="javascript:void(0)">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+    </div>
+</div>
+<div id="survey-content">
+    <div class="row">
+        <div id="container-survey" class="col-md-16">
+            <div class="col-md-4" id="survers">
+                <article class="">
+                    <header class="filter-header">
+                        <a href="#" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" class="">
+                            @*<i class="icon-action fa fa-chevron-down"></i>*@
+                            <p class="title">Danh sách phiếu khảo sát</p>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse show" id="collapse1" style="">
+                        <div class="input-group mb-3">
+                            <input type="text" name="search" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" id="search"><i class="icon-search"></i></button>
+                            </div>
+                        </div>
+                        <div id="survey-list">
+
+                        </div>
+                    </div> <!-- collapse -filter-content  .// -->
+                </article>
+            </div>
+            <div class="col-md-12" id="tab-survers">
+                @using (Ajax.BeginForm("CreateOrEditSurvey", null, new AjaxOptions
+                {
+                    HttpMethod = "post",
+                    OnBegin = "onSaveBegin",
+                    OnSuccess = "onSaveSuccess",
+                    OnFailure = "onSaveFailure",
+                    OnComplete = "onSaveComplete"
+                },
+                    new { id = "form-survey", @class = "form-horizontal" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div id="exTab">
+                        <div id="form-content">
+                            @Html.Partial("_PartialSurvey", Model)
+                        </div>
+
+                        <ul class="nav nav-pills">
+                            <li class="active" id="preview2a">
+                                <a href="#2a" data-toggle="tab">Cấu hình mẫu khảo sát</a>
+                            </li>
+                            <li id="preview3a">
+                                <a href="#3a" data-toggle="tab">Cấu hình các tiêu chí khảo sát</a>
+                            </li>
+                            <li id="preview4a">
+                                <a href="#4a" data-toggle="tab">Preview</a>
+                            </li>
+                            <li id="report5a">
+                                <a href="#5a" data-toggle="tab">Báo cáo</a>
+                            </li>
+                            <li id="tab-workflow" class="hidden"><a href="#6a" data-toggle="tab">@Localizer("DocType.CreateOrEdit.Tab.Workflow")</a></li>
+                        </ul>
+
+                        <div class="tab-content clearfix">
+                            <div class="tab-pane active" id="2a">
+                                <div id="surveyDesLogic"></div>
+                            </div>
+                            <div class="tab-pane" id="3a">
+                                @Html.Partial("_PartialSurveyCriteria")
+                            </div>
+                            <div class="tab-pane" id="4a">
+                                <div id="surveyPreview"></div>
+                            </div>
+                            <div class="tab-pane" id="5a">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <input id="search-input" class="form-control" style="width: 100%; margin-bottom: 5px;" />
+                                        <div id="tree" style="background-color: white; width: 100%; height: 500px; padding: 2px; overflow: auto">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        @Html.TextAreaFor(model => model.SurveyReport)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="6a">
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var surveyModel, pageSize = 25;
+    function refresh(t) {
+        setTimeout("location.reload(true);", t);
+    }
+    function onSaveBegin()
+    {
+        $("#saveSurvey").prop("disabled", true);
+    }
+    function onSaveFailure(response)
+    {
+        $("#notificationError").html(response.mess || "");
+        eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+    }
+    function onSaveComplete(response)
+    {
+        $("#saveSurvey").prop("disabled", false);
+    }
+    function onSaveSuccess(response)
+    {
+        if (response.html)
+            $('#form-content').html(response.html);
+        if (!response.success) {
+            if (response.mess) {
+                $("#notificationError").html(response.mess || "");
+                eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+            }
+        } else {
+            $("#notificationSuccess").html(response.mess || "");
+            eGovMessage.notification($('#notificationSuccess').html(), eGovMessage.messageTypes.success, true);
+            if (response.docTypeId) {
+                getSurvey(response.docTypeId);
+                $('input[name="search"]').val('');
+                getListSurvey(response.docTypeId, 1, pageSize,false);
+            }
+        }
+    }
+    function surveyWorkflow() {
+        var id = $("input[name='DocTypeId']").val();
+        if (id != "" && id !== "00000000-0000-0000-0000-000000000000") {
+            $.ajax({
+                url: '/Admin/DocType/SurveyWorkflow',
+                type: "POST",
+                data: { id: id || "00000000-0000-0000-0000-000000000000" },
+                success: function (result) {
+                    if (result.success) {
+                        $('#6a').html(result.html || "");
+                    } else {
+                        $("#notificationError").html(result.mess || "");
+                        eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                    }
+                }
+            });
+        }
+    }
+    function getSurvey(id) {
+        criteriaArr = null;
+        $.ajax({
+            url: '/Admin/DocType/GetSurvey',
+            type: "POST",
+            data: { docTypeId: id || "00000000-0000-0000-0000-000000000000" },
+            success: function (result) {
+                if (result.success) {
+                    $('#form-content').html(result.html);
+                    surveyWorkflow();
+                    if (result.data) {
+                        var item = result.data;
+                        CKEDITOR.instances['SurveyReport'].setData(item.SurveyReport);
+                        var range = CKEDITOR.instances['SurveyReport'].createRange();
+                        range.moveToPosition(range.root, CKEDITOR.POSITION_BEFORE_END);
+                        CKEDITOR.instances['SurveyReport'].getSelection().selectRanges([range]);
+                        surveyDesLogic.text = item.SurveyConfig;
+                        criteriaArr = JSON.parse(item.SurveyCriteria || null);
+                        $("#tab-workflow").removeClass("hidden");
+                    } else {
+                        surveyDesLogic = new SurveyCreator.SurveyCreator("surveyDesLogic", optionsDesLogic);
+                        surveyDesLogic.showToolbox = "right";
+                        surveyDesLogic.showPropertyGrid = "right";
+                        surveyDesLogic.rightContainerActiveItem("toolbox");
+                        CKEDITOR.instances['SurveyReport'].setData('');
+                        $("#tab-workflow").addClass("hidden");
+                    }
+                    setTimeout(function () { $('#preview2a').find('a').trigger('click'); }, 100);
+                } else {
+                    $("#notificationError").html(result.mess || "");
+                    eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                }
+            }
+        });
+    }
+    function getListSurvey(id, page, pageSize, checkLoad) {
+        $.ajax({
+            url: '/Admin/DocType/GetListSurvey',
+            type: "POST",
+            data: { docTypeId: id, page: page, pageSize: pageSize, search: $('input[name="search"]').val(), checkLoad: checkLoad},
+            success: function(result) {
+                if (result.success) {
+                    $('#survey-list').html(result.html);
+                }
+                //getSurvey(id);
+            }
+        });
+    }
+    $(document).on('click', '.list-group .list-group-item', function ()
+    {
+        $(".list-group .list-group-item").removeClass("active");
+        $(this).addClass("active");
+        var id = $(this).attr("id");
+        $("#my-dialog").dialog('destroy').remove();
+        getSurvey(id);
+    });
+    $(document).on('click', '.list-group .list-group-item .icon-remove2', function () {
+        var id = $(this).attr("doctype-id");
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.Survey.ConfirmDelete"))',null,eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $.ajax({
+                            url: '/Admin/DocType/DeleteSurvey',
+                            type: "POST",
+                            data: { id: id || "00000000-0000-0000-0000-000000000000" },
+                            success: function(result) {
+                                if (result.success) {
+                                    $("#notificationSuccess").html(result.mess || "");
+                                    eGovMessage.notification($('#notificationSuccess').html(), eGovMessage.messageTypes.success, true);
+                                    refresh(1000);
+                                } else {
+                                    $("#notificationError").html(result.mess || "");
+                                    eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                                }
+                            }
+                        });
+                    }
+        );
+
+    });
+    $(document).on('click', 'ul.pagination li', function () {
+        var page = $(this).find('a').attr("data");
+        $("ul.pagination li").removeClass("active");
+        $(this).addClass("active");
+        getListSurvey($("input[name='DocTypeId']").val() || "00000000-0000-0000-0000-000000000000", page, pageSize, true);
+    });
+    $(function () {
+        getListSurvey("00000000-0000-0000-0000-000000000000", 1, pageSize,false);
+        $("#saveSurvey").on("click",
+            function (e) {
+                e.preventDefault();
+                $("input[name='SurveyConfig']").val(JSON.stringify(surveyDesLogic.JSON).replace(/&quot;/g, '\\"'));
+                $("input[name='SurveyCriteria']").val(JSON.stringify(criteriaArr));
+                for ( instance in CKEDITOR.instances ) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+
+                $("#form-survey").submit();
+            });
+        $("#refresh").on("click",
+            function () {
+                $(".list-group .list-group-item").removeClass("active");
+                getSurvey("00000000-0000-0000-0000-000000000000");
+            });
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 200;
+            config.toolbarCanCollapse = true;
+            config.removePlugins = 'image,forms';
+        };
+        CKEDITOR.replace('SurveyReport', {
+            height: 500,
+            allowedContent: true,
+            extraPlugins: 'highcharts'
+        });
+
+        document.getElementById('report5a').addEventListener("click", function () {
+            var questions = criteriaArr;//surveyDesLogic.getAllQuestionsName();
+            var obj = {
+                "id": "node_0",
+                "text": 'Các tiêu chí',
+                "icon": "/Content/Images/doctype_activate.png",
+                "children": []
+            };
+            var data = [];
+            _.each(questions, function (c) {
+                obj.children.push({
+                    "id": c.alias,
+                    "text": c.alias,
+                    "icon": "/Content/Images/doctype_key.png"
+                });
+            });
+            data.push(obj);
+            $("#tree").jstree("destroy");
+            $('#tree').on("select_node.jstree",
+                function (evt, data) {
+                    var check = false;
+                    if (data.node.id != "node_0") {
+                        CKEDITOR.instances["SurveyReport"].insertHtml(`&#64;&#64;${data.node.text}&#64;&#64;`);
+                    }
+                }).jstree({
+                'core': {
+                    "animation": 0,
+                    'check_callback': true,
+                    'multiple': false,
+                    "themes": { "stripes": true },
+                    'data': data
+                },
+                "search": {
+                    "case_sensitive": false,
+                    "show_only_matches": true
+                },
+                "plugins": ["dnd", "search"]
+                }).bind('ready.jstree', function (event, data) {
+                   $("#tree").jstree("open_node", $("#node_0"));
+            });
+
+        });
+
+        $("#search-input").keyup(function () {
+            var searchString = $(this).val();
+            $('#tree').jstree('search', searchString);
+        });
+        $("#search").on("click", function () {
+            var id = $("input[name='DocTypeId']").val() || "00000000-0000-0000-0000-000000000000";
+            getListSurvey(id, 1, pageSize,false);
+            getSurvey(id);
+        });
+    });
+
+    var mainColor = "#007bff";
+    var mainHoverColor = "#3f51b5";
+
+    var defaultThemeColorsEditor = SurveyCreator
+        .StylesManager
+        .ThemeColors["default"];
+    defaultThemeColorsEditor["$primary-color"] = mainColor;
+    defaultThemeColorsEditor["$secondary-color"] = mainColor;
+    defaultThemeColorsEditor["$primary-hover-color"] = mainHoverColor;
+    Survey
+        .StylesManager
+        .applyTheme("bootstrap");
+    Survey.defaultBootstrapCss.navigationButton = "btn btn-blue";
+    Survey.Serializer.addProperty("selectBase", {
+        name: "Tiêu chí",
+        category: "choices",
+        visibleIndex: 0,
+        choices: @Html.Raw(Json.Encode(ViewBag.Catalog)),
+        onSetValue: function (obj, value) {
+            $.ajax('/SurveyCatalog/GetSurveyCatalogValues?catalogId=' + value)
+                .then(function (result) {
+                    obj.choices = result.map(function (r) { return { value: r.CatalogKey, text: r.Value }; });
+                });
+        }
+    });
+    Survey.Serializer.addProperty("matrixBase", {
+        name: "Tiêu chí 1",
+        category: "columns",
+        visibleIndex: 0,
+        choices: @Html.Raw(Json.Encode(ViewBag.Catalog)),
+        onSetValue: function (obj, value) {
+            $.ajax('/SurveyCatalog/GetSurveyCatalogValues?catalogId=' + value)
+                .then(function (result) {
+                    if (obj.getType() === 'matrixdropdown') {
+                        obj.columns.splice(0, obj.columns.length);
+                        for (var i = 0; i < result.length; i++) {
+                            obj.addColumn(result[i].CatalogKey, result[i].Value);
+                        }
+                    } else {
+                        obj.columns = result.map(function (r) { return { value: r.CatalogKey, text: r.Value }; });
+                    }
+                });
+        }
+    });
+    Survey.Serializer.addProperty("matrixBase", {
+        name: "Tiêu chí 2",
+        category: "rows",
+        visibleIndex: 0,
+        choices: @Html.Raw(Json.Encode(ViewBag.Catalog)),
+        onSetValue: function (obj, value) {
+            $.ajax('/SurveyCatalog/GetSurveyCatalogValues?catalogId=' + value)
+                .then(function (result) {
+                    obj.rows = result.map(function (r) { return { value: r.CatalogKey, text: r.Value }; });
+                });
+        }
+    });
+    Survey.Serializer.addProperty("matrixDropdown", {
+        name: "Tiêu chí 3",
+        category: "choices",
+        visibleIndex: 0,
+        choices: @Html.Raw(Json.Encode(ViewBag.Catalog)),
+        onSetValue: function (obj, value) {
+            $.ajax('/SurveyCatalog/GetSurveyCatalogValues?catalogId=' + value)
+                .then(function (result) {
+                    obj.choices = result.map(function (r) { return { value: r.CatalogKey, text: r.Value }; });
+                });
+        }
+    });
+    var CkEditor_ModalEditor = {
+        afterRender: function (modalEditor, htmlElement) {
+            var editor = CKEDITOR.replace(htmlElement, {
+                toolbar: [
+                    ['Source', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-'],
+                    ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-'],
+                    ['NumberedList', 'BulletedList', 'Table', '-'],
+                    ['Styles', 'Format', 'Font', 'FontSize', '-'],
+                    ['TextColor', 'BGColor', '-']
+                ],
+                on: {
+                    instanceReady: function (ev) {
+                        ev.editor.dataProcessor.htmlFilter.addRules({
+                            elements: {
+                                p: function (e) {
+                                    if (e.attributes.style)
+                                        e.attributes.style += ';font-family:Times New Roman,Times,serif';
+                                    else e.attributes.style = 'font-family:Times New Roman,Times,serif';
+                                },
+                                span: function (e) {
+                                    e.attributes.style = e.attributes.style.replace(/\"(Times New Roman)\"/, '$1');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            var isUpdating = false;
+            editor.on("change", function () {
+                isUpdating = true;
+                modalEditor.editingValue = editor.getData();
+                isUpdating = false;
+            });
+            editor.setData(modalEditor.editingValue);
+            modalEditor.onValueUpdated = function (newValue) {
+                if (!isUpdating) {
+                    editor.setData(newValue);
+                }
+            };
+        },
+        destroy: function (modalEditor, htmlElement) {
+            var instance = CKEDITOR.instances[htmlElement.id];
+            if (instance) {
+                instance.removeAllListeners();
+                CKEDITOR.remove(instance);
+            }
+        }
+    };
+    SurveyCreator
+        .SurveyPropertyModalEditor
+        .registerCustomWidget("html", CkEditor_ModalEditor);
+
+    var optionsDesLogic = {
+        showDesignerTab: true,
+        showJSONEditorTab: false,
+        showLogicTab: true,
+        showTestSurveyTab: false,
+        showTranslationTab: false,
+        showEmbededSurveyTab: false
+    };
+    var optionsLogic = {
+        showLogicTab: true,
+        showDesignerTab: true,
+        showJSONEditorTab: false,
+        showTestSurveyTab: false,
+        showTranslationTab: false,
+        showEmbededSurveyTab: false
+    };
+    var optionsPreview = {
+        showDesignerTab: false,
+        showJSONEditorTab: false,
+        showLogicTab: false,
+        showTestSurveyTab: true,
+        showTranslationTab: false,
+        showEmbededSurveyTab: false
+    };
+    var surveyDesLogic = new SurveyCreator.SurveyCreator("surveyDesLogic", optionsDesLogic);
+    surveyDesLogic.showToolbox = "right";
+    surveyDesLogic.showPropertyGrid = "right";
+    surveyDesLogic.rightContainerActiveItem("toolbox");
+    var surveyLogic;
+    document.getElementById('preview3a').addEventListener("click", function () {
+        if (surveyLogic == undefined)
+            surveyLogic = new SurveyCreator.SurveyCreator("surveyLogic", optionsLogic);
+        surveyLogic.JSON = surveyDesLogic.JSON;
+
+        setTimeout(function() {
+            surveyLogic.tabs()[1].action();
+            if(surveyLogic.logicValue.items.length == 0)
+                surveyLogic.logic.koAddNew();
+        }, 1);
+    });
+    document.getElementById('preview4a').addEventListener("click", function () {
+        var survey = new Survey.Model(surveyDesLogic.JSON);
+        survey.render("surveyPreview");
+        $('#surveyPreview .sv_complete_btn').addClass("hidden");
+    });
+</script>

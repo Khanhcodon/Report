@@ -1,0 +1,278 @@
+﻿@using Bkav.eGovCloud.Core.Document;
+@using Bkav.eGovCloud.Core.Utils;
+@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    var checkKetThucXuLy = true;
+    if (ViewBag.DocumentPermissions != null)
+    {
+        var documentPermissions = (DocumentPermissions)ViewBag.DocumentPermissions;
+        if (EnumHelper<DocumentPermissions>.ContainFlags(documentPermissions, DocumentPermissions.KetThucXuLy))
+        {
+            checkKetThucXuLy = true;
+        }
+    }
+}
+<style type="text/css">
+    .return-main
+    {
+        width: 500px;
+    }
+    
+    .return-main .wizard-step
+    {
+        display: none;
+    }
+    
+    .return-main .wizard-button
+    {
+        text-align: right;
+    }
+    
+    .wizard-step .step-title
+    {
+        padding-bottom: 10px;
+        display: block;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    
+    .wizard-button input
+    {
+        height: 23px;
+        border: none;
+        background-color: #4a9ffa;
+        color: white;
+    }
+    
+    .update-success
+    {
+    }
+    
+    .return-form
+    {
+    }
+    
+    .return-form div
+    {
+        margin-bottom: 10px;
+    }
+    
+    .field-label
+    {
+        display: inline-block;
+        width: 130px;
+    }
+    
+    .field-result
+    {
+        display: inline-block;
+        width: 120px;
+        font-weight: bold;
+    }
+    
+    .approver-content
+    {
+        margin-bottom: 10px;
+    }
+    
+    .approver-item
+    {
+        margin-bottom: 10px;
+    }
+    
+    .message
+    {
+        float: left;
+        display: inline-block;
+        width: 260px;
+        text-align: left;
+        height: 23px;
+        line-height: 23px;
+    }
+</style>
+<script type="text/javascript">
+    var isSupplementary = true;  // set true để test => cần set lại khi xong form tiếp nhận bổ sung
+    var isDocSuccess = false;
+    var isReturned = false;
+    $(function () {
+
+        // Hiển thị bước đầu tiên
+        $(".wizard-step:first").fadeIn();
+        if ($(".wizard-step:first").attr("id") == "returnResult") {
+            $("#nextStep").css("display","none");
+        }
+
+        $("#backStep").hide().click(function () {
+            var $step = $(".wizard-step:visible"); // Lấy bước hiện tại
+            if ($step.prev().hasClass("wizard-step")) { // Nếu có bước trước
+                $step.hide().prev().fadeIn();  // Hiển thị và ẩn bước hiện tại
+
+                if (!$step.prev().prev().hasClass("wizard-step")) {
+                    $("#backStep").hide();
+                }
+
+                // Xem xét lại chổ này: trong trường hợp hồ sơ cần phải bổ sung, xác nhận xử lý thì khi  next step đã phải cập nhật thành công rồi
+                // do khi quay lại chỉ cần set text đã cập nhật là đủ => có cần phải kiểm tra lại các điều kiện cập nhật hay ko?
+                $(".message").text("Đã cập nhật").css("color", "Green");
+
+                if ($step.next().attr("id") != "returnResult") {
+                    $("#nextStep").val("Tiếp tục");
+                }
+            }
+        });
+
+        $("#nextStep").click(function () {
+            var $step = $(".wizard-step:visible"); // Lấy bước hiện tại
+            var $nextStep = $step.next();
+            $(".message").text("");
+
+            // Nếu bước hiện tại là tiếp nhận bổ sung
+            if ($step.attr("id") == "supplementary") {
+                if (isSupplementary) {
+                    nextStep($step);
+                }
+                else {
+                    // Tiến hành bổ sung
+                }
+            }
+            else if ($step.attr("id") == "updateSuccess") // bước hiện tại là cập nhật kết quả xử lý cuối
+            {
+                if (isDocSuccess) {
+                    nextStep($step);
+                }
+                else {
+                    // Tiến hành cập nhật kết quả xử lý cuối
+                    updateSuccess($step);
+                }
+            }
+            else // Bước hiện tại là trả kết quả
+            {
+                if (isReturned) {
+                    $(".message").text("Đã trả kết quả").css("color", "Green");
+                }
+                else {
+                    //Cập nhật thông tin kết thúc xử lý
+                    updateEndProcess();
+                }
+            }
+
+            if ($nextStep.attr("id") == "returnResult") {
+                if (isReturned) {
+                    $(".message").text("Đã trả kết quả").css("color", "Green");
+                }
+                $("#nextStep").css("display","none");
+            }
+
+            if ($nextStep.attr("id") == "updateSuccess") {
+                if (isDocSuccess) {
+                    $(".message").text("Đã cập nhật").css("color", "Green");
+                }
+            }
+        });
+    });
+
+    function updateSuccess($step) {
+        if (isDocSuccess) {
+            nextStep($step);
+            return;
+        }
+        var isSuccess = $("input[name='IsSuccess']:checked").val();
+        var docId = $("#documentId").val();
+        $.ajax({
+            url: '@Url.Action("UpdateResult", "Return")',
+            data: { isSuccess: isSuccess, docId: docId },
+            success: function (result) {
+                if (result.success) {
+                    isDocSuccess = true;
+                    nextStep($step);
+                }
+                else {
+                    $(".wizard-button .message").text(result.error).css("color", "red");
+                    return false;
+                }
+            }
+        });
+    }
+
+    function updateEndProcess() {
+        if (isReturned) {
+            return;
+        }
+        var personInfo = $("#personGiveInfo").val();
+        var docId = $("#documentId").val();
+        $.ajax({
+            url: '@Url.Action("UpdateFinish", "Finish")',
+            data: { docId: docId},
+            success: function (result) {
+                if (result.success) {
+                    isReturned = true;
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.error);
+                    $(".dialog").dialog("close");
+                }
+                else {
+                    $(".wizard-button .message").text(result.error).css("color", "red");
+                    return false;
+                }
+            }
+        });
+    }
+
+    function nextStep($step) {
+        if ($step.next().hasClass("wizard-step")) { // nếu có bước tiếp theo?
+            $step.hide().next().fadeIn();  // Hiển thị nó và ẩn bước hiện tại
+            $("#backStep").show();
+        }
+    }
+</script>
+<div class="return-main">
+    @if (Model.IsReturned != true)
+    {
+        <input type="hidden" value="@Model.DocumentId" id="documentId"/>
+        if (Model.IsSupplemented == false)
+        {
+        <div class="wizard-step" id="supplementary">
+            <span class="step-title">Bổ sung hoàn thiện hồ sơ</span>
+            <div>
+                Comming soon</div>
+        </div>
+        }
+        if (Model.IsSuccess == null)
+        { 
+        <div class="wizard-step " id="updateSuccess">
+            <span class="step-title">Cập nhật kết quả xử lý cuối cùng cho hồ sơ</span>
+            <div class="update-appprovers">
+                @foreach (var approver in ViewBag.Approvers)
+                { 
+                    <div class="approver-item">
+                        <span class="field-label">Ý kiến duyệt </span><span class="field-result">@(approver.IsSuccess ? "Đồng ý" : "Từ chối")</span>
+                        <span class="field-label" style="font-weight: bold; color: blue;">@(approver.UserSend == null ? "" : approver.UserSend.FullName)</span>
+                        <span style="font-weight: bold">@approver.DateCreated.ToString("dd/MM/yyyy")</span>
+                    </div>
+                }
+            </div>
+            <div class="update-success">
+                <span class="field-label">Kết quả xử lý</span>
+                <input type="radio" name="IsSuccess" value="true" checked="checked" /><span>Đồng ý</span>
+                <input type="radio" name="IsSuccess" value="false" /><span>Từ chối</span>
+                <textarea id="successNote" style="width: 493px"></textarea>
+            </div>
+        </div>
+        }
+        <div class="wizard-step" id="returnResult">
+            <span class="step-title">Kết thúc xử lý thành công</span>
+        </div>
+        <div class="wizard-button">
+            <span class="message"></span>
+            <input type="button" id="backStep" value="Quay lại" style="background-color: #797979" />
+            <input type="button" id="nextStep" value="Tiếp tục" />
+            <input type="button" value="Đóng" style="background-color: #ff2f2f;" onclick='$(this).parents(".dialog").dialog("close")' />
+        </div>
+    }
+    else
+    {
+        <span class="step-title">Hồ sơ đã được kết thúc</span>
+        <div class="wizard-button">
+            <input type="button" value="Đóng" style="background-color: #ff2f2f;" onclick='$(this).parents(".dialog").dialog("close")' />
+        </div>
+    }
+</div>

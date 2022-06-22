@@ -1,0 +1,104 @@
+﻿@model PaperModel
+
+@Html.HiddenFor(model => model.PaperId)
+@Html.ValidationSummary(true)
+
+<table >
+    @if (Model.PaperId == 0)
+    {
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.CategoryBusinessId):
+            </td>
+            <td>
+                @Html.DropDownList("CategoryBusinessId")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DocFieldId):
+            </td>
+            <td>
+                <select id="DocFieldId" name="DocFieldId">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DocTypeId):
+            </td>
+            <td>
+                <select id="DocTypeId" name="DocTypeId">
+                </select>
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.DocTypeId)
+    }
+    <tr >
+        <td  style="width: 15%;">
+            @Html.EgovLabelFor(model => model.PaperTypeId):
+        </td>
+        <td>
+            @Html.DropDownList("PaperTypeId")
+        </td>
+    </tr>
+  @*     @if (Model.PaperId == 0)
+      {
+         <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.HasCreatePacket):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasCreatePacket)
+                @Html.ValidationMessageFor(model => model.HasCreatePacket)
+            </td>
+        </tr>
+           <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.IgnoreExist):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IgnoreExist)
+                @Html.ValidationMessageFor(model => model.IgnoreExist)
+            </td>
+        </tr>
+      }*@
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.PaperName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.PaperName,
+ new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+             @if (Model.PaperId == 0)
+                    { 
+                        <div>
+                            <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                        </div>
+                    }
+            @Html.ValidationMessageFor(model => model.PaperName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Amount):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Amount)
+            @Html.ValidationMessageFor(model => model.Amount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsRequired):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsRequired)
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/DocField/_Main.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".tabs .tab-menu").addClass(" ui-tabs-selected ui-state-active");
+        $(".tabs .tab-add").removeClass(" ui-tabs-selected ui-state-active");
+    });
+</script>
+
+<div id="tabsChild" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist">
+        <li class="tab-docfield">@Html.ActionLink(Localizer("DocField.CreateOrEdit.Tab.ViewAndEdit"), "Edit", "DocField", new { id = ViewBag.DocFieldId }, null)</li>
+
+        <li class="tab-workflow">@Html.ActionLink(Localizer("DocField.CreateOrEdit.Tab.Workflow"), "DocFieldWorkflow", "DocField", new { id = ViewBag.DocFieldId }, null)</li>
+    </ul>
+    <div style="padding-top: 10px;">
+        @RenderBody()
+    </div>
+</div>

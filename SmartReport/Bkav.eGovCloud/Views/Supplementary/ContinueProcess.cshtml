@@ -1,0 +1,194 @@
+﻿@using Bkav.eGovCloud.Core.Utils
+@using Bkav.eGovCloud.Entities
+@model IEnumerable<Bkav.eGovCloud.Models.SupplementaryModel>
+@{
+    var num = 1;
+    var documentId = ViewBag.DocumentId as Bkav.eGovCloud.Entities.Customer.Document;
+    var docCopyId = ViewBag.DocumentCopyId;
+}
+<style type="text/css">
+    .supp-receive-buttons {
+        text-align: right;
+    }
+
+        .supp-receive-buttons input {
+            border: none;
+            height: 25px;
+            color: white;
+            background-color: #21bbf7;
+            font-family: arial;
+        }
+
+    .supp-item {
+        margin-bottom: 10px;
+    }
+
+        .supp-item .supp-item-stt {
+            display: inline-block;
+            width: 20px;
+        }
+
+        .supp-item .supp-item-content {
+            width: 400px;
+            display: inline-table;
+        }
+
+        .supp-item .supp-item-user {
+            margin-left: 10px;
+            font-weight: bold;
+            display: inline-block;
+            width: 110px;
+            font-size: 11px;
+            color: blue;
+        }
+
+        .supp-item .supp-item-datesend {
+            margin-left: 10px;
+            font-size: 11px;
+            display: inline-block;
+            width: 85px;
+        }
+
+        .supp-item .supp-item-type {
+            font-style: italic;
+            padding-left: 15px;
+        }
+
+    .no-result {
+        margin-left: 10px;
+        color: red;
+        display: inline-block;
+        width: 535px;
+        overflow: hidden;
+    }
+
+    .result {
+        font-style: italic;
+        color: #9b9b9b;
+    }
+
+    #updateButton {
+        text-decoration: underline;
+        color: blue;
+        float: right;
+    }
+
+    .time {
+        float: right;
+        font-size: 12px;
+    }
+
+    .update-process {
+        width: 620px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $(".supp-receive-main .supp-offset").hide();
+    });
+
+    function changeType(_this) {
+        if ($(_this).val() == 3) { //  cong them ngay co dinh
+            $(".supp-offset").show();
+        }
+        else {
+            $(".supp-offset").hide();
+        }
+    }
+
+    function getDateAppointed(type) {
+        var docId = '@documentId';
+        var docCopyId = parseInt('@docCopyId');
+        var range = parseInt($(".offset-day").val());
+        if (isNaN(range)) {
+            range = 0;
+        }
+        $.ajax({
+            url: "@Url.Action("GetDateAppointed", "Supplementary")",
+            data: { type: type, docId: docId, docCopyId: docCopyId, range: range },
+            success: function (result) {
+                if (result.success) {
+                    $(".date-appointed").text(result.success);
+                }
+                else {
+                    eGovMessage.show(result.error);
+                }
+            },
+            error: function (xhr) {
+                eGovMessage.notification(xhr.statusText, eGovMessage.messageTypes.error);
+            }
+        });
+    }
+
+    function getUpdateModel() {
+        var result = {};
+        var updateObjs = $(".update-process");
+        var max;
+        var supps = {};
+        for (var i = 0; max = updateObjs.length, i < max; i++) {
+            var _this = updateObjs[i];
+            var content = $(_this).val();
+            if (content.trim() == "") {
+                $(_this).focus();
+                return null;
+            }
+            var suppId = $(_this).parents('.supp-item').find("#suppId").val();
+            supps[suppId] = content;
+        }
+        result.supps = JSON.stringify(supps);
+        result.comment = $("#suppComment").val();
+        result.type = $("#SupplementType").val();
+        result.offset = $("#offset").val();
+        return result;
+    }
+    
+</script>
+@if (Model.Any())
+{
+    <div class="supp-receive-main">
+        <div style="margin-bottom: 10px"><strong>Các kết quả dừng xử lý</strong></div>
+        @foreach (var supp in Model)
+        {
+            <div class="supp-item">
+                <input type="hidden" value="@supp.SupplementaryId" id="suppId"/>
+                <div>
+                    <span class="supp-item-stt">@(num++).</span>
+                    <span class="supp-item-content">@supp.CommentSend</span>
+                    <span class="supp-item-user">@supp.UserSend.FullName</span>
+                    <span class="supp-item-datesend">@supp.DateSend.ToString("hh:mm dd/MM/yyyy")</span>
+                    <span class="time">@(EnumHelper<SupplementType>.GetDescription((SupplementType)supp.SupplementType))</span>
+                </div>
+                <div style="padding-left: 10px;">
+                    @if (supp.IsSuccess)
+                    {
+                        <span class="supp-item-stt"></span>
+                        <span class="supp-item-content result">@supp.CommentReceive</span>
+                        <span class="supp-item-user">@supp.UserReceive.FullName</span>
+                        <span class="supp-item-datesend">@supp.DateReceive.ToString("hh:mm dd/MM/yyyy")</span>
+                    }
+                    else
+                    {
+                        <input type="text" class="update-process" />
+                        <span style="color: red; float: right;">◄ cập nhật kết quả</span>
+                    }
+                </div>
+            </div>
+        }
+        <div>
+            <div style="margin-bottom: 10px"><strong>Thêm ý kiến xử lý</strong></div>
+            <div class="supp-info">
+                <textarea id="suppComment" style="width: 100%"></textarea>
+                <div style="margin-top: 10px" class="supp-type">
+                    <span>Tính hẹn trả: </span>
+                    @Html.DropDownList("SupplementType", null, new { onchange = "changeType(this)" })
+                    <span class="supp-offset" style="display: none;"><span class="supp-offset-label">Số ngày</span>
+                        <input type="text" name="OffsetDay" class="supp-offset-day" value="1" id="offset"/>
+                        <span style="margin-left: 10px">ngày</span>
+                    </span>
+                    <span style="margin-left: 20px;">Ngày hẹn trả mới: </span>
+                    <strong><span class="date-appointed">@ViewBag.NewDateAppointed</span></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}

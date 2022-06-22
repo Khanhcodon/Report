@@ -1,0 +1,91 @@
+﻿<script id="transferTemplate" type="text/x-jquery-tmpl">
+    <div id="dialogBoxListUser">
+        <div class="dialog-center">
+            <div id="listUser" class="dialog-center-west ui-corner-all grid">
+                <div class="grid-header ui-layout-north">
+                    <div class="grid-header-wrap">
+                        <table class="table-main">
+                            <colgroup>
+                                <col style="width: 130px" />
+                                <col style="width: 100px" />
+                                <col />
+                                <col style="width: 100px" />
+                                <col style="width: 120px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header">Họ tên
+                                    </th>
+                                    <th class="header">Tài khoản
+                                    </th>
+                                    <th class="header">Đơn vị
+                                    </th>
+                                    <th class="header">Xử lý chính
+                                    </th>
+                                    <th class="header">
+                                        <input type="checkbox" id="dongxulyAll" onchange="egov.cshtml.transfer.bindSendAllChange(this)" />
+                                        Đồng xử lý
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div id="Div1" class="grid-content ui-layout-center ">
+                    <table class="table-main" id="tblUsersTransfer">
+                        <colgroup>
+                            <col style="width: 130px" />
+                            <col style="width: 100px" />
+                            <col />
+                            <col style="width: 100px" />
+                            <col style="width: 120px" />
+                        </colgroup>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dialog-center-center ui-widget-content ui-corner-all">
+                <div class="ui-layout-content " style="padding: 0; background: #FFFFFF" id="divListUserTransfer">
+                    <div id="sendXlcLabel" style="font-weight: bold">
+                        Gửi bản chính cho:
+                    </div>
+                    <div id="divViewXulychinh" style="display: none">
+                    </div>
+                    <div id="divViewDongxuly" style="display: none">
+                    </div>
+                    <div id="divViewThongbao" style="display: none">
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-center-south">
+                <div id="divSearch" class="" style="text-align: center; width: 70%; float: left; padding-top: 2px;">
+                    <input type="text" id="searchUser" style="width: 99%" />
+                </div>
+                <div id="divButton" style="padding: 5px 5px 0px 0px; text-align: right">
+                    <span style="" onclick="egov.cshtml.transfer.dongGui()"
+                        id="openDonggui" title="Hiện danh sách đồng gửi">Đồng gửi ▼</span>
+                    <span style="display: none;"
+                        id="closeDonggui" title="Ẩn danh sách đồng gửi">Thu lại ▲</span>
+                </div>
+            </div>
+        </div>
+        <div class="dialog-south">
+            @*@if (ViewBag.OtherPartial != null)
+            {
+                @Html.Partial(ViewBag.OtherPartial as string)   
+            }*@
+        </div>
+    </div>
+</script>
+<script id="userTransferTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td>${fullname}</td>
+        <td>${username}</td>
+        <td>${department}</td>
+        <td>
+            <input type="checkbox" class="xulychinhItem" value="${fullname}" /></td>
+        <td>
+            <input type="checkbox" class="dongxulyItem" value="${fullname}" /></td>
+    </tr>
+</script>

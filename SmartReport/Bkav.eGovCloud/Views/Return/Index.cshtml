@@ -1,0 +1,324 @@
+﻿@using Bkav.eGovCloud.Core.Document;
+@using Bkav.eGovCloud.Core.Utils;
+@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    var checkKetThucXuLy = false;
+    if (ViewBag.DocumentPermissions != null)
+    {
+        var documentPermissions = (DocumentPermissions)ViewBag.DocumentPermissions;
+        if (EnumHelper<DocumentPermissions>.ContainFlags(documentPermissions, DocumentPermissions.KetThucXuLy))
+        {
+            checkKetThucXuLy = true;
+        }
+    }
+}
+<style type="text/css">
+    .return-main {
+        width: 100%;
+    }
+
+        .return-main .wizard-step {
+            display: none;
+        }
+
+        .return-main .wizard-button {
+            text-align: right;
+        }
+
+    .wizard-step .step-title {
+        padding-bottom: 10px;
+        display: block;
+        color: red;
+        font-weight: bold;
+    }
+
+    .wizard-button input {
+        height: 23px;
+        border: none;
+        background-color: #4a9ffa;
+        color: white;
+    }
+
+    .update-success {
+    }
+
+    .return-form {
+    }
+
+        .return-form div {
+            margin-bottom: 10px;
+        }
+
+    .field-label {
+        display: inline-block;
+        width: 130px;
+    }
+
+    .field-result {
+        display: inline-block;
+        width: 120px;
+        font-weight: bold;
+    }
+
+    .approver-content {
+        margin-bottom: 10px;
+    }
+
+    .approver-item {
+        margin-bottom: 10px;
+    }
+
+    .message {
+        float: left;
+        display: inline-block;
+        width: 260px;
+        text-align: left;
+        height: 23px;
+        line-height: 23px;
+    }
+</style>
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var isSupplemented = '@Model.IsSupplemented';
+    var isDocSuccess = '@(Model.IsSuccess == null)';
+    $(function () {
+
+        // Hiển thị bước đầu tiên
+        $(".wizard-step:first").fadeIn();
+        if ($(".wizard-step:first").attr("id") == "returnResult") {
+            $("#nextStep").val("Hoàn thành");
+        }
+
+        $("#backStep").hide().click(function () {
+            var $step = $(".wizard-step:visible"); // Lấy bước hiện tại
+            var $backStep = $step.prev();
+            if ($backStep.hasClass("wizard-step")) { // Nếu có bước trước
+                // Hiển thị bước trước và ẩn bước hiện tại
+                $backStep.show();
+                $step.hide();
+
+                // Ẩn nút back nếu không có bước sau
+                if (!$backStep.prev().hasClass("wizard-step")) {
+                    $("#backStep").hide();
+                }
+
+                // Nếu bước tiếp theo không phải là bước cuối cùng (trả kết quả) thì hiển thị nút tiếp tục
+                if ($step.next().attr("id") != "returnResult") {
+                    $("#nextStep").val("Tiếp tục");
+                }
+            }
+        });
+
+        $("#nextStep").click(function () {
+            var $step = $(".wizard-step:visible"); // Lấy bước hiện tại
+
+            // Cập nhật dữ liệu nếu đây là bước cuối cùng
+            if ($step.attr("id") == "returnResult") {
+                if (isSupplemented == "False")
+                {
+                    var suppModel = egov.cshtml.transfer.supplementary.getForReceive();
+                    updateSupplement(suppModel, $step);
+                }
+                else if(isDocSuccess == "True") {
+                    // Tiến hành cập nhật kết quả xử lý cuối
+                    updateSuccess($step);
+                }
+                else
+                {
+                    // Trả kết quả
+                    updateReturn();
+                }
+            }
+            else {
+                var $nextStep = $step.next();
+                nextStep($step);
+                if ($nextStep.attr("id") == "returnResult") {
+                    $("#nextStep").val("Hoàn thành");
+                }
+            }
+        });
+    });
+
+    function updateSupplement(suppModel, $step) {
+        if (suppModel == null) {
+            return;
+        }
+        $.ajax({
+            url: "Supplementary/Receive",
+            data: suppModel,
+            success: function (result) {
+                if (result.success) {
+                    // Tiến hành cập nhật kết quả xử lý cuối
+                    updateSuccess($step);
+                } else {
+                    eGovMessage.show(result.error);
+                }
+            },
+            error: function (xhr) {
+                eGovMessage.notification(xhr.statusText, eGovMessage.messageTypes.error);
+            }
+        });
+    }
+
+    function updateSuccess($step) {
+        if (isDocSuccess) {
+            nextStep($step);
+            return;
+        }
+        var isSuccess = $("input[name='IsSuccess']:checked").val();
+        var docId = $("#documentId").val();
+        $.ajax({
+            url: '@Url.Action("UpdateResult", "Return")',
+            data: { isSuccess: isSuccess, docId: docId },
+            success: function (result) {
+                if (result.success) {
+                    // Trả kết quả
+                    updateReturn();
+                }
+                else {
+                    $(".wizard-button .message").text(result.error).css("color", "red");
+                }
+            }
+        });
+    }
+
+    function updateReturn() {
+        if (isReturned) {
+            return;
+        }
+        var personInfo = $("#personGiveInfo").val();
+        var docCopyId = $("#docCopyId").val();
+        var isFinish = $("#finishProcess").is(":checked") == true ? true : false;
+        $.ajax({
+            url: '@Url.Action("UpdateReturn", "Return")',
+            data: { docCopyId: docCopyId, returnNote: personInfo, isFinish: isFinish },
+            success: function (result) {
+                if (result.success) {
+                    isReturned = true;
+                    eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                    new dialogAdapter().close();
+                }
+                else {
+                    $(".wizard-button .message").text(result.error).css("color", "red");
+                }
+            }
+        });
+    }
+
+    function nextStep($step) {
+        if ($step.next().hasClass("wizard-step")) { // nếu có bước tiếp theo?
+            $step.hide().next().fadeIn();  // Hiển thị nó và ẩn bước hiện tại
+            $("#backStep").show();
+        }
+    }
+
+    function closeDialog() {
+        new dialogAdapter().close();
+    }
+</script>
+<div class="return-main">
+    @if (Model.IsReturned != true)
+    {
+        <input type="hidden" value="@Model.DocumentId" id="documentId"/>
+        <input type="hidden" value="@Model.DocumentCopyId" id="docCopyId" />
+        
+        // Hiển thị form hoàn thiện bổ sung trước khi trả kết quả
+        if (Model.IsSupplemented == false)
+        {
+            <div class="wizard-step" id="supplementary">
+                <span class="step-title">Hồ sơ đang có yêu cầu bổ sung, bạn cần hoàn thiện bổ sung trước khi trả kết quả</span>
+                <div>@Html.Action("ReceiveSupplementary", "Supplementary", new { docCopyId = ViewBag.DocumentCopyId })</div>
+            </div>
+        }
+
+        // Hiển thị form cập nhật kết quả xử lý cuối cùng
+        if (Model.IsSuccess == null)
+        { 
+        <div class="wizard-step " id="updateSuccess">
+            <span class="step-title">Cập nhật kết quả xử lý cuối cùng cho hồ sơ</span>
+            <div class="update-appprovers">
+                @foreach (var approver in ViewBag.Approvers)
+                { 
+                    <div class="approver-item">
+                        <span class="field-label">Ý kiến duyệt </span>
+                        <span class="field-result">@(approver.IsSuccess ? "Đồng ý" : "Từ chối")</span>
+                        <span class="field-label" style="font-weight: bold; color: blue;">@(approver.UserSend == null ? "" : approver.UserSend.FullName)</span>
+                        <span style="font-weight: bold">@approver.DateCreated.ToString("dd/MM/yyyy")</span>
+                    </div>
+                }
+            </div>
+            <div class="update-success">
+                <span class="field-label">Kết quả xử lý</span>
+                <input type="radio" name="IsSuccess" value="true" checked="checked" /><span>Đồng ý</span>
+                <input type="radio" name="IsSuccess" value="false" /><span>Từ chối</span>
+                <textarea id="successNote" style="width: 100%;"></textarea>
+            </div>
+        </div>
+        }
+        
+        <div class="wizard-step" id="returnResult">
+            <span class="step-title">Trả kết quả</span>
+            <div class="return-form">
+                <div class="return-process-result">
+                    <span class="field-label">Kết quả xử lý </span>
+                    <span class="field-result">@(Model.IsSuccess == true ? "Đồng ý" : "Từ chối")</span>
+                    <span class="field-label" style="font-weight: bold; color: blue;">@(Model.UserSuccess == null ? "" : Model.UserSuccess.FullName)</span>
+                    <span style="font-weight: bold">@(Convert.ToDateTime(Model.DateSuccess).ToString("dd/MM/yyyy"))</span>
+                </div>
+                <div class="return-process-time">
+                    <span class="field-label">Hẹn trả</span>
+                    <span class="field-result">@(Convert.ToDateTime(Model.DateAppointed).ToString("dd/MM/yyyy"))</span>
+                    <span class="field-label">Trễ hẹn</span>
+                    <span style="font-weight: bold">@(Model.DateAppointed == null ? 0 : ((TimeSpan)(Model.DateAppointed - DateTime.Now)).Days) ngày</span>
+                </div>
+                <div class="return-person-info">
+                    <span>Thông tin công dân nhận kết quả</span><br />
+                    <textarea id="personGiveInfo" style="width: 493px">@Model.ReturnNote</textarea>
+                </div>
+                @if (checkKetThucXuLy)
+                {
+                    <div>
+                        <input type="checkbox" id="finishProcess" /><span> Kết thúc xử lý hồ sơ</span>
+                    </div>
+                }
+                <div class="return-papers">
+                    <span>Danh sách giấy tờ trả cho công dân</span>
+                    <ul>
+                        @foreach (var paper in ViewBag.PaperReturns)
+                        { 
+                            <li>
+                                <input type="checkbox" value="@paper.PaperId" @(paper.IsRequired ? "checked" : "") />
+                                <span>@paper.PaperName</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wizard-button">
+            <span class="message"></span>
+            <input type="button" id="backStep" value="Quay lại" style="background-color: #797979" />
+            <input type="button" id="nextStep" value="Tiếp tục" />
+            <input type="button" value="Đóng" style="background-color: #ff2f2f;" onclick='closeDialog()' />
+        </div>
+    }
+    else
+    {
+        <div class="step-title" style="color: blue; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
+            Hồ sơ đã được trả kết quả
+        </div>
+        <div>
+            <span>Thời gian trả kết quả: <strong>@(Convert.ToDateTime(Model.DateReturned).ToString("hh:mm:ss dd/MM/yyyy")) </strong></span>
+        </div>
+        <div>
+            <span>Thông tin người nhận kết quả: </span>
+            <br />
+            <strong>@Model.ReturnNote</strong>
+        </div>
+        <div class="wizard-button">
+            <input type="button" value="Đóng" style="background-color: #ff2f2f;" onclick='closeDialog();' />
+        </div>
+    }
+</div>

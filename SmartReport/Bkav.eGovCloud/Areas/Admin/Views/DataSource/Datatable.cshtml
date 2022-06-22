@@ -1,0 +1,193 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Entities.Customer.E_DataTable>
+    @{
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+
+    @*<section class="content-header">
+            <h1>
+                BI
+                <small>Data Table</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="breadcrumb-item active">Data Table</li>
+            </ol>
+        </section>*@
+    <script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+    <link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var listTable = $('#list-table').DataTable({
+                order: [[1, 'asc']]
+            });
+        });
+    </script>
+    <style>
+        .dataTables_filter input {
+            border: 1px solid #d9d9d9;
+            margin-left: 5px;
+        }
+    </style>
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span>Danh sách table</span>
+        </div>
+    </div>
+    <section class="content">
+        <div class="box">
+            <a href="../SyncTables/@ViewBag.DataSourceId" class="btn btn-primary btn-xs pull-right">Đồng bộ</a>
+        </div>
+        <br />
+        <br />
+        <div class="box-body">
+            <div class="table-responsive">
+                @*<div id="example1_filter" class="dataTables_filter">
+                        <label>Search:<input type="search" class="txt-filter" placeholder=""></label>
+                    </div>*@
+
+                <table id="list-table" class="table table-hover mb-0 list-table">
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col />
+                        <col style="width: 320px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Tên bảng</th>
+                            <th>Mô tả</th>
+                            <th>Trạng thái</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dt in Model)
+                        {
+                            <tr name="@dt.Name @dt.Description">
+                                <td><span class="text-dark">@dt.Name</span></td>
+                                <td>
+                                    <span class="text-dark">@dt.Description</span>
+                                </td>
+                                <td>
+                                    <span class="text-dark">@(dt.IsActivated ? "Actived" : "")</span>
+                                </td>
+                                <td>
+                                    <a class="text-right btn btn-info btn-xs pull-left text-white" style="margin-right:5px" onclick="InitEditDataTableForm('@dt.DataTableId')">Sửa</a>
+                                    <a class="text-right btn btn-warning btn-xs pull-left text-white" href="../DataField/@dt.DataTableId">Quản lý trường dữ liệu</a>
+                                    <a class="text-right btn btn-success btn-xs pull-right text-white" target="_blank" href="../Showdata/@dt.DataTableId">Xem dữ liệu</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <div id="modalDataTable" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="h4Title" id="titleModal">Sửa bảng</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row margin-top-5">
+                            <div class="col-md-3">
+                                <div>Tên bảng</div>
+                            </div>
+                            <div class="col-md-9 datatable-name text-bold" name="datatable-name">
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-3">
+                                <div>Mô tả</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="datatable-des" class="form-control datatable-des" />
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-3">
+                                <div>Trạng thái</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="checkbox" name="datatable-active" class="datatable-active" style="position:relative;top: 3px; left:unset; opacity:1.0" /> Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer align-items-center position-relative">
+                    <button type="button" onclick="UpdateDataTable()" class="btn btn-primary waves-effect text-left" data-dismiss="modal" id="btn-update">Ghi lại</button>
+                    <button type="button" class="btn btn-default waves-effect text-left" data-dismiss="modal" id="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.txt-filter').on('keyup',
+                function (e) {
+                    var term = $('.txt-filter').val().toLowerCase();
+                    $('.list-table tbody tr').each(function () {
+                        var rowE = $(this);
+                        var rowName = rowE.attr("name").toLowerCase();
+
+                        if (rowName.indexOf(term) >= 0) {
+                            rowE.show();
+                        } else {
+                            rowE.hide();
+                        }
+                    });
+                });
+        });
+        var dataTableModel = {
+            DataTableId: null,
+            DataSourceId: null,
+            Name: '',
+            Description: '',
+            IsActivated: true,
+        };
+
+        function InitEditDataTableForm(id) {
+            dataTableModel.DataTableId = id;
+            $.ajax({
+                url: '/datasource/GetTableInfor?id=' + id,
+                cache: false,
+                type: 'post',
+                success: function (data) {
+                    if (data) {
+                        $('.datatable-name').html(data.result.Name);
+                        $('.datatable-des').val(data.result.Description);
+                        $('.datatable-active').prop('checked', data.result.IsActivated);
+
+                        $('#titleModal').html('Sửa bảng');
+
+                        $('#modalDataTable').modal({
+                            show: true
+                        });
+                    }
+                },
+            });
+
+        }
+        function UpdateDataTable() {
+            dataTableModel.IsActivated = $(".datatable-active").is(':checked');
+            dataTableModel.Description = $(".datatable-des").val();
+
+            $.ajax({
+                url: '/datasource/updateTable',
+                data: JSON.stringify(dataTableModel),
+                type: 'post',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success)
+                        window.location.reload();
+                }
+            });
+        }
+    </script>

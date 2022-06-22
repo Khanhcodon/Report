@@ -1,0 +1,10 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Localizer("Báo cáo chính phủ");
+}
+
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @RenderBody()
+    </div>
+</div>

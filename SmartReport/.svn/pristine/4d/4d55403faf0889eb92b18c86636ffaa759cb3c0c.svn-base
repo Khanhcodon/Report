@@ -1,0 +1,28 @@
+﻿<div class="trans trans-left dataDetail" id="search-document-detail">
+    <div class="bmail-search hidden" id="1mail-search" data-app="bmail" style="display: none;"></div>
+
+    <div class="documents-search" data-app="documents" id="" style="display: block;">
+
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <div aria-expanded="false" id="search-document-detail-back" role="button" tabindex="0" class="backtoList">
+                        <i class="material-icons">arrow_back</i>
+                    </div>
+                    <span class="mdl-layout-title wrap-text">
+                        <span id="search-document-detail-title" class="header-title" style="line-height:16px;">Tìm kiếm</span>
+                    </span>
+                </div>
+            </header>
+
+            <div class="mdl-layout__content" style="background: url(../../Content/Images/home/back-ipad.jpg)">
+
+                <div class="documents-detail" style="display: block; height: 602px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-search hidden" data-app="chat" id="1chat-search" style="display: none;"></div>
+</div>

@@ -1,0 +1,716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4986542C-2E8D-44C1-8E72-AFA09EEAC56C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bkav.eGovCloud.Business</RootNamespace>
+    <AssemblyName>Bkav.eGovCloud.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;XuLyVanBanEdition</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Business.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;HoSoMotCuaEdition</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'XLVB-QuanTriTapTrungEdition - Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;QuanTriTapTrungEdition</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Business.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HSMC-QuanTriTapTrungEdition - Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;HoSoMotCuaEdition;QuanTriTapTrungEdition</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Business.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\QuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Release|AnyCPU'">
+    <OutputPath>bin\HoSoMotCuaEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;HoSoMotCuaEdition</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HSMC-QuanTriTapTrungEdition - Release|AnyCPU' ">
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;HoSoMotCuaEdition;QuanTriTapTrungEdition</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Release|AnyCPU'">
+    <OutputPath>bin\XuLyVanBanEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;XuLyVanBanEdition</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'XLVB-QuanTriTapTrungEdition - Release|AnyCPU' ">
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE;XuLyVanBanEdition;QuanTriTapTrungEdition</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Business.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BkavVersion|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\BkavVersion\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;BkavVersion</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.Business.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test - TrinhNVd|AnyCPU'">
+    <OutputPath>bin\Test - TrinhNVd\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\Bkav.SmartReport\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Bkav.eGovCloud.SmsService">
+      <HintPath>..\packages\Bkav.eGovCloud.SmsService.dll</HintPath>
+    </Reference>
+    <Reference Include="Bkav.EReport">
+      <HintPath>..\packages\Bkav.EReport.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.69.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bkav.SmartReport\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\Bkav.SmartReport\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentScheduler">
+      <HintPath>..\Bkav.SmartReport\packages\FluentScheduler.5.3.0\lib\net40\FluentScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\Bkav.SmartReport\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\Bkav.SmartReport\packages\Microsoft.AspNet.SignalR.Core.1.2.2\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="Microsoft.Web.Administration, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Management, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\System32\inetsrv\Microsoft.Web.Management.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler">
+      <HintPath>..\Bkav.SmartReport\packages\MiniProfiler.3.2.0.157\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.EntityFramework">
+      <HintPath>..\Bkav.SmartReport\packages\MiniProfiler.EF.2.1.0\lib\net40\MiniProfiler.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Bkav.SmartReport\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Bkav.SmartReport\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http">
+      <HintPath>bin\Debug\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>bin\Debug\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CustomPackages\Web.MVC.3001\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\AccountBll.cs" />
+    <Compile Include="Customer\ActionLevelBll.cs" />
+    <Compile Include="Customer\Ad_Report\Ad_LocalityBll.cs" />
+    <Compile Include="Customer\Ad_Report\IndatatypeBll.cs" />
+    <Compile Include="Customer\AttachmentDetailBll.cs" />
+    <Compile Include="Customer\CategoryDisaggregationsBll.cs" />
+    <Compile Include="Customer\dataTypeBll.cs" />
+    <Compile Include="Customer\DisaggregationBll.cs" />
+    <Compile Include="Customer\IndicatorValueDepartmentBll.cs" />
+    <Compile Include="Customer\LocalityBll.cs" />
+    <Compile Include="Customer\LocalityDepartmentBll.cs" />
+    <Compile Include="Customer\ReportRuleBll.cs" />
+    <Compile Include="Customer\SurveyCatalogBll.cs" />
+    <Compile Include="Customer\SurveyCatalogValueBll.cs" />
+    <Compile Include="Customer\DocumentPublishPlusBll.cs" />
+    <Compile Include="Customer\InCatalogValueBll.cs" />
+    <Compile Include="Customer\InCatalogBll.cs" />
+    <Compile Include="Customer\IndicatorCatalogBll.cs" />
+    <Compile Include="Customer\DataFieldBll.cs" />
+    <Compile Include="Customer\DocTypeTimeJobBll.cs" />
+    <Compile Include="Customer\ReportModeBll.cs" />
+    <Compile Include="Customer\ReportQueryGroupBll.cs" />
+    <Compile Include="Customer\ReportQueryFilterBll.cs" />
+    <Compile Include="Customer\DocumentRelatedBll.cs" />
+    <Compile Include="Customer\ReportQueryBll.cs" />
+    <Compile Include="Customer\DataSourceBll.cs" />
+    <Compile Include="Customer\E_DataTableBll.cs" />
+    <Compile Include="Admin\ParseQuery\IParseQuery.cs" />
+    <Compile Include="Admin\ParseQuery\ParseQueryMySQL.cs" />
+    <Compile Include="Customer\Specification\ActionLevelQuery.cs" />
+    <Compile Include="Customer\SqlTemplateBll.cs" />
+    <Compile Include="Admin\ConnectionBll.cs" />
+    <Compile Include="Admin\CustomerBll.cs" />
+    <Compile Include="Admin\SiteBll.cs" />
+    <Compile Include="Admin\TimerTemplateBll.cs" />
+    <Compile Include="Admin\TimerJobBll.cs" />
+    <Compile Include="Admin\DomainAliasBll.cs" />
+    <Compile Include="Admin\DomainBll.cs" />
+    <Compile Include="Admin\ServerBll.cs" />
+    <Compile Include="Admin\Specification\AccountQuery.cs" />
+    <Compile Include="Admin\Specification\DomainAliasQuery.cs" />
+    <Compile Include="Admin\Specification\DomainQuery.cs" />
+    <Compile Include="Base\ServiceBase.cs" />
+    <Compile Include="Caching\DocumentsCache.cs" />
+    <Compile Include="Common\CatalogQuery.cs" />
+    <Compile Include="Common\ExtensionEmbryonicForm.cs" />
+    <Compile Include="Common\FileHelper.cs" />
+    <Compile Include="Common\LdapProvider.cs" />
+    <Compile Include="Common\LogBll.cs" />
+    <Compile Include="Common\NetworkShare.cs" />
+    <Compile Include="Common\NotificationHubs.cs" />
+    <Compile Include="Common\ResourceBll.cs" />
+    <Compile Include="Common\Specification\ResourceQuery.cs" />
+    <Compile Include="Common\SettingBll.cs" />
+    <Compile Include="Common\SettingProvider.cs" />
+    <Compile Include="Common\Specification\SettingQuery.cs" />
+    <Compile Include="Customer\ActivityLogBll.cs" />
+    <Compile Include="Customer\AddressBll.cs" />
+    <Compile Include="Customer\AnticipateBll.cs" />
+    <Compile Include="Customer\ApproverBll.cs" />
+    <Compile Include="Customer\AuthorizeBll.cs" />
+    <Compile Include="Customer\BackupRestoreConfigBll.cs" />
+    <Compile Include="Customer\BackupRestoreFileConfigBll.cs" />
+    <Compile Include="Customer\BackupRestoreHistoryBll.cs" />
+    <Compile Include="Customer\BackupRestoreManagerBll.cs" />
+    <Compile Include="Customer\BusinessBll.cs" />
+    <Compile Include="Customer\BusinessLicenseAttachBll.cs" />
+    <Compile Include="Customer\BusinessLicenseBll.cs" />
+    <Compile Include="Customer\BusinessTypeBll.cs" />
+    <Compile Include="Customer\BussinessDocFieldDocTypeGroupBll.cs" />
+    <Compile Include="Customer\CalendarBll.cs" />
+    <Compile Include="Customer\ConfigTypeBll.cs" />
+    <Compile Include="Customer\CatalogBll.cs" />
+    <Compile Include="Customer\CatalogValueBll.cs" />
+    <Compile Include="Customer\CityBll.cs" />
+    <Compile Include="Customer\CodeBll.cs" />
+    <Compile Include="Customer\CategoryBll.cs" />
+    <Compile Include="Customer\CommentBll.cs" />
+    <Compile Include="Customer\AttachmentBll.cs" />
+    <Compile Include="Customer\CriteriaBll.cs" />
+    <Compile Include="Customer\DocColumnSettingBll.cs" />
+    <Compile Include="Customer\DocTypeTemplateBll.cs" />
+    <Compile Include="Customer\EdocBll.cs" />
+    <Compile Include="Customer\EgovJobBll.cs" />
+    <Compile Include="Customer\FileBll.cs" />
+    <Compile Include="Customer\CitizenBll.cs" />
+    <Compile Include="Customer\InfringeListBll.cs" />
+    <Compile Include="Customer\InterfaceConfigBll.cs" />
+    <Compile Include="Customer\ReportKeyBll.cs" />
+    <Compile Include="Customer\StoreDocBll.cs" />
+    <Compile Include="Customer\MailBll.cs" />
+    <Compile Include="Customer\MobileDeviceBll.cs" />
+    <Compile Include="Customer\NotificationBll.cs" />
+    <Compile Include="Customer\NotifyConfigBll.cs" />
+    <Compile Include="Customer\OtpBll.cs" />
+    <Compile Include="Customer\PermissionSettingBll.cs" />
+    <Compile Include="Customer\ProcessFunctionGroupBll.cs" />
+    <Compile Include="Customer\ProcessFunctionFilterBll.cs" />
+    <Compile Include="Customer\ReplaceUserBll.cs" />
+    <Compile Include="Customer\ReportGroupBll.cs" />
+    <Compile Include="Customer\ShareFolderBll.cs" />
+    <Compile Include="Customer\SmsBll.cs" />
+    <Compile Include="Customer\Specification\CitizenQuery.cs" />
+    <Compile Include="Customer\Specification\RequiredSupplementaryQuery.cs" />
+    <Compile Include="Customer\StatisticBll.cs" />
+    <Compile Include="Customer\StatisticsBll.cs" />
+    <Compile Include="Customer\SyncDocTypeBll.cs" />
+    <Compile Include="Customer\TemplateKeyCategoryBll.cs" />
+    <Compile Include="Customer\TimeJobBll.cs" />
+    <Compile Include="Customer\TreeGroupBll.cs" />
+    <Compile Include="Customer\UnitBll.cs" />
+    <Compile Include="Customer\UserActivityLogBll.cs" />
+    <Compile Include="Customer\DailyProcessBll.cs" />
+    <Compile Include="Customer\DistrictBll.cs" />
+    <Compile Include="Customer\DocExtenfieldBll.cs" />
+    <Compile Include="Customer\DocTypeFormBll.cs" />
+    <Compile Include="Customer\DocumentPublishBll.cs" />
+    <Compile Include="Customer\ExtensionTimeBll.cs" />
+    <Compile Include="Customer\DocTimelineBll.cs" />
+    <Compile Include="Customer\CommonCommentBll.cs" />
+    <Compile Include="Customer\DocFinishBll.cs" />
+    <Compile Include="Customer\DocumentContentBll.cs" />
+    <Compile Include="Customer\DocumentCopyBll.cs" />
+    <Compile Include="Customer\FileLocationBll.cs" />
+    <Compile Include="Customer\FormGroupBll.cs" />
+    <Compile Include="Customer\InfomationBll.cs" />
+    <Compile Include="Customer\KeyWordBll.cs" />
+    <Compile Include="Customer\LuceneBll.cs" />
+    <Compile Include="Customer\PrinterBll.cs" />
+    <Compile Include="Customer\ProcessFunctionTypeBll.cs" />
+    <Compile Include="Customer\DocRelationBll.cs" />
+    <Compile Include="Customer\DocumentBll.cs" />
+    <Compile Include="Customer\ExtendFieldBll.cs" />
+    <Compile Include="Customer\FeeBll.cs" />
+    <Compile Include="Customer\FormBll.cs" />
+    <Compile Include="Customer\JobTitlesBll.cs" />
+    <Compile Include="Customer\DocTypeBll.cs" />
+    <Compile Include="Customer\IncreaseBll.cs" />
+    <Compile Include="Customer\PaperBll.cs" />
+    <Compile Include="Customer\ProcessFunctionBll.cs" />
+    <Compile Include="Customer\ReportBll.cs" />
+    <Compile Include="Customer\SignatureBll.cs" />
+    <Compile Include="Customer\Specification\BusinessQuery.cs" />
+    <Compile Include="Customer\Specification\BusinessLicenseQuery.cs" />
+    <Compile Include="Customer\Specification\BusinessTypeQuery.cs" />
+    <Compile Include="Customer\Specification\CatalogQuery.cs" />
+    <Compile Include="Customer\Specification\CityQuery.cs" />
+    <Compile Include="Customer\Specification\CodeQuery.cs" />
+    <Compile Include="Customer\Specification\CategoryQuery.cs" />
+    <Compile Include="Customer\Specification\CommentQuery.cs" />
+    <Compile Include="Customer\Specification\DailyProcessQuery.cs" />
+    <Compile Include="Customer\Specification\DistrictQuery.cs" />
+    <Compile Include="Customer\Specification\FileLocationQuery.cs" />
+    <Compile Include="Customer\Specification\DocCatalogQuery.cs" />
+    <Compile Include="Customer\Specification\DocExtendFieldQuery.cs" />
+    <Compile Include="Customer\Specification\DocFinishQuery.cs" />
+    <Compile Include="Customer\Specification\DocumentCopyQuery.cs" />
+    <Compile Include="Customer\Specification\DocumentQuery.cs" />
+    <Compile Include="Customer\Specification\FeeQuery.cs" />
+    <Compile Include="Customer\Specification\FormGroupQuery.cs" />
+    <Compile Include="Customer\Specification\FormQuery.cs" />
+    <Compile Include="Customer\Specification\JobTitlesQuery.cs" />
+    <Compile Include="Customer\Specification\DocTypeQuery.cs" />
+    <Compile Include="Customer\Specification\IncreaseQuery.cs" />
+    <Compile Include="Customer\Specification\KeyWordQuery.cs" />
+    <Compile Include="Customer\Specification\PaperQuery.cs" />
+    <Compile Include="Customer\Specification\PrinterQuery.cs" />
+    <Compile Include="Customer\Specification\StoreQuery.cs" />
+    <Compile Include="Customer\Specification\TemplateKeyQuery.cs" />
+    <Compile Include="Customer\Specification\TemplateQuery.cs" />
+    <Compile Include="Customer\Specification\TranferTypeQuery.cs" />
+    <Compile Include="Customer\Specification\WardQuery.cs" />
+    <Compile Include="Customer\Specification\WorkflowQuery.cs" />
+    <Compile Include="Customer\StoreBll.cs" />
+    <Compile Include="Customer\DocFieldBll.cs" />
+    <Compile Include="Customer\DepartmentBll.cs" />
+    <Compile Include="Customer\Permission\PermissionBll.cs" />
+    <Compile Include="Customer\Permission\PermissionCache.cs" />
+    <Compile Include="Customer\PositionBll.cs" />
+    <Compile Include="Customer\RoleBll.cs" />
+    <Compile Include="Customer\Specification\DepartmentQuery.cs" />
+    <Compile Include="Customer\Specification\DocFieldQuery.cs" />
+    <Compile Include="Customer\Specification\PositionQuery.cs" />
+    <Compile Include="Customer\Specification\RoleQuery.cs" />
+    <Compile Include="Customer\Specification\UserQuery.cs" />
+    <Compile Include="Customer\StorePrivateBll.cs" />
+    <Compile Include="Customer\SupplementaryBll.cs" />
+    <Compile Include="Customer\TemplateBll.cs" />
+    <Compile Include="Customer\TemplateKeyBll.cs" />
+    <Compile Include="Customer\TimeBll.cs" />
+    <Compile Include="Customer\TranferTypeBll.cs" />
+    <Compile Include="Customer\UserBll.cs" />
+    <Compile Include="Customer\UserConnectionBll.cs" />
+    <Compile Include="Customer\UserDepartmentJobTitlesPositionBll.cs" />
+    <Compile Include="Customer\VoiceTextBll.cs" />
+    <Compile Include="Customer\VoteBll.cs" />
+    <Compile Include="Customer\VoteDetailBll.cs" />
+    <Compile Include="Customer\WardBll.cs" />
+    <Compile Include="Customer\WorkflowBll.cs" />
+    <Compile Include="Extensions\DepartmentExtension.cs" />
+    <Compile Include="Extensions\FormExtension.cs" />
+    <Compile Include="Extensions\HolidayExtension.cs" />
+    <Compile Include="Extensions\LogExtension.cs" />
+    <Compile Include="FileTransfer\Transfer.cs" />
+    <Compile Include="FileTransfer\FileTransferInfo.cs" />
+    <Compile Include="FileTransfer\FileTransferService.cs" />
+    <Compile Include="FileTransfer\FileTransferLocal.cs" />
+    <Compile Include="FileTransfer\IFileTransfer.cs" />
+    <Compile Include="Invoice\InvoiceHelper.cs" />
+    <Compile Include="Mobile\DocumentMobileBll.cs" />
+    <Compile Include="Objects\CacheObjects\AuthorizeCached.cs" />
+    <Compile Include="Objects\CacheObjects\CategoryCached.cs" />
+    <Compile Include="Objects\CacheObjects\CodeUseds.cs" />
+    <Compile Include="Objects\CacheObjects\CurrentUserCached.cs" />
+    <Compile Include="Objects\CacheObjects\DepartmentCached.cs" />
+    <Compile Include="Objects\CacheObjects\DocColumnSettingCached.cs" />
+    <Compile Include="Objects\CacheObjects\DocTypeCached.cs" />
+    <Compile Include="Objects\CacheObjects\DocumentCached.cs" />
+    <Compile Include="Objects\CacheObjects\DomainCached.cs" />
+    <Compile Include="Objects\CacheObjects\HolidayCached.cs" />
+    <Compile Include="Objects\CacheObjects\InterfaceConfigCached.cs" />
+    <Compile Include="Objects\CacheObjects\JobTitlesCached.cs" />
+    <Compile Include="Objects\CacheObjects\PermissionSettingCached.cs" />
+    <Compile Include="Objects\CacheObjects\PositionCached.cs" />
+    <Compile Include="Objects\CacheObjects\ProcessFunctionCached.cs" />
+    <Compile Include="Objects\CacheObjects\ResourceCached.cs" />
+    <Compile Include="Objects\CacheObjects\StoreCached.cs" />
+    <Compile Include="Objects\CacheObjects\StorePrivateCached.cs" />
+    <Compile Include="Objects\CacheObjects\TreeGroupCached.cs" />
+    <Compile Include="Objects\CacheObjects\UserCached.cs" />
+    <Compile Include="Objects\CacheObjects\UserDepartmentJobTitlesPosition.cs" />
+    <Compile Include="Objects\CacheObjects\WorkflowCached.cs" />
+    <Compile Include="Objects\Invoice\InvoicePublishObject.cs" />
+    <Compile Include="Objects\LienThongDto.cs" />
+    <Compile Include="Objects\Notification\Notify.cs" />
+    <Compile Include="Objects\ReportObject.cs" />
+    <Compile Include="Objects\ReportKeyObject.cs" />
+    <Compile Include="Objects\StatisticObject.cs" />
+    <Compile Include="Objects\StatisticObjectDVC.cs" />
+    <Compile Include="Objects\StatisticXlvb\ProgressStatistic_Xlvb.cs" />
+    <Compile Include="Objects\StatisticXlvb\StatisticsCriteriaObject.cs" />
+    <Compile Include="Objects\StatisticXlvb\StatisticPublish.cs" />
+    <Compile Include="Objects\StatisticXlvb\StatisticsGroup.cs" />
+    <Compile Include="Objects\StatisticXlvb\StatisticTimeline.cs" />
+    <Compile Include="Objects\StatisticXlvb\StoreDocumentIn.cs" />
+    <Compile Include="Objects\StatisticXlvb\VanBanDenOverdue.cs" />
+    <Compile Include="Objects\Transfer\CreateDocumentRequest.cs" />
+    <Compile Include="Objects\Transfer\CreateDocumentResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Admin\Specification\ServerQuery.cs" />
+    <Compile Include="Service References\BusinessInvoice\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\DVCService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\FileManagerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PortalService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PublishInvoice\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\DocTypeJobDueDate.cs" />
+    <Compile Include="Tasks\DocTypeJobOutOfDate.cs" />
+    <Compile Include="Tasks\DocTypeScheduler.cs" />
+    <Compile Include="Tasks\EmptyTempFolderJob.cs" />
+    <Compile Include="Tasks\EmptyLogTableJob.cs" />
+    <Compile Include="Tasks\GetDocTypeScheduleJob.cs" />
+    <Compile Include="Tasks\IeGovJob.cs" />
+    <Compile Include="Tasks\JobBase.cs" />
+    <Compile Include="Tasks\ResetIncreateHSMCJob.cs" />
+    <Compile Include="Tasks\ResetIncreateJob.cs" />
+    <Compile Include="Tasks\SearchIndexJob.cs" />
+    <Compile Include="Tasks\SendEmailJob.cs" />
+    <Compile Include="Tasks\eGovQueueJob.cs" />
+    <Compile Include="Tasks\SendEmailJobApi.cs" />
+    <Compile Include="Tasks\SendSmsJob.cs" />
+    <Compile Include="Tasks\DocTypeJob.cs" />
+    <Compile Include="Tasks\SendSmsJobApi.cs" />
+    <Compile Include="Tasks\StatisticJob.cs" />
+    <Compile Include="Tasks\SyncDocumentJob.cs" />
+    <Compile Include="Utils\BmailNotification.cs" />
+    <Compile Include="Utils\DateTimeHelper.cs" />
+    <Compile Include="Utils\DocumentHelper.cs" />
+    <Compile Include="Utils\DomainConfigHelper.cs" />
+    <Compile Include="Utils\SaveFileUtil.cs" />
+    <Compile Include="Utils\HistoryPathHelper.cs" />
+    <Compile Include="Utils\MailHelper.cs" />
+    <Compile Include="Utils\QueueJobHelper.cs" />
+    <Compile Include="Utils\RandomHelper.cs" />
+    <Compile Include="Utils\ReportHelper.cs" />
+    <Compile Include="Utils\SendEmailHelper.cs" />
+    <Compile Include="Utils\SendSmsHelper.cs" />
+    <Compile Include="Utils\TCVN3ToUnicode.cs" />
+    <Compile Include="Utils\TimerJobHelper.cs" />
+    <Compile Include="Utils\WorkflowHelper.cs" />
+    <Compile Include="Utils\DocTypeHelper.cs" />
+    <Compile Include="Utils\FormHelper.cs" />
+    <Compile Include="Utils\DocumentPermissionHelper.cs" />
+    <Compile Include="Utils\TemplateHelper.cs" />
+    <Compile Include="Utils\WorktimeHelper.cs" />
+    <Compile Include="Utils\HandsonToJson.cs" />
+    <Compile Include="Utils\XlsxToJson.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bkav.eGovCloud.Core\Bkav.eGovCloud.Core.csproj">
+      <Project>{ca506352-51fe-4e84-8ae3-f133d6cb0400}</Project>
+      <Name>Bkav.eGovCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bkav.eGovCloud.DataAccess\Bkav.eGovCloud.DataAccess.csproj">
+      <Project>{05ADED69-DBC7-4440-9DC0-D055C28FB1BB}</Project>
+      <Name>Bkav.eGovCloud.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bkav.eGovCloud.Entities\Bkav.eGovCloud.Entities.csproj">
+      <Project>{90E7646F-43A0-41EF-86D3-6EE9C4428FEB}</Project>
+      <Name>Bkav.eGovCloud.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Service References\BusinessInvoice\Bkav.eGovCloud.Business.BusinessInvoice.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\BusinessInvoice\BusinessService.wsdl" />
+    <None Include="Service References\PortalService\PortalService.wsdl" />
+    <None Include="Service References\PublishInvoice\publishservice.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Customer\DynamicForm\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\BusinessInvoice\" />
+    <WCFMetadataStorage Include="Service References\DVCService\" />
+    <WCFMetadataStorage Include="Service References\FileManagerService\" />
+    <WCFMetadataStorage Include="Service References\PortalService\" />
+    <WCFMetadataStorage Include="Service References\PublishInvoice\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\jquery.signalR-2.2.0.min.js.map">
+      <DependentUpon>jquery.signalR-2.2.0.min.js</DependentUpon>
+    </None>
+    <None Include="Service References\DVCService\DVCServiceHoSo.wsdl" />
+    <None Include="Service References\FileManagerService\Bkav.eGovCloud.Business.FileManagerService.FileDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FileManagerService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileManagerService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileManagerService\FileTransfer1.wsdl" />
+    <None Include="Service References\FileManagerService\FileTransfer5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileManagerService\FileTransfer6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileManagerService\FileTransfer7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileManagerService\FileTransfer8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileManagerService\FileTransfer9.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileManagerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileManagerService\FileTransfer1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <None Include="Service References\PortalService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PortalService\configuration.svcinfo" />
+    <None Include="Service References\PortalService\configuration91.svcinfo" />
+    <None Include="Service References\PortalService\PortalService.disco" />
+    <None Include="Service References\BusinessInvoice\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\BusinessInvoice\configuration.svcinfo" />
+    <None Include="Service References\BusinessInvoice\configuration91.svcinfo" />
+    <None Include="Service References\BusinessInvoice\BusinessService.disco" />
+    <None Include="Service References\PublishInvoice\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PublishInvoice\configuration.svcinfo" />
+    <None Include="Service References\PublishInvoice\configuration91.svcinfo" />
+    <None Include="Service References\PublishInvoice\publishservice.disco" />
+    <None Include="Service References\DVCService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\DVCService\configuration.svcinfo" />
+    <None Include="Service References\DVCService\configuration91.svcinfo" />
+    <None Include="Service References\DVCService\DVCServiceHoSo.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

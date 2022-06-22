@@ -1,0 +1,103 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.NotificationSettingsModel
+@{
+    ViewBag.Title = Localizer("Setting.Notification.Tab.Title");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+    var listDocumentNotify = ViewBag.ListDocumentNotifyType as List<SelectListItem>;
+    var listMailNotify = ViewBag.ListMailNotifyType as List<SelectListItem>;
+}
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.NotifyUrl)
+        @Html.HiddenFor(model=>model.DomainUrl)
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b data-res="egov.resources.setting.notify.documentNotify"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.DocumentActived)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.DocumentActived)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.DocumentNotifyType)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.DocumentNotifyType, listDocumentNotify)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b data-res="egov.resources.setting.notify.BmailNotifyType"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.MailActived)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.MailActived)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.MailNotifyType)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.MailNotifyType, listMailNotify)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.TimeToCheckMail)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.TimeToCheckMail, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b data-res="egov.resources.setting.notify.chat"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.ChatActived)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.ChatActived)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b data-res="egov.resources.setting.notify.mobileconfig"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.NotifyUrl)
+                </td>
+                <td>
+                    <div id="DomainUrl">@Model.DomainUrl</div> @Html.TextBoxFor(model => model.NotifyPathUrl, new { @class = "form-control", @placeholder = "/n/{notificationId}" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}

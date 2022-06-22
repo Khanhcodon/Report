@@ -1,0 +1,7 @@
+UserInfoCookie: eGovUserInfo
+BkavSSOCookieName: bkavAuthen
+BkavSSOCookieUsername: bkavUsername
+BkavSSOExpire: 7
+BkavSSOKeyVersion: 0
+BkavSSOParentDomain: eformdev.hcdt.vn
+BkavSSOSecretKey: c58ba928fcddbf73f1b4e9a6fe4776700bcf013d570096ef2ea638f9ad7c2b34

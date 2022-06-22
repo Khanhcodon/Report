@@ -1,0 +1,1280 @@
+﻿@model ReportModel
+@{
+    var reportGroup = ViewBag.ReportGroup as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ReportGroupModel>;
+    var report = ViewBag.Report as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ReportModel>;
+}
+
+<style type="text/css">
+    .report-info > div {
+        width: 100%;
+        float: left;
+        margin-bottom: 5px;
+        padding: 0 5px 0 5px;
+    }
+
+    .field-label {
+        float: left;
+        width: 18%;
+        height: 25px;
+    }
+
+    .field-input {
+        float: left;
+        width: 80%;
+    }
+
+        .field-input input[type='text'], .field-input textarea {
+            width: 100%;
+        }
+
+        .field-input #tblPermission {
+            width: 100%;
+        }
+
+            .field-input #tblPermission td, .field-input #tblPermission th {
+                border: 1px solid #BBB;
+                height: 25px;
+            }
+
+            .field-input #tblPermission th {
+                background-color: #F1F1F1;
+            }
+
+    .span-report-group {
+        margin-right: 10px;
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 0;
+        padding: 5px;
+    }
+
+        fieldset div {
+            float: left;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+    legend {
+        font-size: 16px;
+    }
+    #keyfix btn{
+        -webkit-appearance: button;
+        cursor: pointer;
+    }
+</style>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+<script type="text/javascript">
+
+    var selectedUserIds = @(string.IsNullOrEmpty(Model.UserPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.UserPermission));
+    var selectedDepartmentPositions = @(string.IsNullOrEmpty(Model.DeptPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DeptPermission));
+    var selectedPositionIds = @(string.IsNullOrEmpty(Model.PositionPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.PositionPermission));
+    var treeGroups = @(string.IsNullOrEmpty(Model.GroupForTree) ? MvcHtmlString.Create("[]") : Html.Raw(Model.GroupForTree));
+    var pivotConfig = @(string.IsNullOrEmpty(Model.QueryTotalDocumentProcessed) ? MvcHtmlString.Create("{}") : Html.Raw(Model.QueryTotalDocumentProcessed));
+    var i=0;
+
+    var pivotTable;
+
+    $(function () {
+        $("#submit").off("click").bind('click',function() {
+            var header = CKEDITOR.instances.editorHeader.getData();
+            var footer = CKEDITOR.instances.editorFooter.getData();
+
+            $("#QueryTotal").val(header);
+            $("#QueryTotalDocumentIsOverdue").val(footer);
+            $("#report").submit();
+        });
+
+        $("#DeptPermission").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(allDepartments, function (value) {
+                    value = value.label || value.value || value;
+                    return matcher.test(value) || matcher.test(egov.utilities.string.stripVietnameseChars(value));
+                }));
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#DeptPermission").val(ui.item.label);
+                $("#deptId").val(ui.item.value);
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#UserPermission").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(allUsers, function (value) {
+                    value = value.label || value.value || value;
+                    return matcher.test(value) || matcher.test(egov.utilities.string.stripVietnameseChars(value));
+                }));
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#UserPermission").val('');
+
+                var exist = _.find(selectedUserIds, function (item) {
+                    return item.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allUsers, function (user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedUserIds.push(selected);
+                        appendPermission('user', selected.label, selected.value);
+                    }
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $.each(allPositions, function(index, item){
+            $("#PositionPermission").append(
+                $("<option>").val(item.PositionId).text(item.PositionName));
+        });
+
+        $.each(treeGroups, function(idx, item){
+            $(":checkbox[name='TreeGroupIds']").each(function(){
+                if($(this).val() == item)
+                {
+                    $(this).attr("checked", "checked");
+                }
+            });
+        });
+
+        // Hiển thị lại dánh sách các chức vụ trong phòng ban dc xem báo cáo
+        $.each(selectedDepartmentPositions, function(index, item) {
+            var department = _.find(allDepartments, function(dep) {
+                return dep.value == item.DepartmentId;
+            });
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item.PositionId;
+            });
+            if(department && position) {
+                appendPermission("department", department.label + "\\" + position.PositionName, item.DepartmentId + "," + item.PositionId);
+            }
+        });
+
+
+        // Hiển thị lại danh sách các chức vụ được xem báo cáo
+        $.each(selectedPositionIds, function(index, item) {
+            var position = _.find(allPositions, function(pos) {
+                return pos.PositionId == item;
+            });
+            if(position) {
+                appendPermission("position", position.PositionName, item);
+            }
+        });
+
+        // Hiển thị lại danh sách các user được xem báo cáo
+        $.each(selectedUserIds, function(index, item) {
+            var user = _.find(allUsers, function(u) {
+                return u.value == item;
+            });
+            if(user) {
+                appendPermission("user", user.label, user.value);
+            }
+        });
+
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function(e, data) {
+                var filename = data.files[0].name;
+                if(filename.indexOf(".rpt", filename - ".rpt".length) !== -1)
+                {
+                    $("#CrystalPath").text(filename);
+                    data.submit();
+                }
+                else
+                {
+                    eGovMessage.show("@Localizer("Admin.Report.Upload.Extention.RPTOnly")",
+                        "",eGovMessage.messageButtons.Ok);
+                    // alert("@Localizer("Admin.Report.Upload.Extention.RPTOnly")");
+                }
+            },
+            done: function(e, data) {
+                $("#btnDownload").hide();
+                var result = data.result[0];
+                var file = {};
+                file[result.key] = result.name;
+                $("#ReportPath").val(JSON.stringify(file));
+            },
+            fail: function(e, data) {
+                $("#CrystalPath").text("@Localizer("Common.Error.DownloadFile")");
+            }
+        });
+        $('#uploadGroup').fileupload({
+            dataType: 'json',
+            add: function(e, data) {
+                var filename = data.files[0].name;
+                if(true)
+                {
+                    $("#CrystalGroupPath").text(filename);
+                    data.submit();
+                }
+                else
+                {
+                    eGovMessage.show("@Localizer("Admin.Report.Upload.Extention.RPTOnly")",
+                        "",eGovMessage.messageButtons.Ok);
+                    // alert("@Localizer("Admin.Report.Upload.Extention.RPTOnly")");
+                }
+            },
+            done: function(e, data) {
+                $("#btnDownloadGroup").hide();
+                var result = data.result[0];
+                var file = {};
+                file[result.key] = result.name;
+                $("#ReportGroupPath").val(JSON.stringify(file));
+            },
+            fail: function(e, data) {
+                $("#CrystalGroupPath").text("@Localizer("Common.Error.DownloadFile")");
+            }
+        });
+
+        $("#btnConfigSql").click(function (e) {
+            e.preventDefault();
+            openConfigQuery()
+        })
+
+        function openConfigTemplate(reportId, isView)
+        {
+            contentObj = isView? $("#ViewContent"):$("#Content");
+            var url = "@Url.Action("Index", "CrystalReport")";
+            window.open(url, '','width=' + screen.width + ',height=600');
+        }
+
+        if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+            CKEDITOR.tools.enableHtml5Elements( document );
+
+        // The trick to keep the editor in the sample quite small
+        // unless user specified own height.
+        CKEDITOR.config.width = '100%';
+        var editorElement = CKEDITOR.document.getById( 'editorHeader' );
+
+        var editorF = CKEDITOR.document.getById( 'editorFooter' );
+        var wysiwygareaAvailable = isWysiwygareaAvailable(),
+               isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+
+        //eventClick CKeditor
+        editorElement.on('click', function(ev){
+            alert('clicked here');
+        });
+
+        // :(((
+        if ( isBBCodeBuiltIn ) {
+            editorElement.setHtml(
+                'Hello world!\n\n' +
+                'I\'m an instance of [url=https://ckeditor.com]CKEditor[/url].'
+            );
+        }
+
+        // Depending on the wysiwygarea plugin availability initialize classic or inline editor.
+        if ( wysiwygareaAvailable ) {
+            CKEDITOR.replace( 'editorHeader' );
+            CKEDITOR.replace( 'editorFooter' );
+        } else {
+            editorElement.setAttribute( 'contenteditable', 'true' );
+            CKEDITOR.inline( 'editorHeader' );
+            CKEDITOR.inline( 'editorFooter' );
+        };
+        setTimeout(function () {
+            $(".cke_contents").css({"width": "100%"});
+            $(".cke_inner").css({"width": "100%"});
+        }, 500)
+            function isWysiwygareaAvailable() {
+                // If in development mode, then the wysiwygarea must be available.
+                // Split REV into two strings so builder does not replace it :D.
+                if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+                    return true;
+                }
+
+                return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+       }
+    });
+
+    function addDeptPosPermission() {
+        if ($("#DeptPermission").val() == '') {
+            var posId = $("#PositionPermission").val();
+            var posExist = _.find(selectedPositionIds, function (item) {
+                return item === posId;
+            });
+            if (!posExist || posExist == undefined) {
+                selectedPositionIds.push(posId);
+                appendPermission("position", $("#PositionPermission option[value=" + posId + "]").text(), posId);
+            }
+        } else {
+            var posId = $("#PositionPermission").val();
+            var deptId = $("#deptId").val();
+            var deptPosExist = _.find(selectedDepartmentPositions, function (item) {
+                return item.DepartmentId == deptId && item.PositionId == posId;
+            });
+            if (!deptPosExist || deptPosExist == undefined) {
+                var selected = _.find(allDepartments, function (dept) {
+                    return dept.value == deptId;
+                });
+                if (selected) {
+                    selectedDepartmentPositions.push({ 'DepartmentId': deptId, 'PositionId': posId });
+                    var name = selected.label + "\\" + $("#PositionPermission option[value=" + posId + "]").text();
+                    appendPermission("department", name, deptId + "," + posId);
+                    $("#DeptPermission").val('');
+                }
+            }
+        }
+    }
+
+    function deleteUser(id) {
+        selectedUserIds = _.reject(selectedUserIds, function(item) {
+            return item == id;
+        });
+        $('input[name="UserPermissionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function deletePosition(id) {
+        selectedPositionIds = _.reject(selectedPositionIds, function(item) {
+            return item == id;
+        });
+        $('input[name="PositionPermissionIds"][value="' + id + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function deleteDepartment(deptid, posid) {
+        selectedDepartmentPositions = _.reject(selectedDepartmentPositions, function(item) {
+            return item.DepartmentId == deptid && item.Positionid == posid;
+        });
+        $('input[name="DepartmentPositionIds"][value="' + deptid + ',' + posid + '"]').parent().parent().remove();
+
+        if ($("#tblPermission tbody tr").length == 0) {
+            $("#tblPermission tbody").html("<tr id='noresult'><td colspan='3'>@Localizer("Common.All.Label")</td></tr>");
+        }
+    }
+
+    function openConfigQuery() {
+        $("#configQuery").removeClass('hidden');
+        $("#configQuery").dialog({
+            width: 1200,
+            height: 800,
+            title: "Cấu hình câu truy vấn",
+            buttons: [
+                {
+                    text: "Generate",
+                    click: function () {
+                        var query = $("#configQueryFrame").contents().find(".qb-ui-editor").find("textarea").val();
+                        query = RenameSql(query)
+                        $("#QueryStatistics").val("dashboard:" + query);
+                        //editor.contentWindow.docEditor.destroyEditor();
+                        setTimeout(function () {
+                            $("#configQuery").dialog("close");
+                            $("#configQuery").addClass('hidden');
+                            // location.reload();
+                        }, 1000);
+                    }
+                }
+            ]
+        });
+    }
+
+    function RenameSql(sql) {
+        var sqlAfter = sql;
+        var strSelect = sql.split('Select').pop().split('From')[0];
+        var listSelect = strSelect.split(",");
+        for (var i = 0; i < listSelect.length; i++) {
+            var strColumn = listSelect[i].trim();
+            var listPropColumn = strColumn.split("As");
+            var name = listPropColumn[0];
+            var alias = listPropColumn[1].trim();
+            name = name.split(".").length > 1 ? name.split(".")[1].trim() : name.trim();
+            sqlAfter = sqlAfter.replace(alias, name);
+        }
+        return sqlAfter
+    }
+
+    function appendPermission(type, text, value)
+    {
+        var name = "";
+        var func = "";
+        var label = "";
+
+        if(type == "department")
+        {
+            label = "Phòng ban/Chức vụ";@*"@Localizer("Customer.DepartmentPosition.Label")";*@
+            name = 'DepartmentPositionIds';
+            func = 'javascript:deleteDepartment(' + value + ')';
+        }
+        else if(type == "position")
+        {
+            label = "Chức vụ"; @*"@Localizer("Customer.Position.Label")";*@
+            name = 'PositionPermissionIds';
+            func = 'javascript:deletePosition(' + value + ')';
+        }
+        else if(type == "user")
+        {
+            label = "Người dùng"@*"@Localizer("Role.CreateOrEdit.Tab.User")";*@
+            name = 'UserPermissionIds';
+            func = 'javascript:deleteUser(' + value + ')';
+        }
+        else
+        {
+            return;
+        }
+        $(".no-permission").remove();
+        $("#tblPermission tbody")
+                        .append(
+                            $("<tr>")
+                                .append($("<td>").text(label).append($("<input />").attr("type",'hidden').val(value).attr("name", name)))
+                                .append($("<td>").text(text))
+                                .append($("<td>").append($("<a />").attr("href", func).text("@Html.Raw(Localizer("Common.Button.Delete"))"))));
+    }
+
+    function enableHelper() {
+        return;
+        var enable = $("#enableHelp").is(":checked");
+        if (enable) {
+            initHelper();
+        }
+        else {
+            $("#QueryReport, #QueryGroup, #QueryTotal, #QueryStatistics").qtip("destroy");
+        }
+    }
+
+    function initHelper() {
+        $.fn.qtip.styles.mystyle = {
+            width: 600,
+            textAlign: 'left',
+            color: 'black',
+            border: {
+                width: 7,
+                radius: 5
+            },
+            tip: 'bottomLeft',
+            name: 'green' // dark, cream, light, red, blue, green
+        };
+
+        // Hướng dẫn sql cho báo cáo
+        $("#QueryReport").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryReportHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+
+        // Hướng dẫn soạn sql
+        $("#QueryGroup").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryGroupHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+
+        // Hướng dẫn soạn template
+        $("#QueryTotal").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryTotalHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+
+        // Hướng dẫn soạn template
+        $("#QueryStatistics").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryStatisticsHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+    }
+
+    initPivot();
+    var pivotTable;
+    function initPivot() {
+            $.ajax({
+                url: "/ReportViewer/GetReportData",
+                beforeSend: function () {
+                },
+                data: {
+                    ReportId: @Model.ReportId,
+                    Time: "TuyChon",
+                    FromDate: "2017-01-01T00:00:00",
+                    ToDate: "2018-03-01T00:00:00",
+                    TreeGroupValue: null,
+                    TreeGroupName: null,
+                    GroupId: 0,
+                    sortBy: "",
+                    isDesc: false,
+                    Page: 1,
+                    PageSize: 15000
+                },
+                success: function (result) {
+                    var cf =  {
+                        "dataSource":  { data: result},
+                        "options": {
+                            "grid": {
+                                "showTotals": "off",
+                                "showGrandTotals": "off"
+                            }
+                        },
+                        "tableSizes": {
+                            "columns": [
+                                {
+                                    "idx": 0,
+                                    "width": 468
+                                }
+                            ]
+                        }
+                    }
+
+                    if (pivotConfig) {
+                        cf = pivotConfig
+                        cf["dataSource"]= { data: result};
+
+                    }
+                    pivotTable = new WebDataRocks({
+                        container: "#formPivot",
+                        toolbar: true,
+                        beforetoolbarcreated: customizeToolbar,
+                        global: {
+                            // replace this path with the path to your own translated file
+                            //localization: "http://smartnation.bkav.com/Scripts/bkav.egov/libs/webdatarocks-1.2.0/en.json"
+                        },
+                        report: cf,
+                        reportcomplete: function () {
+                            pivotTable.off("reportcomplete");
+                            createChartColumn();
+                            createChartBar();
+                            createChartLine();
+                            createChartArea();
+                        }
+                    });
+
+                    function createChartColumn() {
+                        pivotTable.highcharts.getData({
+                            type: "column"
+                        }, function (data) {
+                            Highcharts.chart("highchartsContainerColumn", data);
+                        }, function (data) {
+                            Highcharts.chart("highchartsContainerColumn", data);
+                        });
+                    }
+
+                    function createChartBar() {
+                        pivotTable.highcharts.getData({
+                            type: "bar"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerBar', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerBar', data);
+                        });
+                    }
+                    function createChartLine() {
+                        pivotTable.highcharts.getData({
+                            type: "line"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerLine', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerLine', data);
+                        });
+                    }
+
+                    function createChartArea() {
+                        pivotTable.highcharts.getData({
+                            type: "area"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerArea', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerArea', data);
+                        });
+                    }
+                }
+            });
+    }
+
+    function customizeToolbar(toolbar, pivot) {
+        // get all tabs
+        var tabs = toolbar.getTabs();
+        toolbar.getTabs = function () {
+            // There will be two new tabs at the beginning of the Toolbar
+            tabs.unshift(
+                {
+                    id: "wdr-save",
+                    title: "SaveConfig",
+                    handler: saveReportHandler,
+                    icon: this.icons.save
+                },
+                {
+                    id: "wdr-format-column",
+                    title: "Format Cột",
+                    handler: showHeader,
+                    icon: this.icons.export_print
+                }
+            );
+            return tabs;
+        }
+
+        var saveReportHandler = function () {
+            var config = pivotTable.getReport();
+            config["dataSource"] = {"dataSourceType":"json","data":[]}
+
+            $("#QueryTotalDocumentProcessed").val(JSON.stringify(config))
+        };
+
+        var showHeader = function () {
+            $("#configColumn").removeClass('hidden');
+            var a = pivotTable.exportTo("html");
+            $("#configColumn").dialog({
+                width: 1000,
+                height: 400,
+                title: "Cấu hình Cột báo cáo",
+                buttons: [
+                    {
+                        text: "Lưu cấu hình",
+                        click: function () {
+                            $(".htCore").find("tbody>tr").each(function () {
+                                $(this).children('td').first().addClass('rowHeaderCell level0 level0');
+                                $(this).children('td').first().addClass('level0');
+                                $(this).children('td').addClass('columnHeaderCell');
+                                $(this).children('td').first().removeClass("columnHeaderCell");
+                                //$(this).children('td').css('width', '100px');
+                            });
+
+                            var htCore_tr = "<table>"+ $(".htCore").html() +"</table>";
+
+                            $("#ColumnConfig").val(htCore_tr);
+
+                            $("#configColumn").dialog("close");
+                            $("#configColumn").addClass('hidden');
+                        }
+                    }
+                ]
+            });
+        }
+
+        
+    }
+    //Key co dinh
+    function phongbanhientai(){
+        debugger
+        var textPBHT = $("#keyfix").find(".pbht").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+                CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);          
+        }
+    }
+
+    //function phongbanhientaiFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".pbhtFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function PHONGBANHIENTAI(){
+        debugger
+        var textPBHT = $("#keyfix").find(".PBHT").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+        }
+    }
+    //function PHONGBANHIENTAIFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".PBHTFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function dd(){
+        debugger
+        var textPBHT = $("#keyfix").find(".dd").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+        }
+    }
+    //function ddFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".ddFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function MM(){
+        debugger
+        var textPBHT = $("#keyfix").find(".MM").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+        }
+    }
+    //function MMFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".MMFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function yyyy(){
+        debugger
+        var textPBHT = $("#keyfix").find(".yyyy").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+        }
+    }
+    //function yyyyFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".yyyyFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function ddMMyyyy(){
+        debugger
+        var textPBHT = $("#keyfix").find(".ddMMyyyy").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+        }
+    }
+    //function ddMMyyyyFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".ddMMyyyyFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);
+    //    }
+    //}
+    function ddMMyyyhhmm(){
+        debugger
+        var textPBHT = $("#keyfix").find(".ddMMyyyhhmm").attr("value");
+        if(textPBHT == '') {
+            return 0;
+        }else {     
+            CKEDITOR.instances["editorHeader"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);       
+        }
+    }
+    //function ddMMyyyhhmmFT(){
+    //    debugger
+    //    var textPBHT = $("#keyfixFT").find(".ddMMyyyhhmmFT").attr("value");
+    //    if(textPBHT == '') {
+    //        return 0;
+    //    }else {     
+    //        CKEDITOR.instances["editorFooter"].insertHtml(`&#64;&#64;${textPBHT}&#64;&#64;`);       
+    //    }
+    //}
+    var contentObj;
+</script>
+
+@using (Ajax.BeginForm(
+                            Model.ReportId == 0 ? "Create" : "Edit",
+                            null,
+                            new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSaveSuccess", OnBegin = "onBegin", OnFailure = "onFailure" },
+                            new { enctype = "multipart/form-data", id = "report" }))
+{
+    <div style="text-align: right;" class="hidden">
+        <input type="checkbox" id="enableHelp" title="Hiển thị hướng dẫn soạn sql" onchange="enableHelper()" />
+        <span data-res="egov.resources.report.showguide">Bật/tắt hướng dẫn</span>
+    </div>
+    <div class="report-info">
+        @Html.HiddenFor(model => model.ReportId)
+        @Html.HiddenFor(model => model.ParentId)
+        <div class="report-name">
+            <div class="field-label">
+                @Html.LabelRequireFor(model => model.Name)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.Description)
+            </div>
+            <div class="field-input">  
+                <select class="form-control" id="Description" name="Description" style="width: 100%">    
+                    @foreach (var description in ViewBag.Description as IEnumerable<SelectListItem>)
+                    {
+                       <option @(description.Selected ? "selected" : "") value="@description.Value">@description.Text</option>
+                    } 
+                </select>      
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+            </div>
+            <div class="field-input">
+                @Html.CheckBoxFor(model => model.IsActive)
+                @Html.LabelFor(model => model.IsActive)
+
+                @Html.CheckBoxFor(model => model.IsLabel)
+                @Html.LabelFor(model => model.IsLabel)
+
+                @Html.CheckBoxFor(model => model.IsHSMC)
+                Là Báo cáo hồ sơ một cửa
+
+                @Html.CheckBoxFor(model => model.IsShowTotal)
+                Hiển thị dạng pivot
+
+                @*@Html.CheckBoxFor(model => model.IsFile)
+                Hiển thị file báo cáo*@
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.IsFile)
+            </div>
+            <div class="field-input">
+                <select class="form-control" id="IsFile" name="IsFile" style="width: 100%">
+                     @foreach (var listViewReport in ViewBag.ListViewReport as IEnumerable<SelectListItem>)
+                    {
+                       <option @(listViewReport.Selected ? "selected" : "") value="@listViewReport.Value">@listViewReport.Text</option>
+                    } 
+                </select>
+            </div>
+        </div>
+        <div class="@(Model.IsLabel? "hidden": "")">
+            <fieldset>
+                <legend style="font-weight: bold">Cấu hình danh sách hiển thị</legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            Danh sách hiển thị
+                        </div>
+                        <div class="field-input">
+                            <select class="form-control" id="DocColumnId" name="DocColumnId" style="width: 100%">
+                                @foreach (var columnSetting in ViewBag.ColumnSetting as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(columnSetting.Selected ? "selected" : "") value="@columnSetting.Value">@columnSetting.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            @*<fieldset>
+                <legend style="font-weight: bold">Cấu hình đồng bộ báo cáo</legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            Danh sách báo cáo
+                        </div>
+                        <div class="field-input">
+                            <select class="form-control" id="SyncColumn" name="SyncColumn">
+                                <option value=""></option>
+                            </select>
+
+                            <button id="SyncColumnName" class="btn btn-default">Đồng bộ cột</button>
+                            <button id="SyncQuery" class="btn btn-info">Đồng bộ Query</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>*@
+            @if (reportGroup != null)
+            {
+                <fieldset>
+                    <legend style="font-weight: bold" data-res="egov.resources.report.showgroupinreporttree"></legend>
+                    <div>
+                        <div>
+                            <div class="field-label">
+                                @Html.LabelFor(model => model.GroupForTree)
+                            </div>
+                            <div class="field-input">
+                                @foreach (var group in reportGroup)
+                                {
+                                    <label>
+                                        <input type="checkbox" value="@group.ReportGroupId" name="TreeGroupIds" />
+                                        <span class="span-report-group">@group.Name</span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            }
+
+            <fieldset>
+                <legend data-res="egov.resources.report.config">Cấu hình báo cáo</legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.CrystalPath)
+                        </div>
+                        <div class="field-input">
+                            <strong><span id="CrystalPath">@(string.IsNullOrEmpty(Model.CrystalPath) ? Localizer("Admin.Report.NoFile") : Model.CrystalPath)</span></strong>
+                            @Html.Hidden("ReportPath")
+                            @if (!string.IsNullOrEmpty(Model.CrystalPath))
+                            {
+                                <input class="btn" id="btnDownload" type="button" value="Download" onclick="download(@Model.ReportId)" />
+                            }
+                            <input class="btn" type="button" value="Upload" onclick="$('#upload').click()" />
+                            <input class="btn" type="file" name="files" id="upload" style="display: none;" data-url="@Url.Action("UploadCrystal", "Attachment", new { area = "" })" accept="*.rpt" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.CrystalGroupPath)
+                        </div>
+                        <div class="field-input">
+                            <strong><span id="CrystalGroupPath">@(string.IsNullOrEmpty(Model.CrystalGroupPath) ? Localizer("Admin.Report.NoFile") : Model.CrystalGroupPath)</span></strong>
+                            @Html.Hidden("ReportGroupPath")
+                            @if (!string.IsNullOrEmpty(Model.CrystalGroupPath))
+                            {
+                                <input class="btn" id="btnDownloadGroup" type="button" value="Download" onclick="download(@Model.ReportId)" />
+                            }
+                            <input class="btn" type="button" value="Upload" onclick="$('#uploadGroup').click()" />
+                            <input class="btn" type="file" name="files" id="uploadGroup" style="display: none;" data-url="@Url.Action("UploadCrystal", "Attachment", new { area = "" })" accept="*.rpt" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="statistics">
+                <legend>Cấu hình truy vấn</legend>
+                <div class="view-statistics">
+                    <div class="">
+                        <div class="field-label">
+                            Header
+                        </div>
+                        @* Phần key cố định *@
+                        <div style="padding-left: 18%;" id="keyfix">
+                            <input type="button" class="btn btn-default pbht" value="Phòng ban hiện tại" onclick="phongbanhientai()"/>
+                            <input type="button" class="btn btn-default PBHT" value="PHÒNG BAN HIỆN TẠI" onclick="PHONGBANHIENTAI()" />
+                            <input type="button" class="btn btn-default dd" value="dd" onclick="dd()" />
+                            <input type="button" class="btn btn-default MM" value="MM" onclick="MM()" />
+                            <input type="button" class="btn btn-default yyyy" value="yyyy" onclick="yyyy()" />
+                            <input type="button" class="btn btn-default ddMMyyyy" value="dd-MM-yyyy" onclick="ddMMyyyy()" />
+                            <input type="button" class="btn btn-default ddMMyyyhhmm" value="dd-MM-yyyy hh:mm" onclick="ddMMyyyhhmm()" />
+                        </div>                   
+                        <br />
+                        <div style="padding-left: 18%; width: 98%" class="field-input">
+                            <div id="editorHeader">
+                                @Html.Raw(Model.QueryTotal)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden">
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.QueryTotal)
+                        </div>
+                        <div class="field-input">
+                            @Html.TextAreaFor(model => model.QueryTotal, new { style = "height: 100px;" })
+                        </div>
+                    </div>
+                    <div class="hidden">
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.QueryTotalDocumentIsOverdue)
+                        </div>
+                        <div class="field-input">
+                            @Html.TextAreaFor(model => model.QueryTotalDocumentIsOverdue, new { style = "height: 100px;" })
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.QueryStatistics)
+                        </div>
+                        <div class="field-input">
+                            @Html.TextAreaFor(model => model.QueryStatistics, new { style = "height: 250px; padding: 10px;" })
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <div class="field-label">
+                            Footer
+                        </div>
+                        @* Phần key cố định *@
+                        @*<div style="padding-left: 18%;" id="keyfixFT">
+                            <input type="button" class="btn btn-default pbhtFT" value="Phòng ban hiện tại" onclick="phongbanhientaiFT()" />
+                            <input type="button" class="btn btn-default PBHTFT" value="PHÒNG BAN HIỆN TẠI" onclick="PHONGBANHIENTAIFT()" />
+                            <input type="button" class="btn btn-default ddFT" value="dd" onclick="ddFT()" />
+                            <input type="button" class="btn btn-default MMFT" value="MM" onclick="MMFT()" />
+                            <input type="button" class="btn btn-default yyyyFT" value="yyyy" onclick="yyyyFT()" />
+                            <input type="button" class="btn btn-default ddMMyyyyFT" value="dd-MM-yyyy" onclick="ddMMyyyyFT()" />
+                            <input type="button" class="btn btn-default ddMMyyyhhmmFT" value="dd-MM-yyyy hh:mm" onclick="ddMMyyyhhmmFT()" />
+                        </div>*@
+                        <div style="padding-left: 18%; width: 98%" class="field-input">
+                            <div id="editorFooter">
+                                @Html.Raw(Model.QueryTotalDocumentIsOverdue)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <div class="field-label">
+                            Cấu hình pivot
+                        </div>
+                        <div class="field-input">
+                            @Html.TextAreaFor(model => model.QueryTotalDocumentProcessed, new { style = "height: 200px;" })
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <div class="field-label">
+                            Cấu hình headerTable
+                        </div>
+                        <div class="field-input">
+                            @Html.TextAreaFor(model => model.ColumnConfig, new { style = "height: 200px;" })
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend style="font-weight: bold">Cấu hình Sql</legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            Danh sách báo cáo
+                        </div>
+                        <div class="field-input">
+                            <button id="btnConfigSql" class="btn btn-info">Query</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="formPivot"></div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div id="highchartsContainerColumn" style="width:100%;height:400px;"></div>
+
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="highchartsContainerLine" style="width:100%;height:400px;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div id="highchartsContainerArea" style="width:100%;height:400px;"></div>
+
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="highchartsContainerBar" style="width:100%;height:400px;"></div>
+                    </div>
+                </div>
+                <div id="highchartsContainer" style="width:500px;height:400px;"></div>
+            </div>
+            <fieldset class="permission">
+                <legend data-res="egov.resources.report.permissionreadreport"></legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.DeptPermission)
+                        </div>
+                        <div class="field-input">
+                            <input type="text" id="DeptPermission" style="width: 220px; display: inline" class="form-control" />
+                            <input type="hidden" id="deptId" />
+                            <select style="width: 220px; display: inline" id="PositionPermission" class="form-control"></select>
+                            <input type="button" class="btn" value="" data-res="egov.resources.commonlabel.add" onclick="addDeptPosPermission()" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="field-label">
+                            @Html.LabelFor(model => model.UserPermission)
+                        </div>
+                        <div class="field-input">
+                            <input type="text" id="UserPermission" class="form-control" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="field-label"></div>
+                        <div class="field-input">
+                            <table id="tblPermission" class=" table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 200px;" data-res="egov.resources.tableheader.type"></th>
+                                        <th data-res="egov.resources.tableheader.value"></th>
+                                        <th style="width: 100px;" data-res="egov.resources.tableheader.delete"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="no-permission">
+                                        <td colspan="3" data-res="egov.resources.commonlabel.all"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+}
+
+<div class="queryReportHelp" style="display: none">
+    <p>Cấu hình câu truy vấn dữ liệu khi xem báo cáo: tự động phân trang, group.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryGroupHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn dữ liệu lấy các giá trị nhóm cho thống kê
+        <br />
+        (chỉ cần cấu hình khi chọn thống kê theo nhóm ở trên).
+    </p>
+    <p>
+        <strong>Cấu trúc dạng: </strong>
+        <br />
+        <strong style="color: blue;">SELECT</strong> #group, <strong style="color: blue;">COUNT</strong>(#group)
+        <br />
+        <strong style="color: blue;">FROM</strong> tenbang
+        <br />
+        // Mệnh đề Join
+        <br />
+        // Mệnh đề Where
+        <br />
+        <strong style="color: blue;">GROUP BY</strong> #group
+        <br />
+    </p>
+    <p>Trong đó: <strong>#group</strong> sẽ được thay thế bằng giá trị các nhóm thống kê được chọn ở trên trong code</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryTotalHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn riêng để lấy tổng số hồ sơ của thống kê
+        <br />
+        (Dựa trên câu truy vấn lấy dữ liệu cho thống kê).
+    </p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryStatisticsHelp" style="display: none">
+    <p>Cấu hình câu truy vấn để lấy dữ liệu cho thống kê.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để xem báo cáo theo nhóm: </strong><span>Sử dụng: <strong style="color: blue;">AND</strong> (@@groupValue = '' <strong style="color: blue;">OR</strong> #group = @@groupValue)</span> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để phân trang: </strong>Sử dụng  <strong style="color: blue;">LIMIT</strong> <strong>@@skip</strong>, <strong>@@take</strong>.
+        </li>
+        <li>
+            <strong>Để sắp xếp dữ liệu trong báo cáo: </strong><span>Sử dụng: <strong style="color: blue;">ORDER BY</strong> #sortBy #isDesc</span>.
+        </li>
+    </ul>
+</div>
+
+<div id="configQuery" class="hidden" style="position:relative;">
+    <iframe id="configQueryFrame" src="/admin/Query/ConfigReport?id=@Model.ReportId" width="1050" height="577" style="border:none;"></iframe>
+</div>
+
+<div id="configColumn" class="hidden" style="position:relative;width:800px">
+   <div id="tableHandsonGrid" style="">
+       
+   </div>
+    <textarea id="dataColumn">
+        @Model.ColumnConfig
+    </textarea>
+
+    <input type="text" name="dataColumnJson" id="dataColumnJson" value="" />
+</div>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

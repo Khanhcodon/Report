@@ -1,0 +1,15 @@
+﻿<td>${Date.parseFromIsoString(DateSend).format("hh:mm dd/MM/yy")}</td>
+<td>${CommentSend}</td>
+<td>
+    {{if UserReceivedId}}
+    <label class="label label-success">Đã bổ sung</label>
+    {{else}}
+    <label class="label label-warning">Chưa bổ sung</label>
+    {{/if}}
+</td>
+<td>{{if DateReceived}}${Date.parseFromIsoString(DateReceived).format("hh:mm dd/MM/yy")}{{/if}}</td>
+<td class="relation-function text-center">
+    <a href="#" class="supp-open" title="Xem yêu cầu">
+        <i class="icon icon-enter"></i>
+    </a>   
+</td>

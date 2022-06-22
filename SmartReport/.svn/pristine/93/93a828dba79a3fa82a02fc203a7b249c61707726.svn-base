@@ -1,0 +1,260 @@
+﻿@model ReplaceUserModel
+@{
+    ViewBag.Title = Localizer("Admin.ReplaceUser.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var allCategoryBusines = ViewBag.AllCategoryBusines as IEnumerable<SelectListItem>;
+    var allWorkflows = ViewBag.AllWorkflows as string;
+    var allUsers = ViewBag.AllUsers as string;
+}
+
+<style>
+    .grid .grid-content {
+        overflow-y: auto !important;
+        height: 400px;
+    }
+</style>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.min.js")"></script>
+
+<script>
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allWorkflows = @(string.IsNullOrEmpty(allWorkflows) ? MvcHtmlString.Create("[]") : Html.Raw(allWorkflows));
+
+    $(function () {
+        $("#submit").off('click').bind("click",function(){
+            eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.ReplaceUser.ConfirmReplace"))',
+              null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("form").submit();
+            });
+        });
+
+        $("#tblListWorkflow tbody").append($("#tmplRowWorkflow").tmpl(allWorkflows));
+
+        $("#tblListWorkflow").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#OldUserFulName, #NewUserFulName").autocomplete({
+            minLength: 1,
+            source: function(request, response ) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response($.grep(allUsers, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }));
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                var exist = _.find(allUsers, function(user) {
+                    return user.value === ui.item.value;
+                });
+
+                if (exist) {
+                    if(this.name ==='OldUserFulName'){
+                        $("#OldUserId").val(exist.value);
+                        $("#OldUserFulName").val(exist.label);
+                    } else if(this.name ==='NewUserFulName'){
+                        $("#NewUserId").val(exist.value);
+                        $("#NewUserFulName").val(exist.label);
+                    }
+                }
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#ddlCategoryBusiness").bind("change",function(){
+            var result = allWorkflows;
+            var value = $(this).val();
+            if(value!=""){
+                result= _.filter(allWorkflows,function(item){
+                    return item.CategoryBusinessId==value;
+                });
+            }
+
+            $("#tblListWorkflow tbody").empty().append($("#tmplRowWorkflow").tmpl(result));
+            $("#tblListWorkflow").grid('refresh');
+            $("#checkAll").prop('checked', true);
+        });
+
+        $("#checkAll").bind("change",function(){
+            $("#tblListWorkflow input[name=WorkflowIds]").prop('checked', this.checked);
+        });
+
+        $("#tblListWorkflow input[name=WorkflowIds]").bind("change",function () {
+            if (this.checked
+                &&  $("#tblListWorkflow input[name=WorkflowIds]:checked").length == $('#tblListWorkflow input[name=WorkflowIds]').length) {
+                $("#checkAll").prop('checked', true);
+            } else {
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#IsDeletedUserWorkflow").bind("click",function(){
+            this.checked?$('.dateTime').hide():$('.dateTime').show();
+        });
+
+        $("#BeginDated,#EndDated").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user2"></i>
+        <span data-res="egov.resources.sitemap.user"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.confirm"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/user/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Html.BeginForm("UpdateWorkflow"))
+    {
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.OldUserId)
+
+        @Html.HiddenFor(model => model.NewUserId)
+
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 250px;">
+                    @Html.LabelRequireFor(model => model.OldUserFulName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.OldUserFulName)
+                    @* @Html.ValidationMessageFor(model => model.OldUserId)*@
+                    @Html.ValidationMessageFor(model => model.OldUserFulName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 250px;">
+                    @Html.LabelRequireFor(model => model.NewUserFulName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.NewUserFulName)
+                    @*@Html.ValidationMessageFor(model => model.NewUserId)*@
+                    @Html.ValidationMessageFor(model => model.NewUserFulName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 250px;">
+                    @Html.LabelFor(model => model.HasUnActivateUser):
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.HasUnActivateUser)
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 250px;">
+                    @Html.LabelFor(model => model.HasAuthorize):
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.HasAuthorize)
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 250px;">
+                    @Html.LabelFor(model => model.IsDeletedUserWorkflow):
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.IsDeletedUserWorkflow)
+                </td>
+            </tr>
+            <tr class="dateTime" style="display: none">
+                <td style="width: 250px;">
+                    @Html.LabelFor(model => model.BeginDated):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.BeginDated)
+                    @Html.ValidationMessageFor(model => model.BeginDated)
+                </td>
+            </tr>
+            <tr class="dateTime" style="display: none">
+                <td>
+                    @Html.LabelFor(model => model.EndDated):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.EndDated)
+                    @Html.ValidationMessageFor(model => model.EndDated)
+                </td>
+            </tr>
+        </table>
+
+        <fieldset>
+            <legend>@Localizer("Admin.ReplaceUser.ListWorkflow")</legend>
+            <div>
+                @Html.DropDownList("ddlCategoryBusiness", allCategoryBusines, Localizer("Common.All.Label"), new { @style = "width:200px" })
+            </div>
+            <table class="table-main table" id="tblListWorkflow" style="width: 100%">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col style="width: 200px" />
+                    <col />
+                    <col style="width: 200px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            <input type="checkbox" id="checkAll" name="checkAll" checked="checked" />
+                        </th>
+                        <th class="header">@Localizer("Admin.ReplaceUser.WorkflowName")</th>
+                        <th class="header">@Localizer("Admin.ReplaceUser.DoctypeName")</th>
+                        <th class="header">@Localizer("Admin.ReplaceUser.CategotyBusiness")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </fieldset>
+    }
+</div>
+
+<script type="text/x-jquery-tmpl" id="tmplRowWorkflow">
+    <tr data-id="${WorkflowId}" style="width: 100%">
+        <td>
+            <input type="checkbox" name="WorkflowIds" value="${WorkflowId}" checked="checked" />
+        </td>
+        <td>${WorkflowName}
+        </td>
+        <td>${DocTypeName}
+        </td>
+        <td>${CategoryBusinessIdInEnum}
+        </td>
+    </tr>
+</script>

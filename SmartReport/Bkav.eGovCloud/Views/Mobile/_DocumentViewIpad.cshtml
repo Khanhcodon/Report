@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    .mdl-layout__drawer {
+  width: 450px !important;
+}
+
+.mdl-layout__drawer.is-visible {
+  left: 0;
+}
+</style>
+
+<div id="documentFrame" data-theme="documents" data-app="documents" class="egov-app trans trans-left" style="background:url(../../Content/Images/home/back-ipad.jpg)">
+    <div class="main-layout mdl-layout mdl-js-layout">
+        <header class="mdl-layout__header egov-header" style="color:white; background-color:chartreuse">
+            @*<div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu" style="color:black;">
+                <i class="material-icons"></i>
+            </div>*@
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title wrap-text">
+                    <span class="header-title">
+                        Xử lý báo cáo
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="btnSearch" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
+        </header>
+
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer egov-leftmenu" style="background-color:transparent" >
+            <div class="mdl-layout__drawer" style="width:450px;background-color:transparent">
+                @*<div class="useroption main-bg-color">
+                    <img class="avatar" src="https://danhba.bkav.com/avatars/TienBV.bmp" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wrap-text">Bùi Văn Tiến</div>
+                        <div class="wrap-text fullmail">tienbv@bkav.com</div>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>*@
+                <div class="treelist">
+                    <nav class="treemenu">
+                        <div class="documents documents-dataTree" data-app="documents">
+                            <ul id="menu-document" class="mdl-list autoscroll-y"></ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Title</span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                </nav>
+            </div>
+            <main class="mdl-mdl-components__pages" style="overflow:hidden;margin-left:450px !important;background-color:transparent">
+                <div class="egov-maincontent" style="position:relative" id="egovMaincontent">
+                    <div class="no-element-content hidden" style="background-color:transparent !important">
+                        <div class="message">
+                            <span class="material-icons mdl-list__item-icon"></span>
+                            <div style="font-size: 18px;">Không có văn bản</div>
+                            <div class="message-info"></div>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                        <div class="dataList" data-group="normal">
+                            <ul class="mdl-list list-group list-document"></ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>

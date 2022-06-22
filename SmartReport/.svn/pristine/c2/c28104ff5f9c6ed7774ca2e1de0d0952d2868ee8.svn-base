@@ -1,0 +1,47 @@
+﻿fieldset.form-inline .radio, fieldset.form-inline .checkbox {
+    width: 100% !important;
+    display: inline-block !important;
+    padding-right: 1em !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    vertical-align: middle;
+    padding-left: unset !important;
+}
+
+fieldset .checkbox span{
+    display: initial;
+    top: auto !important;
+    border: unset !important;
+}
+
+.checkbox .sv-boolean span{
+    display: inherit;
+    top: auto !important;
+    border: unset !important;
+}
+
+fieldset .checkbox input[type="checkbox"], fieldset .radio input[type="radio"] {
+    height: unset !important;
+    width: unset !important;
+    opacity: unset !important;
+}
+
+fieldset .radio label, fieldset .checkbox label, label.sv-boolean {
+    font-weight: normal !important;
+    padding-left: unset !important;
+}
+
+fieldset .radio label::before, fieldset .radio label::after {
+    display: initial !important;
+    margin: unset !important;
+    border: none !important;
+    border-radius: initial !important;
+    background-color: unset !important;
+}
+
+textarea.form-control{
+    height: auto !important;
+    font-size: unset !important;
+}

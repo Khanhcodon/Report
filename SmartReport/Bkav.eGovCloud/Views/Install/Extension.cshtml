@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+    var browser = (string)ViewBag.Browser;
+    if (browser == null)
+    {
+        browser = "";
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/cngndmpehahbhkdhihanbpobckmkdkkk">
+
+    <link href="/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/bootstrap/css/bootstrap-theme.css" rel="stylesheet" />
+
+    <link href="/Content/bkav.egov/installPlugin.css" rel="stylesheet" />
+
+    <script src="/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="/Content/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="/Scripts/bkav.egov/libs/bkav/PluginEgov/installPlugin.js"></script>
+</head>
+<body>
+    <center>
+        <div class="ins-extension">
+            <div class="ins-step1">
+                <div class="ins-title">
+                    Kích hoạt Bkav eGov Extension theo các bước sau
+                </div>
+                <div class="ins-step">
+                    Trước tiên, tải về Bkav eGov Plugin
+                </div>
+                <div class="ins-image">
+                    <img src="/Content/bkav.egov/images/Install Extension/Extension-step1.png" />
+                </div>
+                <div class="ins-buttons">
+                    <input type="button" class="btn btn-primary" value="Tải về Plugin" id="downloadPlugin" />
+                </div>
+            </div>
+            <div class="ins-step2">
+                <div class="ins-title">
+                    Cài đặt Bkav eGov Plugin.
+                </div>
+                <div class="ins-step">
+                    Tiếp theo, thực hiện theo các bước phía dưới để cài đặt Plugin
+                </div>
+               
+                <div class="ins-image">
+                    <div class="row">
+                        @if (browser.Contains("Firefox"))
+                        {
+                            <div class="col-md-2"></div>
+                        }
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img src="/Content/bkav.egov/images/Install Extension/Extension-step3.0.PNG" />
+                            </div>
+                            <div>
+                                <span style="font-weight: bold; color: blue">Giải nén</span> thư mục vừa tải về
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img src="/Content/bkav.egov/images/Install Extension/Extension-step3.1.PNG" />
+                            </div>
+                            <div>
+                                Nhấp chuột phải vào file thực thi và chọn <span style="font-weight: bold; color: blue">Run as Administrator</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img src="/Content/bkav.egov/images/Install Extension/Extension-step3.2.PNG" />
+                            </div>
+                            <div>
+                                Chọn <span style="font-weight: bold; color: blue">Next</span> cho đến khi hoàn thành việc cài đặt
+                            </div>
+                        </div>
+                        @if (!browser.Contains("Firefox"))
+                        {
+                            <div class="col-md-4">
+                                <div class="thumbnail">
+                                    <img src="/Content/bkav.egov/images/Install Extension/Extension-step3.3.PNG" />
+                                </div>
+                                <div>
+                                    Nhấp vào nút dưới đây và cài đặt extension
+                                    <input type="button" class="btn btn-primary" value="Cài đặt Extension" id="addExtension" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="ins-step3">
+                <div class="ins-title">
+                    Chúc mừng, Bkav eGov Extension đã sẵn sàng để sử dụng!
+                </div>
+                <div class="ins-step">
+                    Vui lòng tải lại trang và bắt đầu sử dụng.
+                </div>
+                <div class="ins-image">
+                    <img src="/Content/bkav.egov/images/Install Extension/Extension-step1.png" />
+                </div>
+                <div class="ins-buttons">
+                    <input type="button" class="btn btn-primary" value="Tải lại trang" id="finish" />
+                </div>
+            </div>
+        </div>
+    </center>
+</body>
+</html>

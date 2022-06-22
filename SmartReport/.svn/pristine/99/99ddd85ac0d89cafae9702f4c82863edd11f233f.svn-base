@@ -1,0 +1,8 @@
+﻿<li class="dropdown {{if !viewIconBangiao}}disabled{{/if}} ">
+    <a class="dropdown-toggle btnTransfer qtooltip" data-toggle="dropdown" href="#" data-restitle="egov.resources.document.btnTransfer" title="Chuyển văn bản/hồ sơ">
+        <span class="icon-forward4"></span>
+    </a>
+    {{if viewIconBangiao}}
+    <ul class="dropdown-menu transferActions" role="menu"></ul>
+    {{/if}}
+</li>

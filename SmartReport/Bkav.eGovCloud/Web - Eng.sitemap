@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="/admin" title="Home Page"  description="" >
+    <siteMapNode url="/admin/config1" title="Config" data-res="egov.resources.sitemap.config" data-restitle="egov.resources.sitemap.config" image="glyphicon icon-cogs">
+      <siteMapNode url="/admin/Setting/General" title="System Config" data-res="egov.resources.sitemap.general" data-restitle="egov.resources.sitemap.general" image="clear.gif"/>
+      <siteMapNode url="/admin/ProcessFunction" title="Document Tree" data-res="egov.resources.sitemap.processfunction" data-restitle="egov.resources.sitemap.processfunction" image="clear.gif"/>
+      <siteMapNode url="/admin/Resource" title="Resource" data-res="egov.resources.sitemap.resource" data-restitle="egov.resources.sitemap.resource" image="clear.gif"/>
+      <siteMapNode url="/admin/ActivityLog" title="Activity Log" data-res="egov.resources.sitemap.activitylog" data-restitle="egov.resources.sitemap.activitylog" image="clear.gif"/>
+      <siteMapNode url="/admin/timejob" title="Timer" data-res="egov.resources.sitemap.egovjob" data-restitle="egov.resources.sitemap.egovjob" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config4" title="Forms" data-res="egov.resources.sitemap.config4" data-restitle="egov.resources.sitemap.config4" image="icon-text">
+      <siteMapNode url="/admin/Template" title="Template Manage" data-res="egov.resources.sitemap.template" data-restitle="egov.resources.sitemap.template" image="clear.gif"/>
+      <siteMapNode url="/admin/TemplateKey" title="Key Manage" data-res="egov.resources.sitemap.templatekey" data-restitle="egov.resources.sitemap.templatekey" image="clear.gif"/>
+      <siteMapNode url="/admin/FormGroup" title="Form Group Manage" data-res="egov.resources.sitemap.formgroup" data-restitle="egov.resources.sitemap.formgroup" image="clear.gif"/>
+      <siteMapNode url="/admin/Form" title="Form Manage" data-res="egov.resources.sitemap.form" data-restitle="egov.resources.sitemap.form" image="clear.gif"/>
+      <siteMapNode url="/admin/EmbryonicForm" title="Embryonic Form Manage" data-res="egov.resources.sitemap.embryonicform" data-restitle="egov.resources.sitemap.embryonicform" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config5" title="Report" data-res="egov.resources.sitemap.config5" data-restitle="egov.resources.sitemap.config5" image="icon-stats">
+      <siteMapNode url="/admin/Report" title="Dynamic Report" data-res="egov.resources.sitemap.report" data-restitle="egov.resources.sitemap.report" image="clear.gif"/>
+      <siteMapNode url="/admin/Notify" title="Notification" data-res="egov.resources.sitemap.notify" data-restitle="egov.resources.sitemap.notify" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config2" title="Catagory" data-res="egov.resources.sitemap.config2" data-restitle="egov.resources.sitemap.config2" image="icon-list">
+      <siteMapNode url="/admin/CategoryBusiness" title="Business" data-res="egov.resources.sitemap.categorybusiness" data-restitle="egov.resources.sitemap.categorybusiness" image="clear.gif"/>
+      <siteMapNode url="/admin/DocField" title="Field" data-res="egov.resources.sitemap.docfield" data-restitle="egov.resources.sitemap.docfield" image="clear.gif"/>
+      <siteMapNode url="/admin/DocType" title="Document Type" data-res="egov.resources.sitemap.doctype" data-restitle="egov.resources.sitemap.doctype" image="clear.gif"/>
+      <siteMapNode url="/admin/DocType/ConfigWorkflow" title="Workflow" data-res="egov.resources.sitemap.configworkflow" data-restitle="egov.resources.sitemap.configworkflow" image="clear.gif"/>
+      <siteMapNode url="/admin/Category" title="Catagory" data-res="egov.resources.sitemap.category" data-restitle="egov.resources.sitemap.category" image="clear.gif"/>
+      <siteMapNode url="/admin/Increase" title="Increase Number" data-res="egov.resources.sitemap.increase" data-restitle="egov.resources.sitemap.increase" image="clear.gif"/>
+      <siteMapNode url="/admin/Code" title="Code" data-res="egov.resources.sitemap.code" data-restitle="egov.resources.sitemap.code" image="clear.gif"/>
+      <siteMapNode url="/admin/Store" title="Document Store" data-res="egov.resources.sitemap.store" data-restitle="egov.resources.sitemap.store" image="clear.gif"/>
+      <siteMapNode url="/admin/Catalog" title="Catalog" data-res="egov.resources.sitemap.catalog" data-restitle="egov.resources.sitemap.catalog" image="clear.gif"/>
+      <siteMapNode url="/admin/KeyWord" title="KeyWord" data-res="egov.resources.sitemap.keyword" data-restitle="egov.resources.sitemap.keyword" image="clear.gif"/>
+      <siteMapNode url="/admin/TransferType" title="Transfer Type" data-res="egov.resources.sitemap.transfertype" data-restitle="egov.resources.sitemap.transfertype" image="clear.gif"/>
+      <siteMapNode url="/admin/Time" title="Work Time" data-res="egov.resources.sitemap.time" data-restitle="egov.resources.sitemap.time" image="clear.gif"/>
+      <siteMapNode url="/admin/Address" title="Address" data-res="egov.resources.sitemap.address" data-restitle="egov.resources.sitemap.address" image="clear.gif"/>
+      <siteMapNode url="/admin/Paper" title="Paper" image="clear.gif"/>
+      <siteMapNode url="/admin/Fee" title="Fee" image="clear.gif"/>
+      <siteMapNode url="/admin/RequiredSupplementary" title="Additional Requirements" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config3" title="Organizational structure" data-res="egov.resources.sitemap.config3" data-restitle="egov.resources.sitemap.config3" image="icon-users3">
+      <siteMapNode url="/admin/Infomation" title="Office" data-res="egov.resources.sitemap.infomation" data-restitle="egov.resources.sitemap.infomation" image="clear.gif"/>
+      <siteMapNode url="/admin/Department" title="Department" data-res="egov.resources.sitemap.department" data-restitle="egov.resources.sitemap.department" image="clear.gif"/>
+      <siteMapNode url="/admin/JobTitles" title="Job Titles" data-res="egov.resources.sitemap.jobtitles" data-restitle="egov.resources.sitemap.jobtitles" image="clear.gif"/>
+      <siteMapNode url="/admin/Position" title="Job Position" data-res="egov.resources.sitemap.position" data-restitle="egov.resources.sitemap.position" image="clear.gif"/>
+      <siteMapNode url="/admin/User" title="User" data-res="egov.resources.sitemap.user" data-restitle="egov.resources.sitemap.user" image="clear.gif"/>
+      <siteMapNode url="/admin/Role" title="Role" data-res="egov.resources.sitemap.role" data-restitle="egov.resources.sitemap.role" image="clear.gif"/>
+      <siteMapNode url="/admin/Authorize" title="Authorize" data-res="egov.resources.sitemap.authorize" data-restitle="egov.resources.sitemap.authorize" image="clear.gif"/>
+      <siteMapNode url="/admin/Client" title="Client" data-res="egov.resources.sitemap.client" data-restitle="egov.resources.sitemap.client" image="clear.gif"/>
+      <siteMapNode url="/admin/People" title="People" data-res="egov.resources.sitemap.people" data-restitle="egov.resources.sitemap.people" image="clear.gif"/>
+      <siteMapNode url="/admin/ScopeArea" title="Scope Area" data-res="egov.resources.sitemap.scopearea" data-restitle="egov.resources.sitemap.scopearea" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config6" title="eGovOnline" data-res="egov.resources.sitemap.config6" data-restitle="egov.resources.sitemap.config6" image="icon-globe">
+      <siteMapNode url="/admin/Office" title="Office" data-res="egov.resources.sitemap.office" data-restitle="egov.resources.sitemap.office" image="clear.gif"/>
+      <siteMapNode url="/admin/Law/Index" title="Law Document" data-res="egov.resources.sitemap.Law" data-restitle="egov.resources.sitemap.law" image="clear.gif"/>
+      <siteMapNode url="/admin/Guide" title="Guide" data-res="egov.resources.sitemap.guide" data-restitle="egov.resources.sitemap.guide" image="clear.gif"/>
+      <siteMapNode url="/admin/Question" title="Frequently Asked Questions" data-res="egov.resources.sitemap.question" data-restitle="egov.resources.sitemap.question" image="clear.gif"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config7" title="Backup and Restore data" data-res="egov.resources.sitemap.config" data-restitle="egov.resources.sitemap.config" image="glyphicon icon-cogs">
+     <siteMapNode url="/admin/sharefolder" title="Shared Folder" data-res="egov.resources.sitemap.sharefolder" data-restitle="egov.resources.sitemap.sharefolder" image="clear.gif"/>
+      <siteMapNode url="/admin/BackupRestoreConfig" title="Backup and Restore Database" data-res="egov.resources.sitemap.backuprestoreconfig" data-restitle="egov.resources.sitemap.backuprestoreconfig" image="clear.gif"/>
+      <siteMapNode url="/admin/BackupRestoreHistory" title="Backup and Restore history" data-res="egov.resources.sitemap.backuprestoreconfig" data-restitle="egov.resources.sitemap.backuprestorehistory" image="clear.gif"/>
+      <siteMapNode url="/admin/BackupRestoreFileConfig" title="Backup and Restore File" data-res="egov.resources.sitemap.backuprestorefileconfig" data-restitle="egov.resources.sitemap.backuprestorefileconfig" image="clear.gif"/>
+      <siteMapNode url="/admin/BackupRestoreManager" title="Backup files Manage" data-res="egov.resources.sitemap.backupRestoreManager" data-restitle="egov.resources.sitemap.backupRestoreManager" image="clear.gif"/>
+
+  </siteMapNode>
+  </siteMapNode>
+</siteMap>

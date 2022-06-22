@@ -1,0 +1,1315 @@
+﻿
+html {
+    font-family: "Roboto",Tahoma,Arial,sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body {
+    font-family: "Roboto",Tahoma,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #212121;
+    background-color: #fff;
+    margin: 0;
+}
+
+.modal-dialog {
+    width: auto !important;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+
+/* -- New Code -- Vị trí khung chat ----------- */
+
+.fix-position-chat {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 101;
+}
+
+/* -- New Code -- Xem chi tiết comment ----------- */
+.comment-list .noobDetail {
+    color: #a2a2a2;
+    margin-right: 40px;
+    margin-top: -82px;
+    font-size: 10px;
+    float: right;
+    cursor: pointer;
+}
+
+
+#commentListCopy .comment-item .comment-detail .target-comment {
+    display: inline-block;
+    padding-top: 5px;
+    border-top: 1px solid #b7b7b7;
+    color: #969696;
+    margin-top: 5px;
+}
+
+#commentList .comment-item .comment-detail .target-comment {
+    padding-top: 5px;
+    border-top: 1px solid #b7b7b7;
+    color: #969696;
+    margin-top: 5px;
+    display: none;
+}
+
+    #commentList .comment-item .comment-detail .target-comment .target-label,
+    #commentListCopy .comment-item .comment-detail .target-comment .target-label {
+        display: inline-block;
+        min-width: 75px;
+    }
+
+#commentList .mdl-list__item, #commentListCopy .mdl-list__item {
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+#commentList .comment-item.open .comment-detail .target-comment,
+#commentListCopy .comment-item.open .comment-detail .target-comment {
+    display: inline-block;
+}
+
+li.documentUnread {
+    font-weight: 500;
+}
+
+/* -- New Code -- CSS bootstrap cho mobile -- */
+/*@font-face {
+    font-family: 'icomoon';
+    src: url(../bootstrap/fonts/icomoon.svg?7a9cdp#icomoon) format('svg');
+    src: url(../bootstrap/fonts/icomoon.eot?7a9cdp);
+    src: url(../bootstrap/fonts/icomoon.eot?#iefix7a9cdp) format('embedded-opentype'), url(../bootstrap/fonts/icomoon.woff?7a9cdp) format('woff'), url(../bootstrap/fonts/icomoon.ttf?7a9cdp) format('truetype'), url(../bootstrap/fonts/icomoon.svg?7a9cdp#icomoon) format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+[class^="icon-"], [class*="icon-"] {
+    color: white;
+    padding-right: 5px;
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-checkmark:before {
+    content: "";
+}
+
+.icon-users3:before {
+    content: "";
+}
+
+.icon-file-pdf:before {
+    content: "";
+}
+
+.icon-file-word:before {
+    content: "";
+}
+
+.icon-eye2:before {
+    content: "\e6c8";
+}
+
+.icon-undo:before {
+    content: "\e662";
+}
+
+.dropdown-mobi {
+    float: left;
+    margin-top: 20px;
+    margin-right: 10px;
+    height: 30px;
+    list-style-type: none;
+}
+
+.icon-head-mobile {
+    line-height: 1;
+    position: absolute;
+    right: 12px;
+    top: 0;
+}
+
+a.dropdown-toggle-mobi.btnFinish, a.dropdown-toggle-mobi.btnAnnouncement {
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------- */
+button.mdl-button.mdl-js-button.mdl-button--primary.btnSend {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    font-size: 16px;
+}
+
+
+/* --------------------------------------------------------- */
+
+/* -- New Code -- Làm mờ tệp đính kèm đã xóa -- */
+.dataDetail .document-info #wrapAttachment .disabled {
+    color: rgb(189, 189, 189) !important;
+    pointer-events: none !important;
+}
+    /* -- Icon các tệp tin -- */
+    .dataDetail .document-info #wrapAttachment .disabled .icon {
+        color: rgb(189, 189, 189) !important;
+        pointer-events: none !important;
+    }
+    /* -- Icon Download -- */
+    .dataDetail .document-info #wrapAttachment .disabled .material-icons {
+        color: rgb(189, 189, 189) !important;
+        pointer-events: none !important;
+    }
+/* -- New Code -- icon Tiệp đính kèm-- */
+.icon.icon-file-pdf, .icon.icon-file-word {
+    color: black !important;
+}
+/* -- New Code -- Sửa lại dãn trái của tree con --*/
+.egov-leftmenu #menu-document ul ul a {
+    /* text-indent: 50px; */
+    text-indent: 0;
+}
+
+/* -- New Code -- sửa lại icon của nút Tạo mới -- */
+.egov-appmenu span.btndocumentspan {
+    position: absolute;
+    border: 3px solid #2f6fca;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    margin-top: 2px;
+    background: white;
+    left: 50%;
+    margin-left: -20px;
+}
+
+    .egov-appmenu span.btndocumentspan .material-icons {
+        color: #2f6fca;
+        font-size: 16px;
+        padding-top: 0;
+    }
+
+/* -- New Code -- thêm width 100% cho giao diện tạo mail --------------- */
+.egov .dataDetail .mail-detail,
+.egov .dataDetail .mail-detail > div {
+    height: 100%;
+    width: 100%;
+}
+
+/* -------------------- END ------------------- */
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    color: #000 !important;
+    position: fixed;
+}
+
+.egov, #main-page,
+.egov, #main-page > div.egov-app {
+    height: 100%;
+    width: 100%;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.wraptext {
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.label-default {
+    background-color: #777;
+}
+
+.label-primary {
+    background-color: #337ab7;
+}
+
+.label-success {
+    background-color: #5cb85c;
+}
+
+.label-info {
+    background-color: #5bc0de;
+}
+
+.label-warning {
+    background-color: #f0ad4e;
+}
+
+.label-danger {
+    background-color: #d9534f;
+}
+
+.fileupload {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+#main-page.showdetail > .mdl-layout__container {
+    display: none;
+}
+
+.mdl-layout__drawer {
+    width: 300px;
+    -webkit-transform: translateX(-320px);
+    -moz-transform: translateX(-320px);
+    -ms-transform: translateX(-320px);
+    -o-transform: translateX(-320px);
+    transform: translateX(-320px);
+}
+
+    .mdl-layout__drawer.is-visible ~ .mdl-layout__content {
+        display: none;
+    }
+
+#main-page.showdetail .detail-layout {
+    display: block !important;
+}
+
+.detail-layout, .detail-layout .detail-layout {
+    display: flex;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -moz-transform: translateX(800px);
+    -ms-transform: translateX(800px);
+    -o-transform: translateX(800px);
+    -webkit-transform: translateX(800px);
+    transform: translateX(800px);
+}
+
+.mdl-list {
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 0;
+}
+
+.mdl-list__item {
+    padding: 8px 16px;
+    color: black;
+    line-height: 20px;
+}
+
+    .mdl-list__item .mdl-list__item-secondary-content {
+        min-width: 47px;
+    }
+
+.mdl-list__item--three-line .mdl-list__item-text-body {
+    padding-left: 56px;
+    height: 56px;
+}
+
+.mdl-progress {
+    /*height: 3px;*/
+    top: 56px;
+    z-index: 102;
+    position: absolute;
+}
+
+    .mdl-progress.mdl-progress__indeterminate > .bar1 {
+        background-color: #ffef62;
+    }
+
+.mdl-layout__title, .mdl-layout-title {
+    max-width: 200px;
+    display: inline-block;
+}
+
+.mdl-snackbar {
+    z-index: 101;
+}
+/*************************************/
+
+#chatFrame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/************************************/
+
+.trans {
+    position: absolute;
+    opacity: 0;
+    z-index: 0;
+    -moz-transition: all ease 0.4s;
+    -o-transition: all ease 0.4s;
+    -webkit-transition: all ease 0.4s;
+    transition: all ease 0.4s;
+}
+
+    .trans.trans-left {
+        -moz-transform: translateX(-1200px);
+        -ms-transform: translateX(-1200px);
+        -o-transform: translateX(-1200px);
+        -webkit-transform: translateX(-1200px);
+        transform: translateX(-1200px);
+    }
+
+    .trans.trans-right {
+        -moz-transform: translateX(1200px);
+        -ms-transform: translateX(1200px);
+        -o-transform: translateX(1200px);
+        -webkit-transform: translateX(1200px);
+        transform: translateX(1200px);
+    }
+
+    .trans.trans-top {
+        -moz-transform: translateY(-2000px);
+        -ms-transform: translateY(-2000px);
+        -o-transform: translateY(-2000px);
+        -webkit-transform: translateY(-2000px);
+        transform: translateY(-2000px);
+    }
+
+    .trans.trans-bottom {
+        -moz-transform: translateY(2000px);
+        -ms-transform: translateY(2000px);
+        -o-transform: translateY(2000px);
+        -webkit-transform: translateY(2000px);
+        transform: translateY(2000px);
+    }
+
+    .trans.trans-rolate90 {
+        -moz-transform: rotate('90');
+        -ms-transform: rotate('90');
+        -o-transform: rotate('90');
+        -webkit-transform: rotate('90');
+        transform: rotate('90');
+    }
+
+    .trans.display {
+        opacity: 100;
+        z-index: 100;
+        -moz-transform: translateX(0) translateY(0);
+        -ms-transform: translateX(0) translateY(0);
+        -o-transform: translateX(0) translateY(0);
+        -webkit-transform: translateX(0) translateY(0);
+        transform: translateX(0) translateY(0);
+        -moz-transition: all ease 0.2s;
+        -o-transition: all ease 0.2s;
+        -webkit-transition: all ease 0.2s;
+        transition: all ease 0.2s;
+    }
+
+/************************************/
+
+.egov-leftmenu {
+    z-index: 10;
+    /*width: 80%;*/
+}
+
+    .egov-leftmenu .useroption {
+        position: relative;
+        padding: 15px;
+        border-radius: 0;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+        .egov-leftmenu .useroption .ui-btn-text {
+            display: none;
+        }
+
+        .egov-leftmenu .useroption .mdl-layout-title {
+            line-height: 32px;
+        }
+
+        .egov-leftmenu .useroption .avatar {
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            width: 50px;
+            border-radius: 50%;
+        }
+
+    .egov-leftmenu .userinfo {
+        float: left;
+        margin-left: 65px;
+    }
+
+        .egov-leftmenu .userinfo .fullmail {
+            font-size: 12px;
+        }
+
+    .egov-leftmenu .treelist {
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: white;
+    }
+
+        .egov-leftmenu .treelist li {
+            display: block;
+        }
+
+            .egov-leftmenu .treelist li a {
+                color: black;
+                text-decoration: none;
+                display: block;
+                width: 100%;
+                line-height: 25px;
+                font-weight: 400;
+            }
+
+    .egov-leftmenu .treemenu {
+        padding-top: 0;
+    }
+
+    .egov-leftmenu #menu-document > li {
+        padding-bottom: 0;
+    }
+
+    .egov-leftmenu #menu-document ul ul .material-icons {
+        display: none;
+    }
+
+    .egov-leftmenu #menu-document > span.material-icons {
+        margin-right: 5px;
+        height: 18px;
+    }
+
+    .egov-leftmenu #menu-document a[data-parent='#menu-document'] {
+        text-transform: uppercase;
+    }
+
+    .egov-leftmenu #menu-document > li > a {
+        font-weight: bold;
+    }
+
+    .egov-leftmenu #menu-document .mdl-button {
+        width: 100%;
+        padding: 10px 15px;
+    }
+
+    .egov-leftmenu #menu-document .material-icons {
+        color: #007C92;
+        position: relative;
+        margin-left: 0;
+        top: 5px;
+    }
+
+    .egov-leftmenu #menu-document .mdl-button .material-icons.close,
+    .egov-leftmenu #menu-document .mdl-button.collapsed .material-icons.open {
+        display: none;
+    }
+
+    .egov-leftmenu #menu-document .mdl-button.collapsed .material-icons.close,
+    .egov-leftmenu #menu-document .mdl-button .material-icons.open {
+        display: block;
+    }
+
+    .egov-leftmenu #menu-document .badge {
+        color: #000;
+        font-weight: normal;
+        float: right;
+        padding-top: 8px;
+    }
+
+    .egov-leftmenu .setting-items {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid #adadad;
+    }
+
+        .egov-leftmenu .setting-items a {
+            float: left;
+            width: 33.3%;
+            text-align: center;
+            padding: 10px 15px;
+        }
+/************************************/
+
+.egov-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 101;
+}
+
+    .egov-footer .egov-appmenu {
+        background: white;
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        padding: 3px 15px;
+        border-top: 1px solid #e9e9e9;
+    }
+
+.egov-appmenu .menuitem {
+    display: inline-block !important;
+    width: 18.9%;
+    text-align: center;
+}
+
+    .egov-appmenu .menuitem .mdl-button--icon {
+        height: 25px;
+    }
+
+    .egov-appmenu .menuitem .menu-appname {
+        display: block;
+        font-size: 11px;
+        color: #d6d6d6;
+    }
+
+.egov-appmenu .material-icons {
+    color: #d6d6d6;
+}
+
+.egov-appmenu .menuitem.active .material-icons {
+    color: #2f6fca;
+}
+
+.egov-appmenu .menuitem.active .menu-appname {
+    color: #000;
+}
+
+.egov-appmenu .notifyBell {
+    margin-right: 0;
+}
+
+    .egov-appmenu .notifyBell.mdl-badge.mdl-badge--overlap:after {
+        right: 50%;
+        margin-right: -16px;
+        font-size: 9px;
+        font-weight: 400;
+        width: 16px;
+        top: 0;
+        height: 16px;
+        background: red;
+    }
+
+/************************************/
+
+.egov-maincontent {
+    height: 100%;
+    overflow: hidden;
+}
+
+    .egov-maincontent .page-content {
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+        .egov-maincontent .page-content .egov-app {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+    .egov-maincontent .list-document {
+        padding: 0;
+        margin: 0;
+    }
+
+.list-document > li {
+    padding: 4px 16px;
+}
+
+.list-document .document-tags span {
+    margin-right: 5px;
+    font-weight: normal;
+}
+
+.list-document .user-avatar {
+    background: #ededed;
+}
+
+/************************************/
+
+.egov .backtoList {
+    background-color: inherit;
+    display: block;
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    border: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    font-size: 26px;
+    line-height: 56px;
+    font-family: Helvetica,Arial,sans-serif;
+    top: 0;
+    left: 0;
+    color: #fff;
+    z-index: 4;
+    margin: 4px;
+}
+
+.egov .dataDetail {
+    width: 100%;
+    background: white;
+    z-index: 101;
+    height: 100%;
+}
+
+    .egov .dataDetail > div {
+        height: 100%;
+        width: 100%;
+    }
+
+    .egov .dataDetail .page-content {
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .egov .dataDetail .document-form {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+.dataDetail .form-group {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ececec;
+}
+
+    .dataDetail .form-group label {
+        float: left;
+        font-weight: 600;
+    }
+
+    .dataDetail .form-group .form-value {
+        padding-left: 80px;
+    }
+
+.dataDetail .document-info {
+    height: 100%;
+}
+
+    .dataDetail .document-info ul, .dataDetail .document-info ul,
+    .dataDetail .document-info label, .dataDetail .document-info p {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .dataDetail .document-info > div {
+        background: white;
+        border-bottom: 1px solid #ececec;
+    }
+
+        .dataDetail .document-info > div:last-child {
+            border-bottom: none;
+        }
+
+    .dataDetail .document-info .compendium {
+        font-size: 18px;
+    }
+
+    .dataDetail .document-info #wrapAttachment {
+    }
+
+        .dataDetail .document-info #wrapAttachment .attachment-function {
+            width: 130px;
+            text-align: right;
+        }
+
+            .dataDetail .document-info #wrapAttachment .attachment-function span {
+                display: inline-block;
+                padding: 5px;
+            }
+
+        .dataDetail .document-info #wrapAttachment .material-icons {
+            color: #666666;
+        }
+
+.dataDetail .document-infoCreate {
+}
+
+.document-infoCreate .form-group .control-label {
+    font-weight: normal;
+    color: #6b6868;
+}
+
+.document-infoCreate .form-group > div {
+    padding-left: 90px;
+    text-align: right;
+}
+
+.document-infoCreate .form-group select,
+.document-infoCreate .form-group textarea,
+.document-infoCreate .form-group input {
+    width: 100%;
+    padding: 0;
+    border: none;
+    outline: none;
+    color: #272727;
+    box-shadow: none;
+    height: 25px;
+}
+
+.document-infoCreate #divContent,
+.document-info #divContent {
+    outline: none;
+    min-height: 150px;
+    width: 100%;
+    border: none;
+    padding: 10px 15px;
+}
+
+.dataDetail #commentListCopy {
+    display: none;
+}
+
+    .dataDetail #commentListCopy.display {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin-right: -16px;
+        padding: 0;
+    }
+
+.dataDetail .commentMobilePage {
+    width: 100%;
+    height: 100%;
+}
+
+.comment-list .avatar {
+    width: 35px;
+    float: left;
+    border-radius: 50%;
+}
+
+.dataDetail .comment-list .comment-item {
+    width: 100%;
+}
+
+.comment-list .comment-item .comment-detail {
+    padding-left: 45px;
+    line-height: 20px;
+}
+
+.comment-list .commentUsername {
+    line-height: 12px;
+    margin-bottom: 5px;
+}
+
+.comment-list span.commentDatetime {
+    color: #a2a2a2;
+    font-size: 11px;
+    float: right;
+}
+
+.comment-list .comment-continue {
+    padding: 0;
+}
+
+.comment-list .displayAllComment {
+    color: #000000;
+    padding-left: 57px;
+    font-weight: bold;
+}
+
+.dataDetail .document-transfer {
+    position: relative;
+    padding: 0 15px;
+    background: white;
+    border-top: 1px solid #e8e8e8;
+}
+
+    .dataDetail .document-transfer .avatar {
+        float: left;
+        width: 24px;
+        border-radius: 50%;
+    }
+
+    .dataDetail .document-transfer.active .avatar {
+        float: none;
+    }
+
+    .dataDetail .document-transfer .user-comment {
+        padding-left: 40px;
+    }
+
+    .dataDetail .document-transfer.active .user-comment {
+        padding-left: 0;
+        position: relative;
+    }
+
+    .dataDetail .document-transfer #Comment {
+        padding-right: 40px;
+        width: 100%;
+        border: none;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        outline: none;
+        resize: none;
+    }
+
+    .dataDetail .document-transfer .user-name {
+        margin-left: 10px;
+        font-weight: bold;
+        display: none;
+        padding-top: 7px;
+    }
+
+    .dataDetail .document-transfer.active .user-name {
+        display: inline-block;
+    }
+
+    .dataDetail .document-transfer .btnInsertAttachment {
+        position: absolute;
+        right: 60px;
+        display: none;
+    }
+
+    .dataDetail .document-transfer .btnInsertTemplate {
+        margin-right: 55px;
+    }
+
+    .dataDetail .document-transfer.active .btnInsertAttachment,
+    .dataDetail .document-transfer.active .btnInsertImage,
+    .dataDetail .document-transfer.active .btnInsertTemplate {
+        display: inline;
+        float: right;
+    }
+
+    .dataDetail .document-transfer .material-icons {
+        color: #555555;
+    }
+
+    .dataDetail .document-transfer .btn-transfer {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+.dataDetail .mail-info {
+}
+
+.mail-info > div {
+    border-bottom: 1px solid #e8e8e8;
+    background: white;
+}
+
+#mailBody {
+    padding: 15px;
+}
+
+.mail-info .mail-subject {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.mail-info .user-address {
+    color: rgba(0,0,0,.47);
+    font-size: 13px;
+}
+
+/*Ghi đè css nội dung mail - CẦN ĐƯA VÀO THIẾT LẬP CHO GHI ĐÈ STYLE CỦA MAIL HAY KHÔNG?*/
+.mail-info .MsoNormalTable {
+    width: 100% !important;
+}
+
+.mail-info .MsoNormal {
+    text-indent: 0 !important;
+}
+
+.mail-info #wrapAttachment {
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+    .mail-info #wrapAttachment .material-icons {
+        color: rgba(0,0,0,.87);
+    }
+
+.mail-info .form-value input[type=text],
+.mail-info .form-value textarea {
+    border: none;
+    width: 100%;
+    resize: none;
+    outline: none;
+}
+
+.mail-info .form-value {
+    padding-left: 55px;
+}
+
+.mail-info #Content {
+    outline: none;
+    min-height: 50px;
+}
+
+.mail-info div#mailBody {
+    overflow: auto;
+}
+
+.mail-info .send-mail-actions {
+    height: 25px;
+}
+
+    .mail-info .send-mail-actions form {
+        float: right;
+    }
+
+    .mail-info .send-mail-actions .material-icons {
+        color: rgba(0,0,0,.77);
+    }
+
+/**************************/
+
+@media (min-width : 768px) and (orientation : portrait) {
+    .dataList .colinfo {
+        padding-left: 15px;
+    }
+}
+
+@media (max-width : 768px) and (orientation : portrait) {
+    .mail-detail #viewmail #attachment .ddlAttachment li .attachname {
+        max-width: 500px;
+    }
+
+    .mdl-menu__container,
+    .mdl-menu {
+        max-width: 600px;
+    }
+}
+
+@media (max-width : 450px) and (orientation : portrait) {
+    .mail-detail #viewmail #attachment .ddlAttachment li .attachname {
+        max-width: 65%;
+    }
+
+    .mdl-menu__container,
+    .mdl-menu {
+        max-width: 350px;
+    }
+}
+
+#ddlNewDocument, ul.mdl-menu {
+    width: 100%;
+    overflow: auto;
+    clip: initial !important;
+}
+
+.mdl-menu__container {
+    -moz-transition: box-shadow 0.3s ease-in;
+    -o-transition: box-shadow 0.3s ease-in;
+    -webkit-transition: box-shadow 0.3s ease-in;
+    transition: box-shadow 0.3s ease-in;
+}
+
+    .mdl-menu__container.is-visible {
+        /*box-shadow: 4px 4px 10px #8b8b8b;*/
+        right: 30px !important;
+        width: 80% !important;
+    }
+
+    .mdl-menu__container .mdl-menu__outline {
+        width: 100% !important;
+    }
+
+/********************************************/
+
+.transfer-dialog {
+    top: 100px;
+    padding-bottom: 0;
+    position: absolute;
+    background: white;
+    width: 100%;
+}
+
+    .transfer-dialog .mdl-dialog__content {
+        padding: 10px 16px 24px;
+        max-height: 350px;
+        overflow: auto;
+    }
+
+    .transfer-dialog .listUsers {
+        padding: 0;
+        margin: 0 -16px;
+    }
+
+.listUsers .mdl-list__item-avatar {
+    height: 36px;
+    width: 36px;
+}
+
+.listUsers .mdl-list__item {
+    height: 50px;
+}
+
+.listUsers .mdl-list__item--two-line .mdl-list__item-primary-content .mdl-list__item-sub-title {
+    font-size: 12px;
+}
+
+.transfer-dialog .transfer-title {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.transfer-dialog .result-view {
+    font-size: 13px;
+    padding: 5px 0;
+    border: 1px solid #cbcbcb;
+    border-left: 0;
+    border-right: 0;
+    margin-bottom: 5px;
+}
+
+.result-view .result-label {
+    float: left;
+    color: black;
+}
+
+.result-view .user-filter {
+    padding-left: 15px;
+}
+
+.result-view .user-receiveds > span.user-result {
+    color: #007acf;
+    margin-right: 5px;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+    .result-view .user-receiveds > span.user-result.selected {
+        color: white;
+        background: #007acf;
+    }
+
+.result-view input[type="text"] {
+    border: none;
+    outline: none;
+    width: 70px;
+}
+
+.transfer-dialog .user-xlc {
+    font-size: 12px;
+    color: #a3a3a3;
+}
+
+
+.modal.in {
+}
+
+
+    .modal.in .modal-dialog {
+        max-width: 600px !important;
+    }
+
+        .modal.in .modal-dialog .modal-content {
+            height: 100%;
+        }
+
+            .modal.in .modal-dialog .modal-content .modal-body {
+                max-height: -webkit-calc(100% - 127px);
+                max-height: -moz-calc(100% - 127px);
+                max-height: calc(100% - 127px);
+                overflow: auto;
+            }
+
+/*************************/
+#notificationFrame {
+}
+
+    #notificationFrame #notificationList {
+        padding: 0;
+        margin: 0;
+    }
+
+    #notificationFrame .headerrow {
+        padding: 5px 16px;
+        text-align: right;
+    }
+
+        #notificationFrame .headerrow a {
+            color: #03A9F4;
+            text-decoration: none;
+            margin-left: 10px;
+            font-weight: normal;
+            font-size: 12px;
+        }
+
+    #notificationFrame .mdl-list__item--three-line .mdl-list__item-text-body {
+        padding-left: 52px;
+        font-size: 13px;
+        height: 55px;
+    }
+
+    #notificationFrame .mdl-list__item--three-line .mdl-list__item-primary-content,
+    #notificationFrame .mdl-list__item--three-line .mdl-list__item-secondary-content {
+        height: 72px;
+        line-height: 18px;
+    }
+
+    #notificationFrame .mdl-list__item-text-body .material-icons,
+    #notificationFrame .close-notify .material-icons {
+        /*font-size: 13px;*/
+        color: #777;
+        position: relative;
+        top: 2px;
+    }
+
+    #notificationFrame .mdl-list__item-text-body .material-icons {
+        margin-right: 5px;
+    }
+
+        #notificationFrame .mdl-list__item-text-body .material-icons[app=documents] {
+            color: #2196F3;
+        }
+
+        #notificationFrame .mdl-list__item-text-body .material-icons[app=bmail] {
+            color: #0b8d0b;
+        }
+
+        #notificationFrame .mdl-list__item-text-body .material-icons[app=chat] {
+            color: #ffb54d;
+        }
+
+    #notificationFrame .mdl-list__item-primary-content .mdl-list__item-avatar {
+        width: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        height: auto;
+        background: #ededed;
+        margin-top: 5px;
+    }
+
+    #notificationFrame .mdl-list__item-text-body .notify-body {
+        max-height: 35px;
+        overflow: hidden;
+        display: block;
+        font-weight: 400;
+        color: rgba(0,0,0,.74);
+    }
+
+    #notificationFrame .mdl-list__item-text-body .notify-date {
+        color: #bfbfbf;
+        font-size: 12px;
+    }
+
+    #notificationFrame .notify-item {
+        border-top: 1px solid #e3e3e3;
+    }
+
+        #notificationFrame .notify-item.unview {
+            background: #fafafa;
+        }
+
+@media (max-width : 350px) and (orientation : portrait) {
+    .mail-detail #viewmail #attachment .ddlAttachment {
+        max-width: 290px;
+    }
+
+        .mail-detail #viewmail #attachment .ddlAttachment li .attachname {
+            max-width: 60%;
+        }
+
+    .mdl-menu__container,
+    .mdl-menu {
+        max-width: 260px;
+    }
+}
+
+.calendar-container {
+}
+
+    .calendar-container .beginDate {
+        color: #7474ef;
+    }
+
+        .calendar-container .beginDate span.month {
+            font-size: 16px;
+        }
+
+    .calendar-container .calendar-divider {
+        background: rgba(67, 151, 255, 0.3);
+        height: 1px;
+        margin-left: 70px;
+    }
+
+.calendar-detail li[isGroup] {
+    font-weight: bold;
+}
+
+@media (max-height: 1024px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 800px;
+    }
+}
+
+@media (max-height: 768px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 450px;
+    }
+}
+
+@media (max-height: 580px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 350px;
+    }
+}
+
+@media (max-height: 481px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 250px;
+    }
+}
+
+@media (max-height: 400px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 250px;
+    }
+}
+
+@media (max-height: 350px) {
+    .mdl-menu__container,
+    .mdl-menu {
+        max-height: 200px;
+    }
+}

@@ -1,0 +1,40 @@
+﻿<form class="form-horizontal search-form" id="formImportExcel">
+    <div class="form-group form-group-sm">
+        <label for="Compendium" class="col-md-4 control-label" data-res="">Cấu hình *:</label>
+        <div class="col-md-12">
+            <input type="radio" name="rdImportType" value="1" id="rdImportTypeStandard" title="Chuẩn"  checked/><label style="padding: 0 10px 0 3px" for="rdImportTypeStandard"> Cơ bản </label>
+            <input type="radio" name="rdImportType" value="2" id="rdImportTypeMissingNumber" title="Nâng cao"  /><label style="padding: 0 10px 0 3px" for="rdImportTypeMissingNumber">Nâng cao </label>
+            <input type="radio" name="rdImportType" value="3" id="rdImportTypeMissAll" title="Thiếu số & header" class="hidden"/><label class="hidden" style="padding: 0 10px 0 3px" for="rdImportTypeMissAll"> Thiếu số & header</label>
+        </div>
+        <div class="col-md-12 classImportTypeMissingNumber" style="display: none">
+            <div class="col-md-6">
+                <strong>Tiêu đề</strong>
+                <input type="number" class="form-control HeaderAI" style="width: 140px; margin-bottom: 5px" id="startTitle" name="startTitle" data-respholder="" placeholder="Dòng tiêu đề bắt đầu" value="">
+                <input type="number" class="form-control HeaderAI" style="width: 140px; margin-bottom: 5px" id="endTitle" name="endTitle" data-respholder="" placeholder="Dòng tiêu đề kết thúc" value="">
+            </div>
+           <div class="col-md-6">
+               <strong>Dữ liệu</strong>
+               <input type="number" class="form-control HeaderAI" style="width: 140px; margin-bottom: 5px" id="startData" name="startData" data-respholder="" placeholder="Dòng dữ liệu bắt đầu từ" value=""> 
+               <input type="number" class="form-control HeaderAI" style="width: 140px" id="endData" name="endData" data-respholder="" placeholder="Dòng dữ liệu kết thúc" value="" >
+               <input type="checkbox" id="autoEndData" /> Tự động
+           </div>
+        </div>
+        <div id="errorLicenseCode" style="color:red; display: none">
+            <i class="icon icon-close"></i>
+            <span>Không được bỏ trống</span>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="Compendium" class="col-md-4 control-label" data-res="">Tài liệu liên quan:</label>
+        <div class="col-md-12">
+            <input type="text" name="FilePath" value="" placeholder="Chọn file ( Không cần tiêu đề )" class="FilePath form-control" />
+            <input type="file" name="files" class="upload" style="display: none;" accept="*.xlsx" />
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="Compendium" class="col-md-4 control-label" data-res=""></label>
+        <div class="col-md-12">
+            <input type="button" value="Chọn file (*.xlsx)" id="btnUpload" class="btn btn-info" />
+        </div>
+    </div>
+</form>

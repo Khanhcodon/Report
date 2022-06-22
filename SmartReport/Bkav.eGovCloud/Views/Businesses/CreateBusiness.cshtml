@@ -1,0 +1,137 @@
+﻿@model Bkav.eGovCloud.Models.BusinessModel
+@{
+    ViewBag.Title = "Thêm mới doanh nghiệp";
+    Layout = null;
+}
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-1.7.2.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.nicescroll.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftAjax.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftMvcAjax.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.layout-latest.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jstree/jquery.jstree.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../Scripts/bkav.egov/util/bkav.utilities.js"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {
+            var value = $("#addbusiness").serializeArray();
+            var dataPost = {};
+            for (var i = 0; i < value.length; i++) {
+                dataPost[value[i].name] = value[i].value;
+            }
+            var data = JSON.stringify(dataPost);
+            $("#businessinfo").val(data);
+            $("#formBusiness").submit();
+        })
+
+        $("#CityCode").change(function (event) {
+            var cityCode = $(this).val();
+            $.get("@Url.Action("CityChange")", 
+                { cityCode: cityCode },
+                function (result) {
+                    if(result) 
+                    {
+                        $('#divBusiness #DistrictCode').empty();                   
+                        var AllDistrict = JSON.parse(result.AllDistrict);                            
+                        if(AllDistrict.length>0)
+                        {
+                            $("#districtTemplate").tmpl(AllDistrict).appendTo("#divBusiness #DistrictCode");
+                        }
+                        $('#divBusiness #WardId').empty();  
+                        var AllWard = JSON.parse(result.AllWard);                            
+                        if(AllWard.length>0)
+                        {
+                            $("#wardTemplate").tmpl(AllWard).appendTo("#divBusiness #WardId");
+                        }                         
+                    }
+                }
+            )
+            .complete(function () {
+                
+            })
+            .fail(function () {
+                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+            });
+        });
+
+        $("#DistrictCode").change(function (event) {
+            var districtCode = $(this).val();
+            $.get("@Url.Action("DistrictChange")", 
+                { districtCode: districtCode },  
+                function (result) {
+                    if(result) 
+                    {
+                        $('#divBusiness #WardId').empty();                   
+                        var AllWard = JSON.parse(result.AllWard);                            
+                        if(AllWard.length>0)
+                        {
+                            $("#wardTemplate").tmpl(AllWard).appendTo("#divBusiness #WardId");
+                        }                         
+                    }
+                }              
+            )
+            .complete(function () {
+                
+            })
+            .fail(function () {
+                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+            });
+        });
+
+        $("#WardId").change(function (event) {
+            var wardId = $(this).val();
+            $.get("@Url.Action("WardChange")", 
+                { wardId: wardId }                
+            )
+            .complete(function () {
+                
+            })
+            .fail(function () {
+                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+            });
+        });
+
+        
+        $("#BusinessTypeId").change(function (event) {
+            var businessTypeId = $(this).val();
+            $.get("@Url.Action("BusinessTypeChange")", 
+                { businessTypeId: businessTypeId }                
+            )
+            .complete(function () {
+                
+            })
+            .fail(function () {
+                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+            });
+        });
+    })
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addbusiness" }))
+{
+    @Html.Partial("_CreateOrEdit", Model)            
+    <script id="districtTemplate" type="text/x-jquery-tmpl"> 
+    <option value="${DistrictCode}">${DistrictName}</option>
+    </script>
+    <script id="wardTemplate" type="text/x-jquery-tmpl"> 
+    <option value="${WardId}">${WardName}</option>
+    </script>
+}
+<form action="/Business/Create" method="post" id="formBusiness">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="businessinfo" value="" id="businessinfo" />
+    <input type="button" name="name" value="Lưu" id="btnSubmit" />
+</form>

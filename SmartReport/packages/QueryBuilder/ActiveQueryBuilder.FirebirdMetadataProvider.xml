@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActiveQueryBuilder.FirebirdMetadataProvider</name>
+    </assembly>
+    <members>
+        <member name="T:ActiveQueryBuilder.Core.FirebirdMetadataProvider">
+            <summary> Metadata Provider for Firebird databases. </summary>
+        </member>
+    </members>
+</doc>

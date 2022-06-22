@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Import Loại hồ sơ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var forms = ViewBag.Forms as List<Bkav.eGovCloud.Entities.Customer.Form>;
+    var formStr = Newtonsoft.Json.JsonConvert.SerializeObject(forms);
+}
+
+<script type="text/javascript">
+    var forms = @Html.Raw(formStr);
+    function openConfig() {
+        var formId = $("#formId").val();
+        window.open("ConfigForm/" + formId, "_blank");
+    }
+
+    function extractLast( term ) {
+        return split( term ).pop();
+    }
+
+    $(function(){
+        $("#formInput").autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                
+                var value = egov.utilities.string.stripVietnameseChars(request.term).toLowerCase();
+                var data = [];
+                for (var i = 0; i < forms.length; i++) {
+                    var item = egov.utilities.string.stripVietnameseChars(forms[i].FormName).toLowerCase();
+                    if (item.indexOf(value) != -1) {
+                        data.push(forms[i]);
+                    }
+                }
+                response(data);
+            },
+            focus: function (event, ui) {
+                $("#formInput").val(ui.item.FormName);
+                return false;
+            },
+            select: function (event, ui) {
+                $("#formInput").val(ui.item.FormName);
+                $("#formId").val(ui.item.FormId);
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li>")
+                .data("item.autocomplete", item)
+                .append("<a href='#'>" + item.FormName + "</a>").appendTo(ul);
+        };
+
+        // $("#formInput").bind('focus', function(){ $(this).autocomplete("search"); } );
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span>Import</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase">Import</span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/form/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div class="bkavegov">
+
+    <form method="post" enctype="multipart/form-data" class="form-horizontal">
+        <div class="form-group">
+            <label class="form-label"><b>Chọn mẫu: </b></label>
+            <input type="text" id="formInput" class="form-control"/>
+            <input type="hidden" name="formId" id="formId" />
+                   @*<select name="formId" id="formId" class="form-control">
+        @foreach (var form in ViewBag.Forms)
+        {
+            <option value="@form.FormId">>> @form.FormName</option>
+        }
+    </select>>*@</div>        
+        <div class="form-group">
+            <label class="form-label"><b>Chọn file: </b></label>
+            <input type="file" name="importFile" class="form-control" />
+        </div>
+        <button type="button" class="btn btn-default" onclick="openConfig()">Xem cấu hình</button>
+    </form>
+</div>

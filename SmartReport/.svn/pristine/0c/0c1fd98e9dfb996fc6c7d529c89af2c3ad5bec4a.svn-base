@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="text-uppercase">Kqklmr</span>
+        <div class="pull-right">
+            <a href="#" class="viewdetail">Xem chi tiết</a>
+        </div>
+        <span class="panel-label">
+            <span class="doctype">Đang xử lý</span>: 1 <span class="doctype">Sắp tới hạn</span>: 4 <span class="doctype">Quá hạn</span>: 1
+        </span>
+    </div>
+    <div class="container-fluid">
+        <table class="table table-hover">
+            <colgroup>
+                <col style="width: 40px" />
+                <col />
+                <col style="width: 100px" />
+                <col style="width: 100px" />
+                <col style="width: 167px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên công việc</th>
+                    <th>Hết hạn</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td>Báo cáo và Xin ý kiến anh QuangNT về việc triển khi eGov trong công ty.</td>
+                    <td class="text-center"></td>
+                    <td class="text-center">QH - ĐBC/GH</td>
+                    <td>
+                        <button class="btn btn-default btn-sm" disabled>Báo cáo</button>
+                        <button class="btn btn-default btn-sm" disabled>Gia hạn</button>
+                        <button class="btn btn-default btn-sm" disabled>BCTD</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">2</td>
+                    <td>PPC (Sau 1 tháng): Rà soát việc thay đổi mật khẩu TrueCrypt.</td>
+                    <td class="text-center">Thứ 7</td>
+                    <td class="text-center">CH - ĐD</td>
+                    <td>
+                        <button class="btn btn-default btn-sm">Báo cáo</button>
+                        <button class="btn btn-default btn-sm">Gia hạn</button>
+                        <button class="btn btn-warning btn-sm">BCTD</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>PPC (Sau 1 tháng): Hậu kiểm tình hình sử dụng và lưu trữ tài liệu trên SVN.</td>
+                    <td class="text-center">Thứ 7</td>
+                    <td class="text-center">CH - ĐD</td>
+                    <td>
+                        <button class="btn btn-default btn-sm">Báo cáo</button>
+                        <button class="btn btn-default btn-sm">Gia hạn</button>
+                        <button class="btn btn-warning btn-sm">BCTD</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">4</td>
+                    <td>Hoàn thành quản trị tập trung cho Quảng Ngãi (triển khai cho các Sở)</td>
+                    <td class="text-center">24/8</td>
+                    <td class="text-center">CH - ĐD</td>
+                    <td>
+                        <button class="btn btn-default btn-sm">Báo cáo</button>
+                        <button class="btn btn-default btn-sm">Gia hạn</button>
+                        <button class="btn btn-warning btn-sm">BCTD</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

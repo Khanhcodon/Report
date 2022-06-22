@@ -1,0 +1,28 @@
+﻿<div class="row">
+    <div class="col-xs-3 col-sm-3">
+        <img src="${SenderAvatar}" width="48" class="img-circle imgAvatar" onerror="this.src = getErrorAvatar()" />
+        <i class="imgAlphabet" data-color="${alphabetCode}">${alphabet}</i>
+    </div>
+    <div class="col-xs-13 col-sm-13 colinfo no-padding-left">
+        <div class="row first-line">
+            <div class="col-xs-14 col-sm-14 col-md-14 col-lg-14 wraptext">
+                <span class="compendium">${Title}</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                {{if hasAttach }}
+                <img class="hasAttach" src="/Content/Mobile/icons/attach.gif" />
+                {{/if}}
+            </div>
+        </div>
+        <div class="document-info row secondary-line">
+            <div class="col-xs-8 col-sm-8 wraptext">
+                <span class="pull-left wraptext">
+                    ${SenderFullName}
+                </span>
+            </div>
+            <div class="col-xs-8 col-sm-8 wraptext notify-date" style="text-align: right;">
+                ${dateFormated}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,250 @@
+﻿<div class="document full-height">
+    <!-- Toolbar-->
+    <div class="rownavbar" data-role="header">
+        <nav class="navbar main-nav" role="navigation">
+            <div class="container-fluid col-xs-2 visible-xs" style="padding-left:0;padding-right: 0px;">
+                <div class="pull-left">
+                    <a class="white-color" href="javacript:void(0);">
+                        <span id="backToList" class="navbar-brand icon-arrow-left qtooltip"
+                              data-restitle="egov.resources.document.backtolist"
+                              title="Quay lại danh sách">
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="pull-left col-xs-14 col-sm-16">
+                <ul class="nav navbar-nav navbar-right pull-right toolbar" id="toolbar"></ul>
+            </div>
+        </nav>
+    </div>
+    <!--end toolbar-->
+    <form class="document-info autoscroll" data-id="${DocumentCopyId}">
+        <div class="form-horizontal document-info-template">
+            <input type="hidden" name="DocumentId" value="${DocumentId}" />
+            <input type="hidden" name="DocumentCopyId" value="${DocumentCopyId}" />
+            <input type="hidden" name="ResultStatus" value="${ResultStatus}" />
+            <div class="formTmp">
+                <div class="form-group form-group-sm" id="wrapCompendium">
+                    <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.Compendium"></label>
+                    <div class="col-sm-13 col-md-14">
+                        <textarea cols="20" class="form-control" name="Compendium" rows="2" required data-restitle="egov.resources.document.CompendiumTitle">${Compendium}</textarea>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <div class="col-md-16">
+                        <div class="form-group form-group-sm" id="wrapComment">
+                            <div class="col-sm-3 col-md-4 control-label">
+                                <label class="control-label" data-res="egov.resources.document.Comment"></label>
+                            </div>
+                            <div class="col-sm-13">
+                                <textarea class="form-control" name="Comment" rows="3" cols="20"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{if CategoryBusinessId == 1}}
+                <div id="wrapOrganization" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Organization"></label>
+                    <div class="col-sm-5 col-md-4">
+                        <input type="text" value="${Organization}" name="Organization" class="form-control" />
+                    </div>
+                    <!--</div>
+                    <div id="wrapSendType" class="form-group">-->
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.SendType"></label>
+                    <div class="col-sm-5 col-md-4">
+                        <select id="SendTypeId" name="SendTypeId" class="form-control"></select>
+                    </div>
+                </div>
+                <div id="wrapDocCode" class="form-group">
+                    <label for="DocCode" class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocCode"></label>
+                    <div class="col-sm-5 col-md-5">
+                        <input type="text" class="form-control" id="DocCode" name="DocCode" value="${DocCode}" />
+                    </div>
+                </div>
+                <div id="wrapDateArrived" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateArrived"></label>
+                    <div class="col-sm-11">
+                        <input type="text" value="${DateArrived}" name="DateArrived" id="DateArrived" class="form-control" />
+                    </div>
+                </div>
+                <div id="wrapDateResponse" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateAppointed"></label>
+                    <div class="col-sm-11">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4" style="padding-left:0">
+                                {{if IsAcknowledged == true}}
+                                <input type="checkbox" name="IsAcknowledged" id="IsAcknowledged" checked />
+                                {{/if}}
+                                {{if IsAcknowledged == false}}
+                                <input type="checkbox" name="IsAcknowledged" id="Checkbox1" />
+                                {{/if}}
+                                <label class="control-label" style="white-space:nowrap" data-res="egov.resources.document.require"></label>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <input type="text" value="${DateResponse}" name="DateResponse" id="DateResponse" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="wrapDatePublished" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" style="white-space:nowrap" data-res="egov.resources.document.DatePublished"></label>
+                    <div class="col-sm-11">
+                        <input type="text" name="DatePublished" value="${DatePublished}" id="DatePublished" class="form-control" />
+                    </div>
+                </div>
+                <div id="wrapDocField" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocField"></label>
+                    <div class="col-sm-11" style="height:60px;overflow-y: scroll;">
+                        <input type="hidden" value="${DocFieldIds}" name="DocFieldIds" id="DocFieldIds" />
+                        <table id="tblDocField" class="table table-bordered table-hover">
+                            <colgroup>
+                                <col style="width:45px" />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="text-center active">
+                                    </th>
+                                    <th class="text-center active">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{each ListDocField}}
+                                <tr>
+                                    <td>
+                                        <!--<input type="checkbox" name="ListDocField" value=${DocFieldId} id="ListDocField">-->
+                                    </td>
+                                    <td>
+                                        ${DocFieldName}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="wrapKeyword" class="form-group">
+                    <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateAppointed"></label>
+                    <div class="col-sm-11" style="height:60px;overflow-y: scroll;">
+                        <input type="hidden" value="${Keyword}" id="Keyword" name="Keyword" />
+                        <table id="tblKeyWord" class="table table-bordered table-hover">
+                            <colgroup>
+                                <col style="width:45px" />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="text-center active">
+                                    </th>
+                                    <th class="text-center active">
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <!--  <input type="hidden" value="${Keyword}" />-->
+                            <tbody>
+                                {{each ListKeyword}}
+                                <tr>
+                                    <td>
+                                        <!--<input type="checkbox" name="ListKeyword" value=${KeyWordId} id="ListKeyword">-->
+                                    </td>
+                                    <td>
+                                        ${KeyWordName}
+                                    </td>
+                                </tr>
+
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{/if}}
+
+                {{if CategoryBusinessId == 4}}
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        <div id="wrapDocCode" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.DocCode1"></label>
+                            <div class="col-sm-11">
+                                <input type="hidden" value="${DocCode}" name="DocCode" />
+                                <b class="form-control">${DocCode}</b>
+                            </div>
+                        </div>
+                        <div id="wrapCitizenName" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.CitizenName"></label>
+                            <div class="col-sm-11">
+                                <label type="text" class="form-control" value="${CitizenName}" name="CitizenName"></label>
+                            </div>
+                        </div>
+                        <div id="wrapAddress" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.Address"></label>
+                            <div class="col-sm-11">
+                                <label type="text" name="Address" value="${Address}" class="form-control"></label>
+                            </div>
+                        </div>
+                        <div id="wrapPhone" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.Phone"></label>
+                            <div class="col-sm-11">
+                                <label type="text" value="${Phone}" name="Phone" alt="phone-vn" class="form-control"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-md-8">
+                        <div id="wrapIdentityCard" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.IdentityCard"></label>
+                            <div class="col-sm-11">
+                                <label type="text" value="${IdentityCard}" name="IdentityCard" alt="cmnd" class="form-control"></label>
+                            </div>
+                        </div>
+                        <div id="wrapEmail" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.Email"></label>
+                            <div class="col-sm-11">
+                                <label type="text" name="Email" value="${Email}" class="form-control"></label>
+                            </div>
+                        </div>
+                        <div id="wrapCommune" class="form-group form-group-sm">
+                            <label class="col-sm-5 control-label" data-res="egov.resources.document.Commune"></label>
+                            <div class="col-sm-11">
+                                <label type="text" class="tabIndex form-control" tabindex="11"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="document-attachment row" style="display: none;">
+            <div class="container-fluid">
+                <div data-res="egov.resources.document.AttachmentList" class="col-md-14 col-sm-14 row"></div>
+                <div class="col-md-2 col-sm-2" style="float:right">
+                    <span class="attachment-download-all" style="float:right">
+                        <span class="icon icon-download3" data-restitle="egov.resources.attachment.downloadAll" title="Tải về"></span>
+                        <span data-res="egov.resources.attachment.downloadAll">Tải về</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-16 col-sm-16" id="wrapAttachment">
+                <ul class="list-group attachment-list"></ul>
+            </div>
+        </div>
+
+        <!--Ý kiến giải quyết-->
+        <div class="document-extend row container-fluid document-contents" id="wrapComments">
+            <div class="form-group">
+                <div class="main-title"><span data-res="egov.resources.document.FinalComment"></span></div>
+                <div class="content">
+                    <ul class="list-group" id="commentList"></ul>
+                </div>
+            </div>
+        </div>
+        <!--end ý kiến giải quyết-->
+        <!--nội dung form-->
+        <div id="divContent" class="row document-contents"></div>
+        <!-- en nội dung form-->
+    </form>
+</div>

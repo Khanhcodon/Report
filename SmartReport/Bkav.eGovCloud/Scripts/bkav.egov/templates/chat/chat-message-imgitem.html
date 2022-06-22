@@ -1,0 +1,55 @@
+﻿
+<div data-account="${account}" data-id="${id}" class="item-message file-message {{if isme == true}} isme {{else}} other {{/if}}  {{if unread == true}}unread{{/if}}">
+    {{if isme == true}}
+    <div class="item-message__status">
+        <div idmsg="${id}" data-field='status'>
+            {{if status=='client'}} <i class="material-icons">panorama_fish_eye</i>{{/if}}
+            {{if status=='server'}} <i class="material-icons">check_circle_outline</i> {{/if}}
+            {{if status=='success'}} <i class="material-icons">check_circle</i>{{/if}}
+        </div>
+    </div>
+    {{/if}}
+    <div class="item-message__content">
+        <div class="item-message__data" id="${id}" url="${url}" file-name="${name}" size="${size}" extension="${extension}">
+            <div class="clear-right">
+                <div>
+                    <div class="chat-content-wrap" style="max-width: ${width}px;">
+                        {{if isMulti}}
+                        <div class="image-content">
+                            <table class="tbl-images">
+                                {{each previewImages}}
+                                <tr>
+                                    {{each $value}}
+                                    <td colspan="${colspan}">
+                                        {{if status == 'client'}}
+                                        <div class="chat-image" id="${id}" style="background: url(/Content/bkav.egov/images/ajax-loader.gif) no-repeat; background-position: center center; width: ${width}px;
+                                                        height:${height}px;"></div>
+                                        {{else}}
+                                        <div class="chat-image" id="${id}" style="background-image: url(${url}); background-position: center center; width: ${width}px;
+                                                        height:${height}px;"></div>
+                                        {{/if}}
+                                    </td>
+                                    {{/each}}
+                                </tr>
+                                {{/each}}
+                            </table>
+                        </div>
+                        {{else}}
+                        <div class="image-content">
+                            {{if status == 'client'}}
+                            <div class="chat-image" id="${previewImages[0].id}" style="background: url(/Content/bkav.egov/images/ajax-loader.gif) no-repeat; background-position: center center; width: ${previewImages[0].width}px;
+                                                            height:${previewImages[0].height}px;"></div>
+                            {{else}}
+                            <div class="chat-image" id="${previewImages[0].id}" style="background-image: url(${previewImages[0].url}); background-position: center center; width: ${previewImages[0].width}px;
+                                                        height:${previewImages[0].height}px;">
+                                {{/if}}
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>

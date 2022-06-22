@@ -1,0 +1,1024 @@
+﻿@using Bkav.eGovCloud.Core.Utils
+@model UserModel
+@{
+    var allRoles = ViewBag.AllRoles as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.RoleModel>;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allJobTitles = ViewBag.AllJobTitles as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.JobTitlesModel>;
+    var allPositions = ViewBag.AllPositions as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.PositionModel>;
+    var selectedRoles = ViewBag.SelectedRoles as string;
+    var selectedDepartmentJobTitless = ViewBag.DepartmentJobTitlesIdsSelected as string;
+    var permissionsInSystem = ViewBag.PermissionsInSystem as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.PermissionModel>;
+    var permissionsSelected = ViewBag.PermissionsSelected as string;
+    var rolePermissions = ViewBag.RolePermissions as string;
+    var listDomain = ViewBag.ListDomain as List<SelectListItem>;
+
+    var permissionsInSystemArr = permissionsInSystem.Select(p => new { p.PermissionId, p.PermissionName }).Stringify();
+    var roleArr = allRoles.Select(p => new { p.RoleId, p.RoleName }).Stringify();
+
+    var devides = ViewBag.Devices as List<Bkav.eGovCloud.Entities.Customer.MobileDevice>;
+}
+
+@if (Model.UserId == 0)
+{
+    <script type="text/javascript">
+
+        var validation = {
+            "Username": {
+                "data-val" : "true",
+                "data-val-length" : "@Localizer("User.CreateOrEdit.Fields.Username.Length")",
+                "data-val-length-max" : "64",
+                "data-val-length-min" : "1",
+                "data-val-required" : "@Localizer("User.CreateOrEdit.Fields.Username.Required")"
+            },
+            "Password": {
+                "data-val" : "true",
+                "data-val-required" : "@Localizer("User.CreateOrEdit.Fields.Password.Required")",
+                "data-val-regex": "@ViewBag.PasswordMessageMatches",
+                "data-val-regex-pattern": "@Html.Raw((ViewBag.PasswordExpression as string).Replace("\\", "\\\\").Replace("\"", "\\\""))"
+            },
+            "ConfirmPassword": {
+                "data-val" : "true",
+                "data-val-equalto" : "@Localizer("User.CreateOrEdit.Fields.ConfirmPassword.NotEqualPassword")",
+                "data-val-equalto-other" : "*.Password"
+            }
+        };
+
+        function updateValidator() {
+            $("form").removeData("validator");
+            $("form").removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse("form");
+        }
+
+        function rebindRandomPassword(isRandom) {
+            debugger
+            var password = $("#Password");
+            var confirm = $("#ConfirmPassword");
+            if (isRandom) {
+                password.attr("disabled", "");
+                password.removeClass("input-validation-error");
+                password.siblings("span").html("");
+                $.each(validation.Password, function(key) {
+                    password.removeAttr(key);
+                });
+                confirm.attr("disabled", "");
+                confirm.removeClass("input-validation-error");
+                confirm.siblings("span").html("");
+                $.each(validation.ConfirmPassword, function(key) {
+                    confirm.removeAttr(key);
+                });
+            } else {
+                $("#Password").removeAttr("disabled");
+                $("#ConfirmPassword").removeAttr("disabled");
+                $("#Password").attr(validation.Password);
+                $("#ConfirmPassword").attr(validation.ConfirmPassword);
+            }
+        }
+
+        $(function() {
+            $("#Username").attr(validation.Username);
+            $("#Password").attr(validation.Password);
+            $("#ConfirmPassword").attr(validation.ConfirmPassword);
+            updateValidator();
+
+            var usernameRecent; //tên đăng nhập gần đây nhất
+            var checkErrorUsername = false;//không có lỗi tồn tại tên đăng nhập
+            $("#Username").focus(function(){
+                usernameRecent = $(this).val();
+            });
+            $("#Username").focusout(function(){
+                if($(this).val() != "" && $(this).val() != usernameRecent && $(this).hasClass("input-validation-error") == false){     //nếu giá trị thay đổi và không có lỗi gì trước đó
+                    var username = $(this).val()+ "@( "@" + HttpContext.Current.Request.GetDomainName())";
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: '@Url.Action("IsExistUsernameEmailDomain")',
+                        data: { usernameEmailDomain: username },
+                        success: function(data) {
+                            if(typeof data.error != 'undefined'){
+                                $("#Username").siblings('span.field-validation-valid').html(data.error).css({color:'red'}).show();
+                                $("#Username").addClass("input-validation-error");
+                                checkErrorUsername = true;
+                            }
+                            else if(typeof data.success != 'undefined')  {
+                                $("#Username").siblings('span.field-validation-valid').html("").hide();
+                                $("#Username").removeClass("input-validation-error");
+                                checkErrorUsername = false;
+                            }
+                        }
+                    });
+                }
+                else if(checkErrorUsername && $("#Username").valid()){
+                    $("#Username").siblings('span.field-validation-valid').html(egov.resources.user.usernameexist|| "Tên đăng nhập đã tồn tại").css({color:'red'}).show();
+                    $("#Username").addClass("input-validation-error");
+                    return false;
+                }
+            });
+        });
+    </script>
+}
+
+
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+</style>
+
+<script type="text/javascript">
+    var selectedRoles = @(string.IsNullOrEmpty(selectedRoles) ? MvcHtmlString.Create("[]") : Html.Raw(selectedRoles));
+    var rolePermissions = @(string.IsNullOrEmpty(rolePermissions) ? MvcHtmlString.Create("[]") : Html.Raw(rolePermissions));
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var permissionsInSystemArr = @(string.IsNullOrEmpty(permissionsInSystemArr) ? MvcHtmlString.Create("[]") : Html.Raw(permissionsInSystemArr));
+    var roleArr = @(string.IsNullOrEmpty(roleArr) ? MvcHtmlString.Create("[]") : Html.Raw(roleArr));
+
+    var selectedDepartments = [];
+
+    $(function() {
+        var $tabContent = $('.ui-tabs-hide');
+        $tabContent.removeClass('ui-tabs-hide');
+
+        $(".table-main").addClass("table-bordered table-hover");
+        $tabContent.addClass('ui-tabs-hide');
+
+        $("form").submit(function() {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        var checkboxes = $("input[name=RoleIds]");
+        $.each(selectedRoles, function(index, role) {
+            var checked = _.find(checkboxes, function(checkbox) {
+                return checkbox.value == role;
+            });
+            if (checked) {
+                checked.checked = true;
+            }
+        });
+
+        $("#selectedDepartment").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allDepartments, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedDepartment").val('');
+                var exist = _.find(selectedDepartments, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allDepartments, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedDepartments.push(selected);
+                        var noresult = $("#tblDepartment tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedDepartmentTemplate")
+                            .tmpl(selected, {
+                                getNumbers: function() {
+                                    return selectedDepartments.length;
+                                }
+                            })
+                            .appendTo("#tblDepartment tbody");
+                        $("#departmentJobTitles_" + ui.item.value)
+                            .val(ui.item.value + "," + $("#jobTitle_" + ui.item.value + " option:first").val() + "," + $("#position_" + ui.item.value + " option:first").val() + ",false,false");
+                        $("#tblDepartment").grid('refresh');
+                    }
+                }
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        var selectedDepartmentJobTitless = @(string.IsNullOrEmpty(selectedDepartmentJobTitless) ? MvcHtmlString.Create("[]") : Html.Raw(selectedDepartmentJobTitless));
+        $.each(selectedDepartmentJobTitless, function(index, item) {
+            if(typeof item =='object') {
+                var selected = _.find(allDepartments, function(user) {
+                    return user.value === item.DepartmentId;
+                });
+                if (selected) {
+                    selectedDepartments.push(selected);
+
+                    $("#selectedDepartmentTemplate")
+                        .tmpl(selected, {
+                            getNumbers: function() {
+                                return selectedDepartments.length;
+                            }
+                        })
+                        .appendTo("#tblDepartment tbody");
+                    $("#departmentJobTitles_" + item.DepartmentId).val(item.DepartmentId + "," + item.JobTitlesId + "," + item.PositionId + "," + item.IsPrimary + "," + item.IsAdmin);
+                    $("#jobTitle_" + item.DepartmentId).val(item.JobTitlesId);
+                    $("#position_" + item.DepartmentId).val(item.PositionId);
+                    $("#isprimary_" + item.DepartmentId).prop('checked',item.IsPrimary);
+                    $("#isadmin_" + item.DepartmentId).prop('checked',item.IsAdmin);
+                }
+            } else {
+                var split = item.split(',');
+                if(split.length === 4) {
+                    var selected = _.find(allDepartments, function(user) {
+                        return user.value == split[0];
+                    });
+                    if (selected) {
+                        selectedDepartments.push(selected);
+
+                        $("#selectedDepartmentTemplate")
+                            .tmpl(selected, {
+                                getNumbers: function() {
+                                    return selectedDepartments.length;
+                                }
+                            })
+                            .appendTo("#tblDepartment tbody");
+                        $("#departmentJobTitles_" + split[0]).val(split[0] + "," + split[1] + "," + split[2] + "," + split[3] + "," + split[4]);
+                        $("#jobTitle_" + split[0]).val(split[1]);
+                        $("#position_" + split[0]).val(split[2]);
+                        $("#isprimary_" + split[0]).prop('checked', split[3]);
+                        $("#isadmin_" + split[0]).prop('checked', split[4]);
+                    }
+                }
+            }
+        });
+        if(selectedDepartments == null || (selectedDepartments != null && selectedDepartments.length == 0)) {
+            $("#tblDepartment tbody").html("<tr id='noresult'><td colspan='7' data-res='egov.resources.user.notindepartment'></td></tr>");
+        }
+
+        $.each(rolePermissions, function(index, permission) {
+            var img = $("#rolePermission_" + permission.PermissionId);
+            if(img) {
+                if(permission.AllowAccess) {
+                    img.attr({
+                        "src" : images.GrantPermissionIds,
+                        "alt" : tooltips.GrantPermissionIds
+                    });
+                }
+            }
+        });
+
+        $("#tblDepartment").grid({
+            isResizeColumn: false,
+            isFixHeightContent: false
+        });
+
+        $("#tblRole").grid({
+            isResizeColumn: false,
+            isFixHeightContent: false
+        });
+
+        $("#tblPermission").grid({
+            isResizeColumn: false,
+            isFixHeightContent: false
+        });
+
+        $(".tab").not("#tabs-1").hide();
+    });
+
+    function changeJobTitle(target) {
+        var id = target.id.replace("jobTitle_", "");
+        $("#departmentJobTitles_" + id).val($("#departmentJobTitles_" + id).siblings("input").val() + "," + target.value + "," + $("#position_" + id).val() + "," + $("#isprimary_" + id).prop('checked') + "," + $("#isadmin_" + id).prop('checked'));
+    }
+
+    function changePosition(target) {
+        var id = target.id.replace("position_", "");
+        $("#departmentJobTitles_" + id).val($("#departmentJobTitles_" + id).siblings("input").val() + "," + $("#jobTitle_" + id).val() + "," + target.value + "," + $("#isprimary_" + id).prop('checked') + "," + $("#isadmin_" + id).prop('checked'));
+    }
+
+    function changeIsPrimary(target) {
+        var id = target.id.replace("isprimary_", "");
+        if (target.checked) {
+            var $uncheck = $('#tblDepartment .isprimary:checked:not(#' + target.id + ')');
+            if ($uncheck.length > 0) {
+                $uncheck.prop('checked', false);
+                changeIsPrimary($uncheck[0]);
+            }
+            $('#tblDepartment .isprimary:checked:not(#' + target.id + ')').prop('checked', false);
+        }
+        $("#departmentJobTitles_" + id).val($("#departmentJobTitles_" + id).siblings("input").val() + "," + $("#jobTitle_" + id).val() + "," + $("#position_" + id).val() + "," + target.checked + "," + $("#isadmin_" + id).prop('checked'));
+    }
+
+    function changeIsAdmin(target) {
+        var id = target.id.replace("isadmin_", "");
+        $("#departmentJobTitles_" + id)
+            .val($("#departmentJobTitles_" + id).siblings("input").val() + "," + $("#jobTitle_" + id).val() + "," + $("#position_" + id).val() + "," + $("#isprimary_" + id).prop('checked') + "," + target.checked);
+    }
+
+    function choiceRole(target) {
+        if(target.checked) {
+            var id = parseInt(target.value);
+            if(!isNaN(id)) {
+                selectedRoles.push(id);
+            }
+        } else {
+            selectedRoles = _.reject(selectedRoles, function(num){ return num == target.value; });
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@Url.Action("GetRolePermissions")',
+            data: { roleIds: selectedRoles},
+            traditional: true,
+            success: function(data) {
+                if(data) {
+                    $(".rolePermission").attr({
+                        "src" : images.IgnorePermissionIds,
+                        "alt" : tooltips.IgnorePermissionIds
+                    });
+                    $.each(data, function(index, permission) {
+                        var img = $("#rolePermission_" + permission.PermissionId);
+                        if(img) {
+                            if(permission.AllowAccess) {
+                                img.attr({
+                                    "src" : images.GrantPermissionIds,
+                                    "alt" : tooltips.GrantPermissionIds
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function removeDepartment(id) {
+        selectedDepartments = _.reject(selectedDepartments, function(department) {
+            return department.value === id;
+        });
+        if(selectedDepartments.length > 0) {
+            $("#tblDepartment tbody tr#" + id).remove();
+            $("#tblDepartment tbody tr td:first-child").each(function(index, el) {
+                $(el).text(index + 1);
+            });
+        } else {
+            $("#tblDepartment tbody").html("<tr id='noresult'><td colspan='5' data-res='egov.resources.user.notindepartment'>Chưa thuộc phòng ban nào</td></tr>");
+        }
+        $("#tblDepartment").grid('refresh');
+    }
+</script>
+
+<script type="text/javascript">
+    var images = {
+        "IgnorePermissionIds": "@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")",
+        "GrantPermissionIds": "@Url.Content("~/Content/Images/Grant_16X16_Standard.png")",
+        "DenyPermissionIds": "@Url.Content("~/Content/Images/Deny_16X16_Standard.png")"
+    };
+    var tooltips = {
+        "IgnorePermissionIds": "",
+        "GrantPermissionIds": "@Localizer("Common.Allow")",
+        "DenyPermissionIds": "@Localizer("Common.Not.Allow")"
+    };
+
+    $(function() {
+        var permissionsSelected = @(string.IsNullOrEmpty(permissionsSelected) ? MvcHtmlString.Create("[]") : Html.Raw(permissionsSelected));
+
+        var allHidden = $("input[name=IgnorePermissionIds]");
+        $.each(permissionsSelected, function(index, permission) {
+            var hidden = _.find(allHidden, function(item) {
+                return item.value == permission.PermissionId;
+            });
+            if(hidden) {
+                var checkbox = $(hidden).siblings("img");
+                if(permission.AllowAccess) {
+                    $(hidden).attr("name", "GrantPermissionIds");
+                    checkbox.attr({
+                        "src" : images.GrantPermissionIds,
+                        "alt" : tooltips.GrantPermissionIds
+                    });
+                } else {
+                    $(hidden).attr("name", "DenyPermissionIds");
+                    checkbox.attr({
+                        "src" : images.DenyPermissionIds,
+                        "alt" : tooltips.DenyPermissionIds
+                    });
+                }
+            }
+        });
+
+        $(".userPermission").click(function() {
+            var hidden = $(this).siblings("input");
+            if(hidden.attr("name") == "IgnorePermissionIds") {
+                hidden.attr("name", "GrantPermissionIds");
+                this.src = images.GrantPermissionIds;
+                this.alt = tooltips.GrantPermissionIds;
+            } else if(hidden.attr("name") == "GrantPermissionIds") {
+                hidden.attr("name", "DenyPermissionIds");
+                this.src = images.DenyPermissionIds;
+                this.alt = tooltips.DenyPermissionIds;
+            } else {
+                hidden.attr("name", "IgnorePermissionIds");
+                this.src = images.IgnorePermissionIds;
+                this.alt = tooltips.IgnorePermissionIds;
+            }
+        });
+
+        $("#findPermiss").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i");
+                response( $.grep( permissionsInSystemArr, function( value ) {
+                    return matcher.test( value.PermissionName )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.PermissionName ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#findPermiss").val('');
+                var exist = _.find(permissionsInSystemArr, function(user) {
+                    return user.PermissionId === ui.item.PermissionId;
+                });
+
+                if (exist) {
+                    var isAdd = $("#addOrRemoveRole").prop("checked");
+                    var _el= $("#tblPermission tr[data-roleid='"+exist.PermissionId+"']").find('.userPermission');
+                    if(_el){
+                        var hidden = $(_el).siblings("input");
+                        if(isAdd){
+                            if(hidden.attr("name") != "GrantPermissionIds") {
+                                hidden.attr("name", "GrantPermissionIds");
+                                $(_el).attr('src' , images.GrantPermissionIds)
+                                    . attr( 'alt' ,tooltips.GrantPermissionIds);
+                            }
+                        }
+                        else{
+                            if(hidden.attr("name") == "IgnorePermissionIds") {
+                                hidden.attr("name", "DenyPermissionIds");
+                                $(_el).attr('src' , images.DenyPermissionIds)
+                                    . attr( 'alt' ,tooltips.DenyPermissionIds);
+                            }else{
+                                hidden.attr("name", "IgnorePermissionIds");
+                                $(_el).attr('src' , images.IgnorePermissionIds)
+                                    . attr( 'alt' ,tooltips.IgnorePermissionIds);
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        })
+         .data("autocomplete")._renderItem = function(ul, item) {
+             return $("<li></li>")
+                 .data("item.autocomplete", item)
+                 .append("<a>" + item.PermissionName + "</a>")
+                 .appendTo(ul);
+         };
+
+
+        $("#findRoles").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i");
+                response( $.grep( roleArr, function( value ) {
+                    return matcher.test( value.RoleName )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.RoleName ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#findRoles").val('');
+                var exist = _.find(roleArr, function(user) {
+                    return user.RoleId === ui.item.RoleId;
+                });
+
+                if (exist) {
+                    var checked = $("input[name=RoleIds][value='"+ ui.item.RoleId+"']").prop('checked');
+                    $("input[name=RoleIds][value='"+ ui.item.RoleId+"']").prop('checked',!checked);
+                }
+                return false;
+            }
+        })
+         .data("autocomplete")._renderItem = function(ul, item) {
+             return $("<li></li>")
+                 .data("item.autocomplete", item)
+                 .append("<a>" + item.RoleName + "</a>")
+                 .appendTo(ul);
+         };
+    });
+
+    $(function(){
+        $('#tablist a').bind("click", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            $("#tabsChild>div").hide();
+            $(id).show();
+            $(id).find('input[type=text]').first().focus();
+        });
+    });
+
+    function removeDevices(userId){
+        var r = confirm("Bạn có chắc muốn xóa tất cả các thiết bị của người dùng?");
+        if(!r){
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@Url.Action("RemoveDevices")',
+            data: { userId: userId},
+            success: function(result) {
+                if(result) {
+                    $("#tableDevices").empty();
+                }
+            }
+        });
+    }
+
+    function activeDevice(e) {
+        var deviceId = $(e).attr("deviceid");
+        var hasBlock = $(e).attr("has-block") === "true";
+
+        $.ajax({
+            url: "/admin/User/ActiveDevice",
+            type: "Post",
+            data: {
+                deviceId: deviceId,
+                hasBlock: hasBlock
+            },
+            success: function (result) {
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
+
+                var deviceRow = $("#device" + deviceId);
+                if (deviceRow.length === 1) {
+                    deviceRow.attr("class", hasBlock ? "disabled" : "");
+                    deviceRow.find(".blockStatus").text(hasBlock ? "(Không cho phép)" : "");
+                    deviceRow.find(".btn-active").toggleClass("btn-info").toggleClass("btn-default")
+                            .attr("has-block", hasBlock ? "false" : "true")
+                            .text(hasBlock ? "Cho phép" : "Chặn thiết bị");
+                }
+            }
+        });
+    }
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.UserId)
+
+<div id="tabsChild" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom: 20px;">
+        <li class="active"><a href="#tabs-1" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.User")</a></li>
+        <li><a href="#tabs-2" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.Department")</a></li>
+        <li><a href="#tabs-3" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.Role")</a></li>
+        <li><a href="#tabs-4" role="tab" data-toggle="tab">@Localizer("User.CreateOrEdit.Tab.Permission")</a></li>
+        <li><a href="#tabs-5" role="tab" data-toggle="tab">Quản lý thiết bị</a></li>
+    </ul>
+
+    <div id="tabs-1" class="tab">
+        <table>
+            @if (Model.UserId == 0)
+            {
+                <tr>
+                    <td style="width: 15%">
+                        @Html.LabelRequireFor(model => model.Username):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Username, new { @style = "display:inline;width:400px", placeholder = "Tài khoản đăng nhập. Chú ý: nhập thêm @domain để tạo tài khoản với domain bất kỳ" })
+                        &nbsp;
+                        @Html.DropDownListFor(model => model.DomainName, listDomain, null, new { @style = "display:inline;width:200px" })
+
+                        @Html.ValidationMessageFor(model => model.Username)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelRequireFor(model => model.Password):
+                    </td>
+                    <td>
+                        @Html.PasswordFor(model => model.Password)
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelRequireFor(model => model.ConfirmPassword):
+                    </td>
+                    <td>
+                        @Html.PasswordFor(model => model.ConfirmPassword)
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.UserId > 0)
+            {
+                <tr>
+                    <td style="width: 15%">
+                        @Html.LabelFor(model => model.Username):
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.UsernameEmailDomain)
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td>
+                    @Html.EgovLabelFor(model => model.FirstName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.EgovLabelFor(model => model.LastName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Gender):
+                </td>
+                <td>
+                    @Html.RadioButtonFor(model => model.Gender, true, Model.Gender ? new { @checked = "" } : null)
+                    Nam
+                    @Html.RadioButtonFor(model => model.Gender, false, !Model.Gender ? new { @checked = "" } : null)
+                    Nữ
+                    @Html.ValidationMessageFor(model => model.Gender)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Phone):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Phone)
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Email):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Fax):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Fax)
+                    @Html.ValidationMessageFor(model => model.Fax)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Address):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Address)
+                    @Html.ValidationMessageFor(model => model.Address)
+                </td>
+            </tr>
+
+            @if (Model.UserId > 0)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.EditorFor(model => model.IsActivated)
+                        @Html.LabelFor(model => model.IsActivated)
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.CanReadEveryDocument)
+                    <span>Cho phép xem tất cả văn bản của cơ quan</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.HasViewReport)
+                    <span>Cho phép xem giám sát văn bản của cơ quan</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.CanFinishDocument)
+                    <span>Cho phép kết thúc văn bản khi chuyển vào user này</span>
+                </td>
+            </tr>
+        </table>
+        @if (Model.UserId > 0)
+        {
+            <br />
+            <div>
+                <span data-res="egov.resources.user.defaultPasswordRest"></span>
+                <input type="text" id="defaultPassword" class="form-control" style="width: 250px;" data-respholder="egov.resources.user.clearToRandomData" value="@ViewBag.DefaultResetPassword" />
+            </div>
+            <p>
+                <button class="btn" type="button" id="resetPassword" name="resetPassword">@Localizer("User.CreateOrEdit.Button.ResetPassword")</button>
+            </p>
+        }
+    </div>
+
+    <div id="tabs-2" class="tab">
+        <p>
+            @Localizer("User.CreateOrEdit.Fields.DepartmentJobTitlesId.Label")
+            <input id="selectedDepartment" class="form-control" style="width: 30%; display: inline" type="text" />
+        </p>
+        <table class="table-main table" id="tblDepartment">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col style="width: 150px" />
+                <col style="width: 150px" />
+                <col style="width: 150px" />
+                <col style="width: 100px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res='egov.resources.tableheader.stt'></th>
+                    <th class="header" data-res='egov.resources.user.departmentname'></th>
+                    <th class="header" data-res='egov.resources.user.position'></th>
+                    <th class="header" data-res='egov.resources.user.position1'></th>
+                    <th class="header" data-res='egov.resources.user.ismaindepartment'></th>
+                    <th class="header" data-res='egov.resources.user.isadministrator'></th>
+                    <th class="header" style="text-align: center" data-res='egov.resources.tableheader.delete'></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="tabs-3" class="tab">
+        <p>
+            @Localizer("User.CreateOrEdit.Fields.Role.Label")
+            <input id="findRoles" class="form-control" style="width: 30%; display: inline" type="text" />
+        </p>
+        <table class="table-main table" id="tblRole" style="width: 100%">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 270px" />
+                <col />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res='egov.resources.tableheader.stt'></th>
+                    <th class="header" data-res='egov.resources.user.groupname'></th>
+                    <th class="header" data-res='egov.resources.tableheader.description'></th>
+                    <th class="header" style="text-align: center" data-res='egov.resources.tableheader.select'></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (allRoles != null && allRoles.Any())
+                {
+                    var number = 0;
+                    foreach (var role in allRoles)
+                    {
+                        number += 1;
+
+                        <tr>
+                            <td>
+                                @number
+                            </td>
+                            <td>
+                                @role.RoleName
+                            </td>
+                            <td>
+                                @role.Description
+                            </td>
+                            <td style="text-align: center">
+                                <input type="checkbox" name="RoleIds" value="@role.RoleId"
+                                       @*@(role.IsAutoAssignment ? "checked" : "")*@
+                                       onchange="choiceRole(this)" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="tabs-4" class="tab">
+        <p>
+            <span data-res="egov.resources.role.rolename">Tên quyền</span>:
+            <input type="text" id="findPermiss" name="findPermiss" style="width: 30%; display: inline" />
+            <label>
+                <span data-res="egov.resources.tableheader.addordelete">Thêm/bỏ</span>:
+                <input type="checkbox" name="addOrRemoveRole" id="addOrRemoveRole"
+                       checked="checked" style="display: inline" />
+            </label>
+        </p>
+
+        <table class="table-main table" id="tblPermission">
+            <colgroup>
+                <col style="width: 200px" />
+                <col />
+                <col style="width: 100px" />
+                <col style="width: 80px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res='egov.resources.user.rolename'></th>
+                    <th class="header" data-res='egov.resources.tableheader.description'></th>
+                    <th class="header" data-res='egov.resources.tableheader.isallow'></th>
+                    <th class="header" data-res='egov.resources.tableheader.addordelete'></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (permissionsInSystem != null && permissionsInSystem.Any())
+                {
+                    var groups = permissionsInSystem.GroupBy(p => p.ModuleName);
+                    foreach (var group in groups)
+                    {
+                        <tr>
+                            <td colspan="4">
+                                <i><b>@group.Key</b></i>
+                            </td>
+                        </tr>
+                        foreach (var permission in group)
+                        {
+                            <tr data-roleid="@permission.PermissionId">
+                                <td>
+                                    @permission.PermissionName
+                                </td>
+                                <td>
+                                    @permission.Description
+                                </td>
+                                <td style="text-align: center">
+                                    <img src="@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")" alt="" id="@("rolePermission_" + permission.PermissionId)" class="rolePermission" />
+                                </td>
+                                <td style="text-align: center">
+                                    <img src="@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")" alt="" class="userPermission" />
+                                    <input type="hidden" value="@permission.PermissionId" name="IgnorePermissionIds" />
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="tabs-5" class="tab">
+        @if (Model.UserId > 0)
+        {
+            <div id="resultparent">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.HasLimitByMac)
+                        <b>Giới hạn thiết bị đăng nhập theo địa chỉ MAC (cần cài đặt Bkav eGov Extension)</b>
+                    </label>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="panel-title">Thông tin các thiết bị truy cập tài khoản</span>
+                        <span class="pull-right">
+                            <a href="#" class="btn btn-edit reset-pass-all" style="color: #1e90ff" deviceid="0" onclick="removeDevices(@Model.UserId)">
+                                Xóa tất cả thiết bị của người dùng
+                            </a>
+                        </span>
+                    </div>
+
+                    <table class="table" id="tableDevices">
+                        <colgroup>
+                            <col style="width:30px" />
+                            <col style="width: 100px" />
+                            <col style="width: 200px" />
+                            <col style="width: 100px" />
+                            <col style="width: 160px" />
+                            <col style="width: 120px;" />
+                            <col style="width: 80px;" />
+                        </colgroup>
+                        <tbody>
+                            @foreach (var item in devides)
+                        {
+                            var activityTime = item.LastUpdate.HasValue ? item.LastUpdate.Value.ToString("HH:mm dd/MM/yyyy") : item.CreatedDate.ToString("HH:mm dd/MM/yyyy");
+                            var urlImage = "/Content/Images/divices/android.png";
+                            switch (item.OS)
+                            {
+                                case 1:
+                                    urlImage = "/Content/Images/divices/window.png";
+                                    break;
+                                case 2:
+                                    urlImage = "/Content/Images/divices/mac.png";
+                                    break;
+                                case 3:
+                                    urlImage = "/Content/Images/divices/ubuntu.png";
+                                    break;
+                                case 4:
+                                    urlImage = "/Content/Images/divices/android.png";
+                                    break;
+                                case 5:
+                                    urlImage = "/Content/Images/divices/iphone.png";
+                                    break;
+                                default:
+                                    urlImage = "/Content/Images/divices/window.png";
+                                    break;
+                            }
+                        <tr valign="middle" style="height:50px" class="@(item.HasBlock ? "disabled" : "")" id="device@(item.MobileDeviceId)">
+                            <td>
+                                <img src="@urlImage" width="24" height="24" />
+                            </td>
+                            <td>@item.DeviceName</td>
+                            <td>
+                                @item.Serial
+                            </td>
+                            <td>@item.Browser</td>
+                            <td>@activityTime</td>
+                            <td>
+                                <a href="#" class="hidden">Xem lịch sử</a>
+                            </td>
+                            <td class="activeBtn">
+                                @if (item.HasBlock)
+                                    {
+                                    <a href="#" class="btn btn-xs btn-info btn-active" deviceid="@item.MobileDeviceId" has-block="false" onclick="activeDevice(this)">Cho phép</a>
+                                    }
+                                    else
+                                    {
+                                    <a href="#" class="btn btn-xs btn-default btn-active" deviceid="@item.MobileDeviceId" has-block="true" onclick="activeDevice(this)">Chặn thiết bị</a>
+                                    }
+                            </td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+
+    <script id="selectedDepartmentTemplate" type="text/x-jquery-tmpl">
+        <tr id="${value}">
+            <td style="text-align: center">${$item.getNumbers()}</td>
+            <td>
+                ${label}
+                <input type="hidden" disabled="disabled" value="${value}" />
+                <input type="hidden" name="DepartmentJobTitlesId" id="departmentJobTitles_${value}" />
+            </td>
+            <td style="text-align: center">
+                <select name="jobTitles" id="jobTitle_${value}" style="width: 100%" onchange="changeJobTitle(this)">
+                    @if (allJobTitles != null && allJobTitles.Any())
+                    {
+                        foreach (var jobTitles in allJobTitles)
+                        {
+                            <option value="@jobTitles.JobTitlesId">@jobTitles.JobTitlesName</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td style="text-align: center">
+                <select name="positions" id="position_${value}" style="width: 100%" onchange="changePosition(this)">
+                    @if (allPositions != null && allPositions.Any())
+                    {
+                        foreach (var position in allPositions)
+                        {
+                            <option value="@position.PositionId">@position.PositionName</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td style="text-align: center">
+                <input type="checkbox" id="isprimary_${value}" class="isprimary" onchange="changeIsPrimary(this)" />
+            </td>
+            <td style="text-align: center">
+                <input type="checkbox" id="isadmin_${value}" onchange="changeIsAdmin(this)" />
+            </td>
+            <td style="text-align: center"><a href="javascript:removeDepartment(${value})" data-res='egov.resources.buttons.delete'>Xóa</a></td>
+        </tr>
+    </script>

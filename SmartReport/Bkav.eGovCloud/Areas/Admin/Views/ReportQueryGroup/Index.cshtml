@@ -1,0 +1,97 @@
+﻿@model IEnumerable<ReportQueryGroupModel>
+    @{
+        ViewBag.Title = "Nhóm truy vấn báo cáo";
+        Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    @*<link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-3.3.2/css/bootstrap.min.css")">*@
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bkav.egov/libs/maxazan/jquery.treegrid.css")" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/maxazan/jquery.treegrid.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/maxazan/jquery.treegrid.bootstrap3.js")"></script>
+
+    <script type="text/javascript">
+        function deleteReportQuery(id) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.ReportQueryGroup.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.OkCancel,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+
+        $(document).ready(function () {
+            $('.dataTableTree').treegrid({
+                initialState: 'collapsed',
+
+		    });
+        });
+    </script>
+    @Html.Partial("_Notifications")
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span data-res="egov.resources.sitemap.datasource">Nhóm truy vấn báo cáo</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/admin/ReportQueryGroup/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-md-16">
+            <div id="divForm" class="bkavegov">
+                <table id="example" class="table table-striped table-bordered dataTableTree" style="margin-left: 20px">
+                    <thead>
+                        <tr>
+                            <th>Nhóm truy vấn</th>
+                            <th>Tên truy vấn</th>
+                            <th>Ngày tạo</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var groupIndex = 1;
+                            var queryIndex = 1;
+                            foreach (var reportQueryGroup in Model)
+                            {
+                                <tr class="treegrid-@queryIndex">
+                                    <td><span class="text-dark">@reportQueryGroup.ReportQueryGroupName</span></td>
+                                    <td>Có: <label style="font-weight: bold">@reportQueryGroup.ReportQuerys.Count()</label> truy vấn</td>
+                                    <td>
+                                        <span class="text-dark">@reportQueryGroup.CreatedAt</span>
+                                    </td>
+                                    <td>
+                                        <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right:5px" href="@Url.Action("Edit", new { Id = reportQueryGroup.ReportQueryGroupId })">Sửa</a>
+                                        <a class="text-right btn btn-danger btn-xs pull-left text-white" onclick="deleteReportQuery('@reportQueryGroup.ReportQueryGroupId')">Xóa</a>
+                                        <form id="formdelete@(reportQueryGroup.ReportQueryGroupId)" style="display: none" action="@Url.Action("Delete", new { Id = reportQueryGroup.ReportQueryGroupId })" method="POST">
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                    </td>
+                                </tr>
+                                groupIndex = queryIndex;
+                                queryIndex++;
+                                foreach (var query in reportQueryGroup.ReportQuerys)
+                                {
+                                    <tr class="treegrid-@queryIndex treegrid-parent-@groupIndex">
+                                        <td></td>
+                                        <td>@query.ReportQueryName</td>
+                                        <td>@query.CreatedAt</td>
+                                        <td>
+                                            <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right:5px" href="@Url.Action("../ReportQuery/Edit", new { Id = query.ReportQueryId })">Sửa</a>
+                                        </td>
+                                    </tr>
+                                    queryIndex++;
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

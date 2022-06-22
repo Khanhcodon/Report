@@ -1,0 +1,219 @@
+eGovScheduler
+connections 1
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+DoctypeScheduleStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+DocTypeScheduler
+SmsStart
+SendEmailJobStart
+error connection doctypeschedule
+DoctypeScheduleStart
+DocTypeScheduler
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection doctypeschedule
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+DoctypeScheduleStart
+SmsStart
+DocTypeScheduler
+SendEmailJobStart
+error connection doctypeschedule
+DoctypeScheduleStart
+DocTypeScheduler
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection doctypeschedule
+SmsStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SendEmailJobStart
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: YES): 
+error connection mail Access denied for user 'root'@'localhost' (using password: YES): 
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+SmsStart
+DocTypeScheduler
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table mails in db
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table sms db
+empty table mails in db
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+DocTypeScheduler
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table sms db
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table sms db
+SmsStart
+empty table mails in db
+SmsStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+DoctypeScheduleStart
+DocTypeScheduler
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table mails in db
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table mails in db
+SmsStart
+empty table sms db
+SmsStart
+empty table sms db
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+SmsStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table sms db
+DoctypeScheduleStart
+DocTypeScheduler
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table mails in db
+empty table sms db

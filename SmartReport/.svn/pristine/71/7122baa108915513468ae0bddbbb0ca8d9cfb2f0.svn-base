@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.BackUrl = "/Admin";
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<style>
+    .form-control {
+        width: 80%;
+        display: inherit;
+    }
+    @ViewBag.LinkCss
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $("#delete").remove();
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        var isLoadPageScroll = $("#IsLoadPageScroll");
+        var pageShow = $(".pageshow");
+        if (isLoadPageScroll.prop("checked")) {
+            pageShow.hide();
+        } else {
+            pageShow.show();
+        }
+        $("input[type='radio'][name='IsLoadPageScroll'][value='True']").click(function () {
+            pageShow.hide();
+        });
+        $("input[type='radio'][name='IsLoadPageScroll'][value='False']").click(function () {
+            pageShow.show();
+        });
+        var controller = '@ViewContext.Controller.ValueProvider.GetValue("controller").RawValue';
+        var action = '@ViewContext.Controller.ValueProvider.GetValue("action").RawValue';
+        var url = "/Admin" + "/" + controller + "/" + action;
+        $(".left-content ul li a").each(function () {
+            if (url.toLowerCase() == (this.pathname).toLowerCase()) {
+                $(this).addClass("selected");
+            }
+        });
+        $("input:text").addClass("form-control");
+        $("select").addClass("form-control");
+        $("input:password").addClass("form-control");
+        $("tr").css("line-height", "2.5");
+        $(".back").bind("click", function () {
+            $(location).attr('href', "@ViewBag.BackUrl");
+        });
+
+        //   addSubmitEvent();
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-cogs"></i>
+        <span data-res="egov.resources.sitemap.config"></span>
+    </div>
+    <div class="options">
+        <button class="btn  btn-warning control-btn" id="submit">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.confirm"></span>
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 col-md-3 left-content">
+        <ul>
+            <li>@Html.ActionLink(Localizer("Setting.General.Tab.Title"), "General")</li>
+            <li>@Html.ActionLink(Localizer("Setting.ConnectionSetting.Tab.Title"), "ConnectionSetting")</li>
+            <li>@Html.ActionLink(Localizer("Setting.Notification.Tab.Title"), "Notification")</li>
+            <li>@Html.ActionLink(Localizer("Setting.FileLocation.Tab.Title"), "FileLocation")</li>
+            <li>@Html.ActionLink(Localizer("Setting.FileUpload.Tab.Title"), "FileUpload")</li>
+            <li>@Html.ActionLink(Localizer("Setting.Authentication.Tab.Title"), "Authentication")</li>
+            <li>@Html.ActionLink(Localizer("Setting.PasswordPolicy.Tab.Title"), "PasswordPolicy")</li>      
+            <li >@Html.ActionLink("Đồng bộ HRM(file JSON)", "SyncAll")</li>
+            <li>@Html.ActionLink("Đồng bộ HRM", "SyncSSO")</li> 
+            <li>@Html.ActionLink("Cấu hình đồng bộ HRM", "SSOApiSettings")</li> 
+            <li>@Html.ActionLink("Cấu hình SSO", "SSO")</li>
+            <li>@Html.ActionLink("Cấu hình BMM", "MissionSettings")</li>
+            <li>@Html.ActionLink("Cấu hình gửi tin điều hành", "ChatSettings")</li>
+            <li>@Html.ActionLink(Localizer("Setting.Email.Tab.Title"), "Email")</li>
+            <li>@Html.ActionLink(Localizer("Setting.Sms.Tab.Title"), "Sms")</li>
+            <li>@Html.ActionLink(Localizer("Setting.Connection.Tab.Title"), "Connection")</li>
+            <li>@Html.ActionLink("Cấu hình báo cáo", "ReportConfigSettings")</li>
+        </ul>
+    </div>
+
+    <div class="col-sm-12 col-md-13 right-content">
+        @Html.Partial("_Notifications")
+        @RenderBody()
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="overview-title">
+    Danh sách văn bản, hồ sơ xử lý đúng hạn - <span class="dunghan-total total"></span>
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tải về <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="dunghan">
+            <li><a href="#" id="btnExportWord">Ms Word</a></li>
+            <li><a href="#" id="btnExportPdf">Pdf</a></li>
+            <li><a href="#" id="btnExportExcel">Excel</a></li>
+        </ul>
+    </div>
+    <div class="btn-group pull-right overdue-group hidden" style="margin-right: 10px;">
+        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Nhóm theo <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="dunghan">
+            <li><a href="#" value="">Bỏ nhóm</a></li>
+            <li><a href="#" value="DocTypeName">Loại văn bản</a></li>
+            <li><a href="#" value="CurrentDepartmentName">Phòng ban</a></li>
+            <li><a href="#" value="UserCurrentName">Người xử lý</a></li>
+            @*<li><a href="#" value="CategoryName">Hình thức văn bản</a></li>*@
+        </ul>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered document-overdue" id="dungHanList">
+        <colgroup>
+            <col style="width: 150px" />
+            <col />
+            <col style="width: 200px" />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Số ký hiệu</th>
+                <th>Trích yếu</th>
+                <th>Cán bộ xử lý</th>
+                <th>Ngày tiếp nhận</th>
+                <th>Hạn xử lý</th>
+                <th>Ngày xử lý</th>
+                <th>Xem</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script type="text/x-jquery-tmpl" id="dunghanTemp">
+    <tr class="${color}">
+        <td class="text-center">${DocCode}</td>
+        <td>${Compendium}</td>
+        <td>${UserCurrentName}</td>
+        <td>${DateCreated}</td>
+        <td class="text-center">${DateAppointed}</td>
+        <td class="text-center">${DateFinished}</td>
+        <td class="text-center"><a href="#" class="btn btn-xs btn-info btn-viewDocument" value="${DocumentCopyId}">Xem</a></td>
+    </tr>
+</script>

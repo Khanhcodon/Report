@@ -1,0 +1,1647 @@
+﻿@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@using StackExchange.Profiling
+@{
+    ViewBag.Title = "eForm";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetUserLangCode();
+    var allTreeGroups = ViewBag.AllTreeGroups as IEnumerable<Bkav.eGovCloud.Models.TreeGroupModel>;
+}
+
+@*<link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style_btc.css">*@
+<link href="../../Content/bkav.egov/egovdocument.min.css" rel="stylesheet" />
+<link href="~/Content/bkav.egov/style.menu.report.css" rel="stylesheet" />
+<link href="@Url.Content("~/Content/offline/offline." + @lang + ".css")" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/bkav/editor/css/bmailEditor.css" rel="stylesheet" />
+<link href="../../Content/bkav.egov/datepicker.css" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js?v=22")"></script>
+<link href="../../Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/Scripts/bkav.egov/libs/linq/linq.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+<script src="~/Scripts/bkav.egov/libs/jquery/jquery.scrollsync.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ace.min.js")" type="text/javascript" charset="utf-8"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ace-1.2.0/ext-language_tools.js")" type="text/javascript" charset="utf-8"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout-3.4.0.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.ko.js")"></script>
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.css")" type="text/css" rel="stylesheet" />
+<script src="../Scripts/bkav.egov/libs/surveyjs-1.7.20/survey-creator.js"></script>@*Thư viện này đã chỉnh sửa*@
+<script src="../Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.pdf.js"></script>
+<link href="~/Content/bkav.egov/egov.survey-custom.css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/plotly-latest.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/wordcloud2.js")"></script>
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.analytics.css")" type="text/css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/surveyjs-1.7.20/survey.analytics.js")"></script>
+
+<script src="/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js"></script>
+<style src="/Scripts/bkav.egov/libs/ckeditor-v4/contents.css"></style>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/exporting.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/funnel.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/solid-gauge.js"></script>
+<script src="/Scripts/bkav.egov/libs/highchart_editor/accessibility.js"></script>
+
+<script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.complete.js"></script>
+<link href="/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.min.css" rel="stylesheet" />
+<script src="/Scripts/bkav.egov/libs/highchart_editor/integrations/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Scripts/bkav.egov/libs/mammoth/mammoth.browser.min.js"></script>
+<style type="text/css">
+    /*.system-tree > ul.nav li > a {
+        padding: 8px;
+        font-size: 15px;
+        position: relative;
+    }*/
+
+    .badge {
+        display: inline-block;
+        width: 20px;
+        height: 18px;
+        line-height: 19px;
+        border-radius: 5px;
+        color: white !important;
+    }
+
+    .user-profile {
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e3e3e3;
+    }
+
+        .user-profile .avatar {
+            border-radius: 50%;
+            width: 75px;
+        }
+
+        .user-profile .full-name {
+            font-size: 20px;
+            padding: 10px 0;
+        }
+
+    .table-hover > tbody > tr > td {
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    #ulTabs > li > a {
+        font-size: 15px;
+        border-radius: 5px;
+    }
+
+    .actionLevel > .selected {
+        border: blue solid 2px;
+        font-weight: bold;
+    }
+
+    .handsontable table thead th {
+        white-space: pre-wrap;
+        vertical-align: middle;
+        max-width: 300px;
+    }
+
+    .bars-left.hidden-bar {
+        display: none;
+    }
+</style>
+<div class="egov full-height" id="content-agv">
+    <div class="row full-height">
+        <div class="col-md-3 sidebar-item bars-left" style="padding-right: 0; height: 100%;" ;>
+            <aside class="main-sidebar">
+                <!-- sidebar -->
+                <section class="sidebar">
+                    @*<div class="user-profile">
+                            <img class="avatar" src="@Url.Content(ViewBag.Avatar) " />
+                            <div class="full-name">
+                                <button class="btn btn-success" id="btnCreateReport">Tạo báo cáo</button>
+                            </div>
+                        </div>*@
+                    <nav role="navigation" class="system-tree center-menu">
+                        @*calc(100vh - 13vh);*@
+                        <ul class="nav nav-pills nav-stacked" id="menu-document" style="overflow-y: auto; height: calc(100vh);">
+                            @foreach (var item in allTreeGroups)
+                            {
+                                var nodeId = "child" + item.TreeGroupId;
+                                var groupid = "group_" + item.TreeGroupId;
+                                var target = "#" + nodeId;
+
+                                <li id="@groupid" style="white-space: normal; /*border-bottom: 0.5px solid #95b0e0*/">
+                                    <a class="list-group-item is-group" data-toggle="collapse"
+                                       data-parent="#menu-document" data-target="@target"
+                                       href="#" onclick="btnToggleTree('@groupid')">
+                                        <span class="node-name" style="float:none;">@(item.IsShowUserFullName ? ViewBag.FullName : item.TreeGroupName)</span>
+                                        <span class="badge reload qtooltip icon-spinner6"
+                                              data-restitle="egov.resources.index.reload"></span>
+                                        <span class="pull-right-container btnToggleTree" onclick="btnToggleTree('@groupid')" style="cursor: default">
+                                            @*<i class="fa fa-angle-right pull-right"></i>*@
+                                        </span>
+                                    </a>
+                                    <ul id="@nodeId" data-id="@item.TreeGroupId"
+                                        class="nav panel-collapse collapse in" role="menu" style="clear: both;"></ul>
+                                </li>
+                            }
+                            <li id="menuSearch" style="white-space: normal;" class="menu-open">
+                                <a class="list-group-item is-group" data-toggle="collapse"
+                                   data-parent="#menu-document" data-target="#menuSearch"
+                                   href="#" onclick="btnToggleTree('group_menuSearch')">
+                                    <span class="node-name" style="float:none">Chức năng</span>
+                                    <span class="badge reload qtooltip icon-spinner6"
+                                          data-restitle="egov.resources.index.reload"></span>
+                                    <span class="pull-right-container btnToggleTree" onclick="btnToggleTree('group_menuSearch')" style="cursor: default">
+                                        @*<i class="fa fa-angle-right pull-right"></i>*@
+                                    </span>
+                                </a>
+                                <ul data-id=""
+                                    class="nav panel-collapse collapse in" role="menu" style="clear: both;">
+                                    <li class="mdl-list__item" id="searchMenuNav" data-parentid="0">
+                                        <a href="#" class="list-group-item  active" style="" data-open="false" data-params="[]">
+                                            <img src="~/Content/Images/home/ic_zoom.png" style="width: 16px;" alt="">
+                                            <span class="node-name wraptext" style="padding-left: 12px;color: #ffffff">Tra cứu</span>
+                                            <span class="badge qtooltip totalUnread" data-totalunread="0" data-total="0" title=""></span>
+
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </section>
+            </aside>
+        </div>
+        <div class="col-md-13 full-height bars-right" id="documentProcessing" style="padding-left: 0;">
+            <div class="app-list row hidden">
+                <div class="flex-container" style="display: flex;
+                     flex-wrap: wrap;
+                     justify-content: space-around;
+                     align-content: space-between;
+                     align-items: flex-start;
+                     padding-bottom: 10px;" id="typeListRow">
+                    <div>
+                        <div class="panel panel-default actionLevel selected" data-id="1">
+                            <div class="panel-heading" style="padding: 10px 5px;">
+                                <img src="/Content/bkav.egov/times/ico-nam.png" alt="" />
+                                Báo cáo Năm <span class="badge" style="background-color: #007bff;">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-list row" style="background: #F8F8F8; width: 100%; height: 65px;margin: 0;">
+                @*<div class="flex-container" style="display: flex;flex-wrap: wrap;justify-content: space-around;align-content: space-between;align-items: flex-start;padding-bottom: 10px;" id="typeListRow">
+                        <div>
+                            <div class="panel panel-default actionLevel selected" data-id="1">
+                                <div class="panel-heading" style="padding: 10px 5px;">
+                                    <img src="/Content/bkav.egov/times/ico-nam.png" alt="" />
+                                    Báo cáo Năm <span class="badge" style="background-color: #007bff;">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                @*data-respholder="egov.resources.placeholderSearch"*@
+                <div class="search-nav">
+                    <div class="pull-left">
+                        @*<div class="input-group input-group-sm grp-search">*@
+                        <button class="btn-bars"></button>
+                        <ul class="grp-search">
+                            @*<li><button class="btn-bars"></button></li>*@
+                            <li><img src="/Content/Images/home/ic_zoom.png" alt="" style="width: 20px; height: 20px;" /></li>
+                            <li>
+                                <input class="search-query form-control" type="text"
+                                       placeholder="Tìm kiếm...">
+                            </li>
+                            <li class="search-btn"><input type="button" class="btn-search" /></li>
+                        </ul>
+                        @*<img src="/Content/Images/home/ic_zoom.png" alt=""/>
+                            <input class="search-query form-control" type="text"
+                                   placeholder="Tìm kiếm...">
+                            <div class="input-group-btn search-btn">
+                                <input type="button" class="btn-search"/>
+                            </div>*@
+                    </div>
+                    <div class="pull-right">
+                        <ul class="create-report">
+                            <li>
+                                <button class="btn bg-btn" id="btnConfigSurvey">
+                                    <img src="/Content/Images/home/ic_settings.png" alt="" />
+                                    Cấu hình phiếu khảo sát
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn bg-btn" id="btnCreateReport">
+                                    <img src="/Content/Images/home/create.png" alt="" />
+                                    Tạo báo cáo
+                                </button>
+                            </li>
+                            <li class="hidden">
+                                <button class="btn bg-btn">
+                                    <img src="/Content/Images/home/create.png" alt="" />
+                                    Báo cáo tổng hợp
+                                </button>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="center-panel center full-height" id="center">
+                <ul id="ulTabs" class="nav nav-tabs" role="tablist"></ul>
+                <div class="full-height" id="tabContents">
+                    <div class="full-height document-process tab-content" id="documentProcess">
+                        <div class="document-process-main full-height">
+                            <div id="documentList" class="document-list">
+                            </div>
+                        </div>
+                        <div class="preview-below document-process-preview">
+                            <div class="document-preview document-preview-below"></div>
+                        </div>
+                        <div class="preview-right document-process-preview">
+                            <div class="document-preview document-preview-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*20200311 START modal compare data*@
+<style>
+    .handsontable table thead th {
+        white-space: pre-line;
+    }
+
+    .htBold {
+        font-weight: bold;
+    }
+
+    .htItalic {
+        font-style: italic;
+    }
+
+    .htStrike {
+        text-decoration: line-through;
+    }
+
+    #beforData > .ht_master.handsontable > .wtHolder {
+        /*max-height: 150px !important;*/
+    }
+
+    #afterData > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    .modal-body {
+        height: 1000px;
+    }
+
+    .modal .modal-body > div.class1 {
+        height: unset;
+    }
+
+    .modal-dialog {
+        width: 98%;
+        margin: 30px auto;
+    }
+
+    #beforeData, #afterData {
+        float: left;
+        width: calc(100% - 22px) !important;
+        height: 400px;
+        overflow: auto;
+    }
+
+    .gray {
+        background-color: #E8E8E8 !important;
+    }
+
+    .htYellow {
+        background-color: yellow !important;
+    }
+
+    .htRed {
+        background-color: red !important;
+    }
+
+    .htGreen {
+        background-color: lightgreen !important;
+    }
+
+    #scroll-com {
+        float: left;
+        width: 100%;
+        overflow-x: auto;
+        height: 17px;
+        margin-top: 10px;
+    }
+
+        #scroll-com #c2-content {
+            height: 17px;
+        }
+
+    #scroll-left {
+        float: left;
+        width: 17px;
+        overflow-y: auto;
+        overflow-x: scroll;
+        margin-left: 5px;
+    }
+
+        #scroll-left #left-content {
+            height: 300px;
+            width: 17px;
+        }
+</style>
+
+@*<script src="~/Scripts/bkav.egov/libs/diff_match/diff_match_patch.js"></script>*@
+<script src="~/Scripts/bkav.egov/libs/ckeditor-v4/adapters/htmldiff.js"></script>
+<style>
+    ins {
+        text-decoration: none;
+        background-color: #d4fcbc;
+    }
+
+    del {
+        text-decoration: line-through;
+        background-color: #fbb6c2;
+        color: #555;
+    }
+</style>
+<div id="compareModal" class="modal fade">
+    <div class="modal-dialog" style="width: 95%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 id="modal-label">So sánh dữ liệu</h4>
+            </div>
+            <div class="modal-body">
+                <div id="outputdiv"></div>
+                <br />
+                <div style="font-weight: bold" class="class1 lblAfterData">
+                </div>
+                <br />
+                <div id="afterData" class="container-data"> </div>
+                <div id="scroll-left">
+                    <div id="left-content">
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div style="font-weight: bold" class="class1 lblBeforeData">
+                </div>
+                <br />
+                <div id="beforeData" class="container-data"> </div>
+                <div id="scroll-com">
+                    <div id="c2-content">
+                    </div>
+                </div>
+                <br />
+
+                @*VuHQ 20191105 REQ-02*@
+            </div>
+        </div>
+    </div>
+</div>
+@*20200311 END modal compare data*@
+
+<div class="alert egov-status" id="egovStatus">
+</div>
+
+@{
+    Html.RenderPartial("_Tokens");
+}
+
+<div class="modal in" id="modalKey" aria-hidden="false">
+    <div class="modal-dialog" style="max-height: 536px;margin-top: 5px">
+        <div class="modal-content ui-draggable">
+            <div class="modal-header">
+                <span> Thiết kế chi tiết báo cáo thuyết minh</span>
+                <button id="finishKey" type="button" style=" margin-left: 60%;" class="btn btn-success">Hoàn thành</button>
+                <button type="button" id="closeModal" data-dismiss="modal" class="btn btn-danger">Quay lại</button>
+            </div>
+            <div class="modal-body" style="height:auto !important">
+                <div>
+                    <div>
+                        <span>Lấy dữ liệu liên kết @ViewBag.Test</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="max-height: 429px;">
+                            <div style="max-height:150px;overflow:auto">
+
+                                <div class="form-group">
+                                    <label>Đơn vị ban hành</label>
+                                    <select class="form-control" id="selectdvbh">
+                                        <option value="0">-Chọn đơn vị ban hành-</option>
+                                        <option value="1">Sở, Ban ngành</option>
+                                        <option value="2">Quận, Huyện</option>
+                                        <option value="3">Xã, Phường</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chế độ báo cáo</label>
+                                    <select class="form-control" id="rpMode">
+                                        <option value="0">- Chọn chế độ báo cáo - </option>
+                                        @foreach (var item in ViewBag.lsReportMode)
+                                        {
+                                            <option value="@item.ReportModeId">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chọn kiểu kỳ báo cáo </label>
+                                    <select class="form-control" id="actionLevel">
+                                        <option value="0">-Chọn kiểu kỳ báo cáo-</option>
+                                        @foreach (var option in (IEnumerable<SelectListItem>)ViewBag.ListActionLevel)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label id="lbKydulieu"></label>
+                                    <div id="kydulieu"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <label>Danh sách báo cáo</label>
+                            <div style="overflow:auto;max-height:300px" id="lsBC">
+                                <ul class="list-group" style="border: 0.5px solid gray;" id="lsDoc">
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div>
+                                <table id="lsKey" class="dataTable table" style="width: 100%;border-collapse: collapse;">
+                                    <thead>
+                                        <tr class="row">
+                                            <th class="col-md-2">
+                                                STT
+                                            </th>
+                                            <th class="col-md-10">
+                                                Tên Key
+                                            </th>
+                                            @*<th class="col-md-3">
+                                                    Vị trí sử dụng
+                                                </th>
+                                                <th class="col-md-4">
+                                                    Chú thích
+                                                </th>*@
+                                            <th class="col-md-4" style="text-align:center">
+                                                Xóa
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="hid-btn" id="groupbtn">
+                                <input type="radio" id="single" name="key" value="single" />
+                                <label for="single">Single</label>
+
+                                <input type="radio" id="multi" name="key" value="multi" style="margin-left: 30px;">
+                                <label for="multi">Multi</label>
+                            </div>
+                            <div id="singleKey" class="hidden-single">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <button type="button" class="buttonCal btn btn-default" value="+">+</button>
+                                        <button type="button" class="buttonCal btn btn-default" value="-">-</button>
+                                        <button type="button" class="buttonCal btn btn-default" value="*">*</button>
+                                        <button type="button" class="buttonCal btn btn-default" value="/">/</button>
+                                        <button type="button" class="buttonCal btn btn-default" value="(">(</button>
+                                        <button type="button" class="buttonCal btn btn-default" value=")">)</button>
+                                        <button type="button">PRE</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" id="btnAccept" class="btn btn-success">Chấp nhận</button>
+
+                                        <button type="button" class="btn btn-danger">Hủy</button>
+                                    </div>
+                                </div>
+                                <div style="padding: 5px;">
+                                    <input type="text" id="calKey" style="width: 245px;" />
+
+                                </div>
+                            </div>
+                            <div id="multiKey" class="hidden-multi" style="padding:10px">
+                                <button type="button" class="btn btn-success" id="btnAcceptMulti">Chấp nhận</button>
+                                <button type="button" class="btn btn-warning" id="checkedEverything">Lấy tất cả</button>
+                            </div>
+                            <div id="colCheckbox"></div>
+                            <div style="width: 100%; height: 300px; overflow: auto;" onscroll="HandleScroll()">
+                                <div id="rowCheckbox"></div>
+                                <div id="dataTable" onscroll="HandleScroll()"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<style>
+    .activeKey {
+        background-color: #f3f3f3;
+    }
+
+    .hidden-single, .hidden-multi, .hid-btn {
+        display: none;
+    }
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    #lsDoc > .list-group-item {
+        border-bottom: 0.5px solid gray !important;
+    }
+
+    tr, th {
+        padding: 5px
+    }
+
+    thead > tr > th {
+        text-align: center;
+    }
+
+    td.col-md-2 {
+        text-align: center;
+    }
+
+    #groupbtn {
+        padding: 5px
+    }
+</style>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    //$('#calKey').droppable({
+    //    alert('hello');
+    //})
+    var doctypeId;
+	var lsttempchecked=[];
+	var lsttempcheckedrow=[];
+    $(document).on('dblclick', 'tr .htCenter', function (e) {
+        var val = "["+ $(this).text()+"]";
+        var inputVal = $('#calKey').val();
+            $('#calKey').val(inputVal + val);
+    })
+
+    $(document).on('click', '#checkedEverything', function () {
+        $('.htCheckboxRendererInput').prop('checked', true);
+		let pnt=parseInt($(".ht_clone_top .colHeader .headerCheck").attr("data-id"));
+        for (var i = pnt; i < $(".ht_clone_top .colHeader").length; i++) {
+            $(".ht_clone_top .colHeader .headerCol").eq(i).prop("checked", true);
+        }
+    })
+    function HandleScroll() {
+        alert('scrolling')
+    }
+    $('#actionLevel').change(function () {
+        var selectVal = $('#actionLevel option:selected').text();
+        $('#kydulieu').html('')
+        $('#lbKydulieu').html('')
+        var appendTime = "";
+        var time = new Date();
+        if (selectVal == "Năm") {
+
+            for (var i = 0; i < 11; i++) {
+                var yearInc = time.getFullYear() + i;
+                appendTime += "<option value='" + yearInc + "'>" + yearInc+ "</option>"
+            }
+            $('#lbKydulieu').append("Kỳ dữ liệu");
+            appendTime = "<select  class='form-control' id='timePick'>" + appendTime + "</select >"
+        } else if (selectVal == "Tháng") {
+            for (var i = 0; i < 11; i++) {
+                var yearInc = time.getFullYear() + i;
+                for (var j = 1; j < 13; j++) {
+                    var month = j
+                    if (j <= 10) {
+                        month = "0" + j;
+                    }
+                    appendTime += "<option value='" + yearInc + month + "'>" +"Tháng " + j + " "+ yearInc + "</option>"
+                }
+
+            }
+            $('#lbKydulieu').append("Kỳ dữ liệu");
+            appendTime = "<select  class='form-control' id='timePick'>" + appendTime + "</select >"
+        } else if (selectVal == "Quý") {
+            for (var i = 0; i < 11; i++) {
+                var yearInc = time.getFullYear() + i;
+                for (var j = 1; j < 5; j++) {
+                    appendTime += "<option value='" + yearInc + j + "'>" + " Quý " + j +" " + yearInc + "</option>"
+                }
+            }
+            $('#lbKydulieu').append("Kỳ dữ liệu");
+            appendTime = "<select  class='form-control' id='timePick'>" + appendTime + "</select >"
+        } else if (selectVal == "Ngày") {
+            $('#lbKydulieu').append("Kỳ dữ liệu");
+            appendTime ="<input type='date' id='timePick' >"
+        }
+
+        if (appendTime != "") {
+            $('#kydulieu').append(appendTime);
+            if (selectVal == "Ngày") {
+                $('#timePick').val(moment().format('YYYY-MM-DD'))
+            }
+        }
+
+
+
+        loadDoc($(this).val(),$('#selectdvbh').children("option:selected").val(), $('#rpMode').children("option:selected").val())
+    });
+
+    $('#selectdvbh').change(function () {
+
+        loadDoc($('#actionLevel').children("option:selected").val(), $(this).val(), $('#rpMode').children("option:selected").val())
+    })
+    $('#rpMode').change(function () {
+
+        loadDoc($('#actionLevel').children("option:selected").val(), $('#selectdvbh').children("option:selected").val(),$(this).val())
+
+    })
+	//ghi lai trang thai check cua cot
+	function arrayRemove(arr, value) { return arr.filter(function(ele){ return ele != value; });}
+	$(document).on("change",".headerCol",function()
+	{
+		if($(this).is(":checked"))
+		{
+			if(!lsttempchecked.includes(parseInt($(this).attr("data-id"))))
+			{
+				lsttempchecked.push(parseInt($(this).attr("data-id")));
+			}
+		}
+		else	
+		{
+			if(lsttempchecked.includes(parseInt($(this).attr("data-id"))))
+			{
+				lsttempchecked=arrayRemove(lsttempchecked,parseInt($(this).attr("data-id")));
+				
+			}
+		
+		}
+	
+	
+	});
+    function loadDoc(actionLevel,timeKey,rpMode) {
+
+        var lsDoc =@Html.Raw(@ViewBag.LsDoctype);
+        $('#lsDoc').html('');
+
+        if (actionLevel != undefined && actionLevel != 0) {
+            lsDoc = lsDoc.filter(e => e.ActionLevel == parseInt(actionLevel))
+        }
+        if (timeKey != undefined && timeKey != 0) {
+            lsDoc = lsDoc.filter(e => e.LevelId == parseInt(timeKey))
+        }
+        if (rpMode != undefined && rpMode != 0) {
+            lsDoc = lsDoc.filter(e => e.ReportModeId == parseInt(rpMode))
+        }
+
+        lsDoc.forEach(e => {
+            $('#lsDoc').append("<li class='list-group-item'><a href='#' class='doctypeHanson' data-id='"+e.DocTypeId+"'>"+e.DocTypeName+"</a></li>");
+        })
+    }
+
+    loadDoc();
+
+
+    $(document).on('click', '.deleteKey', function () {
+        var idTag = $(this).parent().parent().attr('id');
+        var keyText = $("#" + idTag + " > .col-md-10").text();
+        $("#" + idTag).remove()
+        var insKey = $('#docCid').val();
+        var dataCk = CKEDITOR.instances[insKey].getData();
+        dataCk = dataCk.replace(keyText, "");
+        var keyRpl = keyText.replace("$$", "").replace("$$", "");
+        if (dataCk.includes('id="' + keyRpl + '"')) {
+            var htmlObject = document.createElement('div');
+            htmlObject.innerHTML = dataCk;
+            $("#" + keyRpl, htmlObject).remove()
+            dataCk = htmlObject.innerHTML;
+        }
+        CKEDITOR.instances[insKey].setData(dataCk);
+        glbKey = glbKey.filter(e => e.key != keyText);
+    })
+
+
+    $('#btnAcceptMulti').on('click', function () {
+        var columnValue = []
+        var rowIndex = []
+        var selectedKey = $('.activeKey > .col-md-10').text();
+        if (selectedKey != "") {
+            if (glbKey.length > 0) {
+
+                var filterKey = glbKey.filter(e => e.key == selectedKey)
+                if (filterKey.length > 0) {
+
+                    if (filterKey[0].doctypeid) {
+
+                        doctypeId = filterKey[0].doctypeid;
+
+                    }
+                }
+                glbKey = glbKey.filter(e => e.key != selectedKey);
+            }
+            var multiObj = {};
+            $('.ht_clone_top .headerCol').each(function () {
+                if ($(this).is(":checked")) {
+                    columnValue.push(fieldTableData[0][$(this).attr('data-id') - 1])
+					if(!lsttempchecked.includes(parseInt($(this).attr("data-id"))))
+					{
+						lsttempchecked.push(parseInt($(this).attr("data-id")));
+					}
+					
+                }
+            })
+            $('.htCheckboxRendererInput:checked').each(function () {
+                var index = parseInt($(this).attr('data-row')) + 1;
+                rowIndex.push(index);
+				if(!lsttempcheckedrow.includes(parseInt($(this).attr("data-row"))))
+				{
+					lsttempcheckedrow.push(parseInt($(this).attr("data-row")));
+				}
+            })
+            var value = {}
+            multiObj.key = selectedKey;
+            value.value = { column: columnValue, row: rowIndex }
+
+            var dataCol = "";
+            var dataRow = "";
+            var column = columnValue;
+            column.forEach(m => {
+                dataCol += "<th>" + m + "</th>";
+            })
+            dataCol = " <thead><tr>" + dataCol + "</tr></thead >";
+
+            multiData.forEach((e, i) => {
+                if (rowIndex.includes(i)) {
+                    column.forEach(m => {
+                        dataRow += "<td>" + e[fieldTableData[0].indexOf(m) + 1] + "</td>"
+                    })
+                    dataRow = "<tr>" + dataRow + "</tr>";
+                }
+            })
+            dataRow = "<tbody>" + dataRow + "</tbody>";
+
+            var tableAppend = "";
+            if (dataCol != "") {
+                if (dataRow != "") {
+                    dataRow = "<tbody>" + dataRow + "</tbody>"
+                }
+                tableAppend = "<table class='ck_table' cellspacing='0' style='width: 100%' id='" + selectedKey.replace("$$", "").replace("$$", "") + "'>" + dataCol + dataRow + "</table>";
+            }
+            value.TextTable = tableAppend;
+            multiObj.value = value;
+
+            multiObj.doctypeid = doctypeId;
+            multiObj.type = "multi";
+            var timeKey = "";
+            var kybaocao = $('#actionLevel option:selected').text();
+            if (kybaocao == "Năm" || kybaocao == "Quý" || kybaocao == "Tháng") {
+                timeKey = $('#timePick option:selected').val()
+
+            } else if (kybaocao == "Ngày") {
+                timeKey = $('#timePick').val().replace(/-/g, "");
+            }
+            multiObj.timekey = timeKey
+            glbKey.push(multiObj);
+            alert("Cấu hình key " + selectedKey.replace("$$", "").replace("$$", "") + "thành công")
+        } else {
+            alert("Vui lòng chọn key");
+
+        }
+    })
+
+    $(document).on('click', '#finishKey', function () {
+
+        window.top._tempKey = glbKey;
+        var insKey = $('#docCid').val();
+        var dataCk = CKEDITOR.instances[insKey].getData();
+        glbKey.forEach(e => {
+            var keyRpl = e.key.replace("$$", "").replace("$$", "");
+            if (dataCk.includes('id="' + keyRpl + '"')) {
+                var htmlObject = document.createElement('div');
+                htmlObject.innerHTML = dataCk;
+                $("#" + keyRpl, htmlObject).remove()
+                dataCk = htmlObject.innerHTML;
+
+            }
+            if (e.type == "single") {
+                var replaceVal = "<b>$" + e.key + "$</b>" + e.value.value;
+                dataCk = dataCk.replace(e.key, replaceVal);
+            }else if (e.type == "multi") {
+
+                var valueTable = "<b>$" + e.key + "$</b>" + e.value.TextTable
+                dataCk = dataCk.replace(e.key, valueTable);
+            }
+        })
+        CKEDITOR.instances[insKey].setData(dataCk);
+        $('#modalKey').hide();
+        if (dataTable != undefined) {
+            dataTable.destroy()
+        }
+        $('#singleKey').addClass('hidden-single');
+        $('#multiKey').addClass('hidden-multi');
+        $('#groupbtn').addClass('hid-btn')
+        $('#lsKey tbody tr.activeKey').removeClass('activeKey');
+
+    })
+
+    var glbKey = [];
+    $('#btnAccept').on('click', async function () {
+
+        const requestData = function (data) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/Document/GetCompilationData",
+                    data: data,
+                    type: "GET",
+                    success: function (data) {
+                        if (data.success) {
+                            var tableData = JSON.parse(data.data)
+                            var hasData = false;
+                            if (tableData != null) {
+                                if (tableData.length > 0) {
+                                    hasData = true;
+                                }
+                            }
+
+                            if (hasData) {
+                                var ele = inputValue.match(/\[(.*?)\]/gm);
+                                if (ele.length > 0) {
+
+                                    ele.forEach(e => {
+                                        var eval = e.replace("[", "").replace("]", "")
+                                        var indexCol = alphaBet.indexOf(eval.substring(0, 1));
+                                        if (indexCol >= 0) {
+                                            if (fieldTableData.length > 0) {
+                                                var column = fieldTableData[0][indexCol];
+
+                                                keyName.forEach(k => {
+                                                    var split = k.split('!!');
+                                                    if (split.length == 2) {
+                                                        if (split[1] == column) {
+                                                            if (!isNaN(eval.substring(1))) {
+                                                                var dataRow = tableData[eval.substring(1)];
+                                                                Object.keys(dataRow).forEach((m, i) => {
+                                                                    if (m == split[0]) {
+                                                                        inputValue = inputValue.replace(e, Object.values(dataRow)[i]);
+                                                                    }
+                                                                })
+
+                                                            }
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                            resolve(inputValue)
+                        } else {
+                            reject(null)
+                        }
+                    },
+                    error: function () {
+                        reject(null)
+                    }
+                })
+            })
+        }
+        var inputValue = $('#calKey').val();
+        var selectedKey = $('.activeKey > .col-md-10').text();
+        if (selectedKey != "") {
+            var rowObj = {};
+            var timeKey = "";
+            var kybaocao = $('#actionLevel option:selected').text();
+            if (kybaocao == "Năm" || kybaocao == "Quý" || kybaocao == "Tháng") {
+                timeKey = $('#timePick option:selected').val()
+
+            } else if (kybaocao == "Ngày") {
+                timeKey = $('#timePick').val().replace(/-/g, "");
+            }
+            rowObj.key = selectedKey;
+            rowObj.type = "single";
+            rowObj.timekey = timeKey;
+            objVal = {};
+            objVal.text = inputValue;
+            if (glbKey.length > 0) {
+                var filterKey = glbKey.filter(e => e.key == selectedKey);
+                if (filterKey.length > 0) {
+                    if (filterKey[0].doctypeid) {
+                        doctypeId = filterKey[0].doctypeid;
+                    }
+                }
+                glbKey = glbKey.filter(e => e.key != selectedKey);
+            }
+            try {
+                let res = await requestData({
+                    docTypeId: doctypeId,
+                    timeKey: timeKey
+                })
+                try {
+                    res = eval(res);
+                    if (isNaN(res)) {
+                        objVal.value = "<div id='" + selectedKey.replace("$$", "").replace("$$", "") + "'>0</div>";
+                    } else {
+                        objVal.value = "<div id='" + selectedKey.replace("$$", "").replace("$$", "") + "'>"+res+"</div>";
+                    }
+                } catch (e) {
+                    objVal.value = "<div id='" + selectedKey.replace("$$", "").replace("$$", "") + "'>0</div>";
+                }
+
+            } catch (e) {
+
+            }
+            rowObj.doctypeid = doctypeId;
+            rowObj.value = objVal;
+            glbKey.push(rowObj);
+            alert("Cấu hình key " + selectedKey.replace("$$", "").replace("$$", "") + " thành công")
+        } else {
+            alert("Vui lòng chọn key")
+
+        }
+    })
+	
+    $(document).on('click', '#lsKey tbody tr',async function (e) {
+        $('#lsKey tbody tr.activeKey').removeClass('activeKey');
+        $(this).addClass('activeKey');
+		lsttempchecked=[];
+		lsttempcheckedrow=[];
+        $('#groupbtn').removeClass('hid-btn')
+        $('#calKey').val('');
+        if (dataTable != undefined) {
+            if (!dataTable.isDestroyed) {
+                dataTable.destroy();
+            }
+        }
+        if (glbKey.length > 0) {
+            var selectedKey = $(".activeKey > .col-md-10").text();
+
+            var objKey = glbKey.find(e => e.key == selectedKey);
+            if (objKey != undefined) {
+                if (objKey.doctypeid != "") {
+                   
+                    await GetDataForm(objKey.doctypeid);
+                    if (objKey.type == "single") {
+                        $("#single").prop("checked", true);
+        $('#multiKey').addClass('hidden-multi');
+                        $('#singleKey').removeClass('hidden-single');
+
+                        $('#calKey').val(objKey.value.text)
+                    } else if (objKey.type == "multi") {
+                        $("#multi").prop("checked", true);
+                        $('#singleKey').addClass('hidden-single');
+                        $('#multiKey').removeClass('hidden-multi');
+
+                        await createMultiTable();
+                        var rows = objKey.value.value.row;
+                         if (rows != undefined) {
+                            rows.forEach(e => {
+                                var index = e-1
+                                $("[data-row='"+index+"']").prop('checked', true);
+								lsttempcheckedrow.push(parseInt(index));
+								
+                            })
+                        }
+                        var cols = objKey.value.value.column
+                        if (cols != undefined) {
+                            cols.forEach(e => {
+                                var index = fieldTableData[0].indexOf(e) + 1
+                                $("[data-id='" + index + "']").prop('checked', true);
+								lsttempchecked.push(parseInt(index));
+                            })
+                        }
+
+                    }
+                }
+            }
+            else {
+                $('#multiKey').addClass('hidden-multi');
+                $('#single').prop('checked', true);
+                $('#singleKey').removeClass('hidden-single');
+            }
+        } else {
+            $('#single').prop('checked', true);
+            $('#singleKey').removeClass('hidden-single');
+        }
+
+
+
+
+    })
+    $(document).on('click', '.buttonCal', function () {
+        var val = $(this).val();
+        var inputVal = $('#calKey').val();
+        $('#calKey').val(inputVal + val);
+    })
+    $(document).on('click', '#single', function () {
+        $('#singleKey').removeClass('hidden-single');
+        $('#multiKey').addClass('hidden-multi');
+        if (dataTable != undefined) {
+            if (!dataTable.isDestroyed) {
+                dataTable.destroy();
+            }
+            handsonTableRender(dataTableData, dataColumsSetting, fieldTableData, formCode, fieldTableColWidths, dataTableMergedCells, dataTableClassCells)
+        }
+
+    })
+    $(document).on('click', '#multi', function () {
+        $('#singleKey').addClass('hidden-single');
+        $('#multiKey').removeClass('hidden-multi');
+        createMultiTable();
+    })
+
+    async function createMultiTable() {
+        const requestData = function (data) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/Document/GetCompilationData",
+                    data: data,
+                    type: "GET",
+                    success: function (data) {
+                        if (data.success) {
+                            var tableData = JSON.parse(data.data)
+
+                            resolve(tableData)
+                        } else {
+                            reject(null)
+                        }
+                    },
+                    error: function () {
+                        reject(null)
+                    }
+                })
+            })
+        }
+        //if (dataTable != undefined) {
+        //    dataTable.destroy();
+        //}
+        if (dataTable != undefined) {
+
+            var hiddenCol = formCode.extra.hiddenColumns;
+            var multiTableData = JSON.parse(JSON.stringify(dataTableData));
+
+            var multiColSetting = JSON.parse(JSON.stringify(dataColumsSetting));
+
+            var multiFieldTableColWidths = JSON.parse(JSON.stringify(fieldTableColWidths));
+
+            var multiFieldTableData = JSON.parse(JSON.stringify(fieldTableData));
+            hiddenCol = hiddenCol ? hiddenCol.length : 0;
+            if (multiTableData.length > 0) {
+                var columnSet = formCode.extra.columnSetting;
+                var keys = Object.keys(columnSet);
+                var values = Object.values(columnSet);
+
+                var keyData = [];
+                for (var i = 0; i < values.length; i++) {
+                    if (values[i].TypeHandson == 'numeric') {
+                        keyData.push(keys[i]);
+                    }
+                }
+                var timeKey = "";
+                var kybaocao = $('#actionLevel option:selected').text();
+                if (kybaocao == "Năm" || kybaocao == "Quý" || kybaocao == "Tháng") {
+                    timeKey = $('#timePick option:selected').val()
+
+                } else if (kybaocao == "Ngày") {
+                    timeKey = $('#timePick').val().replace(/-/g, "");
+                }
+
+
+                multiFieldTableData[0].splice(hiddenCol, 0, "checkbox");
+
+                for (var i = 0; i < multiFieldTableData[0].length; i++) {
+                    if (multiFieldTableData[0][i] == "checkbox") {
+                        multiFieldTableData[0][i] = '<input type="checkbox" class="headerCheck" data-id="' + i + '"/>';
+                    } else {
+                        multiFieldTableData[0][i] += '<br><input type="checkbox" class="headerCol" data-id="' + i + '"/>';
+
+                    }
+                }
+                try {
+                    let dataMulti = await requestData({
+                        docTypeId: doctypeId,
+                        timeKey: timeKey
+                    })
+                    if (dataMulti ? dataMulti.length : 0 == multiTableData.length) {
+
+                        multiTableData.forEach((e, i) => {
+                            e.splice(hiddenCol, 0, false);
+                            keyData.forEach(m => {
+                                var split = m.split("!!");
+                                var indexName = fieldTableData[0].indexOf(split[1]) + 1;
+                                var dataRow = dataMulti[i][split[0]];
+                                e.splice(indexName, 1, dataRow);
+
+                            })
+                        })
+                    } else {
+                        multiTableData.forEach((e, i) => {
+                            e.splice(hiddenCol, 0, false);
+                            keyData.forEach(m => {
+                                var split = m.split("!!");
+                                var indexName = fieldTableData[0].indexOf(split[1]) + 1;
+                                var dataRow = 0;
+                                e.splice(indexName, 1, dataRow);
+
+                            })
+                        })
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+                multiData = multiTableData;
+
+                if (multiColSetting.length > hiddenCol) {
+
+                    multiColSetting.splice(hiddenCol, 0, { type: 'checkbox' });
+
+                }
+                multiFieldTableColWidths.splice(hiddenCol, 0, 55);
+
+                dataTable.updateSettings({
+                    data: multiTableData,
+                    colHeaders: true,
+                    rowHeaders: true,
+                    columns: multiColSetting,
+                    nestedHeaders: multiFieldTableData,
+                    hiddenColumns: {
+                        columns: formCode.extra.hiddenColumns,
+                        indicators: false
+                    },
+                    filters: true,
+                    dropdownMenu: false,
+                    autoColumnSize: true,
+                    autoWrapRow: true,
+                    className: "htCenter",
+                    colWidths: multiFieldTableColWidths,
+                    manualColumnResize: false,
+                    selectionMode: 'multiple',
+                    viewportColumnRenderingOffset: 500,
+                    viewportRowRenderingOffset: 1000,
+                    renderAllRows: true,
+                    mergeCells: dataTableMergedCells.length == 0 ? true : dataTableMergedCells,
+                    //afterSelection: function (r, c, r2, c2, preventScrolling, selectionLayerLevel) {
+                    //    preventScrolling.value = true;
+                    //},
+                    licenseKey: 'non-commercial-and-evaluation'
+                });
+                //handsonTableRender(multiTableData, multiColSetting, multiFieldTableData, formCode, multiFieldTableColWidths, dataTableMergedCells, dataTableClassCells);
+            }
+
+        }
+    }
+
+    var multiData;
+    $(document).on('change', '.headerCheck', function () {
+        var check = $(this).prop('checked');
+            $('.htCheckboxRendererInput').prop('checked', check);
+		
+		lsttempcheckedrow=[];
+		if($(this).is(":checked"))
+		{
+			$(".ht_master .htCheckboxRendererInput").each(function()
+			{
+				lsttempcheckedrow.push(parseInt($(this).attr("data-row")));
+			});
+		}
+    })
+	 $(document).on('change', '.htCheckboxRendererInput', function () {
+		if(lsttempchecked.length>0)
+			{
+			  for(var i=0;i<lsttempchecked.length;i++)
+			  {
+				$(".headerCol[data-id='" +lsttempchecked[i] + "']").prop("checked",true);
+			  }
+			}
+	  if(lsttempcheckedrow.length>0)
+			{
+			  for(var i=0;i<lsttempcheckedrow.length;i++)
+			  {
+				 if(parseInt(lsttempcheckedrow[i])!=parseInt($(this).attr("data-row"))) { $(".htCheckboxRendererInput[data-row='" +lsttempcheckedrow[i] + "']").prop("checked",true);}
+			  }
+			}
+			
+	  if($(this).is(":checked"))
+		{
+			if(!lsttempcheckedrow.includes(parseInt($(this).attr("data-row"))))
+			{
+				lsttempcheckedrow.push(parseInt($(this).attr("data-row")));
+			}
+		}
+		else	
+		{
+			if(lsttempcheckedrow.includes(parseInt($(this).attr("data-row"))))
+			{
+				lsttempcheckedrow=arrayRemove(lsttempcheckedrow,parseInt($(this).attr("data-row")));
+				
+			}
+		
+		}
+	 });
+    $(document).on('click', '#closeModal', function () {
+        //glbKey = [];
+        if (dataTable != undefined) {
+            if (!dataTable.isDestroyed) {
+                dataTable.destroy()
+            }
+        }
+        $('#singleKey').addClass('hidden-single');
+        $('#multiKey').addClass('hidden-multi');
+        $('#groupbtn').addClass('hid-btn')
+        $('#lsKey tbody tr.activeKey').removeClass('activeKey');
+        $('#modalKey').hide();
+    });
+    var dataContainer = document.getElementById('dataTable');
+    var colContainer = document.getElementById('colCheckbox');
+    var rowContainer = document.getElementById('rowCheckbox');
+
+    //var indexDataContainer = document.getElementById('indexDataTable');
+
+    var dataColumsSetting = []
+
+    //var indexDataTable = undefined;
+    var dataTableData = []
+
+    var dataTable = undefined;
+
+    var rowCheckboxTable = undefined;
+    var colCheckboxTable = undefined;
+
+
+    var dataTableReadOnlys = [];
+    var dataTableMergedCells = true;
+    var dataTableClassCells = [];
+
+    var fieldTableMergedCells = [];
+    var fieldTableColWidths = [];
+    var formCode = [];
+    var setting_json = {
+        "Số nguyên": {
+            "TypeCode": "int",
+            "Displaycode": null,
+            "PatternCode": /^\d*$/,
+            "Details": {}
+        },
+        "Số thực": {
+            "TypeCode": "double",
+            "Displaycode": null,
+            "PatternCode": new RegExp("^[-+]?[0-9]*\.?[0-9]*$"),
+            "Details": {}
+        },
+        "Kí tự": {
+            "TypeCode": "char",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {
+                "Kí tự ngắn": {
+                    "TypeCode": "int",
+                    "Displaycode": null,
+                    "PatternCode": null
+                },
+                "Kí tự dài": {
+                    "TypeCode": "int",
+                    "Displaycode": null,
+                    "PatternCode": null
+                }
+            }
+        },
+        "Thời gian": {
+            "TypeCode": "int",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {
+                "Ngày tháng năm": {
+                    "TypeCode": "int",
+                    "Displaycode": 'DD/MM/YYYY',
+                    "PatternCode": null
+                },
+                "Năm tháng ngày": {
+                    "TypeCode": "int",
+                    "Displaycode": 'YYYY/MM/DD',
+                    "PatternCode": null
+                }
+            }
+        },
+        "Checkbox": {
+            "TypeCode": "int",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {}
+        },
+        "Catalog": {
+            "TypeCode": "cat",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {
+                "Cate1": {
+                    "Details": {
+                        "Cate1.1": {
+                            "TypeCode": "int",
+                            "Displaycode": null,
+                            "PatternCode": null
+                        },
+                        "Cate1.2": {
+                            "TypeCode": "int",
+                            "Displaycode": null,
+                            "PatternCode": null
+                        }
+                    }
+                },
+                "Cate2": {
+                    "Details": {
+                        "Cate2.1": {
+                            "TypeCode": "int",
+                            "Displaycode": null,
+                            "PatternCode": null
+                        },
+                        "Cate2.2": {
+                            "TypeCode": "int",
+                            "Displaycode": null,
+                            "PatternCode": null
+                        }
+                    }
+                }
+            }
+        },
+        "Chỉ tiêu": {
+            "TypeCode": "cat",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {}
+        },
+        "Hình ảnh": {
+            "TypeCode": "int",
+            "Displaycode": null,
+            "PatternCode": null,
+            "Details": {}
+        },
+    }
+    function change_alias(alias) {
+    var str = alias;
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+    str = str.replace(/đ/g,"d");
+    str = str.replace(/!|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+    str = str.replace(/ + /g," ");
+    str = str.trim();
+    return str;
+}
+    var keyName = [];
+    var fieldTableData = [];
+    var alphaBet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $(document).on('click', '.doctypeHanson',async  function () {
+        console.log('a');
+        $('#calKey').val('');
+        var id = $(this).attr("data-id");
+        doctypeId = id;
+        await GetDataForm(id);
+        if ($('#multi').prop('checked')) {
+            createMultiTable();
+        }
+    })
+
+    async function GetDataForm(id) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "/HomeSMReport/GetForm",
+                method: "Post",
+                data: { id: id },
+                success: function (res) {
+                    if (res != "") {
+                        var data = JSON.parse(res);
+                        var DefineValueJson = data.DefineValueJson;
+                        var DefineFieldJson = data.DefineFieldJson;
+
+                        if (DefineValueJson != null && DefineFieldJson != null) {
+                            dataTableData = JSON.parse(DefineValueJson)["data"];
+                            dataColumsSetting = JSON.parse(DefineValueJson)["columns"];
+                            if (DefineValueJson.readOnlys != null) {
+                                dataTableReadOnlys = JSON.parse(DefineValueJson)["readOnlys"];
+                            }
+                            if (DefineValueJson.mergedCells != null) {
+                                dataTableMergedCells = JSON.parse(DefineValueJson)["mergedCells"];
+                            }
+                            if (DefineValueJson.classCells != null) {
+                                dataTableClassCells = JSON.parse(DefineValueJson)["classCells"];
+                            }
+
+                            fieldTableColWidths = JSON.parse(DefineFieldJson)["colWidths"];
+                            fieldTableData = JSON.parse(DefineFieldJson)["data"];
+                            var nestedHeaders = fieldTableData;
+
+                            var dataRowCheck = "";
+                            if (dataTable != undefined) {
+                                if (!dataTable.isDestroyed) {
+                                    dataTable.destroy()
+                                }
+                            }
+                            if (data.FormCode != "") {
+                                formCode = JSON.parse(data.FormCode);
+                                var columnSet = formCode.extra.columnSetting;
+                                var keys = Object.keys(columnSet);
+                                var values = Object.values(columnSet);
+                                var indexMatchName = [];
+                                keyName = [];
+                                for (var i = 0; i < values.length; i++) {
+                                    if (values[i].TypeHandson == 'numeric') {
+                                        keyName.push(keys[i]);
+                                    }
+                                }
+                                keyName.forEach(e => {
+                                    var split = e.split('!!');
+                                    if (split.length == 2) {
+                                        indexMatchName.push(nestedHeaders[0].indexOf(split[1]));
+                                    }
+                                })
+
+                                for (var j = 0; j < dataTableData.length; j++) {
+
+                                    dataRowCheck += "[false],";
+                                    indexMatchName.forEach((e, i) => {
+                                        var alNum = alphaBet[e];
+                                        dataTableData[j][e] = alNum + (j + 1);
+                                    })
+
+                                }
+
+                            }
+                            if (dataRowCheck != "") {
+                                dataRowCheck = "[" + dataRowCheck.substring(0, dataRowCheck.length - 1) + "]";
+
+                            }
+                            handsonTableRender(dataTableData, dataColumsSetting, nestedHeaders, formCode, fieldTableColWidths, dataTableMergedCells, dataTableClassCells);
+                            //rowCheckboxTable.render();
+                            //rowCheckboxTable.validateCells();
+
+                        }
+                        resolve('OK')
+                    }
+                    else {
+                        reject(null)
+                    }
+                },error: function () {
+                    reject(null)
+                }
+            })
+        })
+    }
+
+    function handsonTableRender(dataTableData, dataColumsSetting, nestedHeaders, formCode, fieldTableColWidths, dataTableMergedCells, dataTableClassCells) {
+
+
+        dataTable = new Handsontable(dataContainer, {
+            data: dataTableData,
+            colHeaders:true,
+            rowHeaders: true,
+            columns: dataColumsSetting,
+            nestedHeaders: nestedHeaders,
+            hiddenColumns: {
+                columns: formCode.extra.hiddenColumns,
+                indicators: false
+            },
+            filters: true,
+            dropdownMenu: false,
+            autoColumnSize: true,
+            autoWrapRow: true,
+            className: "htCenter",
+            colWidths: fieldTableColWidths,
+            manualColumnResize: false,
+            selectionMode: 'multiple',
+            viewportColumnRenderingOffset: 500,
+            viewportRowRenderingOffset: 1000,
+            mergeCells: dataTableMergedCells.length == 0 ? true : dataTableMergedCells,
+            afterSelection: function (r, c, r2, c2, preventScrolling, selectionLayerLevel) {
+                preventScrolling.value = true;
+            },
+            licenseKey: 'non-commercial-and-evaluation',
+			 afterScrollHorizontally: function(){
+				if(lsttempchecked.length>0)
+				{
+				 for(var i=0;i<lsttempchecked.length;i++)
+				 {
+				    $(".headerCol[data-id='" +lsttempchecked[i] + "']").prop("checked",true);
+				  }
+				}
+				if(lsttempcheckedrow.length>0)
+				{
+				 for(var i=0;i<lsttempcheckedrow.length;i++)
+				 {
+				    $(".htCheckboxRendererInput[data-row='" +lsttempcheckedrow[i] + "']").prop("checked",true);
+				  }
+				}
+			  },
+			  afterScrollVertically:function() {
+				if(lsttempchecked.length>0)
+				{
+				 for(var i=0;i<lsttempchecked.length;i++)
+				 {
+				    $(".headerCol[data-id='" +lsttempchecked[i] + "']").prop("checked",true);
+				  }
+				}
+				if(lsttempcheckedrow.length>0)
+				{
+				 for(var i=0;i<lsttempcheckedrow.length;i++)
+				 {
+				    $(".htCheckboxRendererInput[data-row='" +lsttempcheckedrow[i] + "']").prop("checked",true);
+				  }
+				}
+			  }
+        });
+
+        dataTable.render();
+        dataTable.validateCells();
+        dataTable.updateSettings({
+            cells: function (row, col, prop) {
+                var cellProperties = {};
+                cellProperties.editor = false;
+                return cellProperties;
+            }
+        })
+
+        Handsontable.hooks.add('beforeOnCellMouseDown',
+            handleHotBeforeOnCellMouseDown, dataTable);
+
+        // set ReadOnly by cell từ cấu hình DefineValueJson
+        var propReadOnly = { readOnly: true, className: "" };
+        dataTableReadOnlys.forEach(function (item, index, arr) {
+            propReadOnly.className = "gray" + " " + dataTableClassCells[item.row][item.col];
+            dataTable.setCellMetaObject(item.row, item.col, propReadOnly);
+        });
+
+
+
+
+
+    }
+
+
+
+
+
+
+    egov.resources.avatar.path = "@ViewBag.AvatarPath";
+    //document.domain = '@ViewBag.ParentDomain';
+    egov.userid = @ViewBag.UserId;
+    function btnToggleTree(id) {
+        if (id.includes('group')) {
+            if (!$(`#menu-document > li#${id}`).hasClass("menu-open"))
+                $(`#menu-document > li#${id}`).addClass("menu-open");
+            else
+                $(`#menu-document > li#${id}`).removeClass("menu-open");
+        } else {
+            if (!$(`#menu-document > li > ul > li#${id}`).hasClass("menu-open"))
+                $(`#menu-document > li > ul > li#${id}`).addClass("menu-open");
+            else
+                $(`#menu-document > li > ul > li#${id}`).removeClass("menu-open");
+        }
+    }
+
+    $(function() {
+        //$(".btn-bars").on("click",
+        //    function() {
+        //        if (!$(".bars-left").hasClass("hidden-bar")) {
+        //            $(".bars-left").addClass("hidden-bar");
+        //            $(".bars-right").removeClass("col-md-13");
+        //            $(".bars-right").addClass("col-md-16");
+        //            $(".bars-right").css("padding-left", "15px");
+        //        } else {
+        //            $(".bars-left").removeClass("hidden-bar");
+        //            $(".bars-right").addClass("col-md-13");
+        //            $(".bars-right").removeClass("col-md-16");
+        //            $(".bars-right").css("padding-left", "0");
+        //        }
+        //    });
+    });
+</script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jspdf/jspdf.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.1.0.min.js")"></script>
+<script src="/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/languages.min.js")"></script>
+@*<script src="/Scripts/bkav.egov/libs/linq/linq.min.js"></script>*@
+<script src="/Scripts/require.js" data-main="@Url.Content("/Scripts/bkav.egov/mainreport.js?v=1s2")"></script>

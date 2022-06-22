@@ -1,0 +1,146 @@
+﻿@model IEnumerable<DocFieldModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+    var firstItem = allCategoryBusiness.FirstOrDefault(t => t.Selected);
+    var categoryBusinessIdSelected = firstItem == null ? 0 : Convert.ToInt32(firstItem.Value);
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;  
+}
+<script type="text/javascript">
+    $(function() {
+        $("#tblDocfield").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblDocfield").openLink({ urlOpen: '/admin/Docfield/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+    function doSubmit(form) {
+        form.submit();
+    }
+</script>
+@using (Ajax.BeginForm("GetByCategoryBusiness", new AjaxOptions { UpdateTargetId = "divListDocFields", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <div style="margin-bottom: 4px;">
+        <span>Nghiệp vụ:</span>
+        <select class="form-control" id="categoryBusinessId" name="categoryBusinessId" style="width: auto;display:inline" onchange="doSubmit($(this).parents('form'));">
+            <option value="0">@Localizer("Common.All.Label")</option>
+            @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+            {
+                foreach (var categoryBusiness in allCategoryBusiness)
+                {
+                <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "") >@categoryBusiness.Text</option>
+                }
+            }
+        </select>
+
+         <span>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.DocFieldName")</span>
+        <input type="text" name="name" id="name" value="@ViewBag.Name"
+             placeholder="@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.DocFieldName")"
+            class="form-control" style="display:inline; width:30%"
+            />
+        <input  class="btn" type="submit" value="@Localizer("Common.Log.Index.Search.Button.Search")" />
+    </div>
+}
+<table class="table-main table" id="tblDocfield">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DocFieldName", Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.DocFieldName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                    {
+                                        page = sortAndPage.CurrentPage,
+                                        pageSize = sortAndPage.PageSize,
+                                        categoryBusinessId = categoryBusinessIdSelected
+                                    },
+                                new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divListDocFields",
+                                        OnBegin = "onBegin",
+                                        OnSuccess = "onSuccess",
+                                        OnFailure = "onFailure"
+                                    })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.IsActivated")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var docfield in Model)
+            {
+                number += 1;
+            <tr data-id="@docfield.DocFieldId">
+                <td>@number
+                </td>
+                <td>@docfield.DocFieldName
+                </td>
+                <td>@(docfield.IsActivated ? Localizer("Bkav.eGovCloud.Areas.Admin.DocField.IsActivated") : Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Inactive"))
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Edit.Button"), "Edit", new { Id = docfield.DocFieldId })
+                </td>
+                <td>
+                    <a href="javascript:deleteDocField(@(docfield.DocFieldId))">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(docfield.DocFieldId)" style="display: none" action="@Url.Action("Delete", new { Id = docfield.DocFieldId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Edit.Button")
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      categoryBusinessId = categoryBusinessIdSelected,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListDocFields",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

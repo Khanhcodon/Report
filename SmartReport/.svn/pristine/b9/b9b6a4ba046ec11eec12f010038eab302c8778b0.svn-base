@@ -1,0 +1,75 @@
+﻿<div class="document full-height">
+    <!-- Toolbar-->
+    <div class="rownavbar">
+        <nav class="navbar main-nav main-bg-color">
+            <div class="col-xs-2 visible-xs">
+                <button id="btnbacktolist" class="mdl-button mdl-js-button mdl-button--icon pull-left">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+            </div>
+            <div class="pull-left col-xs-14 col-sm-16">
+                <div class="pull-right toolbar"></div>
+            </div>
+        </nav>
+    </div>
+    <!--end toolbar-->
+
+    <form class="document-info autoscroll" data-id="">
+        <div class="document-info-template">
+            <div class="formTmp">
+                <div class="form-group">
+                    <textarea cols="20" class="form-control" id="compendium" name="Compendium" rows="2" required>${Compendium}</textarea>
+                    <span class="form-control-bar"></span>
+                    <label class="form-label" data-res="egov.resources.document.Compendium"></label>
+                </div>
+                <div class="form-group">
+                    <textarea cols="20" class="form-control" id="Comment" name="Comment" rows="2"></textarea>
+                    <span class="form-control-bar"></span>
+                    <label class="form-label" data-res="egov.resources.document.Comment"></label>
+                </div>
+
+                <div id="categoryBusiness">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="document-attachment-mobile container-fluid" style="display: none;">
+            <div class="row">
+                <div data-res="egov.resources.document.AttachmentList" class="col-xs-10 col-md-11 col-sm-11"></div>
+                <div class="col-xs-6 col-md-5 col-sm-5">
+                    <!--<a href="/Attachment/DownloadAttachments/${DocumentId}" class="att-download-all pull-right">
+                        <i class="material-icons">save</i>
+                        <span data-res="egov.resources.attachment.downloadAll"></span>
+                    </a>-->
+                    <div class="attachment-download-all pull-right">
+                        <i class="material-icons">save</i>
+                        <span data-res="egov.resources.attachment.downloadAll"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-16 col-md-16 col-sm-16" id="wrapAttachment">
+                    <ul class="list-group attachment-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!--Ý kiến giải quyết-->
+        <div class="document-extend document-contents" id="wrapComments">
+            <div class="form-group">
+                <div class="main-title"><span data-res="egov.resources.document.FinalComment"></span></div>
+                <div class="content">
+                    <ul class="list-group wrapCommentList" id="commentList"></ul>
+                </div>
+            </div>
+        </div>
+        <!--end ý kiến giải quyết-->
+
+        <!--nội dung form-->
+        <div id="divContent" class="document-contents"></div>
+        <!-- en nội dung form-->
+    </form>
+    <div id='commentListCopy' class='autoscroll-y wrapCommentList'>
+    </div>
+</div>

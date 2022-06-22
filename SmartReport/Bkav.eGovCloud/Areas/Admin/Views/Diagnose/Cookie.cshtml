@@ -1,0 +1,28 @@
+﻿@model Bkav.eGovCloud.Entities.CustomerCookieData
+@{
+    ViewBag.Title = Localizer("Common.Diagnose.Cookie");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="bkavegov-content-title">
+    <h3>
+        Cookie</h3>
+</div>
+@if (Model != null)
+{
+    <table>
+        <tr>
+            <td>
+                <b>UserId:</b>
+            </td>
+            <td>@Model.UserId
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Username:</b>
+            </td>
+            <td>@Model.UsernameWithDomain
+            </td>
+        </tr>
+    </table>
+}

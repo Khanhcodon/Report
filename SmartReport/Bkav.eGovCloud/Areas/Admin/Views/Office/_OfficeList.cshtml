@@ -1,0 +1,172 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.OfficeModel>
+    @{
+        var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+        var listPageSize = ViewBag.ListPageSize as List<int>;
+
+        var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    }
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListOffice", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+        {
+            <span class="searchlabel">@Localizer("Common.Office.Index.Search.Fields.OfficeName.Label")</span>
+            <input type="text" name="officeName" class="form-control" id="searchName" value="@(ViewBag.OfficeName ?? "")" placeholder="@Localizer("Common.Office.Index.Search.Fields.OfficeName.Label")" style="width: 300px;" />
+            @Html.DropDownList("levelId", (IEnumerable<SelectListItem>)ViewBag.ListLevel, @Localizer("Admin.Level.AllLevel"), new { @class = "form-control", id = "levelId", style = "margin-left: 10px;margin-right: 10px;" })
+            <input type="submit" class="btn btn-default" id="search" onclick="$(this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+    </div>
+
+    <table id="tblData" class="table table-bordered table-hover">
+        <colgroup>
+            <col style="width: 40px" />
+            <col />
+            <col />
+            <col />
+            <col style="width: 45px" />
+            <col style="width: 45px" />
+            <col style="width: 45px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-center active">
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th class="text-center active" style="white-space: nowrap;">
+                    @Ajax.SortLink("OfficeName", Localizer("Common.Office.Index.List.Column.OfficeName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        officeName = ViewBag.OfficeName,
+                        levelId = ViewBag.LevelId,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListOffice",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+                </th>
+                <th class="text-center active" style="white-space: nowrap;">
+                    @Ajax.SortLink("LevelId", Localizer("Common.Office.Index.List.Column.OfficeLevel"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        officeName = ViewBag.OfficeName,
+                        levelId = ViewBag.LevelId,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListOffice",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+                </th>
+                <th class="text-center active" style="white-space: nowrap;">
+                    @Ajax.SortLink("ParentName", Localizer("Common.Office.Index.List.Column.Parent"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        officeName = ViewBag.OfficeName,
+                        levelId = ViewBag.LevelId,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListOffice",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+                </th>
+                <th class="text-center active" style="white-space: nowrap;">
+                    @Localizer("Common.Office.Index.List.Column.Isme")
+
+                </th>
+                <th class="text-center active">
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th class="text-center active">
+                    @Localizer(" Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var office in Model)
+                {
+                    number += 1;
+                    <tr data-id="@office.OfficeId">
+                        <td class="text-center">
+                            @number
+                    </td>
+                    <td>
+                        @office.OfficeName
+                    </td>
+                    <td>
+                        @office.LevelName
+
+                    </td>
+                    <td>
+                        @office.ParentName
+                    </td>
+                    <td class="text-center">
+                        @Html.CheckBox("checkbox", office.IsMe)
+                    </td>
+                    <td class="text-center">
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new
+               {
+                   Id = office.OfficeId
+               })
+                    </td>
+                    <td class="text-center">
+                        <a id="deleteBtn" href="javascript:deleteOffice(@(office.OfficeId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                        @*<a href="javascript:deleteOffice(@(office.OfficeId))">@T("Common.Resource.Index.List.Column.Delete.Button")</a>*@
+                        <form id="formdelete@(office.OfficeId)" style="display: none" action="@Url.Action("Delete", "office", new { Id = office.OfficeId })" method="POST"></form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" data-res="egov.resources.office.nooffice">
+                        Không có cơ quan nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table>
+        <tr>
+            <td class="" colspan="4" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      officeName = ViewBag.OfficeName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending,
+                                      levelId = ViewBag.LevelId,
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListOffice",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+
+    </table>

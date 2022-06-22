@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ResourceModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Resource.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteResource(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Common.Resource.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListResources").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListResources').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+        $('#divListResources').unblockpanel();
+    }
+
+    $(function () {
+        $("#export").click(function () {
+            document.location = "@Url.Action("Export")";
+        });
+
+        $("#import").click(function () {
+            $("#dialog-form").dialog("open");
+        });
+
+        $("#dialog-form").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 140,
+            width: 'auto',
+            modal: true,
+            close: function () {
+                $("#fileImport").val("");
+            },
+            buttons: {
+                "Import": function () {
+                    if ($("#fileImport").val().length == 0) {
+                        eGovMessage.show("@Localizer("egov.resources.notifications.choosefileimport")");
+                    } else {
+                        $("#dialog-form form:first").submit();
+                        $(this).dialog("close");
+                    }
+                },
+                "Hủy": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-language"></i>
+        <span data-res="egov.resources.sitemap.resource"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/resource/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="divListResources">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+        <p style="clear: both">
+            <input class="btn" id="export" type="button" value="@Localizer("Common.Resource.Index.Button.Export")" />&nbsp;&nbsp;
+            <input class="btn" id="import" type="button" value="@Localizer("Common.Resource.Index.Button.Import")" />
+        </p>
+    </div>
+</div>
+<div id="dialog-form" title="Import">
+    <form action="@Url.Action("Import")" enctype="multipart/form-data" method="POST">
+        <label for="fileImport" data-res="egov.resources.resource.choosefileimport"></label>
+        @Html.AntiForgeryToken()
+        <input type="file" name="fileImport" id="fileImport" class="text ui-widget-content ui-corner-all" />
+    </form>
+</div>

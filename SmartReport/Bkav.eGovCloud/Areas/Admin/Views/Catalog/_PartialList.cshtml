@@ -1,0 +1,104 @@
+﻿@model IEnumerable<CatalogModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblCatalog").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblCatalog").openLink({ urlOpen: '/admin/Catalog/Edit' });
+
+        $(".table-main").addClass("table-bordered table-hover");
+    })
+</script>
+<table class="table-main table" id="tblCatalog">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Catalog.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("CatalogName", Localizer("Catalog.Index.List.Column.CatalogName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                    {
+                                        page = sortAndPage.CurrentPage,
+                                        pageSize = sortAndPage.PageSize,
+                                        resourceKey = ViewBag.ResourceKey,
+                                    },
+                                new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divListCatalogs",
+                                        OnBegin = "onBegin",
+                                        OnSuccess = "onSuccess",
+                                        OnFailure = "onFailure"
+                                    })
+            </th>
+            <th class="header">
+                @Localizer("Catalog.Index.List.Column.IsActivated")
+            </th>
+            <th class="header">
+                @Localizer("Catalog.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Catalog.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var stt = 0;
+            foreach (var catalog in Model)
+            {
+                stt += 1;
+                <tr data-id="@catalog.CatalogId">
+                    <td>
+                        @stt
+                    </td>
+                    <td class="td-filter">
+                        @catalog.CatalogName
+                    </td>
+                    <td>
+                        @if (catalog.IsActivated)
+                        {
+                            <span>@Localizer("Common.Yes.Label")</span>
+                        }
+                        else
+                        {
+                            <span>@Localizer("Common.No.Label")</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("Catalog.Index.List.Column.Edit.Button"), "Edit", new { Id = catalog.CatalogId })
+                    </td>
+                    <td>
+                        <a href="javascript:deleteCatalog('@(catalog.CatalogId)')">@Localizer("Catalog.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(catalog.CatalogId)" style="display: none" action="@Url.Action("Delete", new { Id = catalog.CatalogId })" method="POST">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    @Localizer("Catalog.Index.List..NullValue")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

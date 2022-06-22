@@ -1,0 +1,3 @@
+-- INSERT INTO `domain` VALUES ('1', null, 'egovmain.bkav.com', 'Bkav eGovernment - MCTT', 'tienbva@gmail.com', '0123456789', null, '', null, null, null, 'TienBV', 1, null, '2015-05-29 11:52:27', null, null, '2015-12-07 11:04:41', 1, 1);
+-- INSERT INTO `domainalias` VALUES ('1', '1', 'egovmain.bkav.com', 1, 1, null, '2015-05-29 11:52:27', null, null, '2015-05-29 11:52:27');
+-- INSERT INTO `account_domain` VALUES ('1', '1', '1');

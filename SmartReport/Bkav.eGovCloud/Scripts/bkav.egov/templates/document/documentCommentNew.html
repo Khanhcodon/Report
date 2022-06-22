@@ -1,0 +1,76 @@
+﻿<li class="list-group-item">
+    <div class="comment-item">
+        <div class="comment-avatar">
+            <img src="${avatar}" alt="" class="avatar img-rounded" onerror="imageError(this)" />
+        </div>
+        <div class="comment-content">
+            <div>
+                <div class="comment-detail">
+                    {{if CommentId === 0}}
+                    <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                    {{else}}
+                    <span class="wraptext ellipsis">
+                        <span class='comment-received'>
+                            <b>${UserSend.fullname} </b>
+                        </span> <span class="comment-description">${Description}</span>
+                    </span>
+                    {{/if}}
+                    <img src="${compare}" title="So với bản gần nhất" alt="" data-commentId="${CommentId}" data-prev-commentId="${prev_commentId}" class="avatar {{if prev_commentId == 0}} hidden {{/if}} compare img-rounded" style="width: 22px !important" onerror="imageError(this)" />
+                    <img src="${compare_first}" title="So với bản đầu tiên" alt="" data-commentId="${CommentId}" data-prev-commentId="0" class="avatar {{if prev_commentId == 0}} hidden {{/if}} compare img-rounded" style="width: 22px !important" onerror="imageError(this)" />
+                    <div class="comment-date pull-right">
+                        ${DateCreatedString}
+                    </div>
+                </div>
+            </div>
+            <div class="comment-detail">
+                <div>
+                    {{if CommentId === 0}}
+                    <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                    {{else Content.Content == '' || Content.Content == 'ReleasedSurveyDB'}}
+                    ...
+                    {{else}}
+                    <span class="ellipsis" style="font-size: 14px;">${Content.Content}</span>
+                    {{/if}}
+                </div>
+                {{if Children.length == 0 && Content.Transfers.length > 0}}
+                <div class="target-comment">
+                    {{if Content2}}
+                    <div style="color: #3729ad">${Content2}</div>
+                    {{/if}}
+                    {{each Content.Transfers}}
+                    {{if label !== ""}}
+                    {{if type=="1"}}
+                    <span data-res="egov.resources.document.xlcLabel" class="target-label"></span>
+                    <span style="">${label}</span>
+                    {{else type=="2"}}
+                    <span data-res="egov.resources.document.dxlLabel" class="target-label"></span>
+                    <span style="">${label}</span>
+                    {{else type=="3"}}
+                    <span data-res="egov.resources.document.thongbaoLabel" class="target-label"></span>
+                    <span style="">${label}</span>
+                    {{else type=="4"}}
+                    <span data-res="egov.resources.document.xykLabel" class="target-label"></span>
+                    <span style="">${label}</span>
+                    {{else type=="5"}}
+                    <span class="target-label">Thông báo</span>
+                    <span style="">${label}</span>
+                    {{else type=="0"}}
+                    <span data-res="egov.resources.document.publish" class="target-label">Nơi nhận:</span>
+                    <span style="">${label}</span>
+                    {{else type=="9"}}
+                    <span class="target-label">Đơn vị nhận:</span>
+                    <span style="">${label}</span>
+                    {{/if}}
+                    <br />
+                    {{/if}}
+                    {{/each}}
+                </div>
+                {{else}}
+                <div class="commentChirdren row">
+                    <div class="child${CommentId}"></div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</li>

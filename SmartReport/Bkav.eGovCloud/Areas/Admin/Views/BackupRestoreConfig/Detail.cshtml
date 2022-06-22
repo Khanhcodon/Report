@@ -1,0 +1,105 @@
+﻿@model BackupRestoreConfigModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreConfig.Title.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var databaseTypeList = ViewBag.DatabaseTypeList as List<SelectListItem>;
+    var shareFolderList = ViewBag.FolderShareList as List<SelectListItem>;
+}
+
+<script type="text/javascript">
+    var isRunning = false;
+    $(function () {
+   
+        $(window).bind("beforeunload", function (e) {
+            if (isRunning) {
+                var message = 'Are you sure you want to leave this page message?';
+                if (e) {
+                    e.returnValue = message; // IE
+                }
+                return message;
+            }
+        });
+    });
+ 
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-database"></i>
+        <span data-res="egov.resources.sitemap.backuprestoreconfig"></span>
+    </div>
+    <div class="options">        
+        <a class="btn  btn-default control-btn" href="/admin/backuprestoreconfig/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <fieldset>
+        <legend>
+            @Localizer("Common.BackupRestoreConfig.Detail.ConfigInfo")</legend>
+        <table id="timeJobInfo" style="width: 100%">
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.Domain):
+                </td>
+                <td>
+                     @Html.TextBoxFor(model => model.Domain, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.DatabaseType):
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.DatabaseType, databaseTypeList, "-- Select --", new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.Server):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Server, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.DatabaseName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.DatabaseName, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Port):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Port, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ShareFolderId):
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.ShareFolderId, shareFolderList, "-- Select --", new { disabled = "disabled" })
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <hr />
+    <div>
+         @using (Html.BeginForm("Backup", "BackupRestoreConfig", FormMethod.Post))
+        {
+            <input type="hidden" name="id" value="@Model.BackupRestoreConfigId" />
+            <input type="submit" class="btn  btn-warning control-btn"  value="@Localizer("Common.BackupRestoreConfig.Detail.Backup.Run")" />
+        }
+
+    </div>
+    <div class="cmdLoading" style="display: none; width: 100%; height: 100%; position: absolute; z-index: 1000; top: 0; left: 0; background-color: gray; opacity: 0.4"></div>
+</div>
+

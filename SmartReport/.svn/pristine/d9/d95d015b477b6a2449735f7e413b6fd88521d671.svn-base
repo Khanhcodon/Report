@@ -1,0 +1,202 @@
+﻿@model DepartmentModel
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<script type="text/javascript">
+    function onBegin() {
+        return $('#formUpdate').validate().form();
+    }
+
+    function onSuccess(result) {
+        if (result.message && result.message != '') {
+            eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+            $("#DepartmentName").focus();
+        }
+        else {
+            var nodeselected = $('#divTreeDeptUserForAll').jstree('get_selected');
+            if (result.IsActivated == false) {
+                nodeselected.attr('rel', 'dept-deactivated');
+                nodeselected.find('li').attr('rel', 'dept-deactivated');
+            }
+            else {
+                //Hiện activated cho các phòng ban cấp cha.
+                var arrDeptParent = result.DepartmentIdExt.split('.');
+                if (arrDeptParent.length > 0) {
+                    for (var i = 0; i < arrDeptParent.length; i++) {
+                        $('#divTreeDeptUserForAll').find('li#' + arrDeptParent[i]).attr('rel', 'dept');
+                    }
+                }
+                //Hiện activate cho các phòng ban cấp con
+                var child = _.filter(allDepartments, function (dept) { return dept.parentid == parseInt(nodeselected.attr('id')); });
+                if (child.length > 0) {
+                    for (var j = 0; j < child.length; j++) {
+                        $('#divTreeDeptUserForAll').find('li#' + child[j].value).attr('rel', 'dept');
+                    }
+                }
+            }
+            nodeselected.children("a").html('<ins class="jstree-icon"></ins>' + result.DepartmentName);
+            eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Updated")', eGovMessage.messageTypes.success);
+        }
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Update.Error")', eGovMessage.messageTypes.error);
+    }
+
+    function deleteNode(id) {
+        var deptRoot = _.find(allDepartments, function (node) {
+            return node.parentid == 0 && node.value == id;
+        });
+        if (deptRoot) {
+            eGovMessage.show('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Node.NotDelete")');
+        } else {
+            var nodeChild = jQuery.jstree._reference("#divTreeDeptUserForAll")._get_children("#" + id);//lay ra node con
+            var nodeClose = $("#" + id).hasClass('jstree-closed'); //Kiem tra node close hay open
+
+            if (nodeChild.length != 0 || nodeClose) {
+                eGovMessage.show('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Child.Delete")');
+            }
+            else {
+                eGovMessage.show(
+                    '@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Delete.YesNo")',
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $("#divDepartment").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+                        var token = $("input[name='__RequestVerificationToken']", '#formUpdate').val();
+                        $.ajax({
+                            type: "POST",
+                            url: "Department/DeleteTree",
+                            dataType: "json",
+                            data: { "id": id, __RequestVerificationToken: token },
+                            success: function (data) {
+                                if (data.message == 'delete_success') {
+                                    var preNode = $("#divTreeDeptUserForAll").jstree("get_prev", "#" + id);
+                                    $("#divTreeDeptUserForAll").jstree("remove", "#" + id);
+                                    $.jstree._focused().select_node(preNode);
+                                    eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Delete.Success")', eGovMessage.messageTypes.success);
+                                }
+                                else {
+                                    eGovMessage.show(data.message);
+                                }
+                                $("#divDepartment").unblockpanel();
+                            },
+                            error: function () {
+                                eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Delete.Error")', eGovMessage.messageTypes.error);
+                                $("#divDepartment").unblockpanel();
+                            }
+                        });
+                    }
+                );
+                }
+            }
+            return false;
+        }
+
+        $(function () {
+            $("#tblUser").grid({
+                isResizeColumn: true,
+                isFixHeightContent: false
+            });
+        });
+</script>
+@using (Ajax.BeginForm("UpdateTree", null, new AjaxOptions
+{
+    OnBegin = "onBegin",
+    OnSuccess = "onSuccess",
+    OnFailure = "onFailure",
+    HttpMethod = "POST"
+}, new { id = "formUpdate" }))
+{
+    @Html.HiddenFor(model => model.DepartmentId)
+    @Html.HiddenFor(model => model.ParentId)
+    @Html.AntiForgeryToken()
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelRequireFor(model => model.DepartmentName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DepartmentName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DepartmentName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ParrentDeparmentName):
+            </td>
+            <td>
+                <b id="parentDepartmentName"></b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsActivated) @Html.LabelFor(model => model.IsActivated)
+            </td>
+        </tr>
+        <tr>
+            <td>
+               
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasReceiveWarning)  Cho phép nhận mail cảnh báo
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Địa chỉ nhận mail cảnh báo:
+            </td>
+            <td>
+                @if (Model != null)
+                {
+                    <input type="text" class="form-control" value="@Model.Emails" name="Emails" />
+                }
+                else
+                {
+                    <input type="text" class="form-control" value="" name="Emails" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasCalendar)  Cho phép đặt lịch
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>Mã định danh nhận văn bản đến</span>:
+            </td>
+            <td>
+                <input id="edocId" name="EdocId" style="display: inline" class="form-control" value="@Model.EdocId" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span data-res="egov.resources.deparment.adduser">Thêm user vào phòng/ban</span>:
+            </td>
+            <td>
+                <input id="selectedUser" style="display: inline" class="form-control" />
+            </td>
+        </tr>
+    </table>
+    <p>
+    </p>
+    <div id="divUserInDept">
+        @{
+    Html.RenderPartial("_UserInDept");
+        }
+    </div>
+    <div style="float: left">
+        <button class="btn btn-warning" type="submit" id="updateDept">@Localizer("Common.Button.Edit.Save")</button>
+    </div>
+}

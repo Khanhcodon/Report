@@ -1,0 +1,36 @@
+﻿<li class="list-group-item" style="padding: 0;">
+    <div class="comment-item">
+        <div class="comment-avatar">
+            <img src="${avatar}" alt="" class="avatar img-rounded" onerror="imageError(this)" />
+        </div>
+        <div class="comment-content">
+            <div>
+                <div class="comment-detail">
+                    {{if CommentId === 0}}
+                    <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                    {{else}}
+                    <span class="wraptext ellipsis">
+                        <span class='comment-received'>
+                            <b>${UserSend.fullname} </b>
+                        </span> <span class="comment-description">${Description}</span>
+                    </span>
+                    {{/if}}
+                    <div class="comment-date pull-right">
+                        ${DateCreatedString}
+                    </div>
+                </div>
+            </div>
+            <div class="comment-detail">
+                <div>
+                    {{if CommentId === 0}}
+                    <span style="color: gray" data-res="egov.resources.document.NoComment">Chưa cho ý kiến</span>
+                    {{else Content.Content == ''}}
+                    ...
+                    {{else}}
+                    <span class="ellipsis" style="font-size: 14px;">${Content.Content}</span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

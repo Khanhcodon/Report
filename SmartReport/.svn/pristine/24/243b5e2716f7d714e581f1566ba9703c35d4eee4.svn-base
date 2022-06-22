@@ -1,0 +1,550 @@
+﻿@model ReportKeyModel
+@{
+    var reportGroup = new List<Bkav.eGovCloud.Areas.Admin.Models.ReportGroupModel>();//ViewBag.ReportGroup as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ReportGroupModel>;
+}
+<style type="text/css">
+    .report-info > div {
+        width: 100%;
+        float: left;
+        margin-bottom: 5px;
+        padding: 0 5px 0 5px;
+    }
+
+    .field-label {
+        float: left;
+        width: 18%;
+        height: 25px;
+    }
+
+    .field-input {
+        float: left;
+        width: 80%;
+    }
+
+        .field-input input[type='text'], .field-input textarea {
+            width: 100%;
+        }
+
+        .field-input #tblPermission {
+            width: 100%;
+        }
+
+            .field-input #tblPermission td, .field-input #tblPermission th {
+                border: 1px solid #BBB;
+                height: 25px;
+            }
+
+            .field-input #tblPermission th {
+                background-color: #F1F1F1;
+            }
+
+    .span-report-group {
+        margin-right: 10px;
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 0;
+        padding: 5px;
+    }
+
+        fieldset div {
+            float: left;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+    legend {
+        font-size: 16px;
+    }
+</style>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    var selectedUserIds = @MvcHtmlString.Create("[]"); @*@(string.IsNullOrEmpty(Model.UserPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.UserPermission));*@
+    var selectedDepartmentPositions = @MvcHtmlString.Create("[]"); @*@(string.IsNullOrEmpty(Model.DeptPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DeptPermission));*@
+    var selectedPositionIds = @MvcHtmlString.Create("[]"); @*@(string.IsNullOrEmpty(Model.PositionPermission) ? MvcHtmlString.Create("[]") : Html.Raw(Model.PositionPermission));*@
+    var treeGroups = @MvcHtmlString.Create("[]"); @*@(string.IsNullOrEmpty(Model.GroupForTree) ? MvcHtmlString.Create("[]") : Html.Raw(Model.GroupForTree));*@
+    var pivotConfig = @MvcHtmlString.Create("{}");@*@(string.IsNullOrEmpty(Model.QueryTotalDocumentProcessed) ? MvcHtmlString.Create("{}") : Html.Raw(Model.QueryTotalDocumentProcessed));*@
+    var i=0;
+
+    var pivotTable;
+
+    $(function () {
+        $("#submit").off("click").bind('click',function() {
+            $("#reportKey").submit();
+        });
+        setTimeout(function() {
+            initHelper();
+        }, 100);
+        
+
+        $("#btnConfigSql").click(function(e) {
+            e.preventDefault();
+            openConfigQuery();
+        });
+
+        $("#SyncColumnName").click(function (e) {
+            e.preventDefault();
+            SyncColumnName();
+        });
+
+        $("#SyncQuery").click(function(e) {
+            e.preventDefault();
+            SyncQuery();
+        });
+    });
+
+
+
+    function renderTableChart(){
+        $.ajax({
+            url: 'http://bi.bkav.com/webapi/dashboard/GetChartTypes?type=tablechart',
+            type: 'Get',
+            data: {}
+        }).done(function(ketqua) {
+            var id = ketqua.DashboardChartId;
+            var name = ketqua.Name;
+            var template = '<option value="${DashboardChartId}">${Name}</option>';
+            var tmpl = $.template(template)
+            $("#SyncColumn").html($.tmpl(tmpl, ketqua));
+        });
+    }
+
+    function SyncColumnName(){
+        var id = $("#SyncColumn").val();
+        $.ajax({
+            url: 'http://bi.bkav.com/webapi/dashboard/GetChart?id=' + id,
+            type: 'Get',
+            data: {}
+        }).done(function(ketqua) {
+            var columns = ketqua.ColumnName;
+            var name = ketqua.Name;
+            $.ajax({
+                url: 'DocColumnSetting/CreateColumn',
+                type: 'Get',
+                data: {
+                    columns : columns,
+                    name : name
+                }
+            }).done(function(ketqua) {
+                var columns = ketqua.ColumnName;
+            });
+        });
+    }
+
+    function SyncQuery(){
+        var id = $("#SyncColumn").val();
+        $.ajax({
+            url: 'http://bi.bkav.com/webapi/dashboard/GetChart?id=' + id,
+            type: 'Get',
+            data: {}
+        }).done(function(ketqua) {
+            var columns = ketqua.ColumnName;
+            var query = ketqua.Query;
+            $.ajax({
+                url: 'DocColumnSetting/CreateQuery',
+                type: 'Get',
+                data: {
+                    columns : columns,
+                    query : query
+                }
+            }).done(function(rsl) {
+                $("#QueryStatistics").val("dashboard:" + rsl.query);
+                return;
+            }).fail(function () {
+                $("#QueryStatistics").val("dashboard:" + rsl.query);
+            });
+        });
+    }
+
+
+    function openConfigQuery() {
+        $("#configQuery").removeClass('hidden');
+        $("#configQuery").dialog({
+            width: 1200,
+            height: 800,
+            title: "Cấu hình câu truy vấn",
+            buttons: [
+                {
+                    text: "Generate",
+                    click: function () {
+                        var query = $("#configQueryFrame").contents().find(".qb-ui-editor").find("textarea").val();
+                        query = RenameSql(query);
+                        $("#Sql").val("dashboard:" + query);
+                        setTimeout(function () {
+                            $("#configQuery").dialog("close");
+                            $("#configQuery").addClass('hidden');
+                        }, 1000);
+                    }
+                }
+            ]
+        });
+    }
+
+    function RenameSql(sql) {
+        var sqlAfter = sql;
+        var strSelect = sql.split('Select').pop().split('From')[0];
+        var listSelect = strSelect.split(",");
+        for (var i = 0; i < listSelect.length; i++) {
+            var strColumn = listSelect[i].trim();
+            var listPropColumn = strColumn.split("As");
+            var name = listPropColumn[0];
+            var alias = listPropColumn[1].trim();
+            name = name.split(".").length > 1 ? name.split(".")[1].trim() : name.trim();
+            sqlAfter = sqlAfter.replace(alias, name);
+        }
+        return sqlAfter;
+    }
+
+    function enableHelper() {
+        return;
+        var enable = $("#enableHelp").is(":checked");
+        if (enable) {
+            initHelper();
+        }
+        else {
+            $("#QueryReport, #QueryGroup, #QueryTotal, #QueryStatistics").qtip("destroy");
+        }
+    }
+
+    function initHelper() {
+        $.fn.qtip.styles.mystyle = {
+            width: 600,
+            textAlign: 'left',
+            color: 'black',
+            border: {
+                width: 7,
+                radius: 5
+            },
+            tip: 'bottomLeft',
+            name: 'green' // dark, cream, light, red, blue, green
+        };
+        // Hướng dẫn soạn mã key
+        $("#Code").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".codeHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+        // Hướng dẫn sql cho báo cáo
+        $("#QueryReport").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryReportHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+
+        // Hướng dẫn soạn template
+        $("#Sql").qtip({
+            show: { when: { event: 'focus' } },
+            hide: 'blur',
+            content: $(".queryStatisticsHelp").html(),
+            position: {
+                corner: {
+                    target: 'topLeft',
+                    tooltip: 'bottomLeft'
+                }
+            },
+            style: 'mystyle'
+        });
+    }
+
+    initPivot();
+    function initPivot() {
+            $.ajax({
+                url: "/ReportViewer/GetReportKeyData",
+                beforeSend: function () {
+                },
+                data: {
+                    ReportId: @Model.ReportKeyId,
+                    Time: "TuyChon",
+                    FromDate: "2017-01-01T00:00:00",
+                    ToDate: "2018-03-01T00:00:00",
+                    TreeGroupValue: null,
+                    TreeGroupName: null,
+                    GroupId: 0,
+                    sortBy: "",
+                    isDesc: false,
+                    Page: 1,
+                    PageSize: 500
+                },
+                success: function (result) {
+                    
+                    var data = JSON.parse(JSON.stringify(result));
+                    var cf =  {
+                        "dataSource": { data: data},
+                        "options": {
+                            "grid": {
+                                "showTotals": "off",
+                                "showGrandTotals": "off"
+                            }
+                        },
+                        "tableSizes": {
+                            "columns": [
+                                {
+                                    "idx": 0,
+                                    "width": 468
+                                }
+                            ]
+                        }
+                    }
+
+                    if (pivotConfig) {
+                        cf = pivotConfig;
+                        cf["dataSource"] = { data: data};
+
+                    }
+                    pivotTable = new WebDataRocks({
+                        container: "#formPivot",
+                        toolbar: true,
+                        beforetoolbarcreated: customizeToolbar,
+                        global: {
+                            // replace this path with the path to your own translated file
+                            //localization: "http://smartnation.bkav.com/Scripts/bkav.egov/libs/webdatarocks-1.2.0/en.json"
+                        },
+                        report: cf,
+                        reportcomplete: function () {
+                            pivotTable.off("reportcomplete");
+                            //createChart();
+                        }
+                    });
+                }
+            });
+    }
+    function createChart() {
+        pivotTable.highcharts.getData({
+            type: "areasplinerange"
+        }, function (data) {
+            Highcharts.chart("highchartsContainer", data);
+        }, function (data) {
+            Highcharts.chart("highchartsContainer", data);
+        });
+    }
+    function customizeToolbar(toolbar, pivot) {
+        // get all tabs
+        var tabs = toolbar.getTabs();
+        toolbar.getTabs = function () {
+            // There will be two new tabs at the beginning of the Toolbar
+            tabs.unshift(
+                {
+                    id: "wdr-tab-save",
+                    title: "SaveConfig",
+                    handler: saveReportHandler,
+                    icon: this.icons.save
+                }
+            );
+            return tabs;
+        }
+
+        var saveReportHandler = function () {
+            var config = pivotTable.getReport();
+            config["dataSource"] = {"dataSourceType":"json","data":[]}
+
+            $("#QueryTotalDocumentProcessed").val(JSON.stringify(config));
+        };
+    }
+    var contentObj;
+
+</script>
+
+@using (Ajax.BeginForm(Model.ReportKeyId == 0 ? "Create" : "Edit", null, new AjaxOptions
+{
+    HttpMethod = "Post",
+    OnSuccess = "onSaveSuccess",
+    OnBegin = "onBegin",
+    OnFailure = "onFailure"
+}, new { enctype = "multipart/form-data", id = "reportKey" }))
+{
+    <div class="report-info">
+        @Html.HiddenFor(model => model.ReportKeyId)
+        @Html.HiddenFor(model => model.ParentId)
+        <div class="report-name">
+            <div class="field-label">
+                @Html.LabelRequireFor(model => model.Name)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelRequireFor(model => model.Code)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Code, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Code)
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.Description)
+            </div>
+            <div class="field-input">
+                @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+            </div>
+        </div>
+        <div>
+            <div class="field-label">
+                @Html.LabelFor(model => model.IsActive)
+            </div>
+            <div class="field-input">
+                @Html.CheckBoxFor(model => model.IsActive)
+                @*@Html.CheckBoxFor(model => model.IsLabel)
+                    @Html.LabelFor(model => model.IsLabel)
+
+                    @Html.CheckBoxFor(model => model.IsHSMC)
+                    Là Báo cáo hồ sơ một cửa
+
+                    @Html.CheckBoxFor(model => model.IsShowTotal)
+                    Hiển thị dạng pivot*@
+            </div>
+        </div>
+        <div>
+            <fieldset>
+                <legend style="font-weight: bold">Cấu hình truy vấn</legend>
+                <div>
+                    <div class="field-label">
+                        @Html.LabelFor(model => model.Sql)
+                    </div>
+                    <div class="field-input">
+                        @Html.TextAreaFor(model => model.Sql, new { style = "height: 250px; padding: 10px;" })
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend style="font-weight: bold">Cấu hình Sql</legend>
+                <div>
+                    <div>
+                        <div class="field-label">
+                            Danh sách báo cáo
+                        </div>
+                        <div class="field-input">
+                            <button id="btnConfigSql" class="btn btn-info">Query</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="formPivot">
+
+            </div>
+            <div id="highchartsContainer"></div>
+        </div>
+    </div>
+}
+<div class="codeHelp" style="display: none">
+    <span>
+        <span data-res="egov.resources.keyformat">Định dạng key được phép</span>: <strong data-res="egov.resources.templatekey.speccharacter"></strong><span data-res="egov.resources.keyformat2">
+            bao gồm các chữ cái (hoa, thường), chữ số và dấu gạch chân (_).
+        </span>
+    </span>
+</div>
+<div class="queryReportHelp" style="display: none">
+    <p>Cấu hình câu truy vấn dữ liệu khi xem báo cáo: tự động phân trang, group.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryGroupHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn dữ liệu lấy các giá trị nhóm cho thống kê
+        <br />
+        (chỉ cần cấu hình khi chọn thống kê theo nhóm ở trên).
+    </p>
+    <p>
+        <strong>Cấu trúc dạng: </strong>
+        <br />
+        <strong style="color: blue;">SELECT</strong> #group, <strong style="color: blue;">COUNT</strong>(#group)
+        <br />
+        <strong style="color: blue;">FROM</strong> tenbang
+        <br />
+        // Mệnh đề Join
+        <br />
+        // Mệnh đề Where
+        <br />
+        <strong style="color: blue;">GROUP BY</strong> #group
+        <br />
+    </p>
+    <p>Trong đó: <strong>#group</strong> sẽ được thay thế bằng giá trị các nhóm thống kê được chọn ở trên trong code</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryTotalHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn riêng để lấy tổng số hồ sơ của thống kê
+        <br />
+        (Dựa trên câu truy vấn lấy dữ liệu cho thống kê).
+    </p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryStatisticsHelp" style="display: none">
+    <p>Cấu hình câu truy vấn để lấy dữ liệu cho thống kê.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong>Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để xem báo cáo theo nhóm: </strong><span>Sử dụng: <strong style="color: blue;">AND</strong> (@@groupValue = '' <strong style="color: blue;">OR</strong> #group = @@groupValue)</span> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để phân trang: </strong>Sử dụng  <strong style="color: blue;">LIMIT</strong> <strong>@@skip</strong>, <strong>@@take</strong>.
+        </li>
+        <li>
+            <strong>Để sắp xếp dữ liệu trong báo cáo: </strong><span>Sử dụng: <strong style="color: blue;">ORDER BY</strong> #sortBy #isDesc</span>.
+        </li>
+    </ul>
+</div>
+
+<div id="configQuery" class="hidden" style="position:relative;">
+    <iframe id="configQueryFrame" src="/admin/Query/ConfigReportKey?id=@Model.ReportKeyId" width="1050" height="577" style="border:none;"></iframe>
+</div>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

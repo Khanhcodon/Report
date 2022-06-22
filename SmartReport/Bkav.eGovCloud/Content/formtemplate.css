@@ -1,0 +1,163 @@
+﻿#center .layout
+{
+	width: 100%;
+	border: 1px dashed black;
+	border-collapse: collapse;
+}
+
+	#center .layout td
+	{
+		border: 1px dashed black;
+		height: 40px;
+	}
+
+.cellSelected
+{
+	background: #ECF4FF;
+}
+
+.cellHover
+{
+	background: #ECF4FF;
+}
+
+.wrapControl
+{
+	display: block;
+}
+
+#center .layout textarea
+{
+	width: 100%;
+	min-height: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#center .layout input[type=text], #center .layout select
+{
+	width: 100%;
+}
+
+#center .layout input[type=text]
+{
+	width: 100%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.label-field
+{
+	width: 179px;
+	float: left;
+	margin-left: 10px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+}
+
+.field
+{
+	overflow: hidden;
+	display: block;
+	margin-right: 10px;
+}
+
+.toolbar-panel
+{
+	min-width: 600px;
+	z-index: 4 !important;
+	padding: 5px 5px 5px 10px;
+}
+
+.toolbar-panel > div
+{
+	float: left;
+	height: 100%;
+}
+
+.toolbar-panel .separate
+{
+	border-left: 1px solid rgb(207, 207, 255);
+	margin-left: 10px;
+	margin-right: 10px;
+	height: 90%;
+	margin-top: 5px;
+}
+
+.toolbar-panel .delete
+{
+	width: 85px;
+}
+
+.toolbar-panel .insert
+{
+	width: 175px;
+}
+
+.toolbar-panel .mergesplit
+{
+	width: 175px;
+}
+
+.toolbar-panel a
+{
+	display: inline-block;
+	width: 40px;
+	height: 75px;
+	background-repeat: no-repeat;
+	background-position-x: 4px;
+	position: relative;
+}
+
+	.toolbar-panel a:hover
+	{
+		background-color: #c2d5f2;
+	}
+
+.toolbar-panel .delete a.delete-column
+{
+	background-image: url(Images/ToolbarFormTemplate/deletecolumn.png);
+}
+
+.toolbar-panel .delete a.delete-row
+{
+	background-image: url(Images/ToolbarFormTemplate/deleterow.png);
+}
+
+.toolbar-panel .insert a.insert-above
+{
+	background-image: url(Images/ToolbarFormTemplate/above.png);
+}
+
+.toolbar-panel .insert a.insert-below
+{
+	background-image: url(Images/ToolbarFormTemplate/below.png);
+}
+
+.toolbar-panel .insert a.insert-left
+{
+	background-image: url(Images/ToolbarFormTemplate/left.png);
+}
+
+.toolbar-panel .insert a.insert-right
+{
+	background-image: url(Images/ToolbarFormTemplate/right.png);
+}
+
+.toolbar-panel .mergesplit a.merge
+{
+	background-image: url(Images/ToolbarFormTemplate/merge.png);
+}
+
+.toolbar-panel .mergesplit a.split-column
+{
+	background-image: url(Images/ToolbarFormTemplate/splitcolumn.png);
+}
+
+.toolbar-panel .mergesplit a.split-row
+{
+	background-image: url(Images/ToolbarFormTemplate/splitrow.png);
+}

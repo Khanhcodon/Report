@@ -1,0 +1,234 @@
+﻿@{
+    var allDocTypes = ViewBag.AllDocTypes as string;
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+    var allDocFields = ViewBag.AllDocFields as string;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/util/bkav.utilities.js")"></script>
+<script type="text/javascript">
+    var allDocFields= @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes= @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+
+    function updateDocTypeWorkflow(docTypeIds) {
+        if (docTypeIds == undefined || docTypeIds.length <= 0) {
+            return;
+        }
+
+        $.ajax({
+            url: "@Url.Action("UpdateDocTypeWorkflow")",
+            type: "POST",
+            traditional: true,
+            data: {
+                docTypeIds: docTypeIds,
+                id: '@ViewBag.WorkflowId'
+            },
+            success: function () {
+                window.location.reload(true);
+            }
+        });
+    }
+
+    function updateWorkflow() {
+        var docTypeIds = []
+        $("#tbodyWorkflow input[name=selected]").each(function () {
+            if ($(this).prop('checked')) {
+                docTypeIds.push($(this).attr("value"));
+            }
+        });
+
+        updateDocTypeWorkflow(docTypeIds);
+    }
+
+    function onChangeCate(_this){
+        $("#checkAll").prop('checked',false);
+        var categoryBusinessId= $(_this).val();
+        var filter =_.filter(allDocFields, function(item){
+            return (categoryBusinessId == 0|| categoryBusinessId== item.categoryBusinessId);
+        });
+        $("#docFieldId option[value!='0']").remove();
+        $("#tmplDocField").tmpl(filter).appendTo("#docFieldId");
+
+        var matcher = new RegExp($.ui.autocomplete.escapeRegex($("#searchName").val()), "i" );
+        var filterDocTypes =_.filter(allDocTypes, function(item){
+            return (categoryBusinessId == 0 || categoryBusinessId == item.categoryBusinessId)
+                  && (matcher.test(item.label) || matcher.test(egov.utilities.string.stripVietnameseChars(item.label)));
+        });
+
+        $("#tbodyWorkflow").empty();
+        $("#tmplDocType").tmpl(filterDocTypes).appendTo("#tbodyWorkflow");
+    }
+
+    function onChangeDocField(_this) {
+        $("#checkAll").prop('checked',false);
+        var categoryBusinessId= $("#categoryBusinessId").val();
+        var docfieldId= $(_this).val();
+        var matcher = new RegExp($.ui.autocomplete.escapeRegex($("#searchName").val()), "i" );
+        var filterDocTypes =_.filter(allDocTypes, function(item){
+            return (categoryBusinessId == 0 || categoryBusinessId == item.categoryBusinessId)
+                    && (docfieldId == 0 || docfieldId == item.docfieldId)
+                    && (matcher.test(item.label) || matcher.test(egov.utilities.string.stripVietnameseChars(item.label)));
+        });
+
+        $("#tbodyWorkflow").empty();
+        $("#tmplDocType").tmpl(filterDocTypes).appendTo("#tbodyWorkflow");
+    }
+
+    $(function () {
+        $("#tmplDocField").tmpl(allDocFields).appendTo("#docFieldId");
+        $("#tmplDocType").tmpl(allDocTypes).appendTo("#tbodyWorkflow");
+
+        $('#tbodyWorkflow input[name=selected]').on('change',function () {
+            if (this.checked) {
+                if ($("#tbodyWorkflow input[name=selected]:checked").length === $('#tbodyWorkflow input[name=selected]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").on('change' ,function () {
+            $('#tbodyWorkflow input[name=selected]').prop('checked', this.checked);
+        });
+
+        $("#searchName").autocomplete({
+            minLength: 1,
+            source: function(request, response ) {
+                var categoryBusinessId= $("#categoryBusinessId").val();
+                var docfieldId= $("#docFieldId").val();
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term ), "i" );
+                response($.grep(allDocTypes, function( item ) {
+                    return ((categoryBusinessId == 0 ||categoryBusinessId == item.categoryBusinessId)
+                         && (docfieldId == 0 || docfieldId == item.docfieldId)
+                         && (matcher.test(item.label) || matcher.test(egov.utilities.string.stripVietnameseChars(item.label))));
+                }));
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#searchName").val(ui.item.label);
+                var exist = _.find(allDocTypes, function(item) {
+                    return item.value === ui.item.value;
+                });
+
+                if(exist){
+                    var $el=$("#tbodyWorkflow input[name=selected][value="+ui.item.value+"]");
+                    var checked = $el.prop("checked");
+                    $el.prop("checked",!checked);
+                }
+                return false;
+            }
+        })
+         .data("autocomplete")._renderItem = function(ul, item) {
+             return $("<li></li>")
+                 .data("item.autocomplete", item)
+                 .append("<a>" + item.label + "</a>")
+                 .appendTo(ul);
+         };
+    });
+</script>
+
+<table style="width: 100%">
+    <tr>
+        <td style="width: 15%">
+            @Localizer("Common.DocTypeWorkflow.CategoryBusiness"):
+        </td>
+        <td>
+            <select class="form-control" id="categoryBusinessId" name="categoryBusinessId"
+                style="display: inline" onchange="onChangeCate(this);">
+                <option value="0">@Localizer("Common.All.Label")</option>
+                @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+                {
+                    foreach (var categoryBusiness in allCategoryBusiness)
+                    {
+                    <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "")>
+                        @categoryBusiness.Text
+                    </option>
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 15%">
+            @Localizer("Common.DocTypeWorkflow.DocField"):
+        </td>
+        <td>
+            <select class="form-control" id="docFieldId" name="docFieldId"
+                style="display: inline" onchange="onChangeDocField(this);">
+                <option value="0">@Localizer("Common.All.Label")</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Localizer("Common.Form.FindText"):
+        </td>
+        <td>
+            <input type="text" id="searchName" name="searchName" class="form-control" placeholder=" @Localizer("Common.Form.FindText")" /></td>
+    </tr>
+</table>
+<br />
+<div id="divListForm" style="padding-top: 10px;">
+
+    <div class="grid">
+        <div class="grid-header">
+            <div class="grid-header-wrap">
+                <table class="table-main table" id="tblDocTypeWWorkflow">
+                    <colgroup>
+                        <col />
+                        @*  <col style="width: 150px" />*@
+                        <col style="width: 100px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">@Localizer("Admin.DocTypeWorkflow.DocTypeName")
+                            </th>
+                            @*  <th class="header text-center">@Localizer("Admin.DocTypeWorkflow.IsActivated")
+                            </th>*@
+                            <th class="header text-center">
+                                <label>
+                                    <input name="checkAll" id="checkAll" type="checkbox" />
+                                    @Localizer("Admin.DocTypeWorkflow.Selected")
+                                </label>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="grid-content">
+            <table class="table-main table">
+                <colgroup>
+                    <col />
+                    @*<col style="width: 150px" />*@
+                    <col style="width: 100px" />
+                </colgroup>
+                <tbody id="tbodyWorkflow">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script id="tmplDocType" type="text/x-jquery-tmpl">
+    <tr data-value="${value}">
+        <td class="td-filter">${label}
+        </td>
+        @*    <td style="text-align: center;">{{if state===true}}
+               @Localizer("Admin.DocTypeWorkflow.Activated")
+            {{else}}
+               @Localizer("Admin.DocTypeWorkflow.NotActivated")
+            {{/if}}
+        </td>*@
+        <td style="text-align: center;">
+            <input type="checkbox" name="selected" value='${value}' />
+        </td>
+    </tr>
+</script>
+
+<script id="tmplDocField" type="text/x-jquery-tmpl">
+    <option value="${value}" data-categorybusinessid="${categoryBusinessId}">${label}</option>
+</script>

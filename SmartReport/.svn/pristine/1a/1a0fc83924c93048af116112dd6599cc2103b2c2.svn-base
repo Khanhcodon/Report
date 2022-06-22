@@ -1,0 +1,102 @@
+﻿@{
+    var depts = ViewBag.Departments as IEnumerable<Bkav.eGovCloud.Entities.Customer.Department>;
+    var users = ViewBag.Users as IEnumerable<Bkav.eGovCloud.Entities.Customer.User>;
+    var docOverdues = ViewBag.DocOverdues as IEnumerable<Bkav.eGovCloud.Entities.Customer.DocumentOverdue>;
+    var totalDocDangXuly = (int)ViewBag.TotalDocDangXuly;
+    var totalOverdue = docOverdues == null ? 0 : docOverdues.Count();
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="text-uppercase">Công việc quá hạn</span>
+    </div>
+    <div class="panel-body">
+        <span class="doctype">Văn bản:</span> @totalDocDangXuly  (@totalOverdue đỏ vàng + @(totalDocDangXuly - totalOverdue) trằng)
+    </div>
+    <table class="table documents-overdue table-bordered">
+        <colgroup>
+            <col style="width: 95px" />
+            <col style="width: 80px" />
+            <col style="" />
+            <col style="width: 120px" />
+            <col style="width: 120px" />
+            <col style="width: 120px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-center">
+                    Cán bộ
+                </th>
+                <th class="text-center">Số lượng</th>
+                <th>Trích yếu</th>
+                <th class="text-center">Giữ/CP</th>
+                <th class="text-center">TXL/CP</th>
+                <th class="text-center">Gia hạn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ((depts != null && depts.Any())
+                    && (users != null && users.Any())
+                    && (docOverdues != null && docOverdues.Any()))
+                {
+                    foreach (var dept in depts)
+                    {
+                        if (dept == null)
+                        {
+                            continue;
+                        }
+
+                        var userInDepts = users.Where(p => p.UserDepartmentJobTitless != null &&
+                            p.UserDepartmentJobTitless.Any(c =>
+                                c.DepartmentId == dept.DepartmentId));
+
+                        if (userInDepts == null || !userInDepts.Any())
+                        {
+                            continue;
+                        }
+
+                <tr class="office-name">
+                    <td colspan="6">@dept.DepartmentName</td>
+                </tr>
+                        foreach (var user in userInDepts)
+                        {
+                            var userDocOverdue = docOverdues.Where(p => p.CurrentUserId == user.UserId);
+                            if (userDocOverdue == null || !userDocOverdue.Any())
+                            {
+                                continue;
+                            }
+
+                            var count = userDocOverdue.Count();
+                            var i = 0;
+                            foreach (var doc in userDocOverdue)
+                            {
+                <tr>
+                    @if (i == 0)
+                        {
+                        <td rowspan="@count" class="user-overdue">@user.Username</td>
+                        <td rowspan="@count" class="text-center">@count</td>
+                        }
+                    <td>@doc.Compendium</td>
+                    <td class="text-center">@doc.CurrentNodeKeepTime / @doc.CurrentNodePermitTime</td>
+                    <td class="text-center">@doc.TotalKeepTime / @doc.TotalPermitTime</td>
+                    <td class="text-center">
+                        @if (doc.CategoryBusinessId == (int)Bkav.eGovCloud.Entities.CategoryBusinessTypes.Hsmc)
+                            {
+                            <button class="btn btn-warning btn-sm">Gia hạn</button>
+                            }
+                    </td>
+                </tr>
+                            i++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                <tr>
+                    <td colspan="6">Không có dữ liệu</td>
+                </tr>
+                }
+        </tbody>
+    </table>
+</div>

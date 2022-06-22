@@ -1,0 +1,28 @@
+﻿@model QuestionModel
+@{
+    ViewBag.Title = @Model.Name;
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script>
+    backUrl = "/admin/Guide";
+</script>
+<script>
+    $(document).ready(function () {
+        $("#control-btn").hide();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#create").remove();
+    });
+</script>
+<div class="content-right" style="overflow:auto;">
+    
+    <h2 id="content-title">@Model.Name</h2>
+    <hr />
+    <h4>@Model.Date</h4>
+    <div id="content-view">
+        @Html.Raw(Model.Detail)
+    </div>
+</div>

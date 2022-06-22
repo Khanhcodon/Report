@@ -1,0 +1,307 @@
+﻿@model IEnumerable<UserModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as UserSearchModel;
+}
+
+<script type="text/javascript">
+    var allDepartments = [],
+        allJobTitless = [],
+        allPositions = [];
+
+    $(function () {
+        $("#tblUser").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblUser").openLink({ urlOpen: '/admin/User/Edit' });
+        $("#tblUser").tableSelect({
+            tableCallback: function () {
+                $(".table-main").addClass("table-bordered table-hover");
+                bindContextmenu();
+            }
+        });
+    });
+
+    //Tạo contextmenu
+    function bindContextmenu() {
+        var selector = "#tblUser tbody tr.selected";
+        $.contextMenu('destroy', selector);
+        $.contextMenu({
+            selector: selector,
+            trigger: 'right',
+            build: function () {
+                var items = {
+                    dept: {
+                        name: "@Localizer("User.CreateOrEdit.Fields.DepartmentJobTitlesId.Label")",
+                        icon: "add",
+                        callback: function () {
+                            getData();
+                        }
+                    }
+                };
+                return {
+                    items: items
+                };
+            }
+        });
+    }
+
+    //Lấy ra danh sách người dùng được chọn
+    function getUserIdsSelected() {
+        var selector = "#tblUser tbody tr.selected";
+        var listIds = [];
+        $(selector).each(function (i, item) {
+            var id = $(item).attr("id");
+            listIds.push(parseInt(id));
+        });
+        return listIds;
+    }
+
+    ///Check lấy dữ liệu hiển thị
+    function getData() {
+        if (allDepartments.length > 0 && allPositions.length && allDepartments.length) {
+            bindView(allPositions, allJobTitless, allDepartments);
+        } else {
+            $.ajax({
+                url: "/User/GetAllDeptJobPos",
+                type: "get",
+                success: function (result) {
+                    allDepartments = result.depts;
+                    allJobTitless = result.jobs;
+                    allPositions = result.pos;
+                    bindView(allPositions, allJobTitless, allDepartments);
+                }
+            });
+        }
+    }
+
+    //bind dữ liệu
+    function bindView(allPositions, allJobTitless, allDepartments) {
+        $("#pos").empty().append($('#tmpPosItem').tmpl(allPositions));
+        $("#jobs").empty().append($('#tmpJobItem').tmpl(allJobTitless));
+        showDialogDept(allDepartments);
+    }
+
+    var dialogSelectnodeIds = [];//danh sách phòng ban được chọn trên dialog
+    function showDialogDept(depts) {
+        dialogSelectnodeIds = [];
+        var $dialog = $("#divTreeDeptUserForAll");
+        $dialog.dialog({
+            title: "@Localizer("Admin.Department.CreateOrEdit.ChooseInfo")",
+            modal: true,
+            width: 700,
+            height: 580,
+            open: function () {
+                egov.utilities.jstree.bindJsTree($("#depts"), false, true, true, depts, [], [], function () {
+
+                    $("#depts").bind("check_node.jstree", function (e, data) {
+                        var nodeid = parseInt(data.rslt.obj.attr("id"));
+                        dialogSelectnodeIds.push(nodeid);
+                        $("#depts li").removeClass("jstree-checked jstree-undetermined").addClass("jstree-unchecked");
+                        for (var i = 0; i < dialogSelectnodeIds.length; i++) {
+                            var deptItem = 'li#' + dialogSelectnodeIds[i];
+                            $("#depts").find(deptItem).removeClass("jstree-unchecked jstree-undetermined").addClass("jstree-checked");
+                        }
+                    });
+
+                    $("#depts").bind("uncheck_node.jstree", function (e, data) {
+                        var nodeid = parseInt(data.rslt.obj.attr("id"));
+                        //Loại bỏ khỏi danh sách chọn
+                        dialogSelectnodeIds = _.filter(dialogSelectnodeIds, function (val) {
+                            return val != nodeid;
+                        });
+
+                        $("#depts li").removeClass("jstree-checked jstree-undetermined").addClass("jstree-unchecked");
+                        if (dialogSelectnodeIds.length > 0) {
+                            for (var i = 0; i < dialogSelectnodeIds.length; i++) {
+                                var deptItem = 'li#' + dialogSelectnodeIds[i];
+                                $("#depts").find(deptItem).removeClass("jstree-unchecked jstree-undetermined").addClass("jstree-checked");
+                            }
+                        }
+                    });
+
+                }, null, false, false);
+            },
+            buttons: {
+                "@Localizer("Common.Label.Select")": function () {
+                    var userIds = getUserIdsSelected();
+                    if (userIds.length <= 0) {
+                        eGovMessage.show("@Localizer("Admin.User.NotSelectUser")", null, eGovMessage.messageButtons.Ok, null);
+                        return;
+                    }
+
+                    if (dialogSelectnodeIds.length <= 0) {
+                        eGovMessage.show("@Localizer("Admin.User.NotSelectDepartment")", null, eGovMessage.messageButtons.Ok, null);
+                        return;
+                    }
+                    var _this = $(this);
+                    addUserDeptPosJobs(userIds,
+                        dialogSelectnodeIds,
+                        parseInt($("#pos").val()),
+                        parseInt($("#jobs").val()),
+                        function (message) {
+                            eGovMessage.notification(message, eGovMessage.messageTypes.success);
+                            _this.dialog("destroy");
+                        });
+                },
+                "@Localizer("Common.Button.Destroy")": function () {
+                    $(this).dialog("destroy");
+                }
+    }
+    });
+    }
+
+    function addUserDeptPosJobs(userIds, deptIds, posId, jobId, callback) {
+        $.ajax({
+            traditional: true,
+            url: "/User/AddUserDeptPosJob",
+            type: "post",
+            data: {
+                userIds: userIds,
+                deptIds: deptIds,
+                posId: posId,
+                jobId: jobId
+            },
+            success: function (result) {
+                if (result.result) {
+                    if (typeof callback === 'function') {
+                        callback(result.message);
+                    }
+                } else {
+                    eGovMessage.show(result.message, null, eGovMessage.messageButtons.Ok, null);
+                }
+            }
+        });
+    }
+</script>
+
+<table class="table-main table" id="tblUser">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 150px" />
+        <col/>
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("User.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("Username", Localizer("User.Index.List.Column.Username"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    username = search.Username,
+                    fullName = search.FullName,
+                    isActivated = search.IsActivated
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divListUsers",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="header">
+                @Ajax.SortLink("FullName", Localizer("User.Index.List.Column.FullName"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    username = search.Username,
+                    fullName = search.FullName,
+                    isActivated = search.IsActivated
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divListUsers",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="header">
+                @Localizer("User.Index.List.Column.IsActivated")
+            </th>
+            <th class="header">
+                @Localizer("User.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                Xoá
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var user in Model)
+            {
+                number += 1;
+                <tr id="@user.UserId" unselectable ="on">
+                    <td>@number
+                    </td>
+                    <td>@user.Username
+                    </td>
+                    <td>@user.FullName
+                    </td>
+                    <td align="center">
+                        @(user.IsActivated ? Localizer("Common.Yes.Label") : Localizer("Common.No.Label"))
+                    </td>
+                    <td align="center">
+                        @Html.ActionLink(Localizer("User.Index.List.Column.Edit.Button"), "Edit", new { Id = user.UserId })
+                    </td>
+                    <td align="center">
+                        <a href="javascript:deleteUser(@(user.UserId))">Xoá</a>
+                        <form id="formdelete@(user.UserId)" style="display: none" action="@Url.Action("Delete", new { Id = user.UserId })" method="POST">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.user.nodata">
+                    Không có người dùng nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      username = search.Username,
+                                      fullName = search.FullName,
+                                      isActivated = search.IsActivated,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListUsers",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

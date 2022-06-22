@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BusinessTypeModel>
+<script type="text/javascript">
+    $(function () {
+        $("#tblBusinessType").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblBusinessType").openLink({ urlOpen: '/admin/BusinessType/Edit' });
+    });
+
+</script>
+
+<table class="table-main table" id="tblBusinessType">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.BusinessTypeName")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var number = 0;
+            foreach (var BusinessType in Model)
+            {
+                number += 1;
+            <tr data-id="@BusinessType.BusinessTypeId">
+                <td>@number
+                </td>
+                <td>@BusinessType.BusinessTypeName
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Edit.Button"), "Edit", new { Id = BusinessType.BusinessTypeId })
+                </td>
+                <td>
+                    <a href="javascript:deleteBusinessType(@(BusinessType.BusinessTypeId))">@Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(BusinessType.BusinessTypeId)" style="display: none" action="@Url.Action("Delete", new { Id = BusinessType.BusinessTypeId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">@Localizer("Customer.BusinessType.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

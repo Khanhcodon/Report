@@ -1,0 +1,256 @@
+﻿body, html {
+    min-height: 100%;
+    width: 100%;
+    color: black !important;
+    cursor: default !important;
+    line-height: 21px;
+}
+
+    body a, body label {
+        cursor: default !important;
+    }
+
+.navbar-default {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.overview {
+    font-size: 11.5px;
+}
+
+.form-control {
+    color: black;
+}
+
+.panel-heading {
+    padding: 0;
+}
+
+.office-overview {
+    padding: 10px;
+}
+
+    .office-overview > div {
+        float: left;
+        margin-right: 5px;
+    }
+
+    .office-overview .overview-icon {
+        padding: 5px;
+        background: #e3e3e3;
+    }
+
+    .office-overview .overview-separator {
+        height: 29px;
+        width: 1px;
+        background: #e3e3e3;
+    }
+
+    .office-overview .overview-numb {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 15px;
+    }
+
+    .office-overview .overview-type {
+        /*font-size: 12px;*/
+        color: black;
+    }
+
+.panel-primary .office-overview .overview-icon {
+    background: #5677fc;
+}
+
+.panel-success .office-overview .overview-icon {
+    background: #d6e9c6;
+}
+
+.panel-info .office-overview .overview-icon {
+    background: #bce8f1;
+}
+
+.panel-danger .office-overview .overview-icon {
+    background: #ebccd1;
+}
+
+.overview-barchart {
+}
+
+    .overview-barchart canvas {
+        margin-left: -15px;
+    }
+
+
+.overview-title {
+    margin-bottom: 10px;
+    height: 30px;
+}
+
+.doughnutChar-result {
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+    color: blue;
+    left: 50%;
+    top: 50%;
+    margin-top: -32px;
+    margin-left: -46px;
+}
+
+.overview table {
+    background: white;
+}
+
+    .overview table th {
+        text-align: center;
+        font-size: 11.5px;
+    }
+
+    .overview table tbody tr td {
+        padding: 5px 8px;
+        font-size: 11.5px;
+        vertical-align: middle;
+        white-space: pre-line;
+    }
+
+    .overview table tbody tr.doc-overdue,
+    .overview table tbody span.doc-overdue {
+        background: #ffffc2;
+        color: black;
+    }
+
+    .overview table tbody tr.doc-overdueTotal,
+    .overview table tbody span.doc-overdueTotal {
+        background: #ffb7b7;
+        color: black;
+    }
+
+    .overview table tbody span.doc-overdue,
+    .overview table tbody span.doc-overdueTotal {
+        padding: 1px 5px;
+        border-radius: 4px;
+    }
+
+.overview .overview-filters {
+    margin-bottom: 10px;
+    padding-right: 5px;
+    float: left;
+    width: 100%;
+    clear: both;
+}
+
+    .overview .overview-filters select {
+        margin-right: 10px;
+    }
+
+    .overview .overview-filters .navbar-text {
+        margin: 8px;
+    }
+
+tr.overdue-group {
+    height: 35px;
+    font-weight: bold;
+}
+
+
+.overview-total > div {
+    width: 20%;
+}
+
+.overview-total .panel-body.selected {
+    box-shadow: 2px 3px 5px #B3B3B3;
+}
+
+.overview-total .panel-body:hover {
+    box-shadow: 2px 3px 5px #B3B3B3;
+}
+
+.overview-result {
+}
+
+    .overview-result > div {
+        display: none;
+    }
+
+        .overview-result > div.overview-sumary {
+            display: block;
+        }
+
+.alert {
+    position: absolute;
+    margin-left: -50px;
+    height: 38px;
+    top: 10px;
+    left: 50%;
+    padding: 8px;
+    display: none;
+    z-index: 20;
+}
+
+.ui-widget-header {
+    background: #ffffff !important;
+    padding: 10px 15px !important;
+    border: none !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.ui-draggable .ui-dialog-titlebar {
+    cursor: default !important;
+}
+
+.ui-dialog-title {
+    margin: 0 !important;
+    line-height: 1.42857143 !important;
+    font-size: 19px !important;
+    font-weight: normal !important;
+}
+
+.ui-dialog-buttonpane {
+    text-align: right !important;
+    border-top: 1px solid #e5e5e5 !important;
+    cursor: default !important;
+    outline: none !important;
+}
+
+.ui-dialog-buttonset button {
+    border: 1px solid transparent !important;
+    text-shadow: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #333 !important;
+    background-color: #fff !important;
+    border-color: #ccc !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+}
+
+.ui-resizable-handle {
+    background-image: none !important;
+}
+
+.table > thead > tr > th {
+    vertical-align: middle;
+}
+
+.table tbody tr.isParent {
+    font-weight: bold;
+    color: #4242c5;
+}
+
+#rightPanel {
+    padding: 15px;
+}
+
+.viewer > div {
+    display: none;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    z-index: 2;
+    color: white;
+    background: #4e87dc;
+    border: #4e87dc;
+}

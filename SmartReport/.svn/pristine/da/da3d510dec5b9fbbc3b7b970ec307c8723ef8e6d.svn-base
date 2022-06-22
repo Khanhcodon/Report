@@ -1,0 +1,76 @@
+﻿@using Bkav.eGovCloud.Entities
+@using Bkav.eGovCloud.Web.Framework.Utility
+@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    ViewBag.Title = "Tạo mới hồ sơ, văn bản";
+    //Layout = null;
+    var categoryBusiness = (CategoryBusinessTypes)ViewBag.CategoryBusiness;
+}
+
+@{
+    Html.RenderPartial("_Head");
+}
+<div class="egov">
+    <div class="document" id="document">
+        @using (Html.BeginForm("Create", "Document", FormMethod.Post, new { id = "CreateForm" }))
+        {
+            <div class="div-form">
+                @{
+                    Html.RenderPartial("_Toolbar", Model);
+                }
+            </div>
+            <div id="divCenter" class="document-form">
+                @{
+                     Html.RenderPartial("_CreateOrEdit", Model);
+                }
+            </div>
+        }
+
+    </div>
+</div>
+@{
+    //Html.RenderPartial("_Footer");
+}
+
+@*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.globalize/globalize.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.globalize/cultures/globalize.culture." + CultureHelper.GetCurrentCultureName() + ".js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ui.datepicker-" + CultureHelper.GetCurrentCultureName() + ".js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ui.layout/jquery.layout-latest.js")"></script>*@
+
+<script type="text/javascript">
+   @* $(function () {
+        $('@(categoryBusiness == CategoryBusinessTypes.Hsmc ? "#CitizenName" : "#Compendium")').focus();
+
+        $('#CreateForm').submit(function () {
+            return false;
+        });
+
+        var $compendium = $('#Compendium');
+        var compendiumLength = $compendium.val().length;
+        $compendium.focus();
+        $compendium[0].setSelectionRange(compendiumLength, compendiumLength);
+    });
+
+    function serForCompendium(target) {
+        $("#Compendium").val($("#DefaultCompendium").val() + ' - ' + $(target).val());
+    }*@
+</script>
+
+@*@{
+    Html.RenderPartial("_Head");
+}
+<div class="egov">
+    <div class="document" id="document">
+        <div class="div-form">
+           <div class="toolbar-outer" id="toolbar"></div>
+        </div>
+        <div id="divCenter" class="document-form">
+            @{
+                Html.RenderPartial("_CreateOrEdit", Model);
+            }
+        </div>
+    </div>
+</div>
+@{
+    Html.RenderPartial("_Footer");
+}*@

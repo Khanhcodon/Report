@@ -1,0 +1,338 @@
+﻿@model WorkflowModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var allInterfaceConfig = ViewBag.AllInterfaceConfig as IEnumerable<SelectListItem>;
+}
+
+<script src="@Url.Content("/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout-3.3.0.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout.mapping-latest.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout.validation.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.min.js")"></script>
+
+
+<script type="text/javascript">
+    var workflowTypeJson = @(string.IsNullOrEmpty(Model.WorkflowTypeJson) ? MvcHtmlString.Create("[]") : Html.Raw(Model.WorkflowTypeJson));
+    var isValid = false;
+
+    $(function() { 
+        $("#tblChilds").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $('#tabs form:first').attr("data-bind", "submit: save");
+        
+        bindSettings();
+    });
+
+    function bindSettings(){
+        var columnLine = function(lines, Id, Name, ExpireProcess) {
+            var self = this;
+            self.Name = Name
+                ? ko.observable(Name).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } }) ;
+
+            self.ExpireProcess = ExpireProcess
+                ? ko.observable(ExpireProcess).extend({ required: { message: '*' } })
+                : ko.observable().extend({ required: { message: '*' } });
+
+            self.Id = ko.observable(Id);
+
+            self.index = ko.computed(function() {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+
+            self.background = ko.computed(function() {
+                var index = lines ? lines.indexOf(self) : 0;
+                return index % 2 == 1 ? 'whiteSmoke' : 'white';
+            });
+        };
+
+        var config = function(array) {
+            var self = this;
+            self.columnLines = ko.observableArray([]);
+            if(array && $.isArray(array) && array.length > 0) {
+                for(var i = 0; i < array.length; i ++) {
+                    self.columnLines.push(new columnLine(self.columnLines, array[i].Id, array[i].Name, array[i].ExpireProcess));
+                }
+            }
+
+            self.disableSubmit = function(line, event) {
+                if(event.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            };
+
+            self.addColumn = function() {
+                self.columnLines.push(new columnLine(self.columnLines, null, null ,1));
+                var allrow = $("#tblChilds tbody tr");
+                allrow.eq(allrow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.keyEvent = function(line, event) {
+                if(line) {
+                    if(event.keyCode == 13) {
+                        var index = self.columnLines.indexOf(line);
+                        var allrow;
+                        if(index == self.columnLines().length - 1) {
+                            self.columnLines.push(new columnLine(self.columnLines, null, null, 1));
+                            self.errors = ko.validation.group(self, { deep:true });
+                            allrow = $("#tblChilds tbody tr");
+                            if(allrow) {
+                                allrow.eq(allrow.length - 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        } else if(index > -1 && index < self.columnLines().length - 1){
+                            allrow = $("#tblChilds tbody tr");
+                            if(allrow) {
+                                allrow.eq(index + 1).children('td').eq($(event.target).parent('td').index()).children('input').focus();
+                            }
+                        }
+                    }
+                }
+            };
+
+            self.removeColumn = function(line) {
+                self.columnLines.remove(line);
+                self.errors = ko.validation.group(self, { deep:true });
+            };
+
+            self.save = function() {
+                isValid = validate(self);
+            };
+
+            self.errors = ko.validation.group(self, { deep:true });
+
+        };
+
+        ko.applyBindings(new config(workflowTypeJson), document.getElementById('tabs'));
+    }
+
+    function validate(self) {
+        if(!$('form:first').validate().form()){
+            return false;
+        }
+
+        //if(self.errors().length > 0) {
+        //    self.errors.showAllMessages();
+        //    return false;
+        //}
+
+        var json = $.map(self.columnLines(), function(line) {
+            return line.Name() ? {
+                Name: line.Name(),
+                ExpireProcess: line.ExpireProcess(),
+                Id: line.Id()
+            } : undefined;
+        });
+        $("#WorkflowTypeJson").val(JSON.stringify(json));
+
+        return true;
+    }
+
+    function onSaveBegin() {
+        return isValid;
+    }
+
+    function onSaveSuccess(result) {
+        if(result) {
+            if(result.error) {
+                eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+            }
+            else if(result.success) {
+                eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+            }
+            setTimeout(function(){
+                document.location='@(Model.WorkflowId > 0 ? "/admin/workflow/Index" : "/admin/workflow/Create")';},500);       
+        }
+    }
+</script>
+
+@using (Ajax.BeginForm(Model.WorkflowId == 0 ? "Create" : "Edit",
+        new AjaxOptions
+        {
+            HttpMethod = "Post",
+            OnBegin = "onSaveBegin",
+            OnSuccess = "onSaveSuccess"
+        }))
+{
+    @Html.HiddenFor(model => model.WorkflowId)
+    @Html.HiddenFor(model => model.Json)
+    @Html.ValidationSummary(true)
+
+    <div>
+        <table>
+            <tr>
+                <td style="width: 15%;">
+                    @Html.LabelRequireFor(model => model.WorkflowName):
+                </td>
+                <td colspan="2">
+                    @Html.TextAreaFor(model => model.WorkflowName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+                    @if (Model.WorkflowId == 0)
+                    {
+                        <div>
+                            <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                        </div>
+                    }
+                    @Html.ValidationMessageFor(model => model.WorkflowName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InterfaceConfigId):
+                </td>
+                <td colspan="2">
+                    @Html.DropDownListFor(model => model.InterfaceConfigId, allInterfaceConfig, Localizer("Common.Choose.Label"))
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ExpireProcess):
+                </td>
+                <td colspan="2">
+                    @Html.TextBoxFor(model => model.ExpireProcess)
+                    @Html.ValidationMessageFor(model => model.ExpireProcess)
+                    <div>
+                        Đặt bằng 0: không tính hạn xử lý khi khởi tạo.
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.IsActivated):
+                </td>
+                <td colspan="2">
+                    @Html.CheckBoxFor(model => model.IsActivated)
+                    @Html.ValidationMessageFor(model => model.IsActivated)
+                </td>
+            </tr>
+        </table>
+
+        @if (Model.WorkflowId > 0)
+        {
+            @Html.Partial("_Config")
+            <br />
+            <h3>@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ConfigWorkflow") </h3>
+            <div>
+                <button type="button" class="btn" onclick="openConfigWorkflow(@Model.WorkflowId)">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Index.List.Column.Config")
+                </button>
+            </div>
+            <br />
+
+            <h3>@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ExtportOrImportFromFile") </h3>
+            <div>
+                <button type="button" class="btn" onclick="exportJsonToFile(@Model.WorkflowId)">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ExportToFile")
+                </button>
+
+                <input class="btn" type="button" value="@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.UploadFile") (*.json, *.txt)" onclick="$('#upload').click()" />
+                <input class="btn" type="file" name="files" id="upload" style="display: none;"
+                     data-url="@Url.Action("UpdateJson", "Workflow", new { Id = Model.WorkflowId })" accept="*.txt,*.json" />
+            </div>
+            <script>
+                $('#upload').fileupload({
+                    dataType: 'json',
+                    url: $(this).attr('data-url'),
+                    autoUpload: true,
+                    add: function (e, data) {
+                        var filename = data.files[0].name;
+                        if(filename.indexOf(".txt", filename - ".txt".length) !== -1
+                            ||filename.indexOf(".json", filename - ".json".length) !== -1)    {
+                            data.submit();
+                        }else {
+                            eGovMessage.show("@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Extension")","",eGovMessage.messageButtons.Ok);
+                        }
+                    },
+                    done: function (e, data) {
+                        var result= data.result;
+                        if(result.success)  {
+                            eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                        }
+                        else{
+                            eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                        }
+                    }
+                });
+
+                function exportJsonToFile(id){
+                    var link = '@Url.Action("ExportJsonToFile", "Workflow")';
+                    $.fileDownload(link,
+                        {
+                            data:{id:id},
+                            failCallback: function(response) {
+                                var html = $(response);
+                                try {
+                                    var json = JSON.parse(html.text());
+                                    alert(json.error);
+                                } catch(e) {
+                                    alert('"@Localizer("Common.Error.DownloadFile")"');
+                                }
+                            }
+                        });
+                    }
+            </script>
+        }
+
+        <h3>@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ConfigChilds") </h3>
+        @Html.HiddenFor(model => model.WorkflowTypeJson)
+        @Html.ValidationMessageFor(model => model.WorkflowTypeJson)
+        <div id="listColumn">
+            <table class="table-main table" id="tblChilds">
+                <colgroup>
+                    <col />
+                    <col style="width: 200px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.CreateOrEdit.Fields.WorkflowName.Label")</th>
+                        <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.CreateOrEdit.Fields.ExpireProcess.Label")</th>
+                        <th class="header" data-res="egov.resources.tableheader.delete"></th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach: columnLines'>
+                    <tr data-bind="style: { 'background-color': background() }">
+                        <td>
+                            <input type="hidden" data-bind='value: Id, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit}' />
+                            <input data-bind='value: Name, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit }'
+                                style="width: 90%" />
+                        </td>
+                        <td>
+                            <input data-bind='value: ExpireProcess, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit }'
+                                style="width: 90%" />
+                        </td>
+                        <td class="text-center">
+                            <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeColumn' style="cursor: pointer" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" data-bind='click: addColumn' class="btn" data-res="egov.resources.commonlabel.addcolumn">
+            </button>
+        </div>
+    </div>
+
+    <div id="sticky" class="stuck" style="display: none">
+        <input type="submit" id="submit-workflow" />
+
+        <span id="message" style="color: red; display: none"></span>
+    </div>
+}
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

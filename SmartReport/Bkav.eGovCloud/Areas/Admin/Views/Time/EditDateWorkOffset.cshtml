@@ -1,0 +1,15 @@
+﻿@model HolidayModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Time.EditDateWorkOffset");
+    Layout = Layout = "~/Areas/Admin/Views/Time/_TimeLayout.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        $("#dateworkoffset a").addClass("selected");
+    });
+</script>
+@using (Html.BeginForm("EditDateWorkOffset", "Time"))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+    @Html.AntiForgeryToken()
+}

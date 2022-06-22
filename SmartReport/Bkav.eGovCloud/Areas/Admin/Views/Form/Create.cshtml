@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.Form.Label.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
+}
+<script type="text/javascript">
+    $(function () {
+        $(".tab-form").addClass(" ui-tabs-selected ui-state-active");
+        $(".tab-form").siblings().removeClass(" ui-tabs-selected ui-state-active");
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span data-res="egov.resources.sitemap.form"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/form/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div class="">
+    <div id="divForm" class="bkavegov">
+        <div id="divList" style="padding-top: 10px;">
+            @using (Html.BeginForm("Create", "Form"))
+            {
+                Html.RenderPartial("_CreateOrEdit", new FormModel());
+                @Html.AntiForgeryToken()
+            }
+        </div>
+    </div>
+</div>

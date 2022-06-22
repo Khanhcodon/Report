@@ -1,0 +1,102 @@
+﻿@{   
+    var allFilters = ViewBag.AllFilters as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ProcessFunctionFilterModel>;
+}
+<script type="text/javascript">
+    function updateFilter(functionId) {
+        if (!functionId) {
+            return;
+        }
+
+        var filterIds = [];
+        var objectTmps = [];
+        $("#tblAllFilter .filter").each(function () {
+            if ($(this).is(':checked')) {
+                var id = $(this).attr('data-id');
+                var name = $(this).attr('data-name');
+                filterIds.push(parseInt(id));
+                objectTmps.push({ id: id, name: name, functionId: functionId })
+            }
+        });
+
+        if (filterIds.length > 0) {
+            $.ajax({
+                url: "@Url.Action("AddProcessFilter", "ProcessFunction")",
+                type: "POST",
+                traditional: true,
+                data: {
+                    functionId: functionId,
+                    filterIds: filterIds
+                },
+                success: function () {
+                    $("#my-dialog").dialog("close");
+                    $("#filterTemplate").tmpl(objectTmps).appendTo("#tblFilter tbody");
+                }
+            });
+        }
+        else {
+            $("#my-dialog").dialog("close");
+        }
+    }
+
+</script>
+<div id="divListFilter" style="padding-top: 10px;">
+    @*    @{
+        Html.RenderPartial("_PartialFilter");
+    }*@
+
+    <div class="grid">
+        <div class="grid-header">
+            <div id="DocTypeChangeIsPrimary" style="display: none">
+            </div>
+            <div class="grid-header-wrap">
+                <table class="table-main table">
+                    <colgroup>
+                        <col />
+                        <col style="width: 80px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">Tên bộ lọc
+                            </th>
+                            <th class="header">Chọn
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="grid-content">
+            <table class="table-main table" id="tblAllFilter">
+                <colgroup>
+                    <col />
+                    <col style="width: 80px" />
+                </colgroup>
+                <tbody id="tbodyform">
+                    @if (allFilters != null)
+                    {
+                        foreach (var item in allFilters)
+                        {                    
+                        <tr>
+                            <td class="td-filter">@item.Name
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" name="filter" class="filter" data-id="@item.ProcessFunctionFilterId"  data-name="@item.Name"/>
+                            </td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">Không có mẫu nào
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@*<span style="float: right;">
+    <button type="button" onclick="updateFilter(@ViewBag.FunctionId)">
+        Thêm mẫu</button></span> *@

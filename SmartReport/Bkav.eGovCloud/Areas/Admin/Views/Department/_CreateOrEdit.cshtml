@@ -1,0 +1,153 @@
+﻿@model DepartmentModel
+<script type="text/javascript">
+    $(function () {
+        $("#DepartmentNameCreate").focus();
+        function createTree() {
+            var nodeselected = $('#divTreeDeptUserForAll').jstree('get_selected');
+            var departmentCreateModel;
+            //     var token = $("input[name='__RequestVerificationToken']", '#departmentCreate').val();
+            if (allDepartments.length <= 0 || nodeselected == null) {
+                //Tạo node root
+                departmentCreateModel = {
+                    // hasCreatePacket: $("#HasCreatePacket").prop('checked'),
+                    departmentName: $("#DepartmentNameCreate").val().trim(),
+                    departmentOrder: 0
+                };
+            }
+            else {
+                var departmentSelected = _.find(allDepartments, function (dept) { return dept.value == nodeselected.attr("id"); });
+                if (departmentSelected) {
+                    var order = 0;
+                    if (departmentSelected.parentid == 0) {
+                        var childOfRoot = _.filter(allDepartments, function (dept) { return dept.parentid == departmentSelected.value; });
+                        if (childOfRoot.length > 0) {
+                            order = _.max(childOfRoot, function (stooge) { return stooge.order; }).order + 1;
+                        }
+                    }
+
+                    departmentCreateModel = {
+                        //    hasCreatePacket: $("#HasCreatePacket").prop('checked'),
+                        parentId: nodeselected.attr("id"),
+                        departmentName: $("#DepartmentNameCreate").val().trim(),
+                        departmentOrder: order
+                    };
+                }
+            }
+
+            if (departmentCreateModel) {
+                $.ajax({
+                    type: "POST",
+                    url: "Department/CreateTree",
+                    dataType: "json",
+                    data: departmentCreateModel,
+                    beforeSend: function () {
+                        if ($('#formCreate').validate().form()) {
+                            $("#divDepartment").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+                            return true;
+                        }
+                        return false;
+                    },
+                    success: function (data) {
+                        if (data.message && data.message != '') {
+                            $("#messageCreateSuccess").text(data.message);
+                            $("#DepartmentNameCreate").focus();
+                        }
+                        else {
+                            if (allDepartments.length == 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    allDepartments.push(data[i]);
+                                }
+                                egov.utilities.jstree.bindJsTree($("#divTreeDeptUserForAll"), false, false, true, allDepartments, []);
+                            }
+                            else {
+                                for (var i = 0; i < data.length; i++) {
+                                    allDepartments.push(data[i]);
+                                    $('#divTreeDeptUserForAll').jstree('create', nodeselected, 'last', data[i], null, true);
+                                }
+
+                                $.jstree._focused().select_node(nodeselected);
+                                $("#divTreeDeptUserForAll").jstree("open_node", nodeselected);
+                            }
+                            $("#DepartmentNameCreate").val('');
+                            eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Created")', eGovMessage.messageTypes.success);
+                        }
+                        $("#divDepartment").unblockpanel();
+                    },
+                    error: function () {
+                        eGovMessage.notification('@Localizer("Bkav.eGovCloud.Areas.Admin.DepartmentTree.CreatedError")', eGovMessage.messageTypes.error);
+                        $("#divDepartment").unblockpanel();
+                    }
+                });
+            }
+        }
+        $("#DepartmentNameCreate").keypress(function (e) {
+            if (e.keyCode == 13) {
+                createTree();
+                return false;
+            }
+            else {
+                $("#messageCreateSuccess").text('');
+            }
+        });
+
+        $("#btCreateDepartment").click(function () {
+            createTree();
+        });
+
+    });
+</script>
+<div class="pane-header" style="padding: 0 15px;">
+    <b data-res="egov.resources.deparment.deparmentinfo">Thông tin phòng ban</b>
+</div>
+
+<div class="ui-layout-content">
+    <fieldset style="width: 97%; margin: 0 auto;">
+        <legend style="font-weight: normal" data-res="egov.resources.deparment.addsubdeparment">Thêm mới phòng ban trực thuộc</legend>
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formCreate" }))
+        {
+            @Html.Partial("_qtip")
+            <div id="departmentCreate">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 15%">
+                            <label for="DepartmentNameCreate" data-res="egov.resources.deparment.deparmentname">Tên phòng ban</label>&nbsp;<span class="spanRequire">*</span>:
+                        </td>
+                        <td>
+                            <textarea class="form-control egovQtip"
+                             name="DepartmentNameCreate" id="DepartmentNameCreate"
+                            data-val-required="@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Name.Required")" data-val="true" data-qtip=".tooltipPacket" />
+                            <div>
+                                <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                            </div>
+                            <span data-valmsg-replace="true" data-valmsg-for="DepartmentNameCreate" class="field-validation-valid "></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div>
+                                <button class="btn btn-warning" type="button" name="save" value="save" id="btCreateDepartment">@Localizer("Customer.Department.Button.Create")</button>
+                                <span id="messageCreateSuccess" class="spanRequire"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tooltipPacket" style="display: none">
+                <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+            </div>
+        }
+    </fieldset>
+    <fieldset style="width: 97%; margin: 0 auto;">
+        <legend style="font-weight: normal" data-res="egov.resources.deparment.updateinfo">Cập nhật thông tin phòng ban</legend>
+        @{
+            Html.RenderPartial("Edit", Model);
+        }
+    </fieldset>
+</div>
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

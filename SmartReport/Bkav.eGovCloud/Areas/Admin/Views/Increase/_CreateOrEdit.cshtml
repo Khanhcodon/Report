@@ -1,0 +1,58 @@
+﻿@model IncreaseModel
+@{
+    var allGroup = ViewBag.AllGroup as IEnumerable<SelectListItem>;
+}
+<script>
+    $(function () {
+        $(document).bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                if ($("form").valid())
+                    $("form").submit();
+            }
+        });
+    });
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.IncreaseId)
+
+<table>
+    <tr>
+        <td style="width: 15%">
+            @Html.LabelRequireFor(model => model.Name):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Name, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @if (Model.IncreaseId == 0)
+            { 
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Value):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Value)
+            @Html.ValidationMessageFor(model => model.Value)
+            <div>
+                @string.Format(Localizer("Common.Increase.CreateOrEdit.Note"), Model.Value)
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%">
+            @Html.LabelRequireFor(model => model.BussinessDocFieldDocTypeGroupId):
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.BussinessDocFieldDocTypeGroupId, allGroup, Localizer("Common.All.Label"))
+            @Html.ValidationMessageFor(model => model.BussinessDocFieldDocTypeGroupId)
+        </td>
+    </tr>
+</table>

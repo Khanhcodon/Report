@@ -1,0 +1,16 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    
+</script>
+
+<div class="insert-menu">
+    <span><a href="#">Văn bản liên quan</a></span>
+    <span><a href="#">Tệp đính kèm</a></span>
+    <span><a href="#">Tệp scan</a></span>
+    <span><a href="#">Giấy phép</a></span>
+    <span class="separate"></span>
+    <span><a href="#">Dự kiến chuyển</a></span>
+</div>

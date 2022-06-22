@@ -1,0 +1,35 @@
+﻿
+<div data-account="${account}" data-id="${id}" class="item-message file-message {{if isme == true}} isme {{else}} other {{/if}}  {{if unread == true}}unread{{/if}}">
+    {{if isme == true}}
+    <div class="item-message__status">
+        <div idmsg="${id}" data-field='status'>
+            {{if status=='client'}} <i class="material-icons">panorama_fish_eye</i>{{/if}}
+            {{if status=='server'}} <i class="material-icons">check_circle_outline</i> {{/if}}
+            {{if status=='success'}} <i class="material-icons">check_circle</i>{{/if}}
+        </div>
+    </div>
+    {{/if}}
+    {{each attachment}}
+    <div class="item-message__content">
+        <div class="item-message__data" id="${id}" url="${url}" file-name="${name}" size="${size}" extension="${extension}">
+            <div class="clear-right">
+                <div>
+                    <div class="chat-content-wrap" style="max-width: ${width}px; word-wrap: break-word;">
+                        <div class="chat-content">
+                            <img class="file-type" src="../content/bkav.egov/images/file-extensions/${extension}.svg" onerror="this.src = '../content/bkav.egov/images/file-extensions/notype.svg'">
+                            <div class="file-info">
+                                <span style="font-weight: 500;white-space: pre-wrap;">${name}.${extension}</span><br />
+                                <span><a href="#" class="btn-link openFile">Mở</a> <a href="${url}" class="btn-link downloadFile">Tải về</a></span>
+                            </div>
+                        </div>
+                        {{if status == 'client'}}
+                        <div id="p1" class="mdl-progress mdl-js-progress"></div>
+                        {{/if}}
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>

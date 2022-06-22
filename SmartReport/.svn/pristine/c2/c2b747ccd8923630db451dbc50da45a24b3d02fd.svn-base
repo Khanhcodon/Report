@@ -1,0 +1,58 @@
+﻿
+      <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.dialogextend.min.js"></script>
+<script>
+    function openConfigWorkflow(id) {
+        var url = '/Admin/Workflow/ConfigWorkflow/' + id;
+        location.href = url;
+         //openDialog("#my-dialog-configworkflow", url);
+    }
+
+    function openDialog(_el, url) {
+        $(_el).dialog({
+            autoOpen: true,
+            height: $('body').height(),
+            width: $('body').width(),
+            modal: true,
+            resizable: true, forceFullscreen:true,
+            close: function () {
+                $(_el).dialog("destroy");
+            }
+        }).dialogExtend({
+            close: true,
+            maximize: true,
+            "maximizable": true,           
+            dblclick: 'maximize',
+            events: {
+                maximize: function (e, dlg) {
+                    $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                },
+                restore: function (e, dlg) {
+                    $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                }
+            }
+        });
+
+        $(_el).dialog('open');
+        $(_el).find("iframe").hide();
+        if ($('#iframe_' + url.replace(/\//g, '')).length == 0) {
+            var $newIframe = $('<iframe id="iframe_' + url.replace(/\//g, '') + '" scr="" height="100%" width="100%" style="border:none"></iframe>');
+            var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+            $(_el).append($imgLoading).append($newIframe);
+            var frame = $newIframe[0];
+            frame.src = url;
+            $(frame).load(function () {
+                $imgLoading.remove();
+            });
+        } else {
+            $("#iframe_" + url.replace(/\//g, '')).show();
+        }
+    }
+
+    function closeConfigNode() {
+        $("#my-dialog-configworkflow").dialog("close");
+    }
+
+</script>
+
+@*Cấu hình quy trình, luông văn bản*@
+<div id="my-dialog-configworkflow" style="display: none"></div>

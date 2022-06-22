@@ -1,0 +1,107 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Cảnh báo quá hạn</title>
+    <meta charset="utf-8" />
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            table td {
+                border-width: 0 0 1px 1px;
+                overflow: hidden;
+                -ms-text-overflow: ellipsis;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                white-space: normal;
+                border: solid 1px #D7D7D7;
+                padding: 4px;
+            }
+
+            table tbody {
+                color: #000000;
+            }
+
+            table th {
+                background: #4b6c9e;
+                height: 22px;
+                color: #ffffff;
+                border: 1px solid #dddddd;
+                padding: 6px 5px;
+                text-align: center;
+            }
+
+        a {
+            text-decoration: none;
+        }
+
+        div {
+            border-bottom: 1px solid #dddddd;
+            height: 22px;
+        }
+
+            div:last-child {
+                border: 0;
+            }
+
+        .col1 {
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+        .group{
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h3>
+            DANH SÁCH VĂN BẢN, HỒ SƠ XỬ LÝ QUÁ HẠN
+        </h3>
+    </center>
+    <br />
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+            <th style="width: 120px;">
+                Người vi phạm
+            </th>
+            <th style="width: 60px;">
+                Số lượng
+            </th>
+            <th style="width: 350px;">
+                Trích yếu
+            </th>
+            <th style="width: 100px;">
+                Số ngày
+            </th>
+        </tr>
+        <tbody>
+            @foreach(var group in @Model){
+                var docs = group.Value;  
+                <tr class="group">
+                    <td colspan="4">
+                        @group.Key
+                    </td>
+                </tr>
+                foreach (var subgroup in docs)
+                {
+                    <tr>
+                        <td rowspan="@(subgroup.Value.Count + 1)" style="color: blue">@subgroup.Key</td>
+                        <td rowspan="@(subgroup.Value.Count + 1)" style="text-align: center; font-weight: bold; color: red;">@subgroup.Value.Count</td>
+                    </tr>
+                    foreach(var doc in subgroup.Value){
+                        <tr>
+                            <td >@doc.Compendium</td>
+                            <td style="text-align: center;">@doc.TotalKeepTime/@doc.TotalPermitTime</td>
+                        </tr>
+                    }
+                }
+            }            
+        </tbody>
+    </table>
+</body>
+</html>

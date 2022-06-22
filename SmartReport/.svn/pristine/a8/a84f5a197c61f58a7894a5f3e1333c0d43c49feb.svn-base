@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ProcessFunctionFilterModel>
+    @{
+        ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.ProcessFunctionFilter");
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script type="text/javascript">
+        function deleteFilter(id) {
+            if (confirm("@Localizer("Common.Confirm.Delete.Filter")")) {
+                $('form').submit();
+            }
+        }
+    </script>
+    <div class="col-md-3 left-content">
+        <ul>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.Edit"), "Index")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.StoreList"), "ProcessFunctionGroup")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddStore"), "CreateGroup")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.FilterList"), "ProcessFunctionFilter", null, new { @class = "selected" })</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddFilter"), "CreateFilter")</li>
+        </ul>
+    </div>
+    <div class="col-md-13 right-content">
+        <div id="divForm" class="bkavegov">
+
+            @Html.Partial("_Notifications")
+            <div id="divListForm" style="padding-top: 10px;">
+                <table class="table-main table" id="tblFunctionType">
+                    <colgroup>
+                        <col style="width: 50px" />
+                        <col />
+                        <col style="width: 50px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">
+                                STT
+                            </th>
+                            <th class="header">
+                                Bộ lọc
+                            </th>
+                            <th class="header">
+                                @Localizer("ProcessFunction.ListFunctionType.List.Column.Edit")
+                            </th>
+                            <th class="header">
+                                @Localizer("ProcessFunction.ListFunctionType.List.Column.Delete")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            var number = 0;
+                            foreach (var type in Model)
+                            {
+                                number += 1;
+                                <tr>
+                                    <td>
+                                        @number
+                                    </td>
+                                    <td>
+                                        @type.Name
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink(Localizer("Common.Label.Edit"), "EditFilter", new { Id = type.ProcessFunctionFilterId })
+                                    </td>
+                                    <td>
+                                        <a href="javascript:deleteFilter(@(type.ProcessFunctionFilterId))">@Localizer("ProcessFunction.ListFunctionType.List.Column.Delete.Button")</a>
+                                        <form id="formdelete@(type.ProcessFunctionFilterId)" style="display: none" action="@Url.Action("DeleteFilter", new { Id = type.ProcessFunctionFilterId })" method="POST">
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" data-res="egov.resources.processfunction.nofilter">
+                                    Không có bộ lọc nào
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>

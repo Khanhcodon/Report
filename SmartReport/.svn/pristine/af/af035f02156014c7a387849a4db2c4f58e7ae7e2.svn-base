@@ -1,0 +1,37 @@
+﻿@model  Bkav.eGovCloud.Areas.Admin.Models.OfficeModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Office.Create");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script>
+    backUrl = "/admin/Office";
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span>Đơn vị</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/office">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_Notifications")
+    <div id="divListOffice">
+        @{
+    Html.RenderPartial("_CreateOrEdit", Model);
+        }
+    </div>
+}
+

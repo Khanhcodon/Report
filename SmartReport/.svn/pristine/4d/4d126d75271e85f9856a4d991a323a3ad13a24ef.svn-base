@@ -1,0 +1,36 @@
+﻿<td>
+    <label class="checkbox document-color {{if isCheck }} checked{{/if}}">
+        <input name="checkbox[]" value="${docCopyId}"
+               type="checkbox" class="chkrelationdocument"
+               {{if canView == false }} disabled="disabled" {{/if}} {{if isCheck }} checked="checked" {{/if}}>
+        <span class="document-color-1">
+            <i class="icon-check glyphicon"></i>
+        </span>
+    </label>
+</td>
+<td class="wraptext" style="max-width: 150px">
+    <span class="doccode" title="${docCode}">${docCode}</span>
+</td>
+<td class="wraptext" style="max-width: 350px">
+    <span class="compendium" title="${compendium}">${compendium}</span>
+</td>
+<td class="wraptext" style="max-width: 150px">
+    <span class="citizenname" title="${citizenName}">${citizenName}</span>
+</td>
+<td class="wraptext" style="max-width: 200px">
+    <span class="address" title="${address}">${address}</span>
+</td>
+<td class="wraptext col-extend-info phone">
+    <span title="${phone}">${phone}</span>
+</td>
+<td class="wraptext col-extend-info idcard" style="display: none">
+    <span title="${idCard}">${idCard}</span>
+</td>
+<td class="wraptext col-extend-info email" style="display: none">
+    <span title="${email}">${email}</span>
+</td>
+<td>
+    {{if canView }}
+    <span class="icon icon-eye"></span>
+    {{/if}}
+</td>

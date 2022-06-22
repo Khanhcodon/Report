@@ -1,0 +1,35 @@
+﻿{{if isRelationDoc}}
+<td>
+    <label class="checkbox document-color">
+        <input name="checkbox[]" value="${DocumentCopyId}" type="checkbox">
+        <span class="document-color-1"><i class="icon-check glyphicon"></i></span>
+    </label>
+</td>
+<td class="wraptext">${DocCode}</td>
+<td class="wraptext">${ExtendInfo.InOutCode}</td>
+<td class="wraptext">${Title}</td>
+<td class="wraptext">${ExtendInfo.Organization}</td>
+<td class="wraptext">${DateArrivedStr}</td>
+<td class="wraptext">${ExtendInfo.CurrentUsername}</td>
+<td class="wraptext">${CategoryName}</td>
+{{else}}
+<td class="wraptext">${Index}</td>
+<td class="wraptext">${Title}</td>
+<td class="wraptext">${DocCode}</td>
+<td class="wraptext">${CategoryName}</td>
+<td class="wraptext">${ExtendInfo.Organization}</td>
+<td class="wraptext">${DateArrivedStr}</td>
+<td class="wraptext">${UserSuccessName}</td>
+<td class="wraptext">${ExtendInfo.CreatedUserName}</td>
+{{/if}}
+{{if ExtendInfo.Status==1}}
+    <td class="wraptext" ><span>Chờ duyệt</span></td>
+{{else  ExtendInfo.Status==2}}
+    <td class="wraptext" ><span style="background-color: #dce8f8; border-radius: 4px; padding: 4px 8px;color: blue;">Đang xử lý</span></td>
+{{else  ExtendInfo.Status==4}}
+    <td class="wraptext" data-res="egov.resources.search.status4"></td>
+{{else  ExtendInfo.Status==8}}
+    <td class="wraptext" data-res="egov.resources.search.status8"></td>
+{{else  ExtendInfo.Status==16}}
+    <td class="wraptext" data-res="egov.resources.search.status16"></td>
+{{/if}}

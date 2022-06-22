@@ -1,0 +1,224 @@
+﻿
+<script type="text/x-jquery-tmpl" id="calendarTemplate">
+    <tr>
+        <td rowspan="${Count -1}" style="border: 1px solid #e7e9fd; font-weight:bold; padding: 8px;">
+            ${Date}
+        </td>
+    {{each Calendars}}
+    {{if Contents.length == 1}}
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            <span class="timestart">${Time}</span>
+            <span class="title">
+                ${Title}
+                {{if Contents[0].Content != ''}}
+                <br />${Contents[0].Content}
+                {{/if}}
+            </span>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            ${Contents[0].Department}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            <div class="userPrimaryList list-group">
+                {{html Contents[0].UserPrimary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            ${Contents[0].Joined}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            <div class="userPrimaryList list-group">
+                {{html Contents[0].UserSecondary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; text-align:center">
+            ${Place}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            ${Contents[0].Prepare}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;">
+            ${Contents[0].Note}
+        </td>
+    </tr>
+    {{else}}
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;">
+            <span class="timestart">${Time}</span>
+            <span class="title">${Title}</span>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;"></td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px;  border-top: 0;border-bottom: 0;">
+            <div class="userPrimaryList list-group">
+                {{html Contents[0].UserPrimary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;">${Contents[0].Joined}</td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            <div class="userSecondaryList list-group">
+                {{html Contents[0].UserSecondary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0; text-align: center">${Place}</td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;border-top: 0;border-bottom: 0;"></td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;"></td>
+    </tr>
+    {{each Contents}}
+    <tr class="detail">
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            ${Content}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            ${Department}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            <div class="userPrimaryList list-group">
+                {{if $index > 0 }}
+                {{html UserPrimary}}
+                {{/if}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            {{if $index > 0 }}
+            ${Joined}
+            {{/if}}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            <div class="userPrimaryList list-group">
+                {{if $index > 0 }}
+                {{html UserSecondary}}
+                {{/if}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;"></td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;border-top: 0;border-bottom: 0;">
+            ${Prepare}
+        </td>
+        <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+            ${Note}
+        </td>
+    </tr>
+    {{/each}}
+    {{/if}}
+    {{/each}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="calendarManagerTemplate">
+    <tr>
+        <td class="boldtext" colspan="10">
+            ${Date}
+        </td>
+    </tr>
+    {{each Calendars}}
+    {{if Contents.length == 1}}
+    <tr >
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            <span class="timestart">${Time}</span> tại <span class="place">${Place}</span> <br>
+            <span class="title">
+                ${Title}
+                {{if Contents[0].Content != ''}}
+                <br />${Contents[0].Content}
+                {{/if}}
+            </span>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            ${Contents[0].Department}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            <div class="userPrimaryList list-group">
+                {{html Contents[0].UserPrimary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            ${Contents[0].Joined}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            <div class="userSecondaryList list-group">
+                {{html Contents[0].UserSecondary}}
+            </div>
+        </td>
+        <td class="text-center" style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            ${Place}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">
+            ${Contents[0].Prepare}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; ">${Contents[0].Note}</td>
+        <td class="text-center">
+            {{if $value.IsAccepted == null || $value.IsAccepted == false}}
+            <a href="#" class="btn btn-default btn-xs viewDetail" data-id="${CalendarId}">Sửa</a>
+            {{/if}}
+            {{if IsPrivate || ($value.IsAccepted == null && $value.IsMe)}}
+            <a href="#" class="btn btn-danger btn-xs delete" data-id="${CalendarId}">Xóa</a>
+            {{else IsAdmin}}
+            <a href="#" class="btn btn-danger btn-xs delete" data-id="${CalendarId}">Xóa</a>
+            {{if $value.IsAccepted == null || $value.IsAccepted == false}}
+            <br /><br /><a href="#" class="btn btn-primary btn-xs accept" data-accept="true" data-id="${CalendarId}">Duyệt Lịch</a>
+            {{/if}}
+            {{if $value.IsAccepted}}
+            <br /><br /><a href="#" class="btn btn-default btn-xs accept" data-accept="false" data-id="${CalendarId}">Bỏ duyệt</a>
+            {{/if}}
+            {{/if}}
+        </td>
+    </tr>
+    {{else}}
+    <tr class="detail"  style="border: 1px solid #e7e9fd;  padding: 8px;">
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;">
+            <span class="timestart">${Time}</span><br>
+            <span class="title">${Title}</span>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px; "></td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+        <td class="text-center" style="border: 1px solid #e7e9fd;  padding: 8px;">${Place}</td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+        <td class="text-center" style="border: 1px solid #e7e9fd;  padding: 8px;">
+            {{if $value.IsAccepted == null || $value.IsAccepted == false}}
+            <a href="#" class="btn btn-default btn-xs viewDetail" data-id="${CalendarId}">Sửa</a>
+            {{/if}}
+            {{if IsAdmin}}
+            <a href="#" class="btn btn-danger btn-xs delete" data-id="${CalendarId}">Xóa</a>
+            {{if $value.IsAccepted == null || $value.IsAccepted == false}}
+            <br /><br /><a href="#" class="btn btn-primary btn-xs accept" data-accept="true" data-id="${CalendarId}">Duyệt Lịch</a>
+            {{/if}}
+            {{if !$value.IsPrivate && $value.IsAccepted}}
+            <br /><br /><a href="#" class="btn btn-default btn-xs accept" data-accept="false" data-id="${CalendarId}">Bỏ duyệt</a>
+            {{/if}}
+            {{/if}}
+        </td>
+    </tr>
+    {{each Contents}}
+    <tr class="detail">
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            ${Content}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            ${Department}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            <div class="userPrimaryList list-group">
+                {{html UserPrimary}}
+            </div>
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            ${Joined}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            <div class="userSecondaryList list-group">
+                {{html UserSecondary}}
+            </div>
+        </td>
+        <td class="text-center" style="border: 1px solid #e7e9fd;  padding: 8px;">
+            ${Place}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">
+            ${Prepare}
+        </td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;">${Note}</td>
+        <td style="border: 1px solid #e7e9fd;  padding: 8px;"></td>
+    </tr>
+    {{/each}}
+    {{/if}}
+    {{/each}}
+</script>

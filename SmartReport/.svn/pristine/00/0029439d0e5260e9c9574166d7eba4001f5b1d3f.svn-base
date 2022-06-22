@@ -1,0 +1,33 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.WorkflowModel
+@{
+    ViewBag.Title = Localizer("Common.Workflow.Label.Edit");
+    Layout = "~/Areas/Admin/Views/Workflow/_EditMain.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        $(".tab-workflow").addClass("active");
+        $(".tab-workflow").siblings().removeClass("ui-tabs-selected ui-state-active");
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-shuffle"></i>
+        <span data-res="egov.resources.sitemap.configworkflow"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/Workflow/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @Html.Partial("_CreateOrEdit", Model)
+</div>
+

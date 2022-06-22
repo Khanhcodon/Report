@@ -1,0 +1,141 @@
+﻿@{
+    Layout = null;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.min.js")"></script>
+
+<style type="text/css">
+    .setting-list a {
+        /*font-size: 15px;*/
+        padding: 10px 5px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).bindResources();
+        $('.setting-list > a').on('click', function () {
+            if ($(this).is(".active")) {
+                return;
+            }
+
+            $(this).siblings('.active').removeClass('active');
+            $(this).addClass('active');
+
+            $("#menuRight").html('<img class="loading" src="../Content/bkav.egov/images/ajax-loader.gif" alt="loading"/>');
+        });
+
+        ///Nút submit form ở dialog
+        $('#btnUpdateSetting').on('click', function () {
+            $('form', '#menuRight').trigger('submit');
+        });
+    });
+
+    function onSubmit() {
+        changeBmailResource($("input[name=Language]:checked").val());
+    }
+
+    ///Hàm call back khi update thanhg công!
+    function onSuccess() {
+        $('#reloadPage').modal({
+            backdrop: false,
+            show: true,
+            keyboard: true
+        });
+    }
+
+    function onError() { }
+</script>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span><span class="sr-only">x</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel" data-res="egov.resources.setting.title"></h4>
+</div>
+<div class="modal-body">
+    <div class="row full-height">
+        <div class="col-md-3 full-height">
+            <div class="list-group setting-list">
+                <a class="list-group-item active" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("ProfileConfig", "Account")"
+                   data-res="egov.resources.setting.ProfileConfig"></a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("Changepassword", "Account")"
+                   data-res="egov.resources.setting.Changepassword"></a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("ResetPasswordSettings", "Account")">Thiết lật đặt lại mật khẩu</a>
+                <a class="list-group-item hidden" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("UserSetting", "Account")"
+                   data-res="egov.resources.setting.UserSetting"></a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("Signature", "Account")"
+                   data-res="egov.resources.setting.SignatureSetting"></a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("Authorizes", "Account")"
+                   data-res="egov.resources.setting.AuthorizesSetting"></a>
+                <a class="list-group-item hidden" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("TransferSettings", "Account")"
+                   data-res="egov.resources.setting.TransferSettings"></a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("NotifySettings", "Account")">Trung tâm Thông báo</a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("GeneralSettings", "Account")">Thiết lập Chung</a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("LoginHistory", "Account")">Quản lý thiết bị</a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("Index", "Referendum")">Trưng cầu ý kiến</a>
+                <a class="list-group-item" data-ajax="true" data-ajax-method="Get"
+                   data-ajax-begin="" data-ajax-failure="" data-ajax-success=""
+                   data-ajax-update="#menuRight" data-ajax-mode="replace"
+                   href="@Url.Action("VersionInfo", "Account")">Thông tin phiên bản</a>
+            </div>
+        </div>
+        <div class="col-md-13 full-height" id="menuRight">
+            @Html.Action("ProfileConfig", "Account")
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary" id="btnUpdateSetting" onclick="onSubmit()" data-res="egov.resources.submitBtn"></button>
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseSetting" data-res="egov.resources.closeBtn"></button>
+</div>
+
+<div class="modal" id="reloadPage" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: auto; height: 150px; position: absolute; top: 25%; left: 30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-res="egov.resources.titleMessage"></h4>
+            </div>
+            <div class="modal-body"><b data-res="egov.resources.reloadMessage"></b></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" onclick="resetApplication();" type="submit" data-res="egov.resources.submitBtn"></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-res="egov.resources.closeBtn"></button>
+            </div>
+        </div>
+    </div>
+</div>

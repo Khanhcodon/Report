@@ -1,0 +1,137 @@
+﻿@{
+    Layout = null;
+    var offices = ViewBag.Offices as IEnumerable<Bkav.eGovCloud.Controllers.StatisticsController.Office>;
+    var currentUser = ViewBag.CurrentUser as Bkav.eGovCloud.Business.Objects.CurrentUserCached;
+    var isQuanTriTapTrung = (bool)ViewBag.IsQuanTriTapTrung;
+    var isHSMC = (bool)ViewBag.IsHSMC;
+}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <div class="form-group form-group-sm" style="margin-top: 15px;margin-right: 50px;">
+                    <div class="radio-inline">
+                        <label class="navbar-link" for="">
+                            @if(isHSMC){
+                            <text>
+                                <input type="radio" class="autosubmit" id="IsXlvb" name="IsXlvb" value="IsXlvb" onclick='location.href="/Statistics/Index"'>
+                            </text>
+                            }else{
+                            <text>
+                                <input type="radio" class="autosubmit" id="IsXlvb" name="IsXlvb" value="IsXlvb" checked onclick='location.href="/Statistics/Index"'>
+                            </text>
+                            }
+                            XLVB
+                        </label>
+                    </div>
+                    <div class="radio-inline">
+                        <label class="navbar-link" for="">
+                            @if(isHSMC){
+                            <text>
+                                <input type="radio" class="autosubmit" id="IsHsmc" name="IsHsmc" value="IsHsmc" checked onclick='location.href="/Statistics/Hsmc"'>
+                            </text>
+                            }else{
+                            <text>
+                                <input type="radio" class="autosubmit" id="IsHsmc" name="IsHsmc" value="IsHsmc" onclick='location.href="/Statistics/Hsmc"'>
+                            </text>
+                            }
+                            HSMC
+                        </label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">            
+            <ul class="nav navbar-nav">
+                <li>
+                    <div class="form-group form-group-sm hidden" style=" margin-top: 15px;margin-right: 20px;">                        
+                        <div class="checkbox-inline">
+                            <label class="navbar-link" for="HasTonKyTruoc">
+                                <input type="checkbox" class="autosubmit" id="HasTonKyTruoc" value="true">
+                                Tồn kỳ trước
+                            </label>
+                        </div>
+                    </div>
+                </li>
+              @if (isQuanTriTapTrung)
+              {
+                if(isHSMC){
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span id="officeConditionCurrent">Tất cả cơ quan</span> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" id="officeConditions">
+                        <li><a href="#" value="0">Tất cả cơ quan</a></li>
+                        <li role="separator" class="divider"></li>
+                        <!--Check tai khoan ThomDV-->
+                        @if (@currentUser.Username.Equals("motcua-stnmta"))
+                        {
+                            foreach (var office in offices)
+                            {
+                                <li><input type="checkbox" id="@office.OfficeId" value="@office.OfficeName" /> @office.OfficeName</li>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var office in offices)
+                            {
+                                <li><a href="#" value="@office.OfficeId">@office.OfficeName</a></li>
+                            }
+                        }
+
+                    </ul>
+                </li>
+                }
+              }
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span id="dateConditionCurrent">Trong tháng</span> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" id="dateConditions">
+                        <li><a href="#" type="1">Trong ngày</a></li>
+                        <li><a href="#" type="2">Trong tuần</a></li>
+                        <li><a href="#" type="3">Trong tháng</a></li>
+                        <li><a href="#" type="4">Trong quý</a></li>
+                        <li><a href="#" type="5">Trong năm</a></li>
+                        <li><a href="#" type="6">Tùy chọn thời gian</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="navbar-form navbar-right">
+                <div class="form-group form-group-sm">
+                    <input type="text" class="form-control input-sm" placeholder="Từ ngày" id="from" style="width: 120px;">
+                </div>
+                <div class="form-group form-group-sm">
+                    <input type="text" class="form-control input-sm" placeholder="Đến ngày" id="to" style="width: 120px;">
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="btnReport">Xem thống kê</button>
+                <button id="clearCache" class="btn btn-default btn-sm">Xóa cache</button>
+            </div>
+            <div class="navbar-form navbar-right statistics-time ">
+                <select id="monthSelect" class="form-control input-sm hidden">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                </select>
+                <select id="quarterSelect" class="form-control input-sm hidden">
+                    <option value="1">Quý 1</option>
+                    <option value="2">Quý 2</option>
+                    <option value="3">Quý 3</option>
+                    <option value="4">Quý 4</option>
+                </select>
+                <select id="yearSelect" class="form-control input-sm hidden"></select>
+            </div>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

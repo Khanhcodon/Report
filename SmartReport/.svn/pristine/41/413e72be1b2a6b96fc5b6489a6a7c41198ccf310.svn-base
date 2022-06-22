@@ -1,0 +1,287 @@
+﻿@model Bkav.eGovCloud.Models.BusinessLicenseModel
+@using Bkav.eGovCloud.Entities
+@{
+    var allbusinesstype = ViewBag.AllBusinessType as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.BusinessTypeModel>;
+    var allbusiness = ViewBag.AllBusiness as string;
+    var allfield = ViewBag.AllDocField as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DocFieldModel>;
+    var doctype = ViewBag.DocType as Bkav.eGovCloud.Areas.Admin.Models.DocTypeModel;
+    var search = ViewBag.Search as Bkav.eGovCloud.Models.BusinessSearchModel;
+}
+<script type="text/javascript">
+    var allBusinesses = @(string.IsNullOrEmpty(allbusiness) ? MvcHtmlString.Create("[]") : Html.Raw(allbusiness));
+    $(function () {
+        $("#RegisDate,#IssueDate,#ExpireDate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        $("#BusinessTypeId").change(function (event) {
+            var businessTypeId = $(this).val();
+            $.get("@Url.Action("BusinessTypeChange")", 
+                { businessTypeId: businessTypeId },
+                function (result) {                
+                    if(result) 
+                    {                                          
+                        allBusinesses = JSON.parse(result.AllBusiness);                           
+                    }
+                }
+            )
+            .complete(function () {                
+            })
+            .fail(function () {
+                messageTemp({ message: 'Có lỗi xảy ra', type: 'error' });
+            });
+        });  
+
+        $("#BusinessName").autocomplete({
+            minLength: 1,
+            source: allBusinesses,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+//            change: function( event, ui ) {
+//                alert("lkfdja");
+//            },
+            select: function(event, ui) {                
+                $(this).val(ui.item.label);
+                $("#BusinessId").val(ui.item.value);
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#BusinessName").change(function (event) {
+            var businessname = $(this).val();
+            var isExisted = false; 
+            for( var i = 0; i<allBusinesses.length; i++)
+            {
+                if (allBusinesses[i].label === businessname) {
+                    isExisted = true;
+                    return;
+                }
+            }
+            if (!isExisted) {
+                $(".add-business").show();
+            }
+        });  
+         
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var filename = data.files[0].name;
+                //                if (filename.indexOf(".rpt", filename - ".rpt".length) !== -1) {
+                $("#LicensePath").text(filename);
+                data.submit();
+                //                }
+                //                else {
+                //                    alert("Chỉ cho phép tải lên tệp *.rpt");
+                //                }
+            },
+            done: function (e, data) {
+                var result = data.result[0].Result;
+                var file = {};
+                file[result.key] = result.name;
+                $("#FilePath").val(JSON.stringify(file));
+            },
+            fail: function (e, data) {
+                $("#LicensePath").text("Tải file lỗi");
+            }
+        });
+    });
+</script>
+@Html.ValidationSummary(true)
+@Html.AntiForgeryToken()
+@Html.HiddenFor(model => model.BusinessLicenseId)
+<input type="hidden" name="DocumentCopyId" id="DocumentCopyId" value="@ViewBag.DocCopyId"/>
+<fieldset>
+    <legend>Doanh nghiệp</legend>
+    <table style="width: 100%;">
+        <colgroup>
+            <col width="180px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                Loại hình doanh nghiệp:
+            </td>
+            <td>
+                <select id="BusinessTypeId" name="BusinessTypeId" style="width: 306px" @(Model.BusinessLicenseId > 0 ? "disabled='disabled'" : "")>
+                    @if (allbusinesstype != null && allbusinesstype.Any())
+                    {
+                        foreach (var businesstype in allbusinesstype)
+                        {
+                        <option value="@businesstype.BusinessTypeId" @(search.BusinessTypeId != null && search.BusinessTypeId == businesstype.BusinessTypeId ? "selected='selected'" : "")>@businesstype.BusinessTypeName</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.BusinessId):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BusinessName,
+                new { style = "width:300px" })
+                @Html.HiddenFor(model => model.BusinessId)
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <span class="add-business" style="display: none;">Doanh nghiệp không có trên hệ thống.
+                    Vui lòng thêm <a href="#" id="addBusinesses">@Localizer("BusinessLicense.CreateOrEdit.Link.Business")
+                    </a>.</span>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Loại giấy phép</legend>
+    <table style="width: 100%;">
+        <colgroup>
+            <col width="180px" />
+            <col />
+        </colgroup>
+        @*<tr>
+            <td>
+                Lĩnh vực:
+            </td>
+            <td>
+                <select id="DocFieldId" name="DocFieldId" style="width: 306px" @(Model.BusinessLicenseId > 0 ? "disabled='disabled'" : "")>
+                    @if (allfield != null && allfield.Any())
+                    {
+                        foreach (var docfield in allfield)
+                        {
+                        <option value="@docfield.DocFieldId" @(search.DocFieldId != null && search.DocFieldId == docfield.DocFieldId ? "selected='selected'" : "")>@docfield.DocFieldName</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>*@
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DocTypeId):
+            </td>
+            <td>
+                @doctype.DocTypeName
+                <input type="hidden" name="DocTypeId" id="DocTypeId" value="@doctype.DocTypeId"/>
+                @*<select id="DocTypeId" name="DocTypeId" style="width: 306px" @(Model.BusinessLicenseId > 0 ? "disabled='disabled'" : "")>
+                    @if (alldoctype != null && alldoctype.Any())
+                    {
+                        foreach (var doctype in alldoctype)
+                        {
+                        <option value="@doctype.DocTypeId" @(Model.BusinessId != null && Model.DocTypeId == doctype.DocTypeId ? "selected='selected'" : (search.DocTypeId != null && search.DocTypeId == doctype.DocTypeId ? "selected='selected'" : ""))>@doctype.DocTypeName</option>
+                        }
+                    }
+                </select>
+                @if (Model.BusinessLicenseId > 0)
+                { 
+                    @Html.HiddenFor(model => model.DocTypeId)
+                }*@
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Thông tin giấy phép</legend>
+    <table style="width: 100%;">
+        <colgroup>
+            <col width="180px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.LicenseCode):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.LicenseCode, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.LicenseCode)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.LicenseNumber):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.LicenseNumber, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.LicenseNumber)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.RegisDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.RegisDate, new { style = "width:280px", value = "" })
+                @Html.ValidationMessageFor(model => model.RegisDate)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IssueDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IssueDate, new { style = "width:280px", value = "" })
+                @Html.ValidationMessageFor(model => model.IssueDate)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ExpireDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ExpireDate, new { style = "width:280px", value = Model.ExpireDate.ToShortDateString() })
+                @Html.ValidationMessageFor(model => model.ExpireDate)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.LicenseStatusId):
+            </td>
+            <td>
+                <select id="LicenseStatusId" name="LicenseStatusId" style="width: 306px" @(Model.BusinessLicenseId > 0 ? "disabled='disabled'" : "")>
+                    @foreach (var licenseStatus in ViewBag.AllLicenseStatus as List<SelectListItem>)
+                    { 
+                        <option value="@licenseStatus.Value" @(Model.LicenseStatusId != null && Model.LicenseStatusId.ToString() == licenseStatus.Value ? "selected ='selected'" : "") >@licenseStatus.Text</option>
+                    }
+                </select>
+                @if (Model.BusinessLicenseId > 0)
+                { 
+                    @Html.HiddenFor(model => model.LicenseStatusId)
+                }
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Tài liệu liên quan</legend>
+    <table style="width: 100%;">
+        <colgroup>
+            <col width="180px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                Giấy tờ đính kèm:
+            </td>
+            <td>
+                <strong><span id="LicensePath"></span></strong>
+                @Html.HiddenFor(model => model.FilePath)
+                <input type="button" value="Upload" onclick="$('#upload').click()" />
+                <input type="file" name="files" id="upload" style="display: none;" data-url="@Url.Action("UploadTemp", "Attachment")"  accept="*.docx" />
+            </td>
+        </tr>
+    </table>
+</fieldset>

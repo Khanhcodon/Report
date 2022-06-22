@@ -1,0 +1,126 @@
+﻿@model Bkav.eGovCloud.Models.LoginModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    var error = ViewBag.Error as string;
+
+    var passwordPolicySettings = ViewBag.PasswordPolicySettings as Bkav.eGovCloud.Entities.Customer.PasswordPolicySettings;
+
+    var allowUsersToAutomaticallyLogin = ViewBag.AllowUsersToAutomaticallyLogin is bool && (bool)ViewBag.AllowUsersToAutomaticallyLogin;
+    var enableCaptcha = passwordPolicySettings.EnableCaptcha;
+    var captchaType = passwordPolicySettings.CaptchaType.ToString();
+    var captchaKeyNumbers = passwordPolicySettings.CaptchaKeyNumbers;
+    var lastUserInfo = ViewBag.LastUserInfo == null ? null : (ViewBag.LastUserInfo as Bkav.eGovCloud.Entities.CustomerCookieData);
+}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link href="../Content/Login/material.min.css" rel="stylesheet" />
+<link href="../Content/Mobile/login.css" rel="stylesheet" />
+
+<script src="../Scripts/bkav.egov/views/login/material.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("form").on("submit", function () {
+            $("#loginLoading").show();
+        });
+    });
+</script>
+
+<style type="text/css">
+    .mobile-app {
+        position: fixed;
+        bottom: 0;
+    }
+</style>
+<div id="loginLoading" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="display: none;"></div>
+<div class="login">
+    <div class="login-header">
+        @ViewBag.OfficeName
+    </div>
+    <div>
+        <div>
+            <form action="/Account/Login?ReturnUrl=%2f" method="post">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <p id="error">@error</p>
+
+                <div class="login-title">
+                    @if (lastUserInfo == null)
+                    {
+                        <h1>Đăng nhập</h1>
+                        <div>Để tiếp tục sử dụng eGov</div>
+                    }
+                    else
+                    {
+                        <h1>Xin chào</h1>
+                        <input type="hidden" name="Username" id="Username" class="" autocomplete="off" value="@lastUserInfo.UsernameWithDomain" />
+                        <span class="field-validation-valid mdl-textfield__error" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                        <img src="@ViewBag.LastUserAvatar" alt="" class="avatar" />
+                        <div class="usernameText">
+                            @lastUserInfo.FullName<br />
+                        </div>
+                    }
+                </div>
+
+                @if (lastUserInfo == null)
+                {
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input type="text" name="Username" id="Username" class="mdl-textfield__input" autocomplete="off" />
+                        <label class="mdl-textfield__label" for="Username">Tên đăng nhập</label>
+                        <span class="field-validation-valid mdl-textfield__error" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                    </div>
+                }
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input type="password" name="Password" id="Password" class="mdl-textfield__input" autocomplete="newpass" />
+                    <label class="mdl-textfield__label" for="Password">Mật khẩu:</label>
+                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true" style="color:red;float: right;"></span>
+                </div>
+                @if (enableCaptcha)
+                {
+                    <div id="captchaWrap">
+                        <div class="text-left">
+                            <span class="field-label" style="color:#FF6500">Nhập nội dung trên</span>
+                        </div>
+                        <div id="captcha">
+
+                            @if (captchaType == "Text")
+                            {
+                                @Html.Captcha(Localizer("Account.Captcha.Retry"), Localizer("Account.Captcha.EnterText"), @captchaKeyNumbers, "")
+                            }
+                            else if (captchaType == "Math")
+                            {
+                                @Html.MathCaptcha(Localizer("Account.Captcha.Retry"), Localizer("Account.Captcha.EnterResult"), "")
+                            }
+                        </div>
+                    </div>
+                }
+                <div>
+                    <div class="login-bottom">
+                        <input name="RememberMe" id="RememberMe" type="checkbox" class="hidden" checked />
+                        <a href="#" class="otherAccount" title="Chọn tài khoản khác">Không phải bạn?</a>
+                        <button id="login" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            Tiếp tục
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    @*<div class="mobile-app" style="">
+            <a href="https://play.google.com/store/apps/details?id=com.bkav.appegov" target="_blank"><img src="/Content/bkav.egov/images/app/google-play.png" width="120" style="margin-top: -38px;" /></a>
+        </div>*@
+</div>
+
+<script>
+    try {
+        if (eGovApp) {
+            $(".login-processing").remove();
+        }
+    } catch (e) {
+    }
+    var maximumUserInput = parseInt("@passwordPolicySettings.MaximumUserInput");
+</script>

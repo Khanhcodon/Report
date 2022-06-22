@@ -1,0 +1,18 @@
+﻿<form class="form-horizontal" role="form">
+    <!--Người dùng-->
+    <div class="form-group">
+        <div class="col-md-16">
+            <span style="font-size: 12px; font-style: italic;" data-res="">Chọn đơn vị, cá nhân tham gia thăm dò</span>
+        </div>
+        <div class="col-md-16">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="dgUserVote" data-respholder="egov.resources.transfer.dgUser" style="z-index: 1060;">
+                <div class="input-group-btn">
+                    <button type="button" id="dgUsersVote" class="btn btn-default dropdown-toggle" data-target="#FilterDepartmentVote" style="height:25px;"><span class="caret"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="filterDeparmentVote" id="FilterDepartmentVote">
+</div>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<OnlineTemplateModel>
+@{
+    Layout = null;
+}
+<table id="tblDoctypeTemplate" class="table table-bordered table-hover">
+    <colgroup>
+        <col style="width:50px" />
+        <col />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>@Localizer("Bkav.eGovCloud.Areas.Admin.DoctypeTemplate.Select")</th>
+            <th>@Localizer("Bkav.eGovCloud.Areas.Admin.DoctypeTemplate.Name")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var onlineTemplate in Model)
+        {
+            <tr>
+                <td align="center"><input type="checkbox" data-id="@onlineTemplate.OnlineTemplateId" data-name="@onlineTemplate.Name" class="choose" /></td>
+                <td>@onlineTemplate.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

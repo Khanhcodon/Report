@@ -1,0 +1,51 @@
+﻿@model IEnumerable<NotifyConfigModel>
+@{
+    var count = 0;
+}
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+   <script type="text/javascript">
+       $(function () {
+           $("#tblNotify").grid({
+               isResizeColumn: true,
+               isFixHeightContent: false
+           });
+
+           $(".table-main").addClass("table-bordered table-hover");
+       });
+</script>
+
+<table class="table-main table" id="tblNotify">
+    <colgroup>
+        <col style="width:50px"/>
+        <col />
+        <col />
+        <col style="width:50px"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th data-res="egov.resources.tableheader.stt"></th>
+            <th data-res="egov.resources.tableheader.function"></th>
+            <th data-res="egov.resources.tableheader.description"></th>
+            <th data-res="egov.resources.tableheader.edit"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var notify in Model)
+            {
+                count++;
+            <tr data-id="@notify.Key">
+                <td>@count</td>
+                <td>@notify.Key</td>
+                <td>@notify.Description</td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Button.Edit"),
+                    "UpdateNotify", new { key = notify.Key, isMail = (bool)ViewBag.IsMail })
+                </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>

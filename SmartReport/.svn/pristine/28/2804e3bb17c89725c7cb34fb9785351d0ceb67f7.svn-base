@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "PreViewReceipt";
+}
+
+<h2>PreViewReceipt</h2>

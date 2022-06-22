@@ -1,0 +1,313 @@
+﻿@model IEnumerable<AddressModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var listGroupName = ViewBag.GroupNames as IEnumerable<string>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+
+    <style>
+        .list-group-item.active{
+            background: #abc9ff;
+        }
+    </style>
+<script type="text/javascript">
+    $(function () {
+        $("#tblAddress").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblAddress").openLink({ urlOpen: '/admin/Address/Edit' });
+        $(".table-main").addClass("table-bordered");
+        var check = false;
+        $('.set-all-group-name').change(function () {
+            var checkboxes = $(this).closest('body').find('.set-group-name');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+        $("#saveGroupName").click(function () {
+            var listId = [];
+             $(".set-group-name:checked").each(function () {
+                var $this = $(this);
+                listId.push($this.val());
+            })
+             $("#listId").val(JSON.stringify(listId));
+             $("#myModal").submit();
+        })
+    })
+    if (that.model.get("IsEdit")) {
+        var appModel = $("#listId").val();
+    }
+</script>
+                      <!-- Trigger the modal with a button -->
+                      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Gộp nhóm</button>
+
+                      <!-- Modal -->
+                      <form id="myModal" class="modal fade" role="dialog" action="/Admin/Address/UpdateGroupName" method="post">
+                          <div class="modal-dialog">
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      <h4 class="modal-title">Nhóm các cơ quan</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div class="form-horizontal">
+                                          <div class="form-group">
+                                              <label class="control-label col-sm-4" for="pwd">Tên nhóm:</label>
+                                              <div class="col-sm-12">
+                                                  <input style="width:100%" type="text" name="groupName" class="form-control" id="pwd" placeholder="Tên nhóm các cơ quan được chọn thuộc vào">
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <label class="control-label col-sm-16" style="text-align:center; font-weight:bold">Chọn trong danh sách:</label>
+                                          </div>
+                                          <div class="form-group">
+                                              <div class="well" style="max-height: 300px;overflow: auto;">
+                                                  <ul class="list-group checked-list-box">
+                                                      @foreach (var item in listGroupName)
+                                                      {
+                                                        <li class="list-group-item">@item</li>
+                                                      }
+                                                  </ul>
+                                              </div>
+                                             <ul>
+                                               
+                                             </ul>
+                                          </div>
+                                          <input type="hidden" name="listAddressId" class="form-control" id="listId" placeholder="Tên nhóm các cơ quan được chọn thuộc vào">
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <span class="pull-left"><input type="checkbox" name="isOverride" value="" /> Cho phép ghi đè nhóm</span>
+    <button type="button" class="btn btn-submit" id="saveGroupName">Lưu</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+                              </div>
+
+                          </div>
+                      </form>
+    <table class="table table-bordered table-hover" id="tblAddress" style="width: 100%">
+        <colgroup>
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+            <col style="width: 150px" />
+            <col />
+            <col />
+            <col />
+            <col style="width: 150px" />
+            @*<col style="width: 150px" />*@
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup> 
+        <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" class="set-all-group-name" name="name" value="" />
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.Numbers")
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.EdocId")
+                    </th>
+                    <th class="header">
+                        @Ajax.SortLink("Name", Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.Name"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    search = ViewBag.Search,
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divListAddress",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.Address")
+                    </th>
+                     <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.IsMe")
+                    </th>
+                    <th class="header">
+                        Tên nhóm
+                    </th>
+                    @*<th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.SyncDocType")
+                    </th>*@
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.Edit")
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Address.Index.List.Column.Delete")
+                    </th>
+                </tr>
+            </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var address in Model)
+                {
+                    number += 1;
+                <tr data-id="@address.AddressId">
+                    <td>
+                        <input type="checkbox" name="name" class="set-group-name" value="@address.AddressId" />
+                    </td>
+                    <td>@number
+                    </td>
+                    <td class="td-filter">
+                        @address.EdocId
+                    </td>
+                    <td class="td-filter">
+                        @address.Name
+                    </td>
+                    <td>
+                        @address.AddressString
+                    </td>
+                     <td>
+                        @(address.IsMe ? "X" : "")
+                    </td>
+                    <td>
+                        @address.GroupName
+                    </td>
+                    @*<td>
+                        @if(!address.IsMe){
+                            @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.address.Index.List.Column.SyncDocType.Button"), "SyncDocType", new { id = address.AddressId })
+                        }
+                    </td>*@
+                    <td>
+                        @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.address.Index.List.Column.Edit.Button"), "Edit", new { id = address.AddressId })
+                    </td>
+                    <td>
+                        <a href="javascript:deleteAddress(@(address.AddressId))"> 
+                            @Localizer("Bkav.eGovCloud.Areas.Admin.address.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(address.AddressId)" style="display: none" 
+                            action="@Url.Action("Delete", new { Id = address.AddressId })" method="POST">
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">@Localizer("Customer.Address.List.Null")
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td  colspan="8" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                                        sortAndPage.TotalRecordCount, "SortAndPaging",
+                                        "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                                        new
+                                            {
+                                                search = ViewBag.Search,
+                                                sortBy = sortAndPage.SortBy,
+                                                isSortDesc = sortAndPage.IsSortDescending
+                                            },
+                                        new AjaxOptions
+                                            {
+                                                UpdateTargetId = "divListAddress",
+                                                OnBegin = "onBegin",
+                                                OnSuccess = "onSuccess",
+                                                OnFailure = "onFailure"
+                                            }, listPageSize)
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+<script>
+    $(function () {
+        var listGroup = [];
+
+        $('.list-group.checked-list-box .list-group-item').each(function () {
+            // Settings
+            var $widget = $(this),
+                $checkbox = $('<input type="checkbox" class="hidden" />'),
+                color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                settings = {
+                    on: {
+                        icon: 'glyphicon glyphicon-check'
+                    },
+                    off: {
+                        icon: 'glyphicon glyphicon-unchecked'
+                    }
+                };
+
+            $widget.css('cursor', 'pointer')
+            $widget.append($checkbox);
+
+            // Event Handlers
+            $widget.on('click', function () {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                $checkbox.triggerHandler('change');
+                var isChecked = $checkbox.is(':checked');
+                var text = $widget.text();
+                updateDataGroup(isChecked, text)
+                updateDisplay();
+            });
+            $checkbox.on('change', function () {
+                updateDisplay();
+            });
+
+
+            // Actions
+            function updateDisplay() {
+                var isChecked = $checkbox.is(':checked');
+               
+                // Set the button's state
+                $widget.data('state', (isChecked) ? "on" : "off");
+
+                // Set the button's icon
+                $widget.find('.state-icon')
+                    .removeClass()
+                    .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                // Update the button's color
+                if (isChecked) {
+                    $widget.addClass(style + color + ' active');
+                } else {
+                    $widget.removeClass(style + color + ' active');
+                }
+            }
+
+            function updateDataGroup(isChecked, text) {
+                if (isChecked) {
+                    listGroup.push(text);
+                } else {
+                    var index = listGroup.indexOf($widget.text());
+                    if (index > -1) {
+                        listGroup.splice(index, 1);
+                    }
+                }
+                var name = listGroup.join(";");
+                $("#pwd").val(name)
+            }
+
+            // Initialization
+            function init() {
+
+                if ($widget.data('checked') == true) {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                }
+
+                updateDisplay();
+
+                // Inject the icon if applicable
+                if ($widget.find('.state-icon').length == 0) {
+                    $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span> ');
+                }
+            }
+            init();
+        });
+    });
+</script>

@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = ""@Localizer("Common.Error")"";
+}
+
+@{
+    const string errorKey = "notifications.Error";
+    var errorMessages = new List<string>();
+    if (TempData[errorKey] != null)
+    {
+        errorMessages.AddRange(TempData[errorKey] as IList<string>);
+    }
+    if (ViewData[errorKey] != null)
+    {
+        errorMessages.AddRange(ViewData[errorKey] as IList<string>);
+    }
+}
+@if (errorMessages.Any())
+{
+    foreach (var message in errorMessages)
+    {
+            <h2>@message</h2>
+    }
+}

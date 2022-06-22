@@ -1,0 +1,64 @@
+﻿@model BackupRestoreManagerModel
+
+@using (Html.BeginForm(Model.BackupRestoreManagerId == 0 ? "Create" : "Edit", "BackupRestoreManager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+  
+    @Html.HiddenFor(model => model.BackupRestoreManagerId)
+    <table id="timeJobInfo" style="width: 100%">
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Domain):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Domain)
+                @Html.ValidationMessageFor(model => model.Domain)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Alias):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Alias)
+                @Html.ValidationMessageFor(model => model.Alias)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelFor(model => model.ZipPassword):
+            </td>
+            <td>
+                @Html.Password("ZipPassword", @Model.ZipPassword)
+                @Html.ValidationMessageFor(model => model.ZipPassword)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelFor(model => model.IsDatabaseFile):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsDatabaseFile)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div>
+                    <input type="file" name="fileUpload" multiple="multiple" />
+                    @Html.ValidationMessage("fileUpLoadError")
+                </div>
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Description):
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </td>
+        </tr>
+    </table>
+}

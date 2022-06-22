@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Entities.Customer.DoctypePaper>
+@{
+    Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+    var count = 0;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#submit").remove();
+        $(".tab-paper").addClass("active");
+        $(".tab-paper").siblings().removeClass(" ui-tabs-selected ui-state-active");
+    });
+    function deleteDoctypePaper(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Code.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            width: 800,
+            height: 400,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: [
+                {
+                    'id': "btnRefresh",
+                    text: "@Html.Raw(Localizer("Common.Refresh.Label"))",
+                    click: function () {
+                        $("#my-dialog").load(url);
+                    }
+                },
+                {
+                    'id': "btnCreate",
+                    text: "@Html.Raw(Localizer("Common.Create.Label"))",
+                    click: function () {
+                        window.open("@Url.Action("Create", "Paper")")
+                    }
+                },
+                {
+                    text: "@Html.Raw(Localizer("Common.Label.Select"))",
+                    click: function () {
+                        $("#tblPaper .chose[type=checkbox]").each(function () {
+                            if ($(this).is(":checked")) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/admin/Doctype/AddPaper",
+                                    data: {
+                                        'doctypeId': '@ViewBag.DoctypeId',
+                                        'paperId': $(this).data("id")
+                                    },
+                                }).success(function () {
+                                    location.reload(true);
+                                });
+                            }
+                        }
+                );
+                        $("#my-dialog").dialog("close");
+                    }
+                }
+            ]
+        });
+    }
+    function changeRequire(doctypePaperId) {
+        $.ajax({
+            url: "@Url.Action("ChangePaperRequire")",
+            type: "POST",
+            data: { doctypePaperId: doctypePaperId },
+            success: function (result) {
+                window.location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+</script>
+<div id="my-dialog">
+</div>
+<button class="btn"type="button" onclick="openDialog('@Url.Action("DisplayPapers", "Doctype", new { id = ViewBag.DocTypeId })')">
+    Thêm Giấy tờ</button>
+<div>
+    <table class="table table-bordered table-hover" id="tblPaperInDoctype">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 80px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên giấy tờ</th>
+                <th>Bắt buộc</th>
+                <th>Xóa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctypePaper in Model)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@doctypePaper.Paper.PaperName</td>
+                    <td align="center">
+                        <input type="checkbox" onchange="changeRequire(@doctypePaper.Id)" @((doctypePaper.IsRequired.HasValue && doctypePaper.IsRequired.Value) ? "checked" : "") />
+                    </td>
+                    <td>
+                        <a href="javascript:deleteDoctypePaper('@(doctypePaper.Id)')">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(doctypePaper.Id)" style="display: none" action="@Url.Action("DeleteDoctypePaper", new { doctypeId = ViewBag.DoctypeId, doctypePaperId = doctypePaper.Id })" method="POST"></form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

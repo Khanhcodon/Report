@@ -1,0 +1,216 @@
+﻿@model IEnumerable<DocTypeModel>
+@{
+    ViewBag.Title = Localizer("Common.Doctype.Label.List");
+    Layout = "~/Areas/Admin/Views/DocType/_Main.cshtml";
+    var allDocFields = ViewBag.AllDocFields as string;
+    var search = ViewBag.Search as DocTypeSearchModel;
+
+    // 20200210 VuHQ START
+    var categoryBusinessIdValue = ViewBag.CategoryBusinessIdValue;
+}
+<script type="text/javascript">
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var docfieldSelected = @(search.DocFieldId.HasValue ? search.DocFieldId.Value : 0);
+        $(function () {
+            $("#docTypeName").focus();
+        changeCategoryBusiness(docfieldSelected);
+        $("#CategoryBusinessId").change(function () {
+            changeCategoryBusiness();
+            doSubmit($(this).parents('form:first'));
+        });
+        $(".tabs .tab-menu").addClass(" ui-tabs-selected ui-state-active");
+        $(".tabs .tab-add").removeClass(" ui-tabs-selected ui-state-active");
+    });
+
+    function changeCategoryBusiness(selected) {
+        if ($('#CategoryBusinessId').val()) {
+            var categoryBusinessId = parseInt($('#CategoryBusinessId').val());
+            var docfields = _.filter(allDocFields, function(item) {
+                return (item.CategoryBusinessId & categoryBusinessId) === categoryBusinessId;
+            });
+            $("#docFieldId").html('<option value="">@Localizer("Common.All.Label")</option>');
+            $.each(docfields, function(i, item) {
+                $("#docFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+            });
+            if (selected !== 0) {
+                $('#docFieldId option[value=' + selected + ']').attr('selected', 'selected');
+            }
+        } else {
+            $("#docFieldId").html('<option value="">@Localizer("Common.All.Label")</option>');
+            $.each(allDocFields, function(i, item) {
+                $("#docFieldId").append('<option value="' + item.DocFieldId + '">' + item.DocFieldName + '</option>');
+            });
+            if (selected !== 0) {
+                $('#docFieldId option[value=' + selected + ']').attr('selected', 'selected');
+            }
+        }
+    }
+
+    function deleteDocType(id) {
+        eGovMessage.show(
+            'Việc xóa loại hồ sơ văn bản sẽ xóa luôn tất cả dữ liệu liên quan. Bạn có chắc chắn muốn xóa loại hồ sơ này không?',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    function onBegin() {
+        $("#divListDocTypes").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {$('tr th').css("line-height", "2.5");
+        $('#divListDocTypes').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListDocTypes').unblockpanel();
+    }
+
+    function doSubmit(form) {
+        form.attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        form.submit();
+    }
+
+    function searchDoctype(_this) {
+        var url = _this.baseURI;
+        var categoryBusinessId = getURLParameter(url, 'categoryBusinessId');
+        $(_this).parents('form').attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val() + '&categoryBusinessId=' + (categoryBusinessId == undefined ? 4 : categoryBusinessId));
+    }
+
+    function getURLParameter(url, name) {
+        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+    }
+
+</script>
+@Html.Partial("_Notifications")
+
+<div class="section-header">
+    <div class="title">
+        <i class="icon-docs"></i>
+        <span data-res="egov.resources.sitemap.doctype"></span>
+    </div>
+    <div class="options">
+        @{
+            if (categoryBusinessIdValue == 8)
+            {
+                <a class="btn  btn-warning control-btn" href="/admin/doctype/CreateExplicit">
+                    <span class="icon icon-plus"></span>
+                    <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+                </a>
+            }
+            else if (categoryBusinessIdValue == 16)
+            {
+                <a class="btn  btn-warning control-btn" href="/admin/doctype/CreateReport">
+                    <span class="icon icon-plus"></span>
+                    <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+                </a>
+            }
+            else if (categoryBusinessIdValue == 4 || categoryBusinessIdValue == null)
+            {
+                <a class="btn  btn-warning control-btn" href="/admin/ad_doctype/Create">
+                    <span class="icon icon-plus"></span>
+                    <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+                </a>
+                    @*<a class="btn  btn-warning control-btn" href="/admin/doctype/Create">
+                            <span class="icon icon-plus"></span>
+                            <span class="text-uppercase">Tạo nhanh</span>
+                        </a>*@
+                    <a class="btn  btn-default control-btn" href="/admin/doctype/importdoctypes">
+                        <span class="icon icon-checkmark"></span>
+                        <span class="text-uppercase">Import</span>
+                    </a>
+            }
+            else if (categoryBusinessIdValue == 32)
+            {
+                <a class="btn  btn-warning control-btn" href="/admin/doctype/CreateGeneral">
+                    <span class="icon icon-plus"></span>
+                    <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+                </a>
+            }
+        }
+    </div>
+</div>
+@using (Ajax.BeginForm("Search", new AjaxOptions
+{
+    UpdateTargetId = "divListDocTypes",
+    OnBegin = "onBegin",
+    OnSuccess = "onSuccess",
+    OnFailure = "onFailure",
+    HttpMethod = "Get"
+}))
+{
+    <table>
+        <tr class="hidden">
+            <td style="width: 200px">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.CreateOrEdit.Fields.CategoryBusinessId.Label")</td>
+            <td>@Html.DropDownList("CategoryBusinessId", Localizer("Common.All.Label"))</td>
+        </tr>
+        <tr>
+            <td>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.DocField.Label")</td>
+            <td>
+                <select id="docFieldId" name="docFieldId" onchange="doSubmit($(this).parents('form'));">
+                    <option value="">@Localizer("Common.All.Label")</option>
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Status.Label")</td>
+            <td>
+                <select id="isActivated" name="isActivated" onchange="doSubmit($(this).parents('form'));">
+                    <option value="">@Localizer("Common.All.Label")</option>
+                    <option value="true"
+                            @(search.IsActivated != null && search.IsActivated == true ? "selected='selected'" : "")>
+                        @Localizer("User.IsActivated.Active")
+                    </option>
+                    <option value="false"
+                            @(search.IsActivated != null && search.IsActivated == false ? "selected='selected'" : "")>
+                        @Localizer("User.IsActivated.Unactive")
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Mã báo cáo</td>
+            <td>
+                <input class="form-control" type="text" name="docTypeCode"
+                       id="docTypeCode" value="@search.DocTypeCode" />
+            </td>
+        </tr>
+        <tr>
+            <td>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.DocTypeName.Label")</td>
+            <td>
+                <input class="form-control" type="text" name="docTypeName"
+                       id="docTypeName" value="@search.DocTypeName" />
+            </td>
+        </tr>
+        <tr>
+            <td>Kỳ báo cáo</td>
+            <td>
+                <select id="actionLevel" name="actionLevel">
+                    <option value="">@Localizer("Common.All.Label")</option>
+                    @foreach (var option in (IEnumerable<SelectListItem>)ViewBag.ListActionLevel)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <p>
+                    <input class="btn" type="submit" id="search"
+                           onclick="searchDoctype(this)" value="Tìm kiếm" data-res="egov.resources.buttons.search" />
+                </p>
+            </td>
+        </tr>
+    </table>
+}
+<div id="divListDocTypes">
+    @{
+        Html.RenderPartial("_PartialList", Model);
+    }
+</div>

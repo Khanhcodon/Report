@@ -1,0 +1,241 @@
+﻿<ul class="nav nav-pills">
+    <li class="active" id="tab-${cid}2a">
+        <a href="#${cid}2a" data-toggle="tab">Cấu hình mẫu khảo sát</a>
+    </li>
+    <li id="tab-${cid}3a">
+        <a href="#${cid}3a" data-toggle="tab">Cấu hình các tiêu chí khảo sát</a>
+    </li>
+    <li id="tab-${cid}4a">
+        <a href="#${cid}4a" data-toggle="tab">Xem trước</a>
+    </li>
+    <li id="tab-${cid}6a">
+        <a href="#${cid}6a" data-toggle="tab">Cấu hình báo cáo</a>
+    </li>
+    <li id="tab-${cid}7a">
+        <a href="#${cid}7a" data-toggle="tab">Xem báo cáo</a>
+    </li>
+    <li id="tab-${cid}8a">
+        <a href="#${cid}8a" data-toggle="tab">Thống kê khảo sát</a>
+    </li>
+    <li id="tab-${cid}5a">
+        <a href="#${cid}5a" data-toggle="tab">Đơn vị nhận</a>
+    </li>
+</ul>
+
+<div class="tab-content clearfix">
+<div class="tab-pane active" id="${cid}2a">
+</div>
+<div class="tab-pane" id="${cid}3a">
+    <div id="surveyLogic"></div>
+    <div class="svd_container">
+        <div class="svd_content">
+            <div style="">
+                <survey-logic>
+                    <div class="svd-logic-tab">
+                        <div style="">
+                            <h4 class="svd-logic-tab__rule-editor__title">
+                                Định nghĩa tiêu chí
+                            </h4>
+                            <svd-property-editor>
+                                <svd-property-editor-error>
+                                    <div class="alert alert-danger" role="alert" style="display: none;">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span class="sr-only">Error:</span>
+                                        <span></span>
+                                    </div>
+                                </svd-property-editor-error>
+                                <div></div>
+                                <div class="svd-propertyeditor-condition">
+                                    <div class="svd-expression-content" style="margin-top: 0;">
+                                        <div>
+                                            <div class="svd-expression-setup" style="display: none;"></div>
+                                            <table class="svd-propertyeditor-condition-wide-table" style="width: 100%;">
+                                                <tbody></tbody>
+                                            </table>
+                                            <div class="form-inline form-group">
+                                                <input type="button" class="btn sv-btn btn-primary svd-logic-button svd-logic-add-condition-button svd-focusable" value="Thêm tiêu chí">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div></div>
+                            </svd-property-editor>
+                            <div class="criteria-advance">
+                                <form onsubmit="return false;">
+                                    <h4 class="svd-logic-tab__rule-editor__title">Thêm nâng cao</h4>
+                                    <div class="svd-logic-tab__item">
+                                        <div style="max-width:800px">
+                                            <svd-accordion role="tablist">
+                                                <div class="svd-accordion-tab-content" role="tab">
+                                                    <div class="row svd-popup-editor-tab-general" id="editor_tab_id_general">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <div data-property="setToName">
+                                                                    <svd-property-editor>
+                                                                        <label class="svd-control-label">Tên tiêu chí</label>
+                                                                        <svd-property-editor-error>
+                                                                            <div class="alert alert-danger" role="alert" style="display: none;">
+                                                                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                                                                <span class="sr-only">Error:</span>
+                                                                                <span></span>
+                                                                            </div>
+                                                                        </svd-property-editor-error>
+                                                                        <input type="text" id="criteria-name" size="25" placeholder="" aria-required="true" aria-label="Hãy nhập/chọn giá trị" class="form-control" required>
+                                                                    </svd-property-editor>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div data-property="runExpression">
+                                                                    <svd-property-editor>
+                                                                        <label class="svd-control-label">Chạy biểu thức</label>
+                                                                        <svd-property-editor-error>
+                                                                            <div class="alert alert-danger" role="alert" style="display: none;">
+                                                                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                                                                <span class="sr-only">Error:</span>
+                                                                                <span></span>
+                                                                            </div>
+                                                                        </svd-property-editor-error>
+                                                                        <div></div>
+                                                                        <div class="propertyeditor-expression">
+                                                                            <span>Nhấn ctrl+space để hiển thị gợi ý biểu thức</span>
+                                                                            <div id="criteria-expression" style="height: 150px; width: 100%;"></div>
+                                                                            <span style="white-space:normal">Hãy nhập biểu thức. Bạn có thể sử dụng dấu ngoặc nhọn để truy cập giá trị câu hỏi: '{câu hỏi1} + {câu hỏi2}', '({giá}*{số lượng}) * (100 - {giảm giá})'</span>
+                                                                        </div>
+                                                                        <div></div>
+                                                                    </svd-property-editor>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </svd-accordion>
+                                        </div>
+                                    </div>
+                                    <p></p>
+                                    <div style="width:200px;padding-bottom:20px">
+                                        <input type="submit" class="sv-btn btn btn-primary svd-logic-button svd-logic-add-new-advance-criteria-button" value="Thêm tiêu chí nâng cao">
+                                    </div>
+                                </form>
+                            </div>
+                            <p></p>
+                            <p></p>
+                            <div>
+                                <svd-property-editor-error>
+                                    <div class="alert alert-danger" role="alert" style="display: none;">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span class="sr-only">Error:</span>
+                                        <span></span>
+                                    </div>
+                                </svd-property-editor-error>
+                            </div>
+                            <div class="form-inline form-group">
+                                <input type="button" class="btn sv-btn btn-primary svd-logic-button svd-criteria-save-button" value="Lưu" title="Lưu">
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                </survey-logic>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane" id="${cid}4a">
+    <div id="surveyPreview"></div>
+</div>
+<div class="tab-pane" id="${cid}6a">
+    <div class="row col-md-16">
+        <div class="col-sm-4">
+            <div id="${cid}tree" style="background-color: transparent; width: 100%; height: 500px; padding: 2px; overflow: auto">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <textarea id="${cid}SurveyReport"></textarea>
+        </div>
+    </div>
+</div>
+<div class="tab-pane" id="${cid}7a">
+    <div class="row col-md-16">
+        <div class="col-sm-4">
+            <div id="${cid}treeView" style="background-color: transparent; width: 100%; height: 500px; padding: 2px; overflow: auto">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <textarea id="${cid}SurveyReportView"></textarea>
+        </div>
+    </div>
+</div>
+<div class="tab-pane" id="${cid}5a">
+    <div class="row transfer-form">
+        <div class="col-sm-16 col-md-8" id="left-content">
+            <div class="form-horizontal" role="form">
+                <div class="">
+                    <span style="font-size: 12px; font-weight:bold;" class="dgText">Đồng gửi</span>
+                </div>
+                <!--Người dùng-->
+                <div class="form-group">
+                    <div class="col-md-16">
+                        <span style="font-size: 12px; font-style: italic;" data-res="egov.resources.transfer.dgUserLabel"></span>
+                    </div>
+                    <div class="col-md-16">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="dgUser" data-respholder="egov.resources.transfer.dgUser" style="z-index: 999;">
+                            <div class="input-group-btn dropup">
+                                <button type="button" id="dgUsers" class="btn btn-default dropdown-toggle" data-target="#${cid}_FilterDepartment" style="height:25px;"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right sv_FilterDeparment" id="${cid}_FilterDepartment">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Theo chức vụ phòng ban-->
+                <div class="form-group">
+                    <div class="col-md-16">
+                        <span style="font-size: 12px; font-style: italic" data-res="egov.resources.transfer.dgJobtitleLabel"></span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgJobtitle">
+                            <div class="input-group-btn dropup">
+                                <button type="button" id="dgJobtitle" class="btn btn-default dropdown-toggle" data-target="#${cid}_JobtitleForDept" style="height:25px;"><span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-left dgJobtitlies sv_JobtitleForDept hidden-xs" id="${cid}_JobtitleForDept">
+                                    <li class="list-group-item">
+                                        <label>
+                                            <input name="checkbox[]" value="0" type="checkbox" id="sv_AllJobsForDept">
+                                            <span data-res="egov.resources.transfer.allJobs"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgDeptJob">
+                            <div class="input-group-btn dropup">
+                                <button type="button" id="dgDeptJob" class="btn btn-default dropdown-toggle" data-target="#${cid}_DeptForJobtitle" style="height:25px;"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right department-tree sv_DeptForJobtitle" id="${cid}_DeptForJobtitle">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs hidden-sm col-sm-16 col-md-8" id="right-content" style="border-left: 1px solid #e3e3e3">
+            <div style="height: 25px; " class="hidden-xs">
+                <div class="bold" style="font-size: 14px">Danh sách nhận phiếu khảo sát</div>
+            </div>
+            <div class="result-view show-dg">
+                <div>
+                    <div class="co-process-user">
+                        <ul class="list-group" style="border-bottom:0"> </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane" id="${cid}8a">
+</div>
+</div>

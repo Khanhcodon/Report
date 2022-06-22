@@ -1,0 +1,17 @@
+﻿<a href="#" {{if id}}
+                id="${id}"
+            {{/if}}>
+    <div>
+        <span class="icon ${iconClass}" 
+
+            {{if attrs}}
+                 {{each attrs}}
+                    ${key}="${value}"
+                 {{/each}}
+            {{/if}}
+            >
+        </span>
+        <span>${text}</span>
+    </div>
+
+</a>

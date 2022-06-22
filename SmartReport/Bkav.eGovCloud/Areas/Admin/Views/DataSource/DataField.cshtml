@@ -1,0 +1,692 @@
+﻿@using Bkav.eGovCloud.Entities.Customer
+@model IEnumerable<DataField>
+    @{
+        ViewBag.Title = "Dữ liệu trường";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+    <link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var listField = $('#list-field').DataTable({
+                order: [[1, 'asc']]
+            });
+
+            var listRelation = $('#list-relation').DataTable({
+                order: [[1, 'asc']]
+            });
+        });
+    </script>
+    <style type="text/css">
+        .r-tables {
+            margin-bottom: 27px;
+            height: 50px;
+        }
+
+            .r-tables > div {
+                float: left;
+            }
+
+        .r-datasource, .r-datatarget {
+            background: #e3e3e3;
+            border-radius: 10px;
+            height: 50px;
+            border: 1px solid #a5a4a4;
+            line-height: 45px;
+            font-size: 14px;
+            text-align: center;
+            padding: 0 15px;
+            max-width: 200px;
+            overflow: hidden;
+        }
+
+        .r-datasource {
+            min-width: 120px;
+        }
+
+        .r-datatarget {
+            min-width: 120px;
+        }
+
+        .r-join {
+            margin: 0 50px;
+            position: relative;
+        }
+
+            .r-join .r-link {
+                top: 50%;
+                height: 1px;
+                width: 150px;
+                background: #a5a4a4;
+                left: 0;
+                z-index: 1;
+                margin-left: -50px;
+                margin-top: -24px;
+                margin-right: -50px;
+            }
+
+            .r-join .r-joinname {
+                position: absolute;
+                left: 3px;
+                width: 52px;
+                font-size: 11px;
+                bottom: -34px;
+            }
+
+        .modal {
+            z-index: 9999;
+        }
+
+        .modal-body {
+            position: relative;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            padding: 1rem;
+        }
+
+        .dropdown-menu, .dropdown-grid {
+            color: #616a78;
+            border-radius: 2px;
+            font-size: 13px !important;
+            border-color: #f1f2f3;
+            padding: 0;
+            -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.06);
+            z-index: 9999;
+        }
+
+        .dropdown-item {
+            color: #747e8e;
+            font-weight: 300;
+            padding: 4px 12px;
+            width: auto;
+            margin: 4px;
+            -webkit-transition: 0.15s linear;
+            transition: 0.15s linear;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 9999;
+            display: none;
+            float: left;
+            min-width: 10rem;
+            padding: .5rem 0;
+            margin: .125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: .25rem;
+        }
+
+            .dropdown-menu .dropdown-item:hover {
+                background-color: #a5a4a4;
+            }
+
+        .dropdown-item {
+            display: block;
+            /*width: 100%;*/
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+        }
+
+        .r-datatarget.open #rDatatables {
+            display: block !important;
+        }
+
+        .r-datatarget:hover {
+            cursor: pointer;
+        }
+
+        .breadcrumb {
+            float: right;
+            background-color: #ffffff;
+        }
+
+            .breadcrumb li a {
+                color: #212529;
+            }
+
+            .breadcrumb li:hover {
+                font-weight: bold;
+            }
+
+        .relations {
+            max-height: 400px;
+            overflow-y: auto;
+            position: fixed;
+            transform: translate3d(240px, 130px, 0);
+            top: 0;
+            left: 0;
+            will-change: transform;
+        }
+
+        .r-join:hover {
+            cursor: pointer;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        #content-relations .row {
+            margin-bottom: 5px;
+        }
+
+        .create-relation .modal-body {
+            max-height: 500px;
+        }
+    </style>
+    <!-- Content Header (Page header) -->
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span>Dữ liệu trường</span>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h4 class="box-title">
+                    Danh sách quan hệ với các bảng khác
+                </h4>
+                <button class="btn btn-primary btn-xs pull-right" onclick="addRelation()">Thêm mới</button>
+            </div>
+            <div class="box-body">
+                <br />
+                <div class="table-responsive">
+                    <br />
+                    <table id="list-relation" class="table table-hover mb-0">
+                        <colgroup>
+                            <col />
+                            <col />
+                            <col />
+                            <col />
+                            <col style="width: 150px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Tên trường</th>
+                                <th>Bảng quan hệ</th>
+                                <th>Trường quan hệ</th>
+                                <th>Biểu thức quan hệ</th>
+                                <th>Loại quan hệ</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var relation in (IEnumerable<Relation>)ViewBag.Relations)
+                            {
+                            <tr>
+                                <td>
+                                    <span class="text-dark">@relation.SourceColumn</span>
+                                </td>
+                                <td><span class="text-dark">@relation.TargetName</span></td>
+                                <td>
+                                    <span class="text-dark">@relation.TargetColumn</span>
+                                </td>
+                                <td>
+                                    <span class="text-dark">@relation.JoinExpression</span>
+                                </td>
+                                <td>
+                                    <span class="text-dark">
+                                        @(relation.JoinType == 1 ? "Inner Join" : (relation.JoinType == 2 ? "Left Join" : (relation.JoinType == 3 ? "Right Join" : (relation.JoinType == 4 ? "Outer Join" : "Blend"))))
+                                    </span>
+                                </td>
+                                <td>
+                                    @*<button class="btn btn-primary btn-xs btn-editrelation" data-id="relation.RelationId">Sửa</button>*@
+                                    <button class="btn btn-danger btn-xs btn-delrelation" data-id="@relation.RelationId">Xóa</button>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <div class="box">
+            <div class="box-header">
+                <h4 class="box-title">
+                    Danh sách trường dữ liệu
+                </h4>
+                <a class="btn btn-success btn-xs pull-right" href="../showdata/@ViewBag.DataTableId">Xem dữ liệu</a>
+                <a href="../SyncFields/@ViewBag.DataTableId" class="btn btn-primary btn-xs pull-right" style="margin-right: 5px;">Đồng bộ</a>
+            </div>
+            <div class="box-body">
+                <br />
+                <div class="table-responsive">
+                    <br />
+                    <table id="list-field" class="table table-hover mb-0">
+                        <colgroup>
+                            <col />
+                            <col />
+                            <col />
+                            <col style="width: 150px" />
+                            <col style="width: 150px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Tên trường</th>
+                                <th>Mô tả</th>
+                                <th>Kiểu dữ liệu</th>
+                                <th>Trạng thái</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var df in Model)
+                            {
+                                <tr>
+                                    <td><span class="text-dark">@df.FieldName</span></td>
+                                    <td>
+                                        <span class="text-dark">@df.Description</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark">@df.Datatype</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark">@(df.IsActivated ? "Actived" : "")</span>
+                                    </td>
+                                    <td>
+                                        <a class="text-right btn btn-info btn-xs pull-left text-white" style="margin-right:5px" onclick="InitEditDataFieldForm('@df.DataFieldId')">Sửa</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modalDataField" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="h4Title" id="titleModal">Sửa trường</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row margin-top-5">
+                            <div class="col-md-3">
+                                <div>Tên trường</div>
+                            </div>
+                            <div class="col-md-9 datafield-name text-bold" name="datafield-name">
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-3">
+                                <div>Kiểu dữ liệu</div>
+                            </div>
+                            <div class="col-md-9 datafield-type text-bold" name="datafield-type">
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-3">
+                                <div>Mô tả</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="datafield-des" class="form-control datafield-des" />
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-3">
+                                <div>Trạng thái</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="checkbox" name="datafield-active" class="datafield-active" style="position:relative;top: 3px; left:unset; opacity:1.0" /> Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer align-items-center position-relative">
+                    <button type="button" onclick="UpdateDataField()" class="btn btn-primary waves-effect text-left" data-dismiss="modal" id="btn-update">Ghi lại</button>
+                    <button type="button" class="btn btn-default waves-effect text-left" data-dismiss="modal" id="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade create-relation" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog" style="width: 650px; max-width: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="h4Title" id="titleModal">Thêm quan hệ</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="padding: 0 30px;">
+                        <div class="r-tables">
+                            <div class="r-datasource">
+                                @ViewBag.TableName
+                                <input type="hidden" id="source-id" value="@ViewBag.DataTableId" />
+                            </div>
+                            <div class="r-join">
+                                <img src="~/Content/bkav.egov/images/DBJoin/innerjoin.svg" class="relation-img" style="width: 50px;" />
+                                <span class="r-joinname dropdown-toggle" data-toggle="dropdown">Inner Join</span>
+                                <input type="hidden" id="jointype" value="1" />
+                                <div class="dropdown-menu relations">
+                                    <a class="dropdown-item" href="#" data="1">
+                                        <img src="~/Content/bkav.egov/images/DBJoin/innerjoin.svg" style="width: 30px;" />
+                                        <span>Inner Join</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data="2">
+                                        <img src="~/Content/bkav.egov/images/DBJoin/leftjoin.svg" style="width: 30px;" />
+                                        <span>Left Join</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data="3">
+                                        <img src="~/Content/bkav.egov/images/DBJoin/rightjoin.svg" style="width: 30px;" />
+                                        <span>Right Join</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data="4">
+                                        <img src="~/Content/bkav.egov/images/DBJoin/outerjoin.svg" style="width: 30px;" />
+                                        <span>Outer Join</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#" data="5">
+                                        <img src="~/Content/bkav.egov/images/DBJoin/blend.png" style="width: 30px;" />
+                                        <span>Blend</span>
+                                    </a>
+                                </div>
+                                <div class="r-link"></div>
+                            </div>
+                            <div class="r-datatarget">
+                                <span class="target-name dropdown-toggle" data-toggle="dropdown">Choose Database<span class="caret"></span></span>
+                                <input type="hidden" id="dataTargetId" value="0" />
+                                <div class="dropdown-menu" id="rDatatables" style="max-height: 400px;overflow-y: auto;
+                                            position: fixed;
+                                            transform: translate3d(360px, 110px, 0);
+                                            top: 0;
+                                            left: 0;
+                                            will-change: transform;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="content-relations">
+                            <div class="row">
+                                <div class="col-md-4" style="text-align: center;">
+                                    <select class="form-control" id="resource-column">
+                                        @foreach (var df in Model)
+                                        {
+                                            <option value="@df.FieldName">@(df.Description == "" ? df.FieldName : df.Description)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4" style="text-align: center;">
+                                    <select class="form-control" id="join-operator">
+                                        <option value="=">=</option>
+                                        <option value="like">like</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4" style="text-align: center;">
+                                    <select class="form-control" id="rDatafields">
+                                        <option>Chọn</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1" style="line-height: 30px;">
+                                    <img src="@Url.Content("~/Content/Images/add.png")" style="width: 20px;" title="" data-restitle="egov.resources.catalog.addbewobject" onclick="addRow()" alt="" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer align-items-center position-relative">
+                    <button type="button" class="btn btn-primary waves-effect text-left" data-dismiss="modal" id="btn-addrelation">Thêm</button>
+                    <button type="button" class="btn btn-default waves-effect text-left" data-dismiss="modal" id="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="templateRelation" type="text/x-jQuery-tmpl">
+        <div class="row">
+            <div class="col-md-3" style="text-align: center;">
+                <select class="form-control" id="and-or-operator-${i}">
+                    <option value="and">AND</option>
+                    <option value="or">OR</option>
+                </select>
+            </div>
+            <div class="col-md-3" style="text-align: center;">
+                <select class="form-control" id="resource-column-${i}"></select>
+            </div>
+            <div class="col-md-3" style="text-align: center;">
+                <select class="form-control" id="join-operator-${i}">
+                    <option value="=">=</option>
+                    <option value="like">like</option>
+                </select>
+            </div>
+            <div class="col-md-3" style="text-align: center;">
+                <select class="form-control" id="rDatafields-${i}">
+                    <option>Chọn</option>
+                </select>
+            </div>
+            <div class="col-md-1" style="line-height: 30px;">
+                <img src="@Url.Content("~/Content/Images/no.png")" style="width: 20px;" title="" data-restitle="egov.resources.catalog.addbewobject" onclick="removeRow(this)" alt="" />
+            </div>
+        </div>
+    </script>
+    <script id="SelectRelation" type="text/x-jQuery-tmpl">
+        {{each data}}
+        <option value="${FieldName}">{{if Description == ""}}${FieldName}{{else}}${Description}{{/if}}</option>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+        var modelFiled;
+        var dataFieldModel = {
+            DataFieldId: null,
+            DataTableId: null,
+            FieldName: '',
+            Description: '',
+            Datatype: '',
+            IsActivated: true
+        };
+
+        function _addDataTable(e) {
+            var target = $(e.target).closest('a');
+            var tableId = target.attr("data-id");
+            $("#dataTargetId").val(tableId);
+            var name = target.attr("data-name");
+
+            $(".target-name").text(name);
+
+            $.ajax({
+                url: '/datasource/GetFields',
+                data: { id: tableId },
+                success: (response) => {
+                    if (!response.fields) return;
+                    //$("#rDatafields")
+                    //    .html($.tmpl('<option value="${FieldName}">${FieldName} - ${Description}</option>',
+                    //        response.fields));
+                    $("[id^='rDatafields']").html($.tmpl('<option value="${FieldName}">${FieldName} - ${Description}</option>',response.fields));
+                }
+            });
+        }
+        function addRow() {
+            var tableId = $("#dataTargetId").val();
+            var i = 0;
+            $("#content-relations .row:last-child").each(function (index, el) {
+                var d = `${$(el).children().children()[0].id}`.match("\\d+");
+                d = d == null ? 0 : parseInt(d[0]) + 1;
+                i = d > i ? d : i;
+            });
+            var obj = { i: i };
+            $("#templateRelation").tmpl(obj).appendTo("#content-relations");
+            var m = { data: [] };
+            m.data = modelFiled;
+            $("#SelectRelation").tmpl(m).appendTo(`#resource-column-${i}`);
+            $.ajax({
+                url: '/datasource/GetFields',
+                data: { id: tableId },
+                success: (response) => {
+                    if (!response.fields) return;
+                    $(`#rDatafields-${i}`).html($.tmpl('<option value="${FieldName}">${FieldName} - ${Description}</option>', response.fields));
+                }
+            });
+        }
+        function removeRow(e) {
+            $(e).parent().parent().remove();
+        }
+        function addRelation() {
+            $("#content-relations .row").each(function (index, el) {
+                if (index > 0)
+                {
+                    $(this).remove();
+                }
+            });
+            $('.create-relation').modal({
+                show: true
+            });
+        }
+        function InitEditDataFieldForm(id) {
+            dataFieldModel.DataFieldId = id;
+            $.ajax({
+                url: '/datasource/GetFieldInfor?id=' + id,
+                cache: false,
+                type: 'post',
+                success: function(data) {
+                    if (data) {
+                        $('.datafield-name').html(data.result.FieldName);
+                        $('.datafield-type').html(data.result.Datatype);
+                        $('.datafield-des').val(data.result.Description);
+                        $('.datafield-active').prop('checked', data.result.IsActivated);
+
+                        $('#titleModal').html("Sửa trường");
+
+                        $('#modalDataField').modal({
+                            show: true
+                        });
+                    }
+                },
+            });
+
+        }
+        function UpdateDataField() {
+                dataFieldModel.IsActivated = $(".datafield-active").is(':checked');
+                dataFieldModel.Description = $(".datafield-des").val();
+
+                $.ajax({
+                    url: '/datasource/updateField',
+                    data: JSON.stringify(dataFieldModel),
+                    type: 'post',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success)
+                            window.location.reload();
+                    }
+                });
+        }
+
+        $( document ).ready(function() {
+            modelFiled = @Html.Raw(ViewBag.JsonModel);
+            $.ajax({
+                url: '/datasource/GetTable',
+                data: { id: @ViewBag.DataSourceId },
+                success: (response) => {
+                    if (!response.result) return;
+                    $("#rDatatables").html($.tmpl(
+                            '<a class="dropdown-item" href="#" data-id="${DataTableId}" data-name="${Name}">{{if Description}}${Description}{{else}}${Name}{{/if}}</a>',
+                            response.result));
+                    $("#rDatatables .dropdown-item").click(_addDataTable);
+                }
+            });
+
+            $(".relations a").click(function(e) {
+                var target = $(e.target).closest("a");
+                var type = target.attr('data');
+                $("#jointype").val(type);
+                $(".relation-img").attr("src", target.find("img").attr('src'));
+                $(".r-joinname").text(target.find("span").text());
+            });
+
+            $("#btn-addrelation").click(function () {
+                var model = {
+                    SourceTableId: $("#source-id").val(),
+                    TargetTableId: $("#dataTargetId").val(),
+                    JoinType: $("#jointype").val(),
+                    SourceColumn: $("#resource-column").val(),
+                    TargetColumn: $("#rDatafields").val(),
+                    JoinExpression: $("#join-operator").val(),
+                    TargetName: $(".target-name").text()
+                };
+
+                //var model2 = {
+                //    SourceTableId: $("#source-id").val(),
+                //    TargetTableId: $("#dataTargetId").val(),
+                //    JoinType: $("#jointype").val(),
+                //    SourceColumn: $("#resource-column").val(),
+                //    TargetColumn: $("#rDatafields").val(),
+                //    JoinExpression: $("#join-operator").val(),
+                //    TargetName: $(".target-name").text()
+                //};
+
+                var model2 = {};
+                var operators = [];
+                $("#content-relations .row").each(function (index, el) {
+                    if (index > 0 && $(el).children().children().length > 3) {
+                        model2 = {};
+                        model2.SourceTableId = $("#source-id").val();
+                        model2.TargetTableId = $("#dataTargetId").val();
+                        model2.JoinType = $("#jointype").val();
+                        model2.JoinOperators = $(el).children().children()[0].value;
+                        model2.SourceColumn = $(el).children().children()[1].value;
+                        model2.TargetColumn = $(el).children().children()[3].value;
+                        model2.JoinExpression = $(el).children().children()[2].value;
+                        model2.TargetName = $(".target-name").text();
+                        operators.push(model2);
+                    }
+                });
+
+                $.ajax({
+                    url: "/datasource/addrelation",
+                    type: 'post',
+                    data: {
+                        relation: JSON.stringify(model), operators: JSON.stringify(operators)
+                    },
+                    success: function(response) {
+                        if (response.success)
+                            location.reload(true);
+                    }
+                });
+
+                //console.log(model);
+            });
+
+            $(".btn-delrelation").click(function() {
+                if (!confirm("Bạn có chắc chắn muốn xóa quan hệ của bảng này?")) {
+                    return;
+                }
+
+                var relationId = $(".btn-delrelation").attr('data-id');
+                $.ajax({
+                    url: "/datasource/delrelation",
+                    type: 'post',
+                    data: {
+                        relationId: relationId
+                    },
+                    success: function(response) {
+                        if (response.success) location.reload(true);
+                    }
+                });
+            });
+
+        });
+
+    </script>

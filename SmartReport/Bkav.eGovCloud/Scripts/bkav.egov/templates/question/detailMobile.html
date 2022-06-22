@@ -1,0 +1,102 @@
+﻿<div class="rownavbar">
+    <nav class="navbar main-nav">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <button id="btnbacktolist" class="hidden-xs mdl-button mdl-js-button mdl-button--icon pull-left">
+                <i class="material-icons">arrow_back</i>
+            </button>
+        </div>
+        <div class="pull-right col-xs-14 col-sm-14 col-md-14 col-lg-14">
+            <button id="btnAnswer" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid list-group preview-info detailquestion">
+    <div class="comment-item">
+        <div class="comment-info row">
+            <div class="col-xs-2 col-sm-1">
+                <img src="${UserAvatar}" alt="" class="avatar img-rounded imgAvatar" onerror="this.src = getErrorAvatar()" />
+            </div>
+            <div class="col-xs-14 col-sm-14">
+                <div class="commentUsername">
+                    ${AskPeople}
+                    {{if Email != null && Email.length > 0}} - ${Email}{{/if}}
+                    {{if Phone != null && Phone.length > 0}} - ${Phone}{{/if}}
+                </div>
+                <div class="commentMessage">
+                    <span>${Name}</span>
+                </div>
+                <div class="commentDatetime text-right">
+                    ${DateLabel}
+                </div>
+            </div>
+        </div>
+        <div class="comment-detail">
+            ${Detail}
+        </div>
+    </div>
+    {{if IsGeneralQuestion == false }}
+    <div class="row divDocument">
+        <div class="col-sm-14 col-md-14 col-lg-14">
+            <span data-res="egov.resources.question.compendium"></span>: &nbsp; <b data-restitle="egov.resources.question.compendium"> ${Compendium}</b>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <a data-res="egov.resources.question.btnShowDocumentDetail" id="btnViewDocumentDetail"></a>
+        </div>
+    </div>
+    {{if UserComments.length > 0 }}
+    <div class="row document-info divUserComment open">
+        <h5 class="title">
+            <span data-res="egov.resources.question.commentList"></span>
+            <span class="arrowdown icon-arrow-down7"></span>
+            <span class="arrowup icon-arrow-up6"></span>
+        </h5>
+        <div class="document-extend">
+            <ul class="list-group">
+                {{each UserComments}}
+                <li class="mdl-list__item">
+                    <div class="comment-info row">
+                        <div class="col-sm-1">
+                            <img src="${String.format(egov.setting.avatarPath,Account)}" alt="" class="avatar img-rounded" />
+                        </div>
+                        <div class="col-sm-4 lblUsername">
+                            ${FullName} - ${Account}
+                        </div>
+                        <div class="col-sm-8 comment-detail">
+                            ${Comment}
+                        </div>
+                        <div class="col-sm-3 comment-date text-right">
+                            ${Date}
+                        </div>
+                    </div>
+                </li>
+                {{/each}}
+                {{if AnswerHolder != null && isMe != null && isMe == false}}
+                <li class="divider"></li>
+                <li class="mdl-list__item">
+                    <div class="comment-info row">
+                        <div class="col-sm-1">
+                        </div>
+                        <div class="col-sm-15 ">
+                            <b class="text-warning">
+                                <span class="lblUsername"> ${AnswerHolder.FullName} - ${AnswerHolder.Account}</span>
+                                <span data-res="egov.resources.question.holding"></span>
+                            </b>
+                        </div>
+                    </div>
+                </li>
+                {{/if}}
+
+            </ul>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+    <div class="formanswer" id="formanswer">
+        <textarea class="form-control txtAnswer" id="txtAnswer" rows="2" required></textarea>
+        <span class="form-control-bar"></span>
+        <label class="form-label" data-res="egov.resources.question.answer"></label>
+    </div>
+</div>

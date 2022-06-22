@@ -1,0 +1,31 @@
+﻿@model AddressModel
+@{
+    ViewBag.Title = Localizer("Common.Address.Created.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-map"></i>
+        <span data-res="egov.resources.sitemap.address"></span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/address/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.Partial("_Notifications")
+        @Html.Partial("_CreateOrEdit", Model)
+        @Html.AntiForgeryToken()
+    </div>
+}

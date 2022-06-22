@@ -1,0 +1,17 @@
+﻿
+<span class="mdl-list__item-primary-content wrap-text">
+    <img class="mdl-list__item-avatar file-type" src="../content/bkav.egov/images/file-extensions/${Extension}.svg" onerror="this.src = '../content/bkav.egov/images/file-extensions/notype.svg'">
+    <span class="attachment-name">${Name}</span>
+    <span class="mdl-list__item-sub-title" style="text-transform: uppercase">${Extension} - ${Size}</span>
+</span>
+<span class="mdl-list__item-secondary-action attachment-function">  
+    <a href="#" class="attachment-download">
+        <i class="material-icons">file_download</i>
+    </a>
+    {{if isCreate }}
+    <a href="#" class="attachment-remove">
+        <i class="material-icons">delete</i>
+    </a>
+    {{/if}}
+</span>
+

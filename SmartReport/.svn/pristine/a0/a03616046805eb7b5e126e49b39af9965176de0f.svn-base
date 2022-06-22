@@ -1,0 +1,347 @@
+﻿<div class="document-preview-right">
+    <ul class="nav nav-pills toolbarQuickView"></ul>
+</div>
+<!--<div class="tabs-quickview">
+    <ul class="nav nav-tabs tabs-quickview" role="tablist">
+        <li class="active col-md-8">
+            <a href="#document-info" data-tabs="tab-info" role="tab" data-toggle="tab" class="wraptext">Thông tin chi tiết </a>
+        </li>
+        <li class=" col-md-8">
+            <a href="#document-comment" data-tabs="tab-comment" role="tab" data-toggle="tab" class="wraptext">Ý kiến giải quyết</a>
+        </li>
+    </ul>
+</div>-->
+<div class="document-info">
+    <form>
+        <input type="hidden" name="DocumentId" value="${DocumentId}" />
+        <input type="hidden" name="DocumentCopyId" value="${DocumentCopyId}" />
+        <input type="hidden" name="ResultStatus" value="${ResultStatus}" />
+        <div class="col-md-16 full-height z-depth-1">
+            <div class="row detail-content">
+                <ul class="list-group" data-tabs="tab-info">
+                    <!--<li class="list-group-item display">
+                    
+                    </li>-->
+                    <li class="list-group-item tab-info">
+                        <div class="form-group form-group-sm">
+                            <div class="form-horizontal document-info-template" id="document-info-template">
+                                <div class="form-group form-group-sm " id="wrapCompendium">
+                                    <div class="col-sm-3 col-md-16">
+                                        <h4 data-res="egov.resources.document.Compendium"></h4>
+                                    </div>
+
+                                    <div class="col-sm-13 col-md-16">
+                                        <label style="font-weight: normal">${Compendium}</label>
+                                        <!--<textarea cols="20" class="form-control" rows="2" title="Nhập trích yếu." required>${Compendium}</textarea>-->
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <div class="col-sm-3 col-md-16">
+                                        <label class="control-label">
+                                            <b data-res="egov.resources.document.Comment"></b>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-13 col-md-16">
+                                        <div class="form-group-sm media-body" id="Div2">
+                                            <div class="media-body ">
+                                                <textarea class="form-control comment" name="Comment" rows="2" style="width: 100%; height: 100px"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm ">
+                                    <ul class="list-group row" id="lastComment" style="margin: 0;"></ul>
+                                </div>
+
+                                <div class="form-group form-group-sm ">
+                                    <div class="col-sm-3 col-md-16" style="padding-right: 0">
+                                        <label class="control-label" data-res="egov.resources.document.titleContent"></label>
+                                    </div>
+                                    <div class="col-sm-13 col-md-16">
+                                        <table class="table table-hover" id="titleContent">
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                        <!--<ul id="titleContent" style="padding-left: 15px"></ul>-->
+                                    </div>
+                                </div>
+
+                                <!--    <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapDoctype">
+                                    <div class="col-sm-3 col-md-16" style="padding-right: 0">
+                                        <label class="control-label">Loại văn bản</label>
+                                    </div>
+                                    <div class="col-sm-13 col-md-16" style="margin-left:15px;">
+                                        <label id="DocTypeId" style="font-weight: normal"></label>
+                                        <input type="text" value="${DocTypeName}" readonly class="form-control" id="DocTypeId" />
+                                    </div>
+                                </div>-->
+                                <!--                                           <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapCategory">
+                                    <div class="col-sm-3 col-md-4"> <label class="control-label">Hình thức</label></div>
+                                        <div class="col-sm-13 col-md-12">
+                                            <select id="CategoryId" name="CategoryId" class="form-control"></select>
+                                        </div>
+                                    </div>-->
+
+                                <!--<div class="form-group form-group-sm" id="wrapUrgent">
+                                       <div class="col-sm-3 col-md-4"> <label class="control-label">Độ khẩn</label></div>
+                                        <div class="col-sm-13 col-md-12">
+                                            <select id="UrgentId" name="UrgentId" class="form-control">
+                                                <option value="1" {{if UrgentId == 1}}selected{{/if}}>Thường</option>
+                                                <option value="2" {{if UrgentId == 2}}selected{{/if}}>Khẩn</option>
+                                                <option value="3" {{if UrgentId == 3}}selected{{/if}}>Hỏa tốc</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                <!--                                    <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapInOutPlace">
+                                      <div class="col-sm-3 col-md-4">  <label class="control-label">Đơn vị</label></div>
+                                        <div class="col-sm-13 col-md-12">
+                                            <select id="InOutPlace" name="InOutPlace" class="form-control">
+                                                <option value="${InOutPlace}">${InOutPlace}</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+
+                                <!--                                    <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapDateAppointed">
+                                           <div class="col-sm-3 col-md-4"> <label class="control-label">Thời hạn xử lý</label></div>
+                                            <div class="col-sm-13 col-md-12">
+                                                <p class="form-control-static">${DateAppointed}</p>
+                                            </div>
+                                        </div>-->
+                                <!-- {{if Attachments.length > 0}}
+                                <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapAttachment">
+                                    <div class="col-sm-3 col-md-16" style="padding-right: 0">
+                                        <label class="control-label">File đính kèm</label>
+                                    </div>
+                                    <div class="col-sm-13 col-md-16">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{/if}}-->
+                                <div class="hidden">
+                                    <div class="hidden-xs hidden-sm form-group form-group-sm" id="wrapDocumentRelation">
+                                        <div class="col-sm-16 col-md-16">
+                                            <label class="control-label" data-res="egov.resources.document.RelationList"></label>
+                                        </div>
+                                        <div class="col-sm-16 col-md-16">
+                                            <table class="table table-hover" style="">
+                                                <colgroup>
+                                                    <col style="width: 200px" />
+                                                    <col style="width: 80px" />
+                                                    <col style="width: 100px" />
+                                                    <col style="width: 80px" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header">
+                                                            <span data-res="egov.resources.document.Compendium">Trích yếu</span>
+                                                        </th>
+                                                        <th class="header">
+                                                            <span data-res="egov.resources.document.DocCode2">Số hiệu</span>
+                                                        </th>
+                                                        <th class="header">
+                                                            <span data-res="egov.resources.document.UserComment">Người xử lý</span>
+                                                        </th>
+                                                        <th class="header">
+                                                            <span data-res="egov.resources.document.Category">Hình thức</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!--Tạm đóng văn bản đến-->
+                                    <!--                                    {{if CategoryBusinessId == 1}}
+
+                                    <div id="wrapOrganization" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Cơ quan gửi</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="text" value="${Organization}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div id="wrapDocCode" class="form-group">
+                                        <label for="DocCode" class="col-sm-3 col-md-4 control-label">Số/ký hiệu *</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="text" class="form-control" value="${DocCode}" disabled />
+                                        </div>
+                                    </div>
+                                    <div id="wrapDateArrived" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Ngày đến</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="text" value="${Model.DateArrived}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div id="wrapDatePublished" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Ngày phát hành</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="text" value="${Model.DatePublished}" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div id="wrapStore" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Sổ văn bản</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <select class="form-control" name="StoreId">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="wrapInOutCode" class="form-control">
+                                        <label class="col-sm-3 col-md-4 control-label">Số đến đi</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="text" value="${Model.InOutCode}" class="form-control" name="InOutCode" />
+                                        </div>
+                                    </div>
+                                    <div id="wrapSecurity" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Độ mật</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <select class="form-control" name="SecurityId">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="wrapTotalPage" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Số trang</label>
+                                        <div class="field">
+                                            <select class="form-control" name="TotalPage">
+                                                <option value="">Chọn số trang</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="wrapDocField" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Lĩnh vực</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="hidden" value="${DocFieldIds}" />
+                                            {{each ListDocField}}
+                                            <input type="checkbox" name="ListDocField" value="${DocFieldName}" />
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                    <div id="wrapKeyword" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Từ khóa</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <input type="hidden" value="${Keyword}" />
+                                            {{each ListKeyword}}
+                                            <input type="checkbox" name="ListKeyword" value="${KeywordName}" />
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                    <div id="wrapSendType" class="form-group">
+                                        <label class="col-sm-3 col-md-4 control-label">Hình thức gửi</label>
+                                        <div class="col-sm-13 col-md-14">
+                                            <select class="form-control" name="SendTypeId">
+                                                <option value="">Chọn số trang</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{/if}}-->
+
+                                    {{if CategoryBusinessId == 4}}
+                                    <div class="form-group">
+                                        <div class="col-md-8">
+                                            <div id="Div1" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocCode">Mã hồ sơ</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="hidden" value="${DocCode}" name="DocCode" />
+                                                    <p class="form-control-static">${DocCode}</p>
+                                                </div>
+                                            </div>
+                                            <div id="wrapCitizenName" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.CitizenName">Tên công dân</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" class="form-control" value="${CitizenName}" name="CitizenName" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapAddress" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Address">Địa chỉ</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" name="Address" value="${Address}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapPhone" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Phone">Số điện thoại</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" value="${Phone}" name="Phone" alt="phone-vn" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapPapers" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocPapers">Giấy tờ</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <ul class="papers">
+                                                        {{each DocPapers}}
+                                                        <li class="doc-paper">
+                                                            <div class="" style="width: 20px; margin-left: 0;">
+                                                                <input type="checkbox" value="${DocPaperId}" class="paper-id form-control" />
+                                                            </div>
+                                                            <div class="field">
+                                                                <span class="paper-name" style="width: 80%" title="${PaperName}">${PaperName}</span>
+                                                                <input type="text" value="${Amount}" class="paper-amount form-control" style="width: 16%" />
+                                                            </div>
+                                                        </li>
+                                                        {{/each}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="wrapIdentityCard" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.IdentityCard">Số CMT</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" value="${IdentityCard}" name="IdentityCard" alt="cmnd" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapEmail" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Email">Thư điện tử</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" name="Email" value="${Email}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapCommune" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Commune">Xã phường</label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <input type="text" class="tabIndex form-control" tabindex="11" />
+                                                </div>
+                                            </div>
+                                            <div id="wrapFees" class="form-group form-group-sm">
+                                                <label class="col-sm-3 col-md-4 control-label">
+                                                    Lệ phí: <span id="totalFee" style="font-weight: bold">0</span> <b data-res="egov.resources.document.concurrency">Vnd</b>
+                                                </label>
+                                                <div class="col-sm-13 col-md-12">
+                                                    <ul class="fees">
+                                                        {{each DocFees}}
+                                                        <li class="doc-fee">
+                                                            <div class="" style="width: 20px; margin-left: 0;">
+                                                                <input class="fee-id" type="checkbox" value="${DocFeeId}" />
+                                                            </div>
+                                                            <div class="field">
+                                                                <span class="fee-name" style="width: 70%" title="${FeeName}">${FeeName}</span>
+                                                                <span class="price-unit" data-res="egov.resources.document.concurrency">Vnd</span>
+                                                                <input class="fee-price" type="text" value="${Price}" style="width: 20%" />
+                                                            </div>
+                                                        </li>
+                                                        {{/each}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li class="list-group-item tab-info hidden">
+                        <div id="divContent" class="row document-contents"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>

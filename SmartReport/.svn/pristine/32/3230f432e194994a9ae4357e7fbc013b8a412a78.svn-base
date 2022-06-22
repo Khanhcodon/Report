@@ -1,0 +1,9 @@
+﻿<div class="div-subform">
+    <input type="hidden" name="ContentId" value="${DocumentContentId}" />
+    <div class="subformTitle form-title">
+        <span title="Hiển thị biểu mẫu" class="showOrHideContent">►
+            <span class="formName" data-contentid="${DocumentContentId}" type="${FormTypeId}">${ContentName}</span>
+        </span>
+    </div>
+    <div class="content" style="display:none" data-contentid="${DocumentContentId}" type="${FormTypeId}">{{html Content}}</div>
+</div>

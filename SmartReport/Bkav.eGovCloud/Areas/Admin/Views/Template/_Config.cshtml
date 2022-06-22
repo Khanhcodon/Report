@@ -1,0 +1,240 @@
+﻿@model TemplateModel
+@{
+    ViewBag.Docfield = ViewBag.Docfield as IEnumerable<SelectListItem>;
+    ViewBag.DoctypeId = ViewBag.DoctypeId as IEnumerable<SelectListItem>;
+    ViewBag.Form = ViewBag.Form as IEnumerable<SelectListItem>;
+    var commonKeys = ViewBag.CommonKeys as IEnumerable<SelectListItem>;
+    var specialKeys = ViewBag.SpecialKeys as IEnumerable<SelectListItem>;
+    var action = ViewBag.Action as string;
+}
+<style type="text/css">
+    .div-keys {
+        width: 200px;
+        float: left;
+    }
+
+    .div-editor {
+        width: 700px;
+        float: left;
+        margin-left: 17px;
+    }
+
+    .div-keys select {
+        width: 100%;
+        border: none;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .div-note {
+        padding-left: 217px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .config ul {
+        width: 150px;
+        -webkit-padding-start: 0;
+        -webkit-margin-before: 0;
+    }
+
+        .config ul li {
+            cursor: pointer;
+        }
+
+            .config ul li:hover {
+                color: #3939f1;
+            }
+
+    .config #accordion h3 {
+        padding-left: 10px;
+        color: #c43434;
+        font-weight: bold;
+        background: transparent;
+        /*border: 1px solid #aaaaaa;*/
+        border-radius: 0px;
+        height: 20px;
+        border: none;
+    }
+
+    .config #accordion div {
+        height: 285px;
+        border: none;
+    }
+
+    .config .ui-accordion .ui-accordion-header .ui-icon {
+        left: -0.5em;
+    }
+
+    #cke_Content {
+        width: 100%;
+    }
+
+    /*custom ckeditor style*/
+
+    span.cke_skin_kama {
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+    }
+
+    .cke_skin_kama .cke_wrapper {
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+        background-color: transparent;
+        background-image: none;
+    }
+
+    .cke_skin_kama .cke_rcombo a, .cke_skin_kama .cke_rcombo a:active, .cke_skin_kama .cke_rcombo a:hover {
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+        background-image: none;
+        _background-image: none;
+        padding: 0px;
+        border: 1px solid #dad9d9;
+    }
+
+    .cke_skin_kama .cke_rcombo .cke_openbutton .cke_icon {
+        background-position: 0 -44px;
+        background-position-x: 8px;
+    }
+
+    .cke_skin_kama a.cke_toolbox_collapser, .cke_skin_kama a:hover.cke_toolbox_collapser {
+        display: none;
+    }
+
+    /*end custom editor*/
+</style>
+
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+
+<script type="text/javascript">
+    var existDoctype = JSON.parse('@Html.Raw(string.IsNullOrEmpty(ViewBag.ExistDoctype) ? "[]" : ViewBag.ExistDoctype)');
+    $(function () {
+        checkExistDoctype();
+        $(document).bindResources();
+    });
+
+    function insertKey(key) {
+        CKEDITOR.instances['Content'].insertHtml(key);
+    }
+
+    function getKeys() {
+        var formId = $("#Form").val();
+        if (formId != "") {
+            $.ajax({
+                url: '@Url.Action("GetKeys", "Template")',
+                data: { formId: formId },
+                success: function (result) {
+                    if (result.success) {
+                        var listKeys = $("<ul>");
+                        $("#formKeyTemp").tmpl(JSON.parse(result.success)).appendTo(listKeys);
+                        $("#formKeys").html(listKeys);
+                    }
+                }
+            });
+        }
+    }
+
+    function getDoctypes() {
+        var docfieldId = $("#Docfield").val();
+        if (docfieldId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetDocTypes", "Template")',
+                data: { docfieldId: docfieldId },
+                success: function (result) {
+                    if (result.success) {
+                        $("#DoctypeId option[value!= '']").remove();
+                        var doctypes = JSON.parse(result.success);
+                        for (var i = 0; i < doctypes.length; i++) {
+                            var $option = $("<option>").val(doctypes[i].Value).text(doctypes[i].Text);
+                            $("#DoctypeId").append($option);
+                        }
+                        checkExistDoctype();
+                    }
+                }
+            });
+        }
+    }
+
+    function getForms() {
+        var doctypeId = $("#DoctypeId").val();
+        if (doctypeId != "") {
+            $.ajax({
+                url: '@Url.Action("GetForms", "Template")',
+                data: { doctypeId: doctypeId },
+                success: function (result) {
+                    if (result.success) {
+                        $("#Form option[value!= '']").remove();
+                        var doctypes = JSON.parse(result.success);
+                        for (var i = 0; i < doctypes.length; i++) {
+                            var $option = $("<option>").val(doctypes[i].Value).text(doctypes[i].Text);
+                            $("#Form").append($option);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function checkExistDoctype() {
+        if ($("form").attr("name") == "AddChild") {
+            $("#DoctypeId option").each(function () {
+                var doctypeId = $(this).val();
+                if (_.find(existDoctype, function (e) { return e == doctypeId; })) {
+                    $(this).attr("disabled", "disabled");
+                }
+            });
+        }
+    }
+</script>
+
+@using (Html.BeginForm(action, "Template", FormMethod.Post, new { name = ViewBag.Action, @class = "form" }))
+{
+    @Html.HiddenFor(model => model.TemplateId)
+    @Html.HiddenFor(Model => Model.ParentId)
+    @Html.AntiForgeryToken()
+    <div class="config">
+        <div class="div-keys">
+            @Html.DropDownList("Docfield", null, (ViewBag.Docfield.Count != 1 ? Localizer("Customer.DocType.CreateOrEdit.Fields.DocFieldId.Label") : null), new { onchange = "getDoctypes()" })
+            @Html.DropDownList("DoctypeId", null, (ViewBag.DoctypeId.Count != 1 ? Localizer("Common.ConfigEmbryonicForm.Doctype.Select") : null), new { onchange = "getForms()" })
+            @Html.DropDownList("Form", null, Localizer("Common.ConfigEmbryonicForm.Form.Select"), new { onchange = "getKeys()" })
+            <div id="accordion">
+                <h3 data-res="egov.resources.template.specialkey"></h3>
+                <div class="special-keys">
+                    <ul id="specialKeys">
+                        @foreach (var key in specialKeys)
+                        {
+                            <li>
+                                <span onclick="insertKey('@key.Value')" title="@key.Text">@key.Text</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <h3 data-res="egov.resources.template.key"></h3>
+                <div class="common-keys">
+                    <ul id="commonKeys">
+                        @foreach (var key in commonKeys)
+                        {
+                            <li>
+                                <span onclick="insertKey('@key.Value')" title="@key.Text">@key.Text</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <h3 data-res="egov.resources.template.keyfromform"></h3>
+                <div id="formKeys">
+                </div>
+            </div>
+        </div>
+        <div class="div-editor">
+            @Html.TextAreaFor(model => model.Content)
+        </div>
+    </div>
+}
+<script type="text/x-jquery-tmpl" id="formKeyTemp">
+    <li onclick="insertKey('${Value}')">${Text}</li>
+</script>

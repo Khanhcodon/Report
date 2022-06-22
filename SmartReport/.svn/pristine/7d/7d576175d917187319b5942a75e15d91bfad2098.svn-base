@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.DocFieldWorkflow.Label.Workflow");
+    Layout = "~/Areas/Admin/Views/Workflow/_EditMain.cshtml";
+    var docFieldWorkflows = ViewBag.DocFieldWorkflows as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DocFieldModel>;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".tab-docdield").addClass("active");
+        $(".tab-docdield").siblings().removeClass("ui-tabs-selected ui-state-active");
+
+        $("#tblListWorkflow").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+
+    function changeDocFieldWorkflowStatus(_this, docFieldId,workflowId ){
+        var status = $(_this).is(":checked");
+        $.ajax({
+            url: "@Url.Action("ChangeDocFieldWorkflowStatus")",
+            type: "post",
+            data: {workflowId: workflowId, docFieldId: docFieldId, status: status},
+            success: function(result){
+                window.location.reload(true);
+            }
+        });
+    }
+
+    function deleteDocFieldWorkflow(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.DocFieldWorkflow.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            title:'@Localizer("Admin.DocFieldWorkflow.AddNewDocField")' ,
+            width: 1000,
+            height: 600,
+            resizable: true,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: {
+                "@Html.Raw(Localizer("Admin.DocFieldWorkflow.AddNewDocField"))": function (e) {
+                updateWorkflow();
+                $('#my-dialog').dialog("close");
+            }
+            }
+        });
+}
+</script>
+<style>
+    .table {
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.workflow"></span>
+    </div>
+    <div class="options">
+
+        <a class="btn  btn-default control-btn" href="/admin/Workflow/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="my-dialog">
+</div>
+<button class="btn" type="button"
+        onclick="openDialog('@Url.Action("AddDocFieldWorkflow", "Workflow", new { id = ViewBag.WorkflowId })')">
+    @Localizer("Admin.DocFieldWorkflow.AddNewDocField")
+</button>
+
+<table class="table-main table" id="tblListWorkflow">
+    <colgroup>
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.DocTypeName")
+            </th>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.IsActivated")
+            </th>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (docFieldWorkflows != null && docFieldWorkflows.Any())
+        {
+            foreach (var item in docFieldWorkflows)
+            {
+            <tr>
+                <td class="td-filter">
+                    @item.DocFieldName
+                </td>
+                <td style="text-align: center;">
+                    <input type="checkbox"
+                                     @(item.IsActivated ? "checked='checked'" : "")
+                     onclick="changeDocFieldWorkflowStatus(this,'@item.DocFieldId    ', '@ViewBag.WorkflowId    ')" />
+                </td>
+                <td>
+                    <a href="javascript:deleteDocFieldWorkflow('@(item.DocFieldId)')">
+                        @Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(item.DocFieldId)" style="display: none"
+                                    action="@Url.Action("DeleteDocFieldWorkFlow",
+                                    new { docFieldId = item.DocFieldId, id = ViewBag.WorkflowId })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.doctype.noformdata"></td>
+            </tr>
+        }
+    </tbody>
+</table>

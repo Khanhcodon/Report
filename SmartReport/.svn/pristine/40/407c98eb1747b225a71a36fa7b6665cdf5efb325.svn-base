@@ -1,0 +1,25 @@
+﻿@model Bkav.eGovCloud.Admin.Models.DomainModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ConnectionSetting.General");
+    Layout = "_SettingLayout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery-tmpl.modified.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/knockout/knockout-2.2.0.js")"></script>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        <ul class="nav nav-tabs">
+            <li class="">@Html.ActionLink("Danh sách", "ConnectionSetting")</li>
+            <li class="active"><a href="#">Tạo mới</a></li>
+        </ul>
+        <div class="tab">
+            <br />
+            <div class="container-fluid">
+                @Html.Partial("_CreateOrEditDomain", Model)
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,120 @@
+﻿@model SmsOrMailSearchModel
+@{
+    ViewBag.Title = Localizer("Admin.MailMananer.Title.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.js")"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $('input[type="submit"]').first().focus();
+        $(".control-btn").remove();
+        $('#deleteSeleteds').bind("click", function () {
+            if ($("#formdelete input[name=ids]").length > 0) {
+                eGovMessage.show(
+                    '@Html.Raw(Localizer("Customer.MailMananer.ConfirmMessage"))',
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        $("#formdelete").submit();
+                    }
+                );
+            } else {
+                eGovMessage.show("@Localizer("Customer.MailMananer.NotSelectToDelete")");
+            }
+        });
+
+        $("#FromDate,#ToDate").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+
+    function onBegin() {
+        $("#divMailManager").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divMailManager').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divMailManager').unblockpanel();
+    }
+
+    function onSubmit(_el) {
+        var action = '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val();
+        $(_el).parent().attr('action', action);
+
+        $("#formSearch").submit();
+    }
+
+    function searchMail(_el) {
+        var action = '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val();
+        $(_el).parent().attr('action', action);
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span data-res="egov.resources.sitemap.level"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning" id="deleteSeleteds">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">@Localizer("Common.Button.Delete")</span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+
+    @Html.Partial("_Notifications")
+
+    @using (Ajax.BeginForm("Search", null, new AjaxOptions
+    {
+        UpdateTargetId = "divMailManager",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }, new { @id = "formSearch", @class = "form-inline" }))
+    {
+        <span>@Localizer("MailManager.Index.Search.IsSent")</span>
+        <select id="IsSent" name="IsSent" style="width: 120px; margin-left: 5px; margin-right: 5px;" onchange="onSubmit(this)">
+            <option value="">@Localizer("Customer.Mail.All.label")</option>
+            <option value="False">@Localizer("Customer.Mail.All.NotSent")</option>
+            <option value="True">@Localizer("Customer.Mail.All.Sented")</option>
+        </select>
+        @:&nbsp;
+        <span>@Localizer("MailManager.Index.Search.FindText")</span>
+        @Html.TextBoxFor(model => model.FindText, new { @style = "width:300px;margin-left:5px;margin-right:5px;" })
+
+        @:&nbsp;
+        @Html.LabelFor(model => model.FromDate)
+        @Html.TextBoxFor(model => model.FromDate, new { @style = "width: 100px;margin-left:5px;margin-right:5px;" })
+
+        @Html.LabelFor(model => model.ToDate)
+        @Html.TextBoxFor(model => model.ToDate, new { @style = "width: 100px;margin-left:5px" })
+        <input type="submit"
+           value="@Localizer("Common.Log.Index.Search.Button.Search")" class="btn" onclick="searchMail(this)" />
+
+    }
+    <br />
+    <div id="divMailManager">
+        @Html.Partial("_PartialList")
+    </div>
+</div>

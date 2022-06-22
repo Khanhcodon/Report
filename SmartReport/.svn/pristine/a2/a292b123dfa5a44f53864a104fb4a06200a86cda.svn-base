@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="overview-title">
+    Danh sách khách hàng <span class="customerinfo-total total"></span>
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tải về <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="customerinfo">
+            <li><a href="#" id="btnExportWord">Ms Word</a></li>
+            <li><a href="#" id="btnExportPdf">Pdf</a></li>
+            <li><a href="#" id="btnExportExcel">Excel</a></li>
+            <li><a href="#" id="btnExportXml">XML</a></li>
+        </ul>
+    </div>
+    <div class="btn-group pull-right overdue-group hidden" style="margin-right: 10px;">
+        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Nhóm theo <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="customerinfo">
+            <li><a href="#" value="0">Tên cơ quan</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered table-hover document-overdue" id="customerInfoList">
+        <colgroup>
+            <col style="width: 50px" />
+            <col style="width: 92px" />
+            <col style="width: 194px" />
+            <col />
+            <col style="width: 124px" />
+            <col style="width: 113px" />
+            <col style="width: 125px" />
+            <col style="width: 184px" />
+            @*<col style="width: 50px" />*@
+        </colgroup>
+        <thead>
+            @if (IsHoSoMotCuaEdition)
+            {
+                <tr>
+                    <th>Stt</th>
+                    <th>Số ký hiệu</th>
+                    <th>Tên công dân</th>
+                    <th>Tên thủ tục</th>
+                    <th>Ngày tiếp nhận</th>
+                    <th>Ngày hẹn trả</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ liên hệ</th>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>Stt</th>
+                    <th>Số ký hiệu</th>
+                    <th>Tên công dân</th>
+                    <th>Tên thủ tục</th>
+                    <th>Ngày tiếp nhận</th>
+                    <th>Ngày hẹn trả</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ liên hệ</th>
+                </tr>
+            }
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<script type="text/x-jquery-tmpl" id="customerInfoTemp">
+    <tr class="${color}">
+        <td>${Stt}</td>
+        <td>${DocCode}</td>
+        <td>${CitizenName}</td>
+        <td>${DoctypeName}</td>
+        <td class="text-center">${DateCreated}</td>
+        <td class="text-center">${DateAppointed}</td>
+        <td class="text-center">${Phone}</td>
+        <td class="text-center">${Address}</td>
+    </tr>
+</script>

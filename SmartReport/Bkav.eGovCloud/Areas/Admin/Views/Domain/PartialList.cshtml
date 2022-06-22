@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DomainModel>
+
+<script type="text/javascript">
+    function deleteDomain(id) {
+        if (confirm("Bạn có chắc muốn xóa domain này?")) {
+            $("#formDeleteDomain" + id).submit();
+        };
+    }
+</script>
+
+<table class="table-main table table-hover" id="tblDomain" style="width: 800px">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 300px" />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                STT
+            </th>
+            <th class="header">
+                Tên domain
+            </th>
+            <th class="header">
+                Cơ quan
+            </th>
+            <th class="header">
+                Domain Mặc định
+            </th>
+            <th class="header">
+                Sử dụng
+            </th>
+            <th class="header">
+                Sửa
+            </th>
+            @*<th class="header">
+                Xóa
+            </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var number = 0;
+            foreach (var domain in Model)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                </td>
+                <td>@domain.DomainName
+                </td>
+                <td>@domain.CustomerName
+                </td>
+                <td>
+                    <input type="checkbox" disabled @(domain.IsPrimary? "checked" : "")/>
+                </td>
+                <td>
+                    <input type="checkbox" disabled @(domain.IsActivated ? "checked" : "") />
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { Id = domain.DomainId })
+                </td>
+                <td>
+                    <a href="javascript:deleteDomain(@(domain.DomainId))">@Localizer("Role.Index.List.Column.Delete.Button")</a>
+                    @*<form id="formDeleteDomain@(domain.DomainId)" style="display: none" action="@Url.Action("Delete", new { Id = domain.DomainId })" method="POST">
+                    </form>*@
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">Không có domain nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+    }
+<script type="text/ecmascript">
+    $(function () {
+        $(".date-appoint-select span").click(function () {
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            $('#DateOverdueSelect a').html('Hết hạn: ' + $(this).text() + '<b></b>');
+            $(this).parents(".qtip").hide();
+        });
+
+    });
+
+    function dateAppointFilter(id) {
+        var days = parseInt(id);
+        @*var currentDocuments = egov.cshtml.home.currentDocuments;*@
+        if (days == 0)
+        {
+            egov.cshtml.home.overduefilter('');
+            return;
+        }
+        $.get("@Url.Action("GetDateAppointed", "Home")", 
+                { days: days },
+                function (day) {
+                    if (day)
+                    {
+                        @*currentDocuments.overdueFiltering = new Date(day.year, day.month - 1, day.day, 23, 59, 59); // -1 do kiểu date trong javascript tính tháng từ 0
+                        currentDocuments.renderClientFilter();*@
+                        egov.cshtml.home.overduefilter(day);
+                    }
+                }
+            )
+            .complete(function () {                
+            })
+            .fail(function () {
+                eGovMessage.notification(""@Localizer("Common.Error")"");
+            });
+    }
+</script>
+<div class="date-appoint-select menu-dropdown" id="DateAppointSelect">
+    <span><a href="javascript:dateAppointFilter('0')">
+        Tất cả</a></span>
+    <span><a href="javascript:dateAppointFilter('1')">
+        1 Ngày</a></span> <span><a href="javascript:dateAppointFilter('2')">2 Ngày</a></span>
+    <span><a href="javascript:dateAppointFilter('3')">3 Ngày</a></span> <span><a href="javascript:dateAppointFilter('4')">
+        4 Ngày</a></span> <span><a href="javascript:dateAppointFilter('5')">5 Ngày</a></span>
+    <span><a href="javascript:dateAppointFilter('6')">6 Ngày</a></span> <span><a href="javascript:dateAppointFilter('7')">
+        7 Ngày</a></span> <span><a href="javascript:dateAppointFilter('10')">10 Ngày</a></span>
+    <span><a href="javascript:dateAppointFilter('15')">15 Ngày</a></span> <span><a href="javascript:dateAppointFilter('20')">
+        20 Ngày</a></span> <span><a href="javascript:dateAppointFilter('30')">30 Ngày</a></span>
+</div>

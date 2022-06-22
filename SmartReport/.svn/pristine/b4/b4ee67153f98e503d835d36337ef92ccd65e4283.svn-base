@@ -1,0 +1,99 @@
+﻿@model IEnumerable<EgovJobModel>
+@{
+    ViewBag.Title = Localizer("Common.Timmer.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+}
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(@Localizer("Common.Button.List"), "Index", null, new { @id = "index", @class = "selected" })</li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    <table id="tblTimer" class="table table-hover table-bordered">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 50px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.Name")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.Interval")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.LastRun")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.NextRun")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.LastModified")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.IsActivated")
+                </th>
+                <th>
+                    @Localizer("Common.Timer.Index.List.Column.Edit")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var timer in Model)
+                {
+                    number++;
+                <tr>
+                    <td>
+                        @number
+                    </td>
+                    <td>
+                        @timer.Name
+                    </td>
+                    <td>
+                        @timer.Interval
+                    </td>
+                    <td>
+                        @timer.LastRun
+                    </td>
+                    <td>
+                        @timer.NextRun
+                    </td>
+                    <td>
+                        @timer.LastModified
+                    </td>
+                    <td>
+                        @if (timer.IsActivated)
+                        {
+                            <input id="IsActivated" type="checkbox" name="@timer.Id" value="true" checked/>
+                        }
+                        else
+                        {
+                            <input id="IsActivated" type="checkbox" name="@timer.Id" value="false"/>
+                        }
+                        <form id="setActiveForm@(timer.Id)" style="display: none" action="@Url.Action("SetActive", "EgovJob", new { id = timer.Id, isActivated = timer.IsActivated })" method="POST">
+                        </form>
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = timer.Id })
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

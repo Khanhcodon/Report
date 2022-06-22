@@ -1,0 +1,207 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.SmsSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Sms");
+    Layout = "_SettingLayout.cshtml";
+    var listVendor = ViewBag.ListVendor as List<SelectListItem>;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script type="text/javascript">
+    var documentFields = [
+        {
+            name: "@Localizer("Document.UrgentId.Field.Label")", value: 'UrgentId', type: 'int', options: [
+                { name: "@Html.Raw(Localizer("Document.Urgent.Normal.Field.Label"))", value: 1 },
+                { name: "@Html.Raw(Localizer("Document.Urgent.Fast.Field.Label"))", value: 2 },
+                { name: "@Html.Raw(Localizer("Document.Urgent.SuperFast.Field.Label"))", value: 3 }
+            ]
+        },
+        {
+            name: "@Localizer("Document.Urgent.HasRead")", value: 'IsSuccess', options: []
+        }
+    ];
+
+    function insertSpec(that) {
+        var newSpec = $('<li>');
+        var drop = $('<select class="text-field form-control">').append('<option data-res="egov.resources.commonlabel.select">Chọn</option>');
+
+        documentFields.forEach(function (item) {
+            var option = $('<option>').text(item.name).val(item.value);
+            drop.append(option);
+        });
+        newSpec.append(drop);
+        var btn = $("<button class='btn btn-default btnRemoveInfo'  style='position: absolute;left: 350px;'>Xóa</button>");
+        newSpec.append(btn);
+        $(that).before(newSpec);
+        selectOption();
+    }
+
+    function selectOption() {
+        $('.specifications').find('select').change(function () {
+            var that = $(this);
+            var item = _.find(documentFields, function (i) {
+                return i.value === that.val();
+            });
+            $(this).parents('li').attr('value', item.value);
+            $(this).parents('li').find('.itm-value').remove();
+            if (item.options.length > 0) {
+                var newDrop = $('<select class="value-field form-control">');
+                item.options.forEach(function (option) {
+                    var newOption = $('<option>').text(option.name).val(option.value);
+                    newDrop.append(newOption);
+                });
+                var span = $('<span class="itm-value" data-res="egov.resources.commonlabel.is"> Là </span>').append(newDrop);
+                $(this).parents('li').append(span);
+            }
+        });
+    }
+
+    function submit() {
+        var specs = [];
+        $('.specifications li').each(function () {
+            if ($(this).attr('value') !== '') {
+                if ($(this).find('.value-field').val() !== '') {
+                    var spec = {};
+                    spec.Value = $(this).find('.value-field :selected').val();
+                    spec.Field = $(this).find('.text-field :selected').val();
+                    specs.push(spec);
+                    $('#Conditions').val(JSON.stringify(specs));
+                }
+            }
+        });
+        $('form').submit();
+    }
+
+    $(function () {
+        var conditions = JSON.parse($('#Conditions').val() == '' ? '[]' : $('#Conditions').val());
+        if (conditions.length > 0) {
+            conditions.forEach(function (itm) {
+                var item = _.find(documentFields, function (i) {
+                    return i.value == itm.Field;
+                });
+                if (item != null) {
+                    var newSpec = $('<li>');
+                    var $select = $('<select class="text-field form-control">');
+                    newSpec.append($select);
+                    documentFields.forEach(function (i) {
+                        var option = $('<option>').text(i.name).val(i.value);
+                        if (item.value === i.value) {
+                            option.attr("selected", true);
+                        }
+                        $select.append(option);
+                    });
+                    if (item.options.length > 0) {
+                        var newDrop = $('<select class="value-field form-control">');
+                        item.options.forEach(function (option) {
+                            var newOption = $('<option>').text(option.name).val(option.value);
+                            if (option.value == itm.Value) {
+                                newOption.attr('selected', 'selected');
+                            }
+                            newDrop.append(newOption);
+                        });
+                        var span = $('<span class="itm-value" data-res="egov.resources.commonlabel.is"> Là </span>').append(newDrop);
+                        newSpec.append(span);
+                    }
+                    newSpec.append("<button class='btn btn-default btnRemoveInfo' style='position: absolute;left: 350px;'>Xóa</button>");
+                    $('.specifications li:last').before(newSpec);
+                }
+            });
+        }
+        $(".btnRemoveInfo").bind("click", function (e) {
+            e.stopPropagation();
+            $(this).closest("li").remove();
+        })
+
+        $("#submit").click(function () {
+            submit();
+        })
+        selectOption();
+    });
+</script>
+
+<style type="text/css">
+    fieldset div {
+        /*margin-bottom: 10px;*/
+    }
+
+    .specifications li {
+        margin-bottom: 5px;
+    }
+
+    .specifications select {
+        width: 150px;
+        display: inline-block;
+    }
+</style>
+
+<div id="tabs" class="bkavegov">
+    <div>
+        @Html.Partial("_Notifications")
+
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            
+            @Html.HiddenFor(model => model.IsCustomer)
+            <table>
+                <tr>
+                    <td style="width: 20%">
+                        @Html.LabelFor(model => model.IsActivated):
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsActivated)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelRequireFor(model => model.SmsVendor):</td>
+                    <td>
+                        @Html.DropDownListForEnum(model => model.SmsVendor, typeof(Bkav.eGovCloud.Entities.Enum.SmsVendor))
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelRequireFor(model => model.ServiceUrl):</td>
+                    <td>@Html.TextBoxFor(model => model.ServiceUrl, new { style = "display:inline" })</td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelFor(model => model.ServiceUser):</td>
+                    <td>@Html.TextBoxFor(model => model.ServiceUser, new { style = "display:inline" })</td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelFor(model => model.ServicePass):</td>
+                    <td>@Html.PasswordFor(model => model.ServicePass, new { style = "display:inline" })</td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelFor(model => model.ServiceCode):</td>
+                    <td>@Html.TextBoxFor(model => model.ServiceCode, new { style = "display:inline" })</td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelFor(model => model.Alias):</td>
+                    <td>@Html.TextBoxFor(model => model.Alias, new { style = "display:inline" })</td>
+                </tr>
+                <tr style="display: none">
+                    <td>@Html.LabelFor(model => model.TitleName):</td>
+                    <td>@Html.TextBoxFor(model => model.TitleName, new { style = "display:inline" })</td>
+                </tr>
+                <tr >
+                    <td>@Html.LabelFor(model => model.LinkApi):</td>
+                    <td>@Html.TextBoxFor(model => model.LinkApi, new { style = "display:inline" })</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(model => model.TokenApi):</td>
+                    <td>@Html.TextBoxFor(model => model.TokenApi, new { style = "display:inline" })</td>
+                </tr>
+            </table>
+            <br />
+            @Html.HiddenFor(model => model.SentDocumentTemplateId)
+            @Html.HiddenFor(model => model.SentMeetingTemplateId)            
+        }
+        <br />
+        <fieldset>
+            <legend>@Localizer("Admin.Setting.NotifyConfig.List.Label")</legend>
+
+            @{
+                Html.RenderPartial("_NotifyConfig", ViewBag.AllNotify as List<Bkav.eGovCloud.Areas.Admin.Models.NotifyConfigModel>);
+            }
+        </fieldset>
+    </div>
+</div>

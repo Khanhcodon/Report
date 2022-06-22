@@ -1,0 +1,222 @@
+﻿<ul class="nav nav-pills toolbar">
+    <li class="dropdown">
+        <a class="dropdown-toggle doc-online-btn" data-toggle="dropdown" href="#" data-status="Accept">
+            <span class="icon icon-checkmark3"></span>
+            <span data-res="egov.resources.toolbar.accept"></span>
+        </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle doc-online-btn" data-toggle="dropdown" href="#" data-status="Reject">
+            <span class="icon icon-spam"></span>
+            <span data-res="egov.resources.toolbar.reject"></span>
+        </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle doc-online-btn" data-toggle="dropdown" href="#" data-status="AdditionalRequirements">
+            <span class="icon icon-plus"></span>
+            <span data-res="egov.resources.toolbar.additionalRequirements"></span>
+        </a>
+    </li>
+</ul>
+
+<div class="container-fluid document-info" style="margin-top: 15px;">
+    <input type="hidden" value="${Token}" id="token"/>
+    <div class="staticPart">
+        <div class="form-horizontal document-info-template">
+            <table cellpadding="3">
+                <colgroup>
+                    <col style="width: 50%;">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td colspan="2" rowspan="1">
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.PersonInfo"></label>
+                                <div class="col-sm-13 col-md-14">
+                                    <div class="input-group">
+                                        <input type="text" value="${PersonInfo}" name="CitizenName" class="form-control" />
+                                        <span class="input-group-addon btnCheckCitizenInfo">
+                                            <span class="icon icon-search"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" rowspan="1">
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.Address"></label>
+                                <div class="col-sm-13 col-md-14">
+                                    <input type="text" name="Address" value="${Address}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.IdentityCard"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" name="IdentityCard" value="${IdCard}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Email"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" name="Email" value="${Email}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Phone"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" name="Phone" value="${Phone}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateReceived"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" value="${DateReceivedFormat}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" rowspan="1">
+                            {{if TypeReturned}}
+                            {{if  TypeReturned == 0}}
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.formtemplate.typeReturn"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="hidden" name="name" value="${TypeReturned}" />
+
+                                    <label class="radio-inline">
+                                        <input type="radio" name="TypeReturned" value="0" {{if TypeReturned == 0}} checked {{/if}} />Qua bưu điện
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="TypeReturned" value="1" {{if TypeReturned == 1}} checked {{/if}} />Trực tiếp
+                                    </label>
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{/if}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocCode"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" value="${DocCode}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateAppointed"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <span class="form-control-static">${DateAppoint}</span>
+                                    <!--<input type="text" value="${DateAppoint}" class="form-control" />-->
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" rowspan="1">
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-2 control-label" data-res="egov.resources.document.Compendium"></label>
+                                <div class="col-sm-13 col-md-14">
+                                    <textarea cols="20" class="form-control" rows="2" spellcheck="false" style="height: 38px; min-height: 36px; max-height: none;">${Compendium}</textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group form-group-sm" id="wrapComment">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Comment"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <textarea cols="20" class="form-control" rows="2" spellcheck="false" style="height: 53px;" id="comment"></textarea>
+                                    <label for="comment" class="error">Vui lòng nhập ý kiến xử lý</label>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocType"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" value="${DocTypeName}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.documentOnlineStatus.label"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <input type="text" value="${StatusText}" class="form-control" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocPapers"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    {{if DocPapers}}
+                                    <ul class="papers ul-papers">
+                                        {{each DocPapers}}
+                                        <li class="doc-paper list-group-item">
+                                            <input class="paper-id" type="checkbox" value="${DocPaperId}" checked disabled />
+                                            <span class="paper-name">${PaperName} (${Amount})</span>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group form-group-sm">
+                                <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.AttachmentList"></label>
+                                <div class="col-sm-13 col-md-12">
+                                    <ul class="file_attachments list-group attachment-list">
+                                        {{each Files}}
+                                        <li class="list-group-item{{if IsDoctypeTemplate }} isdoctypetemplate{{/if}}" data-id="${FileId}" data-name="${FileName}">
+                                            <div class="row">
+                                                <div class="col-md-10 col-sm-10">
+                                                    <span class="attachment-name">${FileName}</span>
+                                                </div>
+                                                <div class="col-md-6  col-sm-6 attachment-function">
+                                                    <span class="attachment-download">
+                                                        <span class="icon icon-download3" data-restitle="egov.resources.attachment.download"></span>
+                                                    </span>
+                                                    <span class="attachment-open">
+                                                        <span class="icon icon-enter" data-restitle="egov.resources.attachment.open"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            </div>                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="forms-area" class="clear">
+    </div>
+</div>

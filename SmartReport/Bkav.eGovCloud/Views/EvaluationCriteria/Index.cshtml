@@ -1,0 +1,732 @@
+﻿@{
+    ViewBag.IconList = "active";
+    ViewBag.Criteria = "";
+    ViewBag.Title = "Danh sách vi phạm";
+    Layout = "_LayoutEvaluationCriteria.cshtml";
+    var department = ViewBag.DepartmentExt as Bkav.eGovCloud.Entities.Customer.UserDepartmentJobTitlesPosition;
+    string departmentext = department.DepartmentIdExt;
+    var templatehtml = ViewBag.TemplateSendDoc as string;
+    var isadmin = (bool)ViewBag.IsAdmin;
+    var ismanager = (bool)ViewBag.IsManager;
+}
+@section script{
+    <script src="../Scripts/bkav.egov/rateemployee/bkav.egov.model.js"></script>
+}
+@section script_relate{
+
+    <script id="InfringeRowTemplate" type="text/x-jQuery-tmpl">
+        <tr>
+            <td data-toggle="tooltip" title="${Account}" class="account">${Account}</td>
+            <td class="nameparent" data="${Account}" data-toggle="tooltip" title="${NameParent}">${NameParent}</td>
+            <td data-toggle="tooltip" title="${Name}">${Name}</td>
+            <td data-toggle="tooltip" title="${Detail}">${Detail}</td>
+            <td data-toggle="tooltip" title="${Times}" class="text-center">${Times}</td>
+            <td data-toggle="tooltip" title="${Point}" class="point text-center">${Point}</td>
+            <td class="text-center" data-toggle="tooltip" title="${$item.settime(Date)}"> ${$item.settime(Date)}</td>
+            <td data-toggle="tooltip" title="${CreateUserIdName}" class="text-center">${CreateUserIdName}</td>
+            <td class="text-center">
+                <a href="#" class="deleteinfringe ">
+                    <input type="hidden" name="name" value="${CheckInfringeId}" />
+                    <img src="../Scripts/img/deleteicon.png" height="20" width="20" />
+                </a>
+            </td>
+        </tr>
+    </script>
+    <script id="InfringeRowspanTemplate" type="text/x-jQuery-tmpl">
+        <tr>
+            <td class="nameparent" data="${Account}" data-toggle="tooltip" title="${NameParent}">${NameParent}</td>
+            <td data-toggle="tooltip" title="${Name}">${Name}</td>
+            <td data-toggle="tooltip" title="${Detail}">${Detail}</td>
+            <td data-toggle="tooltip" title="${Times}" class="text-center">${Times}</td>
+            <td data-toggle="tooltip" title="${Point}" class="point text-center">${Point}</td>
+            <td class="text-center" data-toggle="tooltip" title="${$item.settime(Date)}"> ${$item.settime(Date)}</td>
+            <td data-toggle="tooltip" title="${CreateUserIdName}" class="text-center">${CreateUserIdName}</td>
+            <td class="text-center">
+                <a href="#" class="deleteinfringe ">
+                    <input type="hidden" name="name" value="${CheckInfringeId}" />
+                    <img src=".. /Scripts/img/deleteicon.png" height="20" width="20" />
+
+                </a>
+            </td>
+        </tr>
+    </script>
+    <script id="InfringeRowspanRateTemplate" type="text/x-jQuery-tmpl">
+        <tr>
+
+            <td data-toggle="tooltip" title="${Name}">${Name}</td>
+            <td data-toggle="tooltip" title="${Detail}">${Detail}</td>
+            <td data-toggle="tooltip" title="${Times}" class="text-center">${Times}</td>
+            <td data-toggle="tooltip" title="${Point}" class="point text-center">${Point}</td>
+            <td class="text-center" data-toggle="tooltip" title="${$item.settime(Date)}"> ${$item.settime(Date)}</td>
+            <td data-toggle="tooltip" title="${CreateUserIdName}" class="text-center">${CreateUserIdName}</td>
+            <td class="text-center">
+                <a href="#" class="deleteinfringe ">
+                    <input type="hidden" name="name" value="${CheckInfringeId}" />
+                    <img src="../Scripts/img/deleteicon.png" height="20" width="20" />
+
+                </a>
+            </td>
+        </tr>
+    </script>
+    <script>
+        var isadmin = '@isadmin';
+        var ismanager = '@ismanager';
+        console.log(isadmin+"cskjfjksd"+ismanager)
+        var departmentexts = '@(string.IsNullOrEmpty(departmentext) ? MvcHtmlString.Create("[]") : Html.Raw(departmentext))';
+        var listinfringedown = [];
+        var huongchuyen;
+        var date = new Date();
+        var firstday = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastday = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        function countAccount(list, account) {
+            var count = 0;
+            for (var i = 0; i < list.data.length; i++) {
+                if (list.data[i].Account == account) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        function countName(list, account, name) {
+            var count = 0;
+            for (var i = 0; i < list.data.length; i++) {
+                if (list.data[i].Account == account && list.data[i].NameParent == name) {
+                    count++;
+                }
+            }
+            return count;
+        };
+        if (ismanager == "False" && isadmin == "True") {
+            $("#sendsuccess").hide()
+            $("#inferior").show();
+            $("#createinfringe").hide();
+        }
+        var account
+        var nameparent
+        // ve giao diện
+        function datagetview(data, selector) {
+            account = '';
+            nameparent = '';
+            selector.html('');
+            if (data == "none" && isadmin!="True") {
+                $("#inferior").html("");
+                return;
+            }
+           
+            if (selector.is($('#attendees'))) {
+
+            }
+            //console.log(data);
+            listinfringe = { data: data };
+            if (data.length == 0) {
+                selector.append("<tr><td colspan='9'>Không có ghi nhận nào</td></tr>")
+            } else {
+                // vẽ giao diện theo các template phía dưới để gộp hàng
+                for (var i = 0; i < listinfringe.data.length; i++) {
+                    selector.append($('#InfringeRowTemplate').tmpl(listinfringe.data[i], { settime: formattime }))
+                }
+            }
+        }
+        Number.prototype.padLeft = function (base, chr) {
+            var len = (String(base || 10).length - String(this).length) + 1;
+            return len > 0 ? new Array(len).join(chr || '0') + this : this;
+        }
+        function formattime(strtime) {
+            //var timenum = Number(strtime.substring(6, strtime.length - 2))
+            var time = new Date(strtime);
+            return time.getDate().padLeft() + '/' + Number(time.getMonth() + 1).padLeft() + '/' + time.getFullYear().padLeft();
+        }
+        function viewinfringebytime(firsttime, endtime) {
+            GetInfringeByDate(firsttime.toJSON(), endtime.toJSON(), function (data) {
+                listinfringedown = data;
+                datagetview(data, $('#attendees'));
+            });
+            GetInfringeByDateuserid(firsttime.toJSON(), endtime.toJSON(), function (data) {
+                datagetview(data, $('#currentidinfringe'));
+                if (data.length != 0) {
+                    $('#currentidinfringe > tr').each(function () {
+                        $(this).find('td:last').remove()
+                        $(this).find('.account').remove()
+                    });
+                    var sum = 0;
+                    $('.point').each(function () {
+                        sum = sum + Number($(this).text());
+                    })
+                    $('.sumpoint').text(sum);
+                }
+            });
+        }
+        var listinfringe
+        //xem trước công văn
+        $("#sendsuccess").click(function () {
+            if (listinfringedown.length == 0) {
+                bootbox.alert("Không có gì để báo cáo", function () { });
+            } else {
+                $("#tencongvan").val("Báo cáo đánh giá nhân viên");
+               
+                GetActionList(function (data) {
+                    console.log(data);
+                    if (data.length != 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            $("#positionname").append("<option data-node='" + data[i].NodeId + "' value='" + data[i].Id + "'>" + data[i].Name + "</option>");
+                        }
+                        nextnode = data[0].NodeId;
+                        GetUsersByAction(data[0].Id, function (dataaction) {
+                            huongchuyen = dataaction;
+                            for (var i = 0; i < huongchuyen.length; i++) {
+                                $("#useridbyposition").append("<option value='" + huongchuyen[i].Username + "'>" + huongchuyen[i].FullName + "</option>");
+                            }
+                            userratify = huongchuyen[0].Username
+                        });
+                        $("#FormBaoCao").modal("show");
+                        $(".modal-backdrop.fade.in").removeClass("modal-backdrop")
+                    } else {
+                        bootbox.alert("Cấu hình hướng chuyển chưa đúng", function () { });
+                    }
+                });
+            }
+        });
+        // hủy công văn
+        $("#huycongvan").click(function (e) {
+            e.preventDefault();
+            $("#FormBaoCao").modal("hide");
+        })
+        // xem trước nội dung công văn gửi đi
+        $('#xemtruocnoidung').click(function (e) {
+            e.preventDefault();
+            window.open('ReviewArchives?start=' + firstday.toJSON() + '&&end=' + lastday.toJSON(), "", "width=1200,height=900");
+        });
+        var userratify;
+        var nextnode;
+        var htmltemplateencode = '@templatehtml';
+        // chuyển nội dung công văn
+        $("#chuyencongvan").click(function (e) {
+            e.preventDefault();
+            var tencongvan = $("#tencongvan").val();
+            var ykien = $("#ykienxuly").val();
+            if ($("#tencongvan").val() != "") {
+                $.get('ReviewArchives?start=' + firstday.toJSON() + '&&end=' + lastday.toJSON(), function (datahtml) {
+                    console.log($(datahtml))
+                    
+                    var htmlcontent = $(datahtml).find("#posthtml").html();
+                    for (var i = 0; i < $(datahtml).length; i++) {
+                        if ($(datahtml)[i].id == "posthtml") {
+                            htmlcontent = $(datahtml)[i].innerHTML;
+                        }
+                    }
+                    var htmltemplate = _.unescape(htmltemplateencode);
+                    var date = new Date();
+                    var dateread = "Ngày " + date.getDate() + " Tháng " + Number(date.getMonth() + 1) + " Năm " + date.getFullYear();
+
+                    htmltemplate = htmltemplate.replace("{datetimenow}", dateread.trim());
+                    htmltemplate = htmltemplate.replace("{datatable}", htmlcontent.trim());
+                    htmltemplate= _.escape(htmltemplate)
+                    
+                    SendDispatches(userratify, "Báo các đánh giá nhân viên.docx", tencongvan, ykien, htmltemplate, Number(nextnode), function (data) {
+                        if (data>0) {
+                            bootbox.alert("Gửi công văn thành công");
+                        } else {
+                            bootbox.alert("Có sự cố khi gửi công văn");
+                        }
+                        
+                    });
+                });
+                $("#tencongvan").val("")
+                $("#ykienxuly").val("")
+                $("#FormBaoCao").modal("hide");
+            } else {
+                bootbox.alert("cần nhập đầy đủ thông tin", function () { });
+            }
+        });
+        // Sự kiện khi chọn nguoi nhận công văn
+        $("#positionname").change(function () {
+            var textoption = "";
+            $("#useridbyposition").html(textoption);
+            var position = $(this).find(":selected").text();
+            var positionid = $(this).find(":selected").val();
+            nextnode = $(this).find(":selected").attr("data-node");
+            GetUsersByAction(positionid, function (dataaction) {
+                huongchuyen = dataaction;
+                for (var i = 0; i < huongchuyen.length; i++) {
+                    $("#useridbyposition").append("<option value='" + huongchuyen[i].Username + "'>" + huongchuyen[i].FullName + "</option>");
+                }
+                userratify = huongchuyen[0].Username
+               
+            });
+        });
+        $("#useridbyposition").on("change", function () {
+            userratify = $(this).find(":selected").val();
+        })
+        var currentuser = 2618;
+        $("#FormBaoCao").draggable({
+            handle: ".modal-header"
+        });
+
+        // Hàm khởi tạo lúc chạy chương trình
+        $(document).ready(function () {
+            $('#datetimepicker').datepicker({
+                dateFormat: 'dd-mm-yy',
+            });
+            $("#datetimepicker").datepicker("setDate", new Date());
+            GetCriterias(function (datacriteria) {
+                departmentextsarr = departmentexts.split(".");
+                data = [];
+                for (var i = 0; i < datacriteria.length; i++) {
+                    for (var j = 0; j < departmentextsarr.length; j++) {
+
+                        if (departmentextsarr[j] == datacriteria[i].DepartmentId) {
+                            data.push(datacriteria[i]);
+                        }
+                    }
+                }
+                var datalist = data;
+                console.log(data)
+                for (var i = 0; i < datalist.length; i++) {
+                    if (datalist[i].ParentId === undefined) {
+                        datalist[i].ParentId = null
+                    }
+                }
+                var criterias = { data: datalist };
+                for (var i = 0; i < criterias.data.length; i++) {
+                    if (criterias.data[i].ParentId == null) {
+                        $("#choosecriteria").append('<optgroup class="groupcriteria" label="' + criterias.data[i].Name + '"></optgroup>')
+                        for (var j = 0; j < criterias.data.length; j++) {
+                            if (criterias.data[j].ParentId == criterias.data[i].RateEmployeeId) {
+                                $(".groupcriteria:last").append('<option value="' + criterias.data[j].RateEmployeeId + '">' + criterias.data[j].Name + '</option>')
+                            }
+                        }
+                    }
+                }
+            });
+            GetsUserDown(function (data) {
+                if (data.length != 0) {
+                    $("#inferior").show();
+                }
+                for (var i = 0; i < data.length; i++) {
+                    $("#accountname").append('<option value="' + data[i].UserId + '">' + data[i].UserName + '</option>')
+                    $("#searchaccountinfringe").append('<option value="' + data[i].UserId + '">' + data[i].UserName + '</option>')
+                }
+
+            })
+            GetInfringeByDate(firstday.toJSON(), lastday.toJSON(), function (data) {
+                listinfringedown = data
+                datagetview(data, $('#attendees'));
+            })
+            GetInfringeByDateuserid(firstday.toJSON(), lastday.toJSON(), function (data) {
+                datagetview(data, $('#currentidinfringe'));
+                if (data.length != 0) {
+                    $('#currentidinfringe > tr').each(function () {
+                        $(this).find('td:last').remove()
+                        $(this).find('.account').remove()
+                    });
+                }
+                var sum = 0;
+                $('.point').each(function () {
+                    sum = sum + Number($(this).text());
+                })
+                $('.sumpoint').text(sum);
+            });
+            $(document).on('click', '.deleteinfringe', function () {
+                var sltdelete = $(this).find("input");
+                bootbox.confirm("bạn có muốn xóa đánh giá thi đua của người này?", function (rsl) {
+                    if (rsl == true) {
+                        DeleteInfringeUsers(Number(sltdelete.val()), function (datadelete) {
+                            account = '';
+                            nameparent = '';
+
+                            GetInfringeByDate(firstday.toJSON(), lastday.toJSON(), function (data) {
+                                datagetview(data, $('#attendees'));
+                            })
+                        });
+                    }
+                })
+            })
+        });
+
+        $(document).load(function () {
+            $('td').tooltip();
+
+
+        });
+        $("#searchaccountinfringe").change(function () {
+            var accname = $("#searchaccountinfringe option:selected").text();
+            
+            if (accname == "Tất cả") {
+                GetInfringeByDate(firstday.toJSON(), lastday.toJSON(), function (data) {
+                    datagetview(data, $('#attendees'));
+                });
+            } else {
+                var listbyuserObj = [];
+                for (var i = 0; i < listinfringedown.length; i++) {
+                    if (listinfringedown[i].Account == accname) {
+                        listbyuserObj.push(listinfringedown[i]);// lấy ra lỗi vi phạm của acc vừa tìm để hiển thị ra màn hình
+                    }
+                };
+                console.log(listbyuserObj);
+                if (listbyuserObj.length == 0) {
+                    $("#attendees").html("");
+                    $("#attendees").append("<tr><td colspan='9'>Không có ghi nhận nào</td></tr>")
+                } else {
+                    datagetview(listbyuserObj, $('#attendees'));
+                    listbyuserObj = [];
+                }
+            }
+            console.log(listinfringedown)
+
+        })
+        //$(".table").colResizable();
+        // Bộ lọc tìm kiếm theo accout
+        //var accountevent = $(".nameaccount").tautocomplete({
+        //    width: "200px",
+        //    columns: ['Account'],
+        //    data: function () {
+        //        try {
+        //            $('#notall').prop("checked", true);
+        //            var uniqueNames = [];
+        //            var uniqueObj = [];// Lưu những tên acc trong danh sách vi phạm
+        //            for (var i = 0; i < listinfringe.data.length; i++) {
+        //                if (uniqueNames.indexOf(listinfringe.data[i].Account) === -1) {
+        //                    uniqueNames.push(listinfringe.data[i].Account);
+        //                    uniqueObj.push({ "id": 1, "Account": listinfringe.data[i].Account });
+        //                }
+        //            }
+
+        //            var data = uniqueObj;
+
+        //        }
+        //        catch (e) {
+        //            alert(e)
+        //        }
+        //        var filterData = [];
+
+        //        var searchData = eval("/" + accountevent.searchdata() + "/gi");
+
+        //        $.each(data, function (i, v) {
+        //            if (v.Account.search(new RegExp(searchData)) != -1) {
+        //                filterData.push(v);
+        //            }
+        //        });
+        //        return filterData;
+        //    },
+        //    onchange: function () {
+        //        // datagetview(listbyuserObj, $('#attendees'));
+
+        //        var listbyuserObj = [];
+        //        for (var i = 0; i < listinfringe.data.length; i++) {
+        //            if (listinfringe.data[i].Account == accountevent.text()) {
+        //                listbyuserObj.push(listinfringe.data[i]);// lấy ra lỗi vi phạm của acc vừa tìm để hiển thị ra màn hình
+        //            }
+        //        };
+        //        if (listbyuserObj.length == 0) {
+        //            GetInfringeByDate(firstday.toJSON(), lastday.toJSON(), function (data) {
+        //                datagetview(data, $('#attendees'));
+        //            });
+        //        } else {
+        //            datagetview(listbyuserObj, $('#attendees'));
+        //            listbyuserObj = [];
+        //        }
+        //        // console.log("kq" + listbyuserObj)
+
+        //    }
+        //});
+
+        $("#savechangeinfringe").on("click", function () {
+            var accountid = $("#accountname").find(":selected").val();
+            var criterianame = $("#choosecriteria").find(":selected").val();
+            var datetimeinfringe = new Date($("#datetimepicker").datepicker("getDate").getTime() - ($("#datetimepicker").datepicker("getDate").getTimezoneOffset() * 60000)).toJSON();
+            var detailinfringe = $("#detailinfringe").val();
+            if (accountid !== undefined && criterianame && datetimeinfringe != "") {
+                var infr = new InfringeEmployee();
+                infr.set({ "Date": datetimeinfringe, "InfringeUserId": Number(accountid), "RateEmployeeId": Number(criterianame), "Detail": detailinfringe });
+                $("#InfringeModal").modal("hide");
+                AddInfringeUsers(JSON.stringify(infr), function (data) {
+                    //alert('them thanfh cong')
+                    viewinfringebytime(firstday, lastday);
+                });
+            }
+        })
+        // Sự kiện khí đồng ý chon thời gian để hiển thì
+        $("#timechoose").click(function (e) {
+            e.preventDefault();
+            firstday = $("#datepickerstart").datepicker("getDate");
+            lastday = $("#datepickerend").datepicker("getDate");
+            if (firstday <= lastday) {
+                viewinfringebytime(firstday, lastday);
+            } else {
+                bootbox.alert("Không được nhập ngày tháng bắt đầu lớn hơn thời gian kết thúc");
+            }
+        })
+        $("#createinfringe").on("click", function () {
+            $("#InfringeModal").modal("show");
+            $(".modal-backdrop.fade.in").removeClass("modal-backdrop")
+        })
+        // chọn hiển thị theo thời gian
+        $("#searchofdate").change(function () {
+            if ($("#searchofdate option:selected").val() == "choosetime") {// Hiển thị theo thời gian được chọn
+                $(".choosetimeshow").prop("disabled", false);
+                $("#timechoose").prop("disabled", false);
+                // Thêm hiển thị lịch khi chọn vào chọn thời gian
+                $("#datepickerstart").datepicker({
+                    dateFormat: 'dd-mm-yy',
+                    defaultDate: new Date()
+                });
+                $("#datepickerend").datepicker({
+                    dateFormat: 'dd-mm-yy',
+                    defaultDate: new Date()
+                });
+                $("#datepickerstart").datepicker("setDate", firstday);
+                $("#datepickerend").datepicker("setDate", new Date());
+            } else {
+                $(".choosetimeshow").prop("disabled", true);
+                $("#timechoose").prop("disabled", true);
+                if ($("#searchofdate option:selected").val() == "today") {// Hiển thị theo ngày hôm nay
+                    firstday = new Date();
+                    lastday = new Date();
+                    viewinfringebytime(firstday, lastday);
+                } else if ($("#searchofdate option:selected").val() == "week") {// hiển thị theo tuần hiện tại
+                    var curr = new Date;
+                    firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+                    lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+
+                    viewinfringebytime(firstday, lastday);
+                } else if ($("#searchofdate option:selected").val() == "month") {// Hiển thị theo tháng hiện tại
+                    var date = new Date();
+                    firstday = new Date(date.getFullYear(), date.getMonth(), 1);
+                    lastday = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                    viewinfringebytime(firstday, lastday);
+                } else if ($("#searchofdate option:selected").val() == "lastmonth") {
+                    var date = new Date();
+                    firstday = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+                    lastday = new Date(date.getFullYear(), date.getMonth(), 0);
+                    viewinfringebytime(firstday, lastday);
+                } else if ($("#searchofdate option:selected").val() == "lastweek") {
+                    var curr = new Date;
+                    firstday = new Date(curr.setDate(curr.getDate() - curr.getDay() - 7));
+                    lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() - 1));
+                    viewinfringebytime(firstday, lastday);
+                }
+            }
+        });
+        // Sự kiện khi xóa hết trong ô tìm kiếm accout sẽ hiển thị ra như ban đầu
+        //$(".nameaccount").parent().find("input").eq(1).keyup(function () {
+        //    var gt = $(this).val();
+        //    if (gt == "") {
+        //        GetInfringeByDate(firstday.toJSON(), lastday.toJSON(), function (data) {
+        //            datagetview(data, $('#attendees'));
+        //        });
+        //    }
+        //});
+    </script>
+
+}
+<div class="container-fluid">
+    <div class="row" style="padding-top:10px">
+        <div class="col-sm-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="searchofdate" style="">Ngày Đánh Giá:</label>
+                    <select id="searchofdate" class="form-control input-sm" style="width:220px">
+                        <option value="today">Hôm nay</option>
+                        <option value="lastweek">Tuần Trước</option>
+                        <option value="week">Tuần này</option>
+                        <option value="lastmonth">Tháng Trước</option>
+                        <option value="month" selected>Tháng này</option>
+                        <option value="choosetime">Chọn thời gian</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-10">
+            <div>
+                <form class="form-inline">
+                    <div class="form-group pull-right">
+                        <button id="timechoose" class="btn btn-success" disabled>
+                            <i class="icon-search" style="font-size: 11px"></i>
+                        </button>
+                    </div>
+                    <div class="form-group pull-right">
+                        <label for="datepickerend" style="">Đến ngày:</label>
+                        <input id="datepickerend" type="text" name="name" value=" " class="form-control choosetimeshow input-sm" disabled />
+                    </div>
+                    <div class="form-group pull-right">
+                        <label for="datepickerstart" style="">Từ ngày:</label>
+                        <input id="datepickerstart" type="text" name="name" value=" " class="form-control choosetimeshow input-sm" disabled />
+                    </div>
+                </form>
+            </div>
+            <input type="hidden" name="daterange" value=" " class="input-large form-control" />
+        </div>
+    </div>
+    <hr />
+    <div>
+        <div class="row">
+            <div class="col-md-16">
+                <b style="">Danh sách đánh giá thi đua của bạn:</b>
+                <br />
+            </div>
+        </div>
+        <div class="">
+            <div class="" style="overflow-y: auto; width: 100%; z-index: 0; display: block; visibility: visible;">
+                <table class="table table-hover table-main table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-3 header" style="width:22%">Tên Tiêu Chí</th>
+                            <th class="col-sm-4 header" style="width:25%">Phạm vi hiệu lực</th>
+                            <th class="col-sm-3 header" style="width:25%">Nội Dung</th>
+                            <th class="col-sm-1 header text-center" style="width:5%">Số lần</th>
+                            <th class="col-sm-1 header text-center" style="width:5%">Điểm</th>
+                            <th class="col-sm-1 header text-center" style="width:8%">Ngày</th>
+                            <th class="col-sm-2 header" style="width:10%">Người tạo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="currentidinfringe"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div id="inferior" style="display:none">
+        <div style="height:50px">
+            <div class="col-sm-13"></div>
+            <div class="col-sm-3" style="text-align:center;vertical-align:middle">
+                <div class="row">
+                    <button id="sendsuccess" class="btn btn-success pull-right">Gửi công văn</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <b style="">Danh sách Thi Đua:</b>
+            <button class="btn btn-info" id="createinfringe">Thêm Mới Đánh Giá</button>
+            <div style="float:right; width:100px">
+                <select class="form-control" id="searchaccountinfringe">
+                    <option value="all">Tất cả</option>
+                </select>
+            </div>
+        </div>
+        <div class="fluid-row">
+            <div class="grid-content ui-layout-pane ui-layout-pane-center" style="overflow-y: auto; width: 100%; z-index: 0; display: block; visibility: visible;">
+                <table class="table table-hover table-main table-bordered" style="width: 100%; padding-right:15px">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-2 header" style="width:10%">Account</th>
+                            <th class="col-sm-3 header" style="width:18%">Tên Tiêu Chí</th>
+                            <th class="col-sm-3 header" style="width:18%">Phạm vi hiệu lực</th>
+                            <th class="col-sm-3 header" style="width:18%">Nội Dung</th>
+                            <th class="col-sm-1 header text-center" style="width:5%">Số lần</th>
+                            <th class="col-sm-1 header text-center" style="width:5%">Điểm</th>
+                            <th class="col-sm-1 header text-center" style="width:8%">Ngày</th>
+                            <th class="col-sm-1 header text-center" style="width:8%">Người tạo</th>
+                            <th class="col-sm-1 header text-center" style="width:10%">Chức Năng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendees"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    @if (ViewBag.IsManager==true)
+    {
+        <div id="FormBaoCao" class="modal modal-wide fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="color:blue;"><b>Báo cáo đánh giá nhân viên</b></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="email">Tên Công Văn(<span style="color:red">*</span>)</label>
+                            <div class="col-sm-12" id="">
+                                <textarea id="tencongvan" style=" width: 100%;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="email">Hướng chuyển</label>
+                            <div class="col-sm-12" id="">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <select id="positionname" style="width:100%; font-size:12px" class="input-sm"></select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-horizontal">
+                                            <div class="form-group pull-right" style="padding-right:15px">
+                                                <label for="useridbyposition" style="">Đến:</label>
+                                                <select id="useridbyposition" class="input-sm" style=" font-size:12px"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="email">Ý kiến xử lý:</label>
+                            <div class="col-sm-12" id="">
+                                <textarea rows="3" style=" width: 100%;" id="ykienxuly"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="">
+                        <a class="btn btn-default pull-right" style="margin-left:5px" id="huycongvan">Đóng</a>
+                        <a class="btn btn-primary pull-right" id="xemtruocnoidung">Xem trước</a>
+                        <a class="btn btn-success pull-right" id="chuyencongvan">Chuyển</a>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    }
+    
+    <div id="InfringeModal" class="modal modal-wide fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="color:blue;"><b>Thêm người vi phạm</b></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <label class="control-label col-sm-4" for="accountnamediv">Account:</label>
+                            <div class="col-sm-10" id="accountnamediv">
+                                <select id="accountname" class="input-sm form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <label class="control-label col-sm-4" for="namecriteria">Tên Tiêu chí:</label>
+                            <div id="namecriteria" class="col-md-10" style="text-align:left">
+                                <select id="choosecriteria" class="input-sm form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <label class="control-label col-sm-4" for="date">Chọn Ngày:</label>
+                            <div class="col-sm-10" id="date" style="text-align:left">
+                                <input id="datetimepicker" type="text" class="form-control input-sm" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <label class="control-label col-sm-4" for="descriptioncriteria">Nội dung:</label>
+                            <div class="col-sm-10" id="descriptioncriteria">
+                                <textarea style="width:100%; height:100px" id="detailinfringe"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="">
+                        <span id="dialogerror" style="color:red; display:none"><b>Bạn cần nhập đầy đủ thông tin</b></span>
+                        <button type="button" class="btn btn-primary" id="savechangeinfringe">Lưu thay đổi</button>
+                        <button type="button" class="btn btn-close" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>

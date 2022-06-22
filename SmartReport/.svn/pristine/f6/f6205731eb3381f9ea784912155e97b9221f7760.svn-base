@@ -1,0 +1,152 @@
+﻿@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as ActivityLogSearchModel;
+    var logs = ViewBag.Logs as IEnumerable<ActivityLogModel>;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblLog").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover");
+        $('#tblLog input[name=logids]').change(function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="logids" value="' + this.value + '" />');
+                }
+                if ($("#tblLog input[name=logids]:checked").length === $('#tblLog input[name=logids]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").change(function () {
+            $('#tblLog input[name=logids]').prop('checked', this.checked);
+            if (this.checked) {
+                $('#tblLog input[name=logids]').each(function () {
+                    $("#formdelete").append('<input type="hidden" name="logids" value="' + this.value + '" />');
+                });
+            } else {
+                $("#formdelete input[name=logids]").remove();
+            }
+        });
+    })
+</script>
+<form id="formdelete" style="display:none" action="@Url.Action("Delete")" method="POST">
+    @Html.AntiForgeryToken()
+</form>
+<table class="table-main table" id="tblLog">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 120px" />
+        <col style="width: 200px"/>
+        <col />
+        <col style="width: 120px" />
+        <col style="width: 170px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Customer.ActivityLog.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Customer.ActivityLog.Index.List.Column.ActivityLogType")
+            </th>
+            <th class="header">
+                @Localizer("Customer.ActivityLog.Index.List.Column.CreatedByUserName")
+            </th>
+            <th class="header">
+                @Localizer("Customer.ActivityLog.Index.List.Column.Content")
+            </th>
+            <th class="header">
+                @Localizer("Customer.ActivityLog.Index.List.Column.Ip")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("CreatedOnDate", Localizer("Customer.ActivityLog.Index.List.Column.CreatedOnDate"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    toDate = search.ToDate,
+                    fromDate = search.FromDate
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divActivityLogs",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="text-center">
+                <input type="checkbox" id="checkAll" title="Chọn tất" data-restitle="" "/>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (logs != null && logs.Any())
+        {
+            foreach (var log in logs)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                </td>
+                <td>
+                    @log.ActivityLogTypeString
+                </td>
+                <td>@log.UserName
+                </td>
+                <td>@log.Content
+                </td>
+                <td>@log.Ip
+                </td>
+                <td>@log.CreatedOnDate.ToString("G")
+                </td>
+                <td align="center">
+                    <input type="checkbox" name="logids" value="@log.ActivityLogId" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">@Localizer("Customer.ActivityLog.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>@Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  toDate = search.ToDate,
+                                  fromDate = search.FromDate,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divActivityLogs",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)</td>
+        </tr>
+    </tfoot>
+</table>
+

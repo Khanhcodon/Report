@@ -1,0 +1,267 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
+using Bkav.eGovCloud.Business.Customer;
+using Bkav.eGovCloud.Core.FileSystem;
+using Bkav.eGovCloud.Core.ReadFile;
+using Bkav.eGovCloud.Core.Utils;
+using Bkav.eGovCloud.Entities.Customer;
+using Bkav.eGovCloud.Entities;
+using Bkav.eGovCloud.Models;
+using Bkav.eGovCloud.Web.Framework;
+using System.Drawing;
+
+namespace Bkav.eGovCloud.Controllers
+{
+    public class AttachmentPreviewController : CustomerBaseController
+    {
+        private readonly string[] _readableExtensions = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
+        private readonly string[] _imageExtensions = new string[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
+        private readonly AttachmentBll _attachmentService;
+        private readonly UserBll _userService;
+        private readonly SsoSettings _ssoSettings;
+
+        private const int DEFAULT_PAGE = 5;
+
+        public AttachmentPreviewController(AttachmentBll attachmentService, UserBll userService)
+        {
+            _attachmentService = attachmentService;
+            _userService = userService;
+            _ssoSettings = SsoSettings.Instance;
+        }
+
+        public ActionResult Index(Guid DocumentId, int AttachmentId)
+        {
+            var attachments = _attachmentService.Gets(DocumentId);
+
+            attachments = attachments.Where(a => !a.IsDeleted);
+            var model = attachments.ToListModel();
+
+            ViewBag.CurrentFileId = AttachmentId;
+            ViewBag.DocumentId = DocumentId;
+            //var attachments1 = model.Stringify();
+            ViewBag.Attachments = model.Stringify();
+            ViewBag.ParentDomain = _ssoSettings.BkavSSOParentDomain;
+            return View();
+        }
+
+        
+
+        public JsonResult GetPages(Guid documentId, int attachmentId, int fromPage, string fileName, int? version = null)
+        {
+            var failResult = new FilePreviewParser() { IsSuccess = false, AttachmentId = attachmentId };
+            var extension = Path.GetExtension(fileName).ToLower();
+            if (!_readableExtensions.Contains(extension))
+            {
+                return Json(failResult, JsonRequestBehavior.AllowGet);
+            }
+
+            var temp = GetTempFolder(documentId);
+
+            //var basePath = DirectoryUtil.ToAbsoluteAndEnsureExist(Path.Combine(ResourceLocation.Default.FileTemp, temp));
+
+            var basePath = DirectoryUtil.ToAbsoluteAndEnsureExist(Path.Combine(Path.GetTempPath(), temp));
+            if (!Directory.Exists(basePath) || fromPage < 1)
+            {
+                return Json(failResult, JsonRequestBehavior.AllowGet);
+            }
+
+            //var baseUrlPath = Url.Content(Path.Combine("../Temp/", temp));
+            //Thay bang duong dan file temp he thong
+            var baseUrlPath = Url.Content(Path.Combine(Path.GetTempPath(), temp));
+            var attachFile = Path.Combine(basePath, fileName);
+            Stream fileStream = null;
+
+            // Nếu là file ảnh hoặc file khác nhưng chưa convert sang pdf.
+            if (_imageExtensions.Contains(extension)
+                || (!_imageExtensions.Contains(extension) && !System.IO.File.Exists(attachFile)))
+            {
+                var downloads = _attachmentService.GetAttachments(new List<int>() { attachmentId }, version);
+                if (!downloads.Any())
+                {
+                    return Json(failResult, JsonRequestBehavior.AllowGet);
+                }
+
+                // lấy First do chỉ truyền vào 1 attachmentid;
+                fileStream = downloads.First().Value;
+            }
+
+            if (_imageExtensions.Contains(extension))
+            {
+                var file = FileManager.Default.Create(fileStream, basePath, fileName, extension);
+                return Json(new FilePreviewParser()
+                {
+                    IsSuccess = true,
+                    Files = new List<string>() { Url.Content(Path.Combine(baseUrlPath, file.Name)) },
+                    Total = 1,
+                    AttachmentId = attachmentId,
+                    PdfOutput = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (!System.IO.File.Exists(attachFile))
+            {
+                FileManager.Default.Create(fileStream, basePath, fileName);
+            }
+
+            var result = ParseFileTemp(attachFile, fileName, fromPage, basePath, temp);
+            result.AttachmentId = attachmentId;
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Print(string file, bool print)
+        {
+            ViewBag.FilePath = file;
+            ViewBag.Print = print;
+            return View();
+        }
+
+        public void DeleteTemp(Guid documentId)
+        {
+            // Tạm bỏ do ko hiểu sao sau khi xóa thì phải khởi tạo lại web từ đầu.
+            //var temp = GetTempFolder(documentId);
+            //var basePath = DirectoryUtil.ToAbsoluteAndEnsureExist(Path.Combine(ResourceLocation.Default.FileTemp, temp));
+            //try
+            //{
+            //    Directory.Delete(basePath, recursive: true);
+            //}
+            //catch { }
+        }
+
+        public ActionResult PreviewSigned(string filePaths)
+        {
+            ViewBag.SignedFiles = Json2.ParseAs<IEnumerable<string>>(filePaths);
+            return View();
+        }
+
+        private FilePreviewParser ParseFileTemp(string attachFile, string fileName, int fromPage, string basePath, string temp)
+        {
+            var files = new List<string>();
+            var extension = Path.GetExtension(fileName).ToLower();
+            var baseUrlPath = Url.Content(Path.Combine(Path.GetTempPath(), temp));
+            var outputPdf = Path.GetFileNameWithoutExtension(fileName) + ".pdf";
+            var pdfOutput = Path.Combine(basePath, outputPdf);
+            int total;
+            var isSuccess = true;
+
+            try
+            {
+                switch (extension)
+                {
+                    case ".pdf":
+                        files.AddRange(ConvertStreamPdfToImages(attachFile, fromPage, DEFAULT_PAGE, basePath, temp, out total));
+                        break;
+                    case ".doc":
+                    case ".docx":
+                        if (!System.IO.File.Exists(pdfOutput))
+                        {
+                            DocxParser.ConvertToPdf(attachFile, pdfOutput);
+                        }
+                        files.AddRange(ConvertStreamPdfToImages(pdfOutput, fromPage, DEFAULT_PAGE, basePath, temp, out total));
+                        break;
+                    case ".xls":
+                    case ".xlsx":
+                        if (!System.IO.File.Exists(pdfOutput))
+                        {
+                            XlsxParser.ConvertToPdf(attachFile, pdfOutput);
+                        }
+                        files.AddRange(ConvertStreamPdfToImages(pdfOutput, fromPage, DEFAULT_PAGE, basePath, temp, out total));
+                        break;
+                    default:
+                        outputPdf = string.Empty;
+                        total = 0;
+                        isSuccess = false;
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                LogException(ex);
+                total = 0;
+                isSuccess = false;
+            }
+
+            var result = new FilePreviewParser()
+            {
+                IsSuccess = isSuccess,
+                Files = files.Select(n => Url.Content(Path.Combine(baseUrlPath, n))),
+                PdfOutput = outputPdf == "" ? "" : Path.Combine(baseUrlPath, outputPdf),
+                Total = total
+            };
+
+            return result;
+        }
+
+        
+
+        private List<string> ConvertStreamPdfToImages(Stream stream, int fromPage, int pageSize, string basePath, string temp, out int total)
+        {
+            var pdfParser = new PdfParser(JPEGQuality: 8);
+            var result = pdfParser.ConvertToImages(out total, stream, basePath, fromPage, pageSize);
+
+            return result;
+        }
+
+        private List<string> ConvertStreamPdfToImages(string pdfPath, int fromPage, int pageSize, string basePath, string temp, out int total)
+        {
+            var pdfParser = new PdfParser(JPEGQuality: 8);
+            var result = pdfParser.ConvertToImages(out total, pdfPath, basePath, fromPage, pageSize);
+            return result;
+        }
+
+        private string GetTempFolder(Guid documentId)
+        {
+            return string.Format("{0}-{1}", documentId.ToString("N"), User.GetUserId());
+        }
+    }
+
+    public class FilePreviewParser
+    {
+        public bool IsSuccess { get; set; }
+
+        public string PdfOutput { get; set; }
+
+        public int Total { get; set; }
+
+        public int AttachmentId { get; set; }
+
+        public IEnumerable<string> Files { get; set; }
+
+        public IEnumerable<string> Base64OutputString
+        {
+            get
+            {
+                List<string> listBase64 = new List<string>();
+                if(Files.Count() > 0 && Files.Any())
+                {
+                    foreach (string file in Files)
+                    {
+                        var basePath = Path.Combine(Path.GetTempPath(), file);
+                        string base64String = "data:image/png;base64," + ConvertImageToBase64(basePath);
+                        listBase64.Add(base64String);
+                    }
+                }
+                return listBase64;
+            }
+        }
+
+        private string ConvertImageToBase64(string path)
+        {
+            string base64String = "";
+            using (Image image = Image.FromFile(path))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    image.Save(m, image.RawFormat);
+                    byte[] imageBytes = m.ToArray();
+                    base64String = Convert.ToBase64String(imageBytes);
+                }
+            }
+            return base64String;
+        }
+
+    }
+}

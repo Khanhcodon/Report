@@ -1,0 +1,77 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.ChatSettingsModel
+@{
+    ViewBag.Title = Localizer("Setting.MissionSettings.Tab.Title");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Cấu hình kết nối Giao nhiệm vụ</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.IsActive)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsActive)
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ValaToken)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ValaToken, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ValaService)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ValaService, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.MessageService)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.MessageService, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ValaId)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ValaId, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ValaFactoryId)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ValaFactoryId, new { @class = "form-control" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}

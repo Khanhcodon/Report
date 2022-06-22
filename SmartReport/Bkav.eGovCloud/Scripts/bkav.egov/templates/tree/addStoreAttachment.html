@@ -1,0 +1,21 @@
+﻿<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label class="col-md-3 control-label" for="attachmentName">Tài liệu:</label>
+        <div class="col-md-13">
+            <div class="input-group">
+                <input class="form-control" readonly type="text" id="attachmentName">
+                <div class="input-group-addon" style="position: relative">
+                    <i class="icon-folder-open" style="font-size: 13px"></i>
+                    <input id="storePrivateAttachment" type="file" name="file" multiple data-url="/StorePrivate/AddAttachment" style="width: 40px;position: absolute;height: 100%;top: 0;left: 0;opacity: 0;" />
+                    <input type="button" id="uploadStorePrivateAttachment" style="display:none" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-md-3 control-label" for="descStorePrivateAttachment">Mô tả:</label>
+        <div class="col-md-13">
+            <textarea id="descStorePrivateAttachment" class="form-control" style="height: 110px"></textarea>
+        </div>
+    </div>
+</div>

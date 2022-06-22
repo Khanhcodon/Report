@@ -1,0 +1,398 @@
+﻿@model TransferSettingsModel
+@{
+    ViewBag.Title = "Cấu hình tiếp nhận trực tuyến";
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+
+    var allUsers = ViewBag.AllUsers as string;
+    var allDepts = ViewBag.AllDepts as string;
+
+    var userReceiveHsmc = Model.UserReceiveHsmc as string;
+    var userReceiveVbDen = Model.UserReceiveVbDen as string;
+}
+
+<script src="/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.min.js"></script>
+<script src="/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+
+<style>
+    /* Style the close button */
+    .closeHsmc {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 18.5px;
+        padding: 5px 10px;
+    }
+
+        .closeHsmc:hover {
+            background-color: #808080;
+            color: white;
+        }
+
+    .closeVbDen {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 18.5px;
+        padding: 5px 10px;
+    }
+
+        .closeVbDen:hover {
+            background-color: #808080;
+            color: white;
+        }
+
+    ul#listAccountHSMC li {
+        cursor: pointer;
+        position: relative;
+        padding: 5px;
+        background: #eee;
+        transition: 0.2s;
+        /* make the list items unselectable */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Set all odd list items to a different color (zebra-stripes) */
+        ul#listAccountHSMC li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+    ul#listAccountVBD li {
+        cursor: pointer;
+        position: relative;
+        padding: 5px;
+        background: #eee;
+        transition: 0.2s;
+        /* make the list items unselectable */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Set all odd list items to a different color (zebra-stripes) */
+        ul#listAccountVBD li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+    .up {
+        bottom: 100% !important;
+        top: auto !important;
+    }
+
+    .input-edit {
+        margin-bottom: 0px !important;
+        width: 100% !important;
+    }
+
+    .table > tbody > tr > td {
+        vertical-align: middle;
+    }
+</style>
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDepts = @(string.IsNullOrEmpty(allDepts) ? MvcHtmlString.Create("[]") : Html.Raw(allDepts));
+
+    var userReceiveHsmc = @(string.IsNullOrEmpty(userReceiveHsmc) ? MvcHtmlString.Create("[]") : Html.Raw(userReceiveHsmc));
+
+    var userReceiveVbDen = @(string.IsNullOrEmpty(userReceiveVbDen) ? MvcHtmlString.Create("[]") : Html.Raw(userReceiveVbDen));
+</script>
+<script>
+    $(function(){
+
+        // Hiển thị người tiếp nhận hsmc
+        var selectorHSMC = {
+            app: "#AccountHSMC",
+            autocomplete:"#UserReceiveHSMCTxt",
+            result:"#UserReceiveHsmc",
+            status: ""
+        }
+        var fnUserReceiveHSMC = renderUserReceive(userReceiveHsmc, selectorHSMC);
+        var userReviceHSMC = new fnUserReceiveHSMC();
+
+        // Hiển thị người tiếp nhận Văn bản đến
+        var selectorVBD = {
+            app: "#AccountVBD",
+            autocomplete:"#UserReceiveVBD",
+            result:"#UserReceiveVbDen",
+            status: ""
+        }
+        var fnUserReceiveVBD = renderUserReceive(userReceiveVbDen, selectorVBD);
+        var userReviceVBD = new fnUserReceiveVBD();
+    });
+
+    function getAccount(id, listUser) {
+        return _.find(listUser, function(user){
+            if(user.value == Number(id)){
+                return user;
+            }
+        });
+    }
+
+    function renderUserReceive (listUser, selector) {
+        "use strict";
+
+        //#region Relation View
+        var UserReceiveModel = Backbone.Model.extend({
+            defaults: function () {
+                return {
+                    UserId:"",
+                    EDocId : "",
+                    UserName: "",
+                    DepartmentName:"",
+                    IsEdit: false,
+                    DepartmentId : 0,
+                    Users: allUsers,
+                    Departments: allDepts
+                };
+            },
+        });
+
+        var ListUserReceive = Backbone.Collection.extend({
+            model: UserReceiveModel
+        });
+
+        var UserReceive = Backbone.View.extend({
+            el:selector.app,
+            ListUserReceive: new ListUserReceive(),
+
+            initialize: function (options) {
+                this.listenTo(this.ListUserReceive, 'add', this.addUserReceiveItem);
+                //this.listenTo(this.ListUserReceive, 'reset', this.resetVote);
+                this.$el.find(".listAccount").html("");
+                var that = this;
+                $(selector.autocomplete).autocomplete({
+                    minLength: 1,
+                    source: function( request, response ) {
+                        var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                        response( $.grep( allUsers, function( value ) {
+                            value = value.label || value.value || value;
+                            return matcher.test( value ) || matcher.test( value );
+                        }) );
+                    },
+                    focus: function() {
+                        return false;
+                    },
+                    selectFirst: true,
+                    select: function(event, ui) {
+                        var userId = ui.item.value;
+                        var name = ui.item.label;
+                        var exist = that.ListUserReceive.find({UserId : userId });
+                        if (exist) {
+                            return;
+                        }
+                        var userRevice = new UserReceiveModel({UserId: userId, Account: name, IsEdit: true});
+                        that.ListUserReceive.add(userRevice);
+                        $(selector.autocomplete).val("");
+                        return false;
+                    }
+                });
+                that.render();
+
+                return that;
+            },
+
+            render: function () {
+                var that = this;
+                for (var i = 0; i < listUser.length; i++) {
+                    var userRevice = new UserReceiveModel(listUser[i]);
+                    that.ListUserReceive.add(userRevice);
+                }
+                return this;
+            },
+
+            addUserReceiveItem: function (model) {
+                var that = this;
+                var view = new UserReceiveItem({
+                    model: model,
+                    collection :  that.ListUserReceive
+                });
+                that.$el.find(".listAccount").append(view.render().el);
+            }
+        });
+
+        var UserReceiveItem = Backbone.View.extend({
+            tagName: 'tr',
+
+            events: {
+                'click .edit-user-revice': 'edit',
+                'click .cancel-user-revice': 'cancel',
+                'click .delete-user-revice': 'deleteUser',
+                'click .edit-success-user-revice': 'editSuccess'
+            },
+
+            initialize: function (option) {
+                this.collection = option.collection;
+                this.listenTo(this.model, 'change', this.render);
+                this.render();
+            },
+
+            render: function () {
+                this.$el.empty();
+                this.$el.html($.tmpl($("#ItemUser"), this.model.toJSON()));     
+                
+                return this;
+            },
+
+            edit: function (e) {
+                e.preventDefault();
+                this.model.set({IsEdit: true});
+            },
+
+            deleteUser: function () {
+                var that = this;
+                this.model.destroy({
+                    success : _.bind(function(model, response) {
+                        that.$el.remove();
+                    }, this)
+                });
+                $(selector.result).val(JSON.stringify(that.collection.toJSON()));
+            },
+
+            cancel: function () {
+                this.model.set({IsEdit: false});
+            },
+
+            editSuccess: function () {
+                var that =  this;
+                var target = that.$el;
+
+                var edocid = target.find(".edocid").val();
+
+                var departmentId = target.find(".listDepartment").val();
+                var departmentName = target.find(".listDepartment :selected").text();
+
+                var userId = target.find(".user-address").val();
+                var userName = target.find(".user-address :selected").text();
+
+                that.model.set({EDocId: edocid, DepartmentName: departmentName, IsEdit: false, DepartmentId: departmentId, UserId: userId, UserName:userName});
+
+                $(selector.result).val(JSON.stringify(that.collection.toJSON()));
+            }
+        });
+
+        //#endregion
+        return UserReceive;
+    }
+
+</script>
+
+<script id="ItemUser" type="text/html">
+    {{if IsEdit}}
+    <td>
+        <input type="text" name="name" class="form-control input-sm input-edit edocid" value="${EDocId}" />
+    </td>
+    <td>
+        <select class="form-control user-address">
+            {{each Users}}
+            <option value="${$value.value}" {{if UserId == $value.value}} selected {{/if}}>${$value.label}</option>
+            {{/each}}
+        </select>
+    </td>
+    <td>
+        <input type="hidden" name="name" class="address-id" value="${AddressId}" />
+        <select class="listDepartment form-control">
+            {{each Departments}}
+            <option value="${value}" {{if DepartmentId == $value.value}} selected {{/if}}>${departmentName}</option>
+            {{/each}}
+        </select>
+    </td>
+    <td>
+        <a href="#">
+            <span class="edit-success-user-revice" style="color:#00ff21; margin-right:5px">Đồng ý</span>
+            <span class="cancel-user-revice" style="color:red">Bỏ qua</span>
+        </a>
+    </td>
+    {{else}}
+    <td>${EDocId}</td>
+    <td>${UserName}</td>
+    <td>${DepartmentName}</td>
+    <td>
+        <a href="#">
+            <span class="edit-user-revice" style="margin-right: 5px">Sửa</span>
+            <span class="delete-user-revice" style="color:red">Xóa</span>
+        </a>
+    </td>
+    {{/if}}
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="UserReceiveHsmc" id="UserReceiveHsmc" value="@Model.UserReceiveHsmc" />
+    <input type="hidden" name="UserReceiveVbDen" id="UserReceiveVbDen" value="@Model.UserReceiveVbDen" />
+    <table>
+
+        <tr>
+            <td style="width:21%;">
+                Cán bộ tiếp nhận HSMC
+            </td>
+            <td>
+                <input id="UserReceiveHSMCTxt" placeholder="Gõ account cán bộ tiếp nhận hồ sơ trực tuyến: online, liên thông,..." />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div>
+                    <table id="AccountHSMC" class="table table-detail" style="">
+                        <colgroup>
+                            <col style="width:21%" />
+                            <col style="width:230px" />
+                            <col style="" />
+                            <col style="width:120px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Mã định danh</th>
+                                <th>Tài khoản</th>
+                                <th>Cơ quan</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listAccountHSMC" class="listAccount"></tbody>
+                    </table>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td style="height:30px"></td>
+        </tr>
+        <tr>
+            <td style="width:21%;">
+                Cán bộ tiếp nhận văn bản đến
+            </td>
+            <td>
+                <input id="UserReceiveVBD" placeholder="Gõ account cán bộ tiếp nhận hồ sơ trực tuyến: online, liên thông,..." />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div>
+                    <table id="AccountVBD" style="" class="table table-detail">
+                        <colgroup>
+                            <col style="width:21%" />
+                            <col style="width:230px" />
+                            <col style="" />
+                            <col style="width:120px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Mã định danh</th>
+                                <th>Tài khoản</th>
+                                <th>Cơ quan</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listAccountVBD" class="listAccount"></tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+}

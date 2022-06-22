@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FormGroupModel>
+@{
+    ViewBag.Title = Localizer("Common.FormGroup.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteIncrease(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListFormGroup").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListFormGroup').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListFormGroup').unblockpanel();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span data-res="egov.resources.sitemap.formgroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/formgroup/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="divListFormGroup">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+    </div>
+</div>

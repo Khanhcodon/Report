@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bkavegov-content-title">
+    <h3 data-res="egov.resources.form.updateform">Cập nhật loại hồ sơ, văn bản</h3>
+</div>
+<div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">@Html.ActionLink(Localizer("Common.Button.List"), "Index")</li>
+        <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+    </ul>
+    <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <div id="tabsChild" class="bkavegov">
+            <ul>
+                <li class="alignRight"><a href="#tabs-3">@Localizer("DocType.CreateOrEdit.Tab.WorkFlow")</a></li>
+                <li class="alignRight"><a href="#tabs-2">@Localizer("DocType.CreateOrEdit.Tab.Form")</a></li>
+                <li class="alignRight"><a href="#tabs-1">@Localizer("DocType.CreateOrEdit.Tab.ViewAndEdit")</a></li>
+            </ul>
+            <div id="tabs-1">
+            </div>
+            <div id="tabs-2" style="padding-top: 10px;">
+                @RenderBody()                
+            </div>
+            <div id="tabs-3" style="padding: 10px 0 4px 0;">
+            </div>
+        </div>
+    </div>
+</div>
+

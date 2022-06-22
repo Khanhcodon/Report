@@ -1,0 +1,7 @@
+﻿<div class="box-body">
+    <div id="thresHoldIframe"></div>
+    <div id="nd">
+        <span><b>Ngưỡng cảnh báo trên: </b></span> <span id="thresHoldMax"></span>
+        <span><b>Ngưỡng cảnh báo dưới: </b></span> <span id="thresHoldMin"></span>
+    </div>
+</div>

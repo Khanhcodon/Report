@@ -1,0 +1,9 @@
+﻿body {
+}
+
+@font-face {
+    font-family: 'code39';
+    src: url('fonts/code39.woff?7a9cdp') format('woff'),
+		url('fonts/code39.ttf?7a9cdp') format('truetype'),
+		url('fonts/code39.svg?7a9cdp') format('svg');
+}

@@ -1,0 +1,16 @@
+﻿<div class="sv_qstn svd-survey-nopadding question-value" style="flex: 1 1 25%; min-width: 50px; max-width: initial; width: 25%; padding-right: 20px;">
+    <div>
+        <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+        <div>
+            <select aria-label="Hãy nhập/chọn giá trị" class="form-control" name="value" value="${value}">
+                <option value="">Chọn giá trị...</option>
+                {{each(i) choices}}
+                <option value="${value}" ${$data.value == value ? 'selected' : ''}>${text}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="small" style="display: none;">
+            <span style="position: static;"></span>
+        </div>
+    </div>
+</div>

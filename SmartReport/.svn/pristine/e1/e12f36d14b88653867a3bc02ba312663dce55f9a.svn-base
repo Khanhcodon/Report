@@ -1,0 +1,14 @@
+﻿<div class="list-group-item">
+    <div class="row">
+        <div class="col-xs-2 col-sm-2 searchrow">
+            <img src="../../../Content/MobileTablet/images/ic_close_48px.png" id="btnHideSearchResult" />
+        </div>
+        <div class="col-xs-14 col-sm-14 colinfo">
+            <div class="row first-line">
+                <div class="col-xs-16 col-sm-16 wraptext">
+                    <span class="compendium">${message}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

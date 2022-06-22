@@ -1,0 +1,13 @@
+﻿<script>
+    egov.common.targetForComments = [];
+
+    /*Dữ liệu load lên form*/
+    // Danh sách Người dùng - Chức danh - Phòng ban
+    egov.database.allUserDepartments = @(string.IsNullOrEmpty(ViewBag.AllUserDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(ViewBag.AllUserDepartments));
+    // Danh sách Người dùng
+    egov.database.allUsers = @(string.IsNullOrEmpty(ViewBag.AllUsers) ? MvcHtmlString.Create("[]") : Html.Raw(ViewBag.AllUsers));
+    // Danh sách Chức danh
+    egov.database.allJobTitles = @(string.IsNullOrEmpty(ViewBag.AllJobtitless) ? MvcHtmlString.Create("[]") : Html.Raw(ViewBag.AllJobtitless));
+    // Danh sách Phòng ban
+    egov.database.allDepartments = @(string.IsNullOrEmpty(ViewBag.AllDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(ViewBag.AllDepartments));
+</script>

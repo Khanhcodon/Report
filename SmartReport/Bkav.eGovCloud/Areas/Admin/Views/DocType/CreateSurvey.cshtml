@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Thêm mới phiếu khảo sát";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span data-res="egov.resources.sitemap.doctype"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/doctype/Index?categoryBusinessId=32">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @Html.Partial("_qtip")
+    <div id="divListDocType">
+        <div id="divCreateOrEditSurvey">
+            @using (Html.BeginForm("CreateSurvey", "DocType", FormMethod.Post, new { Id = "formHSMC" }))
+            {
+                Html.RenderPartial("_CreateOrEditSurvey");
+                @Html.AntiForgeryToken()
+
+                @*<input type="submit" name="save" value="save"
+                    id="submitCreateRecords" style="display: none" />
+                     <input type="hidden" name="CategoryBusinessId" id="categoryBusinessCodeCreateRecords"
+                            value="@Model.CategoryBusinessId" />*@
+            }
+        </div>
+    </div>
+</div>

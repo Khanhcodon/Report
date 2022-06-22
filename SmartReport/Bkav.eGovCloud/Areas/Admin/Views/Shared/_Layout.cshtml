@@ -1,0 +1,358 @@
+﻿@using Bkav.eGovCloud.Entities
+@using StackExchange.Profiling
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var isDevVersion = false; // (bool)ViewBag.IsDevVersion;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="../../../../Content/bootstrap/icomoon.css" rel="stylesheet" />
+    <link href="../../../../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../../../Content/bootstrap/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="../../../../Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/bkav.egov/admin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/fonts-googleapis/css-roboto-300-400-500-700.css")" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/Content/fonts-googleapis/icon-material-icons.css")">
+
+    @*20191129 VuHQ REQ-5 Preview Mobile trong cấu hình mẫu báo cáo/ loại báo cáo*@
+    <link href="../../../../Content/Mobile/forms-mobile/css/mobiscroll.jquery.min.css?v=39" rel="stylesheet" />
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/browser/jquery.browser.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.cookie.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/resource/egov.resources.bindresource.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/resource/egov.resources.@(lang).min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.nicescroll.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.layout-latest.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/hashbase64.js"></script>
+    <script src="../../../../Scripts/bkav.egov/locache/egov.locache.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="../../../../Content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/util/bkav.utilities.min.js"></script>
+    <script type="text/javascript" src="/Scripts/bkav.egov/libs/bootstrap/bootstrap-notify.min.js"></script>
+
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.min.js"></script>
+
+    <script type="text/javascript">
+        var controller = '@ViewContext.Controller.ValueProvider.GetValue("controller").RawValue';
+        var action = '@ViewContext.Controller.ValueProvider.GetValue("action").RawValue';
+
+        $(function () {
+            $(".system-tree-view .children li").bind("click", function () {
+                window.location = $(this).children("a").attr("href");
+            });
+
+            $("table").css("width", "100%");
+
+            setErrorFocus();
+
+            $("#accordion").children().accordion({
+                collapsible: true,
+                autoHeight: false,
+                create: function (event, ui) {
+                },
+                change: function (event, ui) {
+                    //set cookie for current index on change event
+                    var name = $(this).attr('name');
+                    $.cookie('saved_' + name, null, { expires: 7, path: "/" });
+                    $.cookie('saved_' + name, ui.options.active, { expires: 7, path: "/" });
+                },
+                active: function () {
+                    // this == h3
+                    var name = $(this).parent().attr('name');
+                    var cookie = $.cookie('saved_' + name);
+                    if (cookie == null || isNaN(parseInt(cookie))) {
+                        return false;
+                    }
+                    return true;
+                }
+            });
+
+            var interval = setInterval(function () {
+                var profiler = $("div.profiler-result").parent();
+                if (profiler.length > 0) {
+                    clearInterval(interval);
+                    profiler.css({ 'margin-left': 10 - profiler.width() + 'px' }).hover(function () {
+                        profiler.css({ 'margin-left': '0px' });
+                    }, function () {
+                        profiler.css({ 'margin-left': 10 - profiler.width() + 'px' });
+                    });
+                }
+            }, 100);
+
+            //Disable right click default
+            $(document).bind("contextmenu", function (e) {
+                destroyEvent(e);
+            });
+
+            $(".system-tree").bind("click", function () {
+                if ($(".system-tree-view").css("display") == "none") {
+                    $(".system-tree-view").show();
+                }
+                else {
+                    $(".system-tree-view").hide();
+                }
+            });
+
+            $(".system-tree-view .children").each(function () {
+                var list = $(this);
+                var size = 10;
+                var current_size = 0;
+                list.children().each(function () {
+                    if (++current_size > size) {
+                        var new_list = $("<ul class='children'></ul>").insertAfter(list);
+                        list = new_list;
+                        current_size = 1;
+                    }
+                    list.append(this);
+                });
+            });
+
+            $('.system-tree-view .menu>li').bind("hover", function () {
+                var parentSize = $(this).closest("ul").children("li").size();
+                var childrenSize = $(this).find("li").size();
+                if (childrenSize < parentSize) {
+                    $(".system-tree-view .menu li > ul").css("height", "100%");
+                } else {
+                    $(".system-tree-view .menu li > ul").css("height", "auto");
+                }
+            });
+
+            $(".menu a.root").replaceWith(function () {
+                return $("<span>" + $(this).html() + "</span>");
+            });
+
+            $("#submit").bind("click", function () {
+                submitForm();
+            });
+
+            $(".system-tree-view .menu>li").hover(function () {
+                $(".system-tree-view .menu li ul").hide();
+                var x = $(this).children("ul").size();
+                $(".system-tree-view").css("width", (x + 1) * 250 + "px");
+                $(this).children("ul").show();
+                for (i = 1; i <= x; i++) {
+                    $(this).children("ul").eq(i - 1).css("left", 250 * i + "px");
+                }
+            });
+
+            $(".system-tree-view").on("mouseleave", function () {
+                $(".system-tree-view").hide();
+            })
+
+            $("select,input[type=text],textarea,input[type=password]").addClass("form-control");
+
+            $("tr th").css("line-height", "2.5");
+
+            $("select[name=pageSize]").removeClass("form-control");
+
+            $("select[name=pageSize]").css({
+                "padding": "0",
+                "display": "inline"
+            });
+
+            $(".table-main tbody tr").bind("click", function () {
+                $(".table-main tr").removeClass("info");
+                $(this).addClass("info");
+            });
+
+            $("#navbar li.dropdown").on("mouseenter", function () { $(this).addClass("open"); })
+			  .on("mouseleave", function () { $(this).removeClass("open"); });
+
+            addShortKeyEvent();
+
+            $(document).bindResources();
+        });
+
+        function setErrorFocus() {
+            $('textarea,input[type="text"]').first().focus();
+            $('textarea.input-validation-error, input.input-validation-error').first().focus();
+        }
+
+        function addShortKeyEvent() {
+            var callback = function (e) {
+                if (e.ctrlKey) {
+                    switch (e.keyCode) {
+                        case 83://s "s".charCodeAt(0);
+                            //Dùng để submit form khi tạo mới, hoặc cập nhật
+                            destroyEvent(e);
+                            $("#submit").click();
+                            return false;
+                        case 78://n
+                            //mở from tạo mới
+                            //todo: do cac phím tắt Ctrl+ n  browser không cho override
+                            //http://stackoverflow.com/questions/7295508/javascript-capture-browser-shortcuts-ctrlt-n-w
+                            destroyEvent(e);
+
+                            return false;
+                    }
+                } else if (e.shiftKey) {
+                    switch (e.keyCode) {
+                        @*case 78://n
+                            //mở from tạo mới
+                            if (!$("input[type=text] ,textarea").is(':focus')) {
+                                destroyEvent(e);
+                                document.location = '@Url.Action("Create")';
+                                return false;
+                        }*@
+                }
+            }
+            else if (e.keyCode == 27) { //Esc
+                destroyEvent(e);
+                document.location = '@Url.Action("Index")';
+
+                    return false;
+                }
+
+                return true;
+            };
+
+    if (window.addEventListener) {
+        window.addEventListener('keydown', callback, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('onkeydown', callback);
+    }
+}
+
+function destroyEvent(e) {
+    if (e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
+        e.stopPropagation();
+    }
+}
+
+        function submitForm() {
+            if (controller == "TemplateKey" && (action.toUpperCase() == "Create".toUpperCase() || action.toUpperCase() == "Edit".toUpperCase())) {
+                $("#Sql").val($(".qb-ui-editor").find("textarea").val());
+            }
+    $('.main-content form:first').submit();
+}
+
+    </script>
+
+</head>
+<body>
+    @if (isDevVersion)
+    {
+        @MiniProfiler.RenderIncludes();
+    }
+    <div class="container">
+        <div class="header-container" style="display: none;">
+            <div class="egov-header">
+                <span class="header-name" data-res="egov.resources.shared.productname"></span>
+                @*<span class="pull-right">@Html.Partial("_LogOnPartial")</span>*@
+                <span class="pull-right">@Html.Partial("_CulturePartial")</span>
+            </div>
+            <div class="tabs" style="display: none;">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <span class="system-tree">
+                            <a>
+                                <i class="icon-list"></i>
+                                <span data-res="egov.resources.shared.systemtree"></span>
+                            </a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="home">
+                            <a href="/admin">
+                                <i class="icon-home"></i>
+                                <span data-res="egov.resources.shared.home"></span>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+                <div style="clear: right"></div>
+                <ul class="nav navbar-nav navbar-right" id="control-btn" style="margin-top: 5px;">
+                    @*   <li><span class="btn control-btn" id="submit" data-res="egov.resources.buttons.confirm"></span></li>
+                        <li><span class="btn control-btn" id="delete" data-res="egov.resources.buttons.delete"></span></li>
+                        <li><span class="btn" id="back" data-res="egov.resources.buttons.back"></span></li>*@
+                </ul>
+            </div>
+        </div>
+        <header>
+            <div id="navbar" class="navbar navbar-inverse">
+                <nav class="navbar-inner">
+                    <a class="brand" href="/admin">
+                        @*<span class="header-name" data-res="egov.resources.shared.productname"></span>*@
+                    </a>
+
+                    @if (ViewBag.IsSuperAdmin != null && ViewBag.IsSuperAdmin)
+                    {
+                        <ul class="nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-target="#">
+                                    <i class="icon-cogs"></i><span class="navbar-label">Quản trị tập trung</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="/admin/domain" class="dropdown-toggle" data-target="#">
+                                            <i class="icon-cog3"></i>Domain
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/account" class="dropdown-toggle" data-target="#">
+                                            <i class="icon-list2"></i>Người dùng
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    }
+
+                    @*@Html.SiteMapMenuNavbar()*@
+                    @*HuyNP-13.7.2020-Lỗi icon menu ảnh hưởng đến Highchart*@
+                    @Html.Partial("_LayoutMenuPartial")
+
+                    <div id="navbar-tools" class="pull-right">
+
+                        @Html.Partial("_LogOnPartial")
+
+                        @Html.Partial("_CulturePartial")
+
+                        @Html.Partial("_OfficePartial")
+
+                        <div class="btn-group toppad pull-right">
+                            <a href="/" class="btn office-name navbar-tool">
+                                @ViewBag.OfficeName
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <div id="content" class="">
+            <div class="content-panel main-content">
+                <div class="clear"></div>
+                @RenderBody()
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        @if (!IsHoSoMotCuaEdition)
+        {
+            <text>
+            $(function () {
+                $(".admin-config6, .admin-client, .admin-scopeArea, .admin-citizen, .admin-paper, .admin-fee, .admin-embryonicForm").remove();
+            });
+            </text>
+        }
+    </script>
+</body>
+</html>

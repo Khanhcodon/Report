@@ -1,0 +1,29 @@
+﻿@model FormGroupModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Increase.Updated");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+
+@Html.Partial("_CreateOrEdit", Model)
+@Html.AntiForgeryToken()
+
+@*<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.FormGroupId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>*@

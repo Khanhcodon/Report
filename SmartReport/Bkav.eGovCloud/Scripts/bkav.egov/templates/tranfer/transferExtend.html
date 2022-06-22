@@ -1,0 +1,115 @@
+﻿<form class="form-horizontal" role="form">
+    <div class="">
+        <span style="font-size: 12px; font-weight:bold;" class="dgText">Đồng gửi</span>
+    </div>
+    <!--Người dùng-->
+    <div class="form-group">
+        <div class="col-md-16">
+            <span style="font-size: 12px; font-style: italic;" data-res="egov.resources.transfer.dgUserLabel"></span>
+        </div>
+        <div class="col-md-16">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="dgUser" data-respholder="egov.resources.transfer.dgUser" style="z-index: 999;">
+                <div class="input-group-btn dropup">
+                    <button type="button" id="dgUsers" class="btn btn-default dropdown-toggle" data-target="#FilterDepartment" style="height:25px;"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-right filterDeparment" id="FilterDepartment">
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Theo chức vụ phòng ban-->
+    <div class="form-group">
+        <div class="col-md-16">
+            <span style="font-size: 12px; font-style: italic" data-res="egov.resources.transfer.dgJobtitleLabel"></span>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgJobtitle">
+                <div class="input-group-btn dropup">
+                    <button type="button" id="dgJobtitle" class="btn btn-default dropdown-toggle" data-target="#JobtitleForDept" style="height:25px;"><span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-left dgJobtitlies jobtitleForDept hidden-xs" id="JobtitleForDept">
+                        <li class="list-group-item">
+                            <label>
+                                <input name="checkbox[]" value="0" type="checkbox" id="allJobsForDept">
+                                <span data-res="egov.resources.transfer.allJobs"></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgDeptJob">
+                <div class="input-group-btn dropup">
+                    <button type="button" id="dgDeptJob" class="btn btn-default dropdown-toggle" data-target="#DeptForJobtitle" style="height:25px;"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-right department-tree deptForJobtitle" id="DeptForJobtitle">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Kiểu đồng gửi-->
+    <div class="form-group dg-option hidden" style="margin-right: 5px">
+        <label class="radio-inline pull-right" style="margin-left: 15px;">
+            <input type="radio" name="isDg" value="0" checked="checked">
+            <span data-res="egov.resources.transfer.isDg1"></span>
+        </label>
+        <label class="radio-inline pull-right">
+            <input type="radio" name="isDg" value="1">
+            <span data-res="egov.resources.transfer.isDg2"></span>
+        </label>
+    </div>
+
+    <!--Thông báo-->
+    <div class="form-group thongbao">
+        <div class="col-md-16">
+            <span style="font-size: 12px; font-weight:bold;">Nhận Thông báo</span>
+        </div>
+        <div class="col-md-16 dropup">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="dgUserGiamsat" placeholder="Chọn cán bộ nhận thông báo" style="z-index: 999;">
+                <div class="input-group-btn">
+                    <button type="button" id="dgUserGiamsats" class="btn btn-default dropdown-toggle" data-target="#FilterDepartmentGiamSat" style="height:25px;"><span class="caret"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group relation-option">
+        <div class="col-md-6">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgJobtitle">
+                <div class="input-group-btn dropup">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height:25px;"><span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-left dgJobtitlies jobtitlies">
+                        <li class="list-group-item">
+                            <input name="checkbox[]" value="0" type="checkbox" id="allJobs">
+                            <span data-res="egov.resources.transfer.allJobs"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" style="padding-left: 0; padding-right: 0">
+            <select class="form-control">
+                <option value="1" data-res="egov.resources.transfer.sameDept"></option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group dropup">
+                <input type="text" class="form-control" data-respholder="egov.resources.transfer.dgDeptJob">
+                <div class="input-group-btn  input-group-sm">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height:25px;"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-right department-tree">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="filterDeparment" id="FilterDepartmentGiamSat">
+</div>
+

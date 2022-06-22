@@ -1,0 +1,87 @@
+﻿@model IEnumerable<CategoryModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Category.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+}
+
+<script type="text/javascript">
+    function deleteCategory(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Category.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListCategorys").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListCategorys').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListCategorys').unblockpanel();
+    }
+
+    function doSubmit(form) {
+        form.submit();
+    }
+
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-copy2"></i>
+        <span data-res="egov.resources.sitemap.category">Hình thức văn bản</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/category/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Ajax.BeginForm("GetByCategoryBusiness", new AjaxOptions
+    {
+        UpdateTargetId = "divListCategorys",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }))
+    {
+            <span>@Localizer("Customer.DocType.CreateOrEdit.Fields.CategoryBusinessCode.Label"):</span>
+            <select class="form-control" id="categoryBusinessId" name="categoryBusinessId" style="width: 167px;display:inline" onchange="doSubmit($(this).parents('form'));">
+                <option value="0">@Localizer("Common.All.Label")</option>
+                @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+                {
+                    foreach (var categoryBusiness in allCategoryBusiness)
+                    {
+                    <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "") >@categoryBusiness.Text</option>
+                    }
+                }
+            </select>
+         @:&nbsp;
+           <span>@Localizer("Common.Category.Search"):</span>
+           <input type="text" name="searchName" id="searchName" value="@ViewBag.SearchName"
+                class="from-control" style="width:300px;display:inline" 
+               placeholder="@Localizer("Common.Category.Search")"/>
+           @:&nbsp;
+        <input  type="submit" value="@Localizer("Common.Category.Submit")"/>
+    }
+    <div id="divListCategorys">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

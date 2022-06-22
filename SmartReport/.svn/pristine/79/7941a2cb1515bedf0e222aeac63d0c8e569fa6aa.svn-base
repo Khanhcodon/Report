@@ -1,0 +1,476 @@
+﻿@using Bkav.eGovCloud.Business.Customer
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.Edit");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allFunctions = ViewBag.AllFunctions as string;
+    var allTreeGroups = ViewBag.AllTreeGroups as string;
+}
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.colorpicker/jquery.colorpicker.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree_pre1.0_fix_1/jquery.jstree.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree_pre1.0_fix_1/_lib/jquery.cookie.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree_pre1.0_fix_1/_lib/jquery.hotkeys.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.colorpicker/jquery.colorpicker.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.nicescroll.min.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.js")"></script>
+
+<script type="text/javascript">
+    var allTreeGroups = @(string.IsNullOrEmpty(allTreeGroups) ? MvcHtmlString.Create("[]") : Html.Raw(allTreeGroups));
+    var allFunctions = @(string.IsNullOrEmpty(allFunctions) ? MvcHtmlString.Create("[]") : Html.Raw(allFunctions));
+
+    var objDefineTree = {
+        plugins: ["themes", "html_data", "ui", "crrm", "dnd"],
+        ui: { select_multiple_modifier: false },
+        crrm : {
+            move : {
+                check_move : function (m) {
+                    var p = this._get_parent(m.o);
+                    if(!p) return false;
+                    p = p == -1 ? this.get_container() : p;
+                    if(p === m.np) return true;
+                    if(p[0] && m.np[0] && p[0] === m.np[0]) return true;
+                    return false;
+                }
+            }
+        },
+        dnd : {
+            drop_target : false,
+            drag_target : false
+        }
+    };
+
+    var itemCopy = 0;
+    var itemCopyTreeGroupName = "";
+    var isValid = false;
+    var arrNodeRoot=[];
+    $(function () {
+        $("#delete").remove();
+        $("table").addClass("table table-hover table-bordered");
+        var treeGroupLenth = allTreeGroups.length;
+        for(var i=0; i<treeGroupLenth; i++){
+            var children = _.clone(_.filter(allFunctions, function(func) {
+                return !func.parentid && func.treeGroupId== allTreeGroups[i].id;
+            }));
+
+            children = _.sortBy(children, function (item) {
+                return item.order;
+            });
+
+            getChildren(children);
+
+            allTreeGroups[i].children=children;
+        }
+
+        $("#treeGroupsNode").tmpl(allTreeGroups).appendTo("#tree");
+        for(var i= 0; i< treeGroupLenth; i++){
+            var rootName= "#treeGroups_"+allTreeGroups[i].id;
+            arrNodeRoot.push(rootName);
+            $(rootName)
+                 .jstree(objDefineTree)
+                     .bind("loaded.jstree", function (e, data) {
+                         data.inst.get_container().find('li').each(function() {
+                             if (data.inst.get_path($(this)).length <= 1) {
+                                 data.inst.open_node($(this));
+                             }
+                         });
+                     })
+                     .bind("move_node.jstree", function (e, data) {
+                         $.post("@Url.Action("Move")",
+                        {
+                            __RequestVerificationToken: $('input[name=__RequestVerificationToken]',"#ProcessFunctionMove").val(),
+                            id: data.rslt.o.attr("id"),
+                            target: data.rslt.r.attr("id"),
+                            position: data.rslt.p.toString(),
+                            parentid: data.rslt.cr.attr("id")
+                        }, function (result) {
+                            if(result) {
+                                if(result.error) {
+                                    eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                                }
+                            }
+                        });
+                     });
+                 }
+
+        $("#right").load('@Url.Action("Create")/0');
+
+        $.contextMenu({
+            selector: '.context-menu li',
+            zIndex: 3,
+            build: function($triggerElement, event) {
+                var that= this;
+                var options = {
+                    items: {
+                        "addNode": {
+                            name: "@Localizer("ProcessFunction.ProcessFunction.Create.Label")",
+                            icon: "add",
+                            callback: function() {
+                                var treeGroupName=  $(this).attr('data-tree-group-name');
+                                var treeGroupId= parseInt( $(this).attr('data-tree-group-id'));
+                                $("#right").load('@Url.Action("Create")?id=' +$(this).attr('data-id') +'&treeGroupId='+treeGroupId);
+                                deselectAllNode();
+                                $(treeGroupName).jstree("select_node", '#' + $(this).attr('id'));
+                            }
+                        }
+                    }
+                };
+
+                if(!$($triggerElement).hasClass('nodeRoot')){
+                    options.items.sep1 = "---------";
+                    options.items.copyNode={
+                        name: "@Localizer("ProcessFunction.ProcessFunction.CopyNode.Label")",
+                        icon: "copy",
+                        callback: function() {
+                            itemCopyTreeGroupName=  $(this).attr('data-tree-group-name');
+                            itemCopy = $(this).attr('id');
+                            deselectAllNode();
+                            $(itemCopyTreeGroupName).jstree("select_node", '#' + itemCopy);
+                        }
+                    };
+                }
+
+                if (itemCopy > 0) {
+                    options.items.pasteNode = {
+                        name: "@Localizer("ProcessFunction.ProcessFunction.PasteNode.Label")",
+                        icon: "paste",
+                        callback: function() {
+                            var self = this;
+                            $.post("@Url.Action("Paste")",
+                            {
+                                __RequestVerificationToken: $('input[name=__RequestVerificationToken]',"#ProcessFunctionPaste").val(),
+                                id: itemCopy,
+                                parentId: $(self).attr('data-id')
+                            },  function(data) {
+                                if(data) {
+                                    if(data.error) {
+                                        eGovMessage.notification(data.message, eGovMessage.messageTypes.error);
+                                    } else if(data.success) {
+                                        var newNode;
+                                        if(data.parentId > 0) {
+                                            newNode="li#" + data.parentId;
+                                        }
+                                        else{
+                                            newNode="li#node_"+data.treeGroupId;
+                                        }
+
+                                        $(itemCopyTreeGroupName).jstree(
+                                                'create',
+                                                $(newNode),
+                                                'last',
+                                                {
+                                                    'data': {
+                                                        'title': data.name,
+                                                        'attr': {
+                                                            'href':'@Url.Action("Edit")/' + data.id,
+                                                            'data-ajax-update': '#right',
+                                                            'data-ajax-success': 'onSuccess',
+                                                            'data-ajax-mode': 'replace',
+                                                            'data-ajax-method': 'Get',
+                                                            'data-ajax-failure': 'onFailure',
+                                                            'data-ajax-begin': 'onBegin',
+                                                            'data-ajax': 'true'
+                                                        }
+                                                    },
+                                                    'attr': {
+                                                        'id': data.id,
+                                                        'data-tree-group-name':"#treeGroups_"+data.treeGroupId,
+                                                        'data-tree-group-id':data.treeGroupId}
+                                                },  null,  true  );
+
+                                                deselectAllNode();
+                                                $(itemCopyTreeGroupName).jstree("select_node", '#' + data.id);
+                                                var classActive = (data.isActivated ? "processfunction_active "
+                                                    : "processfunction ") + $(itemCopyTreeGroupName+" li[id=" + data.id + "]")
+                                                    .attr("class").replace('processfunction_active', '')
+                                                    .replace('processfunction_active', '');
+
+                                                $(itemCopyTreeGroupName+" li[id=" + data.id + "]").attr("class", classActive);
+                                                if(data.color && data.color != '') {
+                                                    $(itemCopyTreeGroupName+ " li[id=" + data.id + "] a:first").css({ color: data.color });
+                                                } else {
+                                                    $(itemCopyTreeGroupName+" li[id=" + data.id + "] a:first").removeAttr('style');
+                                                }
+                                                $("#right").load('@Url.Action("Edit")/' + data.id);
+                                            }
+                                    }}).fail(function () {
+                                        eGovMessage.notification("@Localizer("Common.Error.Copy")", eGovMessage.messageTypes.error);
+                                    });
+                            itemCopy = 0;
+                        }
+                    };
+                } else {
+                    if(options.items.pasteNode) {
+                        delete options.items.pasteNode;
+                    }
+                }
+
+                if(!$($triggerElement).hasClass('nodeRoot')){
+                    options.items.sep2 = "---------";
+                    options.items.deleteNode = {
+                        name: "Xóa node này",
+                        icon: "delete",
+                        callback: function() {
+                            deselectAllNode();
+                            var self = this;
+                            var treeGroupName =  $(self).attr('data-tree-group-name');
+                            $(treeGroupName).jstree("select_node", '#' + $(self).attr('id'));
+                            eGovMessage.show(
+                                "@Localizer("ProcessFunction.ConfirmDeleteNode")",
+                                null,
+                                eGovMessage.messageButtons.YesNo,
+                                function () {
+                                    $.post("@Url.Action("Delete")",
+                                        {
+                                            id: $(self).attr('id') ,
+                                            __RequestVerificationToken: $('input[name=__RequestVerificationToken]',"#ProcessFunctionDelete").val(),
+                                        },  function(data) {
+                                            if(data.error) {
+                                                eGovMessage.notification(data.message, eGovMessage.messageTypes.error);
+                                            } else {
+                                                $(treeGroupName).jstree('remove', $(self));
+                                                eGovMessage.notification(
+                                                    "@Localizer("ProcessFunction.ProcessFunction.DeleteNode.Successful")",
+                                                     eGovMessage.messageTypes.success);
+                                            }
+                                        }
+                                    ).fail(function () {
+                                        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+                                    });
+                                }
+                            );
+                        }
+                    };
+                    }
+
+                return options;
+            }
+        });
+    });
+
+        function deselectAllNode(){
+            if(arrNodeRoot.length>0)  {
+                for(var i=0;i< arrNodeRoot.length;i++){
+                    $(arrNodeRoot[i]).jstree("deselect_node");
+                }
+            }
+        }
+
+        function deselectNode(nodeName) {
+            if(arrNodeRoot.length>0){
+                for(var i=0;i< arrNodeRoot.length;i++){
+                    if(nodeName != arrNodeRoot[i]) {
+                        $(nodeName).jstree("deselect_node");
+                    }
+                }
+            }
+        }
+
+        function getChildren(parent) {
+            $.each(parent, function(index, func) {
+                var children = _.filter(allFunctions, function(f) {
+                    return f.parentid && f.parentid == func.id;
+                });
+
+                if(children) {
+                    children = _.sortBy(children, function(item) {
+                        return item.order;
+                    });
+                    func.children = children;
+                    func.isleaf = children.length > 0;
+                    getChildren(children);
+                }
+            });
+        }
+
+        function onBegin() {
+            $(window).blockpanel({ text:egov.resources.notifications.loading ||  "Đang xử lý...", borderWidth: 1 });
+        }
+
+        function onSuccess() {$('tr th').css("line-height", "2.5");
+            $(window).unblockpanel();
+        }
+
+        function onFailure() {
+            eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+            $(window).unblockpanel();
+        }
+
+        function onSaveSuccess(result) {
+            if(result) {
+                if(!result.error) {
+                    var parentid = result.item.parentid ? result.item.parentid : 0;
+                    var newNode;
+                    if(parentid > 0) {
+                        newNode="li#" + parentid;
+                    }
+                    else{
+                        newNode="li#node_"+result.treeGroupId;
+                    }
+
+                    if(result.functionType === "Create") {
+                        var treeGroupId= "#treeGroups_"+result.treeGroupId;
+                        $(treeGroupId).jstree('create',
+                                $(newNode),
+                                'last',
+                                {
+                                    'data': {
+                                        'title': result.item.name,
+                                        'attr': {
+                                            'href':'@Url.Action("Edit")/' + result.item.id,
+                                            'data-ajax-update': '#right',
+                                            'data-ajax-success': 'onSuccess',
+                                            'data-ajax-mode': 'replace',
+                                            'data-ajax-method': 'Get',
+                                            'data-ajax-failure': 'onFailure',
+                                            'data-ajax-begin': 'onBegin',
+                                            'data-ajax': 'true'
+                                        }
+                                    },
+                                    'attr': {
+                                        'id': result.item.id,
+                                        'data-tree-group-name':treeGroupId,
+                                        'data-tree-group-id':result.treeGroupId
+                                    }
+                                }, null, true);
+
+                                var classActive = (result.item.isActivated  ? "processfunction_active " : "processfunction ")
+                                            + $(treeGroupId+" li[id=" + result.item.id + "]")
+                                            .attr("class").replace('processfunction_active', '')
+                                            .replace('processfunction_active', '');
+
+                                $(treeGroupId+" li[id=" + result.item.id + "]") .attr("class", classActive);
+
+                                if(result.item.color && result.item.color != '') {
+                                    $(treeGroupId+" li[id=" + result.item.id + "] a:first").css({ color: result.item.color });
+                                } else {
+                                    $(treeGroupId+" li[id=" + result.item.id + "] a:first").removeAttr('style');
+                                }
+
+                                $("#Name").val('').focus();
+                                $("#ProcessFunctionTypeId option:first").attr('selected', 'selected');
+                                $("#Icon").val('');
+                                $("#Color").val('');
+                                $("#Query").val('');
+                                $("#QueryCountItemUnread").val('');
+                                $("#IsEnablePaging").prop('checked', false);
+                                $("#trQueryCount").hide();
+                                $("#QueryCount").val('');
+                                $("#IsFilterByDocFieldDocType").prop('checked', false);
+                                $("#IsActivated").prop('checked', true);
+
+                                eGovMessage.notification('@Localizer("Common.Create.Success.Label")', eGovMessage.messageTypes.success);
+                            } else if(result.functionType === "Update") {
+                                var treeGroupId= "#treeGroups_"+result.treeGroupId;
+                                $(treeGroupId) .jstree('rename',
+                                                $("li#" + result.item.id),
+                                                result.item.oldname,
+                                                result.item.name
+                                            );
+                                var classActive = (result.item.isActivated ? "processfunction_active " : "processfunction ") ;
+                                $(treeGroupId+" li[id=" + result.item.id + "]").attr("class", classActive);
+                                if(result.item.color && result.item.color != '') {
+                                    $(treeGroupId+" li[id=" + result.item.id + "] a:first").css({ color: result.item.color });
+                                } else {
+                                    $(treeGroupId+" li[id=" + result.item.id + "] a:first").removeAttr('style');
+                                }
+                                if(result.item.isfilter) {
+                                    $("#linkSetting").show();
+                                } else {
+                                    $("#linkSetting").hide();
+                                }
+                                eGovMessage.notification(egov.resources.notifications.updatesuccessful, eGovMessage.messageTypes.success);
+                            }
+                        } else {
+                            eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                        }
+                    }
+                }
+
+                function downloadFile(id){
+                    var link = '@Url.Action("Download", "ProcessFunction", new { area = "Admin" })/' + id;
+                    $.fileDownload(link, {
+                        failCallback: function(response) {
+                            var html = $(response);
+                            try {
+                                var json = JSON.parse(html.text());
+                                alert(json.error);
+                            } catch(e) {
+                                alert("@Localizer("Common.Error.DownloadFile")");
+                            }
+                        }
+                    });
+                }
+</script>
+<script id="treeTemplate" type="text/x-jquery-tmpl">
+    <li id="${id}" data-id="${id}" class="{{if isActivated}}processfunction_active {{else}} processfunction {{/if}}"
+        data-tree-group-name="#treeGroups_${treeGroupId}" data-tree-group-id="${treeGroupId}">
+        <a data-ajax="true" data-ajax-method="Get"
+            data-ajax-begin="onBegin" data-ajax-failure="onFailure"
+            data-ajax-success="onSuccess" data-ajax-update="#right"
+            data-ajax-mode="replace" href="@Url.Action("Edit")/${id}"
+             style="{{if color}}color:${color}{{/if}}">${name}</a>
+        {{if children}}
+        <ul>
+            {{tmpl(children) "#treeTemplate"}}
+        </ul>
+        {{/if}}
+    </li>
+</script>
+
+<script id="treeGroupsNode" type="text/x-jquery-tmpl">
+    <div id="treeGroups_${id}" class="{{if hasChildrenContextMenu}}context-menu{{/if}}">
+        <ul>
+            <li id="node_${id}" data-id="0" class="{{if isActivated}}processfunction_active{{else}}processfunction{{/if}} nodeRoot"
+                data-tree-group-name="#treeGroups_${id}" data-tree-group-id="${id}">
+                <a href="#">${name}</a>
+                {{if children}}
+                <ul>
+                    {{tmpl(children) "#treeTemplate"}}
+                </ul>
+                {{/if}}
+            </li>
+        </ul>
+    </div>
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-flow-cascade"></i>
+        <span >Cây báo cáo</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+    </div>
+</div>
+<div id="container" style="width: 100%;" class="row">
+    <div id="ProcessFunctionMove" style="display: none">@Html.AntiForgeryToken()</div>
+    <div id="ProcessFunctionPaste" style="display: none">@Html.AntiForgeryToken()</div>
+    <div id="ProcessFunctionDelete" style="display: none">@Html.AntiForgeryToken()</div>
+    <div style="background-color: white;" class="col-md-4">
+        <div id="tree">
+        </div>
+    </div>
+    <div id="right" class="col-md-12" style="border-left: 1px solid #bbb; overflow: auto; height: 100%;">
+    </div>
+    <div style="float: left; clear: both; width: 100%; border-top: 1px solid #bbb; height: 1px"></div>
+</div>
+<div style="clear: both">
+</div>
+<script id="positionTemplate" type="text/x-jquery-tmpl">
+    <option value="${PositionId}">${PositionName}</option>
+</script>

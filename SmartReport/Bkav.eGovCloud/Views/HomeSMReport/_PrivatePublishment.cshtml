@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null;
+}
+
+<div id="PrivatePublishment" class="publishment private-publishment">   
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group form-group-sm">
+                    <label class="col-md-4" data-res="egov.resources.document.StoreId">Sổ văn bản</label>
+                    <div class="col-md-12">
+                        <select class="form-control" id="StoreId"></select>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-4">Số ký hiệu</label>
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="Code" style="z-index: 1060;">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 25px"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right code-list" id="CodeId">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-4" data-res="egov.resources.document.SecurityId.name"></label>
+                    <div class="col-md-12">
+                        <select class="form-control" id="SecurityId"></select>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-16">Nơi nhận văn bản</label>
+                </div>
+                <div class="form-group form-group-sm">
+                    <div class="private-receiveds">
+                        <div id="listDepartments"></div>
+                        <ul class="list-group table-depts"></ul>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-16">Nhận thông báo</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-16 dg-view"></div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group form-group-sm">
+                    <label class="col-md-6 " data-res="egov.resources.document.DatePublished"></label>
+                    <div class="col-md-10">
+                        <input type="text" id="DatePublished" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-6 " data-res="egov.resources.document.Approvers"></label>
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="ApproverName">
+                            <div class="input-group-btn">
+                                <input type="hidden" class="form-control" id="Approvers">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right ddlApprovers"></ul>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-6 " data-res="egov.resources.document.DocInPage"></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control total-copy" id="TotalCopy" value="1" />
+                        <span>/ </span>
+                        <input type="text" class="form-control total-page" id="TotalPage" value="1" style=" float: right;" />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-6" data-res="egov.resources.document.InPlace"></label>
+                    <div class="col-md-10">
+                        <select class="form-control" id="InPlace"></select>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-16" style="color: blue;" data-res="egov.resources.document.publishReceive"></label>
+                </div>
+                <div class="form-group form-group-sm publish-receive">
+                    <div class="col-md-16">
+                        <span class="bold" data-res="egov.resources.transfer.MainProcessUser"></span> <i data-res="egov.resources.transfer.MainProcessUserComment"></i>
+                        <div class="main-address">
+                            <ul class="list-group"></ul>
+                        </div>
+                    </div>
+                    <div class="col-md-16">
+                        <span class="bold">Nhận thông báo</span> <i data-res="egov.resources.transfer.AnnouceUserComment"></i>
+                        <div class="private-anoun">
+                            <ul class="list-group"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="SavePrivateStore" class="savePrivateStore">
+    <div class="form-horizontal">
+        <div class="form-group form-group-sm">
+            <label class="col-md-4" data-res="egov.resources.document.StoreId">Sổ văn bản</label>
+            <div class="col-md-12">
+                <select class="form-control" id="StoreId"></select>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-md-4">Số ký hiệu</label>
+            <div class="col-md-12">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" id="Code" style="z-index: 1060;">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 25px"><span class="caret"></span></button>
+                        <div class="dropdown-menu dropdown-menu-right code-list" id="CodeId">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

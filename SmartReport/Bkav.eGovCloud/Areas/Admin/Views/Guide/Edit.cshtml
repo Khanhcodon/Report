@@ -1,0 +1,32 @@
+﻿@model  GuideModel
+@{
+    ViewBag.Title = Localizer("Common.Guide.Label.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user2"></i>
+        <span data-res="egov.resources.sitemap.permissionSetting"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/Guide/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @using (Html.BeginForm("Edit", "Guide", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.Partial("_Notifications")
+        <div id="divListLaw">
+            @{
+                Html.RenderPartial("_CreateOrEdit", Model);
+            }
+        </div>
+    }
+</div>

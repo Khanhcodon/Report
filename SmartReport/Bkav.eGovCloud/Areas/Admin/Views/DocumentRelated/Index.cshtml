@@ -1,0 +1,68 @@
+﻿@model IEnumerable<DocumentRelatedModel>
+    @{
+        ViewBag.Title = "Danh sách văn bản liên quan";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script type="text/javascript">
+    $(function () {
+    });
+    function deleteDoc(id) {
+        eGovMessage.show('@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.DocumentRelated.ConfirmDelete"))',null,eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+        }
+    function Filter() {
+        var filter = $("#TxtFilter").val().toLowerCase();
+        if (filter != "") {
+            $('.table-main .td-filter').each(function () {
+                if ($(this).text().toLowerCase().indexOf(filter) < 0) {
+                    $(this).parent().hide();
+                }
+                else {
+                    $(this).parent().show();
+                }
+            });
+        }
+        else {
+            $('.table-main tr').show();
+        }
+                          }
+    function onBegin() {
+        $("#divListDocRelated").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListDocRelated').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListDocRelated').unblockpanel();
+    }
+    </script>
+
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-popup"></i>
+            <span data-res="egov.resources.sitemap.DocumentRelated"></span>
+        </div>
+        <div class="options">
+            <a class="btn btn-warning" href="/admin/documentrelated/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+    <div id="tabs" class="bkavegov">
+        @Html.Partial("_Notifications")
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.DocumentRelated.Index.Search.Fields.DocumentRelatedName.Label") </span>
+        <input type="text" id="TxtFilter" class="txt-filter" onkeyup="Filter(event)" style="display: inline; width: 70%;margin-bottom: 10px" />
+        <div id="divListCatalogs">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+    </div>

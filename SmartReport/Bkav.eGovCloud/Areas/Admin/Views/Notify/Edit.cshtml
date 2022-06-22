@@ -1,0 +1,49 @@
+﻿@model NotifyModel
+@{
+    var templates = ViewBag.Templates as IEnumerable<TemplateModel>;
+}
+
+@Html.Partial("_Notifications")
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Description)
+    <table id="tblOptions" class="table table-hover">
+        <thead>
+            <tr>
+                <th data-res="egov.resources.tableheader.formname">Tên mẫu</th>
+                <th data-res="egov.resources.tableheader.type">Kiểu</th>
+                <th data-res="egov.resources.tableheader.select">Chọn</th>
+            </tr>
+            @foreach (var template in templates)
+            {
+                var type = string.Empty;
+                if (@template.Type == 1)
+                {
+                    type = Localizer("Bkav.eGovCloud.Areas.Admin.Notify.PrintPaper");
+                }
+                else if (@template.Type == 2)
+                {
+                    type = Localizer("Bkav.eGovCloud.Areas.Admin.Notify.Email");
+                }
+                else if (@template.Type == 3)
+                {
+                    type = Localizer("Bkav.eGovCloud.Areas.Admin.Notify.SMS");
+                }
+                <tr>
+                    <td>@template.Name</td>
+                    <td>@type</td>
+                    <td>@Html.RadioButtonFor(model => model.TemplateId, @template.TemplateId)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2" data-res="egov.resources.notify.nouse">Không sử dụng</td>
+                @if (Model.TemplateId == null)
+                {
+                    <td>@Html.RadioButtonFor(model => model.TemplateId, 0, new { @checked = "checked" })</td>
+                }else {
+                    <td>@Html.RadioButtonFor(model => model.TemplateId, 0)</td>
+                }
+            </tr>
+        </thead>
+    </table>
+}

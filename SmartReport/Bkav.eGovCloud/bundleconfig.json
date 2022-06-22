@@ -1,0 +1,341 @@
+[
+  {
+    "outputFileName": "Scripts/bkav.egov/views/main/topjs.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/util/bkav.utilities.js",
+      "Scripts/bkav.egov/util/bt.util.string.min.js",
+      "Scripts/bkav.egov/util/bt.util.date.js",
+      "Scripts/bkav.egov/libs/notify/desktop-notify.js",
+      "Scripts/bkav.egov/views/main/egov.helper.js",
+      "Scripts/bkav.egov/views/main/egov.notifications.js",
+      "Scripts/bkav.egov/views/main/egov.hub.js",
+      "Scripts/bkav.egov/views/main/egov.mainapps.js",
+      "Scripts/bkav.egov/views/main/main.js",
+      "Scripts/bkav.egov/dev/egov.pubsub.js",
+      "Scripts/bkav.egov/util/egov.fileextension.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/Base.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/ChromeNativeApp.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/pluginfactory.js",
+      "Scripts/bkav.egov/util/egov.plugin.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/mobile/mobile.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js",
+      "Scripts/mobile/libs/jquery.mobile-1.4.5.modified.js",
+      "Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.cookie.min.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery-tmpl.modified.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.xml2json.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery.dotdotdot/jquery.dotdotdot.min.js",
+      "Scripts/bkav.egov/libs/jstree_pre1.0_fix_1/jquery.jstree.js",
+      "Scripts/bkav.egov/libs/underscore/underscore-min.js",
+      "Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js",
+      "Scripts/mobile/libs/dialog-polyfill.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.js",
+      "Scripts/bkav.egov/libs/bkav/scrollloadmore.js",
+      "Scripts/bkav.egov/resource/egov.resources.bindresource.min.js",
+      "Scripts/bkav.egov/resource/egov.resources.vi-VN.js",
+      "Scripts/bkav.egov/dev/egov.request-manager.js",
+      "Scripts/bkav.egov/util/bt.util.date.js",
+      "Scripts/bkav.egov/util/bt.util.string.min.js",
+      "Scripts/mobile/extends/function.js",
+      "Scripts/mobile/views/dialog.js",
+      "Scripts/mobile/templates/templates.js",
+      "Scripts/bkav.egov/dev/egov.enum.js",
+      "Scripts/bkav.egov/dev/egov.models.js",
+      "Scripts/bkav.egov/util/egov.keycode.js",
+      "Scripts/bkav.egov/dev/egov.pubsub.js",
+      "Scripts/bkav.egov/util/egov.fileextension.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/mvendor.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery-tmpl.modified.js",
+      "Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.xml2json.js",
+      "Scripts/bkav.egov/libs/underscore/underscore-min.js",
+      "Scripts/bkav.egov/libs/backbone/backbone-1.3.3.min.js",
+      "Scripts/bkav.egov/libs/bootstrap/bootstrap.min.js",
+      "Scripts/bkav.egov/libs/offline/offline.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js",
+      "Scripts/bkav.egov/libs/modernizr.js",
+      "Scripts/bkav.egov/libs/hashbase64.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js",
+      "Scripts/bkav.egov/util/egov.keycode.js",
+      "Scripts/bkav.egov/resource/egov.resources.bindresource.min.js",
+      "scripts/bkav.egov/libs/bkav/scrollloadmore.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery.dotdotdot/jquery.dotdotdot.min.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/egovcore.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/resource/egov.resources.bindresource.js",
+      "Scripts/bkav.egov/dev/egov.utils.js",
+      "Scripts/bkav.egov/dev/egov.enum.js",
+      "Scripts/bkav.egov/dev/egov.request-manager.js",
+      "Scripts/bkav.egov/dev/egov.entities.js",
+      "Scripts/bkav.egov/dev/egov.models.js",
+      "Scripts/bkav.egov/dev/egov.cache-manager.js",
+      "Scripts/bkav.egov/dev/egov.data-access.js",
+      "Scripts/bkav.egov/dev/egov.data-manager.js",
+      "Scripts/bkav.egov/dev/egov.data-manager.tree.js",
+      "Scripts/bkav.egov/dev/egov.data-manager.documents.js",
+      "Scripts/bkav.egov/dev/egov.data-manager.document.js",
+      "Scripts/bkav.egov/dev/egov.pubsub.js",
+      "Scripts/bkav.egov/dev/egov.events.js",
+      "Scripts/bkav.egov/dev/egov.status.js",
+      "Scripts/bkav.egov/util/bkav.utilities.js",
+      "Scripts/bkav.egov/util/bt.util.date.js",
+      "Scripts/bkav.egov/util/bt.util.string.min.js",
+      "Scripts/bkav.egov/util/egov.fileExtension.js",
+      "Scripts/bkav.egov/util/egov.cookie.js",
+      "Scripts/bkav.egov/util/egov.localStorage.js",
+      "Scripts/bkav.egov/util/egov.message.js",
+      "Scripts/bkav.egov/libs/bkav/bkav.grid.js",
+      "Scripts/bkav.egov/util/egov.popup.js",
+      "Scripts/bkav.egov/util/egov.table.js",
+      "Scripts/bkav.egov/util/egov.tooltip.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/Base.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/ChromeNativeApp.js",
+      "Scripts/bkav.egov/libs/bkav/PluginEgov/pluginfactory.js",
+      "Scripts/bkav.egov/util/egov.plugin.js",
+      "Scripts/bkav.egov/util/treeExtension.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/vendor.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js",
+      "Scripts/bkav.egov/libs/underscore/underscore-1.8.3.js",
+      "Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery-tmpl.modified.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.ui.datepicker-vi-VN.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.validate.min.js",
+      "Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.js",
+      "Scripts/bkav.egov/libs/bootstrap/bootstrap.min.js",
+      "Scripts/bkav.egov/libs/offline/offline.js",
+      "Scripts/bkav.egov/libs/modernizr.js",
+      "Scripts/bkav.egov/libs/hashbase64.js",
+      "Scripts/bkav.egov/locache/egov.locache.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.js",
+      "Scripts/bkav.egov/libs/jquery/jQuery.dotdotdot/jquery.dotdotdot.min.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/btalk/btalk-core.js",
+    "inputFiles": [
+      "Scripts/btalk/app/btalk/btalk.js",
+      "Scripts/btalk/app/btalk/btalk.alert.js",
+      "Scripts/btalk/app/btalk/btalk.reconnection.js",
+      "Scripts/btalk/app/btalk/btalk.messageBuilder.js",
+      "Scripts/btalk/app/btalk/btalk.auth.js",
+      "Scripts/btalk/app/btalk/btalk.connectionManager.js",
+      "Scripts/btalk/app/btalk/btalk.egov.js",
+      "Scripts/btalk/app/btalk/btalk.browser.js",
+      "Scripts/btalk/app/btalk/btalk.cache.js",
+      "Scripts/btalk/app/btalk/btalk.emoticon.js",
+      "Scripts/btalk/app/btalk/btalk.autolink.js",
+      "Scripts/btalk/app/btalk/btalk.fileManager.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/bkav.egov/egovdocument.min.css",
+    "inputFiles": [
+      "Content/bootstrap/icomoon.css",
+      "Content/bootstrap/css/bootstrap.min.css",
+      "Content/bootstrap/css/bootstrap-theme.css",
+      "Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.css",
+      "Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.css",
+      "Content/offline/offline.css",
+      "Content/bkav.egov/egov.custom.css",
+      "Content/bkav.egov/egov.document.css",
+      "Content/bkav.egov/egov.home.css",
+      "Content/bkav.egov/status/egov.status.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/bkav.egov/egovmain.min.css",
+    "inputFiles": [
+      "Content/bootstrap/icomoon.css",
+      "Content/Material/material-icon.css",
+      "Content/bootstrap/css/bootstrap.min.css",
+      "Content/bootstrap/css/bootstrap-theme.css",
+      "Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css",
+      "Scripts/bkav.egov/libs/jquery/jquery.qtip/jquery.qtip.min.css",
+      "Content/bkav.egov/egov.custom.css",
+      "Content/bkav.egov/egov.main.css",
+      "Content/bkav.egov/egov.main.new.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/publishment.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/publishment.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/privatePublishment.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/privatePublishment.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/transfer.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/transfer.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/document.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/document.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/transferExtend.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/transferExtend.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/toolbar.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/toolbar.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/storePrivate.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/storePrivate.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/home/storePrivate.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/home/storePrivate.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/home/tree.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/home/tree.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/util/egov.formtemplate.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/util/egov.formtemplate.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/dateResponseAddresses.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/dateResponseAddresses.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/relations.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/relations.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/home/documents.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/home/documents.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/scanner.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/scanner.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/templates/template.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/templates/template.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/util/egov.shortkey.document.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/util/egov.shortkey.document.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/search/egovSearch.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/search/egovSearch.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/home/tab.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/home/tab.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/home/documentContextmenu.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/home/documentContextmenu.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/attachments.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/attachments.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/announcement.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/announcement.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/functions/consult.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/functions/consult.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/resource/egov.resources.vi-VN.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/resource/egov.resources.vi-VN.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/document/supplementaryList.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/document/supplementaryList.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bkav.egov/views/report/eReport.min.js",
+    "inputFiles": [
+      "Scripts/bkav.egov/views/report/eReport.js"
+    ]
+  }
+]

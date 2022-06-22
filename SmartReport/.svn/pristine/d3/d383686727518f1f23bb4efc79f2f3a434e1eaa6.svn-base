@@ -1,0 +1,95 @@
+﻿@{
+    Layout = null;
+}
+@*Thống kê tổng quan*@
+<div class="overview-title">
+    Tình trạng xử lý hồ sơ đăng ký qua mạng
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tải về <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" data-app="dkqm">
+            <li><a href="#" id="btnExportWord">Ms Word</a></li>
+            <li><a href="#" id="btnExportPdf">Pdf</a></li>
+            <li><a href="#" id="btnExportExcel">Excel</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <div class="overview-statistics">
+        <table class="table table-bordered table-hover table-striped" id="dkqmDetail">
+            <colgroup>
+                <col style="width: 50px;">
+                <col>
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+                <col style="width: 60px;">
+            </colgroup>
+
+            <thead>
+                <tr role="row">
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2" class="statistic-detail-officeName">Đơn vị</th>
+                    <th rowspan="2">Tồn kỳ trước</th>
+                    <th rowspan="2">Nhận trong kỳ</th>
+                    <th rowspan="2">Tổng</th>
+                    <th colspan="5" rowspan="1">Đã giải quyết</th>
+                    <th colspan="5" rowspan="1">Chưa giải quyết</th>
+                </tr>
+                <tr role="row">
+                    <th>Tổng</th>
+                    <th class="">Đúng hẹn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th class="">Trễ hẹn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th>Tổng</th>
+                    <th class="">Quá hạn</th>
+                    <th>Tỉ lệ (%)</th>
+                    <th class="">Chưa đến hạn</th>
+                    <th>Tỉ lệ (%)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@*Thống kê chi tiết*@
+<div class="processingDocs">
+    <div class="overview-title">
+        Danh sách hồ sơ đăng ký qua mạng - <span class="online-total total"></span>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover document-overdue" id="onlineList">
+            <colgroup>
+                <col style="width: 150px" />
+                <col />
+                <col />
+                <col style="width: 130px" />
+                <col style="width: 130px" />
+                <col style="width: 150px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Mã hồ sơ</th>
+                    <th>Tên công dân</th>
+                    <th>Tên hồ sơ</th>
+                    <th>Hạn xử lý</th>
+                    <th>Ngày xử lý</th>
+                    <th>Cán bộ xử lý</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

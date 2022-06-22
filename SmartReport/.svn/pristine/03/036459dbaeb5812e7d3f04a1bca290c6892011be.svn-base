@@ -1,0 +1,47 @@
+﻿@model WardModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Ward.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Ward.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+@using (Html.BeginForm())
+{
+    <div class="bkavegov-content-title">
+        <h3 data-res="egov.resources.ward.updatedata">Cập nhật xã/phường</h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">@Html.ActionLink(Localizer("Common.Button.List"), "Index")</li>
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+            <div>
+                <button type="submit" name="save" value="save">@Localizer("Common.Button.Edit.Save")</button>
+                <button type="button" id="delete" name="delete" value="delete" onclick="deleteServer(@Model.WardId)">@Localizer("Common.Button.Delete")</button>
+                <button type="button" onclick="location.href='/admin/Ward'">
+                    @Localizer("Common.Button.Back")</button>
+            </div>
+        </div>
+    </div>
+}
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.WardId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

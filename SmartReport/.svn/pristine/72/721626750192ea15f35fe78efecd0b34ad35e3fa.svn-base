@@ -1,0 +1,94 @@
+﻿@model QuestionModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/tinymce/tinymce.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#create").remove();
+    });
+</script>
+
+<script>
+    tinyMCE.init({
+        mode: "exact",
+        selector: "#txtTextArea",
+        language: "@lang",
+        height: "300",
+        width: "800",
+        theme: "advanced",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+    });
+    tinyMCE.init({
+        mode: "textareas",
+        selector: "#viewQuestion",
+        language: "@lang",
+        theme: "modern",
+        height: "170",
+        width: "800",
+        readonly: true
+    });
+</script>
+@Html.ValidationSummary(true)
+<div class="form-horizontal">
+    @Html.HiddenFor(model => model.QuestionId)
+    @Html.HiddenFor(model => model.Tag)
+
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.AskPeople.Label")</label>
+        <div class="col-md-5">
+            <h5>@Model.AskPeople</h5>
+            @Html.HiddenFor(model => model.AskPeople)
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.Date.Label")</label>
+        <div class="col-md-5">
+            <h5>@Model.Date.ToString("d/M/yyyy H:m")</h5>
+            @Html.HiddenFor(model => model.Date)
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.Url.Label")</label>
+        <div class="col-md-5">
+            @Html.TextAreaFor(model => model.Detail, new { @class = "form-control", id = "viewQuestion" })
+            @Html.HiddenFor(model => model.Detail)
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.Name.Label")</label>
+        <div class="col-md-5">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.Answer.Label")</label>
+        <div class="col-md-5">
+            @Html.TextAreaFor(model => model.Answer, new { @class = "form-control", id = "txtTextArea" })
+            @Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.AnswerPeople")</label>
+        <div class="col-md-5">
+            @Html.TextBoxFor(model => model.AnswerPeople, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.AnswerPeople, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Question.CreateOrEdit.Field.Active.Label")</label>
+        <div class="col-md-5">
+            @Html.CheckBoxFor(model => model.Active)
+        </div>
+    </div>
+</div>

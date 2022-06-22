@@ -1,0 +1,152 @@
+﻿@model IEnumerable<BussinessDocFieldDocTypeGroupModel>
+@{
+    ViewBag.Title = Localizer("Admin.Title.BussinessDocFieldDocTypeGroup.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var allBussiness = ViewBag.AllBussiness as List<SelectListItem>;
+    var allDocField = ViewBag.AllDocField as string;
+    var allDocType = ViewBag.AllDocType as string; 
+    
+}
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+
+<script type="text/javascript">
+    var allDocField= @(string.IsNullOrEmpty(allDocField) ? MvcHtmlString.Create("[]") : Html.Raw(allDocField));
+    var allDocType= @(string.IsNullOrEmpty(allDocType) ? MvcHtmlString.Create("[]") : Html.Raw(allDocType));
+
+    function deleteGroup(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.BussinessDocFieldDocTypeGroup.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divGroup").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divGroup').unblockpanel();
+    }
+
+    function onFailure() {
+        $('#divGroup').unblockpanel();
+    }
+
+    function searchGroup(_this) {
+        $(_this).parents('form')
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    $(function(){
+        $("#DocFieldId").on("change",function(){
+            bindViewDocType($("#CategoryBusinessId").val(),$(this).val());
+        });
+
+        $("#CategoryBusinessId").on("change",function(){
+            bindViewDocField($(this).val());
+            bindViewDocType($(this).val());
+        });
+    });
+
+    function bindViewDocField(categoryBusinessId){
+        if(allDocField.length>0){
+            var list= _.filter(allDocField,function(item){
+                return item.categoryBusinessId == parseInt(categoryBusinessId);
+            });
+
+            $("#DocFieldId option[value!='']").remove();
+            $("#DocFieldId").append($("#templateOption").tmpl(list));
+        }
+    }
+
+    function bindViewDocType(categoryBusinessId, docFieldId){
+        if(allDocField.length > 0 && allDocType.length>0 ){
+            var list= _.filter(allDocType,function(item){
+                return item.categoryBusinessId == parseInt(categoryBusinessId)
+                    && ((docFieldId == null ||docFieldId==''
+                    || item.docFieldId ==null|| item.docFieldId =='')
+                    || item.docFieldId == parseInt(docFieldId));
+            });
+
+            $("#DocTypeId option[value!='']").remove();
+            $("#DocTypeId").append($("#templateOption").tmpl(list));
+        }
+    }
+
+</script>
+
+<script id="templateOption" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-stopwatch"></i>
+        <span data-res="egov.resources.sitemap.egovjob"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/BussinessDocFieldDocTypeGroup/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search",
+    new AjaxOptions
+    {
+        UpdateTargetId = "divGroup",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }))
+    {
+        <table>
+            <tr><td style="width:15%">
+              @Localizer("BussinessDocFieldDocTypeGroup.CreateOrEdit.Fields.CategoryBusinessId.Label")
+                </td>
+                <td>  @Html.DropDownList("CategoryBusinessId", allBussiness, Localizer("Common.All.Label")) </td>
+            </tr>
+                <tr>
+                    <td> 
+                           @Localizer("BussinessDocFieldDocTypeGroup.CreateOrEdit.Fields.DocFieldId.Label")</td>
+                <td>  <select id="DocFieldId" name="DocFieldId" class="form-control">
+          <option value="">@Localizer("Common.All.Label")</option>
+         </select> </td>
+            </tr>
+                <tr><td>    @Localizer("BussinessDocFieldDocTypeGroup.CreateOrEdit.Fields.DocTypeId.Label")</td>
+                <td>
+         <select id="DocTypeId" name="DocTypeId" class="form-control" >
+            <option value="">@Localizer("Common.All.Label")</option>
+         </select></td>
+            </tr>
+                <tr><td>    @Localizer("BussinessDocFieldDocTypeGroup.CreateOrEdit.Fields.Name.Label")</td>
+                <td><input class="form-control" type="text" name="Name" id="Name"  placeholder="@Localizer("BussinessDocFieldDocTypeGroup.CreateOrEdit.Fields.Name.Label")"/></td>
+            </tr>
+                <tr><td></td>
+                <td>  <input class="btn" type="submit" id="search" onclick="searchGroup(this)"
+            value="@Localizer("Common.Resource.Index.Search.Button.Search")" /></td>
+            </tr>
+        </table>
+    }
+    <br />
+<div style="clear: both">
+</div>
+    <div id="divGroup">
+  @{
+      Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+ 
+</div>

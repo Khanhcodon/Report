@@ -1,0 +1,714 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<link href="../../favicon.ico" rel="Bkav eGov">
+<link href="../../Content/bkav.egov/egovmain.min.css?v=234" rel="stylesheet" />
+<link href="../../Content/bkav.egov/material.min.css" rel="stylesheet" />
+<link href="../../Content/bkav.egov/home.overview.css" rel="stylesheet" />
+
+<script src="../../Scripts/bkav.egov/mvendor.min.js?v=234"></script>
+
+<div class="home-overview">
+    <div class="col-md-3 left-panel">
+        <div>
+            <div class="user-profile">
+                <img class="avatar" src="@Url.Content(ViewBag.Avatar) " />
+                <div class="full-name">
+                    @ViewBag.FullName
+                </div>
+            </div>
+            <div class="menu-app row">
+                <div class="mdl-list">
+                    <div class="mdl-list__item selected" onclick="changeMenu(this, '#tongquan')" id="abc">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons ">show_chart</i>
+                            <span>Tổng quan</span>
+                        </span>
+                    </div>
+                    <div class="mdl-list__item hidden" onclick="changeMenu(this, '#chuongtrinh')">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons ">assignment_turned_in</i>
+                            <span>Chương trình làm việc</span>
+                        </span>
+                    </div>
+                    <div class="mdl-list__item " onclick="changeMenu(this, '#tacnghiep')">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons ">folder_open</i>
+                            <span>Phân quyền điều hành</span>
+                        </span>
+                        <span class="mdl-list__item-secondary-content">
+                        </span>
+                    </div>
+                    <div class="mdl-list__item hidden" onclick="changeMenu(this, '#tongquan')">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons ">assignment_turned_in</i>
+                            <span>Đánh giá kết quả</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-13 right-panel">
+        <div class="content-panel hidden" id="tacnghiep">
+            <div class="menu-name">
+                Phân quyền điều hành
+            </div>
+            <div class="app-list row">
+                <div class="flex-container">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview selected" data-app="calendar" onclick="changeApp(this, 'calendar')">
+                                <div class="overview-icon" style="background: #5677fc;">
+                                    <i class="material-icons">
+                                        calendar_today
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">7</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Lịch làm việc
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview" data-app="hsmc" onclick="changeApp(this, 'hsmc')">
+                                <div class="overview-icon" style="background: #8eb432;">
+                                    <i class="material-icons">
+                                        people
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">18</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        HS một cửa
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="xlvb" onclick="changeApp(this, 'xlvb')">
+                                <div class="overview-icon" style="background: #b24e30;">
+                                    <i class="material-icons">
+                                        folder_open
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">25</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Xử lý văn bản
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="email" onclick="changeApp(this, 'email')">
+                                <div class="overview-icon" style="background: #4f7414;">
+                                    <i class="material-icons">
+                                        email
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">12</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Thư điện tử
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body office-overview " data-app="bmm" onclick="changeApp(this, 'bmm')">
+                                <div class="overview-icon" style="background: #5677fc;">
+                                    <i class="material-icons">
+                                        view_list
+                                    </i>
+                                </div>
+                                <div class="overview-separator"></div>
+                                <div class="overview-detail">
+                                    <div class="overview-numb">
+                                        <span class="doc-total-total">12</span>
+                                    </div>
+                                    <div class="overview-type">
+                                        Nhiệm vụ
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-detail">
+                <div id="appContent">
+                    <div id="appContent_calendar">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel">                                   
+                                    <ul id="menu-calendar" class="mdl-list autoscroll-y">                                    
+                                        <li class="mdl-list__item mdl-js-ripple-effect" onclick="openApp('calendar')">
+                                            <span class="mdl-list__item-primary-content addCalendar">
+                                                <i class="material-icons">add</i>
+                                                <span class="node-name">Quản lý lịch</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/Calendar/GetDaily">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">calendar_today</i>
+                                                <span class="node-name">Lịch trong ngày</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="calendar-count">3</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect selected" data-url="/Calendar/GetWeekly">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">calendar_today</i>
+                                                <span class="node-name">Lịch trong tuần</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="calendar-count">7</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/Calendar/GetMonthly">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">calendar_today</i>
+                                                <span class="node-name">Lịch trong tháng</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="calendar-count">7</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="calendar-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="appContent_hsmc" class="hidden">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel">
+                                    <ul id="menu-document" class="mdl-list autoscroll-y">
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">Hồ sơ vừa tiếp nhận</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DiChoXL">12</span>
+                                            </span>
+                                        </li>
+
+                                        <li class="mdl-list__item mdl-js-ripple-effect active" data-url="/mobile/getProcessings?c=1">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">Hồ sơ chờ xử lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DenChoXL">32</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getSents">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">send</i>
+                                                <span class="node-name">Hồ sơ đang thụ lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">68</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">Hồ sơ đã trả kết quả</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">166</span>
+                                            </span>
+                                        </li>                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="hsmc-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="appContent_xlvb" class="hidden">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel">
+                                    <ul id="menu-document" class="mdl-list autoscroll-y">
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">VB đi chờ xử lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DiChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect active" data-url="/mobile/getProcessings?c=1">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">VB đến chờ xử lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DenChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getSents">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">send</i>
+                                                <span class="node-name">VB đang theo dõi</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">43</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">VB được thông báo</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">134</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">VB đã hoàn thành</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">12</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="xlvb-content">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="appContent_email" class="hidden">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel">
+                                    <ul id="menu-document" class="mdl-list autoscroll-y">
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">Thư cá nhân</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DiChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect active" data-url="/mobile/getProcessings?c=1">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">Thư đã gửi</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DenChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getSents">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">send</i>
+                                                <span class="node-name">Thư nháp</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">43</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">Thư đã xóa</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">134</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">Spam</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">12</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="xlvb-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="appContent_bmm" class="hidden">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel">
+                                    <ul id="menu-document" class="mdl-list autoscroll-y">
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">VB đi chờ xử lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DiChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect active" data-url="/mobile/getProcessings?c=1">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">inbox</i>
+                                                <span class="node-name">VB đến chờ xử lý</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="DenChoXL">25</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getSents">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">send</i>
+                                                <span class="node-name">VB đang theo dõi</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">43</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">VB được thông báo</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">134</span>
+                                            </span>
+                                        </li>
+                                        <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                            <span class="mdl-list__item-primary-content">
+                                                <i class="material-icons">folder_shared</i>
+                                                <span class="node-name">VB đã hoàn thành</span>
+                                            </span>
+                                            <span class="mdl-list__item-secondary-action">
+                                                <span class="node-count" data-target="TheoDoi">12</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="xlvb-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-panel" id="tongquan" style="margin-right: -15px;">
+            @*<iframe src="/home/statictis" style="width: 100%; height: 100%; border:none; height: calc(100vh - 17px);"></iframe>*@
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="calendar">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Lịch làm việc Trong Tuần
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">
+                        Ngày
+                    </th>
+                    <th>
+                        Nội dung
+                    </th>
+                    <th>
+                        Người chủ trì
+                    </th>
+                    <th>
+                        Địa điểm
+                    </th>
+                    @*<th>Chi tiết</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                {{each data}}
+                <tr>
+                    <td rowspan="${Count -1}" style="border: 1px solid #e7e9fd; font-weight:bold; padding: 8px;">
+                        ${Date}
+                    </td>
+                    {{each Calendars}}
+                    {{if Contents.length == 1}}
+                    <td style="border: 1px solid #e7e9fd; padding: 8px;">
+                        <span class="timestart">${Time}</span>
+                        <span class="title">
+                            ${Title}
+                            {{if Contents[0].Content != ''}}
+                            <br />${Contents[0].Content}
+                            {{/if}}
+                        </span>
+                    </td>
+                    <td style="border: 1px solid #e7e9fd; padding: 8px;">
+                        <div class="userPrimaryList list-group">
+                            {{html UserPrimaryPublish}}
+                        </div>
+                    </td>
+                    <td style="border: 1px solid #e7e9fd; padding: 8px; text-align:center">
+                        ${Place}
+                    </td>
+                    @*<td style="text-align:center">
+                            <a href="#">Xem</a>
+                        </td>*@
+                </tr>
+                {{else}}
+            <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;">
+                <span class="timestart">${Time}</span>
+                <span class="title">${Title}</span>
+            </td>
+            <td style="border: 1px solid #e7e9fd;  padding: 8px; border-top: 0;border-bottom: 0;"></td>
+            <td style="border: 1px solid #e7e9fd; padding: 8px;  border-top: 0;border-bottom: 0;">
+                <div class="userPrimaryList list-group">
+                    {{html Contents[0].UserPrimaryPublish}}
+                </div>
+            </td>          
+            </tr>
+            {{each Contents}}
+            <tr class="detail">
+                <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+                    ${Content}
+                </td>
+                <td style="border: 1px solid #e7e9fd; padding: 8px; border-top: 0;border-bottom: 0;">
+                    <div class="userPrimaryList list-group">
+                        {{if $index > 0 }}
+                        {{html UserPrimaryPublish}}
+                        {{/if}}
+                    </div>
+                </td>
+            </tr>
+            {{/each}}
+            {{/if}}
+            {{/each}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/template" id="xlvb">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            ${name}
+
+            <button class="btn btn-primary btn-xs pull-right" onclick="openApp('documents')">Quản lý</button>
+        </div>
+        <table class="table table-striped table-bordered">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 120px" />
+                <col style="width: 120px" />
+                <col />
+                <col style="width: 120px" />
+                <col style="width: 80px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Stt</th>
+                    <th>
+                        Số đến
+                    </th>
+                    <th>
+                        Ký hiệu
+                    </th>
+                    <th>
+                        Trích yếu
+                    </th>
+                    <th>
+                        Hạn xử lý
+                    </th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each data}}
+                <tr data-id="${DocumentCopyId}">
+                    <td style="text-align:center;">${$index + 1} </td>
+                    <td style="text-align:center;">${InOutCode}</td>
+                    <td style="text-align:center;">${DocCode}</td>
+                    <td>
+                        ${Compendium}
+                    </td>
+                    <td style="text-align:center;">${DateOverdue}</td>
+                    <td style="text-align:center;">
+                        <button class="btn btn-xs" onclick="openDocument('${Compendium}', ${DocumentCopyId})">xem</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/template" id="hsmc">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            ${name}
+
+            <button class="btn btn-primary btn-xs pull-right" onclick="openApp('documents')">Quản lý</button>
+        </div>
+        <table class="table table-striped table-bordered">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 120px" />
+                <col />
+                <col style="width: 150px" />
+                <col style="width: 150px" />
+                <col style="width: 80px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <td style="text-align:center;">
+                        Stt
+                    </td>
+                    <th style="text-align:center;">
+                        Số ký hiệu
+                    </th>
+                    <th>
+                        Thủ tục
+                    </th>
+                    <th>
+                        Người gửi
+                    </th>
+                    <th>
+                        Hạn xử lý
+                    </th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each data}}
+                <tr data-id="${DocumentCopyId}">
+                    <td style="text-align:center;">${$index + 1} </td>
+                    <td style="text-align:center;">${DocCode}</td>
+                    <td>
+                        {{if DateOverdue.indexOf("QH") == 0}} <label class="label label-danger">Quá hạn</label> {{/if}}
+                        ${Compendium}
+                    </td>
+                    <td style="text-align:center;">${UserName}</td>
+                    <td style="text-align:center;">${DateOverdue}</td>
+                    <td>
+                        <button class="btn btn-xs" onclick="openDocument('${Compendium}', ${DocumentCopyId})">xem</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script src="../../Scripts/bkav.egov/views/home/home_overview.js"></script>
+<script src="../../Scripts/bkav.egov/views/home/home_statictis.js?v=234"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/google-jsapi/loader.js")"></script>
+
+<script type="text/javascript">
+
+    document.domain = "@ViewBag.ParentDomain";
+
+    function changeApp(e, appname) {
+        $(".office-overview.selected").removeClass('selected');
+        $(e).addClass('selected');
+
+        $("#appContent_" + appname).siblings().addClass('hidden');
+        $("#appContent_" + appname).removeClass('hidden');
+
+        switch (appname) {
+            case 'xlvb':
+                window.overview.showXlvb();
+                break;
+            case 'hsmc':
+                window.overview.showHsmc();
+                break;
+            case 'calendar':
+                window.overview.showCalendar();
+                break;
+            case 'email':
+                window.overview.showEmail();
+                break;
+            case 'bmm':
+                window.overview.showBmm();
+                break;
+            default:
+                break;
+        }
+    }
+
+    function openApp(appName) {
+        if (window.top && window.top.mainApps) {
+            window.top.mainApps.openApp(appName);
+        }
+    }
+
+    function openDocument(id, compendium) {
+        if (window.top && window.top.openDocument) {
+            window.top.openDocument(compendium, id);
+        }
+    }
+
+    function changeMenu(el, id){
+        $(el).siblings().removeClass("selected");
+        $(el).addClass("selected");
+        $(id).siblings().addClass("hidden");
+        $(id).removeClass('hidden');
+    }
+
+    $(function () {
+        $(".office-overview").first().click();
+        $('#tongquan').load("/home/statictis");
+        // changeMenu('#abc', '#tongquan');
+    });
+</script>

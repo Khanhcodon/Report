@@ -1,0 +1,40 @@
+﻿<div class="userConfig">
+    <div class="form-group hidden">
+        <div class="row">
+            <label class="col-xs-8" data-res="egov.resources.mobile.usersetting.loadavatar">
+            </label>
+            <div class="col-xs-8 text-right">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="showAvatar">
+                    <input type="checkbox" id="showAvatar" class="mdl-switch__input" {{if egov.userConfig.showAvatar == true }} checked="checked" {{/if}}>
+                    <span class="mdl-switch__label"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-xs-8" data-res="egov.resources.mobile.usersetting.notify.config">
+            </label>
+            <div class="col-xs-8">
+                <select class="ddlNotifyType form-control">
+                    <option value="0" {{if userConfig.notifyType == 0 }} selected {{/if}} data-res="egov.resources.mobile.usersetting.notify.noNotify"></option>
+                    <option value="1" {{if userConfig.notifyType == 1 }} selected {{/if}} data-res="egov.resources.mobile.usersetting.notify.oneNotify"></option>
+                    <option value="2" {{if userConfig.notifyType == 2 }} selected {{/if}} data-res="egov.resources.mobile.usersetting.notify.allNotify"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-xs-8" data-res="egov.resources.mobile.usersetting.fontsize">
+            </label>
+            <div class="col-xs-8">
+                <select class="ddlFontSize form-control">
+                    {{each(i, v) fontSizes }}
+                    <option value="${v.value}" {{if v.value == userConfig.fontSize }} selected {{/if}}>${v.text}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

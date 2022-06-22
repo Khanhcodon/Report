@@ -1,0 +1,191 @@
+﻿@model DocTypeFormModel
+@using Bkav.eGovCloud.Entities
+@{
+    ViewBag.Title = Localizer("Common.Doctype.Label.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+@*<script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/jquery.jstree.js")"></script>*@
+<script type="text/javascript">
+    var categoryBusinessTypes = {
+        vbden: 1,
+        vbdi: 2,
+        hsmc: 4
+    };
+    $(document).ready(function () {
+
+    });
+    $(function () {
+        egov.utilities.checkbox.checkAndUnCheckAll($("#checkAllStore"), $(".checkItemStore"));
+        $('#categoryBusinessCodeCreateRecords').val($("#categorybusinessForCreate").val());
+        $('#categoryBusinessCodeCreateDoc').val($("#categorybusinessForCreate").val());
+
+        //Xử lý khi chọn tạo mới văn bản hoặc hồ sơ 1 cửa
+        $("#categorybusinessForCreate").change(function () {
+            var categoryBusinessId = $(this).val();
+            $.get("@Url.Action("CategoryBusinessChange")",
+                { categoryBusinessId: categoryBusinessId },
+                function (result) {
+                    if (result) {
+                        var allCategory = JSON.parse(result.AllCategorys);
+                        @if (IsXuLyVanBanEdition)
+                        {
+<text>
+                        if (allCategory.length > 0) {
+                            $('#divCreateOrEditDoc #CategoryId').html('');
+                            $('#divCreateOrEditDoc #CategoryId').append('<option value></option>');
+                            $("#categoryTemplate").tmpl(allCategory).appendTo("#divCreateOrEditDoc #CategoryId");
+                        }
+                        $('#divCreateOrEditDoc').css('display', '');
+                        $('#categoryBusinessCodeCreateDoc').val(categoryBusinessId);
+                        </text>
+                        }
+                        else if (IsHoSoMotCuaEdition)
+                        {
+<text>
+                        if (categoryBusinessId == categoryBusinessTypes.hsmc) {
+                            var allDocfield = JSON.parse(result.AllDocFields);
+                            $('#divCreateOrEditRecords #CategoryId').empty();
+                            if (allCategory.length > 0) {
+                                $("#categoryTemplate").tmpl(allCategory).appendTo("#divCreateOrEditRecords #CategoryId");
+                            }
+                            if (allDocfield.length > 0) {
+                                $('#divCreateOrEditRecords #DocFieldId').html('');
+                                $("#docfieldTemplate").tmpl(allDocfield).appendTo("#divCreateOrEditRecords #DocFieldId");
+                            }
+                            $('#divCreateOrEditDoc').css('display', 'none');
+                            $('#divCreateOrEditRecords').css('display', '');
+                            $('#divCreateOrEditRecords').before($('#divCreateOrEditDoc'));
+                            $('#categoryBusinessCodeCreateRecords').val(categoryBusinessId);
+                        }
+                        else {
+                            if (allCategory.length > 0) {
+                                $('#divCreateOrEditDoc #CategoryId').html('');
+                                $('#divCreateOrEditDoc #CategoryId').append('<option value></option>');
+                                $("#categoryTemplate").tmpl(allCategory).appendTo("#divCreateOrEditDoc #CategoryId");
+                            }
+                            $('#divCreateOrEditDoc').css('display', '');
+                            $('#divCreateOrEditRecords').css('display', 'none');
+                            $('#divCreateOrEditDoc').before($('#divCreateOrEditRecords'));
+                            $('#categoryBusinessCodeCreateDoc').val(categoryBusinessId);
+                        }
+                        </text>
+                        }
+                        else if (IsFullEdition)
+                        {
+<text>
+                        if (categoryBusinessId == categoryBusinessTypes.hsmc) {
+                            var allDocfield = JSON.parse(result.AllDocFields);
+                            $('#divCreateOrEditRecords #CategoryId').empty();
+                            if (allCategory.length > 0) {
+                                $("#categoryTemplate").tmpl(allCategory).appendTo("#divCreateOrEditRecords #CategoryId");
+                            }
+                            if (allDocfield.length > 0) {
+                                $('#divCreateOrEditRecords #DocFieldId').html('');
+                                $("#docfieldTemplate").tmpl(allDocfield).appendTo("#divCreateOrEditRecords #DocFieldId");
+                            }
+                            $('#divCreateOrEditDoc').css('display', 'none');
+                            $('#divCreateOrEditRecords').css('display', '');
+                            $('#divCreateOrEditRecords').before($('#divCreateOrEditDoc'));
+                            $('#categoryBusinessCodeCreateRecords').val(categoryBusinessId);
+                        }
+                        else {
+                            if (allCategory.length > 0) {
+                                $('#divCreateOrEditDoc #CategoryId').html('');
+                                $('#divCreateOrEditDoc #CategoryId').append('<option value></option>');
+                                $("#categoryTemplate").tmpl(allCategory).appendTo("#divCreateOrEditDoc #CategoryId");
+                            }
+                            $('#divCreateOrEditDoc').css('display', '');
+                            $('#divCreateOrEditRecords').css('display', 'none');
+                            $('#divCreateOrEditDoc').before($('#divCreateOrEditRecords'));
+                            $('#categoryBusinessCodeCreateDoc').val(categoryBusinessId);
+                        }
+                        </text>
+                        }
+                    }
+                }
+            )
+            .fail(function () {
+                eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            });
+        });
+
+        $("#submit").off('click');
+        $("#submit").bind("click", function () {
+            if ($("#categorybusinessForCreate").val() == categoryBusinessTypes.hsmc) {
+                $("#submitCreateRecords").click();
+            } else {
+                $("#submitCreateDoc").click();
+            }
+        });
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span data-res="egov.resources.sitemap.doctype"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/doctype/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @Html.Partial("_qtip")
+    <div id="divListDocType">
+        <table>
+            <tr class="hidden">
+                <td style="width: 250px;">
+                    @Html.LabelFor(model => model.DocType.CategoryBusinessId);
+                </td>
+                <td>
+                    <select id="categorybusinessForCreate" style="width: 80%">
+                        @foreach (var categoryBusiness in ViewBag.AllCategoryBusiness as List<SelectListItem>)
+                        {
+                            <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected ='selected'" : "")>@categoryBusiness.Text</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div id="divCreateOrEditRecords">
+            @using (Html.BeginForm("CreateReport", "DocType", FormMethod.Post, new { Id = "formHSMC" }))
+            {
+                @ViewBag.CategoryBusinessIdValue;
+                Html.RenderPartial("_CreateOrEditRecordsPlus", Model);
+                @Html.AntiForgeryToken();
+
+                <input type="submit" name="save" value="save"
+                       id="submitCreateRecords" style="display: none" />
+                <input type="hidden" name="CategoryBusinessId" id="categoryBusinessCodeCreateRecords"
+                       value="@Model.DocType.CategoryBusinessId" />
+
+                <hr />
+                <br />
+                <i class="fa icon-text"></i>
+                <span data-res="egov.resources.sitemap.form"></span>
+                <br />
+                Html.RenderPartial("_CreateOrEditReport", Model);
+            }
+        </div>
+    </div>
+    <script id="categoryTemplate" type="text/x-jquery-tmpl">
+        <option value="${CategoryId}">${CategoryName}</option>
+    </script>
+    <script id="docfieldTemplate" type="text/x-jquery-tmpl">
+        <option value="${DocFieldId}">${DocFieldName}</option>
+    </script>
+
+    <div class="tooltipPacket" style="display: none">
+        <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+    </div>
+</div>

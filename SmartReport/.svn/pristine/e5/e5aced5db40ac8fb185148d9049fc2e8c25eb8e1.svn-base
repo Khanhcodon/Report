@@ -1,0 +1,7 @@
+﻿<div id="departmentCreate">
+    Tên phòng ban66 <span class="spanRequire">*</span>:
+    <input type="text" value="" style="width: 400px" name="DepartmentName" id="DepartmentNameCreate"
+        data-val-required="Bạn phải nhập tên phòng ban!" data-val="true">
+    <div>
+        <button type="button" name="save" value="save" id="btCreateDepartment">@Localizer("Customer.Department.Button.Create")</button></div>
+</div>

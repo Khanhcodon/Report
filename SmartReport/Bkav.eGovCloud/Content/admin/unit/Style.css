@@ -1,0 +1,46 @@
+﻿@font-face {
+    font-family: 'Roboto-Bold';
+    src: url('../../Content/fonts/Roboto-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('../../Content/fonts/Roboto-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto-BoldItalic';
+    src: url('../../Content/fonts/Roboto-BoldItalic.ttf') format('truetype');
+}
+/* use the font */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.text-center i {
+    width: 33px;
+    height: 33px;
+    border-radius: 60px;
+    text-align: center;
+    margin: auto;
+}
+
+.table-responsive table thead tr th {
+    font-weight: bold;
+}
+
+form{
+    color: black;
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 117px;
+}
+#myFormImportUnit{
+    display: flex;
+}

@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Thông tin xem kết quả xét nghiệm</title>
+    <style>
+        .btn-close {
+            margin-bottom: 10px;
+            background: #879deb;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    @*<input type="button" class="btn-close" value="Tắt báo cáo" onclick="closeIframe()">*@
+    <iframe src=@ViewBag.viewPath width="1024" height="800" frameborder="0">  </iframe>
+</body>
+<script type="text/javascript">
+    var isMobile = {
+        Android: function () {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function () {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function () {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function () {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function () {
+            return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+        },
+        any: function () {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
+    if (isMobile.any()) {
+        console.log("Mobie")
+    };
+	function closeIframe() {
+		window.parent.close();
+	}
+</script>
+</html>

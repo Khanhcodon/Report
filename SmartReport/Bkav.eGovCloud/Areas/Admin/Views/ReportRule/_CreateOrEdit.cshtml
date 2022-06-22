@@ -1,0 +1,447 @@
+﻿@model ReportRuleModel
+@{
+    var isCreate = Model.ReportRuleId == 0;
+    //var selectedDocType = ViewBag.SelectedDocType as string;
+    var getlist = ViewBag.AllReportModes as IEnumerable<ReportModels>;
+}
+@*<link href="~/Content/bootstrap/css/datepicker.css" rel="stylesheet" />*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+
+<link href="~/Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+@*<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>*@
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="~/Scripts/bkav.egov/libs/select2/select2.min.js"></script>
+
+<style>
+    .add-datafield {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+        .add-datafield .modal-content, .add-datafield .modal-content .modal-body {
+            overflow: unset;
+        }
+
+    .hasSub {
+        position: relative;
+    }
+
+    .icon-chevron {
+        background-image: url("/Content/Images/home/chevron-right.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 10px;
+        height: 12px;
+    }
+
+    .sub-fomular {
+        background-color: #fff;
+        padding: 0px;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.15);
+        position: absolute;
+        min-width: 10rem;
+        left: 10rem;
+        top: 1px;
+    }
+
+    .datafield-container > li.row-item {
+        border: none;
+        display: inline;
+        margin-right: 10px;
+        padding: 0;
+    }
+
+    .datafield-container > li.row-item, .datafield-container > li.add-item {
+        border: none;
+        display: inline;
+        margin-right: 10px;
+        padding: 0;
+    }
+
+    .datafield-container {
+        height: auto;
+        min-height: 300px;
+    }
+
+        .datafield-container > li.list-group-item {
+            margin-bottom: 0;
+            border-bottom-right-radius: .25rem;
+            border-bottom-left-radius: .25rem;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+
+        .datafield-container .open .dropdown-menu {
+            position: absolute;
+            display: block;
+        }
+
+        .datafield-container span {
+            margin-right: 10px;
+        }
+
+        .datafield-container .btn-rounded {
+            border-radius: 60px;
+        }
+
+        .datafield-container .dropdown-toggle {
+            cursor: pointer;
+            -webkit-transition: .2s linear;
+            transition: .2s linear;
+        }
+
+        .datafield-container > li.row-item a {
+            margin-top: 5px;
+        }
+
+        .datafield-container .dropdown-item {
+            color: #747e8e;
+            font-weight: 300;
+            padding: 4px 12px;
+            width: auto;
+            margin: 4px;
+            -webkit-transition: 0.15s linear;
+            transition: 0.15s linear;
+        }
+
+        .datafield-container .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 10rem;
+            padding: .5rem 0;
+            margin: .125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: .25rem;
+        }
+
+        .datafield-container .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            font-size: 13px;
+        }
+
+        .datafield-container .dropdown-item {
+            width: -webkit-calc(100% - 10px);
+            width: calc(100% - 10px);
+            margin: 2px 5px;
+            padding: .429rem .929rem;
+            -webkit-transition: background-color .25s;
+            -o-transition: background-color .25s;
+            transition: background-color .25s;
+            border-radius: .215rem;
+        }
+
+        .datafield-container .dropdown-toggle:empty::after {
+            margin-left: 0;
+        }
+
+        .datafield-container .dropdown-toggle:after {
+            margin-right: 0;
+            margin-left: .3em;
+        }
+
+        .datafield-container .btn-rounded {
+            vertical-align: middle;
+            line-height: 1;
+            /* margin-top: 10px; */
+            padding-top: 10px;
+        }
+
+        .datafield-container .dropdown-toggle::after {
+            display: inline-block;
+            margin-left: .255em;
+            vertical-align: 0.355em;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-bottom: 0;
+            border-left: .3em solid transparent;
+        }
+
+        .datafield-container .sub-fomular {
+            display: none;
+        }
+
+
+        .datafield-container .glyphicon-menu-right:before {
+            content: "\e258";
+        }
+
+    .ui-draggable-handle {
+        z-index: 9999;
+    }
+
+    .filter-field {
+        margin-left: 10px;
+        border-radius: 5px;
+        border: 1px solid #e3e3e3;
+        padding: 1px 5px;
+        width: 100px !important;
+        height: 23px;
+        display: inline-block;
+    }
+
+    .handsontable table thead th {
+        /*white-space: pre-line;*/
+    }
+
+    #ds-dimension-fields, #ds-measure-fields, #general-values, #ds-dimension-add-fields, #ds-measure-add-fields {
+        overflow: auto;
+        margin-bottom: 21px;
+    }
+
+        #ds-measure-add-fields .media, #ds-dimension-add-fields .media {
+            padding: 5px;
+            width: 100%;
+            float: left;
+        }
+
+    .media-list-divided > .media:not(.media-list-header):not(.media-list-footer), .media-list-divided .media-list-body > .media {
+        border-bottom: 1px solid rgba(97, 106, 120, 0.07);
+    }
+
+    .media {
+        margin-top: 0;
+    }
+
+        .media > * {
+            margin: 0 8px;
+        }
+
+    .media-body > p:last-child {
+        color: #67757c;
+    }
+
+    .media-body > * {
+        margin-bottom: 0;
+    }
+
+    .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: .25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+
+    .add-datafield .name-exist {
+        color: #f00;
+        margin-top: 5px;
+    }
+
+    .d-none {
+        display: none;
+    }
+
+    .mt-10 {
+        margin-top: 10px;
+    }
+
+    .htBold {
+        font-weight: bold;
+    }
+
+    #divReportQueryTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    #divReportQueryTable {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .single h3.side-title:after {
+        content: '';
+        width: 60px;
+        height: 1px;
+        background: #ff173c;
+        display: block;
+        margin-top: 6px;
+    }
+
+    .single h3.side-title {
+        margin: 0;
+        margin-bottom: 10px;
+        padding: 0;
+        font-size: 16px;
+        color: #333;
+        text-transform: uppercase;
+    }
+
+    .single li a:hover {
+        color: #ff173c;
+    }
+
+    .single ul {
+        margin-bottom: 0;
+    }
+
+    .single li a {
+        color: #666;
+        border-bottom: 1px solid #f0f0f0;
+        line-height: 40px;
+        display: block;
+        text-decoration: none;
+    }
+
+    .single li:last-child a {
+        border-bottom: 0;
+    }
+
+    .single {
+        padding: 30px 15px;
+        margin-top: 10px;
+        background: #fcfcfc;
+        border: 1px solid #f0f0f0;
+    }
+
+    .pull-right {
+        font-size: 20px;
+        font-weight: bold;
+        padding-right: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .modal-footer .text-right {
+        margin-right: 15px;
+    }
+
+    .modal-header .close {
+        position: absolute;
+        right: 10px;
+        top: 12px;
+    }
+
+    #general-values .row-filter {
+        cursor: pointer;
+    }
+
+    #condition-value .row {
+        margin: 0;
+    }
+
+    #tab-condition .row {
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+
+    .droptarget {
+        float: left;
+        min-height: 100px;
+        min-width: 200px;
+        border: 1px solid black;
+        margin: 15px;
+        padding: 10px;
+        border: 1px solid #aaaaaa;
+    }
+
+    /*button clear on timeKey, organizeKey textbox*/
+    .clearable.x {
+        background-position: right 5px center;
+    }
+
+    .clearable.onX {
+        cursor: pointer;
+    }
+
+    .clearable::-ms-clear {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    .clearable {
+        background: #fff url(data:image/gif;base64,R0lGODlhBwAHAIAAAP///5KSkiH5BAAAAAAALAAAAAAHAAcAAAIMTICmsGrIXnLxuDMLADs=) no-repeat right -10px center;
+        border: 1px solid #999;
+        padding: 3px 18px 3px 4px; /* Use the same right padding (18) in jQ! */
+        border-radius: 3px;
+        transition: background 0.4s;
+    }
+</style>
+
+@Html.HiddenFor(model => model.ReportRuleId)
+
+<div class="form-horizontal">
+    <div class="panel">
+        <div class="panel-heading">Thông tin chung</div>
+        <div class="panel-body">
+            @*style="height: calc(100vh - 210px); overflow: auto;"*@
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12">
+                    <div class="control-label">@Html.LabelRequireFor(model => model.Code)</div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    @Html.TextBoxFor(model => model.Code)
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+                <div class="col-sm-2 col-xs-12">
+                    <div class="control-label">@Html.LabelRequireFor(model => model.Name)</div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    @Html.TextBoxFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+            <div class="col-sm-2 col-xs-12 hidden">
+                <div class="control-label">@Html.LabelRequireFor(model => model.ReportMode)</div>
+            </div>
+            <div class="col-sm-6 col-xs-12 hidden">
+                @Html.TextBoxFor(model => model.ReportMode)
+                @Html.ValidationMessageFor(model => model.ReportMode)
+            </div>
+        </div>
+    </div>
+</div>
+    <legend>Chế độ báo cáo</legend>
+<div class="col-sm-2 col-xs-12">
+    <div class="control-label">Chọn chế độ báo cáo </div>
+</div>
+    <div class="col-sm-12 col-xs-12 ">
+        <select class="listReportMode" name="states[]" multiple="multiple">
+            @foreach (var re in getlist)
+            {
+                <option value=@re.ReportModelId>@re.Name</option>
+            }
+        </select>
+    </div>
+<script>
+    var lst = " @Html.Raw((ViewBag.AllSelectedReportMode)) ";
+
+    $(document).ready(function () {
+        $('.listReportMode').select2();
+        $(".listReportMode").append(lst);
+    });
+    $('.listReportMode').change(function () {
+        var listReportMode = JSON.stringify($('.listReportMode').val());
+        $("#ReportMode").val(listReportMode);
+    })
+
+</script>
+
+
+

@@ -1,0 +1,102 @@
+﻿@model InfomationModel
+@{
+    ViewBag.Title = Localizer("Common.Infomation.Label.Update");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script>
+    $(function () {
+        var controller = '@ViewContext.Controller.ValueProvider.GetValue("controller").RawValue';
+        var action = '@ViewContext.Controller.ValueProvider.GetValue("action").RawValue';
+        if (action == "Index") {
+            action = "";
+        } else {
+            action = "/" + action;
+        }
+        var url = "/Admin" + "/" + controller + action;
+        $(".left-content ul li a").each(function () {
+            if (url.toLowerCase() == (this.pathname).toLowerCase()) {
+                $(this).addClass("selected");
+            }
+        });
+    });
+</script>
+@*<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Infomation"), "Index")</li>
+        <li>
+            @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Update"), "Edit")
+        </li>
+    </ul>
+</div>*@
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-office"></i>
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Infomation")</span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+    </div>
+</div>
+
+<div class="">
+    @using (Html.BeginForm())
+    {
+        <div id="tabs" class="bkavegov">
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+        </div>
+    }
+
+    <form id="uploader">
+        <img style="height:50px; width:50px; display:inline" id="image_upload_preview" src="@Url.Content("~/Content/Images/home/"+ @ViewBag.NameFile)" alt="@ViewBag.NameFile" />
+        <input style="display:inline" id="fileInput" type="file" multiple>
+        <input type="submit" value="Tải lên" />
+    </form>
+
+</div>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#image_upload_preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+        $("#fileInput").change(function () {
+            readURL(this);
+            $("#ImagePath").val(this.value.replace(/.*[\/\\]/, ''));
+        });
+
+    document.getElementById('uploader').onsubmit = function () {
+        var formdata = new FormData(); //FormData object
+        var fileInput = document.getElementById('fileInput');
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++) {
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Infomation/Upload');
+        xhr.send(formdata);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                alert(xhr.responseText);
+            }
+        }
+        return false;
+    }
+    
+</script>
+
+

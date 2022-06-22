@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    var prints = ViewBag.Result as Dictionary<string, string>;
+}
+<style type="text/css">
+    .field-edit {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+<script type="text/ecmascript">
+
+    $(function () {
+        $(".field-edit").each(function () {
+            $(this).attr("onkeyup", "changeValue(this)");
+        });
+    });
+
+    function changeValue(obj) {
+        var val = $(obj).val();
+        var objId = $(obj).attr("id");
+        $(":text[id='" + objId + "']").val(val);
+    }
+
+</script>
+<div id="print">
+    @foreach (var print in prints)
+    {
+        <div>@Html.Raw(print.Value)</div>
+    }   
+</div>
+

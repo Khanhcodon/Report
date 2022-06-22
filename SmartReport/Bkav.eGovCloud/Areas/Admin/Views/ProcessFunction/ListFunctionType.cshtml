@@ -1,0 +1,104 @@
+﻿@model IEnumerable<ProcessFunctionTypeModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.ListFunctionType");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#tblFunctionType").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+
+    function deleteType(id) {
+        eGovMessage.show(
+            '@Localizer("Common.Confirm.Delete")',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+</script>
+
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.ListFunctionType"), "ListFunctionType")</li>
+        <li>@Html.ActionLink(Localizer("Common.Button.Create"), "CreateFunctionType")</li>
+    </ul>
+</div>
+
+<div class="bkavegov col-md-13 right-content">
+    @Html.Partial("_Notifications")
+    <div id="divListType">
+        <table class="table-main table" id="tblFunctionType">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header">
+                        @Localizer("ProcessFunction.ListFunctionType.List.Column.Numbers")
+                    </th>
+                    <th class="header">
+                        @Localizer("ProcessFunction.ListFunctionType.List.Column.Name")
+                    </th>
+                    <th class="header">
+                        @Localizer("ProcessFunction.ListFunctionType.List.Column.TextField")
+                    </th>
+                    <th class="header">
+                        @Localizer("ProcessFunction.ListFunctionType.List.Column.Edit")
+                    </th>
+                    <th class="header">
+                        @Localizer("ProcessFunction.ListFunctionType.List.Column.Delete")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    var number = 0;
+                    foreach (var type in Model)
+                    {
+                        number += 1;
+                    <tr>
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @type.Name
+                        </td>
+                        <td>
+                            @type.TextField
+                        </td>
+                        <td>
+                            @Html.ActionLink(Localizer("ProcessFunction.ListFunctionType.List.Column.Edit.Button"), "EditFunctionType", new { Id = type.ProcessFunctionTypeId })
+                        </td>
+                        <td>
+                            <a href="javascript:deleteType(@(type.ProcessFunctionTypeId))">@Localizer("ProcessFunction.ListFunctionType.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(type.ProcessFunctionTypeId)" style="display: none" action="@Url.Action("DeleteFunctionType", new { Id = type.ProcessFunctionTypeId })" method="POST">
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" data-res="egov.resources.processfunction.nodata">Không có loại node nào
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

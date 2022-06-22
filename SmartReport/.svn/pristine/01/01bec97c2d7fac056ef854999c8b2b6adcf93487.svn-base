@@ -1,0 +1,102 @@
+﻿@model Bkav.eGovCloud.Models.SupplementaryModel
+@{
+    
+}
+<script src="@Url.Content("~/Scripts/bkav.utilities.js")" type="text/javascript"></script>
+<style type="text/css">
+    .supplementary-main {
+    }
+
+        .supplementary-main .supp-content {
+            width: 483px;
+        }
+
+        .supplementary-main .supp-common {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .supplementary-main .supp-type {
+        }
+
+        .supplementary-main .supp-offset-label {
+            margin-left: 50px;
+        }
+
+        .supplementary-main .supp-offset-day {
+            width: 30px;
+        }
+
+    .supp-buttons {
+        text-align: right;
+    }
+
+        .supp-buttons input, #addSupp {
+            border: none;
+            height: 25px;
+            color: white;
+            background-color: #21bbf7;
+            font-family: arial;
+        }
+
+    #listSupp {
+        height: 180px;
+        overflow-y: auto;
+    }
+
+    .supp-offset {
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        var suppType = $("#SupplementType").val();
+        if (suppType != 3)              // Nếu loại bổ sung là cộng thêm ngày cố định
+        {
+            $(".supp-offset").hide();   // hiển thị nhập số ngày
+        }
+
+        $("#CommentSend").focus();
+    });
+
+
+    function supplementaryTypeChange(obj) {
+        if ($(obj).val() == 3) { //  cong them ngay co dinh
+            $(obj).parent().find('.supp-offset').show();
+        }
+        else {
+            $(obj).parent().find(".supp-offset").hide();
+        }
+    }
+
+    function getSupplementary() {
+        if ($("#CommentSend").val() == "") {
+            eGovMessage.show("Nhập yêu cầu bổ sung");
+            return;
+        }
+        var suppModel = $("form[name='supplementForm']").serializeObject();
+        return suppModel;
+    }
+
+</script>
+
+<form name="supplementForm">
+    <div class="supplementary-main">
+        @Html.HiddenFor(model => model.SupplementaryId)
+        @Html.HiddenFor(model => model.DocumentCopyId)
+        @Html.HiddenFor(model => model.DocumentId)
+
+        <strong>Nội dung yêu cầu bổ sung</strong>
+
+        @Html.TextAreaFor(model => model.CommentSend, new { style = "width: 99%" })
+
+        <div style="margin-top: 10px;">
+            <div><strong>Tính bù thời gian xử lý</strong></div>
+            @Html.DropDownList("SupplementType", null, new { onchange = "supplementaryTypeChange(this)" })
+            <span class="supp-offset" style=""><span class="supp-offset-label">Số ngày</span>
+                <input type="text" name="OffsetDay" class="supp-offset-day" value="1" />
+                <span style="margin-left: 10px">ngày</span>
+            </span>
+        </div>
+    </div>
+</form>

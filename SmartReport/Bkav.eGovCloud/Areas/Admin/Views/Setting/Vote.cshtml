@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.General");
+    Layout = "_SettingLayout.cshtml";
+    var allUsers = ViewBag.AllUsers as string;
+    var userConfig = ViewBag.ListUserCreateVote as IEnumerable<Bkav.eGovCloud.Entities.Customer.User>;
+    var activeConfig = (bool)ViewBag.IsActive;
+    var userCreateStr = ViewBag.UsersCreate as string;
+    ViewBag.LinkCss = ".right-content{overflow:visible;} .main-content{overflow:visible;}";
+}
+
+<form action="" method="post">
+    <table>
+        <tr>
+            <td colspan="2">
+                <b>Cấu hình trưng cầu ý kiến</b>
+            </td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-6" style="padding-left:0px">
+                <img alt="" src="/Content/Images/help.png" title="">
+                Trạng Thái kích hoạt
+            </td>
+            <td class="col-md-10" style="padding-left:0px">
+                @if (activeConfig == true)
+                {
+                    <input type="checkbox" name="IsActive" value=" " id="checkactive" checked />
+                }
+                else
+                {
+                    <input type="checkbox" name="IsActive" value=" " id="checkactive" />
+                }
+
+            </td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-6" style="padding-left:0px">
+                <img alt="" src="/Content/Images/help.png" title="">
+                Người được tạo
+            </td>
+            <td class="col-md-10" style="padding-left:0px">
+                <input type="text" name="name" value="" class="form-control" id="usermanager" />
+            </td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-6" style="padding-left:0px">
+            </td>
+            <td class="col-md-10" style="padding-left:0px">
+                <div class="userAcceptCalendarName" style="width:80%">
+                    @foreach (var item in userConfig)
+                    {
+                        <div>
+                            <span>
+                                @item.Username - @item.FullName
+                                <input type="hidden" name="CreateVoteId" value="@item.UserId" />
+                            </span>
+                            <a class="removeuser" data-id="@item.UserId" style="float:right">Xóa</a>
+                            <br />
+                        </div>
+                    }
+                </div>
+                <input type="hidden" id="UsersCreate" name="UsersCreate" value="0" />
+                <input type="hidden" id="removeId" name="removeId" value="0" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+
+    $("#usermanager").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+            response($.grep(allUsers, function (value) {
+                value = value.label || value.value || value;
+                return matcher.test(value) || matcher.test(value);
+            }));
+        },
+        focus: function () {
+            return false;
+        },
+        selectFirst: true,
+        select: function (event, ui) {
+            debugger
+            $("#UsersCreate").val(ui.item.value);
+            $("form").submit();
+            return false;
+        }
+    })
+       .data("autocomplete")._renderItem = function (ul, item) {
+           return $("<li></li>")
+               .data("item.autocomplete", item)
+               .append("<a>" + item.label + "</a>")
+               .appendTo(ul);
+       };
+    $(".removeuser").click(function () {
+        debugger
+        var id = $(this).data("id");
+        $("#removeId").val(id);
+        $("form").submit();
+    })
+</script>

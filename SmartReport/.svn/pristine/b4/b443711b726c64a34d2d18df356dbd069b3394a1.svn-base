@@ -1,0 +1,87 @@
+﻿@model IEnumerable<ProcessFunctionGroupModel>
+    @{ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.ProcessFunctionGroup");
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script type="text/javascript">
+        function deleteGroup(id) {
+            if (confirm("@Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.Store.Delete")")) {
+                $('form').submit();
+            }
+        }
+    </script>
+    <div class="col-md-3 left-content">
+        <ul>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.Edit"), "Index")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.StoreList"), "ProcessFunctionGroup")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddStore"), "CreateGroup")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.FilterList"), "ProcessFunctionFilter")</li>
+            <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.AddFilter"), "CreateFilter")</li>
+        </ul>
+    </div>
+    <div class="col-md-13 right-content">
+        <div id="divForm" class="bkavegov">
+
+            @Html.Partial("_Notifications")
+            <div id="divListForm" style="padding-top: 10px;">
+                <table class="table-main table" id="tblFunctionType">
+                    <colgroup>
+                        <col style="width: 50px" />
+                        <col />
+                        <col style="width: 50px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">
+                                @Localizer("ProcessFunction.ListFunctionType.List.Column.Numbers")
+                            </th>
+                            <th class="header">
+                                Kho
+                            </th>
+                            <th class="header">
+                                @Localizer("ProcessFunction.ListFunctionType.List.Column.Edit")
+                            </th>
+                            <th class="header">
+                                @Localizer("ProcessFunction.ListFunctionType.List.Column.Delete")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            var number = 0;
+                            foreach (var type in Model)
+                            {
+                                number += 1;
+                                <tr>
+                                    <td>
+                                        @number
+                                    </td>
+                                    <td>
+                                        @type.Name
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink(Localizer("ProcessFunction.ListFunctionType.List.Column.Edit.Button"), "EditGroup", new { Id = type.ProcessFunctionGroupId })
+                                    </td>
+                                    <td>
+                                        <a href="javascript:deleteGroup(@(type.ProcessFunctionGroupId))">@Localizer("ProcessFunction.ListFunctionType.List.Column.Delete.Button")</a>
+                                        <form id="formdelete@(type.ProcessFunctionGroupId)" style="display: none" action="@Url.Action("DeleteGroup", new { Id = type.ProcessFunctionGroupId })" method="POST">
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" data-res="egov.resources.processfunction.nogroup">
+                                    Không có nhóm nào
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>

@@ -1,0 +1,165 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.SmsSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Notify.SMS");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script type="text/javascript">
+    var documentFields = [
+        {
+            name: "@Localizer("Document.UrgentId.Field.Label")", value: 'UrgentId', type: 'int', options: [
+                { name: "@Localizer("Document.Urgent.Normal.Field.Label")", value: 1 },
+                { name: "@Localizer("Document.Urgent.Fast.Field.Label")", value: 2 },
+                { name: "@Localizer("Document.Urgent.SuperFast.Field.Label")", value: 3 }
+            ]
+        },
+        {
+            name: "@Localizer("Document.Urgent.HasRead")", value: 'IsSuccess', options: []
+        }
+    ];
+
+    function insertSpec(that) {
+        var newSpec = $('<li>');
+        var drop = $('<select class="text-field form-control">').append('<option data-res="egov.resources.commonlabel.select">Chọn</option>');
+
+        documentFields.forEach(function (item) {
+            var option = $('<option>').text(item.name).val(item.value);
+            drop.append(option);
+        });
+
+        newSpec.append(drop);
+        $(that).before(newSpec);
+        selectOption();
+    }
+
+    function selectOption() {
+        $('.specifications').find('select').change(function () {
+            var that = $(this);
+            var item = _.find(documentFields, function (i) {
+                return i.value === that.val();
+            });
+            $(this).parents('li').attr('value', item.value);
+            $(this).parents('li').find('.itm-value').remove();
+            if (item.options.length > 0) {
+                var newDrop = $('<select class="value-field form-control">');
+                item.options.forEach(function (option) {
+                    var newOption = $('<option>').text(option.name).val(option.value);
+                    newDrop.append(newOption);
+                });
+                var span = $('<span class="itm-value" data-res="egov.resources.commonlabel.is"> Là </span>').append(newDrop);
+                $(this).parents('li').append(span);
+            }
+        });
+    }
+
+    function submit1() {
+        var specs = [];
+        $('.specifications li').each(function () {
+            if ($(this).attr('value') !== '') {
+                if ($(this).find('.value-field').val() !== '') {
+                    var spec = {};
+                    spec.Value = $(this).find('.value-field :selected').val();
+                    spec.Field = $(this).find('.text-field :selected').val();
+                    specs.push(spec);
+                    $('#Conditions').val(JSON.stringify(specs));
+                }
+            }
+        });
+        $('form').submit();
+    }
+
+    $(function () {
+        var conditions = JSON.parse($('#Conditions').val() == '' ? '[]' : $('#Conditions').val());
+        if (conditions.length > 0) {
+            conditions.forEach(function (itm) {
+                var item = _.find(documentFields, function (i) {
+                    return i.value == itm.Field;
+                });
+                if (item != null) {
+                    var newSpec = $('<li>');
+                    newSpec.append($('<select class="text-field form-control">').append('<option value="' + item.value + '">' + item.name + '</option>'));
+                    if (item.options.length > 0) {
+                        var newDrop = $('<select class="value-field form-control">');
+                        item.options.forEach(function (option) {
+                            var newOption = $('<option>').text(option.name).val(option.value);
+                            if (option.value == itm.Value) {
+                                newOption.attr('selected', 'selected');
+                            }
+                            newDrop.append(newOption);
+                        });
+                        var span = $('<span class="itm-value" data-res="egov.resources.commonlabel.is"> Là </span>').append(newDrop);
+                        newSpec.append(span);
+                    }
+                    $('.specifications li:last').before(newSpec);
+                }
+            });
+        }
+    });
+</script>
+
+<style type="text/css">
+    fieldset div {
+        margin-bottom: 10px;
+    }
+
+    .specifications li {
+        margin-bottom: 5px;
+    }
+
+    .specifications select {
+        width: 150px;
+        display: inline-block;
+    }
+
+    .form-control {
+        margin-bottom: 5px;
+    }
+</style>
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Common.List"), "Index", null, new { @class = "selected" })</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Notify.SMSKB"), "SMS")</li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    <div id="tabs" class="bkavegov">
+        <div class="bkavegov">
+            @Html.Partial("_Notifications")
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.ServiceUrl)
+                @Html.HiddenFor(model => model.Conditions)
+                <div>
+                    <div style="font-weight: bold;">
+                        @Html.CheckBoxFor(model => model.SentWhenReceiveDocument) @Html.LabelFor(model => model.SentWhenReceiveDocument)
+                    </div>
+                    <div>
+                        <ul class="specifications">
+                            <li onclick="insertSpec(this)" style="color: rgb(29, 29, 255); cursor: pointer;" data-res="egov.resources.commonlabel.or"></li>
+                        </ul>
+                        <div>
+                            <span>@Html.LabelFor(model => model.SentDocumentTemplateId)</span>
+                            <span>@Html.DropDownListFor(model => model.SentDocumentTemplateId, ViewBag.Templates as IEnumerable<SelectListItem>, new { style = "width: 240px;display:inline;" })</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-weight: bold;">
+                        @Html.CheckBoxFor(model => model.SentWhenHasMeeting) @Html.LabelFor(model => model.SentWhenHasMeeting)
+                    </div>
+                    <div>
+                        <span style="width: 82px; display: inline-block;">@Html.LabelFor(model => model.BeforeMinute)</span>
+                        <span>@Html.TextBoxFor(model => model.BeforeMinute, new { style = "width: 240px;display:inline;" }) <span data-res="egov.resources.notify.alerttime"></span></span>
+                    </div>
+                    <div>
+                        <span style="width: 82px; display: inline-block;">@Html.LabelFor(model => model.SentMeetingTemplateId)</span>
+                        <span>@Html.DropDownListFor(model => model.SentMeetingTemplateId, ViewBag.Templates as IEnumerable<SelectListItem>, new { style = "width: 240px;display:inline;" })</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+﻿@model IDictionary<string, string>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Paper.CreateOrEdit.Fields.CategoryBusinessCode.Label");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.dialogextend.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#tblCategoryBusiness").grid({
+            isResizeColumn: false,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+
+    function openConfigTemplate(id) {
+        $("#dialog-edit-template iframe").remove();
+        $("#dialog-edit-template")
+            .dialog({
+                autoOpen: false,
+                height: $(window).height(),
+                width: $(window).width(),
+                modal: true,
+                resizable: false,
+                close: function () {
+                    $("#dialog-edit-template").dialog("destroy");
+                }
+            })
+            .dialogExtend({
+                close: true,
+                maximize: true,
+                dblclick: 'maximize',
+                events: {
+                    maximize: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    },
+                    restore: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    }
+                }
+            });
+        $("#dialog-edit-template").dialog('open');
+        $("#dialog-edit-template").css({ padding: '0' });
+
+        var $newIframe = $('<iframe id="iframe_' + id + '" scr="" height="550px" width="100%" style="border:none"></iframe>');
+        var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+        $("#dialog-edit-template").append($imgLoading).append($newIframe);
+        var frame = $newIframe[0];
+        frame.src = '@Url.Action("ConfigTemplate")/' + id;
+        $(frame).load(function () {
+            $imgLoading.remove();
+        });
+    }
+
+    function closeConfigTemplate() {
+        $("#dialog-edit-template").dialog('close');
+    }
+</script>
+<div>
+    <div id="dialog-edit-template" title='@Localizer("Bkav.eGovCloud.Areas.Admin.CategoryBusiness.Setting.UI")' style="display: none;">
+    </div>
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-stack"></i>
+            <span data-res="egov.resources.sitemap.categorybusiness"></span>
+        </div>
+        <div class="options">
+        </div>
+    </div>
+    <table class="table-main table" id="tblCategoryBusiness">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 150px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header text-center">@Localizer("Bkav.eGovCloud.Areas.Admin.CategoryBusiness.Index.List.Column.Numbers")
+                </th>
+                <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.CategoryBusiness.Index.List.Column.Name")
+                </th>
+                <th class="header text-center">@Localizer("Bkav.eGovCloud.Areas.Admin.CategoryBusiness.Index.List.Column.Config")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var number = 0;
+                foreach (var item in Model)
+                {
+                    number += 1;
+                <tr ondblclick="openConfigTemplate('@item.Key')">
+                    <td class="text-center">@number
+                    </td>
+                    <td>@Localizer(item.Value)
+                    </td>
+                    <td class="text-center">
+                        <a href="javascript:openConfigTemplate('@item.Key')" data-res="egov.resources.buttons.config"></a>
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,48 @@
+﻿
+<!-- <script src="handsontable/dist/handsontable.full.min.js"></script>
+<link href="handsontable/dist/handsontable.full.min.css" rel="stylesheet" media="screen"> -->
+<!-- Ugly Hack due to jsFiddle issue -->
+<link type="text/css" rel="stylesheet" href=@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css")>
+<style>
+    .gray {
+        background-color: lightgray !important;
+    }
+</style>
+
+
+<div style="font-weight: bold" class="class1">
+    Cấu hình header
+</div>
+<br />
+<button type="button" onclick="btnAddRowField()">Thêm dòng bên dưới</button>
+<button type="button" onclick="btnAddColField()">Thêm cột bên phải</button>
+<br />
+<br />
+<div id="fieldTable"> </div>
+<br />
+<br />
+<button type="button" onclick="btnSaveFieldConfig(false)">Lưu header</button>
+<hr />
+<div style="font-weight: bold" class="class1">
+    Cấu hình kiểu dữ liệu
+</div>
+<br />
+<div id="typeTable"> </div>
+<br />
+<button type="button" onclick="btnSaveTypeConfig('abc')">Lưu cấu hình1</button>
+<br />
+<br />
+<hr />
+<div style="font-weight: bold" class="class1">
+    Cấu hình dữ liệu mặc định
+</div>
+<br />
+<button type="button" onclick="btnAddRowData()">Thêm dòng bên dưới</button>
+<br />
+<br />
+<div id="dataTable"> </div>
+<br />
+
+@*VuHQ 20191105 REQ-02*@
+<script src="@Url.Content("~/Scripts/bkav.egov/views/document/form/dynamic-form.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/rateemployee/moment.js")"></script>

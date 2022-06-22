@@ -1,0 +1,286 @@
+﻿@model  List<Dictionary<string, object>>
+@{ 
+    var jsondata = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/images/favicon.ico">
+    <title>Báo cáo tổng hợp</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 4.1.3-->
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/jquery-ui.css")" rel="stylesheet" />
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/bootstrap-extend.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style.css">
+    <!-- Unique_Admin skins -->
+    <link rel="stylesheet" href="~/Scripts/generalreport/main/css/skins/_all-skins_general.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_plugins/pace/pace.min.css">
+
+    <link href="~/Scripts/bkav.egov/libs/jstree/themes/default-st/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.css">
+
+
+    <!-- Fontawesome -->
+    <link href="~/Scripts/generalreport/main/fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="box-controls pull-right">
+                            <div class="box-header-actions">
+                                <label class="switch switch-border switch-info">
+                                    <input type="checkbox" checked="">
+                                    <span class="switch-indicator"></span>
+                                    <span class="switch-description"></span>
+                                </label>
+                                <div class="lookup lookup-sm lookup-right">
+                                    <input type="text" id="searchIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                </div>
+                                <button id="clickCheckIndicator" style="display:none">chọn</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body" id="indicatorBodyTree">
+                        <div id="linear" style="width: 650px; height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery 3 -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <script src="/Scripts/generalreport/assets/vendor_components/PACE/pace.min.js"></script>
+    <!-- Bootstrap 4.1.3-->
+    <script src="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/generalreport/main/js/template_general.js"></script>
+    <!-- Unique_Admin for demo purposes -->
+    <script src="/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+    <script src="/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+    <script src="/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+    <script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+    <script src="/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+
+    <script src="/Scripts/generalreport/main/js/demo.js"></script>
+    <script src="/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+    <script src="/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="/Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="~/Scripts/bkav.egov/libs/jstree/jstree_3_3_10.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+    <script>
+        function _convertData(data, x, y) {
+            for (i = 0; i < data.length; i++) {
+                if (data[i] != null && typeof data[i] === 'number') {//If type of X axis is category
+                    x.push(i + 1);
+                    y.push(data[i]);
+                }
+            }
+        }
+
+        function _forecast(data, decimalPlaces, Percent) {
+            var results = [], N = data.length;
+            var X = [];
+            var Y = [];
+
+            if (N > 0) {
+                _convertData(data, X, Y);
+
+                var firtsPoint = { x: N, y: Y[N - 1], name: '' };
+                results.push(firtsPoint);
+
+                var name = data[N - 1].name;
+                //var dateParts = dateString.split("/");
+
+                for (var i = 1; i < 4; i++) {
+                    var x = N + i;
+
+                    var coorY = _predict(x, Y, X) + Percent * _predict(x, Y, X);
+                    if (decimalPlaces)
+                        coorY = parseFloat(coorY.toFixed(decimalPlaces));
+                    var coordinate = { x: x, y: coorY, name: name };
+                    results.push(coordinate);
+                }
+
+                results.sort(function (a, b) {
+                    if (a[0] > b[0]) {
+                        return 1;
+                    }
+                    if (a[0] < b[0]) {
+                        return -1;
+                    }
+                    return 0;
+                });
+            }
+
+            return { equation: "", points: results, string: "" };
+        }
+
+        function _predict(x, ky, kx) {
+            var i = 0, nr = 0, dr = 0, ax = 0, ay = 0, a = 0, b = 0;
+            function forecast(ar) {
+                var r = 0;
+                for (i = 0; i < ar.length; i++) {
+                    r = r + ar[i];
+                }
+                return r / ar.length;
+            }
+            ax = forecast(kx);
+            ay = forecast(ky);
+            for (i = 0; i < kx.length; i++) {
+                nr = nr + ((kx[i] - ax) * (ky[i] - ay));
+                dr = dr + ((kx[i] - ax) * (kx[i] - ax))
+            }
+            b = nr / dr;
+            a = ay - b * ax;
+            return (a + b * x);
+        }
+
+        function _threadHold(data, decimalPlaces, Percent) {
+            var results = [], N = data.length;
+            var X = [];
+            var Y = [];
+
+            if (N > 0) {
+                _convertData(data, X, Y);
+
+                var name = data[N - 1].name;
+
+                for (var i = 0; i < 1; i++) {
+                    var x = N + i;
+
+                    var coorY = _predict(x, Y, X) + Percent * _predict(x, Y, X);
+                    if (decimalPlaces)
+                        coorY = parseFloat
+                            (coorY.toFixed(decimalPlaces));
+                    var coordinate = { x: x, y: coorY, name: name };
+                    results.push(coordinate);
+                }
+
+                results.sort(function (a, b) {
+                    if (a[0] > b[0]) {
+                        return 1;
+                    }
+                    if (a[0] < b[0]) {
+                        return -1;
+                    }
+                    return 0;
+                });
+            }
+
+            return { equation: "", points: results, string: "" };
+        }
+        var url = new URL(location.href);
+        var indicator = url.searchParams.get("indicator");
+        var locality = url.searchParams.get("locality");
+        if (!indicator) {
+            indicator = "NDTP.01";
+        }
+        if (!locality) {
+            locality = "";
+        }
+        // define data array
+        $.ajax({
+            url: "/smartreport/ForecastData",
+            type: 'Get',
+            data: { timetype: "monthkey", indicator: indicator, locality: locality },
+            error: function (a, b, c) {
+            },
+            success: function (response) {
+                var dataDuKien = [], dataThucTe = [];
+                dataDuKien = _.filter(response, function (item) {
+                    return item.TypeData == "KH"
+                });
+                dataThucTe = _.filter(response, function (item) {
+                    return item.TypeData == "TH"
+                });
+
+                dataDuKien = _.map(dataDuKien, function (item) { return Number(item.Measure) });
+                dataThucTe = _.map(dataThucTe, function (item) { return Number(item.Measure) });
+                var chart_linear = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'linear'
+                    },
+                    plotOptions: {
+                        series: {
+                            enableMouseTracking: true,
+                            pointStart: 1,
+                        }
+                    },
+                    title: {
+                        text: "Ngưỡng dự báo"
+                    },
+                    series: [
+                  {
+                      name: 'Dự kiến',
+                      type: 'line',
+                      data: dataDuKien,
+                      color: '#1b66c2'
+                  },
+
+                  {
+                      name: 'Thực tế',
+                      type: 'line',
+                      data: dataThucTe,
+                      color: '#00da3c'
+                  },
+                    {
+                        name: 'Dự đoán',
+                        type: 'line',
+                        dashStyle: 'dash',
+                        marker: { enabled: true },
+                        color: '#bf2c15',
+                        /* function returns data for trend-line */
+                        data: (function () {
+                            return _forecast(dataThucTe, 2, 0).points;
+                        })()
+                    },
+                  {
+                      name: 'Đường biên trên',
+                      type: 'line',
+                      marker: { enabled: true },
+                      color: '#ff8000',
+                      /* function returns data for trend-line */
+                      data: (function () {
+                          return _forecast(dataThucTe, 2, 0.1).points;
+                      })()
+                  },
+                  {
+                      name: 'Đường biên dưới',
+                      type: 'line',
+                      marker: { enabled: true },
+                      color: '#ff8000',
+                      /* function returns data for trend-line */
+                      data: (function () {
+                          return _forecast(dataThucTe, 2, -0.1).points;
+                      })()
+                  }]
+                });
+            }
+        });
+        
+    </script>
+</body>
+</html>

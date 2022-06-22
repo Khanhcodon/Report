@@ -1,0 +1,216 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.Doctype.TemplateNode.Config");
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutBlank.cshtml";
+}
+<link href="@Url.Content("~/Content/formtemplate.css")" rel="stylesheet" type="text/css" />
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/layout-default-latest.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/report/css/bkavegov.report.css")" rel="stylesheet" />
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/json2.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/redips-table.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.messagebox.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.formtemplate.min.js")"></script>
+
+<script type="text/javascript">
+    var templateWorkflow = @(string.IsNullOrEmpty(ViewBag.TemplateWorkflow) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.TemplateWorkflow));
+    var templateNode = @(string.IsNullOrEmpty(ViewBag.TemplateNode) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.TemplateNode));
+    var otherNodes = @(string.IsNullOrEmpty(ViewBag.OtherNodes) ? MvcHtmlString.Create("null") : Html.Raw(ViewBag.OtherNodes));
+    var categoryBusiness = '@ViewBag.CategoryBusiness';
+
+    @if (IsXuLyVanBanEdition)
+    {
+<text>
+    var controlVanBanDi = ["compendium", "comment", "doctype", "category", "urgent", "inOutPlace", "dateAppointed", "dateResponse", "documentRelation", "attachment","store", "inOutCode"];
+    var controlVanBanDen = ["compendium", "organization", "docCode", "docCodeHSMC", "comment", "doctype", "dateArrived", "datePublished", "category", "store", "inOutCode", "urgent", "security", "totalPage", "docField", "keyword", "sendtype", "inOutPlace", "dateAppointed", "dateResponse", "documentRelation", "attachment"];
+    </text>
+    }
+    else if (IsHoSoMotCuaEdition)
+    {
+<text>
+    var controlHoSoMotCua = ["compendium", "docCodeHSMC", "comment", "doctype", "category", "urgent", "inOutPlace", "dateAppointedHsmc", "dateResponse", "citizenName", "address", "phone", "papers", "identityCard", "email", "commune", "fees", "documentRelation", "attachment","store"];
+    </text>
+    }
+    else if (IsFullEdition)
+    {
+<text>
+    var controlVanBanDi = ["compendium", "comment", "doctype", "category", "urgent", "inOutPlace", "dateAppointed", "dateResponse", "documentRelation", "attachment","store", "inOutCode"];
+    var controlVanBanDen = ["compendium", "organization", "docCode", "docCodeHSMC", "comment", "doctype", "dateArrived", "datePublished", "category", "store", "inOutCode", "urgent", "security", "totalPage", "docField", "keyword", "sendtype", "inOutPlace", "dateAppointed", "dateResponse", "documentRelation", "attachment"];
+    var controlHoSoMotCua = ["compendium", "docCodeHSMC", "comment", "doctype", "category", "urgent", "inOutPlace", "dateAppointedHsmc", "dateResponse", "citizenName", "address", "phone", "papers", "identityCard", "email", "commune", "fees", "documentRelation", "attachment","store"];
+    </text>
+    }
+    var cacheTemplateNode = {};
+    $(function () {
+        $('body').layout({
+            resizable: false,
+            closable: true,
+            north__spacing_open: 0,
+            north__size: 90,
+            west__size: 300,
+            west__spacing_open: 0,
+            center__paneSelector: "#center"
+           , west__paneSelector: "#west"
+            ,north__paneSelector: "#north"
+        });
+
+        var $node = $('#selectNode');
+        $node.append('<optgroup label="' + egov.resources.doctype.othernodes + '">');
+        $.each(otherNodes, function(i, node) {
+            $node.append('<option value="' + node.Id + '">&nbsp;&nbsp;&nbsp;' + node.NodeName + '</option>');
+        });
+        $node.change(function() {
+            var nodeid = $(this).val();
+            if (nodeid === '') {
+                egov.formtemplate.edit.load('#center', templateNode);
+            } else {
+                if (nodeid.indexOf('workflow') > -1) {
+                    egov.formtemplate.edit.load('#center', templateWorkflow);
+                } else {
+                    if (cacheTemplateNode[nodeid]) {
+                        egov.formtemplate.edit.load('#center', cacheTemplateNode[nodeid]);
+                    } else {
+                        $("#center").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                        $.get("@Url.Action("GetNodeTemplate", "Workflow")", { workflowId: @ViewBag.WorkflowId, nodeId: nodeid },
+                            function (data) {
+                                if (data) {
+                                    var tl = JSON.parse(data);
+                                    cacheTemplateNode[nodeid] = tl;
+                                    egov.formtemplate.edit.load('#center', tl);
+                                } else {
+                                    egov.formtemplate.edit.clear();
+                                }
+                            }
+                        ).complete(function() {
+                            $("#center").unblockpanel();
+                        }).fail(function() {
+                            eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                        });
+                    }
+                }
+            }
+        });
+
+        @if (IsXuLyVanBanEdition)
+        {
+<text>
+        var listcontrol;
+        if (categoryBusiness === '@Bkav.eGovCloud.Entities.CategoryBusinessTypes.VbDen.ToString()') {
+            listcontrol = controlVanBanDen;
+        } else {
+            listcontrol = controlVanBanDi;
+        }
+        </text>
+        }
+        else if (IsHoSoMotCuaEdition)
+        {
+<text>
+        var listcontrol = controlHoSoMotCua;
+        </text>
+        }
+        else if (IsFullEdition)
+        {
+<text>
+        var listcontrol;
+        if (categoryBusiness === 'Hsmc') { @*@Bkav.eGovCloud.Entities.CategoryBusinessTypes.Hsmc.ToString()*@
+            listcontrol = controlHoSoMotCua;
+        } else if (categoryBusiness === '@Bkav.eGovCloud.Entities.CategoryBusinessTypes.VbDen.ToString()') {
+            listcontrol = controlVanBanDen;
+        } else {
+            listcontrol = controlVanBanDi;
+        }
+        </text>
+        }
+        $.each(listcontrol, function (i, value) {
+            $('#selectControl').append('<option value="' + value + '">' + egov.formtemplate.controls[value].name + '</option>');
+        });
+        egov.formtemplate.edit.load('#center', templateNode);
+    });
+
+    function addControl() {
+        var val = $('#selectControl').val();
+        if ($('#selectControl').val() !== '') {
+            egov.formtemplate.controls[val].add();
+        }
+    }
+
+    function save() {
+        var newtemplate = egov.formtemplate.edit.getFormTemplate();
+        var existControl = false;
+        $.each(newtemplate.controls, function() {
+            existControl = true;
+            return false;
+        });
+        var strTemplate = existControl ? JSON.stringify(newtemplate) : '';
+        $.post("@Url.Action("ConfigTemplateNode", "workflow")",
+            {
+                workflowId: @ViewBag.WorkflowId,
+                nodeId: @ViewBag.NodeId,
+                template: strTemplate
+            },
+            function (data) {
+                if (data) {
+                    if (data.error) {
+                        eGovMessage.notification(data.error, eGovMessage.messageTypes.error);
+                    } else {
+                        window.parent.closeConfigTemplate();
+                    }
+                }
+            }
+        ).fail(function() {
+            eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        });
+    }
+</script>
+
+<div id="north" class="toolbar-panel ui-layout-north">
+    <div class="delete">
+        <a href="javascript:egov.formtemplate.tablelayout.deletecolumn()" data-restitle="egov.resources.editor.deletecol" title="Xóa cột" class="delete-column"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.deleterow()" data-restitle="egov.resources.editor.deleterow" title="Xóa dòng" class="delete-row"></a>
+    </div>
+    <div class="separate"></div>
+    <div class="insert">
+        <a href="javascript:egov.formtemplate.tablelayout.addrow(true)" data-restitle="egov.resources.editor.insertabove" title="Chèn trên" class="insert-above"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.addrow(false)" data-restitle="egov.resources.editor.insertbelow" title="Chèn dưới" class="insert-below"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.addcolumn(true)" data-restitle="egov.resources.editor.insertleft" title="Chèn trái" class="insert-left"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.addcolumn(false)" data-restitle="egov.resources.editor.insertright" title="Chèn phải" class="insert-right"></a>
+    </div>
+    <div class="separate"></div>
+    <div class="mergesplit">
+        <a href="javascript:egov.formtemplate.tablelayout.mergeCell()" data-restitle="egov.resources.editor.merge" title="Hợp nhất" class="merge"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.splitHorizon()" data-restitle="egov.resources.editor.splitcolumn" title="Chia cột" class="split-column"></a>
+        <a href="javascript:egov.formtemplate.tablelayout.splitVertical()" data-restitle="egov.resources.editor.splitrow" title="Chia dòng" class="split-row"></a>
+    </div>
+    <div id="DocTypeConfigTemplateNode" style="display: none">
+        @Html.AntiForgeryToken()
+    </div>
+    <input type="button" value="Lưu" onclick="save()" style="float: right; width: 100px; height: 30px" />
+</div>
+
+<div id="west" class="ui-layout-west">
+    <p>
+        <select id="selectNode">
+            <option value="">@Localizer("Common.Workflow.Setting.OtherNode")</option>
+            <option value="workflow@(ViewBag.WorkflowId)">@Localizer("Common.Workflow.Setting")</option>
+        </select>
+    </p>
+    <p>
+        <select id="selectControl">
+            <option value="">@Localizer("Common.Button.SelectControl")</option>
+        </select>
+        <input type="button" id="addControl" onclick="addControl()" value="Thêm control" data-res="egov.resources.doctype.addcontrol" />
+    </p>
+
+    <div id="settingLayout"></div>
+    <div id="settingControl">
+    </div>
+</div>
+
+<div id="center" class="ui-layout-center">
+</div>

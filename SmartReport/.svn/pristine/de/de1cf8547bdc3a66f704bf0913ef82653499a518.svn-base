@@ -1,0 +1,190 @@
+﻿@model IEnumerable<WorkflowModel>
+@{
+    ViewBag.Title = Localizer("Common.Workflow.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.WorkflowSearchModel;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+    var allDocFields = ViewBag.AllDocFields as string;
+}
+
+<style>
+    .selected {
+        color: red;
+    }
+</style>
+ <link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css")" rel="stylesheet" />
+
+ <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js")"></script>
+
+<script type="text/javascript">
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var docfieldSelected = '@search.DocFieldId';
+    var doctypeSelected = '@search.DocTypeId';
+
+    $(function(){
+        bindDocField(docfieldSelected);
+        changeDocField(doctypeSelected);
+
+        $("#DocFieldId").change(function () {
+            changeDocField();
+            
+            onChange($(this));
+        });
+
+        $("#DocTypeId").change(function () {
+            onChange($(this));
+        });
+    });
+
+    
+    function bindDocField(selected) {
+        $("#DocFieldId").html('<option value="">'+ '@Localizer("Common.All.Label")' +'</option>');
+        $.each(allDocFields, function(i, item) {
+            $("#DocFieldId").append('<option value="' + item.value + '">' + item.label + '</option>');
+        });
+
+        if (selected) {
+            $('#DocFieldId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function changeDocField(selected) {
+        $("#DocTypeId").html('');
+        var docfieldId = parseInt($('#DocFieldId').val());
+        var doctypes;
+        $("#DocTypeId").html('<option value="">'+ '@Localizer("Common.All.Label")' +'</option>');
+        if (docfieldId > 0) {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return item.docfieldId == docfieldId;
+            });
+        }else{            
+            doctypes = allDocTypes;
+        } 
+               
+        $.each(doctypes, function(i, item) {
+            $("#DocTypeId").append('<option value="' + item.value + '">' + item.label + '</option>');
+        });
+
+        if (selected) {
+            $('#DocTypeId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function deleteWorkflow(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListWorkflows").blockpanel({ text: egov.resources.notifications.loading, borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListWorkflows').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListWorkflows').unblockpanel();
+    }
+
+    function searchWorkflows(_this) {
+        $(_this).closest('form')
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    function onChange(_this) {
+        searchWorkflows(_this)
+        $(_this).closest('form').submit();
+    }
+
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-shuffle"></i>
+        <span data-res="egov.resources.sitemap.configworkflow"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/Workflow/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+@Html.Partial("_Config")
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search", new AjaxOptions
+    {
+        UpdateTargetId = "divListWorkflows",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }))
+    {
+        <table>
+            <tr>
+                <td style="width:15%">@Localizer("Customer.DocType.CreateOrEdit.Fields.DocFieldId.Label") :</td>
+                <td>
+                     <select id="DocFieldId" name="DocFieldId" style=" display: inline">
+                    </select>
+                </td>
+            </tr>
+              <tr>
+                <td>@Localizer("Admin.Template.CreateOrEdit.Fields.DoctypeId.Label"):</td>
+                <td>
+                     <select id="DocTypeId" name="DocTypeId" style=" display: inline">
+                     </select>
+                </td>
+            </tr>            
+              <tr>
+                <td> 
+                     @Localizer("Customer.Workflow.Search.Fields.IsActivated.Label"):</td>
+                <td>
+                    <select class="form-control" id="IsActivated" name="IsActivated"
+                                style="display: inline" onchange="onChange(this);">
+                                <option value="">@Localizer("Common.All.Label")</option>
+                                <option value="True" @((search.IsActivated.HasValue && search.IsActivated.Value) ? "selected" : "")>@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.IsActivated")</option>
+                                <option value="False" @((search.IsActivated.HasValue && !search.IsActivated.Value) ? "selected" : "")>@Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Inactive")</option>
+                            </select>
+                </td>
+            </tr>
+             <tr>
+                <td>@Localizer("Customer.Workflow.Search.Fields.WorkflowName.Label"):
+                </td>
+                <td>
+                    <input type="text" name="WorkflowName" id="WorkflowName"
+                         class="from-control"  value="@search.WorkflowName"
+                     style="display:inline" placeholder="@Localizer("Common.Category.Search")"/>
+                </td>
+            </tr>
+              <tr>
+                <td></td>
+                <td>
+<input type="submit" value="@Localizer("Common.Category.Submit")" 
+             onclick="searchWorkflows(this)" class="btn control-btn btn-waring" style="display:inline"/>
+                </td>
+            </tr>
+        </table>
+     
+
+    }
+    <br />
+    <div id="divListWorkflows">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BusinessTypeModel>
+@{
+    ViewBag.Title = Localizer(" Bkav.eGovCloud.Areas.Admin.BusinessType.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    function deleteBusinessType(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-database"></i>
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Title")</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/BusinessType/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div id="divListConfig">
+        @Html.Partial("_PartialList", Model)
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<IncreaseModel>
+@{
+    ViewBag.Title = Localizer("Common.Increase.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allGroup = ViewBag.AllGroup as IEnumerable<SelectListItem>;
+}
+
+<script type="text/javascript">
+    function deleteIncrease(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Increase.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function resetIncrease() {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Increase.ConfirmReset"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formReset").submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListIncrease").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListIncrease').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListIncrease').unblockpanel();
+    }
+
+    function onChange() {
+        $("#search").click();
+    }
+
+    function searchIncrease(_this) {
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-add-to-list"></i>
+        <span data-res="egov.resources.sitemap.increase"></span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="/admin/increase/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+
+          <a class="btn btn-info control-btn" href="javascript:resetIncrease();">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">@Localizer("Admin.Increase.ResetIncrease")</span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+      @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search", new AjaxOptions { HttpMethod = "Get", UpdateTargetId = "divListIncrease", OnBegin = "onBegin", OnFailure = "onFailure", OnSuccess = "onSuccess" }))
+    {
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Increase.Index.Search.Fields.Group.Label")</span>
+        @Html.DropDownList("groupId",
+        allGroup, @Localizer("Common.All.Label"), new { @style = "display:inline;width:150px", onchange = "onChange();" })
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Increase.Index.Search.Fields.IncreaseName.Label")</span>
+        <input type="text" name="name" id="name" value="@(ViewBag.Name ?? "")" style="display:inline;width:50%" />
+        <input class="btn" type="submit" id="search" onclick="searchIncrease(this);" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+    <br />
+    <div id="divListIncrease">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>
+ 
+    <form id="formReset" style="display: none" action="@Url.Action("ResetIncrease")" method="POST">
+  </form>

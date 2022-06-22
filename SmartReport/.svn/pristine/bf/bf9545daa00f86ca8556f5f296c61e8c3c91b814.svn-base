@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{05ADED69-DBC7-4440-9DC0-D055C28FB1BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bkav.eGovCloud.DataAccess</RootNamespace>
+    <AssemblyName>Bkav.eGovCloud.DataAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanQuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaQuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QuanTriTapTrungEdition - Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\QuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaEdition - Release|AnyCPU'">
+    <OutputPath>bin\HoSoMotCuaEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HoSoMotCuaQuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\HoSoMotCuaQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanEdition - Release|AnyCPU'">
+    <OutputPath>bin\XuLyVanBanEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'XuLyVanBanQuanTriTapTrungEdition - Release|AnyCPU'">
+    <OutputPath>bin\XuLyVanBanQuanTriTapTrungEdition - Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BkavVersion|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\BkavVersion\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Bkav.eGovCloud.DataAccess.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test - TrinhNVd|AnyCPU'">
+    <OutputPath>bin\Test - TrinhNVd\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler">
+      <HintPath>..\packages\MiniProfiler.3.2.0.157\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.EntityFramework">
+      <HintPath>..\packages\MiniProfiler.EF.2.1.0\lib\net40\MiniProfiler.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\BaseEfDataProvider.cs" />
+    <Compile Include="ConnectionUtil.cs" />
+    <Compile Include="CustomConnectionFactory.cs" />
+    <Compile Include="Infrastructure\IUnitOfWork.cs" />
+    <Compile Include="Initializer\MySqlDatabaseInitializer.cs" />
+    <Compile Include="Initializer\SqlServerDatabaseInitializer.cs" />
+    <Compile Include="DataProvider\DataProviderManager.cs" />
+    <Compile Include="DataProvider\MySqlDataProvider.cs" />
+    <Compile Include="DataProvider\SqlServerDataProvider.cs" />
+    <Compile Include="EfAdminContext.cs" />
+    <Compile Include="DataObjectFactory.cs" />
+    <Compile Include="EfContext.cs" />
+    <Compile Include="EfRepository.cs" />
+    <Compile Include="EntityQueryFilterProvider.cs" />
+    <Compile Include="Infrastructure\IDataProvider.cs" />
+    <Compile Include="Infrastructure\IDbCustomerContext.cs" />
+    <Compile Include="Infrastructure\IDbAdminContext.cs" />
+    <Compile Include="Infrastructure\IEfDataProvider.cs" />
+    <Compile Include="Infrastructure\IDbContext.cs" />
+    <Compile Include="Infrastructure\IRepository.cs" />
+    <Compile Include="Infrastructure\QueryFilterProvider.cs" />
+    <Compile Include="Mapping\Admin\AccountDomainMap.cs" />
+    <Compile Include="Mapping\Admin\AccountPasswordHistoryMap.cs" />
+    <Compile Include="Mapping\Customer\ActionLevelMap.cs" />
+    <Compile Include="Mapping\Customer\Ad_LocalityMap.cs" />
+    <Compile Include="Mapping\Customer\CategoryDisaggreationsMap.cs" />
+    <Compile Include="Mapping\Customer\DataTypeMap.cs" />
+    <Compile Include="Mapping\Customer\DisaggregationMap.cs" />
+    <Compile Include="Mapping\Customer\IndicatorValueDepartmentMap.cs" />
+    <Compile Include="Mapping\Customer\In_datatypeMap.cs" />
+    <Compile Include="Mapping\Customer\LocalityDepartmentMap.cs" />
+    <Compile Include="Mapping\Customer\LocalityMap.cs" />
+    <Compile Include="Mapping\Customer\SurveyCatalogMap.cs" />
+    <Compile Include="Mapping\Customer\SurveyCatalogValueMap.cs" />
+    <Compile Include="Mapping\Customer\DocPublishPlusMap.cs" />
+    <Compile Include="Mapping\Customer\InCatalogValueMap.cs" />
+    <Compile Include="Mapping\Customer\InCatalogMap.cs" />
+    <Compile Include="Mapping\Customer\IndicatorCatalogMap.cs" />
+    <Compile Include="Mapping\Customer\DataFieldMap.cs" />
+    <Compile Include="Mapping\Customer\DataFieldMathMap.cs" />
+    <Compile Include="Mapping\Customer\DataFieldTemplateMap.cs" />
+    <Compile Include="Mapping\Customer\DocTypeTimeJobMap.cs" />
+    <Compile Include="Mapping\Customer\ReportQueryGroupReportQuery.cs" />
+    <Compile Include="Mapping\Customer\ReportQueryFilterMap.cs" />
+    <Compile Include="Mapping\Customer\ReportQueryGroupMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentRelatedMap.cs" />
+    <Compile Include="Mapping\Customer\ReportModeMap.cs" />
+    <Compile Include="Mapping\Customer\ReportQueryMap.cs" />
+    <Compile Include="Mapping\Customer\DataSourceMap.cs" />
+    <Compile Include="Mapping\Customer\DataTableMap.cs" />
+    <Compile Include="Mapping\Customer\RelationMap.cs" />
+    <Compile Include="Mapping\Customer\SqlTemplateMap.cs" />
+    <Compile Include="Mapping\Admin\ConnectionMap.cs" />
+    <Compile Include="Mapping\Admin\CustomerMap.cs" />
+    <Compile Include="Mapping\Admin\SiteMap.cs" />
+    <Compile Include="Mapping\Admin\TimerTemplateMap.cs" />
+    <Compile Include="Mapping\Admin\TimerJobMap.cs" />
+    <Compile Include="Mapping\Admin\DatabaseTypeMap.cs" />
+    <Compile Include="Mapping\Admin\DomainMap.cs" />
+    <Compile Include="Mapping\Admin\DomainAliasMap.cs" />
+    <Compile Include="Mapping\Admin\ServerMap.cs" />
+    <Compile Include="Mapping\Admin\AccountMap.cs" />
+    <Compile Include="Mapping\Customer\ActivityLogMap.cs" />
+    <Compile Include="Mapping\Customer\AddressMap.cs" />
+    <Compile Include="Mapping\Customer\CalendarDetailMap.cs" />
+    <Compile Include="Mapping\Customer\CalendarMap.cs" />
+    <Compile Include="Mapping\Customer\CalendarResourceMap.cs" />
+    <Compile Include="Mapping\Customer\ConfigTypeMap.cs" />
+    <Compile Include="Mapping\Customer\MobileDeviceMap.cs" />
+    <Compile Include="Mapping\Customer\NotificationsMap.cs" />
+    <Compile Include="Mapping\Customer\OtpMap.cs" />
+    <Compile Include="Mapping\Customer\RateEmployeeMap.cs" />
+    <Compile Include="Mapping\Customer\CheckInfringeMap.cs" />
+    <Compile Include="Mapping\Customer\AnticipateMap.cs" />
+    <Compile Include="Mapping\Customer\AttachmentDetailMap.cs" />
+    <Compile Include="Mapping\Customer\AuthorizeMap.cs" />
+    <Compile Include="Mapping\Customer\BackupRestoreConfigMap.cs" />
+    <Compile Include="Mapping\Customer\BackupRestoreFileConfigMap.cs" />
+    <Compile Include="Mapping\Customer\BackupRestoreHistoryMap.cs" />
+    <Compile Include="Mapping\Customer\BackupRestoreManagerMap.cs" />
+    <Compile Include="Mapping\Customer\BusinessLicenseAttachMap.cs" />
+    <Compile Include="Mapping\Customer\BusinessLicenseMap.cs" />
+    <Compile Include="Mapping\Customer\BusinessMap.cs" />
+    <Compile Include="Mapping\Customer\BusinessTypeMap.cs" />
+    <Compile Include="Mapping\Customer\BussinessDocFieldDocTypeGroupMap.cs" />
+    <Compile Include="Mapping\Customer\CatalogMap.cs" />
+    <Compile Include="Mapping\Customer\CatalogValueMap.cs" />
+    <Compile Include="Mapping\Customer\CategoryMap.cs" />
+    <Compile Include="Mapping\Customer\CategoryCodeMap.cs" />
+    <Compile Include="Mapping\Customer\CityMap.cs" />
+    <Compile Include="Mapping\Customer\ClientMap.cs" />
+    <Compile Include="Mapping\Customer\CodeMap.cs" />
+    <Compile Include="Mapping\Customer\CodeTempMap.cs" />
+    <Compile Include="Mapping\Customer\CommentMap.cs" />
+    <Compile Include="Mapping\Customer\ApproverMap.cs" />
+    <Compile Include="Mapping\Customer\CommonCommentMap.cs" />
+    <Compile Include="Mapping\Customer\DocfieldDoctypeWorkflowMap.cs" />
+    <Compile Include="Mapping\Customer\InterfaceConfigMap.cs" />
+    <Compile Include="Mapping\Customer\NotifyConfigMap.cs" />
+    <Compile Include="Mapping\Customer\ReportKeyMap.cs" />
+    <Compile Include="Mapping\Customer\StatisticsMap.cs" />
+    <Compile Include="Mapping\Customer\SyncDoctypeMap.cs" />
+    <Compile Include="Mapping\Customer\DocColumnSettingMap.cs" />
+    <Compile Include="Mapping\Customer\DoctypeFeeMap.cs" />
+    <Compile Include="Mapping\Customer\DocTypeLawMap.cs" />
+    <Compile Include="Mapping\Customer\DocPublishMap.cs" />
+    <Compile Include="Mapping\Customer\MailMap.cs" />
+    <Compile Include="Mapping\Customer\OnlineTemplateMap.cs" />
+    <Compile Include="Mapping\Customer\DoctypeTemplateMap.cs" />
+    <Compile Include="Mapping\Customer\DoctypePaperMap.cs" />
+    <Compile Include="Mapping\Customer\FileMap.cs" />
+    <Compile Include="Mapping\Customer\GuideMap.cs" />
+    <Compile Include="Mapping\Customer\PermissionSettingMap.cs" />
+    <Compile Include="Mapping\Customer\RequiredSupplementaryMap.cs" />
+    <Compile Include="Mapping\Customer\ProcessFunctionAndFilterMap.cs" />
+    <Compile Include="Mapping\Customer\ProcessFunctionGroupMap.cs" />
+    <Compile Include="Mapping\Customer\ProcessFunctionFilterMap.cs" />
+    <Compile Include="Mapping\Customer\ShareFolderMap.cs" />
+    <Compile Include="Mapping\Customer\SmsMap.cs" />
+    <Compile Include="Mapping\Customer\SupplementaryDetailMap.cs" />
+    <Compile Include="Mapping\Customer\SymmetricCryptoKeyMap.cs" />
+    <Compile Include="Mapping\Customer\LawMap.cs" />
+    <Compile Include="Mapping\Customer\AdministrativeMap.cs" />
+    <Compile Include="Mapping\Customer\NonceMap.cs" />
+    <Compile Include="Mapping\Customer\NotifyMap.cs" />
+    <Compile Include="Mapping\Customer\CitizenMap.cs" />
+    <Compile Include="Mapping\Customer\QuestionMap.cs" />
+    <Compile Include="Mapping\Customer\ScopeAreaMap.cs" />
+    <Compile Include="Mapping\Customer\TemplateKeyCategoryMap.cs" />
+    <Compile Include="Mapping\Customer\TimeJobMap.cs" />
+    <Compile Include="Mapping\Customer\TreeGroupMap.cs" />
+    <Compile Include="Mapping\Customer\UnitMap.cs" />
+    <Compile Include="Mapping\Customer\UserActivityLogMap.cs" />
+    <Compile Include="Mapping\Customer\DailyProcessMap.cs" />
+    <Compile Include="Mapping\Customer\DistrictMap.cs" />
+    <Compile Include="Mapping\Customer\DocTypeFormMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentContentDetailMap.cs" />
+    <Compile Include="Mapping\Customer\FormGroupMap.cs" />
+    <Compile Include="Mapping\Customer\InfomationMap.cs" />
+    <Compile Include="Mapping\Customer\KeyWordMap.cs" />
+    <Compile Include="Mapping\Customer\PrinterMap.cs" />
+    <Compile Include="Mapping\Customer\ReportMap.cs" />
+    <Compile Include="Mapping\Customer\ReportGroupMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentViewedMap.cs" />
+    <Compile Include="Mapping\Customer\RenewalsMap.cs" />
+    <Compile Include="Mapping\Customer\SignatureMap.cs" />
+    <Compile Include="Mapping\Customer\StorePrivateAttachmentMap.cs" />
+    <Compile Include="Mapping\Customer\StorePrivateDocumentCopyMap.cs" />
+    <Compile Include="Mapping\Customer\StorePrivateUserMap.cs" />
+    <Compile Include="Mapping\Customer\TemplateMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentCopyMap.cs" />
+    <Compile Include="Mapping\Customer\FileLocationMap.cs" />
+    <Compile Include="Mapping\Customer\ProcessFunctionTypeMap.cs" />
+    <Compile Include="Mapping\Customer\ListSettingMap.cs" />
+    <Compile Include="Mapping\Customer\ProcessFunctionMap.cs" />
+    <Compile Include="Mapping\Customer\DocFeeMap.cs" />
+    <Compile Include="Mapping\Customer\DocPaperMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentContentMap.cs" />
+    <Compile Include="Mapping\Customer\DocTypeStoreMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentExtensionMap.cs" />
+    <Compile Include="Mapping\Common\ResourceMap.cs" />
+    <Compile Include="Mapping\Common\LogMap.cs" />
+    <Compile Include="Mapping\Common\SettingMap.cs" />
+    <Compile Include="Mapping\Customer\JobTitlesMap.cs" />
+    <Compile Include="Mapping\Customer\SupplementaryMap.cs" />
+    <Compile Include="Mapping\Customer\TemplateKeyMap.cs" />
+    <Compile Include="Mapping\Customer\TransferTypeMap.cs" />
+    <Compile Include="Mapping\Customer\UserConnectionMap.cs" />
+    <Compile Include="Mapping\Customer\UserPasswordHistoryMap.cs" />
+    <Compile Include="Mapping\Customer\VoiceTextMap.cs" />
+    <Compile Include="Mapping\Customer\VoteMap.cs" />
+    <Compile Include="Mapping\Customer\VoteDetailMap.cs" />
+    <Compile Include="Mapping\Customer\WardMap.cs" />
+    <Compile Include="Mapping\Customer\WeekendMap.cs" />
+    <Compile Include="Mapping\Customer\UserDepartmentJobTitlesPositionMap.cs" />
+    <Compile Include="Mapping\Customer\StoreDocMap.cs" />
+    <Compile Include="Mapping\Customer\DocRelationMap.cs" />
+    <Compile Include="Mapping\Customer\DocTimelineMap.cs" />
+    <Compile Include="Mapping\Customer\DocFinishMap.cs" />
+    <Compile Include="Mapping\Customer\DocFieldMap.cs" />
+    <Compile Include="Mapping\Customer\DocExtendFieldMap.cs" />
+    <Compile Include="Mapping\Customer\DocCatalogMap.cs" />
+    <Compile Include="Mapping\Customer\UserRoleMap.cs" />
+    <Compile Include="Mapping\Customer\UserRolePermissionMap.cs" />
+    <Compile Include="Mapping\Customer\WorkflowMap.cs" />
+    <Compile Include="Mapping\Customer\OfficeMap.cs" />
+    <Compile Include="Mapping\Customer\PaperMap.cs" />
+    <Compile Include="Mapping\Customer\PermissionMap.cs" />
+    <Compile Include="Mapping\Customer\RoleMap.cs" />
+    <Compile Include="Mapping\Customer\StoreCategoryMap.cs" />
+    <Compile Include="Mapping\Customer\StoreCodeMap.cs" />
+    <Compile Include="Mapping\Customer\StorePrivateMap.cs" />
+    <Compile Include="Mapping\Customer\StoreMap.cs" />
+    <Compile Include="Mapping\Customer\LuceneMap.cs" />
+    <Compile Include="Mapping\Customer\DocTypeMap.cs" />
+    <Compile Include="Mapping\Customer\DocumentMap.cs" />
+    <Compile Include="Mapping\Customer\ExtendFieldMap.cs" />
+    <Compile Include="Mapping\Customer\FeeMap.cs" />
+    <Compile Include="Mapping\Customer\FormMap.cs" />
+    <Compile Include="Mapping\Customer\FormTypeMap.cs" />
+    <Compile Include="Mapping\Customer\HolidayMap.cs" />
+    <Compile Include="Mapping\Customer\IncreaseMap.cs" />
+    <Compile Include="Mapping\Customer\DepartmentMap.cs" />
+    <Compile Include="Mapping\Customer\AttachmentMap.cs" />
+    <Compile Include="Mapping\Customer\PositionMap.cs" />
+    <Compile Include="Mapping\Customer\UserMap.cs" />
+    <Compile Include="Mapping\Customer\EgovJobMap.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bkav.eGovCloud.Core\Bkav.eGovCloud.Core.csproj">
+      <Project>{ca506352-51fe-4e84-8ae3-f133d6cb0400}</Project>
+      <Name>Bkav.eGovCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bkav.eGovCloud.Entities\Bkav.eGovCloud.Entities.csproj">
+      <Project>{90E7646F-43A0-41EF-86D3-6EE9C4428FEB}</Project>
+      <Name>Bkav.eGovCloud.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EntityFramework.Migrations.ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

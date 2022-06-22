@@ -1,0 +1,378 @@
+﻿@model IEnumerable<DataSourceModel>
+    @{
+        ViewBag.Title = "Truy vấn báo cáo";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    @*<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor/ckeditor.js")"></script>*@
+    <script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+    <link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/combotree/comboTreePlugin.js")"></script>
+    <link href="@Url.Content("~/Content/bkav.egov/libs/combotree/comboTreePlugin.css")" rel="stylesheet">
+    <style>
+        .col-6 {
+            -ms-flex: 0 0 50%;
+            flex: 0 0 50%;
+            max-width: 50%;
+            float: left;
+        }
+
+        .col-6 {
+            position: relative;
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .form-control {
+            width: 100% !important;
+        }
+    </style>
+    <script type="text/javascript">
+        var dataSourceModel = {
+            DataSourceId: null,
+            Name: '',
+            Customer: '',
+            Description: '',
+            Server: '',
+            Port: '',
+            DatabaseName: '',
+            Username: '',
+            Password: '',
+            DatabaseType: 1
+        };
+        var departmentComboTree;
+        $(document).ready(function () {
+            $('#datasource').DataTable({
+                order: [[1, 'asc']]
+            });
+        });
+
+        function InitCreateDataSourceForm() {
+            $.ajax({
+                url: '/DataSource/GetAllDepartment',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (msg) {
+                    ClearDataSourceForm();
+                    $('#titleModal').html('Thêm DataSource');
+                    document.getElementById('btn-update').style.display = 'none';
+                    document.getElementById('btn-create').style.display = 'inline-block';
+
+                    departmentComboTree = $('.datasource-customer').comboTree({
+                        source: JSON.parse(msg.value),
+                        isMultiple: false
+                    });
+                    $('#modalDataSource').modal({
+                        show: true
+                    });
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        };
+
+        function ClearDataSourceForm() {
+            $('.datasource-name').val('');
+            $('.database-type').val(1);
+            $('.datasource-des').val('');
+            $('.datasource-customer').val('');
+            $('.datasource-server').val('');
+            $('.datasource-port').val('');
+            $('.datasource-database-name').val('');
+            $('.datasource-user').val('');
+            $('.datasource-password').val('');
+        }
+        function CreateDataSource() {
+            dataSourceModel.Name = $(".create-datasource-form .datasource-name").val();
+            dataSourceModel.Customer = $(".create-datasource-form .datasource-customer").val();
+            dataSourceModel.DatabaseType = $(".create-datasource-form .database-type :selected").val();
+            dataSourceModel.Server = $(".create-datasource-form .datasource-server").val();
+            dataSourceModel.Port = $(".create-datasource-form .datasource-port").val();
+            dataSourceModel.DatabaseName = $(".create-datasource-form .datasource-database-name").val();
+            dataSourceModel.Username = $(".create-datasource-form .datasource-user").val();
+            dataSourceModel.Password = $(".create-datasource-form .datasource-password").val();
+            dataSourceModel.Description = $(".create-datasource-form .datasource-des").val();
+            dataSourceModel.DepartmentId = departmentComboTree && typeof departmentComboTree.getSelectedIds == 'function' && departmentComboTree.getSelectedIds().length > 0 ? departmentComboTree.getSelectedIds()[0] : 0;
+            if (dataSourceModel.Name === '') {
+                $(".create-datasource-form .form-control-feedback").removeClass('hidden');
+                return;
+            }
+
+            $.ajax({
+                url: '/datasource/create',
+                data: JSON.stringify(dataSourceModel),
+                type: 'post',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    //if (response.success)
+                    window.location.reload();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        function InitEditDataSourceForm(id) {
+            ClearDataSourceForm();
+            dataSourceModel.DataSourceId = id;
+            $.ajax({
+                url: '/datasource/GetDataSource?id=' + id,
+                cache: false,
+                type: 'post',
+                success: function (data) {
+                    if (data) {
+                        document.getElementById('btn-update').style.display = 'inline-block';
+                        document.getElementById('btn-create').style.display = 'none';
+                        $('.datasource-name').val(data.result.Name);
+                        $('.datasource-customer').val(data.result.Customer);
+                        $('.database-type').val(data.result.DatabaseType);
+                        $('.datasource-server').val(data.result.Server);
+                        $('.datasource-port').val(data.result.Port);
+                        $('.datasource-database-name').val(data.result.DatabaseName);
+                        $('.datasource-user').val(data.result.Username);
+                        $('.datasource-password').val(data.result.Password);
+                        $('.datasource-des').val(data.result.Description);
+                        $('#titleModal').html("Cập nhật");
+                        $('#modalDataSource').modal({
+                            show: true
+                        });
+                    }
+                }
+            });
+        }
+        function UpdateDataSource() {
+            dataSourceModel.Name = $(".create-datasource-form .datasource-name").val();
+            dataSourceModel.Customer = $(".create-datasource-form .datasource-customer").val();
+            dataSourceModel.DatabaseType = $(".create-datasource-form .database-type :selected").val();
+            dataSourceModel.Server = $(".create-datasource-form .datasource-server").val();
+            dataSourceModel.Port = $(".create-datasource-form .datasource-port").val();
+            dataSourceModel.DatabaseName = $(".create-datasource-form .datasource-database-name").val();
+            dataSourceModel.Username = $(".create-datasource-form .datasource-user").val();
+            dataSourceModel.Password = $(".create-datasource-form .datasource-password").val();
+            dataSourceModel.Description = $(".create-datasource-form .datasource-des").val();
+            if (dataSourceModel.Name === '') {
+                $(".create-datasource-form .form-control-feedback").removeClass('hidden');
+                return;
+            }
+
+            $.ajax({
+                url: '/datasource/update',
+                data: JSON.stringify(dataSourceModel),
+                type: 'post',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success)
+                        window.location.reload();
+                }
+            });
+        }
+        function ConfirmDeleteForm(id) {
+            $('#deletedValue').val(id);
+            $('#confirmMessage').html("Bạn có chắc chắn xóa dataSource này ?");
+            $('#btn-delete').unbind();
+            $('#btn-delete').click(function () {
+                Delete();
+            });
+            $('#confirmDelete').modal({
+                show: true
+            });
+        }
+        function Delete() {
+            var id = $('#deletedValue').val();
+            $.ajax({
+                url: '/datasource/Delete?id = ' + id,
+                type: "POST",
+                data: { Id: id },
+                success: function (data) {
+                    if (data.ok === true) {
+                        $('#confirmDelete').modal('hide');
+                        window.location.reload();
+                    }
+                },
+            });
+        }
+    </script>
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span data-res="egov.resources.sitemap.datasource">Datasource</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" data-toggle="modal" onclick="InitCreateDataSourceForm();">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-md-16">
+            <div id="divForm" class="bkavegov">
+                <table id="datasource" class="table table-bordered table-striped">
+                    <colgroup>
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col style="width: 120px" />
+                        <col style="width: 280px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Tên DataSource</th>
+                            <th>Đơn vị</th>
+                            <th>Loại CSDL</th>
+                            <th>Mô tả</th>
+                            <th class="text-right">Action</th>
+                            <th class="text-right">Quản lý</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var datasource in Model)
+                        {
+                            <tr>
+                                <td><span class="text-dark">@datasource.Name</span></td>
+                                <td><span class="text-dark">@datasource.Customer</span></td>
+                                <td>
+                                    <span class="text-success">@datasource.DatabaseType</span>
+                                </td>
+                                <td>
+                                    <span class="text-dark">@datasource.Description</span>
+                                </td>
+                                <td>
+                                    <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right:5px" onclick="InitEditDataSourceForm('@datasource.DataSourceId')">Sửa</a>
+                                    <a class="text-right btn btn-danger btn-xs pull-left text-white" onclick="ConfirmDeleteForm('@datasource.DataSourceId')">Xóa</a>
+                                </td>
+                                <td>
+                                    <a class="text-right btn btn-success btn-xs pull-left text-white" style="margin-right:5px" href="DataSource/DataTable/@datasource.DataSourceId">Table</a>
+                                    <a class="text-right btn btn-info btn-xs pull-left text-white" style="margin-right:5px" href="DataSource/SqlTemplate/@datasource.DataSourceId">SQL Template</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDataSource" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="h4Title" id="titleModal">Thêm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal create-datasource-form">
+                        <div class="form-group">
+                            <h5>Tên DataSource <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="text" name="datasource-name" class="form-control datasource-name" required="" data-validation-required-message="Chưa nhập tên dashboard" aria-invalid="false">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Tên Đơn vị <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                @*<input type="text" name="datasource-customer" class="form-control datasource-customer" required="" data-validation-required-message="Chưa nhập tên Đơn vị" aria-invalid="false">*@
+                                <input name="datasource-customer" type="text" readonly="readonly" class="form-control datasource-customer" required="" placeholder="-Chọn-" data-validation-required-message="Chưa nhập tên Đơn vị" aria-invalid="false" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Loại CSDL </h5>
+                            <div class="controls">
+                                <select class="form-control database-type" name="database-type">
+                                    <option value="1">SqlServer</option>
+                                    <option value="2">MySql</option>
+                                    <option value="3">HiveSQL</option>
+                                    <option value="4">Oracle</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>Server <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="datasource-server" class="form-control datasource-server" required="" data-validation-required-message="Chưa nhập Server" aria-invalid="false">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h5>Port <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="datasource-port" class="form-control datasource-port" required="" data-validation-required-message="Chưa nhập Port" aria-invalid="false">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>Database Name <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="datasource-database-name" class="form-control datasource-database-name" required="" data-validation-required-message="Chưa nhập Database Name" aria-invalid="false">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>User <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="datasource-user" class="form-control datasource-user" required="" data-validation-required-message="Chưa nhập User" aria-invalid="false">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h5>Password <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="datasource-password" class="form-control datasource-password" required="" data-validation-required-message="Chưa nhập Password" aria-invalid="false">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Mô tả </h5>
+                            <div class="controls">
+                                <input type="text" name="datasource-des" class="form-control datasource-des" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="CreateDataSource()" class="btn btn-primary waves-effect text-left" data-dismiss="modal" id="btn-create">Ghi lại</button>
+                    <button type="button" onclick="UpdateDataSource()" class="btn btn-primary waves-effect text-left" data-dismiss="modal" id="btn-update">Ghi lại</button>
+                    <button type="button" class="btn btn-default waves-effect text-left" data-dismiss="modal" id="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirmDelete" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog" style="width:500px">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="h4Title" data-i18n="warning"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label id="confirmMessage"></label>
+                                <input type="hidden" id="deletedValue" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer text-right" style="border-top:none">
+                    <button type="button" class="btn btn-primary" id="btn-delete" data-i18n="btn-confirm">Xác nhận</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" data-i18n="btn-cancel">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>

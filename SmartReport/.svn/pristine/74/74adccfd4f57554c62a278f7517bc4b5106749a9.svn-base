@@ -1,0 +1,51 @@
+﻿@model GuideModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/tinymce/tinymce.min.js"></script>
+<script>
+    tinyMCE.init({
+        mode: "exact",
+        elements: "txtTextArea",
+        language: "@lang",
+        height: "300",
+        width: "800",
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true
+    });
+
+</script>
+@Html.ValidationSummary(true)
+<div class="form-horizontal">
+    @Html.HiddenFor(model => model.GuideId)
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Guide.CreateOrEdit.Field.Name.Label") <span style="color: Red; font-size: 11px;">(*)</span></label>
+        <div class="col-md-5">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = Localizer("Common.Guide.CreateOrEdit.Field.Name.Label") })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Guide.CreateOrEdit.Field.Url.Label") <span style="color: Red; font-size: 11px;">(*)</span></label>
+        <div class="col-md-5">
+            @Html.TextBoxFor(model => model.Url, new { @class = "form-control", @placeholder = Localizer("Common.Guide.CreateOrEdit.Field.Url.Label") })
+            @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Guide.CreateOrEdit.Field.Content.Label")</label>
+        <div class="col-md-5">
+            @Html.TextAreaFor(model => model.Content, new { @class = "form-control", id = "txtTextArea" })
+            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>

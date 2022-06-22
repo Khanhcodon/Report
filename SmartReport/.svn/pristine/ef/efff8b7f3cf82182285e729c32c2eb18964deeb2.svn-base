@@ -1,0 +1,96 @@
+﻿@model IEnumerable<DocColumnSettingModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as string;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblDocColumnSetting").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblDocColumnSetting").openLink({ urlOpen: '/admin/DocColumnSetting/Edit' });
+
+        $(".table-main").addClass("table-bordered table-hover");
+    })
+</script>
+<table class="table-main table" id="tblDocColumnSetting" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Admin.DocColumnSetting.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Admin.DocColumnSetting.Index.List.Column.DocColumnSettingName")
+            </th>
+            <th class="header">
+                @Localizer("Admin.DocColumnSetting.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Admin.DocColumnSetting.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                number += 1;
+            <tr data-id="@item.DocColumnSettingId">
+                <td>@number
+                </td>
+                <td>@item.DocColumnSettingName
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Admin.DocColumnSetting.Index.List.Column.Edit"), "Edit", new { Id = item.DocColumnSettingId })
+                </td>
+                <td>
+                    <a href="javascript:deleteAuthorize(@(item.DocColumnSettingId))">@Localizer("Admin.DocColumnSetting.Index.List.Column.Delete")</a>
+                    <form id="formdelete@(item.DocColumnSettingId)" style="display: none" action="@Url.Action("Delete", new { Id = item.DocColumnSettingId })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">@Localizer("Admin.DocColumnSetting.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  search = search,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divAuthorize",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

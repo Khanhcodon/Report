@@ -1,0 +1,88 @@
+﻿@model IEnumerable<RequiredSupplementaryModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as RequiredSupplementarySearchModel;
+    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblPaper").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+</script>
+<table class="table-main table" id="tblPaper" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 120px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("Name", Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.Index.List.Column.name"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    categoryBusinessId = search.CategoryBusinessId,
+                                    docFieldId = search.DocFieldId,
+                                    docTypeId = search.DocTypeId
+                                },
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "divListPaper",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var supp in Model)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                </td>
+                <td>@supp.Name
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.Index.List.Column.Edit.Button"), "Edit", new { Id = supp.RequiredSupplementaryId })
+                </td>
+                <td>
+                    <a href="javascript:deletePaper(@(supp.RequiredSupplementaryId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(supp.RequiredSupplementaryId)" style="display: none" action="@Url.Action("Delete", new { Id = supp.RequiredSupplementaryId })" method="POST">
+                           @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.requiredSupplementary.noRequired"></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,33 @@
+﻿@model BackupRestoreConfigModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreConfig.Title.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/json2.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Html.BeginForm("Restore", "BackupRestoreConfig", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Resore Database</legend>
+            <table id="timeJobInfo" style="width: 100%">
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.BackupRestoreConfigId)
+                        <input type="file" name="fileBackup" id="fileBackup" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                        <input type="submit" value="Restore" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>

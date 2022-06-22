@@ -1,0 +1,248 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.General");
+    Layout = "_SettingLayout.cshtml";
+    var allUsers = ViewBag.AllUsers as string;
+    var userConfig = ViewBag.CurrentUser as List<Bkav.eGovCloud.Entities.Customer.User>;
+    var activeConfig = (bool)ViewBag.ActiveConfig;
+    var templatehtml = ViewBag.Template as string;
+    ViewBag.LinkCss = ".right-content{overflow:visible;} .main-content{overflow:visible;}";
+}
+<script src="../../../../Scripts/bkav.egov/rateemployee/bkav.egov.server.admin.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/tinymce/tinymce.min.js"></script>
+<script>
+    var html = '';
+    tinymce.init({
+        element_format: "html",
+        schema: "html5",
+        menubar: false,
+        plugins: 'preview textcolor link code',
+        selector: '#textareaeditor',
+    });
+</script>
+<table>
+    <tr>
+        <td colspan="2">
+            <b>Cấu hình Hướng Chuyển Công Văn</b>
+        </td>
+    </tr>
+    <tr class="row">
+        <td class="col-md-6" style="padding-left:0px">
+            <img alt="" src="/Content/Images/help.png" title="">
+            Loại văn bản
+        </td>
+        <td class="col-md-6" style="padding-left:0px">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="btnchoosedoctype" role="group">
+                        <div class="input-group " style="width:80%">
+                            <input type="text" name="name" value="" class="form-control" id="doctypechoose" aria-describedby="doctypechoose" />
+                            <span class="input-group-addon " id="doctypechooseclick">
+                                <i class=" icon-arrow-down7"></i>
+                            </span>
+                        </div>
+                        <ul class="dropdown-menu" id="doctypemenu" style=""></ul>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <b>Cấu hình CBCL</b>
+        </td>
+    </tr>
+    <tr class="row">
+        <td class="col-md-6" style="padding-left:0px">
+            <img alt="" src="/Content/Images/help.png" title="">
+            Trạng Thái kích hoạt
+        </td>
+        <td class="col-md-10" style="padding-left:0px">
+            @if (activeConfig == true)
+            {
+                <input type="checkbox" name="name" value=" " id="checkactive" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="name" value=" " id="checkactive" />
+            }
+
+        </td>
+    </tr>
+    <tr class="row">
+        <td class="col-md-6" style="padding-left:0px">
+            <img alt="" src="/Content/Images/help.png" title="">
+            User quản lý
+        </td>
+        <td class="col-md-10" style="padding-left:0px">
+            <input type="text" name="name" value="" class="form-control" id="usermanager" />
+            <div class="userAcceptCalendarName" style="width:80%">
+                @if (userConfig.Count != 0)
+                {
+                    for (int i = 0; i < userConfig.Count; i++)
+                    {
+                        <div>
+                            <span>
+                                @userConfig[i].Username - @userConfig[i].FullName
+                            </span>
+                            <a class="removeuser" data="@userConfig[i].UserId" style="float:right">Xóa</a>
+                            <br />
+                        </div>
+                    }
+
+                }
+            </div>
+        </td>
+    </tr>
+    <tr class="row">
+        <td class="col-md-6" style="padding-left:0px">
+            <b>Cấu hình Văn bản</b>
+        </td>
+        <td class="col-md-10" style="padding-right:0px">
+        </td>
+    </tr>
+</table>
+<div id="checkeditor">
+    <textarea id="textareaeditor" rows="10">
+        @templatehtml
+    </textarea>
+</div>
+<div>
+    <p><b> Các Khóa trong mẫu Văn bản: </b></p>
+    <p>{departmentname} : Bộ phận người đánh giá</p>
+    <p>{acccreate} : Tên người đánh giá</p>
+    <p>{acccreatpos} : Chức vụ người đánh giá</p>
+    <p>{datatable} : Bảng đánh giá của nhân viên cấp dưới</p>
+    <p>{datetimenow} : Thời gian đánh giá</p>
+</div>
+<script>
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    $("#checkactive").change(function () {
+        var value ;
+        if (this.checked) {
+            value="true"
+        }else   {
+            value="false"
+        }
+        ActiveConfig(value, function (data) {
+            console.log(value)
+        })
+    })
+    $("#submit").click(function () {
+        var iframe = document.getElementById('textareaeditor_ifr');
+        var htmltemp =$(iframe).contents().find(".mce-content-body").html();
+        console.log(htmltemp)
+        TemplateConfig(htmltemp, function () {
+            eGovMessage.notification("Update Cấu hình văn bản thành công", eGovMessage.messageTypes.success, true);
+        })
+    })
+    $(document).click(function (event) {
+        if ($('#doctypechoose').parent().parent().hasClass('open')) {
+            if (!$(event.target).closest('.btnchoosedoctype').length && !$(event.target).is('.btnchoosedoctype')) {
+                $('#doctypechoose').parent().parent().removeClass('open');
+            }
+        }
+    });
+    GetDoctype(function (data) {
+        var doctypes = [];
+        for (var i = 0; i < data.length; i++) {
+            doctypes.push({
+                value: data[i].DocTypeName.toLowerCase(),
+                label: data[i].DocTypeName,
+                text: data[i].DocTypeName,
+                id: data[i].DocTypeId,
+            })
+        }
+
+        // Sự kiên gợi ý tên các phòng ban
+        $("#doctypechoose").autocomplete({
+            minLength: 0,
+            source: doctypes,
+            focus: function (event, ui) {
+                $("#doctypechoose").val(ui.item.text);
+                // console.log(ui.item)
+                return false;
+            },
+            select: function (event, ui) {
+                doctype = { "id": ui.item.id, "name": ui.item.text };
+                DoctypeConfig(doctype.id, function (data) { 
+                    eGovMessage.notification("Update Loại Văn Bản thành công", eGovMessage.messageTypes.success, true);
+                })
+            }
+        })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+              .append("<a>" + item.text + "</a>")
+              .appendTo(ul);
+        };
+        for (var i = 0; i < data.length; i++) {
+            $("#doctypemenu").append("<li><a href='#' class='choosedoctype' data=" + data[i].DocTypeId + ">" + data[i].DocTypeName + "<a></li>");
+        }
+        $("#doctypechooseclick").click(function () {
+            $("#doctypemenu").find("li").each(function () {
+                $(this).find("a").eq(1).remove();
+            })
+            if ($('#doctypechooseclick').parent().parent().hasClass('open')) {
+                $('#doctypechooseclick').parent().parent().removeClass('open')
+            } else {
+                $('#doctypechooseclick').parent().parent().addClass('open')
+            }
+        })
+    });
+    DoctypeCurrent(function (data) {
+            $("#doctypechoose").val(data.DocTypeName)
+    })
+    $("#doctypemodify").click(function () {
+        $("#doctypechoose").prop("disabled", false);
+        $("#savedoctypeconfig").show();
+    });
+    $(document).on("click", ".choosedoctype", function (e) {
+        e.preventDefault();
+        var target = $(e.target).closest(".choosedoctype");
+        doctype = { "id": target.attr("data"), "name": target.text() };
+        DoctypeConfig(doctype.id, function (data) { 
+            eGovMessage.notification("Update Loại văn bản thành công", eGovMessage.messageTypes.success, true);})
+        $("#doctypechoose").val(target.text());
+        $('#doctypechoose').parent().parent().removeClass('open');
+    });
+    $("#usermanager").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+            response($.grep(allUsers, function (value) {
+                value = value.label || value.value || value;
+                return matcher.test(value) || matcher.test(value);
+            }));
+        },
+        focus: function () {
+            return false;
+        },
+        selectFirst: true,
+        select: function (event, ui) {
+            UserConfig("Add",ui.item.value, function (data) {
+                if (data=="Error") {
+                    eGovMessage.notification("User đã là người quản trị", eGovMessage.messageTypes.error, true);
+                }else if(data=="Manager"){
+                    eGovMessage.notification("User là quản lý", eGovMessage.messageTypes.error, true);
+                }else {
+                    eGovMessage.notification("Thêm người quản trị thành công", eGovMessage.messageTypes.success, true);
+                    $(".userAcceptCalendarName").append("<div><span>"+ui.item.label+"</span><a class='removeuser' data="+ui.item.value+" style='float:right'>Xóa</a> <br /></div>");
+                }
+            });
+            return false;
+        }
+    })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+    $(document).on("click", ".removeuser",function (e) {
+        var target = $(e.target).closest("a");
+        var value = target.attr("data");
+        UserConfig("Delete",value, function (data) {
+            target.parent().remove();
+            eGovMessage.notification("Xóa người quản trị thành công", eGovMessage.messageTypes.success, true);
+        });
+    })
+</script>

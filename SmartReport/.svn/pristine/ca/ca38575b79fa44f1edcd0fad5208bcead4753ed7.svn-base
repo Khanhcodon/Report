@@ -1,0 +1,428 @@
+﻿using Bkav.eGovCloud.Entities.Common;
+using Bkav.eGovCloud.Entities.Enum;
+using Bkav.eGovCloud.Models;
+using Bkav.eGovCloud.Search;
+using Bkav.eGovCloud.Web.Framework;
+using Bkav.eGovCloud.Entities;
+using System;
+using System.Web.Mvc;
+using System.Collections.Generic;
+using Bkav.eGovCloud.Business.Customer;
+using Bkav.eGovCloud.Entities.Customer;
+using MySql.Data.MySqlClient;
+using Bkav.eGovCloud.DataAccess;
+using Bkav.eGovCloud.Core.Utils;
+using System.Linq;
+
+namespace Bkav.eGovCloud.Controllers
+{
+    /// <summary>
+    /// 
+    /// timg kiếm các document
+    /// </summary>
+    public class SearchDocumentController : CustomerBaseController
+    {
+        private readonly AdminGeneralSettings _generalSettings;
+        private readonly EgovSearch _searchService;
+        private readonly Helper.UserSetting _helperUserSetting;
+        private readonly ISearchInDatabase _searchInDatabaseService;
+        private readonly ISearchInSolr _searchInSolrService;
+        private readonly ReportModeBll _reportModeService;
+        private readonly DocTypeBll _docTypeService;
+        private readonly DocumentBll _documentService;
+        private readonly AttachmentBll _attachmentService;
+        private readonly DocumentCopyBll _documentCopyService;
+
+
+        // <summary>
+        /// Tìm kiếm
+        /// </summary>
+        /// <param name="generalSettings"></param>
+        /// <param name="searchService"></param>
+        /// <param name="searchInDatabaseService"></param>
+        /// <param name="searchInSolrService"></param>
+        public SearchDocumentController(
+            AdminGeneralSettings generalSettings, 
+            EgovSearch searchService,
+            ISearchInDatabase searchInDatabaseService, 
+            ISearchInSolr searchInSolrService,
+            Helper.UserSetting helperUserSetting,
+            ReportModeBll reportModels,
+            DocTypeBll doctypeService,
+            DocumentBll documentService,
+            AttachmentBll attachmentService,
+            DocumentCopyBll documentCopyService)
+        {
+            _generalSettings = generalSettings;
+            _searchService = searchService;
+            _searchInDatabaseService = searchInDatabaseService;
+            _searchInSolrService = searchInSolrService;
+            _helperUserSetting = helperUserSetting;
+            _reportModeService = reportModels;
+            _docTypeService = doctypeService;
+            _documentService = documentService;
+            _attachmentService = attachmentService;
+            _documentCopyService = documentCopyService;
+        }
+
+        public ActionResult Index()
+        {
+            var reportModels = _reportModeService.Gets();
+            var listReportModels = new List<SelectListItem>();
+            listReportModels.Add(new SelectListItem()
+            {
+                Selected = true,
+                Text = "Chọn tất cả",
+                Value = "-1"
+            });
+            foreach (var reportList in reportModels)
+            {
+                listReportModels.Add(new SelectListItem()
+                {
+                    Selected = false,
+                    Text = reportList.Name,
+                    Value = Convert.ToString(reportList.ReportModeId),
+                });
+            }
+            ViewBag.ListReportModels = listReportModels;
+
+            
+            var getCompendium = GetCompendium();
+            var listCompendium = new List<SelectListItem>();
+            listCompendium.Add(new SelectListItem()
+            {
+                Selected = true,
+                Text = "Chọn tất cả",
+                Value = "-1"
+            });
+            foreach (var item in getCompendium)
+            {
+                listCompendium.Add(new SelectListItem()
+                {
+                    Selected = false,
+                    Text = item.Value,
+                    Value = item.Value
+                });
+            }
+            ViewBag.ListCompendium = listCompendium;
+
+            var getAttachment = GetAttachment();
+            var listAttachment = new List<SelectListItem>();
+            listAttachment.Add(new SelectListItem()
+            {
+                Selected = true,
+                Text = "Chọn tất cả",
+                Value = "-1"
+            });
+            foreach (var item in getAttachment)
+            {
+                listAttachment.Add(new SelectListItem()
+                {
+                    Selected = false,
+                    Value = item.Key.ToString(),
+                    Text = item.Value
+                });
+            }
+            ViewBag.ListAttachment = listAttachment;
+            return View();
+        }
+
+        /// <summary>
+        /// Tìm kiếm văn bản
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JsonResult SearchDocument(SearchAdvangeModel model)
+        {
+            //return Json(new { }, JsonRequestBehavior.AllowGet);
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult ResultSaveLocal()
+        {
+            var result = new List<SearchAdvangeModel>();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// hiển thị file đính kèm
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JsonResult GetFileData(int id)
+        {
+
+            var reportFile = _attachmentService.Get(id);
+            if (reportFile == null)
+            {
+                return null;
+            }
+            var result = new ReportFileModel()
+            {
+                DocumentId = reportFile.DocumentId,
+                AttachmentId = reportFile.AttachmentId
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        /// Tìm kiếm nhanh
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public JsonResult QuickSearch(string query, int? page = 1)
+        {
+            var userSetting = _helperUserSetting.GetUserCurrentSetting(editable: false);
+            var model = new SearchAdvangeModel
+            {
+                SearchType = SearchType.Document,
+                Compendium = query,
+                Content = query,
+                Page = page ?? 1,
+                IsUseCached = false,
+                PageSize = _generalSettings.DefaultPageSize,
+                IsMainProcess = userSetting.FindProcessDocument
+            };
+            var result = SearchDocumentQS(model);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private SearchDocumentResultModel SearchDocumentQS(SearchAdvangeModel model)
+        {
+            var userID = User.GetUserId();
+            var result = new SearchDocumentResultModel();
+
+            if (string.IsNullOrWhiteSpace(model.Compendium))
+            {
+                result = new SearchView().ToModel();
+                result.SearchType = (int)SearchType.Document;
+                return result;
+            }
+
+            var docs = _searchInDatabaseService.QuickSearch(userID, model.Compendium, model.IsUseCached, model.Page, model.PageSize, model.IsMainProcess);
+
+            result = docs.ToModel();
+            result.SearchType = (int)SearchType.Document;
+            return result;
+        }
+
+        public JsonResult SearchAdvanceDocument(SearchAdvangeModel model)
+        {
+            if (model.SearchType == 0)
+            {
+                model.SearchType = SearchType.Document;
+            }
+
+            if(model.Page == 0)
+            {
+                model.Page = 1;
+            }
+
+            if(model.PageSize == 0)
+            {
+                model.PageSize = _generalSettings.DefaultPageSize;
+            }
+
+            if(model.FromDateStr == null)
+            {
+                var from = DateTime.Now.AddMonths(-12);
+                model.FromDateStr = from.ToString("dd/MM/yyyy").Replace(".", "/");
+            }
+
+            var result = SearchAdvanceBusDocument(model);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public Dictionary<Guid, string> GetCompendium()
+        {
+            var result = new Dictionary<Guid, string>();
+            using (var context = new EfContext(new MySqlConnection(DataSettings.Current.DataConnectionString)))
+            {
+                var stringQuery = "Select dt.DocTypeName,dt.DocTypeId FROM `doctype` dt INNER JOIN `reportmodes` rm on rm.ReportModeId = dt.ReportModeId Group BY dt.DocTypeId";
+                var resultUserCreateName = context.RawQuery(stringQuery);
+                foreach (var item in resultUserCreateName)
+                {
+                    result.Add(item.DocTypeId, item.DocTypeName);
+                }
+                return result;
+            }
+        }
+        public Dictionary<int, string> GetAttachment()
+        {
+            var result = new Dictionary<int, string>();
+            using(var context = new EfContext(new MySqlConnection(DataSettings.Current.DataConnectionString)))
+            {
+                var stringQuery = "SELECT att.AttachmentId, "
+                    + "att.AttachmentName from attachment as att "
+                    + "INNER JOIN attachment_detail as att_dt ON att.AttachmentId = att_dt.AttachmentId "
+                    + " INNER JOIN document as d ON att.DocumentId = d.DocumentId";
+                var resultUserCreateName = context.RawQuery(stringQuery);
+                foreach (var item in resultUserCreateName)
+                {
+                    result.Add(item.AttachmentId, item.AttachmentName);
+                }
+                return result;
+            }
+        }
+        public JsonResult RenderCompendiumData(int reportmodeId)
+        {
+            var listObj = new List<ObjQuery>();
+            using (var context = new EfContext(new MySqlConnection(DataSettings.Current.DataConnectionString)))
+            {
+                var stringQuery = "";
+                if (reportmodeId == -1)
+                {
+                    stringQuery = "Select dt.DocTypeName,dt.ReportModeId FROM `doctype` dt INNER JOIN `reportmodes` rm on rm.ReportModeId = dt.ReportModeId Group BY dt.DocTypeId";
+                }
+                else
+                {
+                    stringQuery = "Select dt.DocTypeName,dt.ReportModeId FROM `doctype` dt INNER JOIN `reportmodes` "
+                    + "rm on rm.ReportModeId = dt.ReportModeId where rm.ReportModeId = " + reportmodeId + " Group BY dt.DocTypeId";
+                }
+                
+                var resultUserCreateName = context.RawQuery(stringQuery);
+                foreach(var item in resultUserCreateName)
+                {
+                    if (reportmodeId == -1)
+                    {
+                        listObj.Add(new ObjQuery()
+                        {
+                            ReportModeId = item.ReportModeId,
+                            DocTypeName = item.DocTypeName
+                        });
+                    }
+                    else
+                    {
+                        listObj.Add(new ObjQuery()
+                        {
+                            ReportModeId = item.ReportModeId,
+                            DocTypeName = item.DocTypeName
+                        });
+                    }
+                    
+                }
+            }
+            return Json(listObj, JsonRequestBehavior.AllowGet);
+        }
+        public class ObjQuery
+        {
+            public int ReportModeId { get; set; }
+            public string DocTypeName { get; set; }
+        }
+        private SearchDocumentResultModel SearchAdvanceBusDocument(SearchAdvangeModel model)
+        {      
+  
+            var userID = User.GetUserId();
+            model.Compendium = model.Compendium == null ? "" : model.Compendium.Trim();
+
+            model.DocCode = model.DocCode == null ? "" : model.DocCode.Trim();
+            model.InOutCode = model.InOutCode == null ? "" : model.InOutCode.Trim();
+
+            model.OrganizationCreate = model.OrganizationCreate == null ? "" : model.OrganizationCreate.Trim();
+            model.Content = model.Content == null ? "" : model.Content.Trim();
+
+            model.DocTypeCode = model.DocTypeCode == null ? "" : model.DocTypeCode.Trim();
+            model.InOutPlace = model.InOutPlace == null ? "" : model.InOutPlace.Trim();
+            model.UserCreatedName = model.UserCreatedName == null ? "" : model.UserCreatedName.Trim();
+
+            model.TimeKey = model.TimeKey == null ? "" : model.TimeKey.Trim();
+
+            ViewBag.SearchModelDocument = model;
+            var result = new SearchDocumentResultModel();
+
+            if (model.SearchType == SearchType.File)
+            {
+                var fileResultDocument = _searchService.Search(userID, model.Compendium, model.Content, model.CategoryId, model.KeyWord,
+                    model.DocCode, model.InOutCode, model.UrgentId, model.CategoryBusinessId, model.StorePrivateId, model.CurrentUserId, model.FromDate,
+                    model.ToDate, model.InOutPlaceId, model.OrganizationCreate, model.DocFieldId, model.UserSuccessId, model.Page, model.PageSize).ToModel() ??
+                    new SearchDocumentResultModel
+                    {
+                        Items = new List<SearchDocumentItemResultModel>(),
+                        FacetCreatedDate = new List<KeyValuePair<string, int>>(),
+                        FacetDocField = new List<KeyValuePair<string, KeyValuePair<string, int>>>(),
+                        FacetDocType = new List<KeyValuePair<string, KeyValuePair<string, int>>>()
+                    };
+                model.TotalPage = fileResultDocument.TotalResult;
+                return fileResultDocument;
+            }
+
+            /*
+            if(model.ReportModeId != null)
+            {
+                var reportModeId = _reportModeService.Get(Convert.ToInt32(model.ReportModeId));
+                var docTypeList = _docTypeService.Gets(x => x.ReportModeId == reportModeId.ReportModeId);
+                foreach (var docc in docTypeList)
+                {
+                    model.DocTypeId = docc.DocTypeId;
+                }
+            }
+            else
+            {
+                model.DocTypeId = null;
+            }
+            */           
+            model.ReportModeId = model.ReportModeId == null ? null : model.ReportModeId;
+
+            var docs = _searchInDatabaseService.SearchAdvance(new Search.Entity.SearchQuery()
+            {
+                Compendium = model.Compendium,
+                UserId = userID,
+                CategoryId = model.CategoryId,
+                CategoryBusinessId = model.CategoryBusinessId,
+                DocCode = model.DocCode,
+                InOutCode = model.InOutCode,
+                UrgentId = model.UrgentId,
+                StoreId = model.StoreId,
+                StorePrivateId = model.StorePrivateId,
+                CurrentUserId = model.CurrentUserId,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                FromPubDate = model.FromPubDate,
+                ToPubDate = model.ToPubDate,
+                InOutPlaceId = model.InOutPlaceId,
+                Organization = model.OrganizationCreate,
+                CreatedUserId = model.UserCreateId,
+                SuccessedUserId = model.UserSuccessId,
+                IsUseCached = model.IsUseCached,
+                DocTypeCode = model.DocTypeCode,
+                ReportModeId = model.ReportModeId,
+                DocTypeId = model.DocTypeId,
+                InOutPlace = model.InOutPlace,
+                UserCreatedName = model.UserCreatedName,
+                Status = model.Status,
+                ActionLevel = model.ActionLevel,
+                TimeKey = model.TimeKey
+
+            }, model.Page, model.PageSize, model.IsMainProcess);
+
+            result = docs.ToModel();
+            result.SearchType = (int)model.SearchType;
+            return result;
+        }
+
+        private SearchDocumentResultModel SearchFileDocument(SearchAdvangeModel model)
+        {
+            var userId = User.GetUserId();
+
+            var result = new SearchDocumentResultModel();
+
+            if (string.IsNullOrWhiteSpace(model.Compendium))
+            {
+                result = new SearchView().ToModel();
+                result.SearchType = (int)model.SearchType;
+                return result;
+            }
+
+            // Search in Solr
+            var docs = _searchInSolrService.QuickSearchInFile(userId, model.Compendium, model.Page, model.PageSize);
+            result = docs.ToModel();
+            result.SearchType = (int)SearchType.File;
+            return result;
+        }
+
+    }
+}

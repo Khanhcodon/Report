@@ -1,0 +1,659 @@
+﻿{
+  "code": 200,
+  "msg": "OK",
+  "data": {
+    "units": [
+      {
+        "ParentID": "ed4aba44-7e69-4d6a-96ce-ad9ca47ab70e",
+        "ID": "00882fc4-2ce7-4693-9170-4304058b491d",
+        "Name": "Phó phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "008be4f2-cdd0-46ab-b3a8-a3464af7185c",
+        "Name": "Giám đốc kho bạc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e576f096-8ebc-4f48-8e50-c6812492cd64",
+        "ID": "0400d720-58ae-44ad-b470-cac632e28ef5",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "a64152e2-8b6c-4e8c-9102-091c3a192dd1",
+        "ID": "0a397df5-d9f4-4b86-82bd-5aabac912ccc",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ce733e17-7e7d-4ef3-a723-15ca8dcb2351",
+        "ID": "18c14647-233c-408f-bd54-56601510e01e",
+        "Name": "Chỉ huy trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e72269b9-2834-49d4-8dfe-27dca36b0657",
+        "ID": "19708328-525f-4f0a-95e4-6f7bfc47e50b",
+        "Name": "Phó Giám đốc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "1c25c652-6212-44d0-8afb-38cb4782af7d",
+        "Name": "Bí thư",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "d91b7dc0-552f-4da0-bd36-e00b1e23260b",
+        "ID": "26693c1e-183f-4661-85d9-38f5ec49aa4c",
+        "Name": "Phó đội trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "2881fd4d-f9bf-475d-9b47-adf354c8f9ee",
+        "Name": "Chỉ huy trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "8ab6a4fd-fc16-4f94-9a67-99741be96b19",
+        "ID": "2a4f632d-6232-4983-bb65-b609ea38e462",
+        "Name": "Phó ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "bf6f8642-1aa5-4273-a736-4df385de0f8c",
+        "ID": "2a8b15a9-8252-4f93-a4ef-eddbba2c3b3e",
+        "Name": "Kế toán trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f605c49b-9020-4df6-a56b-0e3b44362b8e",
+        "ID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "Name": "Phó Chủ tịch",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "ID": "2dd26b2b-38bb-4c83-977e-9a500ffc1b2c",
+        "Name": "Giám đốc phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ef3978e0-7b61-439e-8a86-7004d95f0835",
+        "ID": "2f02e458-dec3-404c-89d9-f3d1cf4833e7",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "da0ffdda-3164-48ea-b62d-d933d8d67410",
+        "ID": "2f7d9ae6-15f5-427f-bcd8-deb581ba18d5",
+        "Name": "Phó bí thư tỉnh",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "32a99d16-c5e6-4a35-ba9a-10e3c7a44c8b",
+        "Name": "Chủ tịch hội",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "33f74585-d2c6-4f8c-9592-216425ce7da6",
+        "Name": "Chi Cục trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "3578817b-e04a-4b31-bebd-97ceed90d4dc",
+        "Name": "Chỉ huy trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "008be4f2-cdd0-46ab-b3a8-a3464af7185c",
+        "ID": "37d88032-6a9d-4148-9081-d7ac22464139",
+        "Name": "Phó giám đốc kho bạc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "ID": "3bb65640-03aa-4633-8958-0d27f191fb43",
+        "Name": "Chánh thanh tra",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "ID": "3cf94f0b-12f0-44e7-9a48-313cbdc812f8",
+        "Name": "Chánh văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "70323f03-2fdc-465a-9d7f-af2bdc1d75aa",
+        "ID": "4059b34b-1978-4ad1-a619-f6f1479e26d2",
+        "Name": "Phó Chỉ huy trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "ID": "436f2391-8ab7-492c-8673-2e0237e94a62",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "0a397df5-d9f4-4b86-82bd-5aabac912ccc",
+        "ID": "44e53b3a-cbf3-4b2f-93be-01379e1f8fbb",
+        "Name": "Phó phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "ID": "45e37625-cd10-4b71-8e0b-dfc06e097403",
+        "Name": "Kế toán trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e8d1a098-28e0-441b-9147-165ca8f2c52c",
+        "ID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "Name": "Phó giám đốc sở",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f5686f1e-58d3-4028-893d-aa597c86b6ff",
+        "ID": "478dd8af-5f72-4769-bc64-0c7e908f5399",
+        "Name": "Chủ nhiệm UBKT",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "32a99d16-c5e6-4a35-ba9a-10e3c7a44c8b",
+        "ID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "Name": "Phó chủ tịch hội",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e72269b9-2834-49d4-8dfe-27dca36b0657",
+        "ID": "5877598b-5253-4549-b754-f04bf9b61973",
+        "Name": "Giám đốc BHXH",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "df7a8594-ea86-41a9-84af-6ee2cbcbfbf0",
+        "ID": "5cb84963-2ae9-4863-8227-2c5391313c10",
+        "Name": "Phó chánh văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "71e25a7f-fc4f-47b9-9ad1-ebd9644fdaad",
+        "ID": "5db8ce16-df0f-4d79-b90c-ad67ff3ce571",
+        "Name": "Phó chánh thanh tra",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "9016f151-e717-4c7b-aae7-910041bfc1e7",
+        "ID": "607470b4-5853-4d03-8876-8a081300c649",
+        "Name": "Phó chủ tịch",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "d636b918-b115-4925-9e2d-d3d7fb9af527",
+        "ID": "6c8f8432-6de3-47a3-88f5-2600759a5c2a",
+        "Name": "Phó trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "9e383ed0-decf-46cf-9c10-b7ff7d8a2b14",
+        "ID": "6f1ecec5-ec7c-4d75-b3a5-f95018fc16d5",
+        "Name": "Phó bí thư hội",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "70323f03-2fdc-465a-9d7f-af2bdc1d75aa",
+        "Name": "Chỉ huy trưởng ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ed4aba44-7e69-4d6a-96ce-ad9ca47ab70e",
+        "ID": "70f396b2-cd19-4b6e-9504-2709e2f9cdb4",
+        "Name": "Phó trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "71e25a7f-fc4f-47b9-9ad1-ebd9644fdaad",
+        "Name": "Chánh thanh tra",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "991cad42-6e9f-488b-97c7-a8911603eb3b",
+        "ID": "72cd9a7d-c0f1-4f99-81e1-5cc8cc1849c7",
+        "Name": "Phó chủ nhiện ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "1c25c652-6212-44d0-8afb-38cb4782af7d",
+        "ID": "72db97d0-50c9-4218-a83d-03d23be4fe60",
+        "Name": "Phó bí thư",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "607470b4-5853-4d03-8876-8a081300c649",
+        "ID": "78989cb4-0416-4893-80a9-2395ba122eb6",
+        "Name": "Giám đốc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "9d53619b-93e5-4849-bcb9-c0cd9efad7db",
+        "ID": "84d508e4-8ff8-43c4-bd67-40654e35904d",
+        "Name": "Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "cf1a073c-3c02-46a1-9409-1ba997006c51",
+        "ID": "87331825-5710-49a1-9822-b75be822b872",
+        "Name": "Chính ủy ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ad8b8076-ca0d-40c5-b96c-fe82701e7de1",
+        "ID": "8825f813-2ee8-4518-9687-188a9a0f2591",
+        "Name": "Phó Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "abda4213-9d8f-42c2-9c8e-8a1f47e9a04c",
+        "ID": "8a3a5b1e-d4bc-40b8-a9d0-532d66a11ede",
+        "Name": "Phó Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "19708328-525f-4f0a-95e4-6f7bfc47e50b",
+        "ID": "8ab6a4fd-fc16-4f94-9a67-99741be96b19",
+        "Name": "Trưởng ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "b6fef14c-9bf0-4d02-9f5e-73db9c80f7e4",
+        "ID": "8bdd2228-42cd-4482-912f-c3cccd10e975",
+        "Name": "Phụ trách phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "8dd197ea-5a8b-4d57-b128-d90aaae42919",
+        "Name": "Chánh án",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "9016f151-e717-4c7b-aae7-910041bfc1e7",
+        "Name": "Chủ tich",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "8bdd2228-42cd-4482-912f-c3cccd10e975",
+        "ID": "911f67a5-f209-4cba-be31-3a9b7ed914fd",
+        "Name": "Phó phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "ID": "98a00a5f-bdd0-458d-8515-bccec280f75f",
+        "Name": "Phó trưởng ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e8e3bc3c-6833-4abd-9b17-51de9de5d018",
+        "ID": "991cad42-6e9f-488b-97c7-a8911603eb3b",
+        "Name": "Chủ nhiệm ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "87331825-5710-49a1-9822-b75be822b872",
+        "ID": "9b438ac5-ee6f-467c-b513-6f925a8fdc02",
+        "Name": "Phó chính ủy ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "9ca8f18a-6ea6-4bb3-83dc-2a912830596b",
+        "Name": "Cục Trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "5877598b-5253-4549-b754-f04bf9b61973",
+        "ID": "9d53619b-93e5-4849-bcb9-c0cd9efad7db",
+        "Name": "Phó giám đốc BHXH",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "ID": "9e383ed0-decf-46cf-9c10-b7ff7d8a2b14",
+        "Name": "Bí thư hội",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ebbf6297-5be8-4311-a366-b290ef7a119c",
+        "ID": "a64152e2-8b6c-4e8c-9102-091c3a192dd1",
+        "Name": "Phó bí thư phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "ca95e596-3a67-4fa8-8388-176265f613fe",
+        "ID": "a98bddad-f618-43ed-92d0-106b9ced3982",
+        "Name": "Phó trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "84d508e4-8ff8-43c4-bd67-40654e35904d",
+        "ID": "ab64342c-d9cc-4549-a04d-d3fe6b523db5",
+        "Name": "Phó chánh văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "cb631650-0d0b-4841-839a-7d554881f16b",
+        "ID": "ab9612f0-7270-4efc-bb8b-b843e6c4620d",
+        "Name": "Phó chủ nhiệm",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f605c49b-9020-4df6-a56b-0e3b44362b8e",
+        "ID": "abda4213-9d8f-42c2-9c8e-8a1f47e9a04c",
+        "Name": "Phó chủ tịchChánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "ad8b8076-ca0d-40c5-b96c-fe82701e7de1",
+        "Name": "Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "b5defab1-772d-41ca-b784-6e195d388d4e",
+        "Name": "Hiệu trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2f02e458-dec3-404c-89d9-f3d1cf4833e7",
+        "ID": "b6fef14c-9bf0-4d02-9f5e-73db9c80f7e4",
+        "Name": "Phó trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "9ca8f18a-6ea6-4bb3-83dc-2a912830596b",
+        "ID": "bf6f8642-1aa5-4273-a736-4df385de0f8c",
+        "Name": "Phó Cục Trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "bfb78962-7a5d-4900-aeb6-6cab03f7cb68",
+        "Name": "Phó Chi cục trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "9d53619b-93e5-4849-bcb9-c0cd9efad7db",
+        "ID": "ca95e596-3a67-4fa8-8388-176265f613fe",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "72db97d0-50c9-4218-a83d-03d23be4fe60",
+        "ID": "cb631650-0d0b-4841-839a-7d554881f16b",
+        "Name": "Chủ nhiệm",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "cbed86d4-e94f-4a4a-934e-7219338d3171",
+        "Name": "Cục trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f6a7a7eb-c194-4120-be87-db2769e9d46c",
+        "ID": "ccaa8214-ce52-4509-9a5a-e64ee53c1cf6",
+        "Name": "Phó Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "8ab6a4fd-fc16-4f94-9a67-99741be96b19",
+        "ID": "ccbc2bce-a2a9-46c4-b326-2127c61a62d9",
+        "Name": "Phó trưởng ban",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "33f74585-d2c6-4f8c-9592-216425ce7da6",
+        "ID": "ce733e17-7e7d-4ef3-a723-15ca8dcb2351",
+        "Name": "Phó Chi cục trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2881fd4d-f9bf-475d-9b47-adf354c8f9ee",
+        "ID": "cf1a073c-3c02-46a1-9409-1ba997006c51",
+        "Name": "Phó Chỉ huy trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "19708328-525f-4f0a-95e4-6f7bfc47e50b",
+        "ID": "d49f2c73-ea55-4464-ba04-3489a6dc7fcb",
+        "Name": "Trưởng Công An",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "37d88032-6a9d-4148-9081-d7ac22464139",
+        "ID": "d636b918-b115-4925-9e2d-d3d7fb9af527",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "478dd8af-5f72-4769-bc64-0c7e908f5399",
+        "ID": "d91b7dc0-552f-4da0-bd36-e00b1e23260b",
+        "Name": "Đội trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "4dab2bba-a48d-4532-8853-c7a9091d23a7",
+        "ID": "da0ffdda-3164-48ea-b62d-d933d8d67410",
+        "Name": "Bí thư tỉnh",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "37d88032-6a9d-4148-9081-d7ac22464139",
+        "ID": "df7a8594-ea86-41a9-84af-6ee2cbcbfbf0",
+        "Name": "Chánh văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "e0ad7e21-8ac1-40a5-9619-1534b02776c3",
+        "Name": "Viện trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f5686f1e-58d3-4028-893d-aa597c86b6ff",
+        "ID": "e465d2aa-46c5-48d5-8db4-c818ef800f9a",
+        "Name": "Chủ tịch công đoàn",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "78989cb4-0416-4893-80a9-2395ba122eb6",
+        "ID": "e576f096-8ebc-4f48-8e50-c6812492cd64",
+        "Name": "Phó Giám đốc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2ad34ad6-c4e7-4f38-9805-05e7e6f6089c",
+        "ID": "e72269b9-2834-49d4-8dfe-27dca36b0657",
+        "Name": "Giám đốc",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "fc5a7118-5679-465e-9c41-c65b2a33bc71",
+        "ID": "e74ff9aa-4f3d-407d-bc6d-7bac93f51536",
+        "Name": "Phó trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "e72269b9-2834-49d4-8dfe-27dca36b0657",
+        "ID": "e8d1a098-28e0-441b-9147-165ca8f2c52c",
+        "Name": "Giám đốc sở",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "3cf94f0b-12f0-44e7-9a48-313cbdc812f8",
+        "ID": "e8e3bc3c-6833-4abd-9b17-51de9de5d018",
+        "Name": "Phó chánh văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "3bb65640-03aa-4633-8958-0d27f191fb43",
+        "ID": "e987ebcb-f14e-4ed1-be94-6206ca253048",
+        "Name": "Phó Chánh thanh tra",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2f7d9ae6-15f5-427f-bcd8-deb581ba18d5",
+        "ID": "ebbf6297-5be8-4311-a366-b290ef7a119c",
+        "Name": "Bí thư phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "19708328-525f-4f0a-95e4-6f7bfc47e50b",
+        "ID": "ed4aba44-7e69-4d6a-96ce-ad9ca47ab70e",
+        "Name": "Trưởng phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "2dd26b2b-38bb-4c83-977e-9a500ffc1b2c",
+        "ID": "ef3978e0-7b61-439e-8a86-7004d95f0835",
+        "Name": "Phó Giám đốc phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "ID": "f0f681a8-1eb8-49d8-9446-3c729ae799d1",
+        "Name": "Chi Cục trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "f0f681a8-1eb8-49d8-9446-3c729ae799d1",
+        "ID": "f5686f1e-58d3-4028-893d-aa597c86b6ff",
+        "Name": "Phó Chi Cục Trưởng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "",
+        "ID": "f605c49b-9020-4df6-a56b-0e3b44362b8e",
+        "Name": "Chủ tịch",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "47502c35-ef00-4bcb-91ec-3b2aa62a0657",
+        "ID": "f6a7a7eb-c194-4120-be87-db2769e9d46c",
+        "Name": "Chánh Văn phòng",
+        "Level": 0,
+        "IsActive": true
+      },
+      {
+        "ParentID": "bf6f8642-1aa5-4273-a736-4df385de0f8c",
+        "ID": "fc5a7118-5679-465e-9c41-c65b2a33bc71",
+        "Name": "Trưởng phòng cục",
+        "Level": 0,
+        "IsActive": true
+      }
+    ]
+  }
+}

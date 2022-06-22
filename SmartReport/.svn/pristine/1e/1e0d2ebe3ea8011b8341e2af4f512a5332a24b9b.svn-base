@@ -1,0 +1,97 @@
+﻿@model IEnumerable<ReportModeModel>
+
+    @{
+        ViewBag.Title = "Chế độ báo cáo";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+    <link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+    <script type="text/javascript">
+        function deleteReportMode(id) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.ReportMode.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.OkCancel,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+        //$(document).ready(function () {
+        //    var collapsedGroups = {};
+
+        //    var table = $('#example').DataTable({
+        //        order: [[0, 'asc']],
+        //        rowGroup: {
+        //            // Uses the 'row group' plugin
+        //            dataSrc: 1,
+        //            startRender: function (rows, group) {
+        //                var collapsed = !!collapsedGroups[group];
+
+        //                rows.nodes().each(function (r) {
+        //                    r.style.display = collapsed ? 'none' : '';
+        //                });
+
+        //                // Add category name to the <tr>. NOTE: Hardcoded colspan
+        //                return $('<tr/>')
+        //                    .append('<td colspan="8">' + group + ' (' + rows.count() + ')</td>')
+        //                    .attr('data-name', group)
+        //                    .toggleClass('collapsed', collapsed);
+        //            }
+        //        }
+        //    });
+        //});
+    </script>
+    @Html.Partial("_Notifications")
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-text"></i>
+            <span data-res="egov.resources.sitemap.reportmode">Chế độ báo cáo</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/Admin/ReportMode/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-md-16">
+            <div id="divForm" class="bkavegov">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã chế độ báo cáo</th>
+                        <th>Tên chế độ báo cáo</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model != null)
+                    {
+                        var i = 0;
+                        foreach (var report in Model)
+                        {
+                            <tr>
+                                <td><span class="text-dark">@(i+1)</span></td>
+                                <td><span class="text-dark">@report.Code</span></td>
+                                <td><span class="text-dark">@report.Name</span></td>
+                                <td>
+                                    <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right: 5px" href="@Url.Action("Edit", new { Id = report.ReportModeId})">Sửa</a>
+                                    <a class="text-right btn btn-danger btn-xs pull-left text-white" onclick="deleteReportMode('@report.ReportModeId')">Xóa</a>
+                                    <form id="formdelete@(report.ReportModeId)" style="display: none" action="@Url.Action("Delete", new {Id = report.ReportModeId})" method="POST">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

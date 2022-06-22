@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+    var stt = 1;
+}
+
+<style type="text/css">
+    #configEmbryonicForm table td {
+        font-size: 11px;
+        font-family: Tahoma;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $(".btn-copy").click(function (e) {
+            var target = $(e.target).closest(".btn-copy");
+            var copyTargetElement = target.parents("tr").find(".input-text");
+
+            copyTargetElement.select();
+            try {
+                var successful = document.execCommand('copy');
+            } catch (err) {
+                console.log('Oops, unable to copy');
+            }
+        });
+    })
+</script>
+
+<table class="table table-hover">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Stt</th>
+            <th>
+                Tên Trường dữ liệu
+            </th>
+            <th>
+                Mã nhúng mẫu phôi<br />
+                (Nhấn Copy và Paste vào file word)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Controls as IEnumerable<SelectListItem>)
+        {
+            <tr>
+                <td>@(stt++)</td>
+                <td>@item.Text</td>
+                <td>
+                    <input type="text" class="form-control input-text input-sm" style="width: 100%" value="@item.Value" />
+                </td>
+                <td>
+                    <input type="button" class="btn btn-primary btn-sm btn-copy" value="Copy" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

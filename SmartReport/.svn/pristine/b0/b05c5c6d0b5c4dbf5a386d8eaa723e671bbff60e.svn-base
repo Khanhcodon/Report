@@ -1,0 +1,313 @@
+﻿@*Tạo mới, sửa loại hồ sơ liên quan đến hồ sơ 1 cửa*@
+@model DocTypeFormModel
+@Html.HiddenFor(model => model.DocType.StoreIds)
+@Html.HiddenFor(model => model.DocType.DocTypeId)
+@{ var allDocFields = ViewBag.AllDocFields as IEnumerable<DocFieldModel>;
+                var allCategorys = ViewBag.AllCategorys as IEnumerable<CategoryModel>;
+                var allCodes = ViewBag.AllCodes as IEnumerable<CodeModel>;
+
+                var allStores = ViewBag.AllStores as IEnumerable<StoreModel>;
+                var storeIds = ViewBag.StoreIds as List<int>;
+                var strStoreIds = ""; }
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/combotree/comboTreePlugin.js")"></script>
+<link href="@Url.Content("~/Content/bkav.egov/libs/combotree/comboTreePlugin.css")" rel="stylesheet">
+<link href="@Url.Content("~/assets/vendor_components/MaterialDesign-Webfont-5.0.45/css/materialdesignicons.min.css")" rel="stylesheet">
+
+<style>
+    .comboTreeWrapper {
+        width: 80%;
+    }
+</style>
+
+<script type="text/javascript">
+    var docTypeComboTree;
+    $(document).ready(function () {
+        $("#productitem").change(function () {
+            var $url = '/Admin/DocTypeGov/GetManufacturer';
+            $("#OfficeId").empty();
+            $.ajax({
+                url: $url,
+                type: 'POST',
+                datatype: "json",
+                data: "Item=" + $("#productitem").val(),
+                success: function (offfices) {
+                    $.each(offfices, function (i, office) {
+                        $("#OfficeId").append('<option value="'
+                            + office.OfficeId + '">'
+                            + office.OfficeName + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+        $("form").submit(function () {
+            var strStoreIds = "";
+            $(".checkItemStore").each(function () {
+                if ($(this).is(':checked')) {
+                    strStoreIds = strStoreIds == "" ? strStoreIds + $(this).attr('id') : strStoreIds + ';' + $(this).attr('id');
+                }
+            });
+            $("#StoreIds").val(strStoreIds);
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        //$("#checkAllStore, .checkItemStore").click(function () {
+        //    var strStoreIds = "";
+        //    $(".checkItemStore").each(function () {
+        //        if ($(this).is(':checked')) {
+        //            strStoreIds = strStoreIds == "" ? strStoreIds + $(this).attr('id') : strStoreIds + ';' + $(this).attr('id');
+        //        }
+        //    });
+        //    $("#StoreIds").val(strStoreIds);
+        //});
+
+        $("input.checkItemStore").on('change', function () {
+            var $this = $(this);
+            var row = $this.closest('tr');
+            if ($this.prop('checked')) { // move to top
+                row.insertBefore(row.parent().find('tr:first-child'));
+            }
+            else { // move to bottom
+                row.insertAfter(row.parent().find('tr:last-child'));
+            }
+        });
+        $('input.checkItemDefault').on('change', function () {
+            var checked = $(this).closest('tr').find("input.checkItemStore").prop('checked');
+            if (checked) {
+                $('input.checkItemDefault').not(this).prop('checked', false);
+                var codeId = $(this).attr("id");
+                if (codeId) {
+                    $("#StoreIdDefault").val(codeId);
+                }
+            } else {
+                $(this).prop('checked', false);
+            }
+        });
+
+        $('#docTypeComboTree').on('change', function (e) {
+            if (docTypeComboTree) {
+                var selectedIds = docTypeComboTree.getSelectedIds();
+                if (selectedIds.length > 0) $('#DocType_ParentId').val(selectedIds[0]);
+                else $('#DocType_ParentId').val(null);
+            }
+        });
+
+        $.ajax({
+            url: '/webapi/doctypegov/getsall',
+            type: "GET",
+            success: function (res) {
+                res = res.filter(r => r.DocTypeId != '@Model.DocType.DocTypeId');
+                var parents = res.filter(r => !r.ParentId);
+                var data = parents.map(p => ({ id: p.DocTypeId, title: p.DocTypeName }));
+                addDocType(data, res);
+                docTypeComboTree = $('#docTypeComboTree').attr('disabled', false).comboTree({
+                    source: data,
+                    isMultiple: false
+                });
+
+                if ('@Model.DocType.ParentId' != '') {
+                    docTypeComboTree.setSelection(['@Model.DocType.ParentId']);
+                }
+            },
+            error: function (error) { }
+        });
+    });
+
+    function addDocType(array, data) {
+        array.forEach(item => {
+            var children = data.filter(d => d.ParentId === item.id);
+            if (children.length) {
+                item.subs = children.map(c => ({ id: c.DocTypeId, title: c.DocTypeName }));
+
+                addDocType(item.subs, data);
+            }
+        });
+    }
+</script>
+
+<table>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DocType.CategoryId):
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.CategoryId, new SelectList(allCategorys, "CategoryId", "CategoryName"))
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%">
+            <label>Kỳ báo cáo</label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.ActionLevel, (IEnumerable<SelectListItem>)ViewBag.ListActionLevel)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.LevelId):
+        </td>
+        <td>
+
+            @Html.DropDownListFor(model => model.DocType.LevelId, (IEnumerable<SelectListItem>)ViewBag.ListLevel, new { @id = "productitem", style = "width:200px" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.DocFieldId)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.DocType.DocFieldId, new SelectList(allDocFields, "DocFieldId", "DocFieldName"))
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DocType.DocTypeCode)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.DocTypeCode, new Dictionary<string, object>() { })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Tên báo cáo</label>
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DocType.DocTypeName, new Dictionary<string, object>() { })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DocType.Content)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.Content, new { @class = "form-control", id = "txtTextArea" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Tiêu đề báo cáo
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocType.CompendiumDefault)
+        </td>
+    </tr>
+
+    <tr class="hidden">
+        <td>
+            @Html.LabelRequireFor(model => model.DocType.DocTypePermission)
+        </td>
+        <td>
+            @(Html.CheckboxListForEnum("DoctypePermissions", Model.DocType.DocTypePermissionInEnum ?? 0))
+            @Html.ValidationMessageFor(model => model.DocType.DoctypePermissions)
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td></td>
+        <td>
+            @Html.CheckBox("IsAllowOnline", Model.DocType.IsAllowOnline.GetValueOrDefault())
+            @Html.LabelFor(model => model.DocType.IsAllowOnline)
+        </td>
+    </tr>
+    <tr>
+        <td>Loại báo cáo cha</td>
+        <td>
+            @Html.HiddenFor(model => model.DocType.ParentId)
+            <input id="docTypeComboTree" type="text" disabled />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @Html.CheckBoxFor(model => model.DocType.IsActivated)
+            @Html.LabelFor(model => model.DocType.IsActivated)
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td></td>
+        <td>
+            @Html.CheckBoxFor(model => model.DocType.HasOverdueInNode)
+            <label for="HasOverdueInNode">Không tính hạn giữ khi báo cáo, thống kê</label>
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.List")
+            <br />
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.Save.IsAllowed")
+        </td>
+        <td>
+            <input type="hidden" name="StoreIdDefault" id="StoreIdDefault" value="@Model.DocType.StoreIdDefault" />
+            <table class="table-main table" id="tblStore">
+                <colgroup>
+                    <col />
+                    <col style="width:80px" />
+                    <col style="width: 100px" />
+                    <col style="width: 80px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header-unresize">
+                            @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.StoreName")
+                        </th>
+                        <th class="text-center">
+                            Mặc định
+                        </th>
+                        <th class="header-unresize text-center">
+                            <input type="checkbox" id="checkAllStore" @(allStores != null && allStores.Any() && storeIds != null && storeIds.Any() && allStores.Count() == storeIds.Count ? "checked='checked'" : "") />
+                            Kích hoạt
+                        </th>
+                        <th class="header-unresize">Xem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (allStores != null && allStores.Any())
+                    {
+                        foreach (var store in allStores)
+                        {
+        <tr>
+            <td>
+                @store.StoreName
+            </td>
+            <td align="center">
+                @{ if (storeIds != null && storeIds.Any())
+                                        {
+                                            if (@store.IsDefault)
+                                            {
+                    <input type="checkbox" data-id="@store.StoreId" name="IsDefault" checked="checked" class="checkItemDefault" /> }
+                                            else
+                                            {
+                    <input type="checkbox" data-id="@store.StoreId" name="IsDefault" class="checkItemDefault" /> }
+                                        }
+                                        else
+                                        {
+                    <input type="checkbox" data-id="@store.StoreId" name="IsDefault" class="checkItemDefault" /> } }
+            </td>
+
+            <td align="center">
+                @{ if (storeIds != null && storeIds.Any())
+                                        {
+                    <input type="checkbox" data-id="@store.StoreId" @(storeIds.Contains(store.StoreId) ? "checked='checked'" : "") class="checkItemStore" /> }
+                                        else
+                                        {
+                    <input type="checkbox" data-id="@store.StoreId" class="checkItemStore" /> } }
+            </td>
+
+            <td>
+                <a href="/admin/Store/Edit/@store.StoreId">Xem</a>
+            </td>
+        </tr> }
+                    }
+                    else
+                    {
+        <tr>
+            <td colspan="2">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Doctype.Store.List.Null")
+            </td>
+        </tr>}
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>

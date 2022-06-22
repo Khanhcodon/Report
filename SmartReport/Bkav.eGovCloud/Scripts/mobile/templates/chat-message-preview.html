@@ -1,0 +1,33 @@
+﻿
+<div class="preview-container">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <div class="mdl-layout__header mdl-layout__header--seamed" style="display: block;">
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktochat" role="button" tabindex="0" class="backtoList">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <div class="chat-header">
+                    ${fullname}
+                </div>
+                <div class="mdl-layout-spacer"></div>
+                <div>
+                    <a id="download" class="mdl-button mdl-js-button mdl-button--icon" href="#">
+                        <i class="material-icons">save_alt</i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="mdl-layout__content">
+            <div class="image-list">
+                <div style="display: flex; height: 100%; width: ${contentW}px; align-items: center;">
+                    {{each images}}
+                    <div style="width: ${imageW}px; min-height: 50px; text-align: center;" id="${id}" class="image-list-item">
+                        <span class="material-icons image-loading" style="font-size: 48px;color: #333333;">image_search</span>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

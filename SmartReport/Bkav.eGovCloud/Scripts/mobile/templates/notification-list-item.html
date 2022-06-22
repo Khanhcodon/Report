@@ -1,0 +1,15 @@
+﻿
+<li class="mdl-list__item mdl-list__item--three-line notify-item {{if IsReaded == false}} isnew {{/if}}" data-id="${NotificationId}" app="${AppName}">
+    <span class="mdl-list__item-primary-content">
+        <img class="mdl-list__item-avatar user-avatar" src="${Avatar}" alt="" />
+        <i class="material-icons iconapp-name" app="${AppName}">{{if AppName == "documents"}}folder{{else AppName == "bmail"}}email{{else}}chat_bubble{{/if}}</i>
+        <span>${Title}</span>
+        <span class="mdl-list__item-text-body">
+            {{html Body}}
+            <br /><span class="notify-date">${DateCreateStr}</span>
+        </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+        <a class="mdl-list__item-secondary-action close-notify" href="#"><i class="material-icons">clear</i></a>
+    </span>
+</li>

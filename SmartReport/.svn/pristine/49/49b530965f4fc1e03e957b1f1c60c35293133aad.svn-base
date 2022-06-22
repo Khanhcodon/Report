@@ -1,0 +1,373 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Entities.Customer.SqlTemplate>
+    @{
+        ViewBag.Title = "Sql Template";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <!-- Left side column. contains the logo and sidebar -->
+    @*<aside class="main-sidebar">
+            <!-- sidebar -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="ulogo">
+                        <a href="/home/index">
+                            <!-- logo for regular state and mobile devices -->
+                            <span class="text-white"><b>Bkav BI </b>Admin</span>
+                        </a>
+                    </div>
+                    <div class="image">
+                        <img src="~/AvatarProfile/TienBV.bmp" class="rounded-circle" alt="User Image" />
+                    </div>
+                    <div class="info text-white">
+                        <p>Quản trị hệ thống</p>
+                        <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Settings"><i class="ion ion-gear-b"></i></a>
+                        <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Email"><i class="ion ion-android-mail"></i></a>
+                        <a href="#" class="link text-white" data-toggle="tooltip" title="" data-original-title="Logout"><i class="ion ion-power"></i></a>
+                    </div>
+                </div>
+
+                <!-- sidebar menu -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i>
+                            <span>Dashboard</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>Charts</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="treeview active">
+                        <a href="/datasource/index">
+                            <i class="fa fa-th"></i>
+                            <span>Datasource</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <div class="sidebar-background" style="background-image: url(/Content/bkav.bi/images/bg_08.jpg);"></div>
+        </aside>*@
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <style>
+        .breadcrumb {
+            float: right;
+            background-color: #ffffff;
+        }
+
+            .breadcrumb li a {
+                color: #212529;
+            }
+
+            .breadcrumb li:hover {
+                font-weight: bold;
+            }
+
+        .box-header {
+            margin-bottom: 5px;
+            clear: both;
+            width: 100%;
+            height: 25px;
+        }
+
+        .box-title {
+            float: left;
+        }
+
+        .btn-create {
+            width: 90px;
+        }
+
+        .modal-body .form-group {
+            margin-bottom: 0;
+        }
+
+        .name-template, .query-tmplate, .query-tmplate-ex {
+            float: left;
+            width: 100%;
+            font-size: 15px;
+            color: #f5504e;
+            clear: both;
+            top: unset;
+            right: unset;
+            text-align: left;
+            line-height: unset;
+            height: 20px !important;
+            position: relative;
+        }
+    </style>
+    <section class="section-header">
+        <div class="title">
+            <small>Data Source</small>
+        </div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">SQL Template</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <div class="box-title">
+                    Quản lý Template
+                </div>
+                <a class="btn btn-primary pull-right btn-create" onclick="InitCreateSqlTemplateForm(@ViewBag.DataSourceId)">Thêm mới</a>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <colgroup>
+                            <col style="width: 50px" />
+                            <col />
+                            <col />
+                            <col style="width: 150px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên template</th>
+                                <th>Câu truy vấn</th>
+                                <th class="text-right">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int index = 1;
+                            }
+
+                            @foreach (var template in Model)
+                            {
+                                <tr>
+                                    <td><span class="text-dark">@index</span></td>
+                                    <td><span class="text-dark">@template.Name</span></td>
+                                    <td><span class="text-dark">@template.QueryString</span></td>
+                                    <td>
+                                        <a class="text-right btn btn-warning btn-xs pull-left text-white" style="margin-right:5px" onclick="InitEditSqlTemplateForm('@template.TemplateId')">Sửa</a>
+                                        <a class="text-right btn btn-danger btn-xs pull-left text-white" onclick="ConfirmDeleteSqlTemplate('@template.TemplateId')">Xóa</a>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div id="modalSqlTemplate" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="h4Title" id="titleModal">Thêm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal create-template-form">
+                        <div class="form-group">
+                            <h5>Tên template <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="text" name="template-name" class="form-control template-name" required="" data-validation-required-message="Chưa nhập tên template" aria-invalid="false">
+                            </div>
+                            <div class="form-control-feedback hidden name-template"><small>Bạn chưa nhập tên template.</small></div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Câu truy vấn <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <textarea rows="10" cols="60" class="form-control template-query" name="template-query" required>                                    
+                                 </textarea>
+                            </div>
+                            <div class="form-control-feedback hidden query-tmplate"><small>Bạn chưa nhập câu truy vấn.</small></div>
+                            <div class="form-control-feedback hidden query-tmplate-ex"><small></small></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="CreateSqlTemplate()" class="btn btn-primary waves-effect text-left" id="btn-create">Ghi lại</button>
+                    <button type="button" onclick="UpdateSqlTemplate()" class="btn btn-primary waves-effect text-left" id="btn-update">Ghi lại</button>
+                    <button type="button" class="btn btn-default waves-effect text-left" data-dismiss="modal" id="">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirmDelete" class="modal fade" role="dialog" onscroll="scroll" data-backdrop="static" style="background-color: rgba(0,0,0,0.3)">
+        <div class="modal-dialog" style="width:500px">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="h4Title">Cảnh báo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label id="confirmMessage"></label>
+                                <input type="hidden" id="deletedValue" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:none">
+                        <button type="button" onclick="DeleteSqlTemplate()" class="btn btn-primary" id="btn-delete">Đồng ý</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var sqlTemplateModel = {
+            TemplateId: null,
+            DataSourceId: null,
+            Name: '',
+            QueryString: ''
+        };
+
+        function InitCreateSqlTemplateForm(id) {
+            sqlTemplateModel.DataSourceId = id;
+            ClearSqlTemplateForm();
+            $('#titleModal').html('Thêm mới Template');
+            document.getElementById('btn-update').style.display = 'none';
+            document.getElementById('btn-create').style.display = 'inline-block';
+            $('#modalSqlTemplate').modal({
+                show: true
+            });
+        }
+
+        function CreateSqlTemplate() {
+            $(".create-template-form .form-control-feedback").addClass('hidden');
+            $('#modalSqlTemplate').modal('show');
+            sqlTemplateModel.Name = $(".create-template-form .template-name").val();
+            sqlTemplateModel.QueryString = $(".create-template-form .template-query").val();
+            if (sqlTemplateModel.Name === '') {
+                $(".create-template-form .form-control-feedback").removeClass('hidden');
+                return;
+            }
+
+            $.ajax({
+                url: '/datasource/createSqlTemplate',
+                data: JSON.stringify(sqlTemplateModel),
+                type: 'post',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    $(".create-template-form .form-control-feedback").addClass('hidden');
+                    if (response.success) {
+                        window.location.reload();
+                        $('#modalSqlTemplate').modal('hide');
+                    }
+                    else if (response.message) {
+                        $(".create-template-form .query-tmplate-ex").removeClass('hidden');
+                        $(".query-tmplate-ex small").html("Lỗi: "+response.message);
+                    }
+
+                    // alert(response.message);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        function InitEditSqlTemplateForm(id) {
+            ClearSqlTemplateForm();
+            sqlTemplateModel.TemplateId = id;
+            $.ajax({
+                url: '/datasource/GetSqlTemplate?id=' + id,
+                cache: false,
+                type: 'post',
+                success: function (data) {
+                    if (data) {
+                        document.getElementById('btn-update').style.display = 'inline-block';
+                        document.getElementById('btn-create').style.display = 'none';
+
+                        $('.template-name').val(data.result.Name);
+                        $('.template-query').val(data.result.QueryString);
+                        $('#titleModal').html('Chỉnh sửa Template');
+                        $('#modalSqlTemplate').modal({
+                            show: true
+                        });
+                    }
+                },
+            });
+
+        }
+
+        function UpdateSqlTemplate() {
+            sqlTemplateModel.Name = $(".create-template-form .template-name").val();
+            sqlTemplateModel.QueryString = $(".create-template-form .template-query").val();
+            if (sqlTemplateModel.Name === '') {
+                $(".create-template-form .form-control-feedback").removeClass('hidden');
+                return;
+            }
+
+            $.ajax({
+                url: '/datasource/updateSqlTemplate',
+                data: JSON.stringify(sqlTemplateModel),
+                type: 'post',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        window.location.reload();
+                        $('#modalSqlTemplate').modal('hide');
+                    }
+                    else if (response.message)
+                        alert(response.message);
+                }
+            });
+        }
+
+        function ClearSqlTemplateForm() {
+            sqlTemplateModel.TemplateId = null;
+            $('.template-name').val('');
+            $('.template-query').val('');
+        }
+
+        function ConfirmDeleteSqlTemplate(id) {
+            $('#deletedValue').val(id);
+            $('#confirmMessage').html('Bạn có chắc muốn xóa Template này?');
+            $('#btn-delete').unbind();
+            $('#btn-delete').click(function () {
+                DeleteSqlTemplate();
+            });
+            $('#confirmDelete').modal({
+                show: true
+            });
+        }
+        function DeleteSqlTemplate() {
+            var id = $('#deletedValue').val();
+            $.ajax({
+                url: '/datasource/DeleteSqlTemplate?id = ' + id,
+                type: "POST",
+                data: { Id: id },
+                success: function (data) {
+                    if (data.ok === true) {
+                        $('#confirmDelete').modal('hide');
+                        window.location.reload();
+                    }
+                },
+            });
+        }
+    </script>

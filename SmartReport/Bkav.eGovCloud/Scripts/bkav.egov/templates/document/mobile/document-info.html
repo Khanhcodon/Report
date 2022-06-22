@@ -1,0 +1,110 @@
+﻿<div class="document mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="mdl-layout__header mdl-layout__header--seamed mail-header" style="display: block;">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <span class="mdl-layout-title doctypeName">
+            </span>
+            <ul class="nav nav-pills toolbar icon-head-mobile">
+                <li class="dropdown-mobi laylaivanban-mobile" style="display: none">
+                    <a class="dropdown-toggle-mobi btnLaylaivanban" data-toggle="dropdown" href="#">
+                        <span class="icon-undo"></span>
+                    </a>
+                </li>
+
+                <li class="dropdown-mobi ketthuc-mobile" style="display: none">
+                    <a class="dropdown-toggle-mobi btnFinishMobile" data-toggle="dropdown" href="#">
+                        <span class="icon-checkmark"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mdl-layout__content document-content">
+        <div class="page-content">
+            <div class="document-form">
+                <div class="document-info" data-id="">
+                    <div class="document-info-template">
+                        <div>
+                            <div class="form-group">
+                                <span class="compendium">${Compendium}</span>
+                            </div>
+                            {{if CategoryBusinessId == 1}}
+                            <div id="wrapOrganization" class="form-group">
+                                <label class="">CQBH</label>
+                                <div class="form-value">
+                                    <span>${Organization}</span>
+                                </div>
+                            </div>
+                            <div id="wrapInOutCode" class="form-group">
+                                <label data-res="egov.resources.document.InOutCode"></label>
+                                <div class="form-value">
+                                    <span>${InOutCode}</span>
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{if DocCode}}
+                            <div id="wrapDocCode" class="form-group">
+                                <label>Số ký hiệu</label>
+                                <div class="form-value">
+                                    <span>${DocCode}</span>
+                                </div>
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="document-attachment-mobile" style="display: none;">
+                        <div>
+                            <div id="wrapAttachment">
+                                <ul class="mdl-list attachment-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wrapComments">
+                        <ul class="comment-list mdl-list" id="coCommentList"></ul>
+                        <ul class="comment-list mdl-list" id="commentList"></ul>
+                    </div>
+
+                    <div id="divContent" class="document-contents"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fix-position-chat">
+    <div class="document-transfer active" style="display: none">
+        <div class="">
+            <img class="avatar" src="{{html window.currentUserAvatar}}" alt="avatar" onerror="this.src = '../AvatarProfile/noavatar.jpg'">
+            <span class="user-name">{{html window.currentFullName}}</span>
+            <a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">camera_alt</i>
+                <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+            </a>
+            <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">attachment</i>
+                <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+            </a>
+            <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}">
+                <i class="material-icons">add</i>
+            </a>
+            <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect" for="insertComment${DocumentCopyId}" id="commonCommentList"></ul>
+            <div class="user-comment">
+                <textarea id="Comment" name="Comment" rows="1" cols="20" placeholder="Nhập ý kiến xử lý..."></textarea>
+                <button id="btnTransfer${DocumentCopyId}" class="mdl-button mdl-js-button mdl-button--icon btn-transfer" href="#">
+                    <i class="material-icons" style="color: #008299">send</i>
+                </button>
+                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect transferActions" for="btnTransfer${DocumentCopyId}"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="commentExtend" style="display:none;">
+    <ul class="mdl-list comment-list" id="commentListCopy"></ul>
+</div>

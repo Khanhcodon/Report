@@ -1,0 +1,571 @@
+﻿@{
+    ViewBag.IconList = "";
+    ViewBag.Criteria = "active";
+    ViewBag.Check = "";
+    ViewBag.Title = "Quản lý tiêu chí";
+
+    Layout = "_LayoutEvaluationCriteria.cshtml";
+}
+@section script{
+    <script src="../Scripts/bkav.egov/rateemployee/bkav.egov.model.js"></script>
+    <script src="../Scripts/bkav.egov/rateemployee/bkav.egov.view.js"></script>
+    <style>
+        #searchbydepartment :hover {
+            border-color: red;
+        }
+    </style>
+}
+@section script_relate{
+    @if (@ViewBag.IsAdmin == true)
+    {
+        <script id="RateTemplate" type="text/x-jQuery-tmpl">
+            {{if ParentId == null|| ParentId==0}}
+            <td class="parentstt text-center"></td>
+            <td style="text-align:left" data-toggle="tooltip" title="${Name}">
+                <input type="hidden" name="RateEmployeeId" value="${RateEmployeeId}" />
+                <a href="#" class="icon-arrow-down7 togglerow"> </a>
+                <span class="criteria-parent">-${Name} </span>
+            </td>
+
+            {{else}}
+            <td></td>
+            <td style="text-align:left" data-toggle="tooltip" title="${Name}">
+                <span class="childrow">-${Name} </span>
+                <input type="hidden" name="RateEmployeeId" value="${RateEmployeeId}" />
+            </td>
+            {{/if}}
+
+            <td style="text-align:left" class="departmentid" data-toggle="tooltip" title="${DepartmentName}">${DepartmentName}</td>
+            <td data-toggle="tooltip" title="${Point}" class="text-center">${Point}</td>
+            <td class="text-center">
+                <input type="hidden" name="name" value="${Description}" />
+                <a href="#" class="detail">
+                    <span style="color:blue">Xem</span>
+                </a>
+            </td>
+            <td class="text-right">
+                <input type="hidden" name="ParentId" value="${ParentId}" />
+                {{if ParentId == null|| ParentId==0}}
+                <a href="#" style="color:green; padding-right:5px" class="icon-plus addcriteria" data-toggle="tooltip" title="Thêm mới"></a>
+                {{else}}
+
+                {{/if}}
+                <a href="#" style="color:orange; padding-right:5px" class=" icon-pencil2 editcriteria" data-toggle="tooltip" title="Sửa"></a>
+                <a href="#" style="color: red; padding-right: 25px" class="icon-remove2 deletecriteria" data-toggle="tooltip" title="Xóa"></a>
+            </td>
+
+        </script>
+    }
+    else
+    {
+        <script id="RateTemplate" type="text/x-jQuery-tmpl">
+            {{if ParentId == null|| ParentId==0}}
+            <td class="parentstt text-center"></td>
+            <td style="text-align:left" data-toggle="tooltip" title="${Name}">
+                <input type="hidden" name="RateEmployeeId" value="${RateEmployeeId}" />
+                <a href="#" class="icon-arrow-down7 togglerow"> </a>
+                <span class="criteria-parent">-${Name} </span>
+            </td>
+
+            {{else}}
+            <td></td>
+            <td style="text-align:left" data-toggle="tooltip" title="${Name}">
+                <span class="childrow">-${Name} </span>
+                <input type="hidden" name="RateEmployeeId" value="${RateEmployeeId}" />
+            </td>
+
+            {{/if}}
+
+            <td style="text-align:left" class="departmentid" data-toggle="tooltip" title="${DepartmentName}">${DepartmentName}</td>
+            <td data-toggle="tooltip" title="${Point}" class="text-center">${Point}</td>
+            <td class="text-center">
+                <input type="hidden" name="ParentId" value="${ParentId}" />
+                <input type="hidden" name="name" value="${Description}" />
+                <a href="#" class="detail">
+                    <span class="" style="color:blue">Xem</span>
+                </a>
+            </td>
+        </script>
+    }
+
+
+
+    <script id="InfoParentRateTemplate" type="text/x-jQuery-tmpl">
+        <select class="input-large form-control selectparent">
+            <option value="0">-- Không có --</option>
+            {{each data}}
+            {{if ParentId == null}}
+            <option value="${RateEmployeeId}">${Name}</option>
+            {{/if}}
+            {{/each}}
+        </select>
+    </script>
+
+    <script type="text/javascript">
+        function departmentpath(departmentidfunc, departs) {
+            var result = _.where(departs, { DepartmentId: departmentidfunc });
+            return result;
+        }
+        function autostt() {
+            $('.parentstt').each(function (index) {
+                $(this).text(index + 1)
+            })
+        }
+
+        var department;
+        var listcriterias = new ListRateEmployee();
+        var AppView = Backbone.View.extend({
+            el: $("#bodycriteria"),
+            events: {
+                'click .savechangecriteria': 'save',
+                'click .clickmodal': 'createmodal',
+                'click #searchbydepartment': 'searchbydepart',
+                'click #searchbydepartmentmodal': 'searchbydepartmodal'
+            },
+            initialize: function () {
+                this.listenTo(listcriterias, 'add', this.addOneCriteria);
+            },
+            addOneCriteria: function (criteria) {
+                var view = new CriteriaView({ model: criteria });
+                this.$("#tbody_rateemployee").append(view.render().el);
+            },
+            save: function () { // lưu hoặc sửa khi thêm mới hoặc sửa các tiêu chí
+                var name = $("#namecriteria").find("textarea").val();
+                var point = $("#pointcriteria").find("input").val();
+                if (name != "" && point != "") {
+                    $('.selectparent').show();
+                    var objcrit = listcriterias.where({ RateEmployeeId: Number($("#namecriteria").find("input[name=RateEmployeeId]").val()) });
+                    var id = $("#namecriteria").find("input[name=RateEmployeeId]").val();
+                    var criteria = new RateEmployee();
+                    var parentid = $("#setparentrate").find(':selected').val();
+                    // var departmentid = $("#choosedepartment>#selectdepartmentrate").find(':selected').val();
+                    console.log(departmentid)
+                    var desc = $("#descriptioncriteria").find("textarea").val();
+                    if (objcrit.length == 0) {
+                        var criteria = new RateEmployee();
+                        console.log(JSON.stringify(criteria))
+                        criteria.set({ "Name": name, "Point": point, "DepartmentId": departmentid.id, "ParentId": parentid, "Description": desc })
+                        if (criteria.get("DepartmentId") != null) {
+                            CreateCriteria(JSON.stringify(criteria), function (data) {
+                                listcriterias.reset();
+                                GetCriterias(function (data) {
+                                    getDataCriteria(data);
+                                    autostt();
+                                });
+                            });
+                        }
+                    } else {
+                        objcrit[0].set({ "RateEmployeeId": id, "Name": name, "Point": point, "DepartmentId": departmentid.id, "ParentId": parentid, "Description": desc })
+                        CreateCriteria(JSON.stringify(objcrit[0]), function (data) {
+                        });
+                    }
+                    $("#RateEmployeeModal").modal("hide");
+                } else {
+
+                }
+            },
+            createmodal: function () {//Sự kiện khi thêm mới các tiêu chí con
+                clearModal();
+                $(".modal-title > b").text("Thêm mới tiêu chí")
+                $("#namecriteria").find("input[name=RateEmployeeId]").val("")
+                //$("#namecriteria").find("input").prop("autofocus", true);
+                $('.selectparent').prop('disabled', false);
+
+                $("#choosedepartment").find("#selectdepartmentrate").prop('disabled', false);
+                $('.selectparent').find('option[value=0]').prop("selected", true);
+                $("#RateEmployeeModal").modal("show");
+                $(".modal-backdrop.fade.in").removeClass("modal-backdrop")
+
+            },
+            searchbydepart: function () {
+                if ($('#searchbydepartment').parent().parent().hasClass('open')) {
+                    $('#searchbydepartment').parent().parent().removeClass('open')
+                } else {
+                    $('#searchbydepartment').parent().parent().addClass('open')
+                }
+            },
+            searchbydepartmodal: function () {
+                if ($('#searchbydepartmentmodal').parent().parent().hasClass('open')) {
+                    $('#searchbydepartmentmodal').parent().parent().removeClass('open')
+                } else {
+                    $('#searchbydepartmentmodal').parent().parent().addClass('open')
+                }
+            }
+        });
+        // Sự kiện khi click để show modal sẽ focus vào ô tên tiêu chí
+        $('#RateEmployeeModal').on('shown.bs.modal', function () {
+            $("#namecriteria").find("textarea").focus();
+        })
+        // sự kiên click vào vùng ngoài thì sẽ tắt cây phòng ban đi
+        $(document).click(function (event) {
+            if ($('#searchbydepartment').parent().parent().hasClass('open')) {
+                if (!$(event.target).closest('.btndepartment').length && !$(event.target).is('.btndepartment')) {
+                    $('#searchbydepartment').parent().parent().removeClass('open');
+                }
+            }
+
+            if ($('#searchbydepartmentmodal').parent().parent().hasClass('open')) {
+                if (!$(event.target).closest('.btndepartmentmodal').length && !$(event.target).is('.btndepartmentmodal')) {
+                    $('#searchbydepartmentmodal').parent().parent().removeClass('open');
+
+                }
+            }
+            if ($('#doctypechoose').parent().parent().hasClass('open')) {
+                if (!$(event.target).closest('.btnchoosedoctype').length && !$(event.target).is('.btnchoosedoctype')) {
+                    $('#doctypechoose').parent().parent().removeClass('open');
+                }
+            }
+        })
+
+        // Finally, we kick things off by creating the **App**.
+        var App = new AppView;
+        // Khi thay đổi chọn giá trị tìm kiếm
+        $('#choosedepartmentload').on("changed.jstree", function (e, data) {
+            console.log(e);
+            console.log(data)
+            var iddepart = Number(data.selected);
+            $('#choosedepartmentloadmodal').jstree("deselect_all");
+            $('#choosedepartmentloadmodal').jstree("select_node", iddepart);
+            var idext = _.where(department, { DepartmentId: iddepart });
+            if (data.selected != 1) {
+                $('#inputsearchdepartment').val(idext[0].DepartmentName);
+                $('#searchbydepartment').parent().parent().removeClass('open')
+                GetCriterias(function (data) {
+                    var iddepartext = idext[0].DepartmentIDExt.split('.');
+                    var dulieu = [];
+                    var criterias = { data: data };
+                    for (var i = 0; i < criterias.data.length; i++) {
+                        for (var j = 0; j < iddepartext.length; j++) {
+                            if (criterias.data[i].DepartmentId == iddepartext[j]) {
+                                dulieu.push(criterias.data[i])
+                            }
+                        }
+                    }
+                    getDataCriteria(dulieu);
+                });
+            } else {
+                GetCriterias(function (data) {
+                    getDataCriteria(data);
+                    $('#inputsearchdepartment').val(idext[0].DepartmentName);
+                    $('#searchbydepartment').parent().parent().removeClass('open');
+                });
+            }
+        });
+        // khi thay dổi chọn giá trị phòng ban trong khi thêm mới tiêu chí
+        $('#choosedepartmentloadmodal').on("changed.jstree", function (e, data) {
+            if (data.selected != 0) {
+                var iddepart = Number(data.selected);
+                departmentid = { "id": Number(data.selected), "name": data.node.text };
+                $('#searchbydepartmentmodal').parent().parent().removeClass('open');
+
+                $('#departmentmodalname').val(departmentpath(Number(data.selected), department)[0].DepartmentPath);
+            }
+        });
+        $(document).ready(function () {
+            $("#RateEmployeeModal").draggable({
+                handle: ".modal-header"
+            });
+
+            GetCriterias(function (data) {
+                getDataCriteria(data);
+                autostt();
+                GetDepartments(function (data) {
+                    department = data;
+                    var departmentdatatree = [];// Biến dung để lưu đối tượng các phòng ban có trong cây tìm kiếm sau khi được lọc lấy các phòng ban có trong các tiêu chí
+
+                    var departmentlist = { datadepartment: data };
+                    var names = _.uniq(listcriterias.pluck('DepartmentIdExt'));//tim những giá trị DepartmentidExt khác nhau trong listcriterias
+                    console.log(names)
+                    var pbantmp = [];// lấy ra các giá trị phòng ban và các phòng ban bao hàm nó
+                    var tempdepart = [];
+                    for (var i = 0; i < names.length; i++) {
+                        tempdepart = names[i].split(".");
+                        for (var j = 0; j < tempdepart.length; j++) {
+                            pbantmp.push(tempdepart[j]);
+                        }
+                    }
+                    var maphongban = _.uniq(pbantmp);
+                    var departs = [];// biến để lưu lại cây phòng ban đầy đủ dùng cho chọn phòng ban để thêm tiêu chí
+                    var departslist;
+                    // console.log(maphongban)
+                    // tìm các phòng ban có danh sách tiêu chí bao gồm chính nó và bao hàm nó
+                    for (var j = 0; j < maphongban.length; j++) {
+                        for (var i = 0; i < departmentlist.datadepartment.length; i++) {
+                            if (maphongban[j] == departmentlist.datadepartment[i].DepartmentId) {
+
+                                if (departmentlist.datadepartment[i].ParentId == null) {
+                                    departmentlist.datadepartment[i].ParentId = "#"
+                                }
+                                departmentdatatree.push({
+                                    'id': departmentlist.datadepartment[i].DepartmentId,
+                                    'parent': departmentlist.datadepartment[i].ParentId,
+                                    'text': departmentlist.datadepartment[i].DepartmentName
+                                });
+                            }
+                        }
+                    }
+                    var departauto = [] // biến để lưu lại các phòng ban dùng cho sự kiên autocomplete
+                    for (var i = 0; i < departmentlist.datadepartment.length; i++) {// lấy ra các phòng ban để tạo lên cây phòng ban đầy đủ
+                        if (departmentlist.datadepartment[i].ParentId == "#" || departmentlist.datadepartment[i].ParentId == null) {
+                            departmentlist.datadepartment[i].ParentId = "#";
+                            departmentid = { 'id': departmentlist.datadepartment[i].DepartmentId, 'name': departmentlist.datadepartment[i].DepartmentName };// gán giá trị mặc định cho root
+                            departmentiddefault = departmentid;
+                        }
+                        departs.push({
+                            'id': departmentlist.datadepartment[i].DepartmentId,
+                            'parent': departmentlist.datadepartment[i].ParentId,
+                            'text': departmentlist.datadepartment[i].DepartmentName
+                        });
+                        departauto.push({
+                            value: departmentlist.datadepartment[i].DepartmentName.toLowerCase(),
+                            label: departmentlist.datadepartment[i].DepartmentName,
+                            text: departmentlist.datadepartment[i].DepartmentName,
+                            id: departmentlist.datadepartment[i].DepartmentId,
+
+                        })
+                    }
+                    var departmenttree = { 'core': { 'data': departmentdatatree } };
+                    // console.log(departmentdatatree)
+                    $('#choosedepartmentload').jstree(departmenttree).bind("loaded.jstree", function (event, data) {
+                        // you get two params - event & data - check the core docs for a detailed description
+                        $(this).jstree("open_all");
+                    });
+
+                    departslist = { 'core': { 'data': departs } }
+                    console.log(departslist)
+                    //var htmldepartment = $('#InfoDepartmentRateTemplate').tmpl(departslist);
+                    //$('#choosedepartmentload').append(htmldepartment);
+                    //var htmldepartmentload = $('#InfoDepartmentRateTemplate').tmpl(departmentlist);
+                    $("#choosedepartmentloadmodal").jstree(departslist);
+                    console.log(departmentid)
+                    //lấy tên phòng ban root làm mặc định
+                    $('#departmentmodalname').val(departmentpath(Number(departmentid.id), department)[0].DepartmentPath);
+
+                    // Sự kiên gợi ý tên các phòng ban
+                    $("#departmentmodalname").autocomplete({
+                        minLength: 0,
+                        source: departauto,
+                        focus: function (event, ui) {
+                            $("#departmentmodalname").val(departmentpath(Number(ui.item.id), department)[0].DepartmentPath);
+                            // console.log(ui.item)
+                            return false;
+                        },
+                        select: function (event, ui) {
+                            departmentid = { "id": ui.item.id, "name": ui.item.text };
+                        }
+                    })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                          .append("<a>" + item.text + "</a>")
+                          .appendTo(ul);
+                    }
+                    // Sự kiên gợi ý tên các phòng ban timf kiemes
+                    $("#inputsearchdepartment").autocomplete({
+                        minLength: 0,
+                        source: departauto,
+                        focus: function (event, ui) {
+                            $("#inputsearchdepartment").val(departmentpath(Number(ui.item.id), department)[0].DepartmentPath);
+                            // console.log(ui.item)
+                            return false;
+                        },
+                        select: function (event, ui) {
+                            var iddepart = Number(ui.item.id);
+                            $('#choosedepartmentloadmodal').jstree("deselect_all");
+                            $('#choosedepartmentloadmodal').jstree("select_node", iddepart);
+                            var idext = _.where(department, { DepartmentId: iddepart });
+                            if (data.selected != 1) {
+                                $('#inputsearchdepartment').val(idext[0].DepartmentName);
+                                $('#searchbydepartment').parent().parent().removeClass('open')
+                                GetCriterias(function (data) {
+                                    var iddepartext = idext[0].DepartmentIDExt.split('.');
+                                    var dulieu = [];
+                                    var criterias = { data: data };
+                                    for (var i = 0; i < criterias.data.length; i++) {
+                                        for (var j = 0; j < iddepartext.length; j++) {
+                                            if (criterias.data[i].DepartmentId == iddepartext[j]) {
+                                                dulieu.push(criterias.data[i])
+                                            }
+                                        }
+                                    }
+                                    getDataCriteria(dulieu);
+                                });
+                            } else {
+                                GetCriterias(function (data) {
+                                    getDataCriteria(data);
+                                    $('#inputsearchdepartment').val(idext[0].DepartmentName);
+                                    $('#searchbydepartment').parent().parent().removeClass('open');
+                                });
+                            }
+                        }
+                    })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                          .append("<a>" + item.text + "</a>")
+                          .appendTo(ul);
+                    }
+                    
+                });
+            });
+        });
+        // Sự kiên validate khi focus
+        $("#RateEmployeeModal").on("focus", "input, textarea", function () {
+            var name = $("#namecriteria").find("textarea").val();
+            var point = $("#pointcriteria").find("input").val();
+            if (name == "") {
+                $("#namecriteria").find("textarea").addClass("error-focus");
+            } else {
+                $("#namecriteria").find("textarea").removeClass("error-focus");
+            }
+            if (point == "") {
+                $("#pointcriteria").find("input").addClass("error-focus");
+            } else {
+                $("#pointcriteria").find("input").removeClass("error-focus");
+            }
+        })
+    </script>
+}
+<div class="col-sm-16">
+
+
+    <div class="row" style="padding-top:6px">
+        <div class=" col-sm-12" id="">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="btndepartment" style="">Chọn Phòng Ban</label>
+                    <div class="btn-group btndepartment" role="group">
+                        <div class="input-group">
+                            <input type="text" name="name" value="" class="form-control" id="inputsearchdepartment" aria-describedby="searchbydepartment" style="width:337px" />
+                            <span class="input-group-addon " id="searchbydepartment">
+                                <i class=" icon-arrow-down7"></i>
+                            </span>
+                        </div>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" id="choosedepartmentload"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <b style="padding-bottom:10px;">Các tiêu chí đánh giá</b>
+                </div>
+                <div class="col-sm-8" style="">
+                    @if (@ViewBag.IsAdmin == true)
+                    { <div class="">
+                        <button type="button" class="btn btn-success pull-right clickmodal">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Thêm mới
+                        </button>
+                    </div>}
+
+                    <div id="RateEmployeeModal" class="modal modal-wide fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" style="color:blue;">
+                                        <b>
+                                            Thêm mới tiêu chí
+                                        </b>
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <label class="control-label col-sm-4" for="email">Tiêu chí cha:</label>
+                                            <div class="col-sm-10" id="setparentrate">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <label class="control-label col-sm-4" for="namecriteria">Tên Tiêu chí(<span style="color:red">*</span>):</label>
+                                            <div class="col-sm-10" id="namecriteria">
+                                                <input type="hidden" name="RateEmployeeId" value="${RateEmployeeId}" />
+                                                <textarea style="width:100%"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <label class="control-label col-sm-4" for="pointcriteria">Điểm(<span style="color:red">*</span>):</label>
+                                            <div class="col-sm-10" id="pointcriteria" style="text-align:left">
+                                                <input type="number" name="name" value="" placeholder="Điểm tiêu chí" class="input-large form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <label class="control-label col-sm-4" for="choosedepartment">Chọn Phòng Ban:</label>
+                                            <div class="col-sm-10" style="text-align:left" id="choosedepartment">
+                                                <!-- Note the missing multiple attribute! -->
+                                                <div class="btn-group btndepartmentmodal" role="group">
+                                                    <div class="input-group">
+                                                        <input type="text" name="name" value="" class="form-control" id="departmentmodalname" onclick="this.select()" />
+                                                        <span class="input-group-addon icon-arrow-down7" id="searchbydepartmentmodal" style="font-size:11px"></span>
+                                                    </div>
+
+                                                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" id="choosedepartmentloadmodal"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <label class="control-label col-sm-4" for="descriptioncriteria">Mô tả:</label>
+                                            <div class="col-sm-10" id="descriptioncriteria">
+                                                <textarea style="width:100%; height:100px"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <button type="button" class="btn btn-primary savechangecriteria">Lưu thay đổi</button>
+                                            <button type="button" class="btn btn-close" data-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
+        <div class="fluid-row">
+            <div class="grid-content ui-layout-pane ui-layout-pane-center" style="overflow-y: auto; width: 100%; z-index: 0; display: block; visibility: visible;">
+                <table class="table table-hover table-main table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-1 header text-center">STT</th>
+                            <th class="col-sm-6 header">Tên Tiêu Chí</th>
+                            <th class="col-sm-4 header">Phạm vi áp dụng</th>
+                            <th class="col-sm-2 header text-center">Điểm</th>
+                            @if (@ViewBag.IsAdmin == true)
+                            {
+                                <th class="col-sm-1 header text-center">Chi Tiết</th>
+                                <th class="col-sm-2 header text-center">Chức Năng</th>
+                            }
+                            else
+                            {
+                                <th class="col-sm-3 header text-center">Chi Tiết</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_rateemployee"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="dialog" title="Mô tả chi tiết">
+        <p></p>
+    </div>
+</div>

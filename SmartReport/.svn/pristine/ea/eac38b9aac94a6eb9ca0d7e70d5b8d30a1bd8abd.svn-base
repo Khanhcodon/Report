@@ -1,0 +1,29 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="mdl-layout__header-row">
+    <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+        <i class="material-icons">arrow_back</i>
+    </div>
+    <span class="mdl-layout-title">
+        <span class="wraptext">
+            <span id="header-title">
+                <span data-app="documents" style="display: none">Văn bản</span>
+                <span data-app="bmail" style="display: none">Tin điều hành</span>
+                <span data-app="chat" style="display: none">Hội thoại</span>
+                <span data-app="notifications" style="display: none">Thông báo</span>
+                <span data-app="calendar" style="display: none">Lịch cơ quan</span>
+            </span>
+        </span>
+    </span>
+    <div class="mdl-layout-spacer"></div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right txtSearch">
+        <label class="mdl-button mdl-js-button mdl-button--icon" for="txtSearch">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+            <input class="mdl-textfield__input" type="text" name="sample" id="txtSearch">
+        </div>
+    </div>
+</div>

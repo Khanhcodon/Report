@@ -1,0 +1,76 @@
+﻿@model BackupRestoreHistoryModel
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture.vi-VN.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.validate.datetime.min.js")"></script>
+<script>
+    $(function () {
+        $("#DateCreated").datepicker({
+            showWeek: true,
+            firstDay: 1,
+            constrainInput: false,
+            dateFormat: "dd/mm/yy"
+        });
+    });
+</script>
+@using (Html.BeginForm(Model.BackupRestoreHistoryId == 0 ? "Create" : "Edit"))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.BackupRestoreHistoryId)
+
+    <table id="timeJobInfo" style="width: 100%">
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Domain):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Domain)
+                @Html.ValidationMessageFor(model => model.Domain)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelFor(model => model.Ip):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Ip)
+                @Html.ValidationMessageFor(model => model.Ip)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelFor(model => model.IsBackup):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsBackup)
+                @Html.ValidationMessageFor(model => model.IsBackup)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IsDataBase):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsDataBase)
+                @Html.ValidationMessageFor(model => model.IsDataBase)
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Description):
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.DateCreated)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DateCreated, new { @style = "width: 200px;" })
+            </td>
+        </tr>
+    </table>
+}

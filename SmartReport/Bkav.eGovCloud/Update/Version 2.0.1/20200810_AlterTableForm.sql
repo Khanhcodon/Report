@@ -1,0 +1,1 @@
+alter table `documentcopy` add COLUMN `ReportKey` longtext DEFAULT NULL;

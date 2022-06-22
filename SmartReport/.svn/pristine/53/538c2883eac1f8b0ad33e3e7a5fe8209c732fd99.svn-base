@@ -1,0 +1,136 @@
+﻿@model IEnumerable<LevelModel>
+    @{
+        var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+        var listPageSize = ViewBag.ListPageSize as List<int>;
+        var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    }
+    <script type="text/javascript">
+        $(function () {
+            $("#tblLevel").grid({
+                isResizeColumn: true,
+                isFixHeightContent: false
+            });
+            $("#tblLevel").openLink({ urlOpen: '/admin/Level/Edit' });
+            $(".table-main").addClass("table-bordered table-hover");
+        });
+        function doSubmit(form) {
+            form.submit();
+        }
+    </script>
+    <table id="tblLevel" class="table table-bordered table-hover">
+        <colgroup>
+            <col style="width: 45px" />
+            <col />
+             <col style="width: 145px" />
+            <col style="width: 45px" />
+            <col style="width: 45px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-center">
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th style="white-space: nowrap;">
+                    @Ajax.SortLink("Name", Localizer("Common.Level.Index.List.Column.LevelName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        levelName = ViewBag.LevelName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListLevels",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+                </th>
+                <th class="text-center">
+                    @Localizer("Common.Level.Index.List.Column.Type")
+                </th>
+
+                <th class="text-center ">
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th class="text-center ">
+                    @Localizer(" Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var level in Model)
+                {
+                    number += 1;
+                    <tr data-id="@level.LevelId">
+                        <td>
+                            @number
+                    </td>
+                    <td>
+                        @level.Name
+                    </td>
+                    <td>
+                        @if (@level.Type == 1)
+                        {
+                            @Localizer("Common.Level.Index.Type.1")
+                        }
+                        @if (@level.Type == 2)
+                        {
+                            @Localizer("Common.Level.Index.Type.2")
+                        }
+
+                        @if (@level.Type == 3)
+                        {
+                            @Localizer("Common.Level.Index.Type.3")
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink(@Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = level.LevelId })
+                    </td>
+
+                    <td>
+                        <a href="javascript:deleteDocField(@(level.LevelId))">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(level.LevelId)" style="display: none" action="@Url.Action("Delete", new { Id =level.LevelId})" method="POST">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" data-res="egov.resources.level.nodata">
+                        Không có cấp hành chính nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table>
+        <tr>
+            <td class="" colspan="4" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      levelName = ViewBag.LevelName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListLevels",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+
+    </table>

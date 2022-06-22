@@ -1,0 +1,85 @@
+﻿@model FeeModel
+@Html.HiddenFor(model => model.FeeId)
+@Html.ValidationSummary(true)
+
+<table>
+    @if (Model.FeeId == 0)
+    {       
+        
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.CategoryBusinessId):
+            </td>
+            <td>
+                @Html.DropDownList("CategoryBusinessId")
+
+            </td>
+        </tr>
+        <tr>
+           <td style="width: 15%;">
+                @Html.LabelFor(model => model.DocFieldId):
+            </td>
+            <td>
+                <select id="DocFieldId" name="DocFieldId">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.EgovLabelFor(model => model.DocTypeId):
+            </td>
+            <td>
+                <select id="DocTypeId" name="DocTypeId">
+                </select>
+
+                 @Html.ValidationMessageFor(model => model.DocTypeId)
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.DocTypeId)
+    }
+    <tr>
+        <td style="width: 15%;">
+            @Html.EgovLabelFor(model => model.FeeTypeId):
+        </td>
+        <td>
+            @Html.DropDownList("FeeTypeId")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.FeeName):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.FeeName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @if (Model.FeeId == 0)
+            { 
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.FeeName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Price):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Price)
+            @Html.ValidationMessageFor(model => model.Price)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsRequired):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsRequired)
+        </td>
+    </tr>
+</table>

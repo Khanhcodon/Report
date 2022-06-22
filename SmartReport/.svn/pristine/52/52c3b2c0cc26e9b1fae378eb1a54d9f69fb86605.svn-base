@@ -1,0 +1,16 @@
+﻿
+
+<div class="document-signing row">
+    <ul class="list-group sign-list">
+        <li class="list-group-item active">
+            <b>Chọn chữ ký</b>
+        </li>
+
+    </ul>
+    <ul class="list-group att-list">
+        <li class="list-group-item active">
+            <b>Chọn các tệp bạn muốn chèn chữ ký điện tử</b>
+        </li>
+        
+    </ul>
+</div>

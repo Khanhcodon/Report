@@ -1,0 +1,596 @@
+﻿@model ProcessFunctionModel
+@{
+    var allTypes = ViewBag.AllTypes as string;
+    int type = (int)ViewBag.Type;
+    var showTotalInTreeTypeList = ViewBag.ShowTotalInTreeTypeList as List<SelectListItem>;
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var treeGroups = ViewBag.TreeGroups as List<SelectListItem>;
+    var allPermissionSettings = ViewBag.AllPermissionSettings as List<SelectListItem>;
+    var allDocColumnSettings = ViewBag.AllDocColumnSettings as List<SelectListItem>;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/waypoints.min.js")"></script>
+
+<style type="text/css">
+    .validationMessage {
+        color: Red;
+    }
+
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto; /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    #sticky.stuck {
+        position: fixed;
+        bottom: 0;
+    }
+
+    .CodeMirror {
+        border: 1px solid #bbb;
+        font-size: 14px;
+        width: 500px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+    var allTypes = @(string.IsNullOrEmpty(allTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allTypes));
+    var type = @type;
+
+    var typeGroups= {
+        vanBan :0,
+        hscn:1
+    };
+
+    $(function() {
+
+        $("#submit").off("click").bind("click",function() {
+            $("#submit-function").click();
+        });
+
+        if($('#right').data("layoutContainer")) {
+            $('#right').layout().destroy();
+        }
+
+        $('input[type="text"]').first().focus();
+        $('input.input-validation-error').first().focus();
+
+        var parentId = '0';
+        if($("#ParentId").val() != '') {
+            parentId = $("#ParentId").val();
+        }
+        var parentName= "#treeGroups_"+@Model.TreeGroupId + " li[data-id='"+parentId+"'] a:first";
+        $("#parentName").text($(parentName).text());
+
+        $("#typeTemplate").tmpl(allTypes).appendTo("#ProcessFunctionTypeId");
+
+        //$('#Color').colorpicker({
+        //    parts: 'full',
+        //    title: 'Chọn màu'
+        //});
+
+        $("#IsEnablePaging").change(function() {
+            if(this.checked) {
+                $(".paging").show();
+            } else {
+                $(".paging").hide();
+            }
+        });
+
+        $("#contentRight").waypoint(function(direction) {
+            $("#sticky").toggleClass('stuck', direction === "up");
+        },{
+            offset: 'bottom-in-view'
+        });
+
+        $('#DateFilter').attr("disabled", !$('#IsDateFilter').is(":checked"));
+        $('#DateFilterView').attr("disabled", !$('#IsDateFilter').is(":checked"));
+        $("#IsDateFilter").click(function () {
+            $('#DateFilter').attr("disabled", !$(this).is(":checked"));
+            $('#DateFilterView').attr("disabled", !$(this).is(":checked"));
+        });
+    });
+
+    function onSaveBegin() {
+        return validate();
+    }
+
+    function validate() {
+        if(!$('form:first').validate().form()){
+            return false;
+        }
+
+        var nodeType = $("#ProcessFunctionTypeId").val();
+        var paramQuery = [];
+        var query = $("#QueryLatest").val();
+        var queryItemRemove = $("#QueryItemRemove").val();
+        var queryItemUnread =$("#QueryCountItemUnread").val();
+        var queryPaging = $("#QueryPaging").val();
+        var queryCountAllItems = $("#QueryCountAllItems").val();
+        var processType = @type;
+
+        if(processType == 0){
+            @*if(query.indexOf('@("@userId")') == -1) {
+                eGovMessage.show('@Localizer("ProcessFunction.NewestQuery.Parameter.IsRequired") @("@userId")');
+                return false;
+            }*@
+        }
+        else{
+            if(query.indexOf('@("@storePrivateId")') == -1) {
+                eGovMessage.show('@Localizer("ProcessFunction.NewestQuery.Parameter.IsRequired") @("@storePrivateId")');
+                return false;
+            }
+        }
+
+        if(query.indexOf('@("@toDate")') == -1) {
+            eGovMessage.show('@Localizer("ProcessFunction.NewestQuery.Parameter.IsRequired") @("@toDate")');
+            return false;
+        }
+        if(nodeType != '') {
+            var type = _.find(allTypes, function(item) {
+                return item.id.toString() == nodeType;
+            });
+            if(type) {
+                paramQuery = _.pluck(JSON.parse(type.param), 'ParamName');
+                if(paramQuery.length > 0) {
+                    for(var i = 0; i < paramQuery.length; i++) {
+                        if(query.indexOf(paramQuery[i]) == -1) {
+                            eGovMessage.show("@Localizer("ProcessFunction.Query.ParamNotFound")" + paramQuery[i] );
+                            $("#Query").focus();
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        if (queryItemRemove != '') {
+            if(processType == 0){
+                @*if (queryItemRemove.indexOf('@("@userId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.QueryJustDeleteBefore.Parameter.IsRequired") @("@userId")');
+                    return false;
+                }*@
+            }
+            else{
+                if(query.indexOf('@("@storePrivateId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.QueryJustDeleteBefore.Parameter.IsRequired") @("@storePrivateId")');
+                    return false;
+                }
+            }
+
+            if (queryItemRemove.indexOf('{0}') == -1) {
+                eGovMessage.show('@Localizer("ProcessFunction.QueryJustDeleteBefore.Parameter.IsRequired.WithFormat")');
+                return false;
+            }
+        } else {
+            eGovMessage.show('@Localizer("ProcessFunction.EnterQuery.JustDeleteBefore")');
+            return false;
+        }
+        if (queryItemUnread != '') {
+            if(processType == 0){
+                @*if (queryItemUnread.indexOf('@("@userId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.Notify.QueryGetTotalUnread.Parameter.IsRequired") @("@userId")');
+                    return false;
+                }*@
+            }
+            else{
+                if(query.indexOf('@("@storePrivateId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.Notify.QueryGetTotalUnread.Parameter.IsRequired") @("@storePrivateId")');
+                    return false;
+                }
+            }
+            if (paramQuery.length > 0) {
+                for (var i = 0; i < paramQuery.length; i++) {
+                    if (queryItemUnread.indexOf(paramQuery[i]) == -1) {
+                        eGovMessage.show("@Localizer("ProcessFunction.Notify.QueryGetTotalUnread.Parameter.IsRequired")" + paramQuery[i]);
+                        return false;
+                    }
+                }
+            }
+        } else {
+            eGovMessage.show("@Localizer("ProcessFunction.QueryGetTotal.IsRequired")");
+            return false;
+        }      
+        if (queryCountAllItems != '') {
+            if(processType == 0){
+                @*if (queryCountAllItems.indexOf('@("@userId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.Notify.QueryGetTotal.Parameter.IsRequired") @("@userId")');
+                    return false;
+                }*@
+            }
+            else{
+                if(query.indexOf('@("@storePrivateId")') == -1) {
+                    eGovMessage.show('@Localizer("ProcessFunction.Notify.QueryGetTotal.Parameter.IsRequired") @("@storePrivateId")');
+                    return false;
+                }
+            }
+            if (paramQuery.length > 0) {
+                for (var i = 0; i < paramQuery.length; i++) {
+                    if (queryCountAllItems.indexOf(paramQuery[i]) == -1) {
+                        eGovMessage.show("@Localizer("ProcessFunction.Notify.QueryGetTotal.Parameter.IsRequired") " + paramQuery[i]);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if($("#IsEnablePaging").prop("checked") == true) {
+            //   var queryOlder = window['queryOlder'].getValue();
+            var queryOlder = $("#QueryOlder").val()
+            if(queryOlder == '') {
+                eGovMessage.show("@Localizer("ProcessFunction.EnterOlderQuery")");
+                return false;
+            } else {
+                //if(paramQuery.length > 0) {
+                //    for(var i = 0; i < paramQuery.length; i++) {
+                //        if (queryOlder.indexOf(paramQuery[i]) == -1) {
+                //            eGovMessage.show("Câu truy vấn VB, HS cũ hơn phải có tham số " + paramQuery[i]);
+                //            return false;
+                //        }
+                //    }
+                //}
+                @*if(processType == 0){
+                    if(queryOlder.indexOf("@("@userId")") == -1) {
+                        eGovMessage.show("Câu truy vấn VB,HS cũ hơn phải có tham số @("@userId")!");
+                        return false;
+                    }
+                }
+                else{
+                    if(query.indexOf('@("@storePrivateId")') == -1) {
+                        eGovMessage.show('Câu truy vấn VB,HS cũ hơn phải có tham số @("@storePrivateId")');
+                        return false;
+                    }
+                }
+                if(queryOlder.indexOf("@("@fromDate")") == -1) {
+                    eGovMessage.show("Câu truy vấn VB,HS cũ hơn phải có tham số @("@fromDate")!");
+                    return false;
+                }
+                if(queryOlder.indexOf("@("@take")") == -1) {
+                    eGovMessage.show("Câu truy vấn VB,HS cũ hơn phải có tham số @("@take")!");
+                    return false;
+                }*@
+            }
+
+            if($("#HasExportFile").prop("checked") == true) {
+                var queryExportDataToFile = $("#QueryExportDataToFile").val();
+                if(queryExportDataToFile==""){
+                    eGovMessage.show("@Localizer("ProcessFunction.QueryExportDataToFile")");
+                    $("#QueryExportDataToFile").focus();
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    $(function(){
+        $("select, input[type=text],textarea,input[type=password]").addClass("form-control");
+
+        $("#HasExportFile").on("change",function(){
+            if($(this).prop("checked")){
+                $('.exportFile').show();
+            }else{
+                $('.exportFile').hide();
+            }
+        });
+
+        //upload tệp crystal  report
+        $('#file').fileupload({
+            dataType: 'json',
+            add: function(e, data) {
+                var filename = data.files[0].name;
+                if(filename.indexOf(".rpt", filename - ".rpt".length) !== -1){
+                    $("#fileNameCrystal").text(filename);
+                    data.submit();
+                } else {
+                    eGovMessage.show("@Localizer("Admin.Report.Upload.Extention.RPTOnly")","Thong bao", eGovMessage.messageButtons.Ok);
+                }
+            },
+            done: function(e, data) {
+                var result = data.result;
+
+                if(data.result.error){
+                    $("#fileNameCrystal").text("");
+                    eGovMessage.notification(data.result.error, eGovMessage.messageTypes.error);
+                } else if(data.result.success){
+                    eGovMessage.notification(data.result.success, eGovMessage.messageTypes.success);
+                    $("#download").show();
+                }
+            },
+            fail: function(e, data) {
+                $("#fileNameCrystal").text("");
+            }
+        });
+    });
+</script>
+
+<script id="typeTemplate" type="text/x-jquery-tmpl">
+    <option value="${id}" @(Model.ProcessFunctionTypeId.HasValue ? "{{if id==" + Model.ProcessFunctionTypeId.Value + "}} selected='selected' {{/if}}" : "")>${name}</option>
+</script>
+
+<div id="contentRight">
+    @using (Ajax.BeginForm(Model.ProcessFunctionId == 0 ? "Create" : "Edit",
+        new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSaveSuccess", OnBegin = "onSaveBegin" }))
+    {
+        <div>
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ProcessFunctionId)
+            @Html.HiddenFor(model => model.ParentId)
+            @*@Html.HiddenFor(model => model.ProcessFunctionGroupId)*@
+            @Html.HiddenFor(model => model.TreeGroupId)
+            @if (Model.ProcessFunctionId == 0)
+            {
+                @Html.AntiForgeryToken()
+            }
+            else
+            {
+                @Html.AntiForgeryToken()
+            }
+            <table>
+                @if (Model.Type == 0)
+                {
+                    <tr>
+                        <td data-res="egov.resources.processfunction.parent">Cha:
+                        </td>
+                        <td>
+                            <span id="parentName"></span>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.Name):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </td>
+                </tr>
+
+                @if (Model.Type == 0)
+                {
+                    <tr>
+                        <td>
+                            @Html.EgovLabelFor(model => model.ProcessFunctionTypeId):
+                        </td>
+                        <td>
+                            <select id="ProcessFunctionTypeId" name="ProcessFunctionTypeId">
+                                <option value="" data-res="egov.resources.processfunction.normal">Bình thường</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.EgovLabelFor(model => model.Icon):
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Icon)
+                            @Html.ValidationMessageFor(model => model.Icon)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.EgovLabelFor(model => model.Color):
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Color)
+                            @Html.ValidationMessageFor(model => model.Color)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.IsActivated):
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.IsActivated)
+                            @Html.ValidationMessageFor(model => model.IsActivated)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.HasUyQuyen):
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.HasUyQuyen)
+                            @Html.ValidationMessageFor(model => model.HasUyQuyen)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.HasTransferTheoLo):
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.HasTransferTheoLo)
+                            @Html.ValidationMessageFor(model => model.HasTransferTheoLo)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.PermissionSettingId):
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.PermissionSettingId, allPermissionSettings, @Localizer("Common.Choose.Label"))
+                            @Html.ValidationMessageFor(model => model.PermissionSettingId)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td data-res="egov.resources.processfunction.display">Hiển thị:
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.ShowTotalInTreeType, showTotalInTreeTypeList)
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.DocColumnSettingId):
+                    </td>
+                    <td>
+                    @Html.DropDownListFor(model => model.DocColumnSettingId, allDocColumnSettings)
+                    @Html.ValidationMessageFor(model => model.DocColumnSettingId)
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryLatest):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryLatest, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryLatest)
+                    </td>
+                </tr>
+                <tr class="paging" @(!Model.IsEnablePaging ? "style=display:none;" : "")>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryOlder):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryOlder, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryOlder)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryItemRemove):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryItemRemove, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryItemRemove)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryCountItemUnread):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryCountItemUnread, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryCountItemUnread)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>
+                        @Html.LabelFor(model => model.IsEnablePaging):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.IsEnablePaging)
+                        @Html.ValidationMessageFor(model => model.IsEnablePaging)
+                    </td>
+                </tr>                
+                <tr class="paging" style=display:none; @(!Model.IsEnablePaging ? "style=display:none;" : "")>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryPaging):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryPaging, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryPaging)
+                    </td>
+                </tr>
+                <tr class="paging"  @(!Model.IsEnablePaging ? "style=display:none;" : "")>
+                    <td>
+                        @Html.EgovLabelFor(model => model.QueryCountAllItems):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.QueryCountAllItems, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                        @Html.ValidationMessageFor(model => model.QueryCountAllItems)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>
+                        @Html.LabelFor(model => model.IsFilterByDocFieldDocType):
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsFilterByDocFieldDocType, new { @disabled = "disabled" })
+                        <a id="linkSetting" style="@(Model.IsFilterByDocFieldDocType ? "" : "display: none")" href="@Url.Action("SettingColumn", new { id = Model.ProcessFunctionId })">Cấu hình danh sách cho lĩnh vực, hồ sơ</a>
+                    </td>
+                </tr>
+
+                <tr style="display: none">
+                    <td>Lọc theo ngày:
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.IsDateFilter)
+                        <span data-res="egov.resources.processfunction.field">Trường dữ liệu</span>:&nbsp; @Html.TextBoxFor(model => model.DateFilter, new { style = "width:100px;display:inline", disabled = true })
+                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span data-res="egov.resources.processfunction.displayname"></span>Tên hiển thị: &nbsp;@Html.TextBoxFor(model => model.DateFilterView, new { style = "width:100px;display:inline", disabled = true })
+                        @Html.HiddenFor(model => model.DateFilter)
+                        @Html.HiddenFor(model => model.DateFilterView)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td data-res="egov.resources.processfunction.filterByOverdueDate">Lọc theo hạn xử lý:
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.IsOverdueFilter)
+                    </td>
+                </tr>
+            </table>
+
+            @if (Model.ProcessFunctionId > 0)
+            {
+                <fieldset>
+                    <legend data-res="egov.resources.report.config">Cấu hình xuất danh sách ra tệp</legend>
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.HasExportFile):
+                            </td>
+                            <td>
+                                @Html.CheckBox("HasExportFile", Model.HasExportFile)
+                                @Html.ValidationMessageFor(model => model.HasExportFile)
+                            </td>
+                        </tr>
+                        <tr  style='@(Model.HasExportFile ? "" : "display:none")' class="exportFile">
+                            <td></td>
+                            <td>
+                                <div>
+                                    <div class="field-label">
+                                    </div>
+                                    <div class="field-input">
+                                        <input class="btn" type="button" value="Upload" onclick="$('#file').click()" />
+                                        <input class="btn" type="file" name="file" id="file" style="display: none;" data-url="@Url.Action("UploadFile", "ProcessFunction", new { area = "Admin", Id = @Model.ProcessFunctionId })" accept="*.rpt" />
+                                        <input class="btn" type="button" value="Download" name="download" id="download" onclick="downloadFile(@Model.ProcessFunctionId);" style="@(string.IsNullOrEmpty(Model.ExportFileConfig) ? "display:none" : "")" />
+                                    </div>
+                                    <div class="field-input"><span id="fileNameCrystal"></span></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style='@(Model.HasExportFile ? "" : "display:none")' class="exportFile">
+                            <td>
+                                @Html.LabelFor(model => model.QueryExportDataToFile):</td>
+                            <td>
+                                @Html.TextAreaFor(model => model.QueryExportDataToFile, 10, 10, new Dictionary<string, object> { { "style", "width:500px" } })
+                                @Html.ValidationMessageFor(model => model.QueryExportDataToFile)
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            }
+        </div>
+        <div id="sticky" class="stuck" style="display: none">
+            <input value="@(Model.ProcessFunctionId > 0 ? @Localizer("Common.Update.Label") : @Localizer("Common.Create.Label"))" type="submit" id="submit-function" />
+            <span id="message" style="color: red; display: none"></span>
+        </div>
+    }
+</div>
+
+@*<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.js")"></script>*@
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+</script>

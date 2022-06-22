@@ -1,0 +1,20 @@
+﻿<table class="table table-striped table-hover ">
+    <thead>
+        <tr>
+            <th data-res="egov.resources.document.changeWorkflowTypesDialog.stt"></th>
+            <th data-res="egov.resources.document.changeWorkflowTypesDialog.name"></th>
+            <th data-res="egov.resources.document.changeWorkflowTypesDialog.expireProcess"></th>
+            <th data-res="egov.resources.document.changeWorkflowTypesDialog.select"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each workflowTypes}}
+            <tr class="workflowTypeRow">
+                <td>${$index+1}</td>
+                <td>${Name}</td>
+                <td>${ExpireProcess}&nbsp;<span data-res="egov.resources.document.changeWorkflowTypesDialog.day"></span></td>
+                <td><input type="radio" value="${Id}" name="Id"></td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>

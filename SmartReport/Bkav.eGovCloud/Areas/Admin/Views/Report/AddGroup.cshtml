@@ -1,0 +1,32 @@
+﻿@model ReportGroupModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Report.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+<div class="section-header">
+    <div class="title">
+           <i class="fa icon-stats"></i>
+        <span data-res="egov.resources.sitemap.reportgroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/report/Listgroup">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        {
+            Html.RenderPartial("_CreateOrEditGroup", Model);
+        }
+    }
+</div>

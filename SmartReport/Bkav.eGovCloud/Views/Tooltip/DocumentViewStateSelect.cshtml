@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    $(function () {
+        $("#DocumentViewSelect li span").click(function () {
+            $("#DocumentViewSelect li span").removeClass("selected");
+            var $this = $(this);
+            $this.siblings().removeClass("selected");
+            $this.addClass("selected");
+            $this.parents(".qtip").hide();
+            egov.cshtml.home.listdocuments.sortByTypeAndIsView();
+        });
+    });
+</script>
+
+<div class="user-option menu-dropdown" id="DocumentViewSelect">
+    <ul>
+        <li>
+            <span class="selected alldocument"><a href="javascript:void(0);">Tất cả</a></span>
+        </li>
+        <li>
+            <span class="docIsView"><a href="javascript:void(0);">Đã xem</a></span>
+        </li>
+        <li>
+            <span class="docNotView"><a href="javascript:void(0);">Chưa xem</a></span>
+        </li>
+    </ul>
+</div>
+

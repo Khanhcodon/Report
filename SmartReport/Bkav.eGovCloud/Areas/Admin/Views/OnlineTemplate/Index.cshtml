@@ -1,0 +1,67 @@
+﻿@model IEnumerable<OnlineTemplateModel>
+@{
+    ViewBag.Title = Localizer("Common.OnlineTemplate.Index.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteDocField(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.OnlineTemplate.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListTemplates").blockpanel({ text: egov.resources.notifications.loading, borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListTemplates').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListTemplates').unblockpanel();
+    }
+
+    function searchTemp(_this) {
+        $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val())
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-profile"></i>
+        <span data-res="egov.resources.sitemap.onlinetemplate"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/onlinetemplate/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov ">
+
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListTemplates", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+        {
+            <input type="text" class="form-control" name="onlineTemplateName"
+                id="onlineTemplateName" value="@(ViewBag.Search ?? "")" placeholder="Tìm kiếm thông tin" style="width: 45%;" />
+            <input class="btn btn-default"  type="submit" onclick="searchTemp(this)"
+                value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+    </div>
+    <div id="divListTemplates">
+        @Html.Partial("_Notifications")
+        @{
+            Html.RenderPartial("_TemplateList", Model);
+        }
+    </div>
+</div>

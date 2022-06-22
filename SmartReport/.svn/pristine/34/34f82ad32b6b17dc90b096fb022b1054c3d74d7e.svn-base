@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    $(function () {
+        $(".user-option li ul li").click(function () {
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            $(this).parents(".qtip").hide();
+        });
+        $(".user-option li").click(function () {
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            $(this).parents(".qtip").hide();
+        });
+        //
+        $('#changePassword').click(function () {
+            egov.cshtml.home.tab.addTabChangePassWord();
+        });
+        $('#profileConfig').click(function () {
+            egov.cshtml.home.tab.addTabProfileConfig();
+        });
+
+        $('#setting').click(function () {
+           //openDialogSetting();
+          egov.cshtml.home.tab.addTabSetting();
+        });
+
+        $('#feedback').click(function () {
+            egov.cshtml.home.feedback();
+        });
+    });
+    
+</script>
+
+<div class="user-option menu-dropdown">  
+    <ul>
+        @if(User.Identity.Name.ToLower().IndexOf("admin") >= 0)
+        {
+        <li>
+            @Html.ActionLink("Quản trị", "Index", "Welcome", new { area = "admin" }, null)
+        </li>
+        }
+        <li  id="setting">
+            <a href="#">Thiết lập</a>
+        </li>
+        <li id="feedback">
+            <a href="#">Gửi phản hồi</a></li>
+        <li class="separate"></li>
+        <li>
+            @Html.ActionLink("Thoát", "Logout", "Account", new { area = "" }, null)
+        </li>
+    </ul>
+</div>
+

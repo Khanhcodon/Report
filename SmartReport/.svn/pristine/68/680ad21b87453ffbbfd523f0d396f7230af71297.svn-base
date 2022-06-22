@@ -1,0 +1,352 @@
+﻿<style>
+    .bkav-egov-ml-2 {
+        margin-left: 2pt;
+    }
+</style>
+
+<ul class="nav">
+    @*CẤU HÌNH*@
+    <li class="dropdown admin-config1">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-cogs"></i><span class="navbar-label">Cấu hình</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-settinggeneral">
+                <a href="/admin/Setting/General" class="dropdown-toggle" data-target="#">
+                    <i class="icon-cog3"></i>
+                    <span class="bkav-egov-ml-2">Thiết lập hệ thống</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-treegroup">
+                <a href="/admin/treeGroup" class="dropdown-toggle" data-target="#">
+                    <i class="icon-list2"></i>
+                    <span class="bkav-egov-ml-2">Nhóm cây</span>
+                </a>
+            </li>
+            <li class="admin-permissionsetting">
+                <a href="/admin/PermissionSetting" class="dropdown-toggle" data-target="#">
+                    <i class="icon-cogs"></i>
+                    <span class="bkav-egov-ml-2">Cấu hình quyền trên node</span>
+                </a>
+            </li>
+            <li class="admin-doccolumnsetting">
+                <a href="/admin/DocColumnSetting" class="dropdown-toggle" data-target="#">
+                    <i class="icon-cogs"></i>
+                    <span class="bkav-egov-ml-2">Cấu hình hiển thị danh sách</span>
+                </a>
+            </li>
+            <li class="admin-processfunction">
+                <a href="/admin/ProcessFunction" class="dropdown-toggle" data-target="#">
+                    <i class="icon-flow-cascade"></i>
+                    <span class="bkav-egov-ml-2">Cây báo cáo</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-resource">
+                <a href="/admin/Resource" class="dropdown-toggle" data-target="#">
+                    <i class="icon-language"></i>
+                    <span class="bkav-egov-ml-2">Tài nguyên</span>
+                </a>
+            </li>
+            <li class="admin-resource">
+                <a href="/admin/DocumentRelated" class="dropdown-toggle" data-target="#">
+                    <i class="icon-language"></i>
+                    <span class="bkav-egov-ml-2">Văn bản liên quan</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    @*BIỂU MẪU*@
+    <li class="dropdown admin-config4">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-text"></i><span class="navbar-label">Biểu mẫu</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-template">
+                <a href="/admin/Template" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý mẫu phiếu</span>
+                </a>
+            </li>
+            <li class="admin-templateKey">
+                <a href="/admin/TemplateKey" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý Key</span>
+                </a>
+            </li>
+            <li class="admin-templateKey">
+                <a href="/admin/TemplateKeyPlus" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý Key (Mới)</span>
+                </a>
+            </li>
+            <li class="admin-inCatalog">
+                <a href="/admin/IndicatorCatalog" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý danh mục</span>
+                </a>
+            </li>
+            <li class="admin-inCatalogValue">
+                <a href="/admin/IndicatorCatalogValue" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý chỉ tiêu</span>
+                </a>
+            </li>
+            <li class="admin-reportMode">
+                <a href="/admin/ReportMode" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Chế độ báo cáo</span>
+                </a>
+            </li>
+            <li class="admin-reportQuery">
+                <a href="/admin/ReportQuery" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-reportQuery"></i>
+                    <span class="bkav-egov-ml-2">Truy vấn báo cáo</span>
+                </a>
+            </li>
+            <li class="admin-reportQueryGroup">
+                <a href="/admin/ReportQueryGroup" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-reportQueryGroup"></i>
+                    <span class="bkav-egov-ml-2">Nhóm truy vấn báo cáo</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    @*DANH MỤC*@
+    <li class="dropdown admin-config2">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-list"></i><span class="navbar-label">Danh mục</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-workflow">
+                <a href="/admin/workflow" class="dropdown-toggle" data-target="#">
+                    <i class="icon-shuffle"></i>
+                    <span class="bkav-egov-ml-2">Quy trình</span>
+                </a>
+            </li>
+            <li class="admin-interfaceConfig">
+                <a href="/admin/interfaceConfig" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Giao diện báo cáo</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-docField">
+                <a href="/admin/DocField" class="dropdown-toggle" data-target="#">
+                    <i class="icon-archive"></i>
+                    <span class="bkav-egov-ml-2">Lĩnh vực</span>
+                </a>
+            </li>
+            <li class="admin-docType">
+                <a href="/admin/DocType" class="dropdown-toggle" data-target="#">
+                    <i class="icon-docs"></i>
+                    <span class="bkav-egov-ml-2">Loại báo cáo số liệu</span>
+                </a>
+            </li>
+            <li class="admin-docType">
+                <a href="/admin/DocType/Index?categoryBusinessId=8" class="dropdown-toggle" data-target="#">
+                    <i class="icon-docs"></i>
+                    <span class="bkav-egov-ml-2">Loại báo cáo thuyết minh</span>
+                </a>
+            </li>
+            <li class="admin-docType">
+                <a href="/admin/DocType/Index?categoryBusinessId=16" class="dropdown-toggle" data-target="#">
+                    <i class="icon-docs"></i>
+                    <span class="bkav-egov-ml-2">Loại báo cáo danh sách</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-category">
+                <a href="/admin/Category" class="dropdown-toggle" data-target="#">
+                    <i class="icon-copy2"></i>
+                    <span class="bkav-egov-ml-2">Hình thức văn bản</span>
+                </a>
+            </li>
+            <li class="admin-increase">
+                <a href="/admin/Increase" class="dropdown-toggle" data-target="#">
+                    <i class="icon-add-to-list"></i>
+                    <span class="bkav-egov-ml-2">Nhảy số</span>
+                </a>
+            </li>
+            <li class="admin-code">
+                <a href="/admin/Code" class="dropdown-toggle" data-target="#">
+                    <i class="icon-code"></i>
+                    <span class="bkav-egov-ml-2">Bảng mã</span>
+                </a>
+            </li>
+            <li class="admin-store">
+                <a href="/admin/Store" class="dropdown-toggle" data-target="#">
+                    <i class="icon-paste2"></i>
+                    <span class="bkav-egov-ml-2">Sổ hồ sơ</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-catalog">
+                <a href="/admin/Catalog" class="dropdown-toggle" data-target="#">
+                    <i class="icon-popup"></i>
+                    <span class="bkav-egov-ml-2">Danh mục tùy chọn</span>
+                </a>
+            </li>
+            <li class="admin-keyWord">
+                <a href="/admin/KeyWord" class="dropdown-toggle" data-target="#">
+                    <i class="clear.gif"></i>
+                    <span class="bkav-egov-ml-2">Từ khóa</span>
+                </a>
+            </li>
+            <li class="admin-time">
+                <a href="/admin/Time" class="dropdown-toggle" data-target="#">
+                    <i class="icon-clock3"></i>
+                    <span class="bkav-egov-ml-2">Thời gian làm việc</span>
+                </a>
+            </li>
+            <li class="admin-address">
+                <a href="/admin/Address" class="dropdown-toggle" data-target="#">
+                    <i class="icon-map"></i>
+                    <span class="bkav-egov-ml-2">Địa chỉ</span>
+                </a>
+            </li>
+            <li class="admin-address">
+                <a href="/admin/DataSource" class="dropdown-toggle" data-target="#">
+                    <i class="icon-map"></i>
+                    <span class="bkav-egov-ml-2">DataSource</span>
+                </a>
+            </li>
+            <li class="admin-address">
+                <a href="/admin/ActionLevel" class="dropdown-toggle" data-target="#">
+                    <i class="icon-map"></i>
+                    <span class="bkav-egov-ml-2">Kỳ báo cáo</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+    @*CƠ CẤU TỔ CHỨC*@
+    <li class="dropdown admin-config3">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-users3"></i><span class="navbar-label">Cơ cấu tổ chức</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-infomation">
+                <a href="/admin/Infomation" class="dropdown-toggle" data-target="#">
+                    <i class="icon-office"></i>
+                    <span class="bkav-egov-ml-2">Cơ quan</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-jobtitles">
+                <a href="/admin/JobTitles" class="dropdown-toggle" data-target="#">
+                    <i class="icon-user4"></i>
+                    <span class="bkav-egov-ml-2">Chức danh</span>
+                </a>
+            </li>
+            <li class="admin-position">
+                <a href="/admin/Position" class="dropdown-toggle" data-target="#">
+                    <i class="icon-user4"></i>
+                    <span class="bkav-egov-ml-2">Chức vụ</span>
+                </a>
+            </li>
+            <li class="admin-user">
+                <a href="/admin/User" class="dropdown-toggle" data-target="#">
+                    <i class="icon-user2"></i>
+                    <span class="bkav-egov-ml-2">Cán bộ</span>
+                </a>
+            </li>
+            <li class="admin-department">
+                <a href="/admin/Department" class="dropdown-toggle" data-target="#">
+                    <i class="icon-house"></i>
+                    <span class="bkav-egov-ml-2">Phòng ban</span>
+                </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li class="admin-role">
+                <a href="/admin/Role" class="dropdown-toggle" data-target="#">
+                    <i class="icon-users3"></i>
+                    <span class="bkav-egov-ml-2">Vai trò và quyền hạn</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    @*BÁO CÁO*@
+    <li class="dropdown admin-config5">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-stats"></i><span class="navbar-label">Báo cáo</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-listGroup">
+                <a href="/admin/Report/ListGroup" class="dropdown-toggle" data-target="#">
+                    <i class="icon-stats"></i>
+                    <span class="bkav-egov-ml-2">Nhóm báo cáo</span>
+                </a>
+            </li>
+            <li class="admin-reportColumn">
+                <a href="/admin/DocColumnSetting/IndexReport" class="dropdown-toggle" data-target="#">
+                    <i class="icon-stats"></i>
+                    <span class="bkav-egov-ml-2">Danh sách cột báo cáo</span>
+                </a>
+            </li>
+            <li class="admin-report">
+                <a href="/admin/Report" class="dropdown-toggle" data-target="#">
+                    <i class="icon-stats"></i>
+                    <span class="bkav-egov-ml-2">Báo cáo động</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    @*HƯỚNG DẪN*@
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-help"></i><span class="navbar-label">Hướng dẫn</span></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="/content/guide/HDSD_Admin.pdf" class="dropdown-toggle" data-target="#" target="_blank">
+                    <i class="icon-help"></i>
+                    <span class="bkav-egov-ml-2">Hướng dẫn quản trị</span>
+                </a>
+            </li>
+            <li>
+                <a href="/content/Guide/HDSD_User.pdf" class="dropdown-toggle" data-target="#" target="_blank">
+                    <i class="icon-help"></i>
+                    <span class="bkav-egov-ml-2">Hướng dẫn người dùng</span>
+                </a>
+            </li>
+            <li>
+                <a href="/install/customupdate" class="dropdown-toggle" data-target="#" target="">
+                    <i class="icon-help"></i>
+                    <span class="bkav-egov-ml-2">Update</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/AsyncCatalog/Create" class="dropdown-toggle" data-target="#" target="">
+                    <i class="icon-help"></i>
+                    <span class="bkav-egov-ml-2">AsyncCatalog</span>
+
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-target="#"><i class="icon-text"></i><span class="navbar-label">Khảo sát</span></a>
+        <ul class="dropdown-menu">
+            <li class="admin-inCatalog">
+                <a href="/admin/DocType/Index?categoryBusinessId=32" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Cấu hình khảo sát</span>
+                </a>
+            </li>
+            <li class="admin-inCatalog">
+                <a href="/admin/SurveyCatalog" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý danh mục khảo sát</span>
+                </a>
+            </li>
+            <li class="admin-inCatalogValue">
+                <a href="/admin/SurveyCatalogValue" class="dropdown-toggle" data-target="#">
+                    <i class="icon-insert-template"></i>
+                    <span class="bkav-egov-ml-2">Quản lý chỉ tiêu khảo sát</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

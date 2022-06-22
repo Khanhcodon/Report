@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.AccountModel>
+@{var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+  var listPageSize = ViewBag.ListPageSize as List<int>;
+  var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;   
+  }
+<table class="table-main table table-hover" id="tblAccount" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col />
+        <col style="width: 80px" />
+        <col style="width: 80px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                STT
+            </th>
+            <th class="header">
+                Tên đăng nhập
+            </th>
+            <th class="header">
+                Họ và tên
+            </th>
+            <th class="header">
+                Cơ quan
+            </th>
+            <th class="header">
+                Sử dụng
+            </th>
+            <th class="header">
+                Giám sát
+            </th>
+            <th class="header">
+                Sửa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var account in Model)
+            {
+                number += 1;
+                <tr>
+                    <td>
+                        @number
+                    </td>
+                    <td>
+                        @account.Username
+                    </td>
+                    <td>
+                        @account.FullName
+                    </td>
+                    <td>
+                        @account.DomainName
+                    </td>
+                    <td style="text-align: center">
+                        <input type="checkbox" @(account.IsActivated ? "checked" : "") disabled />
+                    </td>
+                    <td style="text-align: center">
+                        <input type="checkbox" @(account.HasViewReport ? "checked" : "") disabled />
+                    </td>
+                    <td>
+                        <a href="/admin/account/edit/@account.AccountId">Sửa</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    Không có account nào
+                </td>
+            </tr>
+        }
+    </tbody><tfoot>
+    <tr>
+        <td colspan="6">
+            <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      name = ViewBag.Name,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending,
+                                      groupId = ViewBag.GroupId
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListAccount",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </div>
+        </td>
+    </tr>
+</tfoot>
+
+</table>

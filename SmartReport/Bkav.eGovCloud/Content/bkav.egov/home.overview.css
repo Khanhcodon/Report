@@ -1,0 +1,359 @@
+﻿html, body, .home-overview {
+    height: 100%;
+    width: 100%;
+}
+
+.home-overview {
+    background-image: url('../../Content/bkav.egov/images/bg_dn.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e8e8e8;
+    background-size: cover;
+}
+
+    .home-overview span, .home-overview div {
+        font-size: 12px;
+        font-family: Tahoma,Arial,Helvetica,sans-serif;
+    }
+
+    .home-overview > div {
+        height: 100%;
+    }
+
+.left-panel {
+}
+
+.right-panel {
+    padding: 15px;
+    overflow: auto;
+}
+
+.app-list {
+}
+
+.app-detail {
+    margin-top: 30px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-between;
+    align-items: flex-start;
+}
+
+    .flex-container > div {
+        width: 20%;
+    }
+
+.user-profile {
+    text-align: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+    .user-profile .avatar {
+        border-radius: 50%;
+        width: 75px;
+    }
+
+    .user-profile .full-name {
+        font-size: 15px;
+        padding: 5px 0;
+    }
+
+.mdl-list__item-primary-content > span {
+    text-transform: uppercase;
+    margin-left: 16px;
+    font-size: 12px;
+}
+
+.mdl-list__item {
+    padding: 15px;
+}
+
+
+.office-overview {
+    padding: 18px 15px 15px;
+    box-shadow: 2px 4px 5px darkgrey;
+    height: 80px;
+}
+
+    .office-overview.selected {
+        background: #5677fc;
+        color: white;
+        width: 110%;
+        height: 100px;
+        color: white;
+        width: 110%;
+        height: 100px;
+        padding: 25px 20px 20px;
+        border-radius: 5px;
+    }
+
+        .office-overview.selected[data-app="hsmc"] {
+            background: #8eb432;
+        }
+
+        .office-overview.selected[data-app="xlvb"] {
+            background: #b24e30;
+        }
+
+        .office-overview.selected[data-app="email"] {
+            background: #4f7414;
+        }
+
+        .office-overview.selected[data-app="bmm"] {
+            background: #5677fc;
+        }
+
+    .office-overview > div {
+        float: left;
+        margin-right: 5px;
+    }
+
+    .office-overview .overview-icon {
+        font-size: 14px;
+        width: 45px;
+        height: 45px;
+        padding: 9px;
+    }
+
+    .office-overview .overview-separator {
+        height: 45px;
+        width: 1px;
+        background: #e3e3e3;
+    }
+
+    .office-overview .overview-numb span {
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 19px;
+    }
+
+    .office-overview .overview-type {
+        font-size: 15px;
+    }
+
+    .office-overview i {
+        color: white;
+    }
+
+    .office-overview .overview-icon {
+        font-size: 14px;
+        width: 40px;
+        height: 40px;
+        padding: 7px;
+    }
+
+.panel .table th {
+    text-align: center;
+    border: 1px solid #e7e9fd !important;
+    border-top: none;
+    padding: 8px;
+    line-height: 19px;
+}
+
+.panel .table td {
+    border-top: 1px solid #e7e9fd !important;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+.panel-heading {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.mdl-list__item.selected {
+    background: #4ebdfa;
+}
+
+.menu-name {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px !important;
+    color: red;
+}
+
+.timestart {
+    color: blue;
+    font-weight: bold;
+}
+
+.addCalendar {
+    border-radius: 27px;
+    background: #f36e6e;
+    color: white;
+    padding: 5px;
+    display: inline-flex;
+}
+
+.calendar-count, .node-count {
+    display: inline-block;
+    background: #17a2b8;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 7px;
+}
+
+
+.home-statictis span, .home-statictis div {
+    font-size: 14px;
+    font-family: Tahoma,Arial,Helvetica,sans-serif;
+}
+
+.home-statictis > div {
+    margin-bottom: 20px;
+}
+
+.content-body .lookup-statistic {
+    position: relative;
+}
+
+    .content-body .lookup-statistic .statistic-label {
+        text-transform: uppercase;
+        color: #10416f;
+        text-align: center;
+        font-weight: bold;
+    }
+
+.content-body .statistic-piechat {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #10416f;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -38px;
+    margin-top: -13px;
+    z-index: 99;
+    font-size: 18px;
+    display: none;
+}
+
+    .content-body .statistic-piechat .statistic-percen {
+        font-size: 25px;
+        color: #db2424;
+    }
+
+.content-body .lookup-statistic #piechart {
+    height: 200px;
+}
+
+.content-body .lookup-statistic .statistic-detail {
+    text-transform: none;
+    font-weight: normal;
+}
+
+.content-body .lookup-statistic-office {
+    margin-top: 10px;
+    border: 1px solid #b6c9da;
+    height: 230px;
+}
+
+    .content-body .lookup-statistic-office .carousel-indicators {
+        bottom: 0;
+        margin-bottom: 5px;
+    }
+
+        .content-body .lookup-statistic-office .carousel-indicators li {
+            border: 1px solid #48b9dd;
+        }
+
+            .content-body .lookup-statistic-office .carousel-indicators li.active {
+                background: #48b9dd;
+            }
+
+    .content-body .lookup-statistic-office .carousel-inner {
+        padding: 0 10px 10px;
+    }
+
+    .content-body .lookup-statistic-office .carousel-control {
+        top: 0;
+        height: 48px;
+        text-shadow: none;
+        opacity: 0.7;
+    }
+
+        .content-body .lookup-statistic-office .carousel-control > span {
+            font-size: 12px;
+            color: #747474;
+            margin-top: -6px;
+        }
+
+        .content-body .lookup-statistic-office .carousel-control.left,
+        .content-body .lookup-statistic-office .carousel-control.right {
+            background: none;
+        }
+
+    .content-body .lookup-statistic-office .statistic-label {
+        color: #10416f;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: #e6e6e6;
+        padding: 15px;
+        text-align: center;
+        margin: 0 -10px 10px;
+    }
+
+        .content-body .lookup-statistic-office .statistic-label .glyphicon {
+            color: #747474;
+            font-size: 12px;
+        }
+
+    .content-body .lookup-statistic-office .badge {
+        background: none;
+        border-radius: 0;
+        float: right;
+        color: black;
+        font-weight: normal;
+    }
+
+    .content-body .lookup-statistic-office .statistic-document {
+        margin-top: 5px;
+    }
+
+        .content-body .lookup-statistic-office .statistic-document .overdue {
+            color: red;
+        }
+
+        .content-body .lookup-statistic-office .statistic-document .undue {
+            color: #48b9dd;
+        }
+
+        .content-body .lookup-statistic-office .statistic-document > div > div {
+            margin-bottom: 3px;
+        }
+
+
+.content-body .lookup-statistic .statistic-label .statistic-time {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.content-body .lookup-statistic-office .statistic-label {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.content-body .statistic-document .percen-bar {
+    height: 15px;
+}
+
+    .content-body .statistic-document .percen-bar > div {
+        height: 15px;
+        float: left;
+    }
+
+    .content-body .statistic-document .percen-bar .undue {
+        background: #0189c4;
+    }
+
+    .content-body .statistic-document .percen-bar .overdue {
+        background: #ff7200;
+    }

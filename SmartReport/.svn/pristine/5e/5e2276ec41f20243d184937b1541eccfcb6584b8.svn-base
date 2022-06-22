@@ -1,0 +1,2 @@
+ALTER TABLE form ADD COLUMN FormCategoryId int COMMENT "Loại báo cáo -- 1: Loại thường, 2. Loại báo cáo chỉ tiêu, 3. Loại báo cáo tổng hợp";
+insert into resource VALUES(NULL, "DocType.Form.CreateOrEdit.Fields.FormCategoryId.Label", "Loại biểu mẫu");

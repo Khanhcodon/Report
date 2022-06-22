@@ -1,0 +1,11 @@
+﻿<div class="list-group-item {{if status == "available"}}online{{/if}}" data-id="${jid}">
+    <img src="${avatar}" alt="" class="list__item-avatar">
+    <span>
+        <span>${fullname}</span>
+        <span class="status">
+            <span></span>
+        </span>
+        <span class="total-unread">0</span>
+    </span>
+    <span class="user-message" title="${userStatus}">${userStatus}</span>
+</div>

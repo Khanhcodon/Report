@@ -1,0 +1,158 @@
+﻿@model LogModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Log.View");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var fullMessage = ViewBag.DetailException as string;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Customer.Logs.ConfirmMessage"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span>Nhật ký Lỗi</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-default control-btn" href="/admin/log">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<h2 data-restitle="egov.resources.log.detail">Chi tiết nhật ký</h2>
+
+<p>
+    @Html.LabelFor(model => model.CreatedOnDate): @Model.CreatedOnDate.ToString("dd/MM/yyyy hh:mm:ss tt")
+</p>
+<p>
+    @Html.LabelFor(model => model.IpAddress): @Model.IpAddress
+</p>
+<p>
+    @Html.LabelFor(model => model.LogTypeValue): @Model.LogTypeValue
+</p>
+<h2 class="short-message">
+    <i>
+        @Model.ShortMessage</i>
+</h2>
+<div>
+    @MvcHtmlString.Create(fullMessage)
+</div>
+@if (!string.IsNullOrWhiteSpace(fullMessage))
+{
+    <p>
+        <i>@Html.LabelFor(model => model.RequestJson):</i>
+    </p>
+    <div id="servervariables">
+        <p class="table-caption">
+            Server Variables
+        </p>
+        <table class="table-main table">
+            <thead class="grid-header">
+                <tr>
+                    <th class="header">Name
+                    </th>
+                    <th class="header">Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div id="form">
+        <p class="table-caption">
+            Form
+        </p>
+        <table class="table-main table">
+            <thead class="grid-header">
+                <tr>
+                    <th class="header">Name
+                    </th>
+                    <th class="header">Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div id="querystring">
+        <p class="table-caption">
+            Query String
+        </p>
+        <table class="table-main table">
+            <thead class="grid-header">
+                <tr>
+                    <th class="header">Name
+                    </th>
+                    <th class="header">Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div id="cookies">
+        <p class="table-caption">
+            Cookies
+        </p>
+        <table class="table-main table">
+            <thead class="grid-header">
+                <tr>
+                    <th class="header">Name
+                    </th>
+                    <th class="header">Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            var request = @(Html.Raw(Model.RequestJson));
+            if (request) {
+                for (var keyParent in request) {
+                    if (request.hasOwnProperty(keyParent)) {
+                        if (request[keyParent]) {
+                            for (var key in request[keyParent]) {
+                                if (request[keyParent].hasOwnProperty(key)) {
+                                    $("#" + keyParent.toLowerCase() + " table tbody").append("<tr><td><b>" + key + "</b></td><td>" + request[keyParent][key] + "</td></tr>");
+                                }
+                            }
+                            $("#" + keyParent.toLowerCase() + " tr:even").css("background-color", "#e9e9e9");
+                            $("#" + keyParent.toLowerCase()).removeAttr("style", "display:none;");
+                        } else {
+                            $("#" + keyParent.toLowerCase()).attr("style", "display:none;");
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
+<p>
+    <button type="button" onclick="location.href='@Url.Action("Index")'">@Localizer("Common.Button.Back")</button>
+    <button type="button" id="delete">@Localizer("Common.Button.Delete")</button>
+</p>
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.LogId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

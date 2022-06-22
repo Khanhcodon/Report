@@ -1,0 +1,61 @@
+﻿@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    ViewBag.Title = "";
+    var listContents = Model.DocumentContents;
+}
+
+<div id="divContent">
+    <div>
+        @{
+            var mainForm = listContents.SingleOrDefault(f => f.IsMain);
+        }
+        @if (mainForm != null)
+        {
+            <div class="div-mainform" id="mainForm">
+                @Html.Hidden("ContentFields", mainForm.Content, new { @class = "main-content" })
+                @Html.Hidden("Contents", "", new { @class = "main-content" })
+                @Html.Hidden("ContentId", Model.DocumentCopyId != 0 ? mainForm.DocumentContentId.ToString() : mainForm.FormId)
+                <div class="main-title form-title" style="height: 0px;">
+                    <span class="formName" data-contentid="@mainForm.DocumentContentId" type="@mainForm.FormTypeId">@mainForm.ContentName @((bool)ViewBag.IsCreatingDocument ? "" : " - Có " + @mainForm.Version + " phiên bản")
+                    </span>
+                    @if (!(bool)ViewBag.IsCreatingDocument)
+                    {
+                        <select class="viewAllVersion" type="@mainForm.FormTypeId" data-contentid="@mainForm.DocumentContentId" style="width: 200px; float: right">
+                            <option value="">Xem các phiên bản</option>
+                        </select>
+                    }
+                </div>
+                @*Khi create thì cho hiển thị editor Inline trên giao diện luôn, còn khi edit phải sử dụng chức năng Sửa trên toolbar.*@
+                <div class="content" data-contentid="@mainForm.DocumentContentId" type="@mainForm.FormTypeId" ></div>
+                @*@(ViewBag.IsCreatingDocument ? "onclick=egov.cshtml.document.enableEditor(this);" : "")>*@
+            </div>
+        }
+    </div>
+    <div id="subForm">
+        @{
+            var subForms = listContents.Where(f => !f.IsMain);
+        }
+        @foreach (var form in subForms)
+        {
+            <div class="div-subform">
+                @Html.Hidden("ContentFields", form.Content, new { @class = "sub-content" })
+                @Html.Hidden("Contents", "", new { @class = "sub-content" })
+                @Html.Hidden("ContentId", Model.DocumentCopyId != 0 ? form.DocumentContentId.ToString() : form.FormId)
+                <div class="subformTitle form-title">
+                    <span title="Hiển thị biểu mẫu" class="showOrHideContent">►
+                       @*   onclick="egov.cshtml.document.getContent('@form.DocumentContentId', this,@Model.DocumentCopyId == 0 ? true: false)"*@
+                        <span class="formName" data-contentid="@form.DocumentContentId" type="@form.FormTypeId">@form.ContentName @((bool)ViewBag.IsCreatingDocument ? "" : " - Có " + @form.Version + " phiên bản")  </span>
+                    </span>
+                    @if (!(bool)ViewBag.IsCreatingDocument)
+                    {
+                        <select class="viewAllVersion" type="@form.FormTypeId" data-contentid="@form.DocumentContentId" style="width: 200px; float: right">
+                            <option value="">Xem các phiên bản</option>
+                        </select>
+                    }
+                </div>
+                <div class="content" data-contentid="@form.DocumentContentId"  type="@form.FormTypeId" ></div>
+                @* @(ViewBag.IsCreatingDocument ? "onclick=egov.cshtml.document.enableEditor(this);" : "") >*@
+            </div>
+        }
+    </div>
+</div>

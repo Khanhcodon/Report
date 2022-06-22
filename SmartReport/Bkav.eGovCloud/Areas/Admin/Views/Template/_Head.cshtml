@@ -1,0 +1,57 @@
+﻿<script src="../../../../Scripts/bkav.egov/libs/ckeditor/ckeditor.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script type="text/ecmascript">
+    var editor;
+    function openConfig(id, name) {
+
+        var url = '@Url.Action("ConfigTemplate")' + "/" + id;
+        window.open(url, 'DialogName', 'height=1000, width=1200,type=fullWindow,fullscreen, modal=yes, alwaysRaised=yes');
+
+        @*$.ajax({
+            url: "@Url.Action("ConfigTemplate")",
+            data: { id: id },
+            success: function (result) {
+                var $dialog = $("#config");
+                $dialog.html(result);
+                $dialog.dialog({
+                    modal: true,
+                    width: "100%",
+                    height: 600,
+                    title: name,
+                    open: function () {
+                        @*$("#config #accordion").accordion({
+                            collapsible: true
+                        });
+                        $("#config").css({
+                            width: "100%",
+                            padding: 0,
+                            margin: 0,
+                        });
+
+                        if (editor)
+                            editor.destroy();
+
+                        editor = CKEDITOR.replace("Content", { toolbar: "Basic", height: 600 });
+                    },
+                    buttons: {
+                        "@Localizer("Common.Button.Save")": function () {
+                            if (editor)
+                                editor.destroy();
+
+                            $("form").submit();
+                            $("#config").dialog("destroy");
+                        },
+                        "@Localizer("Common.Button.Destroy")": function () {
+                            $("#config").dialog("destroy");
+                        }
+                    },
+                    close: function () {
+                        $("#config").html("");
+                    }
+                });
+            }
+        });*@
+    }
+</script>
+<div id="config" style="display: none">
+</div>

@@ -1,0 +1,61 @@
+﻿<div class="row" id="titleSimple">
+    <h3 class="col-md-16" style="text-align: center;color: #474747;margin: 12px;font-size: 20px;">Bạn có chắc chắn muốn gửi cho <strong id="nameDepart"></strong></h3>
+</div>
+
+<div class="col-sm-16 col-md-11" id="left_content">
+    <div class="row hidden-xs hidden">
+        <div class="list-group-item row transfer-filter">
+            <div class="hidden-xs col-sm-5 col-sm-offset-1">
+                <input type="text" id="searchUser" class="form-control input-sm pull-left searchUser"
+                       placeholder="Tìm tài khoản" />
+            </div>
+            <div class="col-sm-4">
+                <select class="form-control input-sm transfer-filter__position"></select>
+            </div>
+            <div class="col-sm-4">
+                <select class="form-control input-sm transfer-filter__dept"></select>
+            </div>
+            <div class="hidden-xs col-sm-1 col-sm-offset-1">
+                <label class="checkbox document-color checkAll qtooltip" title="Chọn/bỏ chọn tất cả cán bộ">
+                    <input name="checkbox[]" value="1" type="checkbox">
+                    <span class="document-color-1"><i class="icon-check"></i></span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="list-group listUsers"> </ul>
+    </div>
+    <div class="dg-view"></div>
+</div>
+
+<div class="hidden-xs hidden-sm col-sm-16 col-md-5" id="right_content" style="border-left: 1px solid #e3e3e3">
+    <div style="height: 25px; " class="hidden-xs">
+        <div class="bold" style="font-size: 14px" data-res="egov.resources.document.transfer.userList">Danh sách nhận văn bản</div>
+    </div>
+    <div class="result-view show-dg">
+        <div>
+            <span data-res="egov.resources.transfer.MainProcessUser"></span>
+            <i data-res="egov.resources.transfer.MainProcessUserComment"></i>
+            <div class="main-process-user">
+                <ul class="list-group" style="border-bottom:0"></ul>
+            </div>
+        </div>
+        <div>
+            <span data-res="egov.resources.transfer.CoProcessUser"></span><i data-res="egov.resources.transfer.CoProcessUserComment"></i>
+            <div class="co-process-user">
+                <ul class="list-group" style="border-bottom:0"> </ul>
+            </div>
+        </div>
+        <div class="hidden-xs annouceuserzone">
+            <span data-res="egov.resources.transfer.AnnouceUser"></span><i data-res="egov.resources.transfer.AnnouceUserComment"></i>
+            <div class="annouce-user">
+                <ul class="list-group" style="border-bottom:0"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var nameDepart = $(".user-position").val();
+    $("#nameDepart").innerHTML = nameDepart;
+</script>

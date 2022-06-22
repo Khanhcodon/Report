@@ -1,0 +1,286 @@
+﻿@model IEnumerable<ResourceModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+
+@using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListResources", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <span>@Localizer("Common.Resource.Index.Search.Fields.ResourceKey.Label")</span>
+    <input  class="form-control" type="text" name="resourceKey" id="resourceKey" value="@(ViewBag.ResourceKey ?? "")" style="display:inline-block;width:400px"/>
+    <input class="btn btn-default" type="submit" id="search" onclick="onSearchResource(this);" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+}
+<div style="clear: both">
+</div>
+<br />
+<script type="text/javascript">
+    $(function () {
+        $("#tblResource").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblResource").openLink({ urlOpen: '/admin/Resource/Edit' });
+        $(".table-main").addClass("table-bordered table-hover .table-striped");
+    });
+    function onSearchResource(_this)
+    {
+        $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+</script>
+<table id="tblResource" class="table table-hover table-bordered">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 200px"/>
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th>
+                @Ajax.SortLink("ResourceKey", Localizer("Common.Resource.Index.List.Column.ResourceKey"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        resourceKey = ViewBag.ResourceKey,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListResources",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th>
+                @Ajax.SortLink("ResourceValue", Localizer("Common.Resource.Index.List.Column.ResourceValue"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        resourceKey = ViewBag.ResourceKey,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListResources",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Edit")
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var resource in Model)
+            {
+                number += 1;
+            <tr data-id="@resource.ResourceId">
+                <td>@number
+                </td>
+                <td>@resource.ResourceKey
+                </td>
+                <td>@resource.ResourceValue
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = resource.ResourceId })
+                </td>
+                <td>
+                    <a href="javascript:deleteResource(@(resource.ResourceId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(resource.ResourceId)" style="display: none" action="@Url.Action("Delete", new { Id = resource.ResourceId })" method="POST">
+                         @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.resource.nodata">
+                    Không có resource nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      resourceKey = ViewBag.ResourceKey,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListResources",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+@*<div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+        @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      resourceKey = ViewBag.ResourceKey,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListResources",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+    </div>
+    <div class="grid-header">
+        <div class="grid-header-wrap">
+            <table class="table-main table">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col />
+                    <col style="width: 50px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("Common.Resource.Index.List.Column.Numbers")
+                        </th>
+                        <th class="header">
+                            @Ajax.SortLink("ResourceKey", Localizer("Common.Resource.Index.List.Column.ResourceKey"),
+                     sortAndPage.SortBy, sortAndPage.IsSortDescending, 
+                     "SortAndPaging", "sort asc", "sort desc",
+                     new
+                         {
+                             page = sortAndPage.CurrentPage,
+                             pageSize = sortAndPage.PageSize,
+                             resourceKey = ViewBag.ResourceKey,
+                         },
+                     new AjaxOptions
+                         {
+                             UpdateTargetId = "divListResources",
+                             OnBegin = "onBegin",
+                             OnSuccess = "onSuccess",
+                             OnFailure = "onFailure"
+                         })
+                        </th>
+                        <th class="header">
+                            @Ajax.SortLink("ResourceValue", Localizer("Common.Resource.Index.List.Column.ResourceValue"),
+                     sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                     "SortAndPaging", "sort asc", "sort desc",
+                     new
+                         {
+                             page = sortAndPage.CurrentPage,
+                             pageSize = sortAndPage.PageSize,
+                             resourceKey = ViewBag.ResourceKey,
+                         },
+                     new AjaxOptions
+                         {
+                             UpdateTargetId = "divListResources",
+                             OnBegin = "onBegin",
+                             OnSuccess = "onSuccess",
+                             OnFailure = "onFailure"
+                         })
+                        </th>
+                        <th class="header">
+                            @Localizer("Common.Resource.Index.List.Column.Edit")
+                        </th>
+                        <th class="header">
+                            @Localizer("Common.Resource.Index.List.Column.Delete")
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="data" class="grid-content" style="overflow-x: auto;overflow-y: visible">
+        <table class="table-main table" id="tblResource">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var resource in Model)
+                    {
+                        number += 1;
+                        <tr>
+                            <td>@number
+                            </td>
+                            <td>@resource.ResourceKey
+                            </td>
+                            <td>@resource.ResourceValue
+                            </td>
+                            <td>
+                                @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = resource.ResourceId })
+                            </td>
+                            <td>
+                                <a href="javascript:deleteResource(@(resource.ResourceId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                                <form id="formdelete@(resource.ResourceId)" style="display: none" action="@Url.Action("Delete", new { Id = resource.ResourceId })" method="POST">
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">
+                            Không có resource nào
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="grid-pager grid-pager-wrap grid-pager-bottom" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+        @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                  sortAndPage.TotalRecordCount, "SortAndPaging",
+                  "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                  new
+                      {
+                          resourceKey = ViewBag.ResourceKey,
+                          sortBy = sortAndPage.SortBy,
+                          isSortDesc = sortAndPage.IsSortDescending
+                      },
+                  new AjaxOptions
+                      {
+                          UpdateTargetId = "divListResources",
+                          OnBegin = "onBegin",
+                          OnSuccess = "onSuccess",
+                          OnFailure = "onFailure"
+                      }, listPageSize)
+    </div>*@ 

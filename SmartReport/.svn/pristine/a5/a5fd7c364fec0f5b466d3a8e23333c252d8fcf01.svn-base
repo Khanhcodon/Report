@@ -1,0 +1,1 @@
+ALTER TABLE `comment` ADD COLUMN Diff MEDIUMTEXT COMMENT "Json lưu handsontable data/ cấu hình khi tạo/ chuyển báo cáo";

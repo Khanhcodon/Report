@@ -1,0 +1,64 @@
+﻿@model IEnumerable<GuideModel>
+@{
+    ViewBag.Title = Localizer("Common.Guide.Label.List");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    function deleteDocField(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Guide.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    function onBegin() {
+        $("#divListGuide").blockpanel({ text: "Đang tải...", borderWidth: 1 });
+    }
+
+    function onSuccess() {$('tr th').css("line-height", "2.5");
+        $('#divListGuide').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+        $('#divListGuide').unblockpanel();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span data-res="egov.resources.sitemap.form"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/Guide/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListGuide", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+        {
+            <span>@Localizer("Common.Guide.Index.List.Column.GuideKey")</span>
+            <input type="text" class="form-control" name="guideName" id="searchName"
+         value="@(ViewBag.GuideName ?? "")" style="width: 40%"
+         placeholder="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+            <input type="submit" class="btn" id="search" onclick="$(this).parent().attr('action', '@Url.Action("Search")    ?pageSize=' + $('select[name=pageSize]:first').val())" value="@Localizer("Common.Guide.Index.Search.Button.Search")" />
+        }
+    </div>
+    <div id="divListGuide">
+        @{
+            Html.RenderPartial("_List", Model);
+        }
+    </div>
+</div>

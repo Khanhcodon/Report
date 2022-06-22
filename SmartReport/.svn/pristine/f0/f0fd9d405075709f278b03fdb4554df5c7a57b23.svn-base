@@ -1,0 +1,71 @@
+﻿@using ActiveQueryBuilder.Web.MVC
+@model ActiveQueryBuilder.Web.Server.QueryBuilder
+@{
+    ViewBag.Title = "Báo cáo tổng hợp";
+    var controls = Html.QueryBuilder(Model, s => s.Theme = "bootstrap");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bootswatch/cosmo/bootstrap.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/themes/black-tie/jquery-ui.css")" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.4.min.js")"></script>
+    <style>
+        .section-title, .body-content {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid body-content">
+        <div class="row">
+            <div class="col-md-12">
+                @controls.GetHtml()
+                <div class="qb-ui-layout">
+                    <div class="qb-ui-layout__top">
+                        <div class="qb-ui-layout__left">
+                            <div class="qb-ui-structure-tabs">
+                                <div class="qb-ui-structure-tabs__tab">
+                                    <input type="radio" id="tree-tab" name="qb-tabs" checked />
+                                    <label for="tree-tab">Database</label>
+                                    <div class="qb-ui-structure-tabs__content">
+                                        @controls.ObjectTreeView().GetHtml()
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qb-ui-layout__right">
+                            @controls.SubQueryNavigationBar().GetHtml()
+                            @controls.Canvas().GetHtml()
+                            @controls.StatusBar().GetHtml()
+                            @controls.Grid().GetHtml()
+                        </div>
+                    </div>
+                    <div class="qb-ui-layout__bottom">
+                        @controls.SqlEditor().GetHtml()
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <footer>
+           <button id="btnSaveQuery">Save</button>
+        </footer>
+    </div>
+    <form action="/" method="post" id="formSubmit">
+        <input type="hidden" name="SqlQuery" class="SqlQuery" value="" />
+    </form>
+    <script>
+        $("#btnSaveQuery").click(function () {
+            $("#SqlQuery").val($(".qb-ui-editor").find("textarea").val());
+            $("formSubmit").submit();
+        })
+    </script>
+</body>
+</html>

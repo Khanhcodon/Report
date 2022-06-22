@@ -1,0 +1,99 @@
+﻿@model IEnumerable<bkav.egovcloud.models.documentcopymodel>
+    @{
+        Layout = null;
+    }
+    <script type="text/javascript">
+        $(function () {
+            egov.utilities.checkbox.checkAndUnCheckAll($(".all-check"), $(".itm-check"));
+        });
+    </script>
+    <div id="confirmRelations">
+        <div>
+            Danh sách các văn bản liên quan:
+        </div>
+        <div>
+            <div class="relation">
+                <div class="grid" id="divRelations">
+                    <div class="grid-header">
+                        <div class="grid-header-wrap">
+                            <table class="table-main">
+                                <colgroup>
+                                    <col style="width: 50px" />
+                                    <col />
+                                    <col style="width: 100px" />
+                                    <col style="width: 100px" />
+                                    <col style="width: 100px" />
+                                    <col style="width: 100px" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" class="all-check" />
+                                        </th>
+                                        <th class="header">
+                                            Trích yếu
+                                        </th>
+                                        <th class="header">
+                                            Số hiệu
+                                        </th>
+                                        <th class="header">
+                                            Người xử lý
+                                        </th>
+                                        <th class="header">
+                                            Ngày tạo
+                                        </th>
+                                        <th class="header">
+                                            Hình thức
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="relationData" class="grid-content egov-border" style="height: 135px;">
+                        <table class="table-main" id="tblRelations">
+                            <colgroup>
+                                <col style="width: 50px" />
+                                <col />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                            </colgroup>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var docCopy in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" class="itm-check" value="@docCopy.DocumentCopyId" />
+                                            </td>
+                                            <td>
+                                                @docCopy.Document.Compendium
+                                        </td>
+                                        <td>
+                                            @docCopy.Document.DocCode
+                                    </td>
+                                    <td>
+                                        @docCopy.Document.CitizenName
+                                </td>
+                                <td>
+                                    @docCopy.DateCreated.ToString()
+                            </td>
+                            <td></td>
+                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 5px;">
+            <input type="checkbox" />
+            <span>Luôn gửi, không hỏi lại lần sau.</span>
+        </div>
+    </div>

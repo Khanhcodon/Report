@@ -1,0 +1,44 @@
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("TimeJob.CreateOrEdit.Fields.IsActiveAlert.Label", "Cảnh báo chu kỳ")
+
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangngayduedate", "Hàng ngày đến hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangtuanduedate", "Hàng tuần đến hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangthangduedate", "Hàng tháng đến hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangquyduedate", "Hàng quý đến hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangnamduedate", "Hàng năm đến hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangngayoutofdate", "Hàng ngày quá hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangtuanoutofdatedate", "Hàng tuần quá hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangthangoutofdatedate", "Hàng tháng quá hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangquyoutofdatedate", "Hàng quý quá hạn")
+
+INSERT INTO resource(resource.ResourceKey, resource.ResourceValue)
+VALUES
+("egovcloud.enum.scheduletype.hangnamoutofdatedate", "Hàng năm quá hạn")

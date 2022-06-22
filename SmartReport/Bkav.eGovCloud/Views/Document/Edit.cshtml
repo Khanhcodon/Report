@@ -1,0 +1,27 @@
+﻿@using Bkav.eGovCloud.Web.Framework.Utility
+@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    ViewBag.Title = "";
+}
+@{
+    Html.RenderPartial("_Head");
+}
+
+<div class="egov">
+    <div class="document" id="document">
+        @using (Html.BeginForm("Edit", "Document", FormMethod.Post, new { id = "EditForm" }))
+        {
+            <input value="@(ViewBag.Comments)" type="hidden" id="Comment" />
+            <div class="div-form">
+                @{
+            Html.RenderPartial("_Toolbar", Model);
+                }
+            </div>
+            <div id="divCenter" class="document-form">
+                @{
+            Html.RenderPartial("_CreateOrEdit", Model);
+                }
+            </div>
+        }
+    </div>
+</div>

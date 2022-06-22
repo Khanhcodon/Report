@@ -1,0 +1,201 @@
+﻿@{
+    var allForm = ViewBag.AllForm as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.FormModel>;
+}
+<script type="text/javascript">
+    function setFormCheck(_this, formid, doctypeid, isprimary) {
+        var token = $('[name=__RequestVerificationToken]', "#DocTypeChangeIsPrimary").val();
+        $.ajax({
+            url: "@Url.Action("ChangeIsPrimary")",
+            type: "POST",
+            data: {
+                formid: formid,
+                doctypeid: doctypeid,
+                isprimary: isprimary,
+                __RequestVerificationToken: token
+            },
+            success: function () {
+                window.location.reload(true);
+            }
+        });
+    }
+
+    //    function setFormCheck(doctypeId, formMainId, formsId){
+    //    alert(formsId);
+    //        $.ajax({
+    //            url: "@Url.Action("UpdateForm")",
+    //            type: "POST",
+    //            data: {doctypeId: doctypeId, formMainId: formMainId, formsId: formsId},
+    //            success: function(result){
+    //
+    //            }
+    //        });
+    //    }
+
+    $("#tbodyform .isprimary").click(function () {
+        primaryclick($(this));
+    });
+
+    function primaryclick(itemprimary) {
+        if (itemprimary.is(':checked')) {
+            $("#tbodyform .isprimary").not(itemprimary).attr('checked', false);
+            $("#tbodyform .notprimary").removeAttr('disabled');
+            itemprimary.parent().next().find('input').attr('checked', false);
+            itemprimary.parent().next().find('input').attr('disabled', 'disabled');
+        }
+        else {
+            $("#tbodyform .notprimary").removeAttr('disabled');
+        }
+    }
+
+    function updateform() {
+        //        var doctypeId = null;
+        //        var formMainId = null;
+        //        var formsId = [];
+        //        if ($("#tbodyform .isprimary:checked").length == 1)
+        //        {
+        //            doctypeId = $("#tbodyform .isprimary:checked").attr('doctypeid');
+        //            formMainId = $("#tbodyform .isprimary:checked").attr('formid');
+        //        }
+        //        else{
+        //            formMainId = "00000000-0000-0000-0000-000000000000";
+        //        }
+        //        if ($("#tbodyform .notprimary:checked").length > 0)
+        //        {
+        //            $("#tbodyform .notprimary:checked").each(function () {
+        //                doctypeId = $(this).attr('doctypeid');
+        //                formsId.push($(this).attr('formid'));
+        //            });
+        //        }
+        //        setFormCheck(doctypeId,formMainId,formsId);
+
+        $("#tbodyform .isprimary").each(function () {
+            if ($(this).is(':checked')) {
+                var formid = $(this).attr('formid');
+                var doctypeid = $(this).attr('doctypeid');
+                setFormCheck($(this), formid, doctypeid, true);
+            }
+        });
+        $("#tbodyform .notprimary").each(function () {
+            if ($(this).is(':checked')) {
+                var formid = $(this).attr('formid');
+                var doctypeid = $(this).attr('doctypeid');
+                setFormCheck($(this), formid, doctypeid, false);
+            }
+        });
+
+        //$dialog.close();
+    }
+
+    function doSubmit(form) {
+        form.submit();
+    }
+</script>
+<div class="grid">
+    <div class="grid-header">
+        <div id="DocTypeChangeIsPrimary" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div class="grid-header-wrap">
+            <table class="table-main table" id="tblForm@(ViewData["isPrimary"])">
+                <colgroup>
+                    <col />
+                    <col style="width: 150px" />
+                    <col style="width: 150px" />
+                    <col style="width: 110px" />
+                    <col style="width: 110px" />
+                    <col style="width: 100px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("Bkav.eGovCloud.Areas.Admin.Form.FormName")
+                    </th>
+                    <th class="header">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Form.Description")
+                </th>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Form.Embryonic")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Form.View")
+        </th>
+        <th class="header">
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Form.IsPrimary")
+    </th>
+    <th class="header">
+        @Localizer("Bkav.eGovCloud.Areas.Admin.Form.NotPrimary")
+</th>
+</tr>
+</thead>
+</table>
+</div>
+</div>
+<div class="grid-content">
+    <table class="table-main table">
+        <colgroup>
+            <col />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 110px" />
+            <col style="width: 110px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <tbody id="tbodyform">
+            @if (allForm != null && allForm.Any())
+            {
+                foreach (var form in allForm)
+                {
+                    <tr>
+                        <td class="td-filter">
+                            @form.FormName
+                        </td>
+                        <td>
+                            @form.Description
+                        </td>
+                        <td>
+                            @form.EmbryonicPath
+                        </td>
+                        <td>
+                            @{
+                    var url = string.Empty;
+                    if (form.FormTypeId == 1)
+                    {
+                        url = Url.Action("ConfigTemplate", "Form", new { id = form.FormId });
+                    }
+                    else if (form.FormTypeId == 2)
+                    {
+                        url = Url.Action("ConfigForm", "Form", new { id = form.FormId });
+                    }
+
+                    var openner = url == string.Empty ? "" :
+                      "window.open(" + url + ", 'DialogName', 'height=800, width=1000, modal=yes, alwaysRaised=yes')";
+                            }
+                            @if (form.FormTypeId == 1 || form.FormTypeId == 2)
+                            {
+                                <a href="#" onclick="window.open('@url', 'DialogName', 'height=1000, width=1200, modal=yes, alwaysRaised=yes')">
+                                    @Localizer("Bkav.eGovCloud.Areas.Admin.Form.View")
+                                </a>
+                            }
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="isprimary" formid='@form.FormId' doctypeid='@ViewBag.DocTypeId' @(ViewBag.HasPrimary ? "disabled='disabled'" : "") />
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="notprimary" formid='@form.FormId' doctypeid='@ViewBag.DocTypeId' />
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.Form.List.Null")
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>

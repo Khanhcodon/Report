@@ -1,0 +1,107 @@
+﻿@model IEnumerable<AddressModel>
+@{
+    ViewBag.Title = Localizer("Common.Address.SyncDocType");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var insideDocTypes = ViewBag.InsideDocTypes as string;
+    var outsideDocTypes = ViewBag.OutsideDocTypes as string;
+    var currentSyncs = ViewBag.CurrentSyncs as string;
+    
+}
+<script type="text/javascript">
+    var insideDocTypes = @(string.IsNullOrEmpty(insideDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(insideDocTypes));
+    var outsideDocTypes = @(string.IsNullOrEmpty(outsideDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(outsideDocTypes));
+    var currentSyncs = @(string.IsNullOrEmpty(currentSyncs) ? MvcHtmlString.Create("[]") : Html.Raw(currentSyncs));
+
+    $(function(){
+        for(var i=0;i<outsideDocTypes.length;i++){
+            var tmp=[];
+            $.each(insideDocTypes, function() {
+                var b = $.extend(true, {}, this);
+                tmp.push(b);
+            });
+            var currentOutsideDoctype=outsideDocTypes[i];
+            $.each(tmp, function() {
+                var that=this;
+                for(var j=0;j<currentSyncs.length;j++){
+                    if(this.value==currentSyncs[j].insideDoctypeId&&currentOutsideDoctype.value==currentSyncs[j].outsideDoctypeId){
+                        this.select = true;
+                        break;
+                    }
+                }
+            });
+
+            var data={
+                stt:i+1,
+                id:currentOutsideDoctype.value,
+                text:currentOutsideDoctype.label,
+                insideDocTypes:tmp,
+            }
+            $('#syncDoctypeItem').tmpl(data).appendTo($(".syncDoctype tbody"));
+        }
+
+        $("#sync").click(function(){
+            var docTypesMap={};
+            var syncDoctypeItems=$(".syncDoctypeItem");
+            $.each(syncDoctypeItems,function(){
+                var outsiteId=$(this).data("id");
+                var insideId=$(this).find("option:selected").val();
+                if(insideId){
+                    docTypesMap[outsiteId]=insideId;
+                }
+            });
+            $.ajax({
+                url:"/admin/Address/SyncDocTypes",
+                data:{
+                    docTypesMap:JSON.stringify(docTypesMap)
+                }
+            }).success(function(result){
+                window.document.location="/admin/address/index";
+            });
+        });
+
+    });
+</script>
+<script type="text/x-jquery-tmpl" id="syncDoctypeItem">
+    <tr class="syncDoctypeItem" data-id="${id}">
+        <td>
+            <label>${stt}</label>
+        </td>
+        <td>
+            <label>${text}</label>
+        </td>
+        <td>
+            <select>
+                <option value>Không đồng bộ</option>
+                {{each insideDocTypes}}
+                        <option value="${value}" {{if select}}selected{{/if}}>${label}</option>
+                {{/each}}
+            </select>
+        </td>
+    </tr>
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span data-res="egov.resources.syncDocType"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="sync">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn btn-default control-btn" href="/admin/Address/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<table class="syncDoctype">
+    <thead>
+        <tr>
+			<th>STT</th>
+            <th>Loại văn bản liên thông</th>
+            <th>Loại văn bản hiện tại</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

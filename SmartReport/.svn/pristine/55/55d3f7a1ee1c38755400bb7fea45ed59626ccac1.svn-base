@@ -1,0 +1,11 @@
+SELECT dc.DocumentCopyId, d.DocCode, d.Compendium, 
+(select username from `user` where UserId=c.UserSendId) as UserSend,
+(select username from `user` where UserId=c.UserReceiveId) as UserReiceived,
+(select dp.DepartmentName FROM department dp INNER JOIN `user_department_jobtitles_position` ud 
+on dp.DepartmentId=ud.DepartmentId where ud.UserId=c.UserSendId ORDER BY ud.IsPrimary DESC limit 1) as DeptSend,
+(select dp.DepartmentName FROM department dp INNER JOIN `user_department_jobtitles_position` ud 
+on dp.DepartmentId=ud.DepartmentId where ud.UserId=c.UserReceiveId ORDER BY ud.IsPrimary DESC limit 1) as DeptReiceived,
+c.DateCreated as DateSend
+FROM documentcopy dc INNER JOIN document d ON dc.DocumentId=d.DocumentId 
+INNER JOIN `comment` c on dc.DocumentCopyId=c.DocumentCopyId
+Where dc.DocumentCopyId in (#docCopyIds)

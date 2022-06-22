@@ -1,0 +1,137 @@
+﻿@model OnlineTemplateModel
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+<link href="../../../../Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<style>
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+        /*float: left;*/
+    }
+
+        .fileinput-button input {
+            border: #1b0e0e;
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            -moz-transform: translate(-300px, 0) scale(4);
+            -ms-transform: translate(-300px, 0) scale(4);
+            -o-transform: translate(-300px, 0) scale(4);
+            -webkit-transform: translate(-300px, 0) scale(4);
+            transform: translate(-300px, 0) scale(4);
+            font-size: 23px;
+            direction: ltr;
+            cursor: pointer;
+        }
+
+    .fileupload-buttonbar .btn,
+    .fileupload-buttonbar .toggle {
+        margin-bottom: 5px;
+    }
+</style>
+
+<script src="../../../../Scripts/bkav.egov/libs/tinymce/tinymce.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    tinyMCE.init({
+        mode: "exact",
+        elements: "Description",
+        language: "@lang",
+        height: "200",
+        width: "800",
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+        image_advtab: true
+    });
+
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm(Model.OnlineTemplateId == 0 ? "Create" : "Edit",
+        "OnlineTemplate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.OnlineTemplateId)
+    <table>
+        <tr>
+            <td style="width: 25%">
+                @Html.LabelRequireFor(model => model.Name)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.LabelFor(model => model.Description)</td>
+            <td>
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description)</td>
+        </tr>
+        <tr>
+            <td>@Localizer("Common.OnlineTemplate.CreateOrEdit.Field.Attachment.Label")</td>
+            <td>
+                <br />
+                <input type="file" name="fileUpload" id="fileUpload" multiple="multiple" />
+            </td>
+        </tr>
+        @*  <tr>
+            <td></td>
+            <td>@if (Model.OnlineTemplateId > 0 && Model.FileId > 0 && ViewBag.FileName != null)
+                {
+                     @Html.HiddenFor(model => model.FileId)
+                <b>
+                    <a href="/Admin/OnlineTemplate/download/@Model.FileId">@ViewBag.FileName</a>
+                </b>
+            </td>
+        </tr>*@
+    </table>
+
+    if (Model.OnlineTemplateId > 0 && Model.FileId > 0 && ViewBag.FileName != null)
+    {
+    <table class="table table-bordered table-hover" id="tblFile">
+        <colgroup>
+            <col />
+            <col style="width: 100px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Law.CreateOrEdit.Field.Attachment.Name")</th>
+                <th class="text-center">@Localizer("Common.Law.CreateOrEdit.Field.Attachment.Download") </th>
+                <th class="text-center">@Localizer("Common.Resource.Index.List.Column.Delete.Button") </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr data-fileid="@Model.FileId">
+                <td>@ViewBag.FileName</td>
+                <td class="text-center">
+                    @Html.ActionLink(Localizer("Common.Law.CreateOrEdit.Field.Attachment.Download"),
+                        "Download", new { id = Model.FileId })
+                </td>
+                <td class="text-center">
+                    <a href="javascript:deleteFile('@Model.FileId')">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a></td>
+            </tr>
+        </tbody>
+    </table>
+    }
+}

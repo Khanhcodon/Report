@@ -1,0 +1,45 @@
+﻿@model JobTitlesModel
+@Html.HiddenFor(model => model.JobTitlesId)
+<table>
+    <tr>
+        <td style="width: 22%">
+            @Html.LabelRequireFor(model => model.JobTitlesName):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.JobTitlesName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @if (Model.JobTitlesId == 0)
+            { 
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.JobTitlesName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsApproved):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsApproved)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsClerical):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsClerical)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CanGetDocumentCome):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.CanGetDocumentCome)
+        </td>
+    </tr>
+</table>

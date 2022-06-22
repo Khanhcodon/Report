@@ -1,0 +1,11 @@
+﻿@{
+    var signature = DependencyResolver.Current.GetService<Bkav.eGovCloud.Entities.Common.EmailSettings>().EmailSignature;
+}
+<html>
+	<head></head>
+	<body>
+		@RenderBody()
+        <br/>
+        @(string.IsNullOrWhiteSpace(signature) ? "" : signature)
+	</body>
+</html>

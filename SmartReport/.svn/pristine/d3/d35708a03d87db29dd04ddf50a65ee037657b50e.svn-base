@@ -1,0 +1,26 @@
+﻿@model TransferTypeModel
+@using Bkav.eGovCloud.Entities
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.TransferTypeId)
+
+<table>
+
+    <tr>
+        <td style="width: 17%">
+            @Html.LabelRequireFor(model => model.TransferTypeName):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.TransferTypeName,
+ new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @if (Model.TransferTypeId == 0)
+            {
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.TransferTypeName)
+        </td>
+    </tr>
+</table>

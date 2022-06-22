@@ -1,0 +1,510 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.AdminGeneralSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.General");
+    Layout = "_SettingLayout.cshtml";
+    var listShowAcountType = ViewBag.ListShowAcountType as List<SelectListItem>;
+    var listUserAcceptCalendars = ViewBag.UserAcceptCalendars as IEnumerable<Bkav.eGovCloud.Entities.Customer.User>;
+    var allUsers = ViewBag.AllUsers as string;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/select2/select2.min.js")"></script>
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Scripts/bkav.egov/libs/select2/select2.css")" />
+
+<script type="text/javascript">
+
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        var isLoadPageScroll = $("#IsLoadPageScroll");
+        var pageShow = $(".pageshow");
+        if (isLoadPageScroll.prop("checked")) {
+            pageShow.hide();
+        } else {
+            pageShow.show();
+        }
+        $("input[type='radio'][name='IsLoadPageScroll'][value='True']").click(function () {
+            pageShow.hide();
+        });
+        $("input[type='radio'][name='IsLoadPageScroll'][value='False']").click(function () {
+            pageShow.show();
+        });
+        $("#UserAcceptCalendar, #UserAcceptOverdue").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(allUsers, function (value) {
+                    value = value.label || value.value || value;
+                    return matcher.test(value) || matcher.test(value);
+                }));
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                if($(this).is("#UserAcceptOverdue")){
+                    $("#UserIgnoreOverdueId").val(ui.item.value);
+                    $("#UserIgnoreOverdueName").val(ui.item.label);
+                    $(".userIgnoreOverdueName").text(ui.item.label);
+                }else{
+                    if (!IsExist($("#UserAcceptCalendarIds").val() ,ui.item.value)) {
+                        setUserIds($("#UserAcceptCalendarIds"), ui.item.value);
+                        $("#userAcceptCalendars").append('<div class="userAcceptCalendarName"> <span>'+ ui.item.label +'</span><a class="removeUserCalendar" href="#" data-id="'+ ui.item.value +'" style="float:right">Xóa</a></div>');
+                    }
+                    $("#UserAcceptCalendar").val("");
+                    $("#UserAcceptCalendarIds").val(ui.item.value);
+                    $("#UserAcceptCalendarName").val(ui.item.label);
+                    $(".userAcceptCalendarName").text(ui.item.label);
+                }
+                return false;
+            }
+        });
+
+        $(document).on("click", ".removeUserCalendar", function (e) {
+            e.preventDefault();
+            var target = $(e.target).closest("a");
+            var value = deleteUserAcceptCalendar($("#UserAcceptCalendarIds").val() ,target.attr("data-id"));
+            $("#UserAcceptCalendarIds").val(value);
+            target.parent().remove();
+        });
+
+        function setUserIds(input, userId) {
+            var value = input.val();
+            if(value != ""){
+                value = value + ",";
+            }
+            input.val(value + userId);
+        }
+
+        function IsExist(userIds, userIdNew) {
+            var listUser = userIds.split(",");
+            for (var i = 0; i < listUser.length; i++) {
+                if(listUser[i] == userIdNew){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function deleteUserAcceptCalendar(userIds, userIdNew) {
+            var listUser = userIds.split(",");
+            var index = listUser.indexOf(userIdNew);
+
+            if (index > -1) {
+                listUser.splice(index, 1);
+            }
+
+            return listUser.toString();
+
+        }
+
+        $('#GovDocFieldId').select2({ allowClear: true });
+        $('#GovWorkFlowId').select2({ allowClear: true });
+    })
+</script>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.HasUseHSMC)
+
+        <table>
+            <tr>
+                <td style="padding-left: 0; width: 45%;">
+                    @Html.HiddenFor(model => model.MoneyFormat)
+                    @Html.LabelHintFor(model => model.IsLoadAllResourceOnStartup)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsLoadAllResourceOnStartup)
+                    @Html.ValidationMessageFor(model => model.IsLoadAllResourceOnStartup)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.DefaultPageSize)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.DefaultPageSize)
+                    @Html.ValidationMessageFor(model => model.DefaultPageSize)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.ListPageSizeParsed)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ListPageSizeParsed)
+                    @Html.ValidationMessageFor(model => model.ListPageSizeParsed)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/Content/Images/help.png" title="Lưu lại thao tác xử lý của người dùng như đăng nhập, chuyển văn bản, ... Việc này giúp quản trị quản lý được truy cập của người sử dụng với hệ thống, nhưng cũng sẽ gây chậm quá trình thao tác của người sử dụng. Cân nhắc nhu cầu khi kích hoạt.">
+                    Cho phép hệ thống Lưu lại thao tác hệ thống người sử dụng
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SaveUserActivity)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/Content/Images/help.png" title="Lưu lại thao tác xử lý của người dùng như đăng nhập, chuyển văn bản, ... Việc này giúp quản trị quản lý được truy cập của người sử dụng với hệ thống, nhưng cũng sẽ gây chậm quá trình thao tác của người sử dụng. Cân nhắc nhu cầu khi kích hoạt.">
+                    Kích hoạt gửi nhanh
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsFastTransfer)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/Content/Images/help.png" title="Lưu lại thao tác xử lý của người dùng như đăng nhập, chuyển văn bản, ... Việc này giúp quản trị quản lý được truy cập của người sử dụng với hệ thống, nhưng cũng sẽ gây chậm quá trình thao tác của người sử dụng. Cân nhắc nhu cầu khi kích hoạt.">
+                    Kích hoạt đính kèm file
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsFileTag)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/Content/Images/help.png" title="Lưu lại thao tác xử lý của người dùng như đăng nhập, chuyển văn bản, ... Việc này giúp quản trị quản lý được truy cập của người sử dụng với hệ thống, nhưng cũng sẽ gây chậm quá trình thao tác của người sử dụng. Cân nhắc nhu cầu khi kích hoạt.">
+                    Kích hoạt kiểm tra kỳ báo cáo đã tạo
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsCreatedForm)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td colspan="2">
+                    <b>Thiết lập xử lý văn bản</b>
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Chỉ người khởi tạo mới có quyền kết thúc văn bản.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.UserCreatetedHasClose)
+                    @Html.ValidationMessageFor(model => model.UserCreatetedHasClose)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Cho phép Người khởi tạo có quyền cập nhật thông tin hồ sơ.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.UserCreatedHasChangeDocument)
+                    @Html.ValidationMessageFor(model => model.UserCreatedHasChangeDocument)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Tự động kết thúc văn bản đến khi trả lời bằng văn bản đi.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FinishOriginalDocumentWhenAnswer)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Kiểm tra quyền khi mở xem văn bản
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.HasCheckViewDocumentPermission)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Yêu cầu có dự kiến phát hành khi khởi tạo văn bản đi.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RequirePublishPlanWhenCreate)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png" title="Nhập account dạng: account1;account2;account3;...">
+                    Không yêu cầu dự kiến phát hành cho:
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IgnoreRequirePublishPlan)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Yêu cầu chọn xử lý chính khi bàn giao văn bản
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RequireChooseXlc)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Yêu cầu nhập ý kiến khi kết thúc văn bản
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RequireCommentWhenFinish)
+                </td>
+            </tr>
+
+            <tr class="hidden">
+                <td colspan="2">
+                    <b>Thiết lập Phát hành văn bản</b>
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Hiển thị Nơi nhận trong đơn vị
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ShowPlaceInOffice)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Hiển thị người ký theo đơn vị trực thuộc
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ShowApproverByDepartment)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Kiểm tra thay đổi nội dung file .PDF
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.DetectPdfChangeContent)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Cho phép thu hồi văn bản liên thông
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.AllowThuHoiVbLienThong)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Hiển thị người ký theo:
+                </td>
+                <td>
+                    @Html.RadioButtonFor(model => model.TypePositionTitleJob, "0", true)
+                    <label>Chức danh</label>
+                    @Html.RadioButtonFor(model => model.TypePositionTitleJob, "1", false)
+                    <label>Chức vụ</label>
+                </td>
+            </tr>
+
+            <tr class="hidden">
+                <td colspan="2">
+                    <b>Thiết lập Xử lý hồ sơ một cửa</b>
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Không cho phép kết thúc hồ sơ.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsNotAllowFinishDocument)
+                    @Html.ValidationMessageFor(model => model.IsNotAllowFinishDocument)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Không cho phép gia hạn hồ sơ
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsNotAllowRenewal)
+                    @Html.ValidationMessageFor(model => model.IsNotAllowRenewal)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Tự động kết thúc hồ sơ khi trả kết quả.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.HasFinishDocumentWhenReturnResult)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Chỉ cho phép người tiếp nhận thay đổi hạn xử lý.
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.OnlyUserCreateChangeDateAppointed)
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <b>Hiển thị thông tin người dùng - Phòng ban</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.ShowAcountType)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.ShowAcountType, listShowAcountType)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.Avatar)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Avatar)
+                    @Html.ValidationMessageFor(model => model.Avatar)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/Content/Images/help.png">
+                    Hiển thị tên phòng ban
+                </td>
+                <td>
+                    <select name="ShowDepartmentType" id="ShowDepartmentType">
+                        <option value="1" @(Model.ShowDepartmentType == 1 ? "selected" : "")>Hiển thị Phòng ban hiện tại</option>
+                        <option value="2" @(Model.ShowDepartmentType == 2 ? "selected" : "")>Hiển thị Phòng ban hiện tại và phòng ban cha</option>
+                        <option value="3" @(Model.ShowDepartmentType == 3 ? "selected" : "")>Hiển thị đầy đủ</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Đường dẫn gửi báo cáo
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.BITranports)
+                    @Html.ValidationMessageFor(model => model.BITranports)
+                </td>
+            </tr>
+
+            <tr class="hidden">
+                <td colspan="2">
+                    <b>Thiết lập Quản lý Lịch cơ quan</b>
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    Cán bộ duyệt lịch
+                </td>
+                <td>
+                    <input id="UserAcceptCalendar" placeholder="Gõ account cán bộ duyệt lịch hệ thống,..." />
+                    @Html.HiddenFor(model => model.UserAcceptCalendarIds)
+                    <div style="width:80%" id="userAcceptCalendars">
+                        @if (listUserAcceptCalendars != null)
+                        {
+                            foreach (var user in listUserAcceptCalendars)
+                            {
+                                <div class="userAcceptCalendarName">
+                                    <span>@user.Username - @user.FullName</span>
+                                    <a href="#" class="removeUserCalendar" data-id="@user.UserId" style="float:right">Xóa</a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="hidden">
+                <td colspan="2">
+                    <b>Thiết lập thống kê</b>
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    Cán bộ giữ không tính hạn văn bản:
+                </td>
+                <td>
+                    <input id="UserAcceptOverdue" placeholder="Gõ account cán bộ" />
+                    @Html.HiddenFor(model => model.UserIgnoreOverdueId)
+                    <div>
+                        @Html.HiddenFor(model => model.UserIgnoreOverdueName)
+                        <span class="userIgnoreOverdueName">@Model.UserIgnoreOverdueName</span>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="">
+                <td colspan="2">
+                    <b>Thiết lập Connection</b>
+                </td>
+            </tr>
+            <tr class="">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    ConnectionDashboard:
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.DashboardConnection)
+                </td>
+
+            </tr>
+            <tr class="">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    BIUrl:
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.BIUrl)
+                </td>
+            </tr>
+            <tr class="">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    Đồng bộ báo cáo chính phủ - Lĩnh vực:
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.GovDocFieldId, (IEnumerable<SelectListItem>)ViewBag.AllDocFields)
+                </td>
+            </tr>
+            <tr class="">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    Đồng bộ báo cáo chính phủ - Cấp hành chính:
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.GovLevelId, (IEnumerable<SelectListItem>)ViewBag.ListLevel)
+                </td>
+            </tr>
+            <tr class="">
+                <td style="width:15%;">
+                    <img src="/Content/Images/help.png">
+                    Đồng bộ báo cáo chính phủ - Quy trình:
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.GovWorkFlowId, (IEnumerable<SelectListItem>)ViewBag.AllWorkflows)
+                </td>
+            </tr>
+        </table>
+    }
+</div>

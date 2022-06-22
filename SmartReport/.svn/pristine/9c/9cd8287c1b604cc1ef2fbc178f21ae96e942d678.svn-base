@@ -1,0 +1,231 @@
+﻿ALTER TABLE dbo.activitylog
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.anticipate
+ALTER COLUMN Destination NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.approver
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.authorize
+ALTER COLUMN DocTypeId CHAR(36)
+
+ALTER TABLE dbo.backup_restore_history
+ALTER COLUMN [Description] NVARCHAR(MAX)
+
+ALTER TABLE dbo.backup_restore_manager
+ALTER COLUMN [Description] NVARCHAR(MAX)
+
+ALTER TABLE dbo.comment
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.commoncomment
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.doc_column_setting
+ALTER COLUMN DisplayColumn NVARCHAR(MAX)
+ALTER TABLE dbo.doc_column_setting
+ALTER COLUMN SortColumn NVARCHAR(MAX)
+
+ALTER TABLE dbo.docdestroy
+ALTER COLUMN Note NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.doc_office
+ALTER COLUMN FromNodeJson NVARCHAR(MAX)
+
+ALTER TABLE dbo.doctimeline
+ALTER COLUMN Note NVARCHAR(MAX)
+
+ALTER TABLE dbo.doctype
+ALTER COLUMN ContentDefault NVARCHAR(MAX)
+ALTER TABLE dbo.doctype
+ALTER COLUMN Content NVARCHAR(MAX)
+
+ALTER TABLE dbo.documentcontentdetail
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.documentcontent
+ALTER COLUMN Content NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.documentcontent
+ALTER COLUMN Url VARCHAR(2000)
+ALTER TABLE dbo.documentcontent
+ALTER COLUMN ContentUrl VARCHAR(2000)
+
+ALTER TABLE dbo.documentcopy
+ALTER COLUMN History NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.documentcopy
+ALTER COLUMN LastComment NVARCHAR(MAX)
+
+ALTER TABLE dbo.documentextension
+ALTER COLUMN Progress NVARCHAR(MAX)
+
+ALTER TABLE dbo.document
+ALTER COLUMN Compendium NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.document
+ALTER COLUMN Compendium2 NVARCHAR(MAX)
+ALTER TABLE dbo.document
+ALTER COLUMN InOutPlace NVARCHAR(MAX)
+ALTER TABLE dbo.document
+ALTER COLUMN Organization NVARCHAR(MAX)
+
+ALTER TABLE dbo.documentonline
+ALTER COLUMN Json NVARCHAR(MAX)
+
+ALTER TABLE dbo.embryonicform
+ALTER COLUMN [Description] NVARCHAR(MAX)
+ALTER TABLE dbo.embryonicform
+ALTER COLUMN Content NVARCHAR(MAX)
+ALTER TABLE dbo.embryonicform
+ALTER COLUMN SqlQuery NVARCHAR(MAX)
+
+ALTER TABLE dbo.form
+ALTER COLUMN Json NVARCHAR(MAX)
+ALTER TABLE dbo.form
+ALTER COLUMN Template NVARCHAR(MAX)
+
+ALTER TABLE dbo.guide
+ALTER COLUMN Content NVARCHAR(MAX)
+
+ALTER TABLE dbo.listsetting
+ALTER COLUMN SettingContent NVARCHAR(MAX)
+
+ALTER TABLE dbo.lucene
+ALTER COLUMN Title NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.mail
+ALTER COLUMN Body NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.mail
+ALTER COLUMN [Signature] NVARCHAR(MAX)
+ALTER TABLE dbo.mail
+ALTER COLUMN Header NVARCHAR(MAX)
+
+ALTER TABLE dbo.nonce
+ALTER COLUMN Context NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.office
+ALTER COLUMN [Description] NVARCHAR(MAX)
+ALTER TABLE dbo.office
+ALTER COLUMN FileService NVARCHAR(MAX)
+ALTER TABLE dbo.office
+ALTER COLUMN DataService NVARCHAR(MAX)
+ALTER TABLE dbo.office
+ALTER COLUMN [Address] NVARCHAR(MAX)
+
+ALTER TABLE dbo.online_template
+ALTER COLUMN [Description] NVARCHAR(MAX)
+
+ALTER TABLE dbo.permission_setting
+ALTER COLUMN DepartmentPositionHasPermission NVARCHAR(MAX)
+ALTER TABLE dbo.permission_setting
+ALTER COLUMN PositionHasPermission NVARCHAR(MAX)
+ALTER TABLE dbo.permission_setting
+ALTER COLUMN UserHasPermission NVARCHAR(MAX)
+
+ALTER TABLE dbo.processfunctionfilter
+ALTER COLUMN Value NVARCHAR(MAX)
+
+ALTER TABLE dbo.processfunctiongroup
+ALTER COLUMN ClientExpression NVARCHAR(MAX)
+ALTER TABLE dbo.processfunctiongroup
+ALTER COLUMN DataQuery NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.processfunctiongroup
+ALTER COLUMN ColumnQuery NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryLatest NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryOlder NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryItemRemove NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryCountItemUnread NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryPaging NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryCountAllItems NVARCHAR(MAX)
+ALTER TABLE dbo.processfunction
+ALTER COLUMN QueryExportDataToFile NVARCHAR(MAX)
+
+ALTER TABLE dbo.processfunctiontype
+ALTER COLUMN Query NVARCHAR(MAX)
+
+ALTER TABLE dbo.question
+ALTER COLUMN Detail NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.question
+ALTER COLUMN Answer NVARCHAR(MAX) 
+
+ALTER TABLE dbo.report
+ALTER COLUMN QueryReport NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN QueryGroup NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN QueryStatistics NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN QueryTotal NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN Content NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN ViewContent NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN UserPermission NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN DeptPermission NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN PositionPermission NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN QueryTotalDocumentIsOverdue NVARCHAR(MAX)
+ALTER TABLE dbo.report
+ALTER COLUMN QueryTotalDocumentProcessed NVARCHAR(MAX)
+
+ALTER TABLE dbo.scopearea
+ALTER COLUMN [Description] NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.scopearea
+ALTER COLUMN Scopes NVARCHAR(MAX) 
+
+ALTER TABLE dbo.[signature]
+ALTER COLUMN [Image] NVARCHAR(MAX) 
+
+ALTER TABLE dbo.sms
+ALTER COLUMN [Message] NVARCHAR(MAX) 
+
+ALTER TABLE dbo.[statistics]
+ALTER COLUMN Query NVARCHAR(MAX) NOT NULL
+ALTER TABLE dbo.[statistics]
+ALTER COLUMN UserPermission NVARCHAR(MAX)
+ALTER TABLE dbo.[statistics]
+ALTER COLUMN DeptPermission NVARCHAR(MAX) 
+ALTER TABLE dbo.[statistics]
+ALTER COLUMN PositionPermission NVARCHAR(MAX) 
+
+ALTER TABLE dbo.store
+ALTER COLUMN UserViewIds NVARCHAR(MAX) 
+ALTER TABLE dbo.store
+ALTER COLUMN DocFieldIds NVARCHAR(MAX) 
+
+ALTER TABLE dbo.templatekey
+ALTER COLUMN [Sql] NVARCHAR(MAX) 
+ALTER TABLE dbo.templatekey
+ALTER COLUMN HtmlTemplate NVARCHAR(MAX) 
+
+ALTER TABLE dbo.template
+ALTER COLUMN Content NVARCHAR(MAX) 
+ALTER TABLE dbo.template
+ALTER COLUMN [Sql] NVARCHAR(MAX) 
+
+ALTER TABLE dbo.time_job
+ALTER COLUMN ScheduleConfig NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.useractivitylog
+ALTER COLUMN Compendium NVARCHAR(MAX) NOT NULL
+
+ALTER TABLE dbo.[user]
+ALTER COLUMN [Address] NVARCHAR(MAX)
+ALTER TABLE dbo.[user]
+ALTER COLUMN UserSetting NVARCHAR(MAX)
+
+ALTER TABLE dbo.workflow
+ALTER COLUMN Template NVARCHAR(MAX)
+ALTER TABLE dbo.workflow
+ALTER COLUMN Json NVARCHAR(MAX)
+ALTER TABLE dbo.workflow
+ALTER COLUMN WorkflowTypeJson NVARCHAR(MAX)

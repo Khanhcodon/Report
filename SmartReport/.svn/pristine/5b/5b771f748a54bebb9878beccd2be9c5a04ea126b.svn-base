@@ -1,0 +1,67 @@
+﻿@{
+    var allWorkflows = ViewBag.AllWorkflows as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.WorkflowModel>;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.DocTypeWorkflowSearchModel;
+}
+<script type="text/javascript">
+    function doSubmit(form) {
+        form.submit();
+    }
+
+    function onBegin() {
+        $("#divListForm").blockpanel({ text: egov.resources.notifications.searching, borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListForm').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListForm').unblockpanel();
+    }
+</script>
+
+@using (Ajax.BeginForm("FindWorkflow", new { doctypeId = ViewBag.DocTypeId },
+    new AjaxOptions { UpdateTargetId = "divListForm", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 15%">
+                @Localizer("Common.Form.Status"):
+            </td>
+            <td>
+                <select id="IsActivatated" name="IsActivatated" class="form-control"
+                        onchange="doSubmit($(this).parents('form'));">
+                    <option value="">@Localizer("Common.All.Label")</option>
+                    <option value="True">Hoạt động</option>
+                    <option value="False">Không hoạt động</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Localizer("Common.Form.FindText"):
+            </td>
+            <td>
+                <input type="text" id="SearchKey" name="SearchKey" class="form-control" placeholder=" @Localizer("Common.Form.FindText")" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="@Localizer("Common.Form.Find")" id="submit" />
+            </td>
+        </tr>
+    </table>
+    <div>
+    </div>
+}
+<div style="clear: both">
+</div>
+<br />
+<div id="divListForm" style="padding-top: 10px;">
+    @{
+        Html.RenderPartial("_PartialWorkflow");
+    }
+</div>

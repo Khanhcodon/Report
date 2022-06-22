@@ -1,0 +1,15 @@
+﻿<script id="announcementTemplate" type="text/x-jquery-tmpl">
+    <div id="dialogBoxListUser" style="font-size: 12px;width: 100%;">
+        <div id="divDg">
+        </div>
+        <div id="divDelAllSelected" style="height: 85px;float:left;width:33%;">
+            <div style="text-align:right">Danh sách nhận thông báo </div>
+            <div ><a href="javascript:void(0)" id="delAllSelected" style="color:Blue;float:right;" onclick="egov.cshtml.transfer.announcement.delAllSelected()">
+                      Xóa hết để chọn lại</a></div>
+        </div>
+        <div id="divListUserTransfer" style="border: 1px solid #e4e4e4;height: 85px;border-radius: 2px;width: 66.6%;float: right;">
+            <div id="divViewThongbao" style="display: none">
+            </div>
+        </div>
+    </div>
+</script>

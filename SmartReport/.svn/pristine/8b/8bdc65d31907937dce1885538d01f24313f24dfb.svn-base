@@ -1,0 +1,132 @@
+﻿@model IEnumerable<UserModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.User.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var search = ViewBag.Search as UserSearchModel;
+}
+<style>
+    table tr {
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .selected {
+        color: red;
+    }
+</style>
+
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css" rel="stylesheet" />
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/jquery.jstree.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script type="text/javascript">
+    function onBegin() {
+        $("#divListUsers").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListUsers').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+        $('#divListUsers').unblockpanel();
+    }
+
+    function deleteUser(userId){
+        eGovMessage.show(
+            'Việc xóa Người dùng sẽ xóa luôn tất cả dữ liệu của người dùng. Bạn có chắc muốn xóa người dùng này?',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + userId).submit();
+            }
+        );
+    };
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user2"></i>
+        <span data-res="egov.resources.sitemap.user"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/user/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/user/replaceuser">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">@Localizer("Admin.User.ReplaceUser.Label")</span>
+        </a>
+        <a class="btn  btn-info control-btn" href="/admin/user/importuserfromfile">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase">Import</span>
+        </a>
+        <a class="btn  btn-info control-btn" href="/admin/user/syncwithsso" target="_blank">
+            <span class="icon icon-circles"></span>
+            <span class="text-uppercase">Đồng bộ SSO</span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Ajax.BeginForm("Search", null, new AjaxOptions
+    {
+        UpdateTargetId = "divListUsers",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }, new { @id = "formSearch" }))
+    {
+        {
+            Html.RenderPartial("_PartialSearch", search);
+        }
+    }
+    <br />
+    <div id="divListUsers">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+
+    <div id="divTreeDeptUserForAll" style="background: white; padding: 0; display: none">
+        <div class="col-md-8">
+            <b data-res="egov.resources.deparment.list">Danh sách phòng ban</b>
+            <br />
+            <div class="col-md-16" style="overflow: auto; height: 450px">
+                <div id="depts"></div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="col-md-16">
+                <b data-res="egov.resources.deparment.choosejobtitle">Chọn chức danh</b>
+                <br />
+                <select id="jobs" name="jobs" style="width: 100%"></select>
+            </div>
+            <br />
+            <br />
+            <div class="col-md-16">
+                <b data-res="egov.resources.deparment.chooseposition">Chọn chức vụ</b>
+                <br />
+                <select id="pos" name="pos" style="width: 100%"></select>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tmpPosItem" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>
+
+<script id="tmpJobItem" type="text/x-jquery-tmpl">
+    <option value="${value}">${label}</option>
+</script>

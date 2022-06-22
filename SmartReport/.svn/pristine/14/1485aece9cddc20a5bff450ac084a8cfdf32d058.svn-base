@@ -1,0 +1,497 @@
+﻿@model IEnumerable<DocumentOpenCloseModel>
+@{
+    ViewBag.Title = "Đóng mở báo cáo";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+ <!-- DataTables -->
+<script src="~/Scripts/generalreport/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/generalreport/assets/vendor_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/generalreport/assets/vendor_plugins/DataTables-1.10.15/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+<script src="~/Scripts/generalreport/assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js"></script>
+
+@{
+    Html.RenderPartial("_Notifications");
+}
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span data-res="egov.resources.sitemap.reportmode">Quản lý đóng mở báo cáo</span>
+    </div>
+</div>
+<!-- Main content -->
+<div class="row">
+    <div class="col-md-16">
+        <div id="divFormOpenClosed" class="bkavegov">
+            <table id="processBC" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:10%">STT</th>
+                        <th style="text-align: center;">Tên báo cáo</th>
+                        <th style="text-align: center;">Phòng ban</th>
+                        <th style="text-align: center;">Người nhận</th>
+                        <th style="text-align: center;width:15%">Ngày tạo báo cáo</th>
+                        <th style="text-align: center;width:20%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        var i = 0;
+                        foreach (var report in Model)
+                        {
+                            <tr>
+                                <td style="text-align: center"><span class="text-dark">@(i + 1)</span></td>
+                                <td style="text-align: center"><span class="text-dark">@report.Compendium</span></td>
+                                <td style="text-align: center"><span class="text-dark">@report.InOutPlace</span></td>
+                                <td style="text-align: center"><span class="text-dark">@report.UserCreatedName</span></td>
+                                <td style="text-align: center"><span class="text-dark">@report.DateCreated</span></td>
+                                <td style="text-align: center">
+                                    <a class="text-right btn btn-info btn-xs text-white" style="margin-right: 5px" onclick="CloseOrEdit('@report.documentID')">Mở báo cáo</a>
+                                    <a class="text-right btn btn-danger btn-xs text-white" style="margin-right: 5px" onclick="extendBC('@report.docTypeID')">Gia hạn báo cáo</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog"  data-backdrop="static" data-keyboard="false" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Gia Hạn Thời Gian Báo Cáo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -20px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">   
+                @* content *@
+                <table id="timeJobInfoOutOfDate" style="width: 100%">
+                    <tr>
+                        <td>Cấu hình thời điểm kích hoạt chu kỳ</td>
+                        <td>
+                           <select class="form-control" id="TimeJob_ScheduleTypeEnumOutOfDate">
+                               <option value="HangNgayOutOfDate">Hàng ngày quá hạn</option>
+                               <option value="HangTuanOutOfDate">Hàng tuần quá hạn</option>
+                               <option value="HangThangDueDatOutOfDate">Hàng tháng quá hạn</option>
+                               <option value="HangQuyOutOfDate">Hàng quý quá hạn</option>
+                               <option value="HangNamOutOfDate">Hàng năm quá hạn</option>
+                           </select>
+                        </td>
+                    </tr>
+                    <tr class="schedule-config">
+                        <td>Thời gian kích hoạt đến hạn:</td>
+                        <td>
+                            <div style="display: none;" id="hangNgayQuaHan">
+                                <b>Thực thi hàng ngày</b>
+                                <br />
+                                <div>
+                                    Vào lúc
+                                    <input type="text" value="0" class="from-hour hour number" />
+                                    giờ
+                                    <input type="text" value="0" class="from-minute minute number" />
+                                    phút
+
+                                </div>
+                            </div>
+
+                            <div style="display: none;" id="hangTuanQuaHan">
+                                <b>Thực thi hàng tuần</b>
+                                <br />
+                                <div style="display: inline-flex;">
+                                    &nbsp;  Vào thứ &nbsp; 
+                                    <select class="from-dayofweek form-control valid" id="DayOfWeek" name="DayOfWeek" style="width: 150px">
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select>
+                                    &nbsp; lúc&nbsp;
+                                    <input type="text" value="1" class="from-hour hour number" />
+                                    &nbsp;   giờ &nbsp;
+                                    <input type="text" value="1" class="from-minute minute number" />
+                                    &nbsp;  phút&nbsp;
+                                </div>
+                            </div>
+
+                            <div style="display: none" id="hangThangQuaHan">
+                                <b>Thực thi hàng tháng theo </b>
+                                <select id="byDayOfWeekOutOfDate">
+                                    <option value="day">Ngày</option>
+                                    <option value="dayofweek">Thứ</option>
+                                </select>
+                                <div class="day">
+                                    <div style="display: inline-flex;">
+                                        &nbsp; Vào ngày mùng &nbsp;
+                                        <select class="from-dayofmonth">
+                                            @for (var i = 1; i < 32; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                        &nbsp; lúc&nbsp;
+                                        <input type="text" value="1" class="from-hour hour number" />
+                                        &nbsp; giờ&nbsp;
+                                        <input type="text" value="1" class="from-minute minute number" />
+                                        &nbsp;  phút&nbsp;
+                                    </div>
+                                </div>
+
+                                <div class="dayofweek" style="display: none">
+                                    Vào thứ 
+                                    <select class="to-dayofweek form-control valid" id="DayOfWeek" name="DayOfWeek">
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select> của
+                                    <select class="weekofmonth" style="width: 150px">
+                                        <option value="1">Tuần đầu tiên</option>
+                                        <option value="2">Tuần thứ 2</option>
+                                        <option value="3">Tuần thứ 3</option>
+                                        <option value="4">Tuần thứ 4</option>
+                                    </select>
+                                    của tháng
+                                    <br />
+                                    Lúc
+                                    <input type="text" value="1" class="from-hour hour number" />
+                                    giờ
+                                    <input type="text" value="1" class="from-minute minute number" />
+                                    phút
+                                </div>
+                            </div>
+
+                            <div style="display:none" id="hangQuyQuaHan">
+                                <div style="display: inline-flex; align-items: baseline;">
+                                    &nbsp;  Vào  &nbsp;
+                                    <select class="monthofquarter" style="width: 150px">
+                                        <option value="1">Tháng đầu tiên</option>
+                                        <option value="2">Tháng thứ 2</option>
+                                        <option value="3">Tháng thứ 3</option>
+                                    </select>
+                                    &nbsp;  của quý  &nbsp;
+                                </div>
+                                <br />
+                                <div style="display: inline-flex; align-items: baseline;">
+                                    &nbsp;  Ngày  &nbsp;
+                                    <select class="from-dayofmonth" style="width: 150px">
+                                        @for (var i = 1; i < 32; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                    &nbsp;  lúc  &nbsp;
+                                    <input type="text" value="1" class="from-hour hour number" />
+                                    &nbsp;  giờ  &nbsp;
+                                    <input type="text" value="1" class="from-minute minute number" />
+                                    &nbsp;  phút  &nbsp;
+                                </div>
+                            </div>
+
+                            <div style="display:none" id="hangNamQuaHan">
+                                <div style="display: inline-flex;">
+                                    &nbsp;  Vào tháng  &nbsp;
+                                    <select class="from-month">
+                                        @for (var i = 1; i <= 12; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+
+                                    &nbsp;  ngày  &nbsp;
+                                    <select class="from-dayofmonth">
+                                        @for (var i = 1; i < 32; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                    &nbsp; lúc&nbsp;
+                                    <input type="text" value="1" class="from-hour hour number" />
+                                    &nbsp; giờ&nbsp;
+                                    <input type="text" value="1" class="from-minute minute number" />
+                                    &nbsp;  phút&nbsp;
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" onclick="saveTimeOutOfDate()"  class="btn btn-primary">Lưu Thời Gian Gia Hạn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //check tb
+    //bien local
+    var str = "";
+    var idLocal = "";
+    function CloseOrEdit(documentId) {
+        eGovMessage.show(
+            'Việc xóa báo cáo sẽ xóa thay đổi chế độ đóng mở báo cáo. Bạn có chắc chắn thay đổi hồ sơ này không?',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $.ajax({
+                    url: '/Admin/Document/CloseOrEdit',
+                    data: { id: documentId },
+                    success: function (response) {
+                        var dc = document.getElementById("notificationSuccessOpenClose").style.display = "block";
+                        setTimeout(function () {
+                            window.location.href += '';
+                        }, 1000);
+                    },
+                    error: function (xhr) { },
+                    complete: function () {
+                    }
+                });
+            }
+        ); 
+    }
+    function extendBC(doctypeId) {
+        $.ajax({
+            url: '/Admin/Document/ExtendBC',
+            data: { id: doctypeId },
+            success: function (response) {
+                $('#ModalCenter').modal('show');
+                if (response.IsActiveAlertOut == true) {
+                    var result = JSON.parse(response.ScheduleConfigOutOfDate);
+                    $('#TimeJob_ScheduleTypeEnumOutOfDate').val(result.Type);
+                    //render modal
+                    switch (response.ScheduleTypeOutOfDate) {
+                        case 3:
+                            //HangNgayOutOfDate
+                            $('#hangNgayQuaHan').show();
+                            $('#hangTuanQuaHan').hide();
+                            $('#hangThangQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangNamQuaHan').hide();
+                            $('.from-hour').val(result.FromHour);
+                            $('.from-minute').val(result.FromMinute);
+                            idLocal = "";
+                            idLocal += response.DocTypeId;
+                            break;
+                        case 4:
+                            //HangTuanOutOfDate
+                            $('#hangTuanQuaHan').show();
+                            $('#hangNgayQuaHan').hide();
+                            $('#hangThangQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangNamQuaHan').hide();
+                            $('.from-dayofweek').val(result.FromDayOfWeek);
+                            $('.from-hour').val(result.FromHour);
+                            $('.from-minute').val(result.FromMinute);
+                            idLocal = "";
+                            idLocal += response.DocTypeId;
+                            break;
+                        case 5:
+                            //HangThangDueDatOutOfDate
+                            $('#hangThangQuaHan').show();
+                            $('#hangTuanQuaHan').hide();
+                            $('#hangNgayQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangNamQuaHan').hide();
+                            $('#byDayOfWeekOutOfDate').val(result.ByDayOfWeek);
+                            $('.from-dayofmonth').val(result.FromDayOfMonth);
+                            $('.from-hour').val(result.FromHour);
+                            $('.from-minute').val(result.FromMinute);
+                            idLocal = "";
+                            idLocal += response.DocTypeId;
+                            break;
+                        case 6:
+                            //HangQuyOutOfDate
+                            $('#hangQuyQuaHan').show();
+                            $('#hangThangQuaHan').hide();
+                            $('#hangTuanQuaHan').hide();
+                            $('#hangNgayQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangNamQuaHan').hide();
+                            $('.monthofquarter').val(result.MonthOfQuarter);
+                            $('.from-dayofmonth').val(result.FromDayOfMonth);
+                            $('.from-hour').val(result.FromHour);
+                            $('.from-minute').val(result.FromMinute);
+                            idLocal = "";
+                            idLocal += response.DocTypeId;
+                            break;
+                        case 7:
+                            //HangNamOutOfDate
+                            $('#hangNamQuaHan').show();
+                            $('#hangQuyQuaHan').hide();
+                            $('#hangThangQuaHan').hide();
+                            $('#hangTuanQuaHan').hide();
+                            $('#hangNgayQuaHan').hide();
+                            $('#hangQuyQuaHan').hide();
+                            $('.from-month').val(result.FromMonth);
+                            $('.from-dayofmonth').val(result.FromDayOfMonth);
+                            $('.from-hour').val(result.FromHour);
+                            $('.from-minute').val(result.FromMinute);
+                            idLocal = "";
+                            idLocal += response.DocTypeId;
+                            break;
+                    }
+                }
+            },
+            error: function (xhr) { },
+            complete: function () {
+            }
+        });
+    }
+    function saveTimeOutOfDate() {
+        var typeOutOfDate = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+        var str = "";
+        var doctypeId = idLocal;
+        switch (typeOutOfDate) {
+            case "HangNgayOutOfDate":
+                // val
+                var s1 = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+                var s2 = $('.from-hour').val();
+                var s3 = $('.from-minute').val();
+                str = "";
+                str += '{"Type":"' + s1 + '","FromHour":' + s2 + ',"FromMinute":' + s3 + '}';
+                break;
+            case "HangTuanOutOfDate":
+                //val
+                var s1 = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+                var s2 = $('.from-hour').val();
+                var s3 = $('.from-minute').val();
+                var s4 = $('.from-dayofweek').val();
+                str = "";
+                str += '{"Type":"' + s1 + '","FromDayOfWeek":"' + s4 + '","FromHour":' + s2 + ',"FromMinute":' + s3 + '}';
+                break;
+            case "HangThangDueDatOutOfDate":
+                var s1 = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+                var s2 = $('.from-hour').val();
+                var s3 = $('.from-minute').val();
+                var s4 = $('.from-dayofmonth').val();
+                var s5 = $('#byDayOfWeekOutOfDate').val();
+                str = "";
+                str += '{"Type":"' + s1 + '","ByDayOfWeek":"' + s5 + '", "FromDayOfMonth":"' + s4 + '" ,"FromHour":' + s2 + ',"FromMinute":' + s3 + '}';
+                break;
+            case "HangQuyOutOfDate":
+                //val
+                var s1 = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+                var s2 = $('.from-hour').val();
+                var s3 = $('.from-minute').val();
+                var s4 = $('.from-dayofmonth').val();
+                var s5 = $('.monthofquarter').val();
+                str = "";
+                str += '{"Type":"' + s1 + '","MonthOfQuarter":"' + s5 + '", "FromDayOfMonth":"' + s4 + '" ,"FromHour":' + s2 + ',"FromMinute":' + s3 + '}';
+                break;
+            case "HangNamOutOfDate":
+                var s1 = $('#TimeJob_ScheduleTypeEnumOutOfDate').val();
+                var s2 = $('.from-hour').val();
+                var s3 = $('.from-minute').val();
+                var s4 = $('.from-dayofmonth').val();
+                var s5 = $('.from-month').val();
+                str = "";
+                str += '{"Type":"' + s1 + '","FromMonth":"' + s5 + '", "FromDayOfMonth":"' + s4 + '" ,"FromHour":' + s2 + ',"FromMinute":' + s3 + '}';
+                break;
+        }
+        var stringOutOfDate = str;
+        var pass = JSON.parse(stringOutOfDate);
+        $.ajax({
+            url: '/Admin/Document/TimeJobOutOfDate',
+            data: { id: doctypeId, OutOfDate: stringOutOfDate, typeOutOfDate: pass.Type },
+            success: function (results) {
+                location.reload();
+            },
+            error: function (xhr) { },
+            complete: function () { }
+        });
+    }
+    $('#processBC').DataTable({
+        'paging': true,
+        'pagingType': 'full_numbers',
+        'lengthChange': true,
+        'searching': true,
+        'ordering': true,
+        'info': true,
+        'autoWidth': true,
+        'language': {
+            "decimal": "",
+            "emptyTable": "Không có dữ liệu",
+            "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ kết quả",
+            "infoEmpty": "Hiển thị 0 đến 0 trong tổng số 0 kết quả",
+            "infoFiltered": "(được lọc từ _MAX_ mục)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Hiển thị _MENU_ bản ghi",
+            "loadingRecords": "&nbsp;",
+            "processing": "<div class='spinner' id='loadingDiv'></div>",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "Không tìm thấy dữ liệu",
+            "paginate": {
+                "first": "Đầu tiên",
+                "last": "Cuối cùng",
+                "next": "&raquo;",
+                "previous": "&laquo;"
+            },
+            "aria": {
+                "sortAscending": ": Hiển thị sắp xếp tăng dần",
+                "sortDescending": ": Hiển thị sắp xếp giảm dần"
+            }
+        }
+    });
+    //bine select Option
+    $('#TimeJob_ScheduleTypeEnumOutOfDate').on('change', function () {
+        var value = $(this).val();
+        switch (value) {
+            case "HangNgayOutOfDate":
+                $('#hangNgayQuaHan').show();
+                $('#hangTuanQuaHan').hide();
+                $('#hangThangQuaHan').hide();
+                $('#hangQuyQuaHan').hide();
+                $('#hangNamQuaHan').hide();
+                break;
+            case "HangTuanOutOfDate":
+                $('#hangNgayQuaHan').hide();
+                $('#hangTuanQuaHan').show();
+                $('#hangThangQuaHan').hide();
+                $('#hangQuyQuaHan').hide();
+                $('#hangNamQuaHan').hide();
+                break;
+            case "HangThangDueDatOutOfDate":
+                $('#hangNgayQuaHan').hide();
+                $('#hangTuanQuaHan').hide();
+                $('#hangThangQuaHan').show();
+                $('#hangQuyQuaHan').hide();
+                $('#hangNamQuaHan').hide();
+                break;
+            case "HangQuyOutOfDate":
+                $('#hangNgayQuaHan').hide();
+                $('#hangTuanQuaHan').hide();
+                $('#hangThangQuaHan').hide();
+                $('#hangQuyQuaHan').show();
+                $('#hangNamQuaHan').hide();
+                break;
+            case "HangNamOutOfDate":
+                $('#hangNgayQuaHan').hide();
+                $('#hangTuanQuaHan').hide();
+                $('#hangThangQuaHan').hide();
+                $('#hangQuyQuaHan').hide();
+                $('#hangNamQuaHan').show();
+                break;
+        }
+    });
+</script>

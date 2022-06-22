@@ -1,0 +1,43 @@
+﻿@model Bkav.eGovCloud.Models.LoginModel
+@{
+    ViewBag.Title = "Login";//Localizer("Common.Label.Login");
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var connectionSettings = ViewBag.ConnectionSettings as Bkav.eGovCloud.Entities.Customer.ConnectionSettings;
+    
+    var useOtherSystem = connectionSettings.MailType > 1 && !string.IsNullOrWhiteSpace(connectionSettings.BmailLink);
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/views/login/jquery-2.2.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/login/jquery.cookie.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/views/login/loginMailExtend.min.js")"></script>
+
+<script>
+    var mailType =
+    {
+        Bmail: 1,
+        Gmail: 2,
+        Yahoo: 3,
+        MailExchange: 4,
+        MDaemon: 5
+    };
+
+    var loginOtherSystemWithForm = {
+        enable: "@useOtherSystem" == "True",
+        type: "@connectionSettings.MailType",
+        mailUrl: "@connectionSettings.BmailLink"
+    },
+
+    returnUrl = "@ViewBag.ReturnUrl",
+
+    defaultDomain = "@ViewBag.DefaultDomain";
+    document.domain = "@ViewBag.DocumentDomain";
+
+    $(function () {
+        $(document).bindResources(null, true);
+    })
+</script>
+@{
+    Html.RenderPartial(Request.Browser.IsMobileDevice ? "_LoginMobile" : (IsQuanTriTapTrungEdition ? "_LoginSSO" : "_LoginNormal"));
+}

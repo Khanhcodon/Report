@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <div>
+            @*<input type="color" id="head" name="head"
+                   value="#e66465">
+            <label for="head">Chọn màu</label>*@
+            <div style="width:220px; height:160px; float:left">
+                <span style="display:block; width: 40%; float: left; height: 100%; background: #5e2910; border-top-left-radius: 30px;border-bottom-left-radius: 30px;"></span>
+                <span class="bg-blue" style="display:block; width: 60%; float: left; height: 100%; border-top-right-radius: 30px;border-bottom-right-radius: 30px; background:#8c562e"></span>
+                <button class="btn btn-primary btn-theme" style="margin-top:5px; margin-left: 40%;" value="default">Chọn</button>
+            </div>
+
+            <div style="width:220px ;height:160px; float:left; margin-left:10px">
+                <span style="display:block; width: 40%; float: left; height: 100%; background: #5c0c7d; border-top-left-radius: 30px;border-bottom-left-radius: 30px;"></span>
+                <span class="bg-blue" style="display:block; width: 60%; float: left; height: 100%; border-top-right-radius: 30px;border-bottom-right-radius: 30px; background:#1D3865"></span>
+                <button class="btn btn-primary btn-theme" style="margin-top:5px; margin-left: 40%;"  value="color1">Chọn</button>
+            </div>
+
+            <div style="width:220px; height:160px; float:left; margin-left:10px">
+                <span style="display:block; width: 40%; float: left; height: 100%; background: #385232; border-top-left-radius: 30px;border-bottom-left-radius: 30px;"></span>
+                <span class="bg-blue" style="display:block; width: 60%; float: left; height: 100%; border-top-right-radius: 30px;border-bottom-right-radius: 30px; background:#2a6b1e"></span>
+                <button  class="btn btn-primary btn-theme" style="margin-top:5px; margin-left: 40%;" value="color2">Chọn</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    $("button.btn-theme").click(function () {
+        var fired_button = $(this).val();
+        switch (fired_button) {
+            case "default":
+                setCookie("theme", "default", 365)
+                $("#colorTheme .west-panel").css("background-color", "#5e2910");   
+                break;
+            case "color1":
+                setCookie("theme", "purple", 365)
+                $("#colorTheme .west-panel").css("background-color", "#5c0c7d");
+                break;
+            case "color2":
+                setCookie("theme", "green", 365)
+                $("#colorTheme .west-panel").css("background-color", "#385232");
+                break;
+        }
+    });
+</script>

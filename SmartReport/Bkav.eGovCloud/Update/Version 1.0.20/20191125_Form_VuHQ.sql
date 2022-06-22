@@ -1,0 +1,4 @@
+﻿-- 20191126 VUHQ REQ-5
+ALTER TABLE form ADD COLUMN FormHeader MEDIUMTEXT COMMENT "Mẫu header của báo cáo";
+-- 20191126 VUHQ REQ-5
+ALTER TABLE form ADD COLUMN FormFooter MEDIUMTEXT COMMENT "Mẫu footer của báo cáo";

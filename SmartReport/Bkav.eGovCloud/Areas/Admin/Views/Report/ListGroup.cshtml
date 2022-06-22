@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ReportGroupModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="section-header">
+    <div class="title">
+        <i class="fa icon-stats"></i>
+        <span data-res="egov.resources.sitemap.reportgroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/report/addgroup">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+    <div id="tabs" class="bkavegov">
+    @using (Html.BeginForm())
+    {
+            {
+        Html.RenderPartial("_listGroup");
+            }
+    }
+</div>

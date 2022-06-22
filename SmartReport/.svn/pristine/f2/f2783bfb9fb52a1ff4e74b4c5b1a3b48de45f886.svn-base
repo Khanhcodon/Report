@@ -1,0 +1,218 @@
+﻿@model Bkav.eGovCloud.Models.SignatureModel
+@using Bkav.eGovCloud.Entities
+@{
+    var isCreate = (bool)ViewBag.IsCreate;
+}
+<style>
+    legend {
+    margin-bottom: 15px;
+    padding-top: 12px;
+}
+    /*.Hb {
+        margin: 0px;
+        padding: 25px !important;
+        max-width: 300px;
+    }
+
+    .qd {
+        -moz-box-sizing: border-box;
+        border-radius: 3px;
+        text-align: left;
+    }*/
+</style>
+<script type="text/javascript">
+    var isCreate = @(isCreate ? "true" : "false");
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+            return;
+        });
+
+        var checked = $("input[type='radio'][name='IsTypeImage'][value='True']").prop('checked');
+        var isImage = $(".isImage");
+        if (checked) {
+            isImage.show();
+        } else {
+            isImage.hide();
+        }
+
+        $("input[type='radio'][name='IsTypeImage'][value='True']").click(function () {
+            isImage.show();
+        });
+        $("input[type='radio'][name='IsTypeImage'][value='False']").click(function () {
+            isImage.hide();
+        });
+
+        $('#file').fileupload({
+            dataType: 'json',
+            url: '/Account/SignatureImage',
+            autoUpload: true,
+            done: function (e, data) {
+                if (data.result.success) {
+                    $('#base64').val(data.result.base64);
+                    $('#extension').val(data.result.extension);
+                    var src = 'data:image/' + data.result.extension + ';base64,' + data.result.base64;
+                    $('#imagePreView').attr('src', src);
+                    $('#imagePreView').show();
+                } else {
+                    window.parent.eGovMessage.show(data.result.message, null, null, null);
+                }
+            }
+        });
+    })
+</script>
+
+@Html.ValidationSummary(true)
+@if (!isCreate)
+{ 
+    @Html.HiddenFor(model => model.SignatureId)
+    @Html.HiddenFor(model => model.UserId)
+    @Html.AntiForgeryToken()
+}
+else
+{ 
+    @Html.AntiForgeryToken()  
+}
+<fieldset>
+    <legend>
+        <span></span>
+        @if (isCreate)
+        {
+            <p data-res="egov.resources.setting.signature.titleCreate">Thêm mới chữ ký số</p>
+        }
+        else
+        {
+            <p data-res="egov.resources.setting.signature.titleEdit">Cập nhật chữ ký số</p>
+        }</legend>
+    <table style="width: 100%">
+        <tr>
+            <td>@Html.LabelFor(model => model.SignatureName)</td>
+            <td>
+                <div class="">@Html.TextBoxFor(model => model.SignatureName, new { @class = "input-sm form-control" })</div>
+                @Html.ValidationMessageFor(model => model.SignatureName)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <fieldset>
+                    <legend>
+                        <p data-res="egov.resources.setting.signature.configPossition">Cấu hình vị trí đặt chữ ký</p>
+                    </legend>
+                    <table style="width:100%">
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center">
+
+                                <label>
+                                    @Html.RadioButtonFor(model => model.SignaturePosition, (int)SignaturePositionType.Above, Model.SignaturePosition == (int)SignaturePositionType.Above ? new { @checked = "checked" } : null)
+                                    @Localizer("Signature.Fields.Above.Label")</label>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>@Html.LabelFor(model => model.SearchWord)</td>
+                            <td style="margin-bottom:0px">
+                                <div style="float:right">
+                                    <label>@Html.RadioButtonFor(model => model.SignaturePosition, (int)SignaturePositionType.Left, Model.SignaturePosition == (int)SignaturePositionType.Left ? new { @checked = "checked" } : null)</label>
+                                    @Localizer("Signature.Fields.Left.Label")
+                                    @Html.TextBoxFor(model => model.SearchWord, new { @style = "width:200px;", @class="input-sm" })
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.SignaturePosition, (int)SignaturePositionType.Right, Model.SignaturePosition == (int)SignaturePositionType.Right ? new { @checked = "checked" } : null)
+                                        @Localizer("Signature.Fields.Right.Label")</label>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.SearchWord)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center">
+                                <label>
+                                    @Html.RadioButtonFor(model => model.SignaturePosition, (int)SignaturePositionType.Below, Model.SignaturePosition == (int)SignaturePositionType.Below ? new { @checked = "checked" } : null)
+                                    @Localizer("Signature.Fields.Below.Label")</label>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <fieldset>
+                    <legend>
+                        <p data-res="egov.resources.setting.signature.configOther">Cấu hình khác</p>
+                    </legend>
+                    <table style="width:100%">
+                        <tr>
+                            <td>@Html.LabelFor(model => model.IsFindType)</td>
+                            <td>
+                                <label>
+                                    @Html.RadioButtonFor(model => model.IsFindType, false, !Model.IsFindType ? new { @checked = "checked" } : null)
+                                    @Localizer("Signature.Fields.IsFindTypeFirst.Label")</label>
+                                &nbsp;&nbsp;
+                             <label>
+                                 @Html.RadioButtonFor(model => model.IsFindType, true, Model.IsFindType ? new { @checked = "checked" } : null)
+                                 @Localizer("Signature.Fields.IsFindTypeLast.Label")</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.LabelFor(model => model.IsTypeImage)</td>
+                            <td>
+                                <label>
+                                    @Html.RadioButtonFor(model => model.IsTypeImage, false, !Model.IsTypeImage ? new { @checked = "checked" } : null)
+                                    @Localizer("Signature.Fields.IsText.Label")</label>
+                                &nbsp;&nbsp;
+                             <label>
+                                 @Html.RadioButtonFor(model => model.IsTypeImage, true, Model.IsTypeImage ? new { @checked = "checked" } : null)
+                                 @Localizer("Signature.Fields.IsImage.Label")</label>
+                            </td>
+                        </tr>
+                        <tr class="isImage" valign="top">
+                            <td>@Html.LabelFor(model => model.Image)</td>
+                            <td>
+                                <div>
+                                    @if (!isCreate)
+                                    {
+                                        if (!string.IsNullOrEmpty(Model.Image))
+                                        { 
+                                        <img src="data:image/@Model.ImageExtension;base64,@Model.Image" width="100px" height="100px" id="imagePreView"  name="imagePreView"/>
+                                        }
+                                        else
+                                        {
+                                        <img src="" width="100px" height="100px" id="imagePreView" name="imagePreView" style="display: none" />
+                                        }
+                                        @Html.HiddenFor(model => model.Image)
+                                        @Html.HiddenFor(model => model.ImageExtension)
+                                    }
+                                    else
+                                    {
+                                        <img src="" width="100px" height="100px" id="imagePreView" name="imagePreView" style="display: none" />
+                                    }
+                                </div>
+                                <div>
+                                    <span class="btn btn-success fileinput-button">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <span>Chọn ảnh...</span>
+                                        <input type="file" id="file" name="file" />
+                                        <input type="hidden" id="extension" name="extension" />
+                                    </span>
+                                    <input type="hidden" value="" id="base64" name="base64" />
+
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Image)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>@Html.CheckBoxFor(model => model.IsDispplayCertificate)
+                                @Html.LabelFor(model => model.IsDispplayCertificate)</td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+        </tr>
+        @*        <tr>
+            <td colspan="2" style="text-align: right">
+                <input type="submit" value="@(isCreate ? "Tạo mới" : "Cập nhật")" /></td>
+        </tr>*@
+    </table>
+</fieldset>
+@Html.Partial("_Notifications")

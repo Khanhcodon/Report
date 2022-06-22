@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SingleSignOnService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="UserEndpoint_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Bkav.eGovCloud.SingleSignOnService" />
+      <xsd:import schemaLocation="http://sso.hsmctt.bkav.com/SingleSignOnService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISingleSignOnService_RequestToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestToken" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_RequestToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_LoginToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoginToken" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_LoginToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_Logout_InputMessage">
+    <wsdl:part name="parameters" element="tns:Logout" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_Logout_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_GetAllDomainIsAuthenticated_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDomainIsAuthenticated" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnService_GetAllDomainIsAuthenticated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDomainIsAuthenticatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnPartnerService_ValidateToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateToken" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnPartnerService_ValidateToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnPartnerService_WriteTokenIsAuthenticated_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteTokenIsAuthenticated" />
+  </wsdl:message>
+  <wsdl:message name="ISingleSignOnPartnerService_WriteTokenIsAuthenticated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteTokenIsAuthenticatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_ChangePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePassword" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_ChangePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_ResetPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResetPassword" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_ResetPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResetPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetConnection_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnection" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetConnection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetConnectionByUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectionByUser" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetConnectionByUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectionByUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_LoginNew_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoginNew" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_LoginNew_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginNewResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_CreateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUser" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_CreateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_CreateUserNew_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUserNew" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_CreateUserNew_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUserNewResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_UpdateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_UpdateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ISingleSignOnService">
+    <wsdl:operation name="RequestToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnService/RequestToken" message="tns:ISingleSignOnService_RequestToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnService/RequestTokenResponse" message="tns:ISingleSignOnService_RequestToken_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoginToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnService/LoginToken" message="tns:ISingleSignOnService_LoginToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnService/LoginTokenResponse" message="tns:ISingleSignOnService_LoginToken_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnService/Logout" message="tns:ISingleSignOnService_Logout_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnService/LogoutResponse" message="tns:ISingleSignOnService_Logout_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDomainIsAuthenticated">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnService/GetAllDomainIsAuthenticated" message="tns:ISingleSignOnService_GetAllDomainIsAuthenticated_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnService/GetAllDomainIsAuthenticatedResponse" message="tns:ISingleSignOnService_GetAllDomainIsAuthenticated_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ISingleSignOnPartnerService">
+    <wsdl:operation name="ValidateToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnPartnerService/ValidateToken" message="tns:ISingleSignOnPartnerService_ValidateToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnPartnerService/ValidateTokenResponse" message="tns:ISingleSignOnPartnerService_ValidateToken_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="WriteTokenIsAuthenticated">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISingleSignOnPartnerService/WriteTokenIsAuthenticated" message="tns:ISingleSignOnPartnerService_WriteTokenIsAuthenticated_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISingleSignOnPartnerService/WriteTokenIsAuthenticatedResponse" message="tns:ISingleSignOnPartnerService_WriteTokenIsAuthenticated_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ICustomerService">
+    <wsdl:operation name="ChangePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/ChangePassword" message="tns:ICustomerService_ChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/ChangePasswordResponse" message="tns:ICustomerService_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/ResetPassword" message="tns:ICustomerService_ResetPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/ResetPasswordResponse" message="tns:ICustomerService_ResetPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnection">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/GetConnection" message="tns:ICustomerService_GetConnection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/GetConnectionResponse" message="tns:ICustomerService_GetConnection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectionByUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/GetConnectionByUser" message="tns:ICustomerService_GetConnectionByUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/GetConnectionByUserResponse" message="tns:ICustomerService_GetConnectionByUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/Login" message="tns:ICustomerService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/LoginResponse" message="tns:ICustomerService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoginNew">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/LoginNew" message="tns:ICustomerService_LoginNew_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/LoginNewResponse" message="tns:ICustomerService_LoginNew_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/CreateUser" message="tns:ICustomerService_CreateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/CreateUserResponse" message="tns:ICustomerService_CreateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserNew">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/CreateUserNew" message="tns:ICustomerService_CreateUserNew_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/CreateUserNewResponse" message="tns:ICustomerService_CreateUserNew_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICustomerService/UpdateUser" message="tns:ICustomerService_UpdateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICustomerService/UpdateUserResponse" message="tns:ICustomerService_UpdateUser_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserEndpoint" type="tns:ISingleSignOnService">
+    <wsp:PolicyReference URI="#UserEndpoint_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RequestToken">
+      <soap12:operation soapAction="http://tempuri.org/ISingleSignOnService/RequestToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginToken">
+      <soap12:operation soapAction="http://tempuri.org/ISingleSignOnService/LoginToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <soap12:operation soapAction="http://tempuri.org/ISingleSignOnService/Logout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDomainIsAuthenticated">
+      <soap12:operation soapAction="http://tempuri.org/ISingleSignOnService/GetAllDomainIsAuthenticated" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomerEndpoint" type="tns:ICustomerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ChangePassword">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetPassword">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/ResetPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnection">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/GetConnection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectionByUser">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/GetConnectionByUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginNew">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/LoginNew" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/CreateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUserNew">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/CreateUserNew" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="http://tempuri.org/ICustomerService/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SingleSignOnService">
+    <wsdl:port name="UserEndpoint" binding="tns:UserEndpoint">
+      <soap12:address location="https://sso.hsmctt.bkav.com/SingleSignOnService.svc/User" />
+    </wsdl:port>
+    <wsdl:port name="CustomerEndpoint" binding="tns:CustomerEndpoint">
+      <soap:address location="http://sso.hsmctt.bkav.com/SingleSignOnService.svc/Customer" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

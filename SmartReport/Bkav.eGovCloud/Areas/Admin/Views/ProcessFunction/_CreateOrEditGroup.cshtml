@@ -1,0 +1,50 @@
+﻿@model ProcessFunctionGroupModel
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.ProcessFunctionGroupId)
+
+<table>
+    <tr>
+        <td style="width: 300px">
+            @Html.EgovLabelFor(model => model.Name):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.DataQuery):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DataQuery, 5, 5, null)
+            @Html.ValidationMessageFor(model => model.DataQuery)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.ClientExpression):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.ClientExpression, 5, 5, null)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.ColumnQuery):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.ColumnQuery, 5, 5, null)
+            @Html.ValidationMessageFor(model => model.ColumnQuery)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.LimitQuery):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.LimitQuery)
+        </td>
+    </tr>
+</table>

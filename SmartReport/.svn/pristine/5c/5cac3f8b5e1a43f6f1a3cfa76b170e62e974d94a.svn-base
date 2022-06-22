@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#GotoDatePicker").datepicker({
+            onSelect: function (dateText, inst) {
+                //var dates = dateText.split('/');
+                //var datefilter = dates[2] + "-" + dates[0] + "-" + dates[1];
+                //egov.cshtml.home.datefilter(datefilter);
+                $("#GotoDate").parents(".qtip").hide();
+                var currentDocuments = egov.cshtml.home.currentDocuments;
+                var date = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
+                $('#GotoDateSelect a .gotodate-value').text(dateText);
+                currentDocuments.dateFiltering = date;
+                currentDocuments.renderClientFilter();
+            }
+        });
+
+        $('.ignore').click(function () {
+            $('#GotoDateSelect a .gotodate-value').text($(this).text());
+            currentDocuments.dateFiltering = null;
+            currentDocuments.renderClientFilter();
+        });
+    });
+</script>
+
+<div class="goto-date" id="GotoDate">
+    <div id="GotoDatePicker" class="date"></div>
+    <div>
+        <span class="ignore">Tất cả</span>
+    </div>
+</div>

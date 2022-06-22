@@ -1,0 +1,204 @@
+﻿@using Bkav.eGovCloud.Entities.Enum;
+@model IEnumerable<Bkav.eGovCloud.Models.DailyProcessModel>
+@{
+    ViewBag.Title = "ExpressPrint";
+    Layout = null;
+    var search = ViewBag.Search as Bkav.eGovCloud.Models.PrintSearchModel;
+}
+
+<script src="../../Scripts/jquery-1.7.2.min.js"></script>
+<script src="../../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<style type="text/css">
+    .print-group {
+        margin-bottom: 10px;
+    }
+
+        .print-group > div {
+            margin-bottom: 5px;
+        }
+
+    .print-group-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        line-height: 25px;
+        background-color: rgb(224, 224, 230);
+        height: 20px;
+        padding: 3px;
+    }
+
+        .print-group-title .print-template {
+            float: right;
+        }
+
+    .print-group-list {
+        padding-left: 18px;
+    }
+
+    .print-list-item {
+        height: 20px;
+        line-height: 20px;
+        border-bottom: 1px solid rgb(216, 216, 253);
+    }
+
+        .print-list-item > span {
+            display: inline-block;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .print-list-item .doc-compendium {
+            /*width: 500px;*/
+        }
+
+        .print-list-item .doc-citizen {
+            width: 150px;
+        }
+
+        .print-list-item .doc-time-created {
+            width: 100px;
+        }
+
+    .div-search {
+        border-bottom: 1px solid #D7D7D7;
+    }
+
+        .div-search select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url(../../Content/Images/down.png);
+            background-repeat: no-repeat;
+            background-position: right;
+            height: 25px;
+            line-height: 16px;
+            text-indent: 0.01px;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 2px 5px 2px 5px;
+            outline: 0px;
+            border: 1px solid #D7D7D7;
+            width: 150px;
+        }
+
+        .div-search > div {
+            display: inline-block;
+        }
+
+    .search-time, .search-process-type, .search-count {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .quick-search {
+        border: 1px solid #D7D7D7;
+        height: 25px;
+        display: inline-block;
+        line-height: 22px;
+        padding: 0px 5px;
+        float: right;
+    }
+
+        .quick-search input {
+            width: 150px;
+            padding: 1px 5px 1px 5px;
+            vertical-align: middle;
+            border: none;
+            outline: 0;
+        }
+
+        .quick-search img {
+            width: 20px;
+            vertical-align: middle;
+        }
+
+    .print-button {
+        background-image: url(../../Content/Images/Toolbar/print.png);
+        background-repeat: no-repeat;
+        width: 70px;
+        height: 29px;
+        border: 1px solid #D7D7D7;
+        -moz-background-size: 20px;
+        -o-background-size: 20px;
+        background-size: 20px;
+        background-position: 10 center;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+        background-color: transparent;
+        margin-right: 50px;
+        padding-left: 20px;
+    }
+
+        .print-button:hover {
+            background-image: url(../../Content/Images/Toolbar/print_hover.png);
+            background-color: #e3e3e3;
+        }
+</style>
+
+<script type="text/javascript">
+    function searchDocCode() {
+        $("form[name='SearchDocCode']").submit();
+    }
+
+    function search() {
+        $("form[name='Search']").submit();
+    }
+
+    function printSelected() {
+        window.parent.egov.cshtml.home.expressPrinter.print($("#Printlist"));
+    }
+
+</script>
+
+<div id="DivSearch">
+    <div class="div-search">
+        <div>
+            @using (Ajax.BeginForm("Search",
+                null,
+                new AjaxOptions() { HttpMethod = "Get", UpdateTargetId = "Printlist", InsertionMode = InsertionMode.Replace },
+                new { name = "Search" }))
+            { 
+                <input type="button" value="In" class="print-button" onclick="printSelected()" />
+                <span class="search-process-type">
+                    <span>Loại xử lý</span>
+                    @Html.DropDownListEnum("ProcessType", typeof(DocumentProcessType), null, new { onchange = "search()" }, search.ProcessType.ToString())
+                </span>
+                <span class="search-time">
+                    <span>Thời gian:</span>
+                    @Html.DropDownListEnum("Time", typeof(DailyProcessTimeForSearch), null, new { onchange = "search()" }, search.Time.ToString())
+                </span>
+                <span class="search-count">
+                    <span>Số hồ sơ</span>
+                    <select name="DocCount" onchange="search()">
+                        <option value="0">Tất cả</option>
+                        <option value="3" @(search.DocCount == 3 ? "selected" : "")>3 hồ sơ gần nhất</option>
+                        <option value="4" @(search.DocCount == 4 ? "selected" : "")>4 hồ sơ gần nhất</option>
+                        <option value="5" @(search.DocCount == 5 ? "selected" : "")>5 hồ sơ gần nhất</option>
+                        <option value="10" @(search.DocCount == 10 ? "selected" : "")>10 hồ sơ gần nhất</option>
+                        <option value="20" @(search.DocCount == 20 ? "selected" : "")>20 hồ sơ gần nhất</option>
+                    </select>
+                </span>
+            }
+        </div>
+        <div style="float: right;">
+            @using (Ajax.BeginForm("SearchDocCode",
+                            null,
+                            new AjaxOptions() { HttpMethod = "Get", UpdateTargetId = "Printlist", InsertionMode = InsertionMode.Replace },
+                            new { name = "SearchDocCode" }))
+            {
+                <span class="quick-search">
+                    <input type="text" name="SearchTerm" title="Tìm theo mã hồ sơ, số ký hiệu bất kỳ" class="search-term" placeholder="Mã hồ sơ, số ký hiệu" />
+                    <img id="ListSearchIcon" src="../../Content/Images/find.png" alt="" onclick="searchDocCode();">
+                </span>
+            }
+        </div>
+    </div>
+    <div id="Printlist">
+        @Html.Partial("_ExpressPrintList", Model)
+    </div>
+</div>

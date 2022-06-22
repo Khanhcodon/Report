@@ -1,0 +1,85 @@
+﻿<div class="queryReportHelp" style="display: none">
+    <p>Cấu hình câu truy vấn dữ liệu khi xem báo cáo: tự động phân trang, group.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong> Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryGroupHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn dữ liệu lấy các giá trị nhóm cho thống kê
+        <br />
+        (chỉ cần cấu hình khi chọn thống kê theo nhóm ở trên).
+    </p>
+    <p>
+        <strong>Cấu trúc dạng: </strong>
+        <br />
+        <strong style="color: blue;">SELECT</strong> #group, <strong style="color: blue;">COUNT</strong>(#group)
+        <br />
+        <strong style="color: blue;">FROM</strong> tenbang
+        <br />
+        // Mệnh đề Join
+        <br />
+        // Mệnh đề Where
+        <br />
+        <strong style="color: blue;">GROUP BY</strong> #group
+        <br />
+    </p>
+    <p>Trong đó: <strong>#group</strong> sẽ được thay thế bằng giá trị các nhóm thống kê được chọn ở trên trong code</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong> Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryTotalHelp" style="display: none">
+    <p>
+        Cấu hình câu truy vấn riêng để lấy tổng số hồ sơ của thống kê
+        <br />
+        (Dựa trên câu truy vấn lấy dữ liệu cho thống kê).
+    </p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong> Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+    </ul>
+</div>
+
+<div class="queryStatisticsHelp" style="display: none">
+    <p>Cấu hình câu truy vấn để lấy dữ liệu cho thống kê.</p>
+    <p><span style="color: red">Tất cả báo cáo cá nhân bắt buộc phải có tham số: </span><strong>@@userId</strong>.</p>
+    Các trường hợp truy vấn dữ liệu:
+    <ul>
+        <li>
+            <strong>Để báo cáo cá nhân: </strong>Sử dụng tham số <strong>@@userId</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để lấy báo cáo trong một khoảng thời gian: </strong> Sử dụng tham số <strong>@@from</strong> và <strong>@@to</strong> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để xem báo cáo theo nhóm: </strong> <span>Sử dụng: <strong style="color: blue;">AND</strong> (@@groupValue = '' <strong style="color: blue;">OR</strong> #group = @@groupValue)</span> trong mệnh đề where.
+        </li>
+        <li>
+            <strong>Để phân trang: </strong>Sử dụng  <strong style="color: blue;">LIMIT</strong> <strong>@@skip</strong>, <strong>@@take</strong>.
+        </li>
+        <li>
+            <strong>Để sắp xếp dữ liệu trong báo cáo: </strong> <span>Sử dụng: <strong style="color: blue;">ORDER BY</strong> #sortBy #isDesc</span>.
+        </li>
+    </ul>
+</div>

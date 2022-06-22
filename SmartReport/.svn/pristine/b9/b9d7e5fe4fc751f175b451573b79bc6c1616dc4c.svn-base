@@ -1,0 +1,54 @@
+{
+    "background": {
+        "page": "background.html"
+    },
+    "browser_action": {
+        "default_icon": "images/icon16.png",
+        "default_title": "Bkav Egov Extension 4.8.9"
+    },
+    "content_scripts": [
+        {
+            "js": [ "content.js" ],
+            "matches": [ "https://*/*", "http://*/*" ]
+        }
+    ],
+    "externally_connectable": {
+        "matches": [ 
+		"*://localhost/*", 
+		"*://*.bkav.com/*", 
+		"*://*.bgov.vn/*", 
+		"*://*.phuongthanhtranconsin.com.vn/*", 
+		"*://*.ninhbinh.bgov.vn/*", 
+		"*://*.mobifone.com.vn/*", 
+		"*://*.mobifone.vn/*", 
+		"*://*.baria-vungtau.gov.vn/*", 
+		"*://*.quangngai.gov.vn/*", 
+		"*://*.kontum.gov.vn/*", 
+		"*://*.haiphong.gov.vn/*", 
+		"*://*.namdinh.gov.vn/*", 
+		"*://*.haiduong.gov.vn/*", 
+		"*://*.bacninh.gov.vn/*", 
+		"*://*.dienbien.gov.vn/*",
+		"*://*.phuyen.gov.vn/*",
+		"*://*.nghean.gov.vn/*",
+		"*://*.tayninh.gov.vn/*",
+		"*://*.lamdong.gov.vn/*",
+		"*://*.langson.gov.vn/*"]
+    },
+    "description": "Bkav Egov Extension 4.8.9",
+    "homepage_url": "http://www.bkavegov.vn/",
+    "icons": {        
+        "16": "images/icon16.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3sTgh3B780bZpbsiOT8Vx4UKtmTkKie0o8Yl4Rkg31+KIPv57AVhOz5fGp1ZoRVitOipQx1T/6pQGGC1M133sH0n5FnvtlAmJjbWc9LtEXrR2It6J63O8YDjm+TTkpcGyJpqyKH0RcZlcP1jx2wt9CXKfSFvEcgjDnBgalYnp3LPwaE5EKKEqi8dSQ/FmFocVfu5MoZW5O8ukqpydn1t61/hjqKoxQf00sCgUlKdMWD79xOXKACrL3WSwD1K1aqLDUdB+m+YIvRUGHtULVohMckInBTzWKEK1qNd9e4/EEblY8YtCsMb3guFXr3NwveenjhtTdQHMDzOhOQTYwYbQIDAQAB",
+    "manifest_version": 2,
+    "name": "Bkav Egov Extension",
+    "permissions": [ "webNavigation", "tabs", "http://*/*", "https://*/*", "nativeMessaging", "activeTab", "background", "notifications" ],
+    "update_url": "https://clients2.google.com/service/update2/crx",
+	"web_accessible_resources": [
+		"images/icon16.png"
+	],
+    "version": "4.8.9"
+}

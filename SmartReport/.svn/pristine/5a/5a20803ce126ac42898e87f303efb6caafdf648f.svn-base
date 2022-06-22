@@ -1,0 +1,75 @@
+﻿@model IEnumerable<bkav.egovcloud.models.businesslicensemodel>
+    @{
+        ViewBag.Title = "Danh sách giấy phép";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Scripts/jquery.ui.layout/layout-default-latest.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Scripts/jquery.contextmenu/jquery.contextMenu.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Scripts/jquery.colorpicker/jquery.colorpicker.css")" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+    <link href="../../Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css" rel="stylesheet" />
+
+    <script src="../../Scripts/bkav.egov/libs/MicrosoftMvcAjax.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/MicrosoftMvcAjax.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jstree/jquery.jstree.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="../../Scripts/bkav.egov/util/bkav.utilities.js"></script>
+    <script type="text/javascript">
+
+        function deleteBusinessLicense(id) {
+            messageBoxConfirm({
+                message: '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.BusinessLicense.ConfirmDelete"))',
+                buttonOkFunction: function () {
+                    $("#formdelete" + id).submit();
+                }
+            });
+        }
+
+        function onBegin() {
+            $("#divListBusinessLicense").blockpanel({ text: "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('#divListBusinessLicense').unblockpanel();
+        }
+
+        function onFailure() {
+            alert(""@Localizer("Common.Error")"");
+            $('#divListBusinessLicense').unblockpanel();
+        }
+    </script>
+    <div class="bkavegov-content-title">
+        <h3>
+            Danh sách giấy phép
+        </h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                <a href="#">
+                    Danh sách
+                </a>
+            </li>
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            @Html.Partial("_Notifications")
+            <div id="divListBusinessLicense">
+                @{
+                    Html.RenderPartial("_PartialList", Model);
+                }
+            </div>
+        </div>
+    </div>

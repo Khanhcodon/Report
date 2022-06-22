@@ -1,0 +1,186 @@
+﻿<script type="text/x-jquery-tmpl" id="commonFieldPanel">
+    <div class="common-fields">
+        <ul>
+            <li>
+                <span>${name}</span>
+                <ul>
+                    {{each(i, commonfield) commonFields}} 
+                                <li>
+                                    <span class="report-toolbox-field" value="${commonfield.value}" datatype="${commonfield.datatype}">${commonfield.name}</span>
+                                </li>
+                    {{/each}} 
+                </ul>
+            </li>
+            <li>
+                <input type="button" value="Thêm" />
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="dataFieldPanel">
+    <div class="data-fields">
+        <ul>
+            <li class="jstree-open">
+                <span>${name}</span>
+                <ul>
+                    {{each(i, datafield) dataFields}} 
+                            <li>
+                                <span class="report-toolbox-field" value="${datafield.value}" datatype="${datafield.datatype}">${datafield.name}</span>
+                            </li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li>
+                <input type="button" value="Thêm" />
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="toolboxFieldPanel">
+    <div class="toolbox">
+        <ul>
+            <li>
+                <span>${name}</span>
+                <ul>
+                    {{each(i, toolboxfield) toolboxFields}} 
+                            <li>
+                                <span id="tool_text" class="report-toolbox-field" value="${toolboxfield.value}" datatype="${toolboxfield.datatype}">${toolboxfield.name}</span>
+                            </li>
+                    {{/each}} 
+                </ul>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="reportPanel">
+    <div class="report-wrapper ui-layout-center">
+        <div class="report-panel gridview">
+            <div class="report-header" style="height: 200px">
+                <div class="report-header-title">Report header</div>
+                <div class="report-content"></div>
+            </div>
+            <div class="report-detail" style="height: 200px">
+                <div class="report-header-title">Report detail</div>
+                <div class="report-content"></div>
+            </div>
+            <div class="report-footer" style="height: 200px">
+                <div class="report-header-title">Report footer</div>
+                <div class="report-content"></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tableHeader">
+    <div class="grid-header-wrap">
+        <table class="table-header">
+            <thead>
+                <tr>
+                    {{each cols}}
+                            <th class="header"></th>
+                    {{/each}}
+                </tr>
+            </thead>
+        </table>
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tableDetail">
+    <table class="table-detail">
+        <tbody>
+            <tr>
+                {{each cols}}
+                        <td></td>
+                {{/each}}
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script type="text/x-jquery-tmpl" id="textProperties">
+    <div id="pnl_root_prop" style="overflow-y: auto; overflow-x: hidden; background-color: white; height: 636px;">
+        <div class="basicGroup" style="clear: both;">
+            <h4>▼ Cơ bản</h4>
+            <div id="pnlpr_p1" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px; display: none;">
+                <div style="float: left; min-width: 100px;"><b>Nội dung:</b> </div>
+                <br>
+                <textarea id="prop_p1" name="prop_p1" rows="7" style="width: 280px;"></textarea>
+            </div>
+            <div id="pnlpr_p15" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px; display: none;">
+                <div style="float: left; min-width: 100px;"><b>ControlId:</b> </div>
+                <span style="font-weight: bold; color: blue;">1</span>
+            </div>
+        </div>
+        <div class="styleGroup" style="clear: both;">
+            <h4>▼ Định dạng, kích thước, màu sắc</h4>
+            <div id="pnlpr_p2" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>In đậm:</b> </div>
+                <select id="prop_p2" name="prop_p2">
+                    <option selected="selected" value="normal">Không</option>
+                    <option value="bold">Có</option>
+                </select>
+            </div>
+            <div id="pnlpr_p3" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>In nghiêng:</b> </div>
+                <select id="prop_p3" name="prop_p3">
+                    <option selected="selected" value="normal">Không</option>
+                    <option value="italic">Có</option>
+                </select>
+            </div>
+            <div id="pnlpr_p4" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Cỡ chữ:</b> </div>
+                <input id="prop_p4" name="prop_p4">
+            </div>
+            <div id="pnlpr_p5" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Màu chữ:</b> </div>
+                <input id="prop_p5" name="prop_p5">
+            </div>
+            <div id="pnlpr_p6" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Chiều rộng:</b> </div>
+                <input id="prop_p6" name="prop_p6">
+            </div>
+            <div id="pnlpr_p7" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Chiều cao:</b> </div>
+                <input id="prop_p7" name="prop_p7">
+            </div>
+            <div id="pnlpr_p8" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Chữ gạch chân:</b> </div>
+                <select id="prop_p8" name="prop_p8">
+                    <option selected="selected" value="none">Không</option>
+                    <option value="underline">Có</option>
+                </select>
+            </div>
+            <div id="pnlpr_p9" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Font chữ:</b> </div>
+                <select id="prop_p9" name="prop_p9">
+                    <option selected="selected" value=""></option>
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Tahoma">Tahoma</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                </select>
+            </div>
+            <div id="pnlpr_p10" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Màu nền:</b> </div>
+                <input id="prop_p10" name="prop_p10">
+            </div>
+            <div id="pnlpr_p18" style="float: left; clear: both; width: 280px; margin-top: 5px; margin-left: 10px;">
+                <div style="float: left; min-width: 100px;"><b>Canh lề:</b> </div>
+                <select id="prop_p18" name="prop_p18">
+                    <option selected="selected" value="left">Canh trái</option>
+                    <option value="center">Canh giữa</option>
+                    <option value="right">Canh phải</option>
+                    <option value="justify">Canh đều</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</script>

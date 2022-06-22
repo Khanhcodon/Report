@@ -1,0 +1,115 @@
+﻿@model IEnumerable<PermissionModel>
+@{
+    var permissionsSelected = ViewBag.PermissionsSelected as string;
+    
+}
+<script type="text/javascript">
+    var images = {
+        "IgnorePermissionIds": "@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")",
+        "GrantPermissionIds": "@Url.Content("~/Content/Images/Grant_16X16_Standard.png")",
+        "DenyPermissionIds": "@Url.Content("~/Content/Images/Deny_16X16_Standard.png")"
+    };
+    var tooltips = {
+        "IgnorePermissionIds": "",
+        "GrantPermissionIds": "Cho phép",
+        "DenyPermissionIds": "Không cho phép"
+    };
+    $(function() {
+        var permissionsSelected = @(string.IsNullOrEmpty(permissionsSelected) ? MvcHtmlString.Create("[]") : Html.Raw(permissionsSelected));
+
+        var allHidden = $("input[name=IgnorePermissionIds]");
+        $.each(permissionsSelected, function(index, permission) {
+            var hidden = _.find(allHidden, function(item) {
+                return item.value == permission.PermissionId;
+            });
+            if(hidden) {
+                var checkbox = $(hidden).siblings("img");
+                if(permission.AllowAccess) {
+                    $(hidden).attr("name", "GrantPermissionIds");
+                    checkbox.attr("src", images.GrantPermissionIds);
+                    checkbox.attr("alt", tooltips.GrantPermissionIds);
+                } else {
+                    $(hidden).attr("name", "DenyPermissionIds");
+                    checkbox.attr("src", images.DenyPermissionIds);
+                    checkbox.attr("alt", tooltips.DenyPermissionIds);
+                }
+            }
+        });
+
+        $(".check").click(function() {
+            var hidden = $(this).siblings("input");
+            if(hidden.attr("name") == "IgnorePermissionIds") {
+                hidden.attr("name", "GrantPermissionIds");
+                this.src = images.GrantPermissionIds;
+                this.alt = tooltips.GrantPermissionIds;
+            } else if(hidden.attr("name") == "GrantPermissionIds") {
+                hidden.attr("name", "DenyPermissionIds");
+                this.src = images.DenyPermissionIds;
+                this.alt = tooltips.DenyPermissionIds;
+            } else {
+                hidden.attr("name", "IgnorePermissionIds");
+                this.src = images.IgnorePermissionIds;
+                this.alt = tooltips.IgnorePermissionIds;
+            }
+        });
+    });
+</script>
+<div class="grid">
+    <div class="grid-header">
+        <div class="grid-header-wrap">
+            <table class="table-main table">
+                <colgroup>
+                    <col style="width: 200px" />
+                    <col style="width: 400px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.role.rolename">
+                            Tên quyền
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.description">
+                            Mô tả
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.select">
+                            Chọn
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible">
+        <table class="table-main table" id="tblRole">
+            <colgroup>
+                <col style="width: 200px" />
+                <col style="width: 400px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    var groups = Model.GroupBy(p => p.ModuleName);
+                    foreach (var group in groups)
+                    {
+                        <tr>
+                            <td colspan="3"><i><b>@group.Key</b></i>
+                            </td>
+                        </tr>
+                        foreach (var permission in group)
+                        {
+                            <tr>
+                                <td>@permission.PermissionName</td>
+                                <td>@permission.Description</td>
+                                <td style="text-align: center">
+                                    <img src="@Url.Content("~/Content/Images/Unchecked_16X16_Standard.png")" alt="" class="check" />
+                                    <input type="hidden" value="@permission.PermissionId" name="IgnorePermissionIds"/>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

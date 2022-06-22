@@ -1,0 +1,112 @@
+﻿@model IEnumerable<TransferTypeModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblTransferType").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblTransferType").openLink({ urlOpen: '/admin/TransferType/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+</script>
+<table class="table-main table" id="tblTransferType">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("TransferTypeName", Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.TransferTypeName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        transfertypeName = ViewBag.TransferTypeName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListTransferType",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+                 
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var transfertype in Model)
+            {
+                number += 1;
+            <tr data-id="@transfertype.TransferTypeId">
+                <td>@number
+                </td>
+                <td>@transfertype.TransferTypeName
+                </td>
+                
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.Edit.Button"), "Edit", new { Id = transfertype.TransferTypeId })
+                </td>
+                <td>
+                    <a href="javascript:deleteTransferType(@(transfertype.TransferTypeId))">@Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(transfertype.TransferTypeId)" style="display: none" action="@Url.Action("Delete", new { Id = transfertype.TransferTypeId })" method="POST">
+                         @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" data-res="egov.resources.transfertype.nodata">
+                    Không có hình thức chuyển nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      transfertypeName = ViewBag.TransferTypeName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListTransferType",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

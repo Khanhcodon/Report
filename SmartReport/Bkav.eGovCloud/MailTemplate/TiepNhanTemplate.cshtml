@@ -1,0 +1,32 @@
+﻿<subject>Thư thông báo tiếp nhận hồ sơ</subject>
+<h2 style='text-align: center;'><strong>Thư thông báo tiếp nhận hồ sơ: ${Compendium}</strong></h2>
+<table style='text-align: center;'>
+    <tbody>
+        <tr>
+            <td style='width: 200px; text-align: left;'><strong>Loại Hồ sơ:</strong></td>
+            <td style='width: 457px; text-align: left;'>${CategoryName}</td>
+        </tr>
+        <tr>
+            <td style='width: 200px; text-align: left;'><strong>Số kí hiệu:</strong></td>
+            <td style='width: 457px; text-align: left;'>${DocCode}</td>
+        </tr>
+        <tr>
+            <td style='width: 200px; text-align: left;'><strong>Cơ quan ban hành:</strong></td>
+            <td style='width: 457px; text-align: left;'>${InOutPlace}</td>
+        </tr>
+        <tr>
+            <td style='width: 200px; text-align: left;'><strong>Trích yếu:</strong></td>
+            <td style='width: 457px; text-align: left;'>${Compendium}</td>
+        </tr>
+        <tr>
+            <td style='width: 200px; text-align: left;'><strong>File đính kèm:</strong></td>
+            <td style='width: 457px; text-align: left;'><b>(nhấn vào file đính kèm để thực hiện tải về)</b></td>
+        </tr>
+        <each Attachments>
+            <tr>
+                <td style='width: 200px; text-align: left;'></td>
+                <td style='width: 457px; text-align: left;color:#3385ff'>-  ${AttachmentName}</td>
+            </tr>
+        </each>
+    </tbody>
+</table>

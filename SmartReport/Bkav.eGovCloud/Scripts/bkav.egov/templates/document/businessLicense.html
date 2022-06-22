@@ -1,0 +1,91 @@
+﻿<div class="search-form">
+    <form>
+        <div class="form-horizontal search-form" role="form">
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Doanh Nghiệp *:</label>
+                <div class="col-md-12">
+                    <!--<div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="dgUser" data-respholder="egov.resources.transfer.dgUser" style="z-index: 1060;">
+                        <div class="input-group-btn">
+                            <button type="button" id="dgUsers" class="btn btn-default dropdown-toggle" data-target="#FilterDepartment" style="height:25px;"><span class="caret"></span></button>
+                        </div>
+                    </div>-->
+                    <input type="text" class="form-control" id="CitizenNameInput" data-respholder="" placeholder="Tên Doanh Nghiệp" value="${CitizenName}">
+                    <input type="hidden" name="BusinessId" id="CitizenNameHidden">
+                    <div class="" style="color:red; display: none" id="errorCitizenName">
+                        <i class="icon icon-close"></i>
+                        <span>Tên doanh nghiệp chưa có trong hệ thống</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal search-form" role="form">
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Loại giấy phép:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="DoctypeNameInput" data-respholder="" placeholder="Loại giấy phép" readonly value="${DoctypeName}">
+                    <input type="hidden" name="DoctypeId" id="DoctypeId" value="">
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal search-form" role="form">
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Mã giấy phép *:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="LicenseCode" name="LicenseCode" data-respholder="" placeholder="Mã giấy phép" value="${LicenseCode}">
+                </div>
+                <div id="errorLicenseCode" style="color:red; display: none">
+                    <i class="icon icon-close"></i>
+                    <span>Không được bỏ trống</span>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Số giấy phép *:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="LicenseNumber" name="LicenseNumber" data-respholder="" placeholder="Trích yếu" value="${LicenseNumber}">
+                </div>
+                <div class="" style="color:red; display: none" id="errorLicenseNumber">
+                    <i class="icon icon-close"></i>
+                    <span>Không được bỏ trống</span>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Ngày đăng ký:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="RegisDate" name="RegisDate" data-respholder="" placeholder="Ngày đăng ký" value="${RegisDate}">
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Ngày cấp phép:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="IssueDate" name="IssueDate" data-respholder="" placeholder="Ngày cấp phép" value="${IssueDate}">
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Có giá trị đến:</label>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="ExpireDate" name="ExpireDate" data-respholder="" placeholder="Có giá trị đến" value="${ExpireDate}">
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="CategoryBusinessId" class="col-md-4 control-label" data-res="egov.resources.search.categorybusiness.name">Tình trạng</label>
+                <div class="col-md-12 ">
+                    <select id="LicenseStatusId" name="LicenseStatusId" class="form-control" value="${LicenseStatusId}">
+                        <option value="1">Cấp mới</option>
+                        <option value="2">Cấp đổi, bổ sung</option>
+                        <option value="3">Thu hổi</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="Compendium" class="col-md-4 control-label" data-res="">Tài liệu liên quan:</label>
+                <div class="col-md-12">
+                    <strong><span id="LicensePath"></span></strong>
+                    <input type="button" value="Tải lên" onclick="$('#upload').click()" class="btn btn-info"/>
+                    <input type="hidden" name="FilePath" value="${FilePath}" id="FilePath" />
+                    <input type="file" name="files" id="upload" style="display: none;" data-url="/Attachment/Uploadtemp" accept="*.docx" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

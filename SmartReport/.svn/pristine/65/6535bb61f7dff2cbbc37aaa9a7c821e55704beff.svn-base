@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+
+  <siteMapNode url="/admin" title="Trang chủ"  description="" class="menu-admin">
+    <siteMapNode url="/admin/config1" class="admin-config1" title="Cấu hình" data-res="egov.resources.sitemap.config" data-restitle="egov.resources.sitemap.config" image="icon-cogs">
+      <siteMapNode url="/admin/Setting/General" class="admin-settinggeneral" title="Thiết lập hệ thống" data-res="egov.resources.sitemap.general" data-restitle="egov.resources.sitemap.general" image="icon-cog3"/>
+      <siteMapNode url="/admin/divider1" class="divider" />
+      <siteMapNode url="/admin/treeGroup" class="admin-treegroup" title="Nhóm cây" data-res="egov.resources.sitemap.treeGroup" data-restitle="egov.resources.sitemap.treeGroup" image="icon-list2"/>
+      <siteMapNode url="/admin/PermissionSetting" class="admin-permissionsetting" title="Cấu hình quyền trên node" data-res="egov.resources.sitemap.permissionSetting" data-restitle="egov.resources.sitemap.permissionSetting"  image="icon-cogs"/>
+      <siteMapNode url="/admin/DocColumnSetting" class="admin-doccolumnsetting" title="Cấu hình hiển thị danh sách" data-res="egov.resources.sitemap.docColumnSetting" data-restitle="egov.resources.sitemap.docColumnSetting"  image="icon-cogs"/>
+      <siteMapNode url="/admin/ProcessFunction" class="admin-processfunction" title="Cây báo cáo" data-res="egov.resources.sitemap.processfunction" data-restitle="egov.resources.sitemap.processfunction" image="icon-flow-cascade"/>
+      <siteMapNode url="/admin/divider2" class="divider" />
+      <siteMapNode url="/admin/Resource" class="admin-resource" title="Tài nguyên" data-res="egov.resources.sitemap.resource" data-restitle="egov.resources.sitemap.resource" image="icon-language"/>
+      <siteMapNode url="/admin/DocumentRelated" class="admin-resource" title="Văn bản liên quan" data-res="egov.resources.sitemap.resource" data-restitle="egov.resources.sitemap.resource" image="icon-language"/>
+    </siteMapNode>
+
+    <siteMapNode url="/admin/config4" class="admin-config4" title="Biểu mẫu" data-res="egov.resources.sitemap.config4" data-restitle="egov.resources.sitemap.config4" image="icon-text">
+      <siteMapNode url="/admin/Template" class="admin-template" title="Quản lý mẫu phiếu" data-res="egov.resources.sitemap.template" data-restitle="egov.resources.sitemap.template" image="icon-insert-template"/>
+      <siteMapNode url="/admin/TemplateKey" class="admin-templateKey" title="Quản lý Key" data-res="egov.resources.sitemap.templatekey" data-restitle="egov.resources.sitemap.templatekey" image="icon-insert-template"/>
+      <siteMapNode url="/admin/TemplateKeyPlus" class="admin-templateKey" title="Quản lý Key (Mới)" data-res="egov.resources.sitemap.templatekey" data-restitle="egov.resources.sitemap.templatekey" image="icon-insert-template"/>
+      <siteMapNode url="/admin/IndicatorCatalog" class="admin-inCatalog" title="Quản lý danh mục" data-res="egov.resources.sitemap.inCatalog" data-restitle="egov.resources.sitemap.inCatalog" image="icon-insert-template"/>
+      <siteMapNode url="/admin/IndicatorCatalogValue" class="admin-inCatalogValue" title="Quản lý chỉ tiêu" data-res="egov.resources.sitemap.inCatalogValue" data-restitle="egov.resources.sitemap.inCatalogValue" image="icon-insert-template"/>
+      <siteMapNode url="/admin/ReportMode" class="admin-reportMode" title="Chế độ báo cáo" data-res="egov.resources.sitemap.reportMode" data-restitle="egov.resources.sitemap.reportMode" image="icon-insert-template"/>
+      <siteMapNode url="/admin/ReportQuery" class="admin-reportQuery" title="Truy vấn báo cáo" data-res="egov.resources.sitemap.reportQuery" data-restitle="egov.resources.sitemap.reportQuery" image="icon-insert-reportQuery"/>
+      <siteMapNode url="/admin/ReportQueryGroup" class="admin-reportQueryGroup" title="Nhóm truy vấn báo cáo" data-res="egov.resources.sitemap.reportQueryGroup" data-restitle="egov.resources.sitemap.reportQueryGroup" image="icon-insert-reportQueryGroup"/>
+    </siteMapNode>
+
+    <siteMapNode url="/admin/config2" class="admin-config2" title="Danh mục" data-res="egov.resources.sitemap.config2" data-restitle="egov.resources.sitemap.config2" image="icon-list">
+      <siteMapNode url="/admin/workflow" class="admin-workflow" title="Quy trình" data-res="egov.resources.sitemap.configworkflow" data-restitle="egov.resources.sitemap.configworkflow" image="icon-shuffle"/>
+      <siteMapNode url="/admin/interfaceConfig" class="admin-interfaceConfig" title="Giao diện Báo cáo" data-res="egov.resources.sitemap.interfaceConfig" data-restitle="egov.resources.sitemap.configworkflow" image="icon-insert-template"/>
+      <siteMapNode url="/admin/divider5" class="divider" />
+      <siteMapNode url="/admin/DocField" class="admin-docField" title="Lĩnh vực" data-res="egov.resources.sitemap.docfield" data-restitle="egov.resources.sitemap.docfield" image="icon-archive"/>
+      <siteMapNode url="/admin/DocType" class="admin-docType" title="Loại báo cáo số liệu" image="icon-docs"/>
+      <siteMapNode url="/admin/DocType/Index?categoryBusinessId=8" class="admin-docType" title="Loại báo cáo thuyết minh" image="icon-docs"/>
+      <siteMapNode url="/admin/DocType/Index?categoryBusinessId=16" class="admin-docType" title="Loại báo cáo danh sách" image="icon-docs"/>
+      <siteMapNode url="/admin/divider6" class="divider" />
+      <siteMapNode url="/admin/Category" class="admin-category" title="Hình thức văn bản" data-res="egov.resources.sitemap.category" data-restitle="egov.resources.sitemap.category" image="icon-copy2"/>
+      <siteMapNode url="/admin/Increase" class="admin-increase" title="Nhảy số" data-res="egov.resources.sitemap.increase" data-restitle="egov.resources.sitemap.increase" image="icon-add-to-list"/>
+      <siteMapNode url="/admin/Code" class="admin-code" title="Bảng mã" data-res="egov.resources.sitemap.code" data-restitle="egov.resources.sitemap.code" image="icon-code"/>
+      <siteMapNode url="/admin/Store" class="admin-store" title="Sổ hồ sơ" data-res="egov.resources.sitemap.store" data-restitle="egov.resources.sitemap.store" image="icon-paste2"/>
+      <siteMapNode url="/admin/divider7" class="divider" />
+      <siteMapNode url="/admin/Catalog" class="admin-catalog" title="Danh mục tùy chọn" data-res="egov.resources.sitemap.catalog" data-restitle="egov.resources.sitemap.catalog" image="icon-popup"/>
+      <siteMapNode url="/admin/KeyWord" class="admin-keyWord" title="Từ khóa" data-res="egov.resources.sitemap.keyword" data-restitle="egov.resources.sitemap.keyword" image="clear.gif"/>
+      <!--<siteMapNode url="/admin/TransferType" class="admin-transfertype" title="Hình thức gửi" data-res="egov.resources.sitemap.transfertype" data-restitle="egov.resources.sitemap.transfertype" image="icon-paperplane"/>-->
+      <siteMapNode url="/admin/Time" class="admin-time" title="Thời gian làm việc" data-res="egov.resources.sitemap.time" data-restitle="egov.resources.sitemap.time" image="icon-clock3"/>
+      <siteMapNode url="/admin/Address" class="admin-address" title="Địa chỉ" data-res="egov.resources.sitemap.address" data-restitle="egov.resources.sitemap.address" image="icon-map"/>
+      <!--<siteMapNode url="/admin/Paper" class="admin-paper" data-res="egov.resources.sitemap.paper" data-restitle="egov.resources.sitemap.paper" title="Giấy tờ" image="icon-copy"/>
+      <siteMapNode url="/admin/Fee" class="admin-fee" data-res="egov.resources.sitemap.fee" data-restitle="egov.resources.sitemap.fee" title="Lệ phí" image="icon-coin"/>-->
+      <!--<siteMapNode url="/admin/RequiredSupplementary" data-res="egov.resources.sitemap.requiredSupplementary" data-restitle="egov.resources.sitemap.requiredSupplementary" title="Mẫu yêu cầu bổ sung" image="clear.gif"/>-->
+      <siteMapNode url="/admin/DataSource" class="admin-address" title="DataSource" image="icon-map"/>
+      <siteMapNode url="/admin/ActionLevel" class="admin-address" title="Kỳ báo cáo" data-res="egov.resources.sitemap.actionlevel" data-restitle="egov.resources.sitemap.actionlevel" image="icon-map"/>
+    </siteMapNode>
+
+    <siteMapNode url="/admin/config3" class="admin-config3" title="Cơ cấu tổ chức" data-res="egov.resources.sitemap.config3" data-restitle="egov.resources.sitemap.config3" image="icon-users3">
+      <siteMapNode url="/admin/Infomation" class="admin-infomation" title="Cơ quan" data-res="egov.resources.sitemap.infomation" data-restitle="egov.resources.sitemap.infomation" image="icon-office"/>
+      <siteMapNode url="/admin/divider8" class="divider" />
+      <siteMapNode url="/admin/JobTitles" class="admin-jobtitles" title="Chức danh" data-res="egov.resources.sitemap.jobtitles" data-restitle="egov.resources.sitemap.jobtitles" image="icon-user4"/>
+      <siteMapNode url="/admin/Position" class="admin-position" title="Chức vụ" data-res="egov.resources.sitemap.position" data-restitle="egov.resources.sitemap.position" image="icon-user4"/>
+      <siteMapNode url="/admin/User" class="admin-user" title="Cán bộ" data-res="egov.resources.sitemap.user" data-restitle="egov.resources.sitemap.user" image="icon-user2"/>
+      <siteMapNode url="/admin/Department" class="admin-department" title="Phòng ban" data-res="egov.resources.sitemap.department" data-restitle="egov.resources.sitemap.department" image="icon-house"/>
+      <siteMapNode url="/admin/divider81" class="divider" />
+      <siteMapNode url="/admin/Role" class="admin-role" title="Vai trò và quyền hạn" data-res="egov.resources.sitemap.role" data-restitle="egov.resources.sitemap.role" image="icon-users3"/>
+    </siteMapNode>
+    <siteMapNode url="/admin/config5" class="admin-config5" title="Báo cáo" data-res="egov.resources.sitemap.config5" data-restitle="egov.resources.sitemap.config5" image="icon-stats">
+      <siteMapNode url="/admin/Report/ListGroup" class="admin-listGroup" title="Nhóm báo cáo" data-res="egov.resources.sitemap.reportgroup" data-restitle="egov.resources.sitemap.reportgroup" image="icon-stats"/>
+      <siteMapNode url="/admin/DocColumnSetting/IndexReport" class="admin-reportColumn" title="Danh sách cột báo cáo" image="icon-stats"/>
+      <siteMapNode url="/admin/Report" class="admin-report" title="Báo cáo động" data-res="egov.resources.sitemap.report" data-restitle="egov.resources.sitemap.report" image="icon-stats"/>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

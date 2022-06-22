@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ActionLevelModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteCode(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListCode").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListActionLevel').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListCode').unblockpanel();
+    }
+
+    function searchActionLevel(_this) {
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    function onChange() {
+        $("#search").click();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-code"></i>
+        <span data-res="egov.resources.sitemap.actionlevel">Kỳ báo cáo</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/actionlevel/create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search",
+            new AjaxOptions
+            {
+                HttpMethod = "Get",
+                UpdateTargetId = "divListActionLevel",
+                OnBegin = "onBegin",
+                OnFailure = "onFailure",
+                OnSuccess = "onSuccess"
+            }))
+    {
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.Search.ActionLevelName.Label")</span>
+        <input style="display:inline;width:50%" type="text"
+                name="actionLevelName" id="actionLevelName" value="@(ViewBag.ActionLevelName ?? "")"
+                 placeholder="@Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.Search.ActionLevelName")" />
+
+        <input style="display:inline" class="btn" type="submit"
+            id="search" onclick="searchActionLevel(this)" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+    <br />
+    <div id="divListActionLevel">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

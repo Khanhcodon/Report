@@ -1,0 +1,42 @@
+﻿<div class="container-fluid">
+    <!--<div class="row">
+        <div class="list-group-item row">
+            <div class="col-sm-15 col-md-15 col-lg-15 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                <input type="text" id="searchUser" class="form-control input-sm pull-left searchUser"
+                       data-respholder="egov.resources.question.searchUser" />
+            </div>
+        </div>
+    </div>-->
+    <div class="row">
+        <ul class="list-group questionforward listUsers">
+            {{each(i, user) users}}
+            <li class="list-group-item" data-userid="${user.UserId}">
+                <div class="row">
+                    <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 transfer-avatar">
+                        <img src="${String.format(egov.setting.avatarPath, user.Account)}" alt="${user.FullName}" width="28" class="img-rounded" onerror="this.onerror = null; this.src = '/AvatarProfile/noavatar.jpg';" />
+                    </div>
+                    <div class="hidden-xs col-sm-14 col-md-14 col-lg-14 wraptext transfer-info">
+                        <div class="transfer-user">
+                            <span class="user-fullname">${user.FullName}</span>
+                            <span class="second-color">
+                                <span class="user-username">${user.Account}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-md-1 col-lg-1 transfer-info chkdoc">
+                        <label class="checkbox document-color co-process qtooltip" data-restitle="egov.resources.question.chooseuser">
+                            <input name="checkbox[]" value="${value}" type="checkbox">
+                            <span class="document-color-1"><i class="icon-check"></i></span>
+                        </label>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        <div class="row">
+            <div class="form-group">
+                <textarea cols="3" data-respholder="egov.resources.question.transferComment" class="form-control txtTransferComment">${Answer}</textarea>
+            </div>
+        </div>
+    </div>
+</div>

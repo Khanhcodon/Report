@@ -1,0 +1,260 @@
+﻿@model TemplateModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Template.Edit");
+    ViewBag.CreateOrEdit = Localizer("Common.Label.Update");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+    var childs = ViewBag.Childs as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.TemplateModel>;
+}
+
+@Html.Partial("_Head")
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+
+<style type="text/css">
+    #tblTemplate tr:first-child {
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    function onBegin() {
+        $(".ui-tabs-nav li").last().siblings().removeClass(" ui-tabs-selected ui-state-active");
+        $(".ui-tabs-nav li").last().addClass("ui-tabs-selected ui-state-active");
+    }
+    function deleteTemplate(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Template.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.OkCancel,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function activeTemplate(e, templateId) {
+        var isActive = $(e).prop("checked");
+        $.ajax({
+            method: "POST",
+            url: "@Url.Action("ActiveTemplate")",
+            data: {
+                id: templateId,
+                isactive: isActive
+            }
+        });
+    }
+
+    $(function () {
+        $("#delete").remove();
+
+        $("#tablist li").click(function () {
+            $("#tablist li").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        $("#tblTemplate").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $('.upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var filename = data.files[0].name;
+                if (filename.indexOf(".rpt", filename - ".rpt".length) !== -1) {
+                    $(this).parent().find(".ContentFile").text(filename);
+                    data.submit();
+                }
+                else {
+                    alert("@Localizer("Admin.Report.Upload.Extention.RPTOnly")");
+                }
+            },
+            done: function (e, data) {
+                var templateId = $(this).attr("id");
+                var result = data.result[0];
+                $(this).parent().find(".ContentFile").attr("filename", result.key);
+                $.ajax({
+                    method: "POST",
+                    url: "@Url.Action("ChangeContentFile")",
+                    data: {
+                        id: templateId,
+                        fileName: result.name,
+                        fileLocalName: result.key
+                    }
+                })
+            },
+            fail: function (e, data) {
+            }
+        });
+    });
+    $(".table-main").addClass("table-bordered table-hover");
+    function addChild(id) {
+        $.ajax({
+            url: "@Url.Action("AddChild")",
+            data: { parentId: id },
+            success: function (result) {
+                var $dialog = $("#config");
+                $dialog.html(result);
+                $dialog.dialog({
+                    modal: true,
+                    width: 1000,
+                    height: 600,
+                    title: "Thêm mẫu con",
+                    open: function () {
+                        $("#config #accordion").accordion({
+                            collapsible: true
+                        });
+                        if (editor)
+                            editor.destroy();
+                        editor = CKEDITOR.replace("Content", { toolbar: "Basic", height: 380 });
+                    },
+                    buttons: {
+                        "Thêm": function () {
+                            if (editor)
+                                editor.destroy();
+                            //$(".config #Content").val(escape($(".config #Content").val()));
+                            $("form[name='AddChild']").submit();
+                            $("#config").dialog("destroy");
+                        },
+                        "Hủy": function () {
+                            $("#config").dialog("destroy");
+                        }
+                    },
+                    close: function () {
+                        $("#config").html("");
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-insert-template"></i>
+        <span data-res="egov.resources.sitemap.template"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/template/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div>
+        <div id="divListTemplate">
+            @using (Html.BeginForm())
+            {
+                @Html.Partial("_CreateOrEdit", Model)
+                @Html.AntiForgeryToken()
+            }
+            @*            <div>
+                    <label>@Localizer("Admin.Template.Edit.CrystalReports")</label>
+                    <input class="btn" type="button" value="@Localizer("Admin.Template.Edit.CrystalReports.Upload")" style="margin-bottom:5px" />
+                </div>*@
+            <div>
+                <label>@Localizer("Admin.Template.Edit.Childs")</label>
+            </div>
+            <table class="table-main table" id="tblTemplate">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col style="width: 100px" />
+                    <col />
+                    <col style="width: 200px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("Common.Resource.Index.List.Column.Numbers")
+                        </th>
+                        <th class="header">
+                            @Localizer("Admin.Template.Index.List.Column.Name")
+                        </th>
+                        <th class="header">
+                            @Localizer("Admin.Template.Index.List.Column.DocField")
+                        </th>
+                        <th class="header">
+                            @Localizer("Admin.Template.Index.List.Column.Doctype")
+                        </th>
+                        <th class="header">
+                            @Localizer("Admin.Template.Edit.CrystalReports")
+                        </th>
+                        <th class="header">
+                            @Localizer("Admin.Template.Index.List.Column.Config")
+                        </th>
+                        <th class="header">
+                            @Localizer("Common.Template.Index.List.Column.IsActive")
+                        </th>
+                        <th class="header">
+                            @Localizer("Common.Template.Index.List.Column.Delete")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (childs != null && childs.Any())
+                    {
+                        foreach (var child in childs)
+                        {
+                            number += 1;
+                            <tr>
+                                <td>
+                                    @number
+                                </td>
+                                <td>
+                                    @child.Name
+                                </td>
+                                <td>
+                                    @(child.DocField == null ? "" : child.DocField.DocFieldName)
+                                </td>
+                                <td>
+                                    @(child.DocType == null ? "" : child.DocType.DocTypeName)
+                                </td>
+                                <td class="text-center" style="word-break: break-all;">
+                                    <span class="ContentFile">@child.ContentFile</span>
+                                    <span class="btn btn-upload icon icon-upload3 pull-right" style="min-width: 0" onclick="$('#@child.TemplateId').click()"></span>
+                                    <input type="file" name="files" class="upload" id="@child.TemplateId" style="display: none;" data-url="@Url.Action("UploadCrystal", "Attachment", new { area = "" })" accept="*.rpt" />
+                                </td>
+                                <td class="text-center">
+                                    @*<a href="#" onclick="openConfig(@child.TemplateId, '@child.Name')">Cấu hình</a>*@
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" @(child.IsActive ? "checked = 'checked'" : "") onclick="activeTemplate(this, @(child.TemplateId))" />
+                                </td>
+                                <td class="text-center">
+                                    <a href="javascript:deleteTemplate(@(child.TemplateId))">@Localizer("Admin.Template.Index.List.Column.Delete.Button")</a>
+                                    <form id="formdelete@(child.TemplateId)" style="display: none" action="@Url.Action("Delete", new { Id = child.TemplateId })" method="POST">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" data-res="egov.resources.template.nodata"></td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <input class="btn" type="button" value="@Localizer("Admin.Template.Edit.Childs.Add")" onclick="addChild('@childs.First().TemplateId    ')" style="margin-bottom:5px" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

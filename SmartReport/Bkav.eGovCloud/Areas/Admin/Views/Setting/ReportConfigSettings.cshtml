@@ -1,0 +1,61 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.ReportConfigSettingsModel
+@{
+    ViewBag.Title = "Cấu hình báo cáo";
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Cấu hình báo cáo</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.UrlService)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.UrlService, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.TokenService)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.TokenService, new { @class = "form-control" })
+                </td>
+            </tr>       
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.SendDirectly)
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.SendDirectly, new { @class = "form-control" })
+                </td>
+            </tr> 
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.OzganizeKey)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.OzganizeKey, new { @class = "form-control" })
+                </td>
+            </tr>    
+        </table>
+    </div>
+}

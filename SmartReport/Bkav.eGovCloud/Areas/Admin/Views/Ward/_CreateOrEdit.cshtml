@@ -1,0 +1,52 @@
+﻿@model WardModel
+@{
+    var allcity = ViewBag.AllCity as IEnumerable<CityModel>;
+    var alldistrict = ViewBag.AllDistrict as IEnumerable<DistrictModel>;
+    var search = ViewBag.Search as WardSearchModel;
+}
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.WardId)
+
+<table>
+    <tr>
+        <td>
+            Tỉnh/thành phố:
+        </td>
+        <td>
+            <select id="CityCode" name="CityCode" style="width: 306px" @(Model.WardId > 0 ? "disabled='disabled'" : "")>
+                @if (allcity != null && allcity.Any())
+                {
+                    foreach (var city in allcity)
+                    {
+                    <option value="@city.CityCode" @(search.CityCode != null && search.CityCode == city.CityCode ? "selected='selected'" : "")>@city.CityName</option>
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.DistrictCode):
+        </td>
+        <td>
+            <select id="DistrictCode" name="DistrictCode" style="width: 306px" @(Model.WardId > 0 ? "disabled='disabled'" : "")>
+                @if (alldistrict != null && alldistrict.Any())
+                {
+                    foreach (var district in alldistrict)
+                    {
+                    <option value="@district.DistrictCode" @(search.DistrictCode != null && search.DistrictCode == district.DistrictCode ? "selected='selected'" : "")>@district.DistrictName</option>
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.WardName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.WardName, new { style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.WardName)
+        </td>
+    </tr>
+</table>

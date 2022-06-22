@@ -1,0 +1,108 @@
+﻿@{
+    Layout = "";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+<html>
+<head>
+    <title>@Localizer("Common.CrystalReport.Index")</title>
+    <style type="text/css">
+        .div-inputs input {
+            float: right;
+            height: 25px;
+            border: none;
+            background-color: rgb(57, 57, 250);
+            color: white;
+            width: 65px;
+            margin: 3px;
+        }
+
+        .div-inputs #btnClose {
+            background-color: #e41d1d;
+        }
+
+        .div-inputs #recreate {
+            background-color: orange;
+        }
+    </style>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Scripts/bkav.egov/libs/report/js/jquery.contextmenu/jquery.contextmenu.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Scripts/bkav.egov/libs/report/css/bkavegov.report.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Scripts/bkav.egov/libs/report/js/colorpicker/css/colorpicker.css")" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/browser/jquery.browser.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/js/colorpicker/js/colorpicker.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")" type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/js/jquery.contextmenu/jquery.ui.position.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/js/jquery.contextmenu/jquery.contextmenu.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.resizecolumn.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkavegov.report.config.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.template.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.field.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.panel.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.hotkey.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.commandmanager.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/report/bkav.egov.report.command.js")"></script>
+
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var contentObj = $(window.opener.contentObj);
+            var isReport = false;
+            if (contentObj.is("#Content")) {
+                isReport = true;
+                $("#copy").attr("title", "@Localizer("Admin.CrystalReport.CopyFormStatisticForm")");
+            }
+            var content = (contentObj.val() == "" || contentObj.val() == "undefined") ? {} : JSON.parse(contentObj.val());
+
+            var report = new eReport("#reportTool", content, isReport);
+            report.init();
+
+            $("#btnSave").click(function () {
+                var content = report.get();
+                contentObj.val(JSON.stringify(content));
+                window.close();
+            });
+
+            $("#copy").click(function () {
+                $("#reportTool").html("");
+                var target;
+                if (contentObj.is("#Content")) {
+                    target = $(window.opener.document).find("#ViewContent");
+                }
+                else {
+                    target = $(window.opener.document).find("#Content");
+                }
+                report = new eReport("#reportTool", target.val() == "" ? {} : JSON.parse(target.val()));
+                report.init();
+            });
+
+            $("#recreate").click(function () {
+                $("#reportTool").html("");
+                report = new eReport("#reportTool", {});
+                report.init();
+            });
+
+            $(document).bindResources();
+        });
+    </script>
+</head>
+<body>
+    <div id="reportTool" style=""></div>
+    <div class="div-inputs">
+        <input type="button" data-res="egov.resources.buttons.close" value="Đóng" onclick="window.close()" id="btnClose" />
+        <input type="button" value="Lưu" id="btnSave" data-res="egov.resources.crystalreport.save" />
+        <input type="button" value="Sao chép" title="Sao chép từ mẫu báo cáo" data-restitle="egov.resources.crystalreport.copyfromreportform" id="copy" data-res="egov.resources.buttons.copy" />
+        <input type="button" value="Xóa hết" title="Config lại từ đầu" id="recreate" data-restitle="egov.resources.crystalreport.reconfig" data-res="egov.resources.buttons.deleteAll" />
+    </div>
+</body>
+</html>

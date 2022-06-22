@@ -1,0 +1,195 @@
+﻿@model IEnumerable<QuestionModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+    <script>
+        $(function () {
+            $("#tblData").openLink({ urlOpen: '/admin/Question/Edit' });
+        });
+    </script>
+<table id="tblData" class="table table-bordered table-hover">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 160px" />
+        <col style="width: 120px" />
+        <col style="width: 110px" />
+        <col style="width: 80px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="text-center active">
+                @Localizer("Common.Question.Index.List.Column.Numbers")
+            </th>
+            <th class="text-center active">
+                @Ajax.SortLink("Name", Localizer("Common.Question.Index.List.Column.QuestionName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        questionName = ViewBag.QuestionName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListQuestion",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="text-center active">
+                @Ajax.SortLink("AskPeople", Localizer("Common.Question.Index.List.Column.AskPeople"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        questionName = ViewBag.QuestionName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListQuestion",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="text-center active">
+                @Ajax.SortLink("Date", Localizer("Common.Question.Index.List.Column.Date"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        questionName = ViewBag.QuestionName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListQuestion",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>            
+            <th class="text-center active">
+                @Ajax.SortLink("Active", Localizer("Common.Question.Index.List.Column.QuestionActive"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        questionName = ViewBag.QuestionName,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListQuestion",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="text-center active">
+                @Localizer("Common.Question.Index.List.Column.Answer")
+            </th>
+            <th class="text-center active">
+                @Localizer("Common.Question.Index.List.Column.Edit")
+            </th>
+            <th class="text-center active">
+                @Localizer("Common.Question.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var question in Model)
+            {
+                number += 1;
+            <tr data-id="@question.QuestionId">
+                <td style="text-align: center;">
+                    @number
+                </td>
+                <td>
+                    @if (question.Name != null && question.Name.Length > 0)
+                    {
+                        @question.Name   
+                    }
+                    else
+                    {                     
+                        <span style="color: #ff6a00;">Chưa trả lời</span>
+                    }
+                </td>
+                <td>
+                    @question.AskPeople
+                </td>
+                <td>
+                    @question.Date.ToString("HH:mm - d/M/yyyy")
+                </td>                
+                <td style="text-align: center;">
+                    @if (question.Name != null && question.Name.Length > 0)
+                    {
+                        @Html.CheckBoxFor(x => question.Active, new { @questionId = @question.QuestionId }) 
+                    }
+                    else
+                    {                     
+                        @Html.CheckBoxFor(x => question.Active, new { @questionId = @question.QuestionId, @disabled="" })
+                    }                    
+                </td>
+                <td style="text-align: center;">
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Answer.Button"), "Answer", new { Id = question.QuestionId })
+                </td>
+                <td style="text-align: center;">
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = question.QuestionId })
+                </td>
+                <td style="text-align: center;">
+                     <a href="javascript:deleteDocField(@(question.QuestionId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(question.QuestionId)" style="display: none" action="@Url.Action("Delete", new { Id = question.QuestionId })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" data-res="egov.resources.question.nodata">
+                    Không có câu hỏi nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<table>
+
+    <tr>
+        <td class="" colspan="4" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+            @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      questionName = ViewBag.QuestionName,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListQuestion",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+        </td>
+    </tr>
+
+</table>

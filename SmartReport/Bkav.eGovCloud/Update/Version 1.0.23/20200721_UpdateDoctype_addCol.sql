@@ -1,0 +1,3 @@
+ALTER TABLE `doctype`
+ADD COLUMN `SurveyReport` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+ADD COLUMN `SurveyCriteria` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;

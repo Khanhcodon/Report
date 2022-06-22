@@ -1,0 +1,45 @@
+﻿@model System.Collections.Generic.IList<LawModel>
+@{
+    ViewBag.Title = Localizer("DocType.CreateOrEdit.Tab.DocTypeLaw");
+    Layout = null;
+}
+
+<table id="tblData" class="table table-hover table-main table-bordered">
+    <colgroup>
+        <col style="width: 150px"/>
+        <col />
+        <col style="width: 45px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th style="line-height: 2.5;" class="header">
+                @Localizer("Common.Law.Column.NumberSign")
+            </th>
+            <th style="line-height: 2.5;" class="header">
+                @Localizer("Common.Law.Column.SubContent")
+            </th>
+            <th class="text-center header" style="line-height: 2.5;">
+                @Localizer("Common.Law.Column.Choose")
+            </th>
+        </tr>
+    </thead>
+        @if(Model!=null&&Model.Any()){
+            foreach (var item in Model)
+            { 
+              <tr>
+                    <td>
+                        @item.NumberSign
+                    </td>
+                    <td>
+                        @item.SubContent
+                    </td>
+                    <td  class="text-center">
+                        <input type="checkbox" 
+                            value=@item.LawId name="IsCheck" lawnumbersign="@item.NumberSign" />
+                    </td>
+                </tr>
+            }
+        }
+</table>
+<div>
+</div>

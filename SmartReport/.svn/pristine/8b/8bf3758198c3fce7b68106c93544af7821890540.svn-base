@@ -1,0 +1,113 @@
+﻿@model IEnumerable<PaperModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as PaperSearchModel;
+    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblPaper").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblPaper").openLink({ urlOpen: '/admin/Paper/Edit' });
+    });
+
+    function deletePaper(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Paper.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+</script>
+<table class="table-main table" id="tblPaper" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+       <col style="width: 150px" />
+        <col style="width: 120px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("PaperName", Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.PaperName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    categoryBusinessId = search.CategoryBusinessId,
+                                    docFieldId = search.DocFieldId,
+                                    docTypeId = search.DocTypeId
+                                },
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "divListPaper",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Type")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Requierd")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var paper in Model)
+            {
+                number += 1;
+            <tr data-id="@paper.PaperId">
+                <td>@number
+                </td>
+                <td>@paper.PaperName
+                </td>
+                <td>
+                    @paper.PaperTypeName
+                </td>
+                <td style="text-align: center">
+                    @(paper.IsRequired ? "X" : "")
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Paper.Index.List.Column.Edit.Button"), "Edit", new { Id = paper.PaperId })
+                </td>
+                <td>
+                    <a href="javascript:deletePaper(@(paper.PaperId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(paper.PaperId)" style="display: none" action="@Url.Action("Delete", new { Id = paper.PaperId })" method="POST">
+                           @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.paper.nopaper">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

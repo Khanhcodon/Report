@@ -1,0 +1,24 @@
+﻿<div>
+    <label data-res="egov.resources.document.print.printer"></label>
+    <select class='form-control printerId'>
+        {{each printers}}
+                <option value='${PrinterId}'{{if PrinterId==egov.setting.userSetting.PrinterId}}selected{{/if}}>${ShareName}</option>
+        {{/each}}
+    </select>
+</div>
+<div>
+    <label data-res="egov.resources.document.print.copies"></label>
+    <input type='text' class='form-control copies' value='1' />
+</div>
+<div>
+    <label data-res="egov.resources.document.print.landscape"></label>
+    <select class='form-control landscape'>
+        <option value='true' data-res='egov.resources.document.print.inDoc'></option>
+        <option value='false' data-res='egov.resources.document.print.inNgang'></option>
+    </select>
+</div>
+<div class="pull-right">
+    <button type="button" class="btn btn-primary" data-disable="false" id="quickPrint" data-res="egov.resources.document.print.quickPrint"></button>
+    <!--<button type="button" class="btn btn-primary" data-disable="false" id="printContent" data-res="egov.resources.document.print.text"></button>-->
+    <button type="button" class="btn btn-close" data-disable="false" data-res="egov.resources.common.closeButton"></button>
+</div>

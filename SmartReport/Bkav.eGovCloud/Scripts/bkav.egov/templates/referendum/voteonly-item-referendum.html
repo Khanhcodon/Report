@@ -1,0 +1,22 @@
+﻿
+<div class="col-md-16">
+    <div class="list-group-item" style="padding:5px 3px; ">
+        {{if Option.IsMultiSelect}}
+        <label class="checkbox document-color">
+            <input name="checkbox[]" value="11" type="checkbox" id="${VoteDetailId}" {{if IsChecked}} checked{{/if}}>
+            <span class="document-color-1">
+                <i class="icon-check"></i>
+            </span>
+        </label>
+        <label for="${VoteDetailId}" style="font-size:14px" class="">${TitleDetail}</label>
+        {{else}}
+        <label class="checkbox document-color">
+            <input name="checkbox[]" value="11" type="checkbox" id="${VoteDetailId}" {{if IsChecked}} checked{{/if}}>
+            <span class="document-color-1" style="border-radius: 50px">
+                <i class="icon-check"></i>
+            </span>
+        </label>
+        <label style="font-size:14px" for="${VoteDetailId}" class="">${TitleDetail}</label>
+        {{/if}}
+    </div>
+</div>

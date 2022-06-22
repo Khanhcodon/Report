@@ -1,0 +1,64 @@
+﻿
+
+<div id="viewmail" class="mdl-layout mdl-js-layout mdl-layout--fixed-header" maildetailid="${id}" mailid="${mailId}">
+    <div class="mdl-layout__header mdl-layout__header--seamed mail-header">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnCloseCompose" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">clear</i>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <!--<button id="saveDraft" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect pull-right">
+                <i class="material-icons">save</i>
+            </button>-->
+
+            <form method="post" id="uploadFileForm" action="${serverUpload}" enctype="multipart/form-data" style="position:relative;">
+                <input type="file" name="Filedata" class="fileupload " id="txtInsertFile" multiple />
+                <label for="txtInsertFile" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="btnInsertFile">
+                    <i class="material-icons">attach_file</i>
+                </label>
+            </form>
+
+            <label for="txtInsertFile" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="btnInsertFile">
+                <i class="material-icons">attachment</i>
+                <input type="file" name="Filedata" class="fileupload" id="upload" multiple data-url="${serverUpload}" />
+
+            </label>
+
+            <label class="mdl-button mdl-js-button mdl-button--icon" id="sendMail" data-upgraded=",MaterialButton">
+                <i class="material-icons">send</i>
+            </label>
+        </div>
+    </div>
+    <div class="mdl-layout__content">
+        <div class="mail-reply-info">
+            <div class="mdl-menu__item--full-bleed-divider">
+                <span>Đến: </span>
+                <input type="text" id="mailTo" required class="form-control" value="${to}" placeholder="Gửi tới" />
+            </div>
+
+            <div>
+                <b><div contenteditable="true" id="mailSubject" class="item-title" placeholder="Nhập tiêu đề">${subject}</div></b>
+            </div>
+
+            <div id="mailBody">
+                <div id="Content" contenteditable="true" placeholder="Soạn mail" class="form-control" style="min-height: 50px;"></div>
+                <div id="signal">
+                    <!--Chèn chữ ký sau này-->
+                </div>
+            </div>
+            <div id="wrapAttachment">
+                <ul id="mailAttachDetail" class="mdl-list"></ul>
+            </div>
+
+            <div id="oldMail">
+                <div class="viewOldMail">Xem thư đầy đủ</div>
+                <div id="oldMailContent" style="display: none">
+                    <div class="oldSenderInfo">
+                        ${sendInfo}
+                    </div>
+                    <div class="oldMailContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

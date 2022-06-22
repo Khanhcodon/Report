@@ -1,0 +1,122 @@
+﻿<div style="display: none" class="token">
+    <!--Transfer -->
+     <div id="TransferTransferMultiple">
+         @Html.AntiForgeryToken()
+    </div>    
+    <div id="TransferTransferDocument">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="TransferSaveDocDraft">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="TransferSaveDoc">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="TransferTransferTiepNhan">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="TransferTransferAnswer">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="PublishTransferPublish">
+        @Html.AntiForgeryToken()
+    </div>
+     <div id="PublishTransferPublishTheoLo">
+         @Html.AntiForgeryToken()
+    </div>
+    <div id="PublishResendLienThong">
+        @Html.AntiForgeryToken()
+    </div>    
+    <div id="TransferTransferConsult">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="TransferTransferAnnouncement">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="FinishUpdateFinish">
+        @Html.AntiForgeryToken()
+    </div>
+    <!--end transfer -->
+    <!--document-->
+    <div id="DocumentIndexAddTime">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentUpdateDateAppointed">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentUndoTransfering">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentSendComment">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentGetFormContent">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="ApproverSend">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentRemoveDocument">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentConfirmTransfer">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentConfirmProcess">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentParseDynamicFormContent">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentRemoveDocumentInStorePrivate">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateRemoveAttachment">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateCreate">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateUpdate">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateAddAttachment">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateOpen">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateClose">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="StorePrivateDelete">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="DocumentSaveDocumentToStorePrivate">
+        @Html.AntiForgeryToken()
+    </div>
+    <!--end document -->
+    <!--Giấy phép-->
+    <div id="BusinessLicenseCreateLicense">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="BusinessesCreateBusiness">
+        @Html.AntiForgeryToken()
+    </div>
+    <div id="BusinessesCreate">
+        @Html.AntiForgeryToken()
+    </div>
+
+    <!--end giấy phép-->
+    <!--hồ sơ 1 cửa -->
+    @if (IsHoSoMotCuaEdition || IsFullEdition)
+    {
+        <div id="SupplementarySendRequire" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+        <div id="SupplementaryConfirmContinueProcess" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+    }
+    <!-- end 1 cửa-->
+</div>

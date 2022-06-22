@@ -1,0 +1,216 @@
+﻿@model ScopeAreaModel
+@{
+    var clients = ViewBag.Clients as string;
+    var clientsInScopeArea = ViewBag.ClientsInScopeArea as string;
+}
+
+<script type="text/javascript">
+    var clients = @(string.IsNullOrEmpty(clients) ? MvcHtmlString.Create("[]") : Html.Raw(clients));
+    var clientsInScopeArea = @(string.IsNullOrEmpty(clientsInScopeArea) ? MvcHtmlString.Create("[]") : Html.Raw(clientsInScopeArea));
+    var selectedClients = [];
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        var scopeList = "@Model.Scopes".split(' ');
+        for (var i = 0; i < scopeList.length; i++) {
+            $(".scopes[value='" + scopeList[i] + "']").attr("checked", "checked");
+        }
+
+        var newScopes = "";
+        $('form').on('submit', function () {
+            var newScopes = "";
+            $(".scopes:checked").each(function () {
+                newScopes += $(this).attr("value") + " ";
+            });
+            $("#scopes").val(newScopes);
+        });
+
+        if(clientsInScopeArea == null || (clientsInScopeArea != null && clientsInScopeArea.length == 0)) {
+            $("#tblClient tbody").append("<tr id='noresult'><td colspan='5'>Chưa có Client nào</td></tr>");
+        } else {
+            var numbers = 1;
+            selectedClients = _.filter(clients,
+                function(client) {
+                    return _.indexOf(clientsInScopeArea, client.Id) > -1;
+                });
+            $("#selectedClientTemplate")
+                .tmpl(selectedClients, {
+                    getNumbers: function() {
+                        return numbers++;
+                    }
+                })
+                .appendTo("#tblClient tbody");
+        }
+
+        $("#selectedClient").autocomplete({
+            minLength: 1,
+            source:  function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( clients, function( value ) {
+                    return matcher.test( value.Name )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.Name ) );
+                }) );
+            },
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#selectedClient").val('');
+                var exist = _.find(selectedClients, function (client) {
+                    return client.Id === ui.item.Id;
+                });
+                if (!exist) {
+                    var selected = _.find(clients, function (client) {
+                        return client.Id === ui.item.Id;
+                    });
+                    if (selected) {
+                        selectedClients.push(selected);
+                        var noresult = $("#tblClient tbody #noresult");
+                        if (noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedClientTemplate")
+                            .tmpl(selected, {
+                                getNumbers: function () {
+                                    return selectedClients.length;
+                                }
+                            })
+                            .appendTo("#tblClient tbody");
+                    }
+                }
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.Name + " - " + item.Domain +"</a>")
+                .appendTo(ul);
+        };
+    });
+
+    function removeClient(id) {
+        selectedClients = _.reject(selectedClients, function(client) {
+            return client.Id === id;
+        });
+
+        if(selectedClients.length > 0) {
+            $("#tblClient tbody tr#" + id).remove();
+            $("#tblClient tbody tr td:first-child").each(function(index, el) {
+                $(el).text(index + 1);
+            });
+        } else {
+            $("#tblClient tbody").html("<tr id='noresult'><td colspan='5'>Chưa có Client nào</td></tr>");
+        }
+    }
+</script>
+<script id="selectedClientTemplate" type="text/x-jquery-tmpl">
+    <tr id="${Id}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td>${Name}<input type="hidden" name="ClientIds" value="${Id}" /></td>
+        <td>${Domain}</td>
+        <td>${Ip}</td>
+        <td style="text-align: center"><a href="javascript:removeClient(${Id})">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a></td>
+    </tr>
+</script>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<table>
+    <tr>
+        <td style="width: 15%">@Html.LabelRequireFor(model => model.Key)</td>
+        <td>
+            @Html.TextBoxFor(model => model.Key, new
+       {
+           @class = "form-control",
+           @placeholder = Localizer("Common.ScopeArea.CreateOrEdit.Field.Key.Label")
+       })
+            @Html.ValidationMessageFor(model => model.Key, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.Name)</td>
+        <td>
+            @Html.TextBoxFor(model => model.Name, new
+       {
+           @class = "form-control",
+           @placeholder = Localizer("Common.ScopeArea.CreateOrEdit.Field.Name.Label")
+       })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.Description)</td>
+        <td>
+            @Html.TextAreaFor(model => model.Description,
+                    new
+                    {
+                        @class = "form-control",
+                        @placeholder = Localizer("Common.ScopeArea.CreateOrEdit.Field.Description.Label")
+                    })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })</td>
+    </tr>
+</table>
+<fieldset>
+    <legend>@Localizer("ScopeArea.CreateOrEdit.Tab.Client")</legend>
+    <div>
+        <div style="margin-bottom: 20px">
+            <input id="selectedClient" style="width: 500px; display: inline"
+               class="form-control" placeholder="@Localizer("ScopeArea.CreateOrEdit.Tab.Client")" />
+        </div>
+        <div>
+            <table class="table-main table table-bordered table-hover" id="tblClient">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col style="width: 150px" />
+                    <col />
+                    <col style="width: 150px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header" data-res="egov.resources.tableheader.stt">STT
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.name">Name
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.domain">Domain
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.ip">Ip
+                        </th>
+                        <th class="header" data-res="egov.resources.tableheader.delete">Xóa
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</fieldset>
+
+<br />
+<fieldset>
+    <legend>@Localizer("ScopeArea.CreateOrEdit.Tab.Scope")</legend>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width: 250px" data-res="egov.resources.tableheader.zone">Vùng</th>
+                <th data-res="egov.resources.tableheader.description">Mô tả</th>
+                <th style="width: 50px" data-res="egov.resources.tableheader.select">Chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var scope in ViewBag.Scopes)
+            {
+                <tr>
+                    <td>@scope.Name</td>
+                    <td>@scope.Description</td>
+                    <td>
+                        <input type="checkbox" value="@scope.Name" class="scopes" /></td>
+                </tr>
+            }
+        </tbody>
+        @Html.HiddenFor(model => model.Scopes, new { @id = "scopes" })
+    </table>
+</fieldset>

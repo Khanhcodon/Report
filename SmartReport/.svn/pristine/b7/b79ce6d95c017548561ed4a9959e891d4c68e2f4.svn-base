@@ -1,0 +1,154 @@
+﻿body, html {
+    cursor: default !important;
+    height: 100%;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    overflow: hidden;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: black;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.egov, .report-container {
+    height: 100%;
+    width: 100%;
+}
+
+#left, #left .jstree-default.jstree-focused {
+    z-index: 3 !important;
+    background: #efefef;
+}
+
+    #left .jstree-default .jstree-clicked {
+        background: #6c8594;
+        display: inline-block;
+        padding: 0 2px;
+        color: #fff;
+        line-height: 15px;
+        border: none;
+    }
+
+#right {
+    margin-bottom: 45px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: -1px 0 5px #ad9e9e;
+    z-index: 3 !important;
+}
+
+div#left-resizer {
+    background: #dfe0e4;
+    border-right: 1px solid #b7b7b7;
+    border-right: 1px solid #e2e2e2;
+    background-image: none;
+}
+
+.tree {
+    height: 100%;
+}
+
+.grid-header table {
+    margin-bottom: 0;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+    .table > thead > tr > th {
+        font-size: 12px;
+        color: #ffffff;
+        background: #02029e;
+        border: 1px solid white;
+    }
+
+        .table > thead > tr > th a {
+            color: #ffffff;
+        }
+
+    .table > tbody > tr > td {
+        font-size: 12px;
+        padding: 5px 8px;
+        white-space: pre-line;
+    }
+
+div#reportViewer {
+    /*width: 100%;*/
+    height: calc(100% - 110px);
+    overflow: auto;
+}
+
+tr.report-group[loaded="true"] {
+    background: #b9b9ff;
+}
+
+tr.report-group a {
+    font-weight: bold;
+    color: blue;
+}
+
+.pager {
+    margin: 0;
+}
+
+    .pager li > a, .pager li > span {
+        border-radius: 0;
+    }
+
+        .pager li.btn-prev > a{
+         border-top-left-radius: 5px;
+         border-bottom-left-radius: 5px;
+    }
+        .pager li.btn-next > a {
+         border-top-right-radius: 5px;
+         border-bottom-right-radius: 5px;
+    }
+
+
+#dateConditionCurrent, #groupName {
+    font-weight: bold;
+}
+
+a.btnViewDocument {
+    color: blue;
+}
+
+.reportInfo {
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+    .reportInfo .reportName {
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+.status {
+    position: absolute;
+    padding: 12px;
+    bottom: 25px;
+    left: 40px;
+    z-index: 10;
+    font-size: 13px;
+    font-weight: normal;
+    display: none;
+}
+
+#left {
+    padding: 10px;
+}
+
+.floatingHeader {
+      position: absolute;
+      top: 115px;
+      visibility: visible;
+    }

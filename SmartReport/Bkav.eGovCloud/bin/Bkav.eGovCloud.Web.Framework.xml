@@ -1,0 +1,773 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bkav.eGovCloud.Web.Framework</name>
+    </assembly>
+    <members>
+        <member name="T:Bkav.eGovCloud.Web.Framework.JsonpExtension">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : JsonpExtension - public - Framework
+            Access Modifiers:
+            Create Date : 031012
+            Author      : TrungVH
+            Description : Hàm mở rộng cho JsonpResult
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.JsonpExtension.Jsonp(System.Web.Mvc.Controller,System.Object)">
+            <summary>
+            Lấy ra kết quả dạng json
+            </summary>
+            <param name="controller">Controller</param>
+            <param name="data">Data</param>
+            <returns>JsonpResult</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.JsonpExtension.Jsonp(System.Web.Mvc.Controller,System.Object,System.Web.Mvc.JsonRequestBehavior)">
+            <summary>
+            Lấy ra kết quả dạng json
+            </summary>
+            <param name="controller">Controller</param>
+            <param name="data">Data</param>
+            <param name="behavior">Behavior</param>
+            <returns>JsonpResult</returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.AjaxExtensions">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : AjaxExtensions; - public - Framework
+            Access Modifiers: 
+            Create Date : 080812
+            Author      : TrungVH
+            Description : 1 helper mở rộng cho AjaxHelper
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.AjaxExtensions.Pager(System.Web.Mvc.AjaxHelper,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Phân trang cho 1 table
+            </summary>
+            <param name="helper">Ajax helper</param>
+            <param name="pageSize">Số bản ghi / 1 trang</param>
+            <param name="currentPage">Trang hiện tại</param>
+            <param name="totalRecords">Tổng số bản ghi</param>
+            <param name="actionName">Tên action (ActionName trong controller)</param>
+            <param name="cssPagerButton">Tên class css cho nút trang</param>
+            <param name="cssPagerButtonDisabled">Tên class khi disable nút trang</param>
+            <param name="cssPagerButtonCurrentPage">Tên class cho trang hiện tại</param>
+            <param name="valuesDictionary">Các tham số (query string)</param>
+            <param name="ajaxOptions">Ajax option</param>
+            <param name="listPageSize">Danh sách pagesize</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.AjaxExtensions.Pager(System.Web.Mvc.AjaxHelper,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Mvc.Ajax.AjaxOptions,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Phân trang cho 1 table
+            </summary>
+            <param name="helper">Ajax helper</param>
+            <param name="pageSize">Số bản ghi / 1 trang</param>
+            <param name="currentPage">Trang hiện tại</param>
+            <param name="totalRecords">Tổng số bản ghi</param>
+            <param name="actionName">Tên action (ActionName trong controller)</param>
+            <param name="cssPagerButton">Tên class css cho nút trang</param>
+            <param name="cssPagerButtonDisabled">Tên class khi disable nút trang</param>
+            <param name="cssPagerButtonCurrentPage">Tên class cho trang hiện tại</param>
+            <param name="valuesDictionary">Các tham số (query string)</param>
+            <param name="ajaxOptions">Ajax option</param>
+            <param name="listPageSize">Danh sách pagesize</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.AjaxExtensions.SortLink(System.Web.Mvc.AjaxHelper,System.String,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Web.Mvc.Ajax.AjaxOptions)">
+            <summary>
+            Tạo link sắp xếp cho 1 cột trong bảng
+            </summary>
+            <param name="helper">Ajax helper</param>
+            <param name="columnName">Tên column trong CSDL</param>
+            <param name="text">Tên link</param>
+            <param name="currentSortBy">Tên column hiện tại đang được sắp xếp</param>
+            <param name="sortDescending">Sắp xếp từ lớn đến nhỏ: true, ngược lại: false</param>
+            <param name="actionName">Tên action (ActionName trong controller)</param>
+            <param name="cssSortAsc">Tên class css khi sắp xếp từ nhỏ đến lớn</param>
+            <param name="cssSortDesc">Tên class css khi sắp xếp từ lớn đến nhỏ</param>
+            <param name="valuesDictionary">Các tham số (query string)</param>
+            <param name="ajaxOptions">Ajax option</param>
+            <returns></returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.EgovApiBaseController">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : EgovApiBaseController - public - Framework
+            Access Modifiers: 
+            Create Date : 12092014
+            Author      : QuangP
+            Description : API base controller cho các api của egov, các hàm tiện ích
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.BaseController">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : BaseController - public - Framework
+            Access Modifiers: 
+                * Inherit : System.Web.Mvc.Controller
+            Create Date : 310712
+            Author      : TrungVH
+            Description : Base controller cho tất cả các controller. Hỗ trợ ghi log khi hệ thống lỗi và 1 số hàm tiện ích
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.OnActionExecuted(System.Web.Mvc.ActionExecutedContext)">
+            <summary>
+            
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.ExecuteCore">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.Json(System.Object,System.String,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="contentType"></param>
+            <param name="contentEncoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.Json(System.Object,System.String,System.Text.Encoding,System.Web.Mvc.JsonRequestBehavior)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="contentType"></param>
+            <param name="contentEncoding"></param>
+            <param name="behavior"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.LogException(System.Exception)">
+            <summary>
+            Log ngoại lệ
+            </summary>
+            <param name="ex"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.LogException(System.String,System.Exception)">
+            <summary>
+            Log ngoại lệ
+            </summary>
+            <param name="message"></param>
+            <param name="ex"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.CreateActivityLog(Bkav.eGovCloud.Entities.ActivityLogType,System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Tạo log hành động
+            </summary>
+            <param name="type"></param>
+            <param name="content"></param>
+            <param name="username"></param>
+            <param name="userId"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.CreateActivityLog(Bkav.eGovCloud.Entities.ActivityLogType,System.String)">
+            <summary>
+            Tạo log hành động
+            </summary>
+            <param name="type"></param>
+            <param name="content"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.AccessDeniedView">
+            <summary>
+            AccessDeniedView
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.SuccessNotification(System.String,System.Boolean)">
+            <summary>
+            Notify báo thành công
+            </summary>
+            <param name="message"></param>
+            <param name="persistForTheNextRequest"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.ErrorNotification(System.String,System.Boolean)">
+            <summary>
+            Notify báo lỗi
+            </summary>
+            <param name="message"></param>
+            <param name="persistForTheNextRequest"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.ErrorNotification(Bkav.eGovCloud.Core.Exceptions.EgovException,System.Boolean)">
+            <summary>
+            Notify báo lỗi
+            </summary>
+            <param name="exception"></param>
+            <param name="persistForTheNextRequest"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.AddNotification(System.String,System.String,System.Boolean)">
+            <summary>
+            Thêm notify
+            </summary>
+            <param name="type"></param>
+            <param name="message"></param>
+            <param name="persistForTheNextRequest"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.GetCurrentCultureName">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.BaseController.GetCurrentCulture">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.CustomerBaseController">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : BaseController - public - Framework
+            Access Modifiers:
+                * Inherit : System.Web.Mvc.Controller
+            Create Date : 310712
+            Author      : TrungVH
+            Description : Base controller cho tất cả các controller. Hỗ trợ ghi log khi hệ thống lỗi và 1 số hàm tiện ích
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.CustomerBaseController.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.CustomerBaseController.GetUserCreatedId">
+            <summary>
+            Trả về Id của cán bộ đăng nhập hiện tại hoặc Id cán bộ ủy quyền khởi tạo
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.JsonNetResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.JsonNetResult.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.JsonNetResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.HandleUpdateFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HandleUpdateFilter.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">
+            <summary>
+            
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HandleUpdateFilter.OnActionExecuted(System.Web.Mvc.ActionExecutedContext)">
+            <summary>
+            
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.HandleInstallFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HandleInstallFilter.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">
+            <summary>
+            
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HandleInstallFilter.OnActionExecuted(System.Web.Mvc.ActionExecutedContext)">
+            <summary>
+            
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.CheckLicenseAttribute">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : CheckLicenseAttribute - public - Framework
+            Access Modifiers: 
+                * Inherit : System.Web.MVC.ActionFilterAttribute
+                * Implement: System.Web.MVC.IActionFilter
+            Create Date : 110614
+            Author      : TrungVH
+            Description : Attribute kiểm tra xác thực bản quyền
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.EgovAuthorizeAttribute">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : EgovAuthorizeAttribute - public - Framework
+            Access Modifiers: 
+                * Inherit : System.Web.MVC.FilterAttribute
+                * Implement: System.Web.MVC.IAuthorizationFilter
+            Create Date : 300712
+            Author      : TrungVH
+            Description : Attribute kiểm tra xác thực người dùng
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.LocalizationDisplayName">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : LocalizationDisplayName - public - Framework
+            Access Modifiers: 
+                * Inherit : System.ComponentModel.DisplayNameAttribute
+            Create Date : 300712
+            Author      : TrungVH
+            Description : 1 custom attribute hỗ trợ lấy ra resource tương ứng với 1 thuộc tính
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.LocalizationDisplayName.#ctor(System.String)">
+            <summary>
+            Khởi tạo
+            </summary>
+            <param name="resourceKey">Key của resource</param>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.LocalizationDisplayName.ResourceKey">
+            <summary>
+            Lấy hoặc thiết lập Key của resource
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.LocalizationDisplayName.Hint">
+            <summary>
+            Lấy ra gợi ý về thuộc tính (Sử dụng cho extension LabelHintFor)
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.VietnameseDateTimeAttribute">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : VietnameseDateTimeAttribute - public - Framework
+            Access Modifiers: 
+                * Inherit : System.ComponentModel.ValidationAttribute
+                * Implement: IClientValidatable
+            Create Date : 270812
+            Author      : TrungVH
+            Description : 1 custom attribute hỗ trợ kiểm tra ngày tháng theo dạng dd/MM/yyyy
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.VietnameseDateTimeAttribute.#ctor(System.String)">
+            <summary>
+            Khởi tạo
+            </summary>
+            <param name="resourceKey">Key của resource</param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.VietnameseDateTimeAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Validates the specified value with respect to the current validation attribute.
+            </summary>
+            <returns>
+            An instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult"/> class. 
+            </returns>
+            <param name="value">The value to validate.</param><param name="validationContext">The context information about the validation operation.</param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.VietnameseDateTimeAttribute.GetClientValidationRules(System.Web.Mvc.ModelMetadata,System.Web.Mvc.ControllerContext)">
+            <summary>
+            When implemented in a class, returns client validation rules for that class.
+            </summary>
+            <returns>
+            The client validation rules for this validator.
+            </returns>
+            <param name="metadata">The model metadata.</param><param name="context">The controller context.</param>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.EgovValidatorFactory">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : EgovValidatorFactory - public - Presentation
+            Access Modifiers: 
+                * Inherit : FluentValidation.Attributes.AttributedValidatorFactory
+            Create Date : 191012
+            Author      : TrungVH
+            Description : Provider thay thế cho provider validate mặc định của MVC
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.MenuTab">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.MenuTab.Create(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="text"></param>
+            <param name="action"></param>
+            <param name="controller"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.MenuTab.Text">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.MenuTab.Action">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.MenuTab.Controller">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.HtmlExtensions">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : HtmlExtensions; - public - Framework
+            Access Modifiers: 
+            Create Date : 010812
+            Author      : TrungVH
+            Description : 1 helper mở rộng cho HtmlHelper
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.CheckboxListForEnum``1(System.Web.Mvc.HtmlHelper,System.String,``0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="html"></param>
+            <param name="name"></param>
+            <param name="modelItems"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.Object,System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="htmlAttributes">Các thuộc tính html của dropdown</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.Collections.Generic.IDictionary{System.String,System.Object},System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="htmlAttributes">Các thuộc tính html của dropdown</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.String,System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="optionLabel">Giá trị đầu tiên trong dropdown (VD: Mời bạn chọn...)</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="optionLabel">Giá trị đầu tiên trong dropdown (VD: Mời bạn chọn...)</param>
+            <param name="htmlAttributes">Các thuộc tính html của dropdown</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListForEnum``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Type,System.String,System.Object,System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="optionLabel">Giá trị đầu tiên trong dropdown (VD: Mời bạn chọn...)</param>
+            <param name="htmlAttributes">Các thuộc tính html của dropdown</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.DropDownListEnum(System.Web.Mvc.HtmlHelper,System.String,System.Type,System.String,System.Object,System.String)">
+            <summary>
+            Tạo dropdown list từ 1 Enum
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="name">Tên control</param>
+            <param name="enumType">Kiểu enum</param>
+            <param name="optionLabel">Giá trị đầu tiên trong dropdown (VD: Mời bạn chọn...)</param>
+            <param name="htmlAttributes">Các thuộc tính html của dropdown</param>
+            <param name="selectedValue">Giá trị sẽ được chọn sẵn</param>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.RetrieveDescription(System.String,System.Type)">
+            <summary>
+            Lấy ra mô tả của từng thuộc tính trong enum
+            </summary>
+            <param name="name">Tên thuộc tính</param>
+            <param name="enumeration">Kiểu enum</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.LabelHintFor``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Boolean)">
+            <summary>
+            Tạo label có gợi ý
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="displayHint">Hiển thị gợi ý: true và ngược lại: false</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.EgovLabelFor``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Boolean)">
+            <summary>
+            Tạo label có thêm thông tin bắt buộc nhập (tự phát hiện) và hiển thị gợi ý
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <param name="displayHint">Hiển thị gợi ý: true và ngược lại: false</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.LabelRequireFor``2(System.Web.Mvc.HtmlHelper{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Tạo label có thêm thông tin bắt buộc nhập
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="expression">Tên thuộc tính trong model</param>
+            <typeparam name="TModel">Kiểu của model</typeparam>
+            <typeparam name="TProperty">Kiểu của thuộc tính</typeparam>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.Hint(System.Web.Mvc.HtmlHelper,System.String)">
+            <summary>
+            Tạo gợi ý cho từng label (Mô tả chi tiết về trường dữ liệu đó giúp người dùng hiểu rõ hơn)
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="text">Nội dung</param>
+            <returns>Chuỗi html</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.ResolveUrl(System.Web.Mvc.HtmlHelper,System.String)">
+            <summary>
+            Lấy ra đường dẫn tới các file trong hệ thống (Thực chất chính là Url.Content)
+            </summary>
+            <param name="htmlHelper">Html helper</param>
+            <param name="url">Đường dẫn</param>
+            <returns>Đường dẫn chính xác</returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.Tabs(System.Web.Mvc.HtmlHelper,System.Collections.Generic.IEnumerable{Bkav.eGovCloud.Web.Framework.MenuTab})">
+            <summary>
+            
+            </summary>
+            <param name="helper"></param>
+            <param name="tabs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.SiteMapMenu(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Trả về html menu từ site map
+            </summary>
+            <param name="htmlHelper"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.HtmlExtensions.SiteMapMenuNavbar(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Trả về html menu từ site map
+            </summary>
+            <param name="htmlHelper"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.JsonpResult">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : JsonpResult - public - Framework
+            Access Modifiers: 
+                * Inherit : JsonResult
+            Create Date : 031012
+            Author      : TrungVH
+            Description : Class hỗ trợ trả về kết quả dạng json khi gọi ajax từ một domain khác
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.JsonpResult.JsonCallback">
+            <summary>
+            Lấy hoặc thiết lập Query string json callback
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.SessionManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetValidCulture(System.String)">
+            <summary>
+            Returns a valid culture name based on "name" parameter. If "name" is not valid, it returns the default culture "en-US"
+            </summary>
+            <param name="name">Culture's name (e.g. en-US)</param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetValidCultureName(System.String)">
+            <summary>
+            Returns a valid culture name based on "name" parameter. If "name" is not valid, it returns the default culture "en-US"
+            </summary>
+            <param name="name">Culture's name (e.g. en-US)</param>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetDefaultCulture">
+            <summary>
+            Returns default culture name which is the first name decalared (e.g. en-US)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetDefaultCultureName">
+            <summary>
+            Returns default culture name which is the first name decalared (e.g. en-US)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetDefaultNeutralCultureName">
+            <summary>
+            Returns default culture name which is the first name decalared (e.g. en-US)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetCurrentCulture">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetCurrentCultureName">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetCurrentNeutralCultureName">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.GetNeutralCulture(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.Utility.CultureHelper.IsViewSeparate(System.String)">
+            <summary>
+             Returns "true" if view is implemented separatley, and "false" if not.
+             For example, if "es-CL" is true, then separate views must exist e.g. Index.es-cl.cshtml, About.es-cl.cshtml
+            </summary>
+            <param name="name">Culture's name</param>
+            <returns></returns>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.WebViewPage`1">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : WebViewPage&lt;TModel&gt; - public - Framework
+            Access Modifiers: 
+                * Inherit : System.Web.Mvc.WebViewPage&lt;TModel&gt;
+            Create Date : 300712
+            Author      : TrungVH
+            Description : 1 Customer webviewpage dùng cho tất cả các View trong hệ thống
+            </summary>
+        </member>
+        <member name="M:Bkav.eGovCloud.Web.Framework.WebViewPage`1.Localizer(System.String,System.Object[])">
+            <summary>
+            Lấy giá trị resource tương ứng với key
+            </summary>
+            <param name="resourceKey">Key resource</param>
+            <param name="args">Tham số để format (string.Format)</param>
+            <returns></returns>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsXuLyVanBanEdition">
+            <summary>
+            Là phiên bản xử lý văn bản
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsHoSoMotCuaEdition">
+            <summary>
+            Là phiên bản hồ sơ một cửa
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsFullEdition">
+            <summary>
+            Là phiên bản full
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsQuanTriTapTrungEdition">
+            <summary>
+            Là phiên bản hỗ trợ quản trị tập trung
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsBkavEdition">
+            <summary>
+            Phiên bản nội bộ
+            </summary>
+        </member>
+        <member name="P:Bkav.eGovCloud.Web.Framework.WebViewPage`1.IsDevEdition">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bkav.eGovCloud.Web.Framework.WebViewPage">
+            <summary>
+            Bkav Corp. - BSO - eGov - eOffice team
+            Project: eGov Cloud v1.0
+            Class : WebViewPage&lt;dynamic&gt; - public - Framework
+            Access Modifiers: 
+                * Inherit : Bkav.eGovCloud.Web.Framework.WebViewPage&lt;dynamic&gt;
+            Create Date : 300712
+            Author      : TrungVH
+            Description : 1 Customer webviewpage dùng cho tất cả các View trong hệ thống
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.IconList = "active";
+    ViewBag.Criteria = "";
+    ViewBag.Check = "";
+
+    Layout = "_CalendarLayout.cshtml";
+}
+
+<script>
+        var stryearlocal = new Date().getFullYear();
+        var strweeklocal = getCurrentWeekNumber(new Date());
+        var currentWeek = strweeklocal;
+        var currentYear = stryearlocal;
+
+        $(document).ready(function () {
+            //căn chữ cho tiêu đề
+            var htmltmpl = '<tr> <td class="ngay"></td><td class="noidung"colspan="6"><table class="table calendar_day"><colgroup><col style="width:131px" /><col style="" /><col style="width:200px" /><col style="width:100px" /><col style="width:100px" /><col style="width:96px" /></colgroup></table> </td> </tr>';
+
+            //xử lý dữ liệu khi lấy được trên server về
+            function getDataofWeek(strweek, stryear) {
+                $.ajax({
+                    type: 'Get',
+                    url: 'ViewCalendarofWeek',
+                    dataType: 'json',
+                    data: { week: Number(strweek), year: stryear },
+                    success: function (data) {
+                        var week = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+                        $("#tbody_calendar").html('');
+                        for (var i = 1; i < 7; i++) {
+                            $("#tbody_calendar").append(htmltmpl);
+                            $(".ngay:last").append("<span>" + week[i] + "</span><br><span>" + convertDate(w2date(stryear, strweek, i - 1)) + "</span>");
+
+                            var obj = JSON.parse(data);
+
+                            for (var index = 0; index < obj.length; index++) {
+                                var strDateBegin = obj[index].BeginTime.substring(0, 10);
+                                var dateBegin = new Date(new Date(strDateBegin).toDateString());
+                                var strDateEnd = obj[index].EndTime.substring(0, 10);
+                                var dateEnd = new Date(new Date(strDateEnd).toDateString());
+
+                                if (dateBegin.getTime() <= w2date(stryear, strweek, i - 1).getTime() && dateEnd.getTime() >= w2date(stryear, strweek, i - 1)) {
+                                    $("#calendarTemplate").tmpl(obj[index], {
+                                        settime: function (timer1, timer2) {
+                                            if (timer1 == null) {
+                                                return '?';
+                                            } else {
+                                                if (timer1.split("T")[0] == timer2.split("T")[0]) {
+                                                    return timer1.split("T")[1].substring(0, 5);
+                                                } else {
+                                                    return timer1.split("T")[1].substring(0, 5) + " " + convertDate(new Date(timer1.split("T")[0]));
+                                                }
+                                            }
+                                        },
+                                        showUser: function (text) {
+                                            return text.replace(/, /g, ",").replace(/,/g, ", ");
+                                        }
+                                    }).appendTo(".calendar_day:last");
+                                }
+                            }
+                        }
+                    },
+                    error: function (ex) {
+                    }
+                });
+            }
+            //Load AJAX
+            $(document).ready(function () {
+                getDaterangeofweek(strweeklocal, stryearlocal);
+                getDataofWeek(strweeklocal, stryearlocal);
+            });
+
+            $("#currentWeek").click(function () {
+                strweeklocal = currentWeek;
+                stryearlocal = currentYear;
+
+                getDaterangeofweek(currentWeek, currentYear);
+                getDataofWeek(currentWeek, currentYear)
+            })
+
+            $('.btnLeftweek').click(function () {
+                if (strweeklocal == 1) {
+                    stryearlocal = Number(stryearlocal) - 1;
+                    strweeklocal = '52';
+                } else {
+                    strweeklocal = Number(strweeklocal) - 1;
+
+                }
+                getDaterangeofweek(strweeklocal, stryearlocal);
+                getDataofWeek(strweeklocal, stryearlocal);
+            });
+
+
+            $('.btnRightweek').click(function () {
+                if (strweeklocal == 52) {
+                    stryearlocal = Number(stryearlocal) + 1;
+                    strweeklocal = '1';
+                } else {
+                    strweeklocal = Number(strweeklocal) + 1;
+
+                }
+                getDaterangeofweek(strweeklocal, stryearlocal);
+                getDataofWeek(strweeklocal, stryearlocal)
+            })
+            $("#printcalendar").click(function () {
+
+                var myWindow = window.open("PrintCalendar?week=" + strweeklocal + "&&year=" + stryearlocal, '', "width=900,height=500");
+            })
+        });
+</script>
+
+<script id="calendarTemplate" type="text/x-jQuery-tmpl">
+    <tr style="border-bottom: solid 2px #b7e3e8">
+        <td class="" style="text-align: center; border-right: solid 1px #b7e3e8;">
+            <img src="/Content/bkav.egov/images/calendar_img/clock.png" width="17" height="17" />
+            ${$item.settime(BeginTime, EndTime)} - ${$item.settime(EndTime, BeginTime)}
+        </td>
+        <td class="" style=" text-align: left; border-right: solid 1px #b7e3e8;"> ${Title}</td>
+        <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${$item.showUser(DepartmentPrimary)}</td>
+        <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${UserJoin}</td>
+        <td class="" style="text-align: left; border-right: solid 1px #b7e3e8;"> ${Location}</td>
+        <td class="" style="text-align: left;">${Note}</td>
+    </tr>
+</script>
+
+<div class="container-fluid">
+    <div>
+        <ul class="nav nav-pills toolbar" style="height:40px">
+            <li class="dropdown">
+                <a class="dropdown-toggle btnTransfer" data-toggle="dropdown" href="#" id="printcalendar" style="padding:5px">
+                    <span class="icon icon-print" style="color: #008299"></span>
+                    <span data-res="egov.resources.toolbar.transferBtn">In Lịch</span>
+                </a>
+            </li>
+            <li class="dropdown pull-right">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="currentWeek" style="padding:5px; float:none">
+                    <span class="icon icon-calendar2" style="color: #008299"></span>
+                    <span data-res="egov.resources.toolbar.transferBtn">Tuần này</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="">
+        <div>
+            <div style="text-align: center; font-weight: bold;">
+                <h3><b>Lịch làm việc</b></h3>
+            </div>
+            <div id="period_week" style="text-align:center; padding-bottom:20px">
+                <span></span>
+            </div>
+            <div style=" padding-bottom:10px;  text-align:center">
+                <a class="btnLeftweek">
+                    <img src="/Content/bkav.egov/images/calendar_img/leftarrow.png" />
+                </a>
+                <span>
+                </span>
+                <a class="btnRightweek">
+                    <img src="/Content/bkav.egov/images/calendar_img/rightarrow.png" />
+                </a>
+            </div>
+        </div>
+        <div class="">
+            <table class="table">
+                <colgroup>
+                    <col style="width: 65px" />
+                    <col style="width:135px" />
+                    <col style="" />
+                    <col style="width:200px" />
+                    <col style="width:100px" />
+                    <col style="width:100px" />
+                    <col style="width:100px" />
+                </colgroup>
+                <thead style="background-color: bisque; border: solid 2px #DDD">
+                    <tr>
+                        <th style="text-align:center;border-right: solid 1px #DDD" class="">Ngày</th>
+                        <th class="thead-style">Thời Gian</th>
+                        <th class="thead-style">Nội dung</th>
+                        <th class="thead-style">Thành phần</th>
+                        <th class="thead-style">Đơn vị chủ trì</th>
+                        <th class="thead-style">Địa điểm</th>
+                        <th class="thead-style">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_calendar" style="background-color: beige"></tbody>
+            </table>
+        </div>
+        <div>
+            <div style=" padding-bottom:30px; text-align:center">
+                <a class="btnLeftweek">
+                    <img src="/Content/bkav.egov/images/calendar_img/leftarrow.png" />
+                </a>
+                <span>
+                </span>
+                <a class="btnRightweek">
+                    <img src="/Content/bkav.egov/images/calendar_img/rightarrow.png" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "eGov Cloud";
+}
+
+<h2>Có lỗi xảy ra, bạn vui lòng liên hệ với quản trị để kiểm tra</h2>

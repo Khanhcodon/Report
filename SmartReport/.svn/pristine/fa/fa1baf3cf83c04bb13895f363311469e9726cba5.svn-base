@@ -1,0 +1,199 @@
+﻿@model IEnumerable<BackupRestoreManagerModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.BackupRestoreManagerSearchModel;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblManager").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false,
+        });
+        $("#tblManager").openLink({ urlOpen: '/admin/BackupRestoreManager/Edit' });
+
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $('#tblManager input[name="ids"]').on("change", function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                }
+                if ($('#tblManager input[name="ids"]:checked').length === $('#tblManager input[name="ids"]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").on("change", function () {
+            $('#tblManager input[name="ids"]').prop('checked', this.checked);
+            if (this.checked) {
+                $('#tblManager input[name="ids"]').each(function () {
+                    if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                        $("#formdelete").append('<input type="hidden" name="ids" value="' + this.value + '" />');
+                    }
+                });
+            } else {
+                $("#formdelete input[name='ids']").remove();
+            }
+        });
+    });
+
+</script>
+
+<form id="formdelete" style="display:none" action="@Url.Action("Delete")" method="POST">
+</form>
+
+<table class="table-main table" id="tblManager">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 80px" />
+        <col style="width: 50px" />
+        <col style="width: 30px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("Domain", Localizer("BackupRestoreManager.Index.List.Column.Domain"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    toDate = search.ToDate,
+                                    fromDate = search.FromDate
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestoreManager",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("BackupRestoreManager.Index.List.Column.FileNameAlias")
+            </th>
+            <th class="header">
+                @Localizer("BackupRestoreManager.Index.List.Column.Account")
+            </th>
+            <th class="header text-center">
+                @Localizer("BackupRestoreManager.Index.List.Column.IsDatabaseFile")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateCreated", Localizer("BackupRestoreManager.Index.List.Column.DateCreated"),
+                            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                            "SortAndPaging", "sort asc", "sort desc",
+                            new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    toDate = search.ToDate,
+                                    fromDate = search.FromDate
+                                },
+                            new AjaxOptions
+                                {
+                                    UpdateTargetId = "divBackupRestoreManager",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header text-center">
+                @Localizer("Common.Resource.Index.List.Column.Download.Button")
+            </th>
+            <th class="header  text-center">
+                @Localizer("Common.Resource.Index.List.Column.Edit.Button")
+            </th>
+            <th class="header  text-center">
+                <input type="checkbox" id="checkAll" data-restitle="egov.resources.buttons.selectAll" title="Chọn tất" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                number++;
+            <tr data-id="@item.BackupRestoreManagerId">
+                <td>
+                    @number
+                </td>
+                <td>
+                    @item.Domain
+                </td>
+                <td>
+                    @item.FileNameAlias
+                </td>
+                <td>
+                    @item.Account
+                </td>
+
+                <td>
+                    @(item.IsDatabaseFile ? "Database" : "File")
+                </td>
+                <td>
+                    @item.DateCreated.ToString("dd/MM/yyyy hh:ss:mm:tt")
+                </td>
+                <td class="text-center">
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Download.Button"),
+                    "Download", new { Id = item.BackupRestoreManagerId })
+                </td>
+                <td class="text-center">
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"),
+                    "Edit", new { Id = item.BackupRestoreManagerId })
+                </td>
+                <td class="text-center">
+                    <input type="checkbox" name="ids" value="@item.BackupRestoreManagerId" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="9">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  toDate = search.ToDate,
+                                  fromDate = search.FromDate,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divBackupRestoreManager",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)</td>
+        </tr>
+    </tfoot>
+
+</table>
+

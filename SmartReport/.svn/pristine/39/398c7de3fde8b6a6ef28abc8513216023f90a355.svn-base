@@ -1,0 +1,203 @@
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Bkav.eGovCloud.Business;
+using Bkav.eGovCloud.Business.Customer;
+using Bkav.eGovCloud.Entities;
+using Bkav.eGovCloud.Models;
+using Bkav.eGovCloud.Web.Framework;
+using System.Collections.Generic;
+using Bkav.eGovCloud.Core.Utils;
+
+namespace Bkav.eGovCloud.Controllers
+{
+	//[RequireHttps]
+	public class FinishController : CustomerBaseController
+	{
+		private readonly DocumentCopyBll _docCopyService;
+		private readonly PaperBll _paperService;
+		private readonly ApproverBll _approverService;
+		private readonly StorePrivateBll _storePrivateService;
+		private readonly UserActivityLogBll _userActivityLogService;
+		private readonly DocumentPermissionHelper _documentPermissionHelper;
+		private readonly UserBll _userService;
+		private readonly AddressBll _addressService;
+
+#pragma warning disable 618
+
+		public FinishController(
+			DocumentCopyBll docCopyService,
+			PaperBll paperService,
+			ApproverBll approverService,
+			StorePrivateBll storePrivateService,
+			DocumentPermissionHelper documentPermissionHelper,
+			UserActivityLogBll userActivityLogService,
+			UserBll userService,
+			AddressBll addressService)
+		{
+			_docCopyService = docCopyService;
+			_paperService = paperService;
+			_approverService = approverService;
+			_storePrivateService = storePrivateService;
+			_documentPermissionHelper = documentPermissionHelper;
+			_userActivityLogService = userActivityLogService;
+			_userService = userService;
+			_addressService = addressService;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="docCopyId"></param>
+		/// <returns></returns>
+		public ActionResult Index(int docCopyId)
+		{
+			// CuongNT@bkav.com - 210613: Ủy quyền xử lý
+			int userSendId;
+			if (!_documentPermissionHelper.CheckForUyQuyenVaXuLyVanBan(docCopyId, CurrentUserId(), out userSendId))
+			{
+				return null;
+			}
+
+			var docCopy = _docCopyService.Get(docCopyId);
+			if (docCopy == null)
+			{
+				return PartialView("Index", new DocumentModel());
+			}
+			// TODO: (Kết quả: TienBV-?. Reporter: CuongNT-050313). Cần viết hàm Gets(int doctypeid, PaperType papertypeId) thay vì lấy toàn bộ từ database lên như ở đây rồi mới lấy ra loại cần dùng.
+			ViewBag.PaperReturns = _paperService.Gets(docCopy.Document.DocTypeId.Value, PaperType.TraCongDan);
+			ViewBag.Approvers = _approverService.Gets(docCopyId);
+			ViewBag.DocumentPermissions = _documentPermissionHelper.CheckAll(docCopy.Document, docCopy, userSendId);
+			return PartialView("Index", docCopy.Document.ToModel());
+		}
+
+		/// <summary>
+		/// Kết thúc xử lý
+		/// </summary>
+		/// <param name="documentCopyId"></param>
+		/// <param name="storePrivateId"></param>
+		/// <returns></returns>
+		[HttpPost]
+		// [ValidateAntiForgeryToken(Salt = "FinishUpdateFinish")]
+		[ValidateAntiForgeryToken]
+		public JsonResult UpdateFinish(int documentCopyId, string comment, int? storePrivateId, bool isThongBao = false)
+		{
+			try
+			{
+				int currentUserId = CurrentUserId();
+				int userSendId = currentUserId;
+				var documentCopy = _docCopyService.Get(documentCopyId);
+				if (documentCopy == null)
+				{
+					return Json(new { error = true, message = "Văn bản không tồn tại" });
+				}
+
+				if (!isThongBao && !_documentPermissionHelper.CheckForUyQuyenVaXuLyVanBan(documentCopy, currentUserId, out userSendId))
+				{
+					return null;
+				}
+
+
+				if (_documentPermissionHelper.CheckForKetThucVanBan(documentCopy, userSendId))
+				{
+					var finished = false;
+					if (isThongBao)
+					{
+						if (documentCopy.UserThongBaos().Contains(userSendId))
+						{
+							_docCopyService.UpdateUserThongBao(documentCopy, addUserIds: new List<int>(), removedUserIds: new List<int>() { userSendId }, hasSaveChange: true);
+						}
+
+						finished = true;
+					}
+
+					// Nếu là hồ sơ liên thông bị gửi nhầm( DocTypeId không tồn tại) sẽ cho kết thúc hồ sơ này tại đây
+					if (!finished && documentCopy.Document.Original == 2 && documentCopy.Document.DocTypeId == null && documentCopy.UserCurrentId == userSendId)
+					{
+						Finish(documentCopy, userSendId, comment);
+						finished = true;
+					}
+
+					// Kiểm tra điều kiện nếu mà văn bản này có thể kết thúc mà User hiện tại ko có quyền xử lý thì là văn bản thông báo
+					if (!finished && _documentPermissionHelper.CheckForQuyenXuly(documentCopy, userSendId))
+					{
+						Finish(documentCopy, userSendId, comment);
+						finished = true;
+					}
+
+					if (storePrivateId.HasValue)
+					{
+						var storePrivate = _storePrivateService.CheckPermissionStorePrivate(storePrivateId.Value, userSendId);
+						if (storePrivate != null && storePrivate.Status == (byte)StorePrivateStatus.IsActive)
+						{
+							_storePrivateService.AddDocumentToStore(storePrivate, documentCopy.DocumentCopyId, documentCopy.DocumentId);
+						}
+					}
+
+					return Json(new { success = true });
+				}
+
+				return Json(new { error = true, message = "Không có quyền kết thúc văn bản." });
+			}
+			catch (Exception ex)
+			{
+				LogException(ex);
+				return Json(new { error = true, message = "Kết thúc xử lý bị lỗi." });
+			}
+		}
+
+		/// <summary>
+		/// Chức năng lấy lại văn bản kết thúc
+		/// </summary>
+		/// <param name="documentCopyId"></param>
+		/// <returns></returns>
+		[HttpPost]
+		//[ValidateAntiForgeryToken(Salt = "FinishUndoFinish")]
+		public JsonResult UndoFinish(int documentCopyId)
+		{
+			var currentUserId = _userService.CurrentUser.UserId;
+			var docCopy = _docCopyService.Get(documentCopyId);
+
+			if (docCopy != null)
+			{
+				_docCopyService.UndoFinish(docCopy);
+				return Json(new { error = false, data = new { } });
+			}
+			return Json(new { error = true, message = "Bản sao không tồn tại." });
+		}
+
+		/// <summary>
+		/// Kết thúc xử lý văn bản
+		/// </summary>
+		/// <param name="documentCopy">văn bản copy</param>
+		/// <param name="userSendId"></param>
+		private void Finish(Entities.Customer.DocumentCopy documentCopy, int userSendId, string comment)
+		{
+			var dateCreated = DateTime.Now;
+
+			var user = _userService.GetFromCache(userSendId);
+
+			if (comment == "undefined")
+			{
+				comment = "";
+			}
+
+			if (documentCopy.StatusInEnum != DocumentStatus.KetThuc && documentCopy.IsCurrentUser(userSendId))
+			{
+				comment = string.Format("{0} kết thúc văn bản vào lúc {1}: {2}", user.FullName, dateCreated.ToString("dd/MM/yyyy HH:mm:ss"), comment);
+
+				_docCopyService.Finish(documentCopy, dateCreated, userSendId, comment);
+
+				_docCopyService.ClearCache(documentCopy.DocumentCopyId);
+			}
+
+			CreateActivityLog(ActivityLogType.KetThucVanBan, string.Format("{0} kết thúc văn bản: {1}", User.GetUserNameWithDomain(), documentCopy.Document.Compendium));
+		}
+
+		private int CurrentUserId()
+		{
+			return _userService.CurrentUser.UserId;
+		}
+
+	}
+}

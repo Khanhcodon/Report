@@ -1,0 +1,49 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="egov-appmenu">
+    <span class="menuitem menu-items" data-theme="documents" id="documents" data-ng-app="documents">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">folder_open</i>
+        </span>
+        <span class="menu-appname">Văn bản</span>
+    </span>
+    <span class="menuitem menu-items" data-theme="bmail" id="mail" data-ng-app="bmail">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">mail_outline</i>
+        </span>
+        <span class="menu-appname">Điều hành</span>
+    </span>
+    @*<span class="menuitem menu-items" data-theme="calendar" id="calendar" data-ng-app="calendar">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">perm_contact_calendar</i>
+        </span>
+        <span class="menu-appname">Lịch</span>
+    </span>*@
+
+
+    @*Tạo mới*@
+   
+   
+
+    <span class="menuitem menu-items" data-theme="chat" id="chat" data-ng-app="chat">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">chat_bubble_outline</i>
+        </span>
+        <span class="menu-appname">Hội thoại</span>
+    </span>
+    <span class="menuitem menu-items notifyBell  mdl-badge mdl-badge--overlap" data-ng-app="notifications">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">notifications</i>
+        </span>
+        <span class="menu-appname">Thông báo</span>
+    </span>
+    <span class="menuitem menu-items btndocumentspan" data-theme="bmail" id="btnNewDocument">
+        <span class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons" style="color: orangered">add</i>
+        </span>
+        <span class="menu-appname" style="color: orangered">Thêm</span>
+    </span>
+    <ul class="mdl-menu mdl-menu--top-right mdl-js-menu ddlnewdocumentul" id="ddlNewDocument" for="btnNewDocument"></ul>
+</div>

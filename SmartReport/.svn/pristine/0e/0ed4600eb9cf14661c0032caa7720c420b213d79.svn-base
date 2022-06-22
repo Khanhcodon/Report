@@ -1,0 +1,15 @@
+﻿
+<div class="mdl-list__item-primary-content {{if status == "available"}}online{{/if}}" {{if type == "groupchat"}} group{{/if}}>
+    <div class="mdl-list__item-avatar" style="position:relative;">
+        <img src="${avatar}" style="width: 100%; height: 100%; border-radius: inherit;" />
+        <span class="online-status">on</span>
+    </div>
+    <span class="full-name">${fullname}</span>
+    <span class="mdl-list__item-sub-title">
+        <span class="lastmessage">{{html lastMessage}}</span>
+    </span>
+</div>
+<span class="mdl-list__item-secondary-content">
+    <span class="mdl-list__item-secondary-info">${lastTimeString}</span>
+    <span class="unread-count">${unread}</span>
+</span>

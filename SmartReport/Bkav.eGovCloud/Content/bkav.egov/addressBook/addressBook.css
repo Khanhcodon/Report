@@ -1,0 +1,305 @@
+﻿body, html {
+    cursor: default !important;
+    height: 100%;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    overflow: hidden;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: black;
+}
+
+/* Smartphones ----------- */
+@media only screen and (max-width: 760px) {
+  #eGovAddressBook { display: none; }
+  #eGovAddressBookMobile { display: block; }
+}
+
+@media only screen and (min-width: 760px) {
+  #eGovAddressBook { display: block; }
+  #eGovAddressBookMobile { display: none; }
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.egov, .report-container {
+    height: 100%;
+    width: 100%;
+}
+
+#left, #left .jstree-default.jstree-focused {
+    z-index: 3 !important;
+    background: #efefef;
+}
+
+    #left .jstree-default .jstree-clicked {
+        background: #6c8594;
+        display: inline-block;
+        padding: 0 2px;
+        color: #fff;
+        line-height: 15px;
+        border: none;
+    }
+
+#right {
+    margin-bottom: 45px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: -1px 0 5px #ad9e9e;
+    z-index: 3 !important;
+}
+
+div#left-resizer {
+    background: #dfe0e4;
+    border-right: 1px solid #b7b7b7;
+    border-right: 1px solid #e2e2e2;
+    background-image: none;
+}
+
+.tree {
+    height: 100%;
+}
+
+.grid-header table {
+    margin-bottom: 0;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+    .table > thead > tr > th {
+        font-size: 12px;
+        color: #ffffff;
+        background: #02029e;
+        border: 1px solid white;
+    }
+
+        .table > thead > tr > th a {
+            color: #ffffff;
+        }
+
+    .table > tbody > tr > td {
+        font-size: 12px;
+        padding: 5px 8px;
+        white-space: pre-line;
+    }
+
+div#reportViewer {
+    /*width: 100%;*/
+    height: calc(100% - 110px);
+    overflow: auto;
+}
+
+tr.report-group[loaded="true"] {
+    background: #b9b9ff;
+}
+
+tr.report-group a {
+    font-weight: bold;
+    color: blue;
+}
+
+.pager {
+    margin: 0;
+}
+
+    .pager li > a, .pager li > span {
+        border-radius: 0;
+    }
+
+
+#dateConditionCurrent, #groupName {
+    font-weight: bold;
+}
+
+a.btnViewDocument {
+    color: blue;
+}
+
+.reportInfo {
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+    .reportInfo .reportName {
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+.status {
+    position: absolute;
+    padding: 12px;
+    bottom: 25px;
+    left: 40px;
+    z-index: 10;
+    font-size: 13px;
+    font-weight: normal;
+    display: none;
+}
+
+#left {
+    
+}
+.red-color{background-color: #F44336;color: #fff;padding-bottom: 60px;text-align: center; padding-top: 10px;}
+.light-blue{background-color: #00BCD4;padding-bottom: 60px;text-align: center; padding-top: 10px;}
+.yelo-color{background-color: #ffc107;color: #fff;padding-bottom: 60px;text-align: center; padding-top: 10px;}
+.megenta-color{background-color: #009688;padding-bottom: 60px;text-align: center; padding-top: 10px;}
+.margin{margin-top:100px;}
+
+/*///////////////Right Tooltip w/ Left Arrow////////////////*/
+.tooltip-col {
+    position: relative;
+    display: inline-block;
+    cursor:pointer;
+    text-align:center;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 350px;
+    height:40px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    top: -13px;
+    left: 110%;
+}
+
+.tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+.tooltip-col:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+/*///////////////Left Tooltip w/ Right Arrow////////////////*/ 
+
+.tooltiptext2 {
+    visibility: hidden;
+    width: 150px;
+    height:50px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    top: -13px;
+    right: 120px;
+}
+
+.tooltiptext2::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    margin-top: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent black;
+}
+.tooltip-col:hover .tooltiptext2 {
+    visibility: visible;
+}
+
+/*///////////////Bottom Tooltip w/ Top Arrow////////////////*/ 
+
+.tooltiptext3 {
+    visibility: hidden;
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    top: 30px;
+    right: -19px;
+}
+
+.tooltiptext3::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 61px;   
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+.tooltip-col:hover .tooltiptext3 {
+    visibility: visible;
+}
+
+
+/*///////////////Top Tooltip w/ Bottom Arrow////////////////*/ 
+
+.tooltiptext4 {
+    visibility: hidden;
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    top: -56px;
+    right: -19px;
+}
+
+.tooltiptext4::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 61px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.tooltip-col:hover .tooltiptext4 {
+    visibility: visible;
+}
+
+
+
+:focus {outline: none;}
+* {
+  -webkit-box-sizing: border-box; 
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;
+
+  -ms-transition:.25s ease-in-out;
+  -moz-transition:.25s ease-in-out;
+  -o-transition:.25s ease-in-out;
+  -webkit-transition:.25s ease-in-out;
+  transition:.25s ease-in-out;
+}​

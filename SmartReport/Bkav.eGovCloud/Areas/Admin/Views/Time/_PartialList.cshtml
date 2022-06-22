@@ -1,0 +1,101 @@
+﻿@using System.Globalization
+@model IEnumerable<HolidayModel>
+<script type="text/javascript">
+    function GetExtends() {
+        var year1 = $("#Years").val();
+        document.location = '@Url.Action("GetExtendDate", "Time", new { year = "curYear" })'.replace("curYear", year1);
+        }
+
+        $(function () {
+            $("#tblTime").grid({
+                isResizeColumn: false,
+                isFixHeightContent: false
+            });
+            $("#tblTime").openLink({ urlOpen: '/admin/Time/Edit' });
+
+            $(".table-main").addClass("table-bordered table-hover");
+        });
+</script>
+<input class="btn" type="button" value="" data-res="egov.resources.time.caculateextendtime" onclick="GetExtends()" style="margin-bottom: 20px;" />
+<table class="table-main table" id="tblTime">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" data-res="egov.resources.tableheader.stt"></th>
+            <th class="header" data-res="egov.resources.time.freeday"></th>
+            <th class="header" data-res="egov.resources.time.AL"></th>
+            <th class="header" data-res="egov.resources.time.DL"></th>
+            <th class="header" data-res="egov.resources.time.day"></th>
+            <th class="header" title="Lặp theo năm" data-res="egov.resources.time.repeat" data-restitle="egov.resources.time.repeatbyyear"></th>
+            <th class="header" data-res="egov.resources.tableheader.edit"></th>
+            <th class="header" data-res="egov.resources.tableheader.delete"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+
+            var stt = 0;
+            foreach (var holiday in Model)
+            {
+                var ngayduong = holiday.HolidayDateInSolar;
+                var ngayam = holiday.HolidayDateInLunar;
+                stt += 1;
+            <tr data-id="@holiday.HolidayId">
+                <td>
+                    @stt
+                </td>
+                <td>
+                    @holiday.HolidayName
+                </td>
+                <td>
+                    @(holiday.IsLunar ? ngayam.ToString() : "")
+                </td>
+                <td>
+                    @ngayduong.ToString("d")
+                </td>
+                <td>
+                    <span style="@(ViewBag.Weekend.Contains(ngayduong.DayOfWeek.ToString()) ? "color: red" : "color: black")">
+                        @DateTimeFormatInfo.CurrentInfo.GetDayName(@ngayduong.DayOfWeek)
+                    </span>
+                </td>
+                <td>
+                    @if (holiday.IsRepeated)
+                    {
+                        <span data-res="egov.resources.commonlabel.yes"></span>
+                    }
+                    else
+                    {
+                        <span data-res="egov.resources.commonlabel.no"></span>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Catalog.Index.List.Column.Edit.Button"), "Edit", new { Id = holiday.HolidayId })
+                </td>
+                <td>
+                    <a href="javascript:deleteTime(@(holiday.HolidayId))">@Localizer("Catalog.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(holiday.HolidayId)" style="display: none" action="@Url.Action("Delete", new { Id = holiday.HolidayId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" data-res="egov.resources.time.nodata">Không có ngày nghỉ nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

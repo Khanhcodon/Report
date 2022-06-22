@@ -1,0 +1,132 @@
+﻿@model IEnumerable<PrinterModel>
+@{
+    int number = 0;
+}
+<div style="clear: both">
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#tbPrinter").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tbPrinter").openLink({ urlOpen: '/admin/Printer/Edit' });
+    });
+
+    function changeShared(item) {
+        var shared = $(item).prop('checked');
+        var printerId = $(item).attr('printerId');
+        $.ajax({
+            url: "@Url.Action("ChangeShared", "Printer")",
+            type: "get",
+            data: { id: printerId, shared: shared },
+            success: function (result) {
+                if (result.success) {
+                    $(item).checked = !shared;
+                    eGovMessage.notification(result.message, eGovMessage.messageTypes.success);
+                }
+                else {
+                    eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                }
+            }
+
+        });
+    }
+
+    function changeActivities(item) {
+        var activities = $(item).prop('checked');
+        var printerId = $(item).attr('printerId');
+        $.ajax({
+            url: "@Url.Action("ChangeActivities", "Printer")",
+            type: "get",
+            data: { id: printerId, activities: activities },
+            success: function (result) {
+                if (result.success) {
+                    $(item).checked = !activities;
+                    eGovMessage.notification(result.message, eGovMessage.messageTypes.success);
+                }
+                else {
+                    eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                }
+            }
+        });
+    }
+</script>
+<table id="tbPrinter">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        @*<col />*@
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.Numbers")
+            </th>
+            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.PrinterName")
+            </th>
+            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.ShareName")  </th>
+            @*<th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.ShareName")  </th>*@
+            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.IsShare")  </th>
+            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Printer.Index.List.Column.IsActivated")</th>
+            <th class="header">
+                @Localizer("Common.Pinter.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Common.Pinter.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                number += 1;
+            <tr data-id="@item.PrinterId">
+                <td>@number
+                </td>
+                <td>
+                    @item.PrinterName
+                </td>
+                <td>
+                    @item.ShareName
+                </td>
+                @*<td>
+                    @(item.IsFromComputer ? Localizer("Bkav.eGovCloud.Areas.Admin.Printer.FromComputer") : Localizer("Bkav.eGovCloud.Areas.Admin.Printer.FromNetwork"))
+
+                </td>*@
+                <td style="text-align: center">
+                    @Html.CheckBoxFor(m => item.IsShared, new { onchange = "changeShared(this);", printerId = item.PrinterId })
+                </td>
+                <td style="text-align: center">
+                    @Html.CheckBoxFor(m => item.IsActivated, new { onchange = "changeActivities(this);", printerId = item.PrinterId })
+                </td>
+                <td style="text-align: center">
+                    @Html.ActionLink(Localizer("Common.Pinter.Index.List.Column.Edit"), "Edit", new { Id = item.PrinterId })
+                </td>
+                <td style="text-align: center">
+                    <a href="javascript:deletePrinter(@(item.PrinterId))">@Localizer("Common.Pinter.Index.List.Column.Delete")</a>
+                    <form id="formdelete@(item.PrinterId)" style="display: none" action="@Url.Action("Delete", new { Id = item.PrinterId })" method="POST">
+                         @Html.AntiForgeryToken()
+                    </form>
+
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.printer.nodata">
+                    Không có resource nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

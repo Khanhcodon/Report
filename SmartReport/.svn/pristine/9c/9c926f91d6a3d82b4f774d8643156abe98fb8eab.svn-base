@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.Diagnose.Title.Label");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bkavegov-content-title">
+    <h3>
+        @Localizer("Common.Diagnose.Title.Label")
+    </h3>
+</div>
+<p>
+    @Html.ActionLink(@Localizer("Common.Diagnose.Cookie.Check"), "Cookie")
+</p>
+<p>
+    @Html.ActionLink(@Localizer("Common.Diagnose.Email.Setting"), "EmailSettings")
+</p>

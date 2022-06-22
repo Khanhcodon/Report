@@ -1,0 +1,21 @@
+﻿{{if ParentId == null}}
+<td style="padding-left:20px">
+    <label class="checkbox document-color">
+        <input name="checkbox[]" value="${value}" type="checkbox">
+        <span class="document-color-1"><i class="icon-check"></i></span>
+    </label>
+</td>
+<td class="wraptext" style="padding-left:20px; width: 150px;">
+    ${Name}
+</td>
+{{else}}
+<td style="padding-left:30px">
+    <label class="checkbox document-color">
+        <input name="checkbox[]" value="${value}" type="checkbox">
+        <span class="document-color-1"><i class="icon-check"></i></span>
+    </label>
+</td>
+<td class="wraptext" style="padding-left:30px">
+    ${Name}
+</td>
+{{/if}}

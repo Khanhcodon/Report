@@ -1,0 +1,233 @@
+﻿@{
+    Layout = null;
+    var reportHtml = ViewBag.Report as string;
+}
+
+<script type="text/javascript">
+    debugger
+    var GROUP_VALUE_DEFAULT= "DEFAULT";
+    var isPendding=false;
+    $(function(){
+
+        $(".report-content > table").addClass("table table-hover");
+
+        $("body").on("click", "tr.pager a", function () {
+            if(isPendding) {
+                return;
+            }
+
+            if ($(this).hasClass("selected")) {
+                return;
+            }
+
+            if ($("#Time").val() == undefined || $("#Time").val() == "") {
+                eGovMessage.show(egov.resources.report.chosseReportDate);
+                return;
+            }
+
+            isPendding = true;
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            var data = getParam2();
+            //data.page= $(this).attr("page");
+            //data.groupValue = $(this).attr("group");
+            //data.pageSize=  $("select.page-size[group='"+  data.groupValue+"']").val();
+            gotoPage2(data, $(this).closest('.pager'),true);
+        });
+
+        $("select.page-size").off("change").bind("change", function () {
+            if(isPendding) {
+                return;
+            }
+            isPendding = true;
+
+            $(".selected").removeClass("selected");
+            var data = getParam2();
+            //data.groupValue = $(this).attr("group");
+            //data.page = $("tr.pager a[group='"+  data.groupValue+"']").attr("page");
+            //data.pageSize= $(this).val();
+            gotoPage2(data, $(this).closest('.pager'),true);
+        });
+
+        if($("a[type='group']").length > 0){
+            $("a[type='group']").off('click').bind('click',function () {
+                if(isPendding) {
+                    return;
+                }
+
+                isPendding = true;
+                var data = getParam2();
+                data.page = 1;
+
+                data.groupValue = $(this).attr("group");
+                var target = $(this).parents("tr");
+
+                if($("tr[group='"+data.groupValue+"']").length === 0){
+                    gotoPage2(data,target,false);
+                }else{
+                    $("tr[group='"+data.groupValue+"']").toggle();
+                    isPendding = false;
+                }
+            });
+        }
+
+        if($('[data-hassort="true"]').length > 0){
+            $('[data-hassort="true"]').off('click').bind('click',function(){
+                if(isPendding){
+                    return;
+                }
+                var data = getParam2();
+                if(data.groupId > 0){
+                    return;
+                }
+
+                isPendding = true;
+                var sortBy= $(this).attr('data-value');
+                var desc= $(this).attr('data-desc')=='true' ? false:true;
+                $(this).attr('data-desc', desc);
+                data.sortBy = sortBy;
+                data.isDesc= desc;
+                $("#SortBy").val(sortBy);
+                $("#IsDesc").val(desc);
+
+                $.ajax({
+                    url:  "/ReportViewer/GotoPage",
+                    type: "Post",
+                    data: data,
+                    success: function (result) {
+                        if (result.success) {
+                            var result = $(result.success);
+                            $('.report-content table tbody').empty().append(result);
+                        }
+                        else  if (result.error) {
+                            eGovMessage.show(result.error);
+                        }
+
+                        isPendding = false;
+                    },
+                    error: function (xhr) {
+                        isPendding = false;
+                        eGovMessage.show(xhr.statusText);
+                    }
+                });
+            });
+        }
+        $('.report-viewer').bindResources();
+    });
+
+    var gotoPage2 = function (data, target, hasRamoveTarget) {
+        $.ajax({
+            url:  "/ReportViewer/GotoPage",
+            type: "Post",
+            data: data,
+            beforeSend: function(){
+                eGovMessage.notification("Đang lấy dữ liệu", eGovMessage.messageTypes.processing, false)
+            },
+            success: function (result) {
+                if (result.success) {
+                    var result = $(result.success);
+                    if(GROUP_VALUE_DEFAULT === data.groupValue || data.groupValue === ""){
+                        target.siblings("tr").remove();
+                    }else{
+                        target.siblings("tr[group="+data.groupValue+"]").remove();
+                    }
+
+                    $(result).each(function(){
+                        $(this).attr('group', data.groupValue);
+                    });
+
+                    target.after($(result));
+
+                    if(hasRamoveTarget){
+                        target.remove();
+                    }
+                }
+                else  if (result.error) {
+                    eGovMessage.show(result.error);
+                }
+                isPendding=false;
+            },
+            error: function (xhr) {
+                isPendding=false;
+                eGovMessage.notification(xhr.statusText, eGovMessage.messageTypes.error);
+            },
+            complete: function(){                
+                eGovMessage.notification("", eGovMessage.messageTypes.success);
+            }
+        });
+    };
+
+    var getParam2 = function () {
+        var data = {
+            reportId:@ViewBag.ReportId,
+            time: $("#Time").val(),
+            fromDate: $("[name='FromDate']").val(),
+            toDate: $("[name='ToDate']").val(),
+            page: $("tr.pager a.selected").length == 0 ? 1 : parseInt($("tr.pager a.selected").attr("page")),
+            pageSize: $("#pageSize").length == 0 ? 30 : parseInt($("#pageSize").val()),
+            sortBy: $("#SortBy").val(),
+            isDesc: $("#IsDesc").val(),
+            groupId:$("#GroupId").val() == ""? 0 : parseInt($("#GroupId").val()),
+            groupValue: '',
+            treeGroupName:'@ViewBag.TreeGroupName',
+            treeGroupValue:'@ViewBag.TreeGroupValue'
+        };
+        return data;
+    };
+
+    function viewDocument(id, title) {
+        window.parent.egov.cshtml.home.tab.add(id, title, null, function () {
+            window.parent.egov.cshtml.home.listdocuments.updateIsViewed(id);
+        });
+    }
+
+    function sortDocument(sortBy) {
+        $("#SortBy").val(sortBy);
+        $("#IsDesc").val($("#IsDesc").val() == "true" ? "false" : "true");
+        var data = getParam2();
+        gotoPage2(data,$(".pager"));
+    }
+</script>
+
+<style>
+    .label {
+        font-size: 14px;
+        color: rgb(59, 88, 152);
+    }
+
+    .table {
+        table-layout: fixed;
+    }
+
+        .table > thead > tr > th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .detail [col='0'] {
+        text-align: center;
+    }
+</style>
+
+<div class="report-viewer">
+    @Html.Hidden("ReportId")
+    <div style="padding: 5px; margin-left: 10px; margin-bottom: 10px">
+        <div class="">
+            <span data-res="egov.resources.report.totalDocuments">Tổng số văn bản: </span>
+            <b>@ViewBag.TongVanBan </b>
+        </div>
+        <div class="hidden">
+            <span data-res="egov.resources.report.totalDocumentNotProcessed">Số văn bản chưa xử lý: </span>
+            <b>@ViewBag.SoVanBanChuaXuLy</b>
+        </div>
+        <div class="hidden">
+            <span data-res="egov.resources.report.totalDocumentProcessed">Số văn bản đã xử lý: </span>
+            <b>@ViewBag.SoVanBanDaXuLy</b>
+        </div>
+        <div class="hidden">
+            <span data-res="egov.resources.report.totalDocumentOverdue">Số văn bản quá hạn: </span>
+            <b>@ViewBag.SoVanBanQuaHan</b>
+        </div>
+    </div>
+    @Html.Raw(reportHtml)
+</div>

@@ -1,0 +1,10 @@
+﻿<a href="#" class="list-group-item wraptext {{if status !=0 }}disable{{/if}}">
+    <span class="badge qtooltip totalUnread"></span>
+    <span class="{{if children.length > 0}}closed{{/if}} menu-icon pull-left"
+          {{if children&&children.length>0 }}data-toggle="collapse" data-parent="#storeChild${parentId}" data-target="#storeChild${id}" {{/if}}></span>
+    <span class="folder-icon"></span>
+    <span>${name}</span>
+</a>
+{{if children.length > 0}}
+    <ul class="nav panel-collapse collapse" id="child${functionId}" role="menu"></ul>
+{{/if}}

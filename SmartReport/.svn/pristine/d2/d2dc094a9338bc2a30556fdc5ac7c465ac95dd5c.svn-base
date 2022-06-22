@@ -1,0 +1,718 @@
+﻿@model FormModel
+@{
+    var isCreate = new Guid().CompareTo(Model.FormId) == 0;
+    // 20191111 VuHQ REQ-2
+    var catalogs = ViewBag.Catalogs1;
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.fileDownload.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor/ckeditor.js")"></script>
+
+<style>
+    #cke_FormHeader, #cke_FormFooter {
+        width: 80%;
+    }
+
+    .handsontable table thead th {
+        /*white-space: pre-line;*/
+    }
+
+    .htBold {
+      font-weight: bold;
+    }
+</style>
+<script type='text/javascript' src="@Url.Content("~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.bundle.js")"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#addItemForm').click(function () {
+            return false;
+        });
+        String.format = function () {
+            var s = arguments[0];
+            for (var i = 0; i < arguments.length - 1; i++) {
+                var reg = new RegExp("\\{" + i + "\\}", "gm");
+                s = s.replace(reg, arguments[i + 1]);
+            }
+            return s;
+        }
+
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 200;
+            config.toolbarCanCollapse = true;
+
+        };
+        CKEDITOR.replace('FormHeader');
+        CKEDITOR.replace('FormFooter');
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href"); // activated tab
+            var colName;
+            var rows;
+            var typeControl;
+            var headerTemplates = [];
+            var headerTemplate;
+            var patternCode;
+            var nameControl;
+
+            // get type configs
+            $.ajaxSetup({ async: false });
+            $.getJSON('/Admin/Form/GetHeaderTemplates', {},
+                function (data, textStatus, jqXHR) {
+                    headerTemplates = JSON.parse(data.headerTemplates);
+                });
+            $.ajaxSetup({ async: true });
+
+            if (target == "#mobilePreviewTab") {
+                rows = "<div class='mbsc-form-group'>";
+                for (var i = 0; i < dataTable.countCols(); i++) {
+                    typeControl = typeTable.getCellMeta(i, fieldRowsCount + 2).type;
+                    nameControl = typeTable.getDataAtCell(i, fieldRowsCount);
+                    headerTemplate = headerTemplates.filter(function (item) {
+                        return (item.TypeName == nameControl);
+                    });
+
+                    if (headerTemplate != null && headerTemplate != undefined && headerTemplate.length > 0) {
+                        if (nameControl == "Checkbox")
+                            patternCode = typeTable.getDataAtCell(i, fieldRowsCount + 3) == true ? String.format(headerTemplate[0].RegEx, "") : String.format(headerTemplate[0].RegEx, "|null|false");
+                        else
+                            patternCode = typeTable.getDataAtCell(i, fieldRowsCount + 3) == true ? String.format(headerTemplate[0].RegEx, "+") : String.format(headerTemplate[0].RegEx, "*");
+                    }
+
+                    // START get name
+                    colName = '';
+                    for (var j = 0; j < fieldRowsCount; j++) {
+                        if (j != 0)
+                            colName += " - ";
+                        if (typeTable.getDataAtCell(i, j) != null) {
+                            colName += typeTable.getDataAtCell(i, j);
+                        } else {
+                            for (var k = i; k >= 0; k--) {
+                                if (typeTable.getDataAtCell(k, j) != null) {
+                                    colName += typeTable.getDataAtCell(k, j);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // END get name
+                    rows += String.format("<label for='{0}' class='mbsc-control-w mbsc-input'>", "input_" + i);
+                    rows += String.format("<span class='mbsc-label' title='{0}'>{0}</span><span class='mbsc-input-wrap'>", colName);
+
+                    if (typeControl == "dropdown") {
+                        rows += String.format("<select id='{0}' class='mbsc-control' style='-webkit-appearance: menulist !important'>", "input_" + i);
+                        var sourceControl = typeTable.getCellMeta(i, fieldRowsCount + 2).source;
+                        $.each(sourceControl, function (key, value) {
+                            rows += String.format("<option value='{0}'>{0}</option>", value);
+                        });
+                        rows += "</select>";
+                    }
+                    else {
+                        rows += String.format("<input id='{0}' type='{1}' placeholder='{2}' value='' name = '{0}' pattern='{3}' class='mbsc-control'", "input_" + i, typeControl, colName, patternCode);
+                        if (typeControl == "checkbox")
+                            rows += "style='-webkit-appearance: checkbox !important'>";
+                        else
+                            rows += ">";
+                    }
+
+                    rows += "<span class='mbsc-input-fill'></span>";
+                    rows += "</span></label>";
+                }
+                rows += "</div>";
+                $('#formContentmbsc').html(rows);
+
+
+                $("form").validate({
+                    rules: {
+                        input_1: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        input_1: {
+                            required: "Please create your username",
+                        }
+
+                    },
+                    submitHandler: function (form) { // for demo
+                        alert('valid form submitted'); // for demo
+                        return false;
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+<style>
+    #fieldTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 150px !important;*/
+    }
+
+    #typeTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    .modal-body {
+        height: 1000px;
+        overflow: scroll !important;
+    }
+
+    .modal .modal-body > div.class1 {
+        height: unset;
+    }
+
+    .modal-dialog {
+        width: 95%;
+        margin: 30px auto;
+    }
+
+    #fieldTable {
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+    }
+
+    #dataTable {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    #typeTable {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+    /*#dataTable th .relative {
+        white-space: pre-line !important;
+    }*/
+</style>
+<script type="text/javascript">
+    $(function () {
+        $("#FormName").focus();
+
+        $('#upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var filename = data.files[0].name;
+                if (filename.indexOf(".xlsx", filename - ".xlsx".length) !== -1) {
+                    $(".EmbryonicPath").text(filename);
+                    data.submit();
+                }
+                else {
+                    eGovMessage.show("Chỉ được up file xlsx",
+                        "", eGovMessage.messageButtons.Ok);
+                }
+            },
+            done: function (e, data) {
+                var result = data.result[0];
+                $("#EmbryonicPath").val(result.name);
+                $("#EmbryonicLocationName").val(result.key);
+            },
+            fail: function (e, data) {
+                $(".EmbryonicPath").text("@Localizer("Common.Error.DownloadFile")");
+            }
+        });
+        $("#createETL").click(function (e) {
+            var comment = $("#Description").val();
+            $.ajax({
+                url: "/Admin/form/CreateETL?id=" + "@Model.FormId" + "&comment=" + comment,
+                type: 'GET',
+                data: {}
+            }).done(function (result) {
+                if (result.succress) {
+                    $.notify({
+                        message: "Tạo bảng mới thành công"
+                    }, {
+                        type: 'success',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        }
+                    });
+                    location.href = "/Admin/Form/Edit/" + "@Model.FormId";
+                }
+                else {
+                    $.notify({
+                        message: result.message
+                    }, {
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        }
+                    });
+                }
+            });
+        })
+
+        $("#createFormMobile").click(function (e) {
+            $.ajax({
+                url: "/Admin/form/CreateFormMobile?id=" + "@Model.FormId",
+                type: 'GET',
+                data: {}
+            }).done(function (result) {
+                $.notify({
+                    message: "Tạo bảng mới thành công"
+                }, {
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    }
+                });
+                location.href = "/Admin/Form/Edit/" + "@Model.FormId";
+            });
+        })
+    })
+
+    function download(id) {
+        var link = '@Url.Action("DownloadEmbryonicFileBase64", "Attachment", new { area = "" })/' + id;
+        $.fileDownload(link, {
+            failCallback: function (response) {
+                var html = $(response);
+                try {
+                    var json = JSON.parse(html.text());
+                    alert(json.error);
+                } catch (e) {
+                    alert('"@Localizer("Common.Error.DownloadFile")"');
+                }
+            }
+        });
+    }
+
+    function openConfigEmbryonic(formId) {
+        $("#configEmbryonicForm").removeClass('hidden');
+        $("#configEmbryonicForm").dialog({
+            width: 1100,
+            height: 600,
+            title: "Cấu hình mẫu báo cáo",
+            buttons: [
+                {
+                    text: "Generate",
+                    click: function () {
+                        var editor = $("#ereport")[0];
+                        //editor.contentWindow.docEditor.destroyEditor();
+                        setTimeout(function () {
+                            $("#configEmbryonicForm").dialog("close");
+                            $("#configEmbryonicForm").addClass('hidden');
+                            // location.reload();
+                        }, 1000);
+
+
+                    }
+                }
+            ]
+        });
+    }
+
+    // 20191111 VuHQ REQ-2
+    $(document).ready(function () {
+        $('#btnGenerate').click(function () {
+            // get cols width
+            var table1_col_size = [];
+            for (var i = 0; i < dataTable.countCols(); i++)
+                table1_col_size.push(dataTable.getColWidth(i));
+
+            var fieldmergedCells = [];
+            if (fieldTable.getPlugin('mergeCells').mergedCellsCollection != null)
+                fieldmergedCells = fieldTable.getPlugin('mergeCells').mergedCellsCollection.mergedCells;
+
+            var defineFieldJson = { "data": fieldTableData, "mergedCells": fieldmergedCells, "countCols": fieldTable.countCols(), colWidths: table1_col_size };
+
+            typeTableData = typeTable.getData();
+
+            // get hidden fields
+            var hiddenColumns = [];
+            for (var i = 0; i < typeTableData.length; i++) {
+                if (typeTableData[i][fieldTable.countRows() + 7])
+                    hiddenColumns.push(i);
+            }
+
+            var defineTypeJson = { "data": typeTableData, "columns": typeColumsSetting, "hiddenColumns": hiddenColumns };
+
+            var fieldmergedCellData = [];
+            if (dataTable.getPlugin('mergeCells').mergedCellsCollection != null) {
+                fieldmergedCellData = dataTable.getPlugin('mergeCells').mergedCellsCollection.mergedCells;
+            }
+
+            var fieldReadonly = []
+            var cells = dataTable.getCellsMeta();
+            for (var i = 0; i < cells.length; i++) {
+                var cellData = cells[i];
+                if (cellData && cellData.readOnly) {
+                    fieldReadonly.push({ "col": cellData.col , "row": cellData.row})
+                }
+            }
+
+            // set data bị merged từ null ==> data cell merge đầu tiên
+            var _modifiedDataTableData = dataTable.getData();
+
+            fieldmergedCellData.forEach((e) => {
+                for (var i = e.row; i < e.rowspan + e.row; i++) {
+                    for (var j = e.col; j < e.colspan + e.col; j++) {
+                        _modifiedDataTableData[i][j] = _modifiedDataTableData[e.row][e.col];
+                    }
+                }
+            })
+
+            // get classname of datatable
+            var classCells = [];
+            var h0 = document.getElementById('dataTable');
+            var st1 = '.ht_master tbody > tr';
+3
+            $.each(h0.querySelectorAll(st1), function (rowIndex, rowValue) {
+                var row = [];
+                $.each(rowValue.cells, function (columnIndex, cellValue) {
+                    if (columnIndex == 0) return;
+                    row.push(cellValue.className);
+                });
+                classCells.push(row);
+            });
+
+            var defineDataJson = {
+                "data": _modifiedDataTableData, "columns": dataColumsSetting,
+                "mergedCells": fieldmergedCellData, readOnlys: fieldReadonly,
+                "xoayHeaders": isXoay ? xoayHeaders : null,
+                "xoayInfo": isXoay ? gia_tri_prop : null,
+                "classCells": classCells
+            };
+            $('#DefineFieldJson').val(JSON.stringify(defineFieldJson));
+            $('#DefineConfigJson').val(JSON.stringify(defineTypeJson));
+            $('#DefineValueJson').val(JSON.stringify(defineDataJson));
+            $('#defaultModal').modal('hide');
+        });
+
+    });
+</script>
+
+@Html.HiddenFor(model => model.FormId)
+
+<table>
+    <tr>
+        <td style="width: 15%">
+            @Html.LabelFor(model => model.FormGroupId)
+        </td>
+        <td>
+            @Html.DropDownList("FormGroupId")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.FormTypeId)
+        </td>
+        <td>
+            @Html.DropDownList("FormTypeId")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.FormName)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.FormName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @if (Model.FormId == Guid.Empty)
+            {
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>}
+            @Html.ValidationMessageFor(model => model.FormName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Description)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = Model.EmbryonicPath })
+        </td>
+    </tr>
+    <tr class="txtFormUrl hidden">
+        <td>
+            @Html.LabelFor(model => model.FormUrl)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.FormUrl, new { style = "display:inline" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.ConfigForm)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.ConfigForm, new { style = "display:inline" })
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelRequireFor(model => model.Json)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Json)
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelRequireFor(model => model.CompilationId)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.CompilationId)
+        </td>
+    </tr>
+
+    <tr class="">
+        <td>
+            @Html.LabelRequireFor(model => model.ConfigFunction)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.ConfigFunction)
+        </td>
+    </tr>
+
+    <tr class="">
+        <td>
+            @Html.LabelRequireFor(model => model.ChildCompilationId)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.ChildCompilationId)
+        </td>
+    </tr>
+    @*20191030 VUHQ START REQ-02
+        Lấy hoặc thiết lập Định nghĩa cấu hình table dạng json*@
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DefineFieldJson)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DefineFieldJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DefineConfigJson)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DefineConfigJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="hidden">
+        <td>
+            @Html.LabelFor(model => model.DefineValueJson)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.DefineValueJson, new { @readonly = "readonly" })
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelFor(model => model.FormHeader)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.FormHeader)
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelFor(model => model.FormFooter)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.FormFooter)
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            @Html.LabelFor(model => model.TableName)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.TableName)
+        </td>
+    </tr>
+    @*20191030 VUHQ END REQ-02
+        Lấy hoặc thiết lập Định nghĩa cấu hình table dạng json*@
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsActivated)
+        </td>
+        <td>
+            @Html.RadioButtonFor(model => model.IsActivated, 1, new { @checked = "checked" })
+            Sử dụng
+            @Html.RadioButtonFor(model => model.IsActivated, 2)
+            Không Sử dụng
+        </td>
+    </tr>
+
+    <tr class="hidden">
+        <td>
+            @Html.LabelRequireFor(model => model.FormCode)
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.FormCode)
+        </td>
+    </tr>
+    @if (Model.FormId != Guid.Empty)
+    {
+        <tr>
+            <td style="padding-top: 20px">
+                <b>Cấu hình mẫu báo cáo</b>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                Mẫu báo cáo
+            </td>
+            <td>
+                <span class="EmbryonicPath">@Model.EmbryonicPath</span>
+                <div style="display:none">
+                    <input type="text" name="EmbryonicPath" id="EmbryonicPath" />
+                    <input type="text" name="EmbryonicLocationName" id="EmbryonicLocationName" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input class="btn btn-primary" type="button" value="Tải lên" onclick="$('#upload').click()" />
+                <input class="btn" type="file" name="files" id="upload" style="display: none;" data-url="@Url.Action("UploadEmbryonic", "Attachment", new { area = "" })" accept="*.xlsx" />
+                @if (!string.IsNullOrEmpty(Model.EmbryonicLocationName))
+                {
+                    <input type="button" class="btn btn-default" value="Tải xuống" onclick="download('@Model.FormId')" />
+                }
+
+                @*<input type="button" class="btn btn-info" value="Cấu hình" style="margin-left: 20px" onclick="openConfigEmbryonic('@Model.FormId')" />*@
+                @*<input type="button" class="btn btn-info" value="Cấu hình" style="margin-left: 20px" onclick="openConfigEmbryonic('@Model.FormId')" />*@
+                <a data-toggle="modal" id="btnConfig" href="#defaultModal" class="btn btn-primary btn-large" data-url='@Url.Action("RenderConfigReport")'>
+                    Cấu hình
+                </a>
+                <input type="hidden" id="catalogs" value='@catalogs' />
+                <input type="button" id="createETL" class="btn btn-info hidden" value="Tạo ETL" style="margin-left: 20px" />
+                <input type="button" id="createFormMobile" class="btn btn-info" value="Tạo Form Mobile" style="margin-left: 20px" />
+            </td>
+        </tr>
+    }
+
+</table>
+<div id="defaultModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 id="modal-label">Cấu hình mẫu báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <!-- <script src="handsontable/dist/handsontable.full.min.js"></script>
+                <link href="handsontable/dist/handsontable.full.min.css" rel="stylesheet" media="screen"> -->
+                <!-- Ugly Hack due to jsFiddle issue -->
+                <script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js")"></script>
+                <link type="text/css" rel="stylesheet" href=@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css")>
+                <style>
+                    .gray {
+                        background-color: #E8E8E8 !important;
+                    }
+                </style>
+                <div style="font-weight: bold" class="class1">
+                    Cấu hình header
+                </div>
+                <br />
+                <button id ="btnAddRowField" type="button" onclick="addRowField()" class="btn btn-success">Thêm dòng bên dưới</button>
+                <button type="button" onclick="btnAddColField()" class="btn btn-info">Thêm cột bên phải</button>
+                <br />
+                <br />
+                <div id="fieldTable"> </div>
+                <br />
+                <br />
+                <button type="button" onclick="btnSaveFieldConfig(false)" class="btn btn-primary">Lưu header</button>
+                <hr />
+                <div style="font-weight: bold" class="class1">
+                    Cấu hình kiểu dữ liệu
+                </div>
+                <br />
+                <div id="typeTable"> </div>
+                <br />
+                <button type="button" onclick="btnSaveTypeConfig(false)" class="btn btn-primary">Lưu cấu hình</button>
+                <br />
+                <br />
+                <hr />
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist" style="font-weight: bold">
+                        <li role="presentation" class="active">
+                            <a href="#dataConfigTab" aria-controls="dataConfigTab" role="tab" data-toggle="tab">Cấu hình dữ liệu mặc định</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#mobilePreviewTab" aria-controls="mobilePreviewTab" role="tab" data-toggle="tab">Mobile Preview</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="dataConfigTab">
+                            <br />
+                            <button type="button" onclick="btnAddRowData()" class="btn btn-success">Thêm dòng bên dưới</button>
+                            <br />
+                            <br />
+                            <div id="dataTable"> </div>
+                            <br />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="mobilePreviewTab">
+                            <div class="document mdl-layout mdl-js-layout mdl-layout--fixed-header">
+                                <div class="mdl-layout__content document-content">
+                                    <div class="detail-content">
+                                        <div class="document-form">
+                                            <div class="document-info" data-id="">
+                                                <div class="document-info-template">
+                                                    <div mbsc-form id="formEdit">
+                                                        <div class="mbsc-form-group-title">Nội dung báo cáo</div>
+                                                    </div>
+                                                </div>
+                                                <div class="document-attachment-mobile" style="display: none;">
+                                                    <div>
+                                                        <div id="wrapAttachment">
+                                                            <ul class="mdl-list attachment-list"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="divContentmobile" class="">
+                                                    <div mbsc-form="" id="formContentmbsc" class="mbsc-comp mbsc-form mbsc-no-touch mbsc-mobiscroll mbsc-ltr">
+                                                    </div>
+                                                    <div mbsc-form="" class="mbsc-comp mbsc-form mbsc-no-touch mbsc-mobiscroll mbsc-ltr">
+                                                        <div class="mbsc-form-group">
+                                                            <div class="mbsc-btn-group-block">
+                                                                <button id="addItemForm" class="mbsc-control mbsc-btn">Thêm mới</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right">
+                        <input type="button" id="btnGenerate" value="Generate" class="btn btn-primary" />
+                    </div>
+                </div>
+                @*VuHQ 20191105 REQ-02*@
+                <script src="@Url.Content("~/Scripts/bkav.egov/views/document/form/dynamic-form.js")"></script>
+                <script src="@Url.Content("~/Scripts/bkav.egov/rateemployee/moment.js")"></script>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="configEmbryonicForm" class="hidden" style="position:relative;">
+    @*<iframe id="ereport" src="/admin/Form/ConfigReport?id=@Model.FormId" width="1050" height="577" style="border:none;"></iframe>*@
+</div>

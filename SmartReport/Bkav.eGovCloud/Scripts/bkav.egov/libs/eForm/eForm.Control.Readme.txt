@@ -1,0 +1,96 @@
+﻿//#region Readme.txt
+/*
+* Load form for tiep nhan
+* eForm.efTools.LoadForm 
+--> eForm.database.JsonDeserialize -- (parse json to controls) 
+--> eForm.efTools.LoadFormRows -- tao cac div dai dien cac row tren form
+--> Duyet danh sach control vua parse o tren
+{
+--> eForm.efTools.setRowForcus($("[rid='" + ctrl.getPosRow() + "']")); -- Dat bien toan cuc tro ve dong hien tai dang can add control vao
+--> eForm.efTools.Load(ctrl);
+{
+--> LoadPanel(ctrl.getId()); -- tao panel chua control trong moi row <div id="pnl1" class="css_NestedInputForm">
+--> var ctr = eForm.CreateFormObject(ctrl.getTypeId(), ctrlLibs); -- Tao control object
+--> ctr.Load(ctrl, eForm.cfgPrefixId.divControlId + ctrl.getId());
+{
+--> Tao label, tao control add vao panel
+--> gan cac su kien va gia tri danh muc vao cotrol neu co
+}
+}
+}
+*/
+// Load: gọi khi tiếp nhận hồ sơ
+// Add: gọi khi chỉnh sửa form động
+/*
+<select data-bind="options:itemModel.collections.categoriesBill, optionsText:'billcode', optionsCaption:' ', value:selection"
+style="width: 100px;">
+</select>    
+*/
+/*
+<input name="mst" data-bind="value:mst, event:{ change:mstValidate }" type="text" value="" class="ffield textbox string" title="Mã số thuế" />
+<label data-bind="visible:mstError, attr:{ title: mstError }, click:mstDismissError" class="error">!</label>
+*/
+// LoadProperty load vào panel để edit form động
+/* Checkboxlist template
+<ul data-bind="template: { name: 'choiceTmpl', foreach: choices, templateOptions: { selections: selectedChoices } }"></ul>
+
+<script id="choiceTmpl" type="text/html">
+<li>
+<input type="checkbox" data-bind="attr: { value: $data }, checked: $item.selections" />
+<span data-bind="text: $data"></span>
+</li>
+</script>
+
+<hr />
+
+<div data-bind="text: ko.toJSON(selectedChoices)"></div>
+
+<hr />
+
+<div data-bind="text: selectedChoicesDelimited"></div>
+var viewModel = {
+choices: ["one", "two", "three", "four", "five"],
+selectedChoices: ko.observableArray(["two", "four"])
+};
+
+viewModel.selectedChoicesDelimited = ko.dependentObservable(function() {
+return this.selectedChoices().join(",");
+}, viewModel);
+
+ko.applyBindings(viewModel);
+
+Ý nghĩa các property:
+p1:		Nội dung
+p2:		In đậm
+p3:		In nghiêng
+p4:		Cỡ chữ
+p5:		Màu chữ
+p6:		Chiều rộng
+P7:		Chiều cao
+P8:		Chữ có gạch chân
+p9:		Font chữ
+p10:	Màu nền
+p11:	Danh sách (ListItem)
+p12:	Số cột
+p13:	Bắt buộc nhập
+p14:	Thông báo lỗi
+p15:	ControlId
+p16:	Chỉ đọc (Read Only)
+P17:	Tiêu đề (nhãn)
+P18:	Canh lề
+p19:	Định dạng (Mask)
+p20:	Chữ in hoa
+p21:	Phụ thuộc
+p22:	Độ dài tối đa
+p23:	Khoảng cho phép
+p24:	GlobalCode
+p25:	Tự tính C#
+p26:	Tự tính JS
+P27:	Validate C#
+P28:	Validate JS
+p29:	Regex
+p30:	Số không âm
+p31:	CatalogSelected
+p32:
+*/
+//#endregion

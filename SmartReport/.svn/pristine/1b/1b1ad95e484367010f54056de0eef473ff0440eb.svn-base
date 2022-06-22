@@ -1,0 +1,167 @@
+﻿@model Bkav.eGovCloud.Models.UserSettingModel
+@{
+    var documentProfilesList = ViewBag.DocumentProfilesList as string;
+    var generalConfigsList = ViewBag.GeneralConfigsList as string;
+    var shortKey = ViewBag.ShortKey as List<string>;
+}
+
+<script>
+    $(function () {
+        $(document).bindResources();
+    })
+
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpRowGeneralConfigs">
+    <tr class="key">
+        <td>
+            <input type="hidden" value="${functionName}" class="functionName" />
+            <span class="displayName">${displayName}</span>
+        </td>
+        <td style="text-align: center">
+            <select class="shortKey" name="shortKey">
+                @foreach (var item in shortKey)
+                {
+                    <option value="@item"  {{if shortKey == '@item'}}selected="selected"{{/if}}>@item</option>
+                }
+            </select>
+        </td>
+        <td style="text-align: center">
+            <input type="text" class="keyName" value="${keyName}" maxlength="1" style="width: 30px; font-weight: bold; text-align: center" />
+
+        </td>
+    </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpRowDocDefault">
+    <tr class="key">
+        <td>
+            <input type="hidden" value="${argument}" class="argument" />
+            <span class="functionName">${functionName}</span>
+        </td>
+        <td style="text-align: center">
+            <select class="shortKey" name="shortKey">
+                @foreach (var item in shortKey)
+                {
+                    <option value="@item"  {{if shortKey == '@item'}}selected="selected"{{/if}}>@item</option>
+                }
+            </select>
+        </td>
+        <td style="text-align: center">
+            <input type="text" class="keyName" value="${keyName}" maxlength="1" style="width: 30px; font-weight: bold; text-align: center" /></td>
+        <td style="text-align: center">
+            <a href="javascript:void(0);" title="Xóa" style="cursor: pointer" onclick="deleteRow(this);" data-res="egov.resources.delete" data-restitle="egov.resources.document.delete">Xóa</a>
+        </td>
+    </tr>
+
+</script>
+
+<script type="text/html" id="tmpListRowDocDefault">
+    <table class="table-main unselectable" id="listDocDefaults">
+        <colgroup>
+            <col style="width: 40px;">
+            <col style="width: 300px;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    <input type="checkbox" id="checkAll" />
+                </th>
+                <th class="header" data-res="egov.resources.setting.usersetting.document">
+                    Văn bản, hồ sơ
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each items}}
+            <tr class="key">
+                <td>
+                    <input type="checkbox" data-id="${DocTypeId}" />
+                </td>
+                <td>${DocTypeName}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</script>
+
+<div id="result"></div>
+
+<div class="Hb qd" style="max-width: 98%">
+    @using (Html.BeginForm("UserSetting", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="wrapsetting">
+            <div class="wrapsetting-line row">
+                <div class="wrapsetting-row col-md-8">
+                    <div>
+                        <b data-res="egov.resources.setting.usersetting.generalconfig">Cấu hình Chung:</b>
+                    </div>
+                    <br />
+                    <div>
+                        <table class="table-main unselectable table" id="tbGeneralConfigs">
+                            <colgroup>
+                                <col style="width: 100px;">
+                                <col style="width: 60px;">
+                                <col style="width: 40px;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.fnname">
+                                        Tên chức năng
+                                    </th>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.supportkey">
+                                        Phím hỗ trợ
+                                    </th>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.shortkey">
+                                        Phím tắt
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="wrapsetting-row wrapsetting-row-margin col-md-8">
+                    <div></div>
+                    <b data-res="egov.resources.setting.usersetting.document">Cấu hình phím tăt cho văn bản, hồ sơ mặc định:</b>
+                    <input type="button" onclick="showAddDocumentProfileDefault();" data-res="egov.resources.setting.usersetting.selectdocument" value="Chọn văn bản, hồ sơ" class="btn btn-default" />
+                    <div>
+                        <table class="table-main unselectable table" id="tbDocDefaultSetting">
+                            <colgroup>
+                                <col style="width: 100px;">
+                                <col style="width: 60px;">
+                                <col style="width: 40px;">
+                                <col style="width: 30px;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.documentdefaultname">
+                                        Tên văn bản, hồ sơ mặc định
+                                    </th>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.supportkey">
+                                        Phím hỗ trợ
+                                    </th>
+                                    <th class="header" data-res="egov.resources.setting.usersetting.shortkey">
+                                        Phím tắt
+                                    </th>
+                                    <th class="header" data-res="egov.resources.delelte">
+                                        Xóa
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div style="text-align: left; padding-top: 10px" class="wrapsetting-line">
+                <input type="button" data-res="egov.resources.editor.update" class="btn btn-primary pull-left" onclick="updateUserSetting();" />
+            </div>
+        </div>
+    }
+</div>

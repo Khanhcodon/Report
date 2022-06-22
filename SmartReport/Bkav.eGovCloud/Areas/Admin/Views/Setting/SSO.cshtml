@@ -1,0 +1,76 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.SSOSettingsModel
+@{
+    ViewBag.Title = Localizer("Setting.FileManager.Tab.Title");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b data-res="egov.resources.setting.notify.chat"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.IsActive)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.IsActive)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.CallBackUrl)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.CallBackUrl, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.ApiUrl)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.ApiUrl, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.ClientID)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.ClientID, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.SecretKey)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.SecretKey, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelHintFor(model => model.Type)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Type, new { @class = "form-control" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}

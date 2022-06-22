@@ -1,0 +1,65 @@
+﻿<div class="comment-item {{if stt > 3}}hidden{{/if}}">
+    <div class="comment-avatar">
+        <a class="user-avatar">
+            <img src="${avatar}" alt="" width="40" height="40">
+        </a>
+    </div>
+    <div class="comment-content">
+        <div class="comment-message">
+            <div class="comment-message__content">
+                <div class="comment-message__data">
+                    <div class="clear-right">
+                        <div>
+                            <div class="comment-content-wrap" style="word-wrap: break-word;">
+                                <div class="comment-data">
+                                    <div>
+                                        {{if UserSend.fullname}}
+                                        <b>${UserSend.fullname}</b>
+                                        {{/if}}
+                                    </div>
+                                    <div style="white-space: pre-wrap;">{{if Content.Content == ''}}...{{else}}{{html Content.Content}}{{/if}}</div>
+                                </div>
+                                <div>
+                                    <div class="target-comment">
+                                        <div class="target-comment-desc">
+                                            {{if Description != ''}}<span style="float:left; margin-right: 15px;">${Date}</span> {{html Description}}{{/if}}
+                                        </div>
+                                        <div class="target-comment-detail hidden">
+                                            {{if Content2}}
+                                            ${Content2}
+                                            {{/if}}
+                                            {{each Content.Transfers}}
+                                            {{if label !== ""}}
+                                            {{if type=="1"}}
+                                            <span data-res="egov.resources.document.xlcLabel" class="target-label"></span>
+                                            <span style="">${label}</span>
+                                            {{else type=="2"}}
+                                            <span data-res="egov.resources.document.dxlLabel" class="target-label"></span>
+                                            <span style="">${label}</span>
+                                            {{else type=="3"}}
+                                            <span data-res="egov.resources.document.thongbaoLabel" class="target-label"></span>
+                                            <span style="">${label}</span>
+                                            {{else type=="4"}}
+                                            <span data-res="egov.resources.document.xykLabel" class="target-label"></span>
+                                            <span style="">${label}</span>
+                                            {{else type=="5"}}
+                                            <span class="target-label">Thông báo: </span>
+                                            <span style="">${label}</span>
+                                            {{else type=="0"}}
+                                            <span data-res="egov.resources.document.publish" class="target-label">Nơi nhận:</span>
+                                            <span style="">${label}</span>
+                                            {{/if}}
+                                            <br />
+                                            {{/if}}
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

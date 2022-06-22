@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Cật nhật phiên bản";
+    Layout = null;
+}
+
+<style type="text/css">
+    .header {
+        background-image: url(../../Content/Images/top_bg.PNG);
+        background-repeat: no-repeat;
+        height: 100px;
+    }
+
+    .hint {
+        color: #808080;
+        font-size: 11px;
+    }
+</style>
+<link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".releaseNotes").load("../Update/ReleaseNotes.html");
+
+        $(".btn-viewReleaseNote").click(function () {
+            $(".releaseNotes").toggleClass("hidden");
+        });
+    });
+</script>
+
+<div class="header"></div>
+<div class="container">
+    <h3>
+        Nâng cấp hệ thống
+    </h3>
+
+    <form class="form-horizontal" method="post" action="Update">
+        <div class="">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Phiên bản hiện tại</label>
+                <div class="col-md-13">
+                    <input type="text" class="form-control input-sm" readonly value="@ViewBag.AppVersion" />
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Phiên bản mới nhất</label>
+                <div class="col-md-13">
+                    <input type="text" class="form-control input-sm" readonly value="@ViewBag.CurrentVersion" />
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Chọn Đơn vị</label>
+                <div class="col-md-13">
+                    <select name="domainId" class="form-control">
+                        @foreach (var domain in ViewBag.Domains)
+                        {
+                            <option value="@domain.Value" @(domain.Selected ? "selected" : "")>@domain.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>        
+        <div>
+            @ViewBag.Error
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-offset-3 col-md-13">
+                <button type="submit" class="btn btn-primary btn-sm">Nâng cấp</button>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-offset-3 col-md-13 ">
+                <div><a href="#" class="btn btn-xs btn-info btn-viewReleaseNote">Release Notes</a></div>
+                <div class="releaseNotes hidden">
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

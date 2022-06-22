@@ -1,0 +1,77 @@
+﻿@model MailModel
+@{
+    ViewBag.Title = Localizer("Admin.MailManager.Title.View");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-left: 20px">
+    <h2>@Localizer("Admin.MailManager.Title.View")</h2>
+    <table>
+        <tbody>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.DateCreated): </td>
+                <td>
+                    <b>@( Model.DateCreated.HasValue ? Model.DateCreated.Value.ToString("dd/MM/yyyy hh:mm:ss tt") : "")</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.Subject): </td>
+                <td>
+                    <b>@Model.Subject</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.SendTo): </td>
+                <td>
+                    <b>@Model.SendTo</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.CarbonCopys): </td>
+                <td>
+                    <b>@((Model.CarbonCopys != null && Model.CarbonCopys.Any()) ? string.Join(",", Model.CarbonCopys.ToArray()) : "")</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.IsSent): </td>
+                <td>
+                    <b>@(Model.IsSent ? "Đã gửi" : "Chưa gủi")</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.DateSend): </td>
+                <td>
+                    <b>@( Model.DateSend.HasValue ? Model.DateSend.Value.ToString("dd/MM/yyyy hh:mm:ss tt") : "")</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.DateSend): </td>
+                <td>
+                    @Html.Raw(Model.Body)
+                </td>
+            </tr>
+
+             <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.AttachmentIds): </td>
+                <td>
+                   <b>@(Model.AttachmentIds!=null ? "Có" : "không có")</b>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+
+    <p>
+        <button type="button" onclick="location.href='@Url.Action("Index")'">@Localizer("Common.Button.Back")</button>
+    </p>
+
+</div>

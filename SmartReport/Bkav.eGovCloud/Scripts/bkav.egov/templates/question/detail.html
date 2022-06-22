@@ -1,0 +1,135 @@
+﻿<ul class="nav nav-pills toolbar">
+    <li class="dropdown">
+        <a class="dropdown-toggle" id="btnAnswer" data-toggle="dropdown" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span data-res="egov.resources.question.btnAnswer"></span>
+        </a>
+    </li>
+    {{if IsAdminHolder}}
+    {{if IsGeneralQuestion == false && AnswerHolder == null}}
+    <li class="dropdown">
+        <a class="dropdown-toggle" id="btnForward" data-toggle="dropdown" href="#">
+            <span class="icon icon-forward4"></span>
+            <span data-res="egov.resources.question.transfer"></span>
+        </a>
+    </li>
+    {{/if}}
+    <li class="dropdown">
+        <a class="dropdown-toggle" id="btnReject" data-toggle="dropdown" href="#">
+            <span class="icon icon-spam"></span>
+            <span data-res="egov.resources.question.reject"></span>
+        </a>
+    </li>
+    {{else}}
+    <li class="dropdown">
+        <a class="dropdown-toggle" id="btnRejectAnswer" data-toggle="dropdown" href="#">
+            <span class="icon icon-spam"></span>
+            <span data-res="egov.resources.question.reject"></span>
+        </a>
+    </li>
+    {{/if}}
+</ul>
+<div class="container-fluid list-group preview-info detailquestion">
+    <div class="row">
+        <div class="col-sm-10 col-md-10 col-lg-10">
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.name"></h5>
+                <div class="questionInfo"><b>${Name}:</b></div>
+            </div>
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.content"></h5>
+                <div class="questionInfo">${Detail}:</div>
+            </div>
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.date"></h5>
+                <div class="questionInfo">${Date}:</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.citizenname"></h5>
+                <div class="questionInfo"><b>${AskPeople}:</b></div>
+            </div>
+            {{if Email != null && Email.length > 0}}
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.email"></h5>
+                <div class="questionInfo">${Email}:</div>
+            </div>
+            {{/if}}
+            {{if Phone != null && Phone.length > 0}}
+            <div class="form-group">
+                <h5 data-res="egov.resources.question.phone"></h5>
+                <div class="questionInfo">${Phone}:</div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{if IsGeneralQuestion == false }}
+    <div class="row divDocument">
+        <div class="col-sm-14 col-md-14 col-lg-14">
+            <span data-res="egov.resources.question.compendium"></span>: &nbsp; <b data-restitle="egov.resources.question.compendium"> ${Compendium}</b>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <a data-res="egov.resources.question.btnShowDocumentDetail" id="btnViewDocumentDetail"></a>
+        </div>
+    </div>
+    {{if UserComments.length > 0 }}
+    <div class="row document-info divUserComment open">
+        <h5 class="title">
+            <span data-res="egov.resources.question.commentList"></span>
+            <span class="arrowdown icon-arrow-down7"></span>
+            <span class="arrowup icon-arrow-up6"></span>
+        </h5>
+        <div class="document-extend">
+            <ul class="list-group">
+                {{each UserComments}}
+                <li class="list-group-item">
+                    <div class="comment-info row">
+                        <div class="col-sm-1">
+                            <img src="${String.format(egov.setting.avatarPath,Account)}" alt="" class="avatar img-rounded" />
+                        </div>
+                        <div class="col-sm-4 lblUsername">
+                            ${FullName} - ${Account}
+                        </div>
+                        <div class="col-sm-8 comment-detail">
+                            ${Comment}
+                        </div>
+                        <div class="col-sm-3 comment-date text-right">
+                            ${Date}
+                        </div>
+                    </div>
+                </li>
+                {{/each}}
+                {{if AnswerHolder != null && isMe != null && isMe == false}}
+                <li class="divider"></li>
+                <li class="list-group-item">
+                    <div class="comment-info row">
+                        <div class="col-sm-1">
+                        </div>
+                        <div class="col-sm-15 ">
+                            <b class="text-warning">
+                                <span class="lblUsername"> ${AnswerHolder.FullName} - ${AnswerHolder.Account}</span>
+                                <span data-res="egov.resources.question.holding"></span>
+                            </b>
+                        </div>
+                    </div>
+                </li>
+                {{/if}}
+
+            </ul>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+    <div class="row formanswer">
+        <div class="col-sm-16 col-md-16 col-lg-16">
+            <div class="btnShowQuickAnswer">
+                <h4 data-res="egov.resources.question.answer"></h4>
+            </div>
+            <div id="formanswer">
+                <div class="alhToolbar"></div>
+                <div id="txtAnswer" class="txtAnswer">${Answer}</div>
+            </div>
+        </div>
+    </div>
+</div>

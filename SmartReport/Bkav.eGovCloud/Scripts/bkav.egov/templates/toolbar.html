@@ -1,0 +1,22 @@
+﻿<a href="javascipt:void(0);" class="filter qtooltip dropdown-toggle" data-toggle="dropdown" title="${text}" >
+    {{if isDropdownMenu && !isImageButton}}
+    ${text} <span class="caret"></span>
+    {{else}}
+    <span class="${icon}"></span>
+    {{/if}}
+</a>
+{{if isDropdownMenu }}
+<ul class="dropdown-menu {{if isRightMenu}}dropdown-menu-right{{/if}}" role="menu">
+    {{each data}}
+    {{if text == "---"}}
+    <li class="divider"></li>
+    {{else}}
+    <li class="{{if selected}}active{{/if}}">
+        <a href="javascipt:void(0);" value="${value}" class="qtooltip">
+            ${text}
+        </a>
+    </li>
+    {{/if}}
+    {{/each}}
+</ul>
+{{/if}}

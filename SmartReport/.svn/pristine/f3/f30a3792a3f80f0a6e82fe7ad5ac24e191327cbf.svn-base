@@ -1,0 +1,37 @@
+﻿<div class="form-horizontal" role="form">
+    <input type="hidden" id="templateId" name="templateId" value="${templateId}" />
+    <input type="hidden" id="documentId" name="documentId" value="${documentId}" />
+    <div class="form-group form-group-sm">
+        <label for="userNameRecive" class="col-md-3 control-label">Tên người nhận:</label>
+        <div class="col-md-13">
+            <input type="text" class="form-control" id="userNameRecive" name="userNameRecive" readonly="true" value="${userNameRecive}">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        {{if isMail}}
+             <label for="email" class="col-md-3 control-label">Email:</label>
+        <div class="col-md-13">
+            <input type="text" class="form-control" id="email" name="email" value="${email}">
+        </div>
+        {{else}}
+             <label for="email" class="col-md-3 control-label">Số điện thoại:</label>
+        <div class="col-md-13">
+            <input type="text" class="form-control" id="phone" name="phone" value="${phone}">
+        </div>
+        {{/if}}
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="userNameRecive" class="col-md-3 control-label">Nội dung:</label>
+        <div class="col-md-13">
+            {{if isMail}}
+          <div id="toolbar"></div>
+            <div id="content" style="min-height: 200px; max-height: 400px; height: auto; background-color: #ececec !important;">
+                {{html content}}
+            </div>
+            {{else}}
+             <textarea id="content" class="form-control" style="height: 100px;">${content}</textarea>
+            {{/if}}
+          
+        </div>
+    </div>
+</div>

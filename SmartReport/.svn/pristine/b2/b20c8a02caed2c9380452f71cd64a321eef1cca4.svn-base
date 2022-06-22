@@ -1,0 +1,34 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.TemplateModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Template.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.CreateOrEdit = Localizer("Common.Label.Add");
+}
+
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-insert-template"></i>
+        <span data-res="egov.resources.sitemap.template"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/template/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    <div id="divListTemplate">
+        @using (Html.BeginForm())
+        {
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+        }
+    </div>
+</div>

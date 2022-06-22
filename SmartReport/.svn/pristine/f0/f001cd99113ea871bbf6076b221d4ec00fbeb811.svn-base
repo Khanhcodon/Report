@@ -1,0 +1,198 @@
+﻿@using System.Globalization
+@using Bkav.eGovCloud.Web.Framework.Utility
+@model HolidayModel
+@{
+    var holiday = (bool)ViewBag.Holiday;
+    ViewBag.RangeLunar = new List<SelectListItem> {new SelectListItem {Text = Localizer("SearchAdvangeModel.BeforeDate.Field.Label"), Value = "-1", Selected = Model.RangeLunar == -1},
+                                                        new SelectListItem {Text = Localizer("SearchAdvangeModel.NowDate.Field.Label"), Value = "0", Selected = Model.RangeLunar == 0},
+                                                        new SelectListItem {Text = Localizer("SearchAdvangeModel.AfterDate.Field.Label"), Value = "1", Selected = Model.RangeLunar== 1}};
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/eForm/jquery/jquery.maskedinput-1.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/eForm/jquery/jquery.meio.mask.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.globalize/globalize.min.js"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.globalize/cultures/globalize.culture." + CultureHelper.GetCurrentCultureName() + ".js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.datepicker-" + CultureHelper.GetCurrentCultureName() + ".js")"></script>
+<script src="../../../../Scripts/bkav.egov/libs/amlich-hnd.js"></script>
+
+<script type="text/javascript">
+    Globalize.culture('@(CultureHelper.GetCurrentCultureName())');
+    $.datepicker.setDefaults($.datepicker.regional['@(CultureHelper.GetCurrentCultureName())']);
+
+    $(function () {
+        $("#HolidayRange").attr('alt', 'integer');
+        //  $('#HolidayRange').setMask();
+
+        loadSettingLunar($('#IsLunar').is(':checked'));
+
+        $('#IsLunar').click(function () {
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            var isChecked = $(this).is(':checked');
+            loadSettingLunar(isChecked);
+        });
+        $('#IsRepeated').click(function () {
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+        });
+
+        $('#RangeLunar').change(function () {
+            var selected = $(this).val();
+            if (selected == '-1') {
+                $("#HolidayRange").attr('alt', 'signedinteger');
+            } else {
+                $("#HolidayRange").attr('alt', 'integer');
+            }
+            $('#HolidayRange').setMask();
+        });
+    });
+
+    function loadSettingLunar(isLunar) {
+        if (isLunar) {
+            $('.islunar').show();
+            $("#HolidayDate").datepicker("destroy");
+        }
+        else {
+            $('.islunar').hide();
+            loadHolidayDatePicker();
+        }
+    }
+
+    function loadHolidayDatePicker() {
+        $("#HolidayDate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            onSelect: function (dateText) {
+                @if (!holiday)
+                {
+                   <text> valiIsNotWeekendOrHoliday(dateText);</text>
+                }
+            }
+        });
+        $("#EventDate").change(function () {
+            $(this).val(Globalize.format($(this).datetimepicker('getDate'), Globalize.culture().calendar.patterns.d)); /*d t*/
+        });
+    }
+
+    function checkDateIsNotWeekendOrHoliday() {
+        var date = $('#HolidayDate').val();
+        if (date == null) {
+            $('#HolidayDate').css({ "border": "1px solid red" });
+        }
+        else {
+            valiIsNotWeekendOrHoliday(date);
+        }
+    }
+
+    function valiIsNotWeekendOrHoliday(date) {
+        $('#checkDate').attr('disabled', 'disabled');
+        $.ajax({
+            url: "/Admin/Time/CheckDateIsNotWeekendOrHoliday",
+            data: { date: date },
+            success: function (result) {
+                if (result.result) {
+                    $('#message').css({ "color": "green" });
+                }
+                else {
+                    $('#message').css({ "color": "red" });
+                }
+                $('#message').text('');
+                $('#message').text(result.message);
+                $('#checkDate').removeAttr('disabled');
+            },
+            error: function () {
+                $('#message').text(egov.resources.time.timenotcheck || "Không kiểm tra được thời gian");
+                $('#checkDate').removeAttr('disabled');
+            }
+        });
+    }
+</script>
+
+<div style="margin-top: 10px;">
+    @Html.Partial("_Notifications")
+    @Html.HiddenFor(model => model.HolidayId)
+    @Html.HiddenFor(model => model.IsExtendHoliday)
+    @Html.HiddenFor(model => model.ParentHolidayId)
+    <table>
+        <tr>
+            <td style="width: 13%">
+                @Html.LabelRequireFor(model => model.HolidayName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.HolidayName)
+                @Html.ValidationMessageFor(model => model.HolidayName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.HolidayDate)
+            </td>
+            <td>
+                @Html.DropDownList("RangeLunar", null, new { @class = "islunar" })
+                <input style="display:inline" type="text" name="HolidayDate" id="HolidayDate" value="@Model.HolidayDate.ToString("d", CultureInfo.CurrentUICulture)"
+                     @(holiday ? "" : "onchange=checkDateIsNotWeekendOrHoliday()") />
+                @if (!holiday)
+                {
+                    <input class="btn" type="button" value="" data-res="egov.resources.time.checkdate" onclick="checkDateIsNotWeekendOrHoliday();" id="checkDate" />
+
+                    <div><span id="message"></span></div>
+                }
+                <input type="text" style="width: 50px" id="UHolidayRang" name="UHolidayRang" value="@Model.UHolidayRang" class="islunar" />
+                <span class="islunar" data-res="egov.resources.commonlabel.time.date"></span>
+                <br />
+                <div class="isLunar" id="lunarCalendar"></div>
+            </td>
+        </tr>
+        @if (holiday)
+        {
+            <tr>
+                <td></td>
+                <td>
+                    @if ((bool)ViewBag.IsCreated)
+                    {
+                        @Html.CheckBoxFor(model => model.IsRepeated)
+                    }
+                    else
+                    {
+                        <input id="IsRepeated" class="disabled" disabled="disabled" type="checkbox" @(Model.IsRepeated ? "checked=checked" : "") />
+                        @Html.HiddenFor(model => model.IsRepeated)
+                    }
+
+                    @Html.LabelFor(model => model.IsRepeated)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @if ((bool)ViewBag.IsCreated)
+                    {
+                        @Html.CheckBoxFor(model => model.IsLunar)
+                    }
+                    else
+                    {
+                        <input id="IsLunar" class="disabled" disabled="disabled" type="checkbox" @(Model.IsLunar ? "checked=checked" : "") />
+                        @Html.HiddenFor(model => model.IsLunar)
+                    }
+                    @Html.LabelFor(model => model.IsLunar)
+                </td>
+            </tr>
+
+        }
+@*        <tr>
+            <td></td>
+            <td>
+                <a class="btn  btn-warning control-btn" id="submit" href="#">
+                    <span class="icon icon-plus"></span>
+                    <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+                </a>
+            </td>
+        </tr>*@
+    </table>
+</div>

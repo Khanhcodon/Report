@@ -1,0 +1,96 @@
+﻿@model IEnumerable<ShareFolderModel>
+@{
+    ViewBag.Title = Localizer("Admin.TimeJob.Title.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var number = 0;
+}
+
+<script type="text/javascript">
+    function deleteShareFolder(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.ShareFolder.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    $(function () {
+        $("#tblShareFolder").openLink({ urlOpen: '/admin/ShareFolder/Edit' });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-share2"></i>
+        <span data-res="egov.resources.sitemap.sharefolder"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/sharefolder/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div>
+    <table id="tblShareFolder" class="table table-hover table-bordered">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th>
+                    @Localizer("BackupRestoreConfig.Index.List.Column.Directory")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    number++;
+                <tr data-id="@item.ShareFolderId">
+                    <td>
+                        @number
+                    </td>
+                    <td>
+                        @item.Directory
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = item.ShareFolderId })
+                    </td>
+                    <td>
+                        <a href="javascript:deleteShareFolder(@(item.ShareFolderId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(item.ShareFolderId)" style="display: none"
+                             action="@Url.Action("Delete", new { Id = item.ShareFolderId })"
+                             method="POST">
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@Html.Partial("_Notifications")

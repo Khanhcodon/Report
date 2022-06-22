@@ -1,0 +1,87 @@
+﻿@model Bkav.eGovCloud.Models.FileModel
+@{
+    ViewBag.Title = "Tải ảnh";
+}
+<link href="~/Content/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<style>
+    .titleChoose{
+        margin-left: 10px;
+    }
+    .imgUpload{
+        margin-top:5px;
+        cursor: pointer;
+    }
+    .imgUpload:hover{
+        opacity: 0.6
+    }
+    .imgUpload {
+      position: relative;
+    }
+
+     .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .container-img:hover .tooltiptext{
+      visibility: visible;
+    }
+</style>
+@using (Html.BeginForm("UploadImage", "DocumentReport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.files, htmlAttributes: new { @class = "col-md-2 titleChoose" })
+                <div class="col-md-4" style="margin-left: -20px;">
+                    @Html.TextBoxFor(model => model.files, "", new { @type = "file", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.files, "", new { @class = "text-danger" })
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12">
+                            <input type="submit" value="Tải ảnh" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12 text-success notifiaction-all">
+                            @ViewBag.UploadStatus
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div style = "overflow: auto" >
+                    @foreach (var image in (IEnumerable<string>)ViewBag.Images)
+                    {
+                       <div class="container-img" style="display:inline-block">
+                           <img class="imgUpload" src="@Url.Content(image)" alt="@Url.Content(image)" height="90" />
+                           <span class="tooltiptext">Ấn để sao chép đường dẫn</span>
+                       </div>
+                    }
+                </div>
+            </div>
+        </div>
+} 
+<script src="~/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+<script src="~/assets/vendor_components/jquery-validation-1.17.0/dist/jquery.validate.min.js"></script>
+<script>
+    $(".imgUpload").on("click", function () {
+        var domain = window.location.origin;
+        var inp = document.createElement('input');
+        var alt = domain+$(this).attr("alt")
+        document.body.appendChild(inp)
+        inp.value = alt
+        inp.select();
+        document.execCommand('copy', false);
+        $(".notifiaction-all").text("Đã copy đường dẫn ảnh");
+        inp.remove();
+    });
+</script>

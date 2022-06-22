@@ -1,0 +1,36 @@
+﻿<a href="#" class="list-group-item " style="{{if color}}color: ${color} {{/if}}" data-open="false">
+    <!--<span class="badge qtooltip totalUnread" data-totalunread="${totalDocumentUnread}" title="${totalDocumentUnread} chưa đọc / ${totalDocument} văn bản">
+        {{if totalDocumentUnread > 0}}
+        ${totalDocumentUnread}
+        {{/if}}
+    </span>-->
+    <!--<img src="${iconName}?v=1" style="width: 30px;">-->
+    <!--<i class="fa fa-circle" style="color:#FE69EA"></i>-->
+    {{if parentId == 0 }}
+    <img src="../Content/Images/home/ic_copy.png" style="width: 16px;" alt="">
+    {{else}}
+    <i class="fa fa-circle" style="color: #FFC062; float: left;"></i>
+    {{/if}}
+    <!--wraptext-->
+    <span class="node-name " style="padding-left: 12px;color: #ffffff">${name}</span>
+    <span class="badge qtooltip totalUnread">
+        {{if totalDocumentUnread > 0}}
+        ${totalDocumentUnread}
+        {{/if}}
+    </span>
+    <span class="icon {{if state == 'closed'}}closed{{/if}} menu-icon pull-right {{if children && children.length == 0 && totalDocumentUnread == 0}}margin-notchidren{{/if}}" {{if state == 'closed'}} data-toggle="collapse" data-parent="#child${parentId}" data-target="#child${functionId}" {{/if}}></span>
+
+</a>
+{{if children && children.length > 0}}
+<ul class="nav panel-collapse" role="menu" style="clear: both;">
+    {{each children}}
+    <li class="mdl-list__item">
+        <a style="padding-left: 42px;" href="#" class="list-group-item wraptext">
+            <!--<span class="folder-icon"></span>-->
+            <i class="fa fa-circle" style="color:#FFC062"></i>
+            <span class="node-name">${name}</span>
+        </a>
+    </li>
+    {{/each}}
+</ul>
+{{/if}}

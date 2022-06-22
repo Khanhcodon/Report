@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Import";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table tr {
+        user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .selected {
+        color: red;
+    }
+</style>
+
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css" rel="stylesheet" />
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/jquery.jstree.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script type="text/javascript">
+    function onBegin() {
+        $("#divListUsers").blockpanel({ text: egov.resources.notifications.loading || "Đang tải...", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListUsers').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification('Có lỗi xảy ra', eGovMessage.messageTypes.error);
+        $('#divListUsers').unblockpanel();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-user2"></i>
+        <span data-res="egov.resources.sitemap.user"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase">Import</span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/user/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    <form method="post" enctype="multipart/form-data" class="form-horizontal">
+        <div class="form-group">
+            <label class="form-label">
+                <b>Chọn tệp excel (.xlsx):</b>
+                <a href="/Content/Guide/ImportUser.xlsx" target="_blank">Tải file mẫu</a>
+            </label>
+            <input type="file" name="importFile" class="form-control" />
+            <p>*Lưu ý: Format file Excel gồm 3 cột: Cột A là tên địa chỉ đầy đủ, cột B là Mã định danh, cột C là cấp độ.</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label"><b>Tên Sheet</b></label>
+            <input type="text" name="sheetName" class="form-control">
+        </div>
+    </form>
+</div>

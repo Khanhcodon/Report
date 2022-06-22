@@ -1,0 +1,240 @@
+﻿@model Ad_LocalityModel
+@{
+    ViewBag.Title = " Quản lý địa bàn ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border leftRightDis">
+                    <div class="leftdisaggregation">
+                        <h3 class="box-title">Danh sách địa bàn</h3>
+                    </div>
+                    <div class="rightdisaggregation">
+                        <a href="/Reports/TemplateAdLocality.xlsx" style="font-style: italic; color: #008ae6;width: 100%;">
+                            <span class="fa fa-download"></span> Download file mẫu
+                        </a>
+                        @using (Html.BeginForm("ExportToExcel", "Ad_Locality", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormImportAdLocality" }))
+                        {
+                            @Html.Raw(ViewBag.Error)
+                            <div style="height: 33px;margin-right: 4px;">
+                                <label class="custom-file-upload">
+                                    <input type="file" name="excelfile" />
+                                    <i class="fa fa-cloud-upload"></i> Import Excel
+                                </label>
+                            </div>
+                            <br /> 
+                            <input type="submit" class="btn btn-brown" value="Lưu File" />
+                        }
+
+                        <a class="popup-with-form btn btn-block btn-successs" id="tagFormLocality" href="#myFormLocality" style="background-color:aquamarine;margin-right: 4px;">
+                            <i class="fa fa-plus-square"></i> Thêm</a>
+                        <button type="button" id="deleteMulLocality" class="btn btn-block btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+
+                        <!-- form itself -->
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myFormLocality", @class = "mfp-hide white-popup-block" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.AntiForgeryToken()
+
+                            <h1>Thêm mới địa bàn</h1>
+                            <fieldset style="border:0;">
+                                <div class="form-group">
+                                    <label class="control-label" for="inputName">Tên địa bàn</label>
+                                    <br />
+                                    <input type="text" class="form-control" id="txtNAME_FIELD" name="LocalityName" placeholder="Tên địa bàn">
+                                    @Html.ValidationMessageFor(model => model.LocalityName)
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="inputName">Mã địa bàn</label>
+                                    <br />
+                                    <input type="text" class="form-control" id="txtId_FIELD" name="Id" placeholder="Mã địa bàn">
+                                    @Html.ValidationMessageFor(model => model.Id)
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="inputName">Loại địa bàn</label>
+                                    <select type="text" class="form-control" id="txtTYPE_FIELD" name="Type" placeholder="Loại địa bàn" style="width: 100%;">
+                                        <option value="3">Xã/Phường/Thị trấn</option>
+                                        <option value="2">Quận/Huyện/Thị xã</option>
+                                        <option value="1">Tỉnh/Thành phố</option>
+                                    </select>
+                                    @*<input type="text" class="form-control" id="txtTYPE_FIELD" name="Type" placeholder="Loại địa bàn">*@
+                                    @Html.ValidationMessageFor(model => model.Type)
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="inputName">Địa bàn cha</label>
+                                    <br />
+                                    <select class="form-control js-states" id="txtPAR_FIELD" name="ParentId" placeholder="Địa bàn cha" style="width: 100%;">
+                                        @if(ViewBag.ListOption != null){
+
+                                            foreach (var item in ViewBag.ListOption as IEnumerable<SelectListItem>)
+                                            {
+                                                <option @(item.Selected ? "selected" : "") value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                        @Html.ValidationMessageFor(model => model.ParentId)
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="textarea">Mô tả</label>
+                                    <br>
+                                    <textarea class="form-control" id="txtDES_FIELD" name="Description" placeholder="Mô tả" rows="7"></textarea>
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" value="true">
+                                    <label class="form-check-label" for="IsActive">Sử dụng</label>
+                                </div>
+
+                                <button class="btn btn-primary" id="btnAddLocality" style="padding-top: 10px; float:right">
+                                    <span class="-ap icon icon-plus3"></span> Lưu lại
+                                </button>
+                            </fieldset>
+                            @Html.HiddenFor(model => model.LocalityId)
+                        }
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="Ad_LocalityTable" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="checkBoxAllsLocality" name="checkBoxAll" class="custom-checkbox form-check-input labelThead" />
+                                        <label class="form-check-label labelIndicatorID" for="checkBoxAllsLocality"></label>
+                                    </th>
+                                    <th hidden class="text-center">ID_Guid</th>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Tên địa bàn</th>
+                                    <th class="text-center">Mã địa bàn</th>
+                                    <th class="text-center">Loại địa bàn</th>
+                                    <th class="text-center">Địa bàn cha</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Sử dụng</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Ad_Localitys != null)
+                                {
+                                    var stt = 0;
+                                    foreach (var item in Model.Ad_Localitys)
+                                    {
+                                <tr class="checkId">
+                                    <td class="tdInDi">
+                                        <input type="checkbox" id="@item.LocalityId" name="@item.LocalityId" value="@item.LocalityId"
+                                                class="custom-checkbox form-check-input chkCheckBoxId" />
+                                        <label class="form-check-label labelIndicatorID" for="@item.LocalityId"></label>
+                                    </td>
+                                    <td hidden class="text-center">@item.LocalityId</td>
+                                    <td class="text-center">@(stt + 1)</td>
+                                    <td class="text-center">@item.LocalityName</td>
+                                    <td class="text-center">@item.Id</td>
+                                    <td class="text-center">
+                                        @if (item.Type == 3)
+                                        {
+                                            <label class="text-center"> Xã/Phường/Thị trấn </label>
+                                        }
+                                        else
+                                            if (item.Type == 2)
+                                        {
+                                            <label class="text-center">Quận/Huyện/Thị xã</label>
+                                        }
+                                        else
+                                        if (item.Type == 1)
+                                        {
+                                            <label class="text-center">Tỉnh/Thành phố</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="text-center">Dữ liệu không xác định</label>
+                                        }
+
+                                    </td>
+                                    <td class="text-center">@item.ParentName</td>
+                                    <td class="text-center">@item.Description</td>
+                                    <td class="text-center">
+                                        @if (item.IsActive == true)
+                                        {
+                                            <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="@item.IsActive" disabled>
+                                            <label for="md_checkbox_27"></label>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="@item.IsActive" disabled>
+                                            <label for="md_checkbox_27"></label>
+                                        }
+                                    </td>
+                                    <td class="text-center" style="font-size: 23px;">
+                                        <i onclick="EditLocality('@item.LocalityId')" class="fa fa-edit fa-hover" title="Sửa địa bàn" aria-hidden="true" style="color: blue;"></i>
+                                        <i onclick="RemoveLocality('@item.LocalityId')" class="fa fa-remove fa-hover" title="Xóa địan bàn" aria-hidden="true" style="color: darkred;"></i>
+                                    </td>
+                                </tr>
+                                        stt++;
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<link href="~/Content/admin/locality/style.css" rel="stylesheet" />
+<script src="~/Scripts/admin/locality/createOrEditAdLocality.js"></script>
+<script type="text/javascript">
+    function EditLocality(localityId) {
+        $.ajax({
+            url: '/Ad_Locality/Edit',
+            data: { id: localityId },
+            success: function (result) {
+                var localityId = result.LocalityId;
+                var localityName = result.LocalityName;
+                var parentId = result.ParentId;
+                var type = result.Type;
+                var description = result.Description;
+                var isActive = result.IsActive;
+                var id = result.Id;
+                $('#LocalityId').val(localityId);
+                $('#txtNAME_FIELD').val(localityName);
+                $('#txtPAR_FIELD').val(parentId);
+                $('#txtTYPE_FIELD').val(type);
+                $('#txtDES_FIELD').val(description);
+                $("#IsActive").attr("checked", isActive);
+                $('#txtId_FIELD').val(id);
+                $('#tagFormLocality').click();
+             },
+            error: function (xhr) { },
+            complete: function () {}
+            });
+    }
+    function RemoveLocality(localityId) {
+        $.ajax({
+            url: '/Ad_Locality/Delete',
+            type: 'POST',
+            data: { id: localityId },
+            success: function (result) {
+
+            },
+            error: function (xhr) { },
+            complete: function () {
+                swal("Thành công!", "Xóa địa bàn thành công", "success");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
+        });
+    }
+</script>
+    <!-- js -->

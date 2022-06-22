@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/images/favicon.ico">
+    <title>Báo cáo tổng hợp</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 4.1.3-->
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/jquery-ui.css")" rel="stylesheet" />
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/bootstrap-extend.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style.css">
+    <!-- Unique_Admin skins -->
+    <link rel="stylesheet" href="~/Scripts/generalreport/main/css/skins/_all-skins_general.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_plugins/pace/pace.min.css">
+
+    <link href="~/Scripts/bkav.egov/libs/jstree/themes/default-st/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.css">
+
+
+    <!-- Fontawesome -->
+    <link href="~/Scripts/generalreport/main/fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="box-controls pull-right">
+                            <div class="box-header-actions">
+                                <label class="switch switch-border switch-info">
+                                    <input type="checkbox" checked="">
+                                    <span class="switch-indicator"></span>
+                                    <span class="switch-description"></span>
+                                </label>
+                                <div class="lookup lookup-sm lookup-right">
+                                    <input type="text" id="searchIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                </div>
+                                <button id="clickCheckIndicator" style="display:none">chọn</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body" id="indicatorBodyTree">
+                        <div id="indicatorTree"></div>
+                    </div>
+                    <input type="hidden" name="name" id="dataChecked" value="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery 3 -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <script src="/Scripts/generalreport/assets/vendor_components/PACE/pace.min.js"></script>
+    <!-- Bootstrap 4.1.3-->
+    <script src="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/generalreport/main/js/template_general.js"></script>
+    <!-- Unique_Admin for demo purposes -->
+
+    <script src="/Scripts/generalreport/main/js/demo.js"></script>
+    <script src="/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+    <script src="/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="/Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="~/Scripts/bkav.egov/libs/jstree/jstree_3_3_10.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+    <script>
+        var that = this;
+        var href = location.href;
+        var url = new URL(href);
+        var departmentId = url.searchParams.get("departmentId");
+        if (!departmentId) {
+            departmentId = 501;
+        }
+        clickCheckIndicator
+        $.ajax({
+            url: "/IndicatorCatalogValueView/GetIndicator",
+            type: 'Get',
+            data: { departmentId: 501 },
+            error: function (a, b, c) {
+            },
+            success: function (response) {
+                var templateTree = '<div id="indicatorTree">Chọn chỉ tiêu</div>';
+               $("#indicatorBodyTree").html(templateTree);
+
+                var kpis = _.map(response, function (kpi) {
+                    kpi["icon"] = "fa fa-line-chart"
+                    return kpi;
+                });
+
+                kpis = _.filter(kpis, function (kpi) {
+                    return kpi.indicatorDepartCheck == true;
+                });
+
+               $("#indicatorTree").jstree({
+                   "checkbox": {
+                       "keep_selected_style": false,
+                       "three_state": false
+                   },
+                   "plugins": ["checkbox", "search"],
+                    'core': {
+                        'data': kpis
+                    }
+                }).bind("loaded.jstree", function (event, data) {
+                    $(this).jstree("open_all");
+                });
+
+                var to = false;
+                $('#searchIndicator').keyup(function () {
+                    $('#indicatorTree').jstree(true).close_all();
+                    if (to) { clearTimeout(to); }
+                    to = setTimeout(function () {
+                        var v = $('#searchIndicator').val();
+                        if (!v) {
+                            $('#indicatorTree').jstree(true).open_all();
+                        }
+                        $('#indicatorTree').jstree(true).search(v);
+                    }, 250);
+                });
+
+                $("#clickCheckIndicator").on('click', function (e) {
+                    var data = $('#indicatorTree').jstree("get_selected");
+                    var iData = [];
+                    _.each(kpis, function (kpi) {
+                        if (_.contains(data, kpi.id)) {
+                            iData.push(kpi);
+                        };
+                    });
+                    $("#dataChecked").val(JSON.stringify(iData))
+                });
+            }
+        });
+    </script>
+</body>
+</html>

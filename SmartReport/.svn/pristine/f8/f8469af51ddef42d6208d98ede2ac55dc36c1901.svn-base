@@ -1,0 +1,11 @@
+﻿
+<div class="chat-config">
+    <div>
+        <span class="material-icons" style="font-size: 13px; margin-right: 5px;">
+            ${config.icon}
+        </span>
+        <span>${config.userEdit}</span>
+        <span>${config.reason}</span>
+        <span>${config.value}</span>
+    </div>
+</div>

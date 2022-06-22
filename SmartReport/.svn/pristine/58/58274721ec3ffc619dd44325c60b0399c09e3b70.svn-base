@@ -1,0 +1,378 @@
+﻿@using StackExchange.Profiling
+@{
+    ViewBag.Title = "Bkav eGovernment";
+    var version = "123";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetUserLangCode();
+    var systemApps = ViewBag.SystemApps as string;
+    systemApps = systemApps.Replace("\'", "\"");
+    var isDevVersion = (bool)ViewBag.IsDevVersion;
+    var licenseMessage = ViewBag.LicenseMessage as string;
+    var isCreateVote = (bool)ViewBag.IsCreateVote;
+    var versionValue = ViewBag.VersionValue as string;
+    if (versionValue == "")
+    {
+        versionValue = "VersionDefault";
+    }
+}
+
+<link href="../../favicon.ico" rel="Bkav eGov">
+<link href="../../Content/bkav.egov/egovmain.min.css?v=234" rel="stylesheet" />
+<link href="../../Scripts/bkav.egov/libs/viewerjs/viewer.min.css" rel="stylesheet" />
+
+<link href="../Content/bkav.egov/egov.chathome.css?v=234" rel="stylesheet" />
+
+<script src="../../Scripts/bkav.egov/mvendor.min.js?v=234"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.js?v=1"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/signalR/jquery.signalR-1.2.1.min.js?v=1" )"></script>
+<script src="../../signalr/hubs"></script>
+<script src="../../Scripts/bkav.egov/resource/egov.resources.vi-VN.min.js?v=1"></script>
+<script src="../../Scripts/bkav.egov/libs/viewerjs/viewer.min.js"></script>
+<script type="text/javascript">
+    var systemApps = JSON.parse('@Html.Raw(systemApps)');
+    var eGovSso = '@ViewBag.SsoDomain';
+    var currentUserId = '@ViewBag.UserId';
+    var currentUserName = '@ViewBag.Username';
+    //document.domain = '@ViewBag.ParentDomain';
+    $(function () {
+        $(document).bindResources();
+        egov.resources.avatar.path = "@ViewBag.AvatarPath";
+        egov = egov || {};
+        egov.notifyConfig = {
+            mailNotifyType: "@ViewBag.MailNotifyType",
+            mailNotifyFolder: "@ViewBag.MailNotifyFolder"
+        };
+
+        egov.isAdmin = "@ViewBag.IsAdmin" == "True";
+
+        //// Miniprofiler
+        var interval = setInterval(function () {
+            var profiler = $("div.profiler-result").parent();
+            if (profiler.length > 0) {
+                clearInterval(interval);
+                profiler.css({ 'margin-left': 10 - profiler.width() + 'px' }).hover(function () {
+                    profiler.css({ 'margin-left': '0px' });
+                }, function () {
+                    profiler.css({ 'margin-left': 10 - profiler.width() + 'px' });
+                });
+            }
+        }, 100);
+    });
+</script>
+
+<div class="egov full-height main-frame">
+    <div id="importantWarning"></div>
+    <div id="colorTheme" class="egov-theme full-height">
+        <div class="panel-container full-height">
+            <div class="west-panel site-menu">
+                <div class="list-group menu-items">
+                    <a href="#" class="list-group-item menu main-menu">
+                        @*<i class="material-icons">home</i>*@
+                    </a>
+                    <a href="#" class="list-group-item statistics" data-theme="calendar-theme" data-ng-app="statistics" title="Giám sát">
+                        <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <path fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" d="M54.999,36.001C55,50.913,42.912,63,28,62.999
+	                            C13.087,63,1,50.912,1.001,36C1,21.088,13.088,9,28,9.001V36L54.999,36.001z" />
+                        <path fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" d="M63,28C63.001,13.087,50.914,0.998,36.001,1v27H63z" />
+                        </svg>
+                        @*Giám sát*@
+                    </a>
+                    <a href="#" class="list-group-item bmail hidden" data-theme="bmail-theme" data-ng-app="bmail" title="Điều hành">
+                        <img src="../Content/bkav.egov/icon egov/egov-11.png" />
+                        @*Điều hành*@
+                    </a>
+                    <a href="#" class="list-group-item egov documents" data-theme="egov-theme" data-ng-app="documents" title="Xử lý văn bản">
+                        @*<img src="../Content/bkav.egov/icon egov/egov-09.png" />*@
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <polygon fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" points="63,18 63,54 1,54 1,10 22,10 30,18 " />
+                        </svg>
+                        @*Văn bản*@
+                    </a>
+                    <a href="#" class="list-group-item chat" data-theme="chat-theme" data-ng-app="chat" title="Trao đổi">
+                        <img src="../Content/bkav.egov/icon egov/egov-10.png" />
+                        @*Trao đổi*@
+                    </a>
+                    <a href="#" class="list-group-item calendar hidden" data-theme="calendar-theme" data-ng-app="calendar" title="Lịch">
+                        <img src="../Content/bkav.egov/icon egov/egov-12.png" />
+                        @*Lịch*@
+                    </a>
+                    <a href="#" class="list-group-item report hidden" data-theme="calendar-theme" data-ng-app="report" title="Báo cáo">
+                        <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="22px" height="18px" stroke="white" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <rect x="10" y="29" fill="none" stroke-width="4" stroke-miterlimit="10" width="12" height="34" />
+                        <rect x="42" y="39" fill="none" stroke-width="4" stroke-miterlimit="10" width="12" height="24" />
+                        <rect x="26" y="1" fill="none" stroke-width="4" stroke-miterlimit="10" width="12" height="62" />
+                        </svg>
+                        @*Báo cáo*@
+                    </a>
+                    
+                </div>
+                <div class="list-group setting-items" id="setting">
+                    <a href="#" id="resetSystem" class="list-group-item" title="Khởi động lại">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <g>
+                        <path stroke="#fff" stroke-width="3" d="M32,0C14.355,0,0,14.355,0,32s14.355,32,32,32v-2C15.458,62,2,48.542,2,32S15.458,2,32,2s30,13.458,30,30
+                                c0,6.266-1.91,12.263-5.524,17.352L52,53.828V45h-2v11l1,1h11v-2h-8.344l4.292-4.293l0.106-0.126C61.944,45.137,64,38.712,64,32
+                                C64,14.355,49.645,0,32,0z" />
+                        </g>
+                        </svg>
+                    </a>
+                    <a href="/Home/Setting" data-toggle="modal" data-target="#settingDialog" class="list-group-item" data-theme="calendar-theme" data-ng-app="statistics" title="Thiết lập cá nhân">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="18px" height="18px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <g>
+                        <polygon fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" points="32,1 26,1 26,10 20,12 14,6 6,14 12,20
+                                    10,26 1,26 1,38 10,38 12,44 6,50 14,58 20,52 26,54 26,63 32,63 38,63 38,54 44,52 50,58 58,50 52,44 54,38 63,38 63,26 54,26
+                                    52,20 58,14 50,6 44,12 38,10 38,1 	" />
+                        <circle fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" cx="32" cy="32" r="6" />
+                            </g>
+                        </svg>
+                    </a>
+                    <a class="list-group-item" data-theme="calendar-theme" data-ng-app="statistics" title="Đăng xuất" id="logout" href="account/logout">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                             width="18px" height="18px" viewBox="0 0 49.548 49.549" style="enable-background:new 0 0 49.548 49.549;" xml:space="preserve">
+                        <path fill="#fff" stroke-width="1" d="M30.203,4.387v4.385c7.653,2.332,13.238,9.451,13.238,17.857c0,10.293-8.373,18.667-18.667,18.667     S6.106,36.922,6.106,26.629c0-8.405,5.585-15.525,13.238-17.857V4.387C9.323,6.835,1.855,15.866,1.855,26.629     c0,12.639,10.281,22.92,22.919,22.92s22.92-10.281,22.92-22.92C47.694,15.865,40.224,6.835,30.203,4.387z" />
+                        <path fill="#fff" stroke-width="1" d="M24.776,27.225c-1.41,0-2.554-1.145-2.554-2.555V2.554c0-1.41,1.144-2.554,2.554-2.554c1.41,0,2.554,1.144,2.554,2.554     V24.67C27.33,26.08,26.186,27.225,24.776,27.225z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="center-panel full-height">
+                <div class="row site-header" style="background:url(/Content/Images/home/bg-header.png)">
+                    <nav class="navbar navbar-default main-nav header-nav" role="navigation">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li class="module">
+                                <a href="#" class="not-hover" title="@ViewBag.OfficeName">
+                                    <span>@ViewBag.OfficeName</span>
+                                </a>
+                            </li>
+                            <li class="li-create-new">
+                                <a href="#" class="create-new dropdown-toggle" data-toggle="dropdown">
+                                    <span class="create-new-icon icon-plus4"></span>
+                                    <span class="create-new-label" data-res="egov.resources.newEmail"></span>
+                                </a>
+                                <ul class="dropdown-menu new-doctypes">
+                                    <li class="doctypesFilter" style="padding: 5px 15px">
+                                        <div class="">
+                                            <div class="">
+                                                <input type="text" id="doctypesSearch" class="form-control input-sm" placeholder="Gõ nhanh tên văn bản, hồ sơ muốn khởi tạo" />
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <ul class="pinnedDocTypes">
+                                            <li class="divider"></li>
+                                        </ul>
+                                    </li>
+                                    <li class="commonDocTypes"></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right" id="notificationCenter">
+
+                            <li class="pull-left mudim-icon" data-restitle="egov.resources.main.gtv" style="display: none">
+                                <a href="#">
+                                    <span class="typing">E</span>
+                                </a>
+                            </li>
+
+                            <li class="pull-left user-option">
+                                <a href="#" class="" data-toggle="dropdown">
+                                    <span class="user-name">@ViewBag.FullName</span>
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.Avatar))
+                                    {
+                                        <img class="avatar" src="@Url.Content(ViewBag.Avatar) " />}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+                                    {
+                                        <li>
+                                            <a id="administrator" href="/Admin">
+                                                <span class="icon icon-cog2"></span>
+                                                <span data-res="egov.resources.administrator"></span>
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>}
+                                    <li id="setting">
+                                        <a href="/Home/Setting" data-toggle="modal" data-target="#settingDialog">
+                                            <span class="icon icon-cog"></span>
+                                            <span data-res="egov.resources.config"></span>
+                                        </a>
+                                    </li>
+                                    <li id="installPlugin">
+                                        <a href="#">
+                                            <span class="icon icon-download"></span>
+                                            <span data-res="egov.resources.installPlugin">Cài Extension</span>
+                                        </a>
+                                    </li>
+                                    @if (isCreateVote)
+                                    {
+                                        <li id="referendum">
+                                            <a href="#">
+                                                <span class="icon icon-checkbox-checked"></span>
+                                                <span data-res="egov.resources.referendum">Tạo trưng cầu ý kiến</span>
+                                            </a>
+                                        </li>}
+                                    <li class="divider"></li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="small-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.smallSize"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="medium-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.mediumSize"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="app-size" data-value="large-size">
+                                            <span class="icon icon-list3"></span>
+                                            <span data-res="egov.resources.largeSize"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="2">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.underPreview"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="1">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.rightPreview"></span>
+                                        </a>
+                                    </li>
+                                    <li id="">
+                                        <a href="#" class="preview" data-value="0">
+                                            <span class="icon icon-info"></span>
+                                            <span data-res="egov.resources.hidePreview"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li id="absent" data-toggle="modal" data-target="#absentDialog">
+                                        <a href="#" class="preview" data-value="0">
+                                            <span class="icon icon-clock3"></span>
+                                            <span>Báo vắng</span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a id="logout" href="account/logout">
+                                            <span class="icon icon-switch"></span>
+                                            <span data-res="egov.resources.logout"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="navbar-form navbar-right form-search in" id="form0">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <input class="search-query form-control" name="query" id="MainSearchQuery" type="text"
+                                           data-respholder="egov.resources.placeholderSearch"
+                                           placeholder="Tìm kiếm thông tin hồ sơ, văn bản, tệp đính kèm">
+
+                                    <input class="search-type" name="type" id="MainSearchType" type="hidden" value="1">
+                                    <div class="input-group-btn search-btn">
+                                        <button type="submit" class="btn btn-default"><span class="icon-search2"></span></button>
+                                    </div>
+                                    <div class="input-group-btn search-type-btn hidden">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a role="menuitem" tabindex="-1" href="#" data-value="1" data-res="egov.resources.searchDocument"></a></li>
+                                            <li><a role="menuitem" tabindex="-1" href="#" data-value="2" data-res="egov.resources.searchFile"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="row site-center">
+                    <div class="site-center-container" style="width: 100%; height: 100%;">
+                        <div class="site-content full-height">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="settingDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 1000px; height: 650px">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<div class="modal" id="newAppDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 600px; height: 350px">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="absentDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 300px;">       
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Báo vắng</h4>
+            </div>
+            <div class="modal-body">
+                <p>Tôi sẽ vắng mặt</p>
+                <div class="form-group">
+                    <label for="">Từ</label>
+                    <input type="datetime" id="startAbsent" value="" class="form-control datetime">
+                </div>
+                <div class="form-group">
+                    <label for="">Đến</label>
+                    <input type="datetime" id="endAbsent" value="" class="form-control datetime">
+                </div>
+                <div>
+                    <a href="#" style="" id="cancelAbsent">Hủy báo vắng</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="saveAbsent">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" data-toggle="modal" data-target="#filePreviewDialog" id="openFilePreview" />
+<div class="modal" id="filePreviewDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 100%; height: 100%; margin: 0">
+        <div class="modal-content" style="width: 100%;height: 100%;overflow: hidden;background: rgba(0, 0, 0, 0.1);">
+        </div>
+    </div>
+    <button type="button" class="hidden" data-dismiss="modal" id="btnCloseFilePreviewDialog"></button>
+</div>
+
+<div class="alert"></div>
+<script src="../../Scripts/bkav.egov/views/main/topjs.min.js?v=234"></script>
+
+<div id="imagePreview" style="display: none;">
+    <ul id="images"></ul>
+</div>
+
+<script src="../../Scripts/bkav.egov/templates/template.min.js"></script>
+<script src="../../Scripts/require.js" data-main="../../Scripts/bkav.egov/views/chat/chat_app.js?v=fefe"></script>
+
+<script>
+    var versionValue = "@Html.Raw(versionValue)";
+    var i = 0;
+    $("#referendum").on("click", function () {
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.ShowReferendum();
+    });
+
+</script>

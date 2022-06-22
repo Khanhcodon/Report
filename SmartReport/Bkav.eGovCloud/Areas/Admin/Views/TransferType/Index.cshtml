@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TransferTypeModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.TransferType.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteTransferType(id) {
+        eGovMessage.show(
+       '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+
+    function onBegin() {
+        $("#divListTransferType").blockpanel({ text: egov.resources.notifications.searching || "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divListTransferType').unblockpanel();
+        }
+
+        function onFailure() {
+            alert("@Localizer("Common.Error")");
+            $('#divListTransferType').unblockpanel();
+        }
+
+        function searchTransferType(_this) {
+            $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-paperplane"></i>
+        <span data-res="egov.resources.sitemap.transfertype"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/transfertype/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Ajax.BeginForm("Search",
+                new AjaxOptions
+                {
+                    UpdateTargetId = "divListTransferType",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure",
+                    HttpMethod = "Get"
+                }))
+    {
+        <input class="form-control"style="display:inline;width:60%"
+                    type="text" name="transfertypename" id="transfertypename"
+                     value="@(ViewBag.TransferTypeName ?? "")"
+                    placeholder="@Localizer("Bkav.eGovCloud.Areas.Admin.TransferType.Index.Search.Fields.TransferTypeName.Label")" />
+        <input class="btn" type="submit" id="search" onclick="searchTransferType(this)" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+    <div id="divListTransferType">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

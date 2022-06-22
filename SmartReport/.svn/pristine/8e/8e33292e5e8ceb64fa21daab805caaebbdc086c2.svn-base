@@ -1,0 +1,137 @@
+﻿(function () {
+    window.tree_indicator = {};
+    window.tree_indicator.renderIndicator = function () {
+        var that = this;
+        $.ajax({
+            url: "/Admin/IndicatorDepartment/GetCatalog",
+            data: {},
+            type: 'Get',
+            error: function (a, b, c) { },
+            success: function (response) {
+                var templateTree = '<div id="chooseIndicatorTree">Chọn chỉ tiêu</div>';
+                $("#treeIndicator").html(templateTree)
+
+                var kpis = _.map(response, function (kpi) {
+                    kpi["icon"] = "icon icon-stats"
+                    return kpi
+                });
+
+                $("#chooseIndicatorTree").jstree({
+                    "checkbox": {
+                        "keep_selected_style": false,
+                        "three_state": false
+                    },
+                    "plugins": ["checkbox", "search"],
+                    'core': {
+                        'data': kpis,
+                        "multiple": true
+                    }
+                }).bind("loaded.jstree", function (event, data) {
+                    $(this).jstree("open_all");
+                });
+
+                var to = false;
+
+                $('#inputIndicatorSearch').keyup(function () {
+                    $("#chooseIndicatorTree").jstree(true).close_all();
+                    if (to) { clearTimeout(to); }
+                    to = setTimeout(function () {
+                        var v = $('#inputIndicatorSearch').val();
+                        if (!v) {
+                            $("#chooseIndicatorTree").jstree(true).open_all();
+                        }
+                        $("#chooseIndicatorTree").jstree(true).search(v);
+                    }, 250);
+                });
+            }
+        });
+
+        window.tree_indicator.loadByIndicator = function () {
+            var indexIndcatorCode = null;
+            var indexIndcatorUnit = null;
+            var indexIndcatorName = null;
+
+            typeTableData.forEach(function (val) {
+                if (val.length > 14) {
+                    switch (val[16]) {
+                        case "Kỳ trước":
+                            val[16] = "KT";
+                            break;
+                        case "Cùng kỳ":
+                            val[16] = "CK";
+                            break;
+                        case "Tự chọn":
+                            val[16] = "TC";
+                            break;
+                        default:
+                            break;
+                    }
+                    if (val[14] == "Chỉ tiêu") {
+                        val[14] = "Indicator";
+                        switch (val[15]) {
+                            case "Mã chỉ tiêu":
+                                val[15] = "IndicatorCode";
+                                break;
+                            case "Tên chỉ tiêu":
+                                val[15] = "IndicatorName";
+                                break;
+                            case "Đơn vị chỉ tiêu":
+                                val[15] = "IndicatorUnit"
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (val[14] == "Loại số liệu") {
+                        val[14] = "TypeData"
+                        var dataTypeNamesArr = JSON.parse($('#dataTypeNames').val());
+                        var dataTypesArr = JSON.parse($('#dataTypes').val());
+                        dataTypeNamesArr.forEach(function (value, index) {
+                            if (val[15] == value) {
+                                val[15] = dataTypesArr[index];
+                            }
+                        })
+                    } else {
+                    }
+                }
+            })
+
+            for (var i = 0; i < typeTableData.length; i++) {
+                var type = typeTableData[i][fieldRowsCount + 13];
+                var typeData = typeTableData[i][fieldRowsCount + 14];
+                if (type == "Indicator" && typeData == "IndicatorCode") {
+                    indexIndcatorCode = i
+                }
+                if (type == "Indicator" && typeData == "IndicatorUnit") {
+                    indexIndcatorUnit = i
+                }
+                if (type == "Indicator" && typeData == "IndicatorName") {
+                    indexIndcatorName = i
+                }
+            }
+
+            var selected = JSON.parse(localStorage.getItem("selected"));
+            var data = dataTable.getData();
+            if (!selected) {
+                selected = {
+                    row: 0,
+                    col: 0
+                };
+            };
+            var row = selected.row;
+            var column = selected.col;
+            var indicators = $("#chooseIndicatorTree").jstree("get_selected");
+            for (var i = row; i < row + indicators.length; i++) {
+                var node = $("#chooseIndicatorTree").jstree(true).get_node(indicators[i - row], false);
+                if (node && node.original) {
+                    data[i][indexIndcatorCode] = node.original.code;
+                    data[i][indexIndcatorName] = node.original.name;
+                    data[i][indexIndcatorUnit] = node.original.unit;
+                }
+            }
+            dataTable.getInstance().loadData(data);
+            dataTable.getInstance().render();
+        }
+    }
+    window.tree_indicator.renderIndicator();
+})();

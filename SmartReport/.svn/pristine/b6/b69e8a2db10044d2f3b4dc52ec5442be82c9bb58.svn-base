@@ -1,0 +1,3 @@
+INSERT INTO `permission` VALUES ('0', 'DocTypeCreatePlus', 'Thêm mới loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng tạo mới loại văn bản Plus');
+INSERT INTO `permission` VALUES ('0', 'DocTypeEditPlus', 'Chỉnh sửa loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng chỉnh sửa loại văn bản Plus');
+INSERT INTO `permission` VALUES ('0', 'DocTypeFormPlus', 'Danh sách mẫu loại văn bản Plus', 'Quản lý loại văn bản', 'Cho phép người dùng xem danh sách mẫu văn bản Plus');

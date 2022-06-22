@@ -1,0 +1,13 @@
+﻿
+<li class="mdl-list__item mdl-list__item--three-line search-item" data-id="${DocumentCopyId}">
+    <span class="mdl-list__item-primary-content">
+        {{if (InOutCode == "" && DocCode == "")}}
+        <span class="primary-title">${CategoryName} <span style="float:right;font-size: 12px;">${Status}</span></span>
+        {{else}}
+        <span class="primary-title">${CategoryName} - ${InOutCode != "" ? InOutCode : DocCode}<span style="float:right;font-size: 12px;">${Status}</span></span>
+        {{/if}}
+        <span class="mdl-list__item-text-body">
+            ${Title}
+        </span>
+    </span>
+</li>

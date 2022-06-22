@@ -1,0 +1,18 @@
+﻿<div class="announcement form-horizontal" id="Announcement">
+    <div class="form-group " style="margin-bottom: 0px;">
+        <div class="col-md-9">
+            <div class="form-group">
+                <label class="col-md-16 text-left" data-res="egov.resources.transfer.AnnouncementPlace">Nơi nhận thông báo</label>
+                <div class="col-md-16 dg-view"></div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="form-group">
+                <span class="bold" data-res="egov.resources.transfer.AnnouceUser">Nhận thông báo</span> <i data-res="egov.resources.transfer.AnnouceUserComment">(để xem)</i>
+                <div class="private-anoun">
+                    <ul class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

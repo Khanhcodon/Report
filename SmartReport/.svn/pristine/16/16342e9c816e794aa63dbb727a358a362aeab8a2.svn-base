@@ -1,0 +1,51 @@
+﻿@model AuthorizeModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Edit.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete").submit();
+            }
+            );
+        });
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-accessibility"></i>
+        <span data-res="egov.resources.sitemap.authorize"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/authorize/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div>
+         @Html.Partial("_Notifications")
+        @Html.Partial("_CreateOrEdit", Model)
+        <input type="hidden" name="CategoryBusinessId" id="categoryBusinessCodeCreateRecords" />
+        <input type="hidden" name="DocFieldId" id="docFieldCodeCreateRecords" />
+    </div>
+}
+
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.AuthorizeId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

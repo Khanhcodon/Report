@@ -1,0 +1,448 @@
+﻿@{
+    ViewBag.IconList = "";
+    ViewBag.Criteria = "";
+    ViewBag.Check = "active";
+    ViewBag.Title = "Quản lý tiêu chí";
+    Layout = "_CalendarLayout.cshtml";
+    
+
+    var allUsers = ViewBag.AllUsers as string;
+}
+@section ScriptHead{
+    <link href="../Scripts/bkav.egov/libs/tagEditor/jquery.tag-editor.css" rel="stylesheet" />
+    <link href="../Scripts/bkav.egov/libs/vakata-jstree-c0cd19c/dist/themes/default/style.min.css" rel="stylesheet" />
+    <script src="../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+   
+    <script src="../Scripts/bkav.egov/libs/backbone/backbone-1.3.3.min.js"></script>
+
+    <script src="../Scripts/bkav.egov/libs/json2.min.js"></script>
+    <script src="../Scripts/bkav.egov/calendar/egov.server.js"></script>
+    <script src="../Scripts/bkav.egov/calendar/egov.model.calendar.js"></script>
+    <script src="../Scripts/bkav.egov/libs/tagEditor/jquery.caret.min.js"></script>
+    <script src="../Scripts/bkav.egov/libs/tagEditor/jquery.tag-editor.min.js"></script>
+    <script src="../Scripts/bkav.egov/libs/hashbase64.js"></script>
+    <script src="../Scripts/bkav.egov/locache/egov.locache.js"></script>
+    <script src="../Scripts/bkav.egov/dev/egov.request-manager.js"></script>
+    <script src="../Scripts/bkav.egov/libs/vakata-jstree-c0cd19c/dist/jstree.min.js"></script>
+    <script src="../Scripts/bkav.egov/calendar/egov.tree.departuser.js"></script>
+    <script src="../Scripts/bkav.egov/calendar/egov.view.calendar.js"></script>
+}
+
+@section ScriptRelate{
+    <script>
+        // The Application
+        // ---------------
+        function compareTime(dateone, datetwo) {
+
+            if (dateafter != "" && datebefore != "") {
+                var datebefore = new Date(2016, 1, 1, dateone.split(":")[0], dateone.split(":")[1], 0, 0)
+                var dateafter = new Date(2016, 1, 1, datetwo.split(":")[0], datetwo.split(":")[1], 0, 0)
+                if (dateafter.getTime() < datebefore.getTime()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }
+
+        function getDataofDay(date) {
+            egov.pubsub.publish(egov.events.status.processing, "Đang xử lý");
+            unCensorCals.reset();
+            ViewCalendarUncensorofDay(date, function (data) {
+                var listobj = JSON.parse(data);
+                for (var i = 0; i < listobj.length; i++) {
+                    var calM = new Calendar(listobj[i]);
+                    unCensorCals.add(calM);
+                }
+                egov.pubsub.publish(egov.events.status.success, "Thành công");
+            })
+            var notemptyCal = censorCals.filter(function (calendar) {
+                return calendar.stt !== '';
+            });
+            for (var i = 0; i < notemptyCal.length; i++) {
+                notemptyCal[i].set(calendar.model.emptyModel())
+            }
+            ViewCalendarcensorofDay(date, function (data) {
+                //console.log(data)
+                var listobj = JSON.parse(data);
+                for (var i = 0; i < listobj.length; i++) {
+                    var calM = new Calendar(listobj[i]);
+                    var cecal = censorCals.where({
+                        stt: i + 1
+                    })
+                    cecal[0].set(calendar.model.setModel(calM))
+                    //console.log(cecal[0].toJSON())
+                }
+            })
+
+        }
+        // Our overall **AppView** is the top-level piece of UI.
+        var AppView = Backbone.View.extend({
+            el: $("#CalendarCensorId"),
+
+            events: {
+                'click #btnSaveCalendar': 'saveCal',
+                'click .btnLeftDay': 'leftDay',
+                'click .btnRightDay': 'rightDay'
+            },
+
+            initialize: function (options) {
+                // this.listenTo(FETCHER.Collections.Tags, 'sort', this.render, this);
+                this.listenTo(unCensorCals, 'add', this.addOneUnCensor);
+                this.listenTo(censorCals, 'add', this.addOneCensor);
+                this.listenTo(censorCals, 'change', this.addRow);
+                this.listenTo(unCensorCals, 'reset', this.resetUnCensor);
+                //this.listenTo(censorCals, 'reset', this.resetCensor);
+                this.eventObject = options.eventObject;
+                this.eventObject.on("Ctrl_s", this.saveCal, this);
+            },
+
+            saveCal: function () {
+                var editer = censorCals.where({ stt: Number(rowfocus.find('.sttcalendar').val()) })
+                console.log(Number(rowfocus.children().eq(0).text().trim()))
+                // rowfocus.children().eq(0).css("background-color", "green");
+                var arrDate = $('#date_calendar').val().split('/');
+                if (editer.length != 0) {
+                    editer[0].set(calendar.model.setModelConformRow(rowfocus));
+                }
+                console.log(censorCals.toJSON())
+                var notemptyCalendar = censorCals.filter(function (censorCals) {
+                    return censorCals.get("BeginTime") != "" && censorCals.get("Title") != "";
+                });
+                //console.log(notemptyCalendar.length)
+                saveDatainServer(notemptyCalendar);
+            },
+
+            leftDay: function () {
+
+                var strdate = $('#date_calendar').val();
+                strdate = convertDate(addDays(getDateformatstring(strdate), -1));
+                $('#date_calendar').val(strdate);
+                getDaterangeofDay(strdate);
+                // Hàm gọi AJAX
+                getDataofDay(getDateformatstring(strdate));
+            },
+
+            rightDay: function () {
+                var strdate = $('#date_calendar').val();
+                strdate = convertDate(addDays(getDateformatstring(strdate), 1));
+                $('#date_calendar').val(strdate);
+                getDaterangeofDay(strdate);
+                // Hàm gọi AJAX
+                getDataofDay(getDateformatstring(strdate));
+
+            },
+
+            addRow: function () {
+                // emptyModel() egov.model.calendar.emptyModel()
+                var rowEmpty = censorCals.where(calendar.model.emptyModel());
+                if (rowEmpty.length < 5) {
+                    var calM = new Calendar({
+                        stt: censorCals.length + 1,
+                    });
+                    censorCals.add(calM);
+                }
+            },
+
+            addOneUnCensor: function (calendarmodel) {
+                var view = new CalendarUnCensorView({ model: calendarmodel });
+                this.$("#tbody_calendar").append(view.render().el);
+            },
+
+            addOneCensor: function (calendarmodel) {
+                var view = new CalendarEditableView({ model: calendarmodel });
+                this.$("#tbody_censor_calendar").append(view.render().el);
+            },
+
+            resetUnCensor: function (e) {
+                this.$("#tbody_calendar").html("");
+            },
+        });
+
+        // Finally, we kick things off by creating the **App**.
+        var App = new AppView({ eventObject: eventObject });
+        function hidetimepicker(selector, selectornext) {
+            selector.datetimepicker('hide');
+            selectornext.datetimepicker('show');
+        }
+
+
+        $(document).ready(function () {
+            
+            //load dữ liệu trên server phần lịch chưa duyệt
+            for (var i = 1; i < 6; i++) {
+                var calM = new Calendar({
+                    stt: i,
+                });
+                censorCals.add(calM);
+            }
+            //$(document).on("blur", ".tag-editor-tag.active input", function (e) {
+            //    console.log("vào đây")
+            //})
+
+            getDataofDay(new Date())
+            //Load dữ liệu trên server phần lịch duyệt rồi
+
+            //căn chữ cho tiêu đề
+
+            //bắt sự kiện trong bảng đặt lịch
+            //$('td').children().focus(function () {
+            //    setCaretToPos(this, 0)
+            //});
+            //sự kiện di chuyển sang bên trái
+            $(document).on('keydown', 'td > input,textarea', function (e) {
+                if (e.keyCode == 37) {
+                    calendar.cursor.moveLeft(this)
+                }
+            });
+
+            //Sự kiện di chuyển lên trên
+            $(document).on('keydown', 'td > input,textarea', function (e) {
+                if (e.keyCode == 38) {
+                    calendar.cursor.moveUp(this);
+                }
+
+            });
+            //Sự kiện di chuyển sang bên phải
+            $(document).on('keydown', 'td > input,textarea', function (e) {
+                if (e.keyCode == 39) {
+                    calendar.cursor.moveRight(this)
+                }
+
+            });
+            //Sự kiện di chuyển xuống dưới
+            $(document).on('keydown', 'td > input,textarea', function (e) {
+                if (e.keyCode == 40) {
+                    calendar.cursor.moveDown(this)
+                }
+            });
+
+            //Thiết lập giờ
+
+            var time = new Date();
+            $('#date_calendar').datetimepicker({
+                value: time.getDate() + '/' + time.getMonth + '/' + time.getYear,
+                timepicker: false,
+                format: 'd/m/Y',
+                onSelectDate: function (date) {
+                    var check = false;
+                    $('#table_calendar>tfoot>tr').each(function (index) {
+                        if ($(this).children().eq(1).children().val() != "") {
+                            check = true;
+                            return;
+                        }
+                    })
+
+                    if (check) {
+                        bootbox.confirm("Bạn có muốn Lưu lại các thông tin đã nhập", function (result) {
+                            if (result) {
+                                // document.getElementById('btnSaveCalendar').click();
+                            }
+                        });
+                    }
+                    $('.btnLeftDay').parent().find('span').text(date.getDate() + '/' + Number(date.getMonth() + 1) + '/' + date.getFullYear());
+                    getDataofDay(date)
+                }
+            });
+
+            $('#a_date_calendar').click(function () {
+                $('#date_calendar').focus();
+            });
+        });
+
+    </script>
+
+    <script id="calendarTemplate" type="text/x-jQuery-tmpl">
+
+        <td style="text-align: center; border: solid 1px #DDD" class="timestartuncensor">
+            @*<img src="/Content/bkav.egov/images/calendar_img/clock.png" width="17" height="17" />*@
+            ${$item.settime(BeginTime)}
+        </td>
+        <td style="text-align: center;">
+            @*<img src="/Content/bkav.egov/images/calendar_img/clock.png" width="17" height="17" />*@
+            ${$item.settime(EndTime)}
+        </td>
+        <td style="">${Title}</td>
+        <td style="">${$item.showUser(DepartmentPrimary)}</td>
+        <td style="">${UserJoin}</td>
+        <td style="">${Location}</td>
+        <td style="">${Note} </td>
+        <td style="text-align:center">
+            <input type="hidden" name="name" value="${CalendarId}" />
+            <a href="#" class="success_calendar">
+                <i style="color:green" class="icon-checkmark3"></i>
+            </a>
+            <a href="#" class="remove_calendar">
+                <i style="color:red" class="icon-cross"></i>
+            </a>
+        </td>
+    </script>
+
+    <script id="calendarTemplateLoad" type="text/x-jQuery-tmpl">
+
+        <td class="row" style="text-align: center; text-align: center">
+            ${stt}
+        </td>
+        <td class="row insert"><input class="col-md-16 timestart" data-time="${BeginTime}" value="${$item.settime(BeginTime)}" /></td>
+        <td class="row insert"><input class="col-md-16 timeend" data-time="${EndTime}" value="${$item.settime(EndTime)}" /></td>
+        <td class="row insert" style="padding: 0px 0px 0px 0px;">
+            <textarea class="col-md-16">${Title}</textarea>
+        </td>
+        <td class="row insert" style="padding: 0px 0px 0px 0px;position:relative">
+            <textarea class="col-md-16 list-user">${DepartmentPrimary}</textarea>
+            <span style="position: absolute; z-index: 1000; top: 20%; right:0;" class="chooseUser">
+                <i class="icon-arrow-down7"></i>
+            </span>
+        </td>
+        <td class="row insert" style="padding: 0px 0px 0px 0px;"><textarea class="col-md-16">${UserJoin}</textarea></td>
+        <td class="row insert" style="padding: 0px 0px 0px 0px;"><textarea class="col-md-16">${Location}</textarea></td>
+        <td class="row insert" style="padding: 0px 0px 0px 0px;"><textarea class="col-md-16">${Note}</textarea></td>
+        <td>
+            <input type="hidden" name="name" class="sttcalendar" value="${stt}" />
+            <input type="hidden" name="name" class="calendaridremember" value="${CalendarId}" />
+            <div class="checkbox issms" style="text-align:center">
+                <label style="padding-left:5px">
+                    <input type="checkbox" value="" {{if IsSms == true}} checked {{/if}}>
+                    <span class="cr"><i class="cr-icon icon-checkmark"></i></span>
+                    <p>SMS</p>
+                </label>
+            </div>
+            <a class="remove_row_censor" style="color:red">
+                <span class="icon-remove2"></span>
+            </a>
+        </td>
+
+    </script>
+}
+<div class="modal fade" id="userDeptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Thành phần tham gia</h4>
+            </div>
+            <div class="modal-body" id="jstreeUserDepart">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnChoose">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-16 col-sx-16" style="padding:0" id="CalendarCensorId">
+    <div>
+        <ul class="nav nav-pills toolbar" style="height:40px">
+            <li class="dropdown">
+                <a class="dropdown-toggle btnTransfer" data-toggle="dropdown" href="#" style="padding:5px" id="btnSaveCalendar">
+                    <span class="icon icon-archive" style="color: #008299"></span>
+                    <span data-res="egov.resources.toolbar.transferBtn">Lưu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fluid-row">
+        <div>
+            <div style="text-align: center; font-weight: bold;">
+                <h3 style="font-weight:bold">Duyệt Lịch Đăng Ký</h3>
+            </div>
+            <div style=" padding-bottom:10px;  text-align:center">
+                <a class="btnLeftDay">
+                    <img src="/Content/bkav.egov/images/calendar_img/leftarrow.png" />
+                </a>
+                <span>
+                    Hôm nay
+                </span>
+                <a class="btnRightDay">
+                    <img src="/Content/bkav.egov/images/calendar_img/rightarrow.png" />
+                </a>
+            </div>
+        </div>
+        <div>
+            <div style="text-align:center"><h4>Danh sách những người đăng ký </h4></div>
+
+            <div>
+                <table class="table table-bordered" id="Calendar_view">
+                    <colgroup>
+                        <col style="width: 60px" />
+                        <col style="width: 60px" />
+                        <col style="" />
+                        <col style="width: 150px" />
+                        <col style="width: 100px" />
+                        <col style="width: 100px" />
+                        <col style="width: 100px" />
+                        <col style="width: 60px" />
+                    </colgroup>
+                    <thead style="background-color: bisque; border: solid 2px #DDD">
+                        <tr style="text-align:left">
+                            <th colspan="9">
+                                <input id="date_calendar" type="text" name="datetime" value="" placeholder="Chọn Ngày Tháng" />
+                                <a id="a_date_calendar" href="#">
+                                    <img src="/Content/bkav.egov/images/calendar_img/calendar.jpg" width="30px" height="30px" />
+                                </a>
+                            </th>
+                        </tr>
+                        <tr class="center">
+                            <th style=" " class="thead-style">TGBD</th>
+                            <th class="thead-style">TGKT</th>
+                            <th class="thead-style">Nội dung</th>
+                            <th class="thead-style">Thành phần</th>
+                            <th class="thead-style">Đơn vị chủ trì</th>
+                            <th class="thead-style">Địa điểm</th>
+                            <th class="thead-style">Ghi chú</th>
+                            <th class="thead-style">Duyệt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_calendar" style=""></tbody>
+                </table>
+            </div>
+        </div>
+        <div style="text-align:center; padding-top:10px;padding-bottom:10px">
+            <h4> Bảng nhập và duyệt lịch</h4>
+        </div>
+        <div>
+            <table id="table_calendar" class=" table table-bordered">
+                <colgroup>
+                    <col style="width: 40px" />
+                    <col style="width: 135px" />
+                    <col style="width: 135px" />
+                    <col style="" />
+                    <col style="width: 150px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 60px" />
+                </colgroup>
+                <thead style="background-color: bisque">
+                    <tr style="text-align:left">
+                        <th colspan="9">
+                            <span>Ghi chú: (<span style="color:red">*</span>) là bắt buộc nhập</span>
+                        </th>
+                    </tr>
+                    <tr class="center">
+                        <th class="thead-style">STT</th>
+                        <th class="thead-style">TGBĐ (<span style="color:red">*</span>)</th>
+                        <th class="thead-style">TGKT</th>
+                        <th class="thead-style">Nội dung (<span style="color:red">*</span>)</th>
+                        <th class="thead-style">Thành phần</th>
+                        <th class="thead-style">Đơn vị chủ trì</th>
+                        <th class="thead-style">Địa điểm</th>
+                        <th class="thead-style">Ghi chú</th>
+                        <th class="thead-style"></th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tbody_censor_calendar"></tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>

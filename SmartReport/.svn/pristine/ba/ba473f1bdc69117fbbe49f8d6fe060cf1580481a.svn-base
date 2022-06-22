@@ -1,0 +1,112 @@
+﻿@*{{each(i, processor) Processor}}*@
+
+@*Mẫu*@
+@*<div class="comment">
+                    <div class="user-avatar">
+                        <img src="../../Content/Staff/tienbv@bkav_com.bmp" alt="" />
+                    </div>
+                    <div class="comment-info">
+                        <span class="username">Bùi Văn Tiến</span>
+                        <span class="datesend">05:07 29/08/2013</span>
+                    </div>
+                    <div class="transfer-info">
+                        <span class="comment-text">Con biết bây giờ Mẹ chờ tin con, khi pháo giao thừa rộn ràng nơi nơi. Năm trước con hẹn đầu xuân sẽ về, nay Én bay đầy trước ngõ, mà tin con vẫn xa ngàn xa.
+                    <span class="receives">
+                        <span class="transfer-label">Xử lý chính:</span>
+                        <span class="viewXlc  transfer-value">Hoàng Văn Dũng</span>
+                        <br>
+                        <span class="transfer-label">Đồng xử lý:</span>
+                        <span class="viewDxl  transfer-value">Bùi Văn Tiến</span>
+                    </span>
+                        </span>
+                    </div>
+                </div>*@
+<div class="comment">
+    <div class="user-avatar">
+        <img src="${egov.setting.avatarPath.format(UserSend.username)}" alt="" />
+    </div>
+    <div class="comment-info">
+        <span class="username">${UserSend.FullName}</span>
+        @*<span class="datesend">${DateCreatedString}</span>*@
+    </div>
+    <div class="transfer-info">
+        <span class="datesend" style="color: #9B9B9C;">${DateCreatedString}</span>
+        <span class="comment-text">{{if CommentId === 0}}
+                    <span style="color: gray">Chưa cho ý kiến</span>
+            {{else Content.Content == ''}}
+                    ...
+                {{else}}
+                    ${Content.Content}
+                {{/if}}
+        <span class="receives">{{if Content.Transfers}}
+                ${( $data.exitLabelXlc = 'false' ),''}
+                ${( $data.exitLabelDxl = 'false' ),''}
+                ${( $data.isFirstDxl = 'true' ),''}
+                ${( $data.exitLabelTb = 'false' ),''}
+                ${( $data.isFirstTb = 'true' ),''}
+                ${( $data.exitLabelXyk = 'false' ),''}
+                ${( $data.isFirstXyk = 'true' ),''}
+                {{each(j, transfer) Content.Transfers}}
+                    {{if transfer.type == "xulychinh"}}
+                        <span class="transfer-label">Xử lý chính:</span>
+            <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+            ${( $data.exitLabelXlc = 'true' ),''}
+                    {{/if}}
+                    {{if transfer.type == "dongxuly"}}
+                        {{if isFirstDxl == 'true'}}
+                            ${( $data.isFirstDxl = 'false' ),''}
+                            {{if exitLabelXlc == 'true'}}
+                                <br />
+            {{/if}}
+                        {{else}}
+                            <br />
+            {{/if}}
+                        {{if exitLabelDxl == 'false'}}
+                            <span class="transfer-label">Đồng xử lý:</span>
+            ${( $data.exitLabelDxl = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+            {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+            {{/if}}
+                    {{if transfer.type == "thongbao"}}
+                        {{if isFirstTb == 'true'}}
+                            ${( $data.isFirstTb = 'false' ),''}
+                            {{if exitLabelXlc == 'true' || exitLabelDxl == 'true'}}
+                                <br />
+            {{/if}}
+                        {{else}}
+                            <br />
+            {{/if}}
+                        {{if exitLabelTb == 'false'}}
+                            <span class="transfer-label">Thông báo:</span>
+            ${( $data.exitLabelTb = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+            {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+            {{/if}}
+                    {{if transfer.type == "xinykien"}}
+                        {{if isFirstXyk == 'true'}}
+                            ${( $data.isFirstXyk = 'false' ),''}
+                            {{if exitLabelXlc == 'true' || exitLabelDxl == 'true'}}
+                                <br />
+            {{/if}}
+                        {{else}}
+                            <br />
+            {{/if}}
+                        {{if exitLabelXyk == 'false'}}
+                            <span class="transfer-label">Xin ý kiến:</span>
+            ${( $data.exitLabelXyk = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+            {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+            {{/if}}
+                {{/each}}
+            {{/if}}
+        </span>
+        </span>
+    </div>
+</div>
+@*{{/each}}*@

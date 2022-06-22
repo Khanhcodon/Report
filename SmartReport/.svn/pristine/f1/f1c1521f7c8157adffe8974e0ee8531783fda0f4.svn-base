@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+    ViewBag.Title = "Đồng bộ SSO";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <center>
+            @using (Html.BeginForm("SyncSSO", "Setting", FormMethod.Post))
+            {
+                <input class="btn btn-danger" style="margin-top:10px" type="submit" value="Đồng bộ" />
+            }
+        </center>
+    </div>
+    <div class="col-md-4">
+           <a href="@Url.Action("ExportExcel", "Setting")" 
+            style="font-size: 16px; font-weight: bold; line-height: 40px; height:40px;
+            background:#ff00dc; padding:10px; border: 2px solid red;
+            border-radius: 10px;"> Export File Excel</a>
+    </div>
+</div>

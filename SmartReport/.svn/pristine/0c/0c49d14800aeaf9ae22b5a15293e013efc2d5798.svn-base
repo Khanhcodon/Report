@@ -1,0 +1,18 @@
+﻿<div style="text-align: left; font-size: 12px; margin-bottom: 10px; position: relative">
+    <label data-res="egov.resources.document.anticipate.receive"></label>
+    <select id="dropdownAction" name="dropdownAction" style="width: 160px">
+        <option value="" data-res="egov.resources.document.anticipate.choosereceive"></option>
+    </select>
+    <label data-res="egov.resources.document.anticipate.receiver"></label>
+    <select id="dropdownUserTransfer" name="dropdownUserTransfer" style="width: 160px">
+        <option value="" data-res="egov.resources.document.anticipate.choosereceiver"></option>
+    </select>
+    <label data-res="egov.resources.document.anticipate.anticipate"></label>
+    <select id="dropdownActionPlan" name="dropdownActionPlan" style="width: 160px">
+        <option value="" data-res="egov.resources.document.anticipate.chooseanticipate"></option>
+    </select>
+</div>
+<br />
+<div class="transferplan-form">
+</div>
+

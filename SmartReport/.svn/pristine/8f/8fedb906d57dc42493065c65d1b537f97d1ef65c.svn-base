@@ -1,0 +1,279 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
+using Bkav.eGovCloud.Business;
+using Bkav.eGovCloud.Business.Common;
+using Bkav.eGovCloud.Business.Customer;
+using Bkav.eGovCloud.Core.Domain.License;
+using Bkav.eGovCloud.Core.FileSystem;
+using Bkav.eGovCloud.Core.Utils;
+using Bkav.eGovCloud.Entities;
+using Bkav.eGovCloud.Entities.Admin;
+using Bkav.eGovCloud.Entities.Common;
+using Bkav.eGovCloud.Entities.Customer;
+using Bkav.eGovCloud.Entities.Customer.Settings;
+using Bkav.eGovCloud.Entities.Enum;
+using Bkav.eGovCloud.Models;
+using Bkav.eGovCloud.Search;
+using Bkav.eGovCloud.Web.Framework;
+using Bkav.eGovOnline.Business.Customer;
+using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
+using System.Data;
+using System.Xml;
+using Bkav.eGovCloud.Business.Utils;
+using System.Web;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Configuration;
+using Bkav.eGovCloud.DataAccess;
+using MySql.Data.MySqlClient;
+
+namespace Bkav.eGovCloud.Controllers
+{
+	//[RequireHttps]
+	[EgovAuthorize]
+	public class DashboardController : CustomerBaseController
+	{
+		#region properties
+
+		private readonly AdminGeneralSettings _generalSettings;
+		private readonly ImageSettings _insertImageSettings;
+		private readonly DocTypeBll _docTypeService;
+		private readonly ProcessFunctionBll _processFunctionService;
+		private readonly ProcessFunctionGroupBll _processFunctionGroupService;
+		private readonly DocumentCopyBll _docCopyService;
+		private readonly DocumentBll _docService;
+		private readonly EgovSearch _searchService;
+		private readonly DocFieldBll _docFieldService;
+		private readonly UserBll _userService;
+		private readonly JobTitlesBll _jobTitlesService;
+		private readonly PositionBll _positionService;
+		private readonly DocFinishBll _docFinishService;
+		private readonly WorktimeHelper _workTimeHelper;
+		private readonly SmsSettings _smsSettings;
+		private readonly LuceneBll _luceneService;
+		private readonly UserActivityLogBll _userActivityLogService;
+		private readonly ResourceBll _resourceService;
+		private readonly FileUploadSettings _fileUploadSettings;
+		private readonly UserConnectionBll _userConnectionService;
+		private readonly DocumentOnlineBll _docOnlineService;
+		private readonly Helper.UserSetting _helperUserSetting;
+		private readonly ConnectionSettings _connectionSettings;
+		private readonly SsoSettings _ssoSettings;
+		private readonly LanguageSettings _languageSettings;
+		private readonly DepartmentBll _departmentService;
+		private readonly PermissionBll _permissionSerice;
+		private readonly TreeGroupBll _treeGroupSerice;
+		private readonly DocColumnSettingBll _docColumnSettingSerice;
+		private readonly InfomationBll _infoService;
+		private readonly CategoryBll _categoryService;
+		private readonly SignatureBll _signatureService;
+
+		private readonly CodeBll _codeService;
+		private readonly StorePrivateBll _storePrivateService;
+		private readonly CommonCommentBll _commonCommentService;
+
+		private readonly OnlineRegistrationSettings _onlineRegistrationSettings;
+		private readonly FAQSetting _faqSettings;
+		private readonly AttachmentBll _attachmentService;
+		private readonly SettingBll _settingService;
+		private readonly VoteSettings _voteSettings;
+		private readonly VersionTreeSetting _versionTreeSettings;
+		private readonly AuthenticationSettings _authenSetting;
+
+		private LicenseSettings _license;
+
+		private const string COLUMN_IS_VIEWED = "IsViewed";
+		private const string COLUMN_KEY = "DocumentCopyId";
+		private const string COLUMN_COMPENDIUM = "Compendium";
+		private const string COLUMN_DOCTYPE_ID = "DocTypeId";
+		private const string EMOTICONS_PATH = "~/Content/bkav.egov/emoticons";
+        private readonly DocumentRelatedBll _docRelatedService;
+        #endregion properties
+
+        #region constructor
+
+        public DashboardController(
+			DocumentOnlineBll docOnlineService,
+			AdminGeneralSettings generalSettings,
+			ImageSettings insertImageSettings,
+			DocTypeBll docTypeBll,
+			DocumentCopyBll documentCopyService,
+			DocumentBll documentService,
+			ProcessFunctionBll processFunctionService,
+			ProcessFunctionGroupBll processFunctionGroupService,
+			EgovSearch searchService,
+			DocFieldBll docFieldService,
+			UserBll userService,
+			DocFinishBll docFinishService,
+			WorktimeHelper workTimeHelper,
+			SmsSettings smsSettings,
+			UserActivityLogBll userLogServices,
+			LuceneBll luceneService,
+			UserActivityLogBll userActivityLogService,
+			UserConnectionBll userConnectionService,
+			ResourceBll resourceService,
+			FileUploadSettings fileUploadSettings,
+			Helper.UserSetting helperUserSetting,
+			DepartmentBll departmentService,
+			PermissionBll permissionSerice,
+			LanguageSettings languageSettings,
+			OnlineRegistrationSettings onlineRegistrationSettings,
+			TreeGroupBll treeGroupSerice,
+			DocColumnSettingBll docColumnSettingSerice,
+			InfomationBll infoService,
+			ConnectionSettings connectionSettings,
+			FAQSetting faqSettings,
+			CategoryBll categoryService,
+			SettingBll settingService, AuthenticationSettings authenSettings,
+			VoteSettings voteSetting, StorePrivateBll storePrivateService,
+			VersionTreeSetting versionTreeSettings, PositionBll positionService,
+			AttachmentBll attachmentService, JobTitlesBll jobTitlesService,
+			SignatureBll signatureService, CommonCommentBll commonCommentService,
+			CodeBll codeService, DocumentRelatedBll docRelatedService)
+		{
+			_docOnlineService = docOnlineService;
+			_generalSettings = generalSettings;
+			_insertImageSettings = insertImageSettings;
+			_docTypeService = docTypeBll;
+			_processFunctionService = processFunctionService;
+			_searchService = searchService;
+			_docCopyService = documentCopyService;
+			_docFieldService = docFieldService;
+			_userService = userService;
+			_docFinishService = docFinishService;
+			_workTimeHelper = workTimeHelper;
+			_smsSettings = smsSettings;
+			_luceneService = luceneService;
+			_userActivityLogService = userActivityLogService;
+			_userConnectionService = userConnectionService;
+			_resourceService = resourceService;
+			_fileUploadSettings = fileUploadSettings;
+			_processFunctionGroupService = processFunctionGroupService;
+			_ssoSettings = SsoSettings.Instance;
+			_connectionSettings = connectionSettings;
+			_helperUserSetting = helperUserSetting;
+			_departmentService = departmentService;
+			_permissionSerice = permissionSerice;
+			_languageSettings = languageSettings;
+			_onlineRegistrationSettings = onlineRegistrationSettings;
+			_treeGroupSerice = treeGroupSerice;
+			_docColumnSettingSerice = docColumnSettingSerice;
+			_infoService = infoService;
+			_settingService = settingService;
+			_faqSettings = faqSettings;
+			_docService = documentService;
+			_license = LicenseSettings.Current;
+			_categoryService = categoryService;
+			_voteSettings = voteSetting;
+			_versionTreeSettings = versionTreeSettings;
+			_attachmentService = attachmentService;
+			_signatureService = signatureService;
+			_jobTitlesService = jobTitlesService;
+			_positionService = positionService;
+			_storePrivateService = storePrivateService;
+			_commonCommentService = commonCommentService;
+			_authenSetting = authenSettings;
+			_codeService = codeService;
+            _docRelatedService = docRelatedService;
+        }
+
+		#endregion constructor
+
+        public ActionResult Index()
+        {
+			var appSettings = ConfigurationManager.AppSettings;
+			ViewBag.ProcessFunctionId = appSettings["dashboardProcessFunctionId"];
+
+			ViewBag.CurrentDepartment = _departmentService.GetCacheAllUserDepartmentJobTitlesPosition()
+				.Where(p => p.UserId == User.GetUserId())
+				.OrderBy(p => p.IsPrimary)
+				.FirstOrDefault();
+			ViewBag.SoLieu_ChoXuLy = 0;
+			ViewBag.SoLieu_ChoDuyet = 0;
+			ViewBag.SoLieu_QuaHan = 0;
+
+			ViewBag.TuongMinh_ChoXuLy = 0;
+			ViewBag.TuongMinh_ChoDuyet = 0;
+			ViewBag.TuongMinh_QuaHan = 0;
+
+			ViewBag.TongHop_ChoXuLy = 0;
+			ViewBag.TongHop_ChoDuyet = 0;
+			ViewBag.TongHop_QuaHan = 0;
+
+			var connectionString = DataSettings.Current.DataConnectionString;
+			var connection = new MySqlConnection(connectionString);
+
+			using (var context = new EfContext(connection))
+			{
+				ViewBag.SoLieu_ChoXuLy = context.RawQuery(GetSql("SoLieu", "ChoXuLy")).First().Count;
+				ViewBag.TuongMinh_ChoXuLy = context.RawQuery(GetSql("TuongMinh", "ChoXuLy")).First().Count;
+				ViewBag.TongHop_ChoXuLy = context.RawQuery(GetSql("TongHop", "ChoXuLy")).First().Count;
+
+				ViewBag.SoLieu_ChoDuyet = context.RawQuery(GetSql("SoLieu", "ChoDuyet")).First().Count;
+				ViewBag.TuongMinh_ChoDuyet = context.RawQuery(GetSql("TuongMinh", "ChoDuyet")).First().Count;
+				ViewBag.TongHop_ChoDuyet = context.RawQuery(GetSql("TongHop", "ChoDuyet")).First().Count;
+
+				//ViewBag.SoLieu_QuaHan = context.RawQuery(GetSqlQuaHan(1)).First().Count;
+				//ViewBag.TuongMinh_QuaHan = context.RawQuery(GetSqlQuaHan(2)).First().Count;
+				//ViewBag.TongHop_QuaHan = context.RawQuery(GetSqlQuaHan(3)).First().Count;
+			}
+
+			return View();
+        }
+
+		private string GetSql(string type, string status)
+		{
+			var sqlJoinForm = string.Empty;
+			var sqlCategoryBusinessId = string.Empty;
+			var sqlFormCategoryId = string.Empty;
+			if (type == "SoLieu" || type == "TongHop")
+			{
+				sqlJoinForm = "INNER JOIN `form` as `f` ON `d`.`FormId` = `f`.`FormId`";
+				sqlCategoryBusinessId = "AND `d`.CategoryBusinessId NOT IN (8, 16)";
+				sqlFormCategoryId = $"AND `f`.`FormCategoryId` = {(type == "SoLieu" ? 1 : 3)}";
+			}
+			else if (type == "TuongMinh")
+			{
+				sqlCategoryBusinessId = "AND `d`.CategoryBusinessId = 8";
+			}
+
+
+			var sqlStatus = string.Empty;
+			var sqlUser = string.Empty;
+			if (status == "ChoXuLy")
+			{
+				sqlStatus = "WHERE `dc`.`Status` = 2";
+				sqlUser = $"AND `dc`.`UserCurrentId` = {_userService.CurrentUser.UserId}";
+			}
+			else if (status == "ChoDuyet")
+			{
+				sqlStatus = "WHERE `dc`.`Status` IN (2, 16)";
+				sqlUser = $@"AND dc.UserNguoiThamGia LIKE CONCAT('%;',{_userService.CurrentUser.UserId},';%')
+AND `dc`.`UserCurrentId` != {_userService.CurrentUser.UserId}
+AND `dc`.HasJustCreated != 1";
+			}
+
+			return $@"SELECT Count(1) AS Count
+FROM `document` as `d`
+INNER JOIN `documentcopy` as `dc` ON `d`.`DocumentId` = `dc`.`DocumentId`
+{sqlJoinForm}
+{sqlStatus}
+AND `d`.`Status`  in (2, 16)
+{sqlCategoryBusinessId}
+{sqlUser}
+AND `dc`.`DocumentCopyType` in (1, 2, 4)
+{sqlFormCategoryId};";
+		}
+
+        [HttpPost]
+        public JsonResult GetDataDocRelated()
+        {
+            var result = _docRelatedService.Gets().OrderByDescending(c => c.CreatedAt);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+    }
+}

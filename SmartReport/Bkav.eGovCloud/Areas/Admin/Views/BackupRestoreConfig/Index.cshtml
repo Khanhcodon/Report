@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BackupRestoreConfigModel>
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreConfig.Title.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteConfig(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.BackupRestoreConfig.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListConfig").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListConfig').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            $('#divListConfig').unblockpanel();
+        }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-database"></i>
+        <span data-res="egov.resources.sitemap.backuprestoreconfig"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/backuprestoreconfig/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div id="divListConfig">
+        @Html.Partial("_PartialList", Model)
+    </div>
+</div>

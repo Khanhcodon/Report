@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.User.ImportUserFromLdap");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var usersImport = ViewBag.UsersImport as string;
+}
+<style type="text/css">
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 20px;
+    }
+
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+</style>
+
+<script src="../../../../Scripts/bkav.egov/libs/json2.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.resizecolumn.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js"></script>
+<script type="text/javascript">
+    var usersImport = @(string.IsNullOrEmpty(usersImport) ? MvcHtmlString.Create("[]") : Html.Raw(usersImport));
+    var usersSelected = [];
+    $(function() {
+        $("#usersImport").autocomplete({
+            minLength: 1,
+            source: usersImport,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#usersImport").val('');
+                $("input[name='" + ui.item.value + "']").attr("checked", "");
+                var exist = _.find(usersSelected, function(user) {
+                    return user.value === ui.item.value;
+                });
+                if(!exist) {
+                    var selected = _.find(usersImport, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if(selected) {
+                        usersSelected.push(selected);
+                    }
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $("#usersImport").focus();
+
+        $("#usersImportTemplate").tmpl(usersImport).appendTo("#tblUsersImport tbody");
+
+        $("#divUsersImport").resizecolumn({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#import").click(function() {
+            if(usersSelected.length == 0) {
+                eGovMessage.show( egov.resources.user.selectusertoimport ||"Bạn phải chọn người dùng để import");
+            } else {
+                $.blockUI({
+                    message: '<img src="/Content/Images/ajax-loader.gif" width="32" height="32" /><br /><strong data-res="egov.resources.notifications.importing">Đang import...</strong>',
+                    css: {
+                        height: '50px',
+                        padding: '5px 0px 5px 0px'
+                    }
+                });
+                $.post('@Url.Action("ImportUserFromLdap")', {
+                    users: JSON.stringify(usersSelected)
+                })
+                .done(function (data) {
+                    if (data) {
+                        if(data.success) {
+                            eGovMessage.notification( egov.resources.user.importusersuccessfull || 'Import người dùng thành công', eGovMessage.messageTypes.success);
+                        } else {
+                            eGovMessage.notification(data.message, eGovMessage.messageTypes.error);
+                        }
+                    }
+                    $.unblockUI();
+                })
+                .fail(function () {
+                    $.unblockUI();
+                    eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+                });
+            }
+        });
+    });
+
+    function adduser(target) {
+        if(target.checked) {
+            var selected = _.find(usersImport, function(user) {
+                return user.value === target.value;
+            });
+            if(selected) {
+                usersSelected.push(selected);
+            }
+        } else {
+            usersSelected = _.reject(usersSelected, function(user) {
+                return user.value === target.value;
+            });
+        }
+    }
+
+    function addAllUsers(target) {
+        if(target.checked) {
+            usersSelected = usersImport;
+            $(".userselected").attr("checked", "");
+        } else {
+            usersSelected = [];
+            $(".userselected").removeAttr("checked");
+        }
+    }
+</script>
+<h2>Localizer("Bkav.eGovCloud.Areas.Admin.Title.User.ImportUserFromLdap")</h2>
+<p>
+    <input id="usersImport" style="width: 360px" />&nbsp;&nbsp;
+    <input type="button" id="import" value="@Localizer("User.ImportUserFromLdap.Button.Import")" />
+</p>
+<div class="grid" id="divUsersImport">
+    <div class="grid-header">
+        <div class="grid-header-wrap">
+            <table class="table-main table" style="width: 700px">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col style="width: 200px" />
+                    <col style="width: 200px" />
+                    <col style="width: 200px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("User.ImportUserFromLdap.List.Column.Numbers")
+                        </th>
+                        <th class="header">
+                            @Localizer("User.ImportUserFromLdap.List.Column.Username")
+                        </th>
+                        <th class="header">
+                            @Localizer("User.ImportUserFromLdap.List.Column.Email")
+                        </th>
+                        <th class="header">
+                            @Localizer("Common.Resource.Index.List.Column.FullName")
+                        </th>
+                        <th class="header">
+                            <input type="checkbox" onchange="addAllUsers(this)" />
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible">
+        <table class="table-main table" id="tblUsersImport" style="width: 700px">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 200px" />
+                <col style="width: 200px" />
+                <col style="width: 200px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script id="usersImportTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td style="text-align: center">${numbers}</td>
+        <td>${value}</td>
+        <td>${email}</td>
+        <td>${fullname}</td>
+        <td style="text-align: center">
+            <input type="checkbox" name="${value}" class="userselected" onchange="adduser(this)" value="${value}" />
+        </td>
+    </tr>
+</script>

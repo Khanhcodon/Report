@@ -1,0 +1,81 @@
+﻿
+<div id="chat-body">
+    <div class="chat-body">
+        <div class="chat-message">
+
+        </div>
+        <div class="chat-seen {{if isgroup}}isgroup{{/if}}">
+            <i class="material-icons" style="font-size: 16px;">check</i> <span class="user-seen"></span> đã xem
+        </div>
+        <div class="chat-typing">
+            <div style="display: flex;">
+                <div>
+                    {{if isgroup}}
+                    <img class="mdl-list__item-avatar" src="" />
+                    {{else}}
+                    <img class="mdl-list__item-avatar" src="${senderAvatar}" />
+                    {{/if}}
+                </div>
+                <div class="typing-message">
+                    <svg class="lds-message" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                        <g transform="translate(25 50)">
+                            <circle cx="0" cy="0" r="10" fill="gray" transform="scale(0.967789 0.967789)">
+                                <animateTransform attributeName="transform" type="scale" begin="-0.3333333333333333s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                            </circle>
+                        </g>
+                        <g transform="translate(50 50)">
+                            <circle cx="0" cy="0" r="10" fill="gray" transform="scale(0.599407 0.599407)">
+                                <animateTransform attributeName="transform" type="scale" begin="-0.16666666666666666s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                            </circle>
+                        </g>
+                        <g transform="translate(75 50)">
+                            <circle cx="0" cy="0" r="10" fill="gray" transform="scale(0.148234 0.148234)">
+                                <animateTransform attributeName="transform" type="scale" begin="0s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                            </circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chat-compose">
+    <div style="display: flex;min-height:35px;">
+        <div class="user-avatar">
+            <div class="emoticon-set dropup">
+                <button class="btn-emoticon dropdown-toggle" type="button" id="demo-menu-top-right" data-toggle="dropdown" >
+                    <span class="icon-happy"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="demo-menu-top-right">
+                    <div class="emoticon-list">
+                        <ul id="emoticon"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-wrap">
+            <div contenteditable="true" placeholder="Nhập tin nhắn..." class="compose-content"></div>            
+            <div class="send-files">
+                <a class="mdl-button mdl-js-button mdl-button--icon" href="#">
+                    <i class="material-icons">photo_camera</i>
+                    <input type="file" accept="image/*" class="insertPhoto fileupload" multiple name="photos" style="cursor: default;" />
+                </a>
+                <a class="mdl-button mdl-js-button mdl-button--icon" href="#">
+                    <i class="material-icons">attach_file</i>
+                    <input type="file" class="insertAttachment fileupload" name="files" style="cursor: default;">
+                </a>
+            </div>
+        </div>
+        <div style="padding-top: 9px;">
+            <a href="#" class="btnSendMessage">
+                <span class="material-icons">send</span>
+            </a>
+        </div>
+    </div>
+    <div class="pastePreview">
+        <canvas id="previewCanvas"></canvas>
+        <span class="removePaste" >
+            <span class="icon-close"></span>
+        </span>
+    </div>
+</div>

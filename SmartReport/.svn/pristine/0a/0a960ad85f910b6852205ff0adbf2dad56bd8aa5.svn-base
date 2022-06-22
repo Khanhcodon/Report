@@ -1,0 +1,19 @@
+﻿<div class="form-group">
+    <div class="title">
+        <strong data-res="egov.resources.document.supplementary.add"></strong>
+    </div>
+    <div id="supItemZone">
+
+    </div>
+    <input type="text" class="form-control" id="addRequire" />
+</div>
+<div class="form-group">
+    <div class="title">
+        <strong data-res="egov.resources.document.supplementary.comment"></strong>
+    </div>
+    <textarea id="txtComment" class="form-control" data-res="egov.resources.document.supplementary.defaultComment"></textarea>
+</div>
+<div class="form-group" id="expireDayZone">
+    <label data-res="egov.resources.document.supplementary.expireDate"></label>
+    <input type="number" id="expireDate" class="form-control" value="7" />
+</div>

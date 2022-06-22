@@ -1,0 +1,36 @@
+﻿@model DistrictModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.DistrictId)
+
+<table>
+    <tr>
+        <td style="width:20%">
+            @Html.LabelFor(model => model.CityCode):
+        </td>
+        <td>
+            @Html.DropDownList("CityCode")
+            @if (Model.DistrictId > 0)
+            { 
+                @Html.HiddenFor(model => model.CityCode)
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.DistrictName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DistrictName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DistrictName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.DistrictCode):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DistrictCode, new {  @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DistrictCode)
+        </td>
+    </tr>
+</table>

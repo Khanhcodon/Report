@@ -1,0 +1,36 @@
+﻿
+<div class="message-time">
+    <div class="">${messageTime}</div>
+</div>
+<div data-account="${account}" data-id="${id}" class="item-message {{if isme == true}} isme {{else}} other {{/if}}  {{if unread == true}}unread{{/if}} {{if isConfigMsg == true}}isconfig{{/if}}">
+    {{if isme == true}}    <div class="item-message__status">
+        <div idmsg="${id}" data-field='status'>
+            {{if status=='client'}} <i class="material-icons">panorama_fish_eye</i>{{/if}}
+            {{if status=='server'}} <i class="material-icons">check_circle_outline</i> {{/if}}
+            {{if status=='success'}} <i class="material-icons">check_circle</i>{{/if}}
+        </div>
+    </div>
+    {{/if}}
+    <div class="item-message__content">
+        <div class="item-message__data">
+            <div class="clear-right">
+                <div>
+                    <div class="chat-content-wrap" style="max-width: ${width}px; word-wrap: break-word;">
+                        <div class="chat-content">
+                            {{if contentmsg_quote !=null && sendermsg_quote !=null && contentmsg_quote !=undefined && sendermsg_quote !=undefined}}
+                            <div class="chat-quote">
+                                <div class="content-reply">
+                                    <div style="font-weight: 500; margin-bottom: 5px;">${sendermsg_quote}</div>
+                                    <span style="white-space: pre-wrap;">{{html contentmsg_quote}}</span>
+                                </div>
+                            </div>
+                            {{/if}}
+                            <span style="white-space: pre-wrap;">{{html message}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model  Bkav.eGovCloud.Areas.Admin.Models.OfficeModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.OfficeId)
+
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.OfficeName.Label")<span style="color: Red; font-size: 11px;">(*)</span></label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.OfficeName, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.OfficeName.Label") })
+           @Html.ValidationMessageFor(model => model.OfficeName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.OfficeCode.Label")<span style="color: Red; font-size: 11px;">(*)</span></label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.OfficeCode, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.OfficeCode.Label") })
+            @Html.ValidationMessageFor(model => model.OfficeCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.ParentId.Label")</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.ParentId, (IEnumerable<SelectListItem>)ViewBag.ListParent, Localizer("Common.Office.Message.NotParent"), new { @class = "form-control" })
+        </div>
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.LevelId.Label")</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.LevelId, (IEnumerable<SelectListItem>)ViewBag.ListLevel, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.Address.Label")</label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Address, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.Address.Label") })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.Description.Label")</label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.Description.Label") })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.Phone.Label")</label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.Phone.Label") })
+            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.Email.Label")</label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.Email.Label") })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.OnlineServiceUrl.Label")</label>
+        <div class="col-md-8">
+
+            @Html.TextBoxFor(model => model.OnlineServiceUrl, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.OnlineServiceUrl.Label") })
+            @Html.ValidationMessageFor(model => model.OnlineServiceUrl, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.ProcessServiceUrl.Label")</label>
+        <div class="col-md-8">
+
+            @Html.TextBoxFor(model => model.ProcessServiceUrl, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.OnlineServiceUrl.Label") })
+            @Html.ValidationMessageFor(model => model.ProcessServiceUrl, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.ReportServiceUrl.Label")</label>
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.ReportServiceUrl, new { @class = "form-control", @placeholder = Localizer("Common.Office.CreateOrEdit.Field.ReportServiceUrl.Label") })
+            @Html.ValidationMessageFor(model => model.ReportServiceUrl, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.IsMe.Label")</label>
+        <div class="col-md-8">
+            @Html.CheckBoxFor(model => model.IsMe, new { @class = "checkbox" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">@Localizer("Common.Office.CreateOrEdit.Field.IsOnlineRegister.Label")</label>
+        <div class="col-md-8">
+            @Html.CheckBoxFor(model => model.IsOnlineRegister, new { @class = "checkbox" })
+        </div>
+    </div>
+</div>

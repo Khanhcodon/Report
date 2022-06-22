@@ -1,0 +1,129 @@
+﻿<form class="form-horizontal" role="form">
+    <!--Người dùng-->
+    <div class="form-group">
+        <div class="col-xs-13 no-padding-right">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" class="mdl-textfield__input" id="dgUser" style="z-index: 1060;">
+                <label class="mdl-textfield__label" for="dgUser" data-res="egov.resources.transfer.dgUserLabelM"></label>
+            </div>
+        </div>
+        <div class="col-xs-3 no-padding-left">
+            <button type="button" id="dgUsers" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-target="#FilterDepartment">
+                <span class="material-icons">expand_more</span>
+            </button>
+        </div>
+    </div>
+
+    <!--Theo chức vụ phòng ban-->
+    <div class="form-group">
+        <div class="col-xs-13 no-padding-right">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" class="mdl-textfield__input" id="dgJobtitleLabel">
+                <label class="mdl-textfield__label" for="dgJobtitleLabel" data-res="egov.resources.transfer.dgJobtitleLabelM"></label>
+            </div>
+        </div>
+        <div class="col-xs-3 no-padding-left">
+            <button type="button" id="dgJobtitle" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-target="#JobtitleForDept">
+                <span class="material-icons">expand_more</span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-13 no-padding-right">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <label class="mdl-textfield__label" for="dgDeptLabel" data-res="egov.resources.transfer.dgDeptLabelM"></label>
+                <input type="text" id="dgDeptLabel" class="mdl-textfield__input">
+            </div>
+        </div>
+        <div class="col-xs-3 no-padding-left">
+            <button type="button" id="dgDeptJob" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-target="#DeptForJobtitle">
+                <span class="material-icons">expand_more</span>
+            </button>
+        </div>
+    </div>
+
+    <!--Kiểu đồng gửi-->
+    <!--<div class="form-group dg-option" style="margin-right: 5px">
+        <label class="radio-inline pull-right mdl-radio mdl-js-radio mdl-js-ripple-effect" style="margin-left: 15px;" for="isDg_0">
+            <input type="radio" id="isDg_0" name="isDg" value="0" checked="checked" class="mdl-radio__button">
+            <span class="mdl-radio__label" data-res="egov.resources.transfer.isDg1"></span>
+        </label>
+        <label class="radio-inline pull-right mdl-radio mdl-js-radio mdl-js-ripple-effect" for="isDg_1">
+            <input type="radio" id="isDg_1" name="isDg" value="1" class="mdl-radio__button">
+            <span class="mdl-radio__label" data-res="egov.resources.transfer.isDg2"></span>
+        </label>
+    </div>-->
+    <div class="form-group dg-option" style="margin-right: 5px">
+        <label class="radio-inline pull-right" style="margin-left: 15px;">
+            <input type="radio" name="isDg" value="0" checked="checked">
+            <span data-res="egov.resources.transfer.isDg1"></span>
+        </label>
+        <label class="radio-inline pull-right">
+            <input type="radio" name="isDg" value="1">
+            <span data-res="egov.resources.transfer.isDg2"></span>
+        </label>
+    </div>
+
+    <!--Giám sát-->
+    <div class="form-group giamsat">
+        <div class="col-xs-13 no-padding-right dropup">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" class="mdl-textfield__input" id="dgUserGiamsat" style="z-index: 1060;">
+                <label class="mdl-textfield__label" for="dgUserGiamsat" data-res="egov.resources.transfer.dgUserGiamsatM"></label>
+            </div>
+        </div>
+        <div class="col-xs-3 no-padding-left">
+            <button type="button" id="dgUserGiamsats" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-target="#FilterDepartmentGiamSat">
+                <span class="material-icons">expand_more</span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group relation-option">
+        <div class="col-xs-6">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" class="mdl-textfield__input">
+                <div class="input-group-btn dropup">
+                    <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-left dgJobtitlies jobtitlies">
+                        <li class="list-group-item">
+                            <input name="checkbox[]" value="0" type="checkbox" id="allJobs">
+                            <span data-res="egov.resources.transfer.allJobs"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4" style="padding-left: 0; padding-right: 0">
+            <select class="form-control">
+                <option value="1" data-res="egov.resources.transfer.sameDept"></option>
+            </select>
+        </div>
+        <div class="col-xs-6">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input type="text" id="dgDeptJob" class="mdl-textfield__input">
+                <label class="mdl-textfield__label" for="dgDeptJob" data-res="egov.resources.transfer.dgDeptJob"></label>
+                <div class="input-group-btn  input-group-sm">
+                    <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect dropdown-toggle" data-toggle="dropdown">
+                        <span class="material-icons">expand_more</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right department-tree">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="filterDeparment" id="FilterDepartment">
+</div>
+<div class="filterDeparment" id="FilterDepartmentGiamSat">
+</div>
+<ul class="dropdown-menu dropdown-menu-left dgJobtitlies jobtitleForDept" id="JobtitleForDept">
+    <li class="list-group-item">
+        <label class="mdl-checkbox mdl-js-checkbox checkbox">
+            <input class="mdl-checkbox__input" name="checkbox[]" value="0" type="checkbox" id="allJobsForDept">
+            <span data-res="egov.resources.transfer.allJobs"></span>
+        </label>
+    </li>
+</ul>
+<div class="dropdown-menu dropdown-menu-right department-tree deptForJobtitle" id="DeptForJobtitle">
+</div>

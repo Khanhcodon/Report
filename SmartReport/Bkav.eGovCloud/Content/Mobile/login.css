@@ -1,0 +1,125 @@
+﻿body {
+    background: #fff;
+    color: rgba(0,0,0,.87);
+    direction: ltr;
+    font-family: 'Roboto',sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.login {
+    padding: 25px;
+}
+
+.login-header {
+    font-size: 20px;
+    color: #2e2eb5;
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+.login-title {
+    margin-bottom: 20px;
+}
+
+.avatar {
+    border-radius: 50%;
+    width: 26px;
+    float: left;
+}
+
+.usernameText {
+    padding-left: 35px;
+    line-height: 26px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    margin: 0;
+}
+
+input[type=text] {
+    outline: none;
+}
+
+#login {
+    float: right;
+    background: #4285f4;
+}
+
+.otherAccount {
+    float: left;
+    margin-top: 5px;
+    color: #4285f4;
+    text-decoration: none;
+}
+
+#captchaWrap {
+    display: none;
+}
+
+#captcha {
+    text-align: right;
+    position: relative;
+}
+
+    #captcha br {
+        display: none;
+    }
+
+    #captcha #CaptchaImage {
+        position: relative;
+        width: 125px;
+        float: left;
+        border: 1px solid #B7B7B7;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+
+    #captcha #CaptchaInputText {
+        float: right;
+        padding: 8px 15px;
+        margin-left: 5px;
+        outline: 0;
+        border: 1px solid #b7b7b7;
+        border-radius: 4px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 125px;
+        height: 43px;
+    }
+
+    #captcha a {
+        position: absolute;
+        top: 0;
+        color: #5b5be8;
+    }
+
+
+.login-bottom {
+    margin-top: 30px;
+    float: left;
+    width: 100%;
+}
+
+.mdl-textfield__label {
+    font-size: 14px;
+}
+
+#error {
+    color: Red;
+    display: none;
+}
+
+.mdl-progress {
+    height: 3px;
+}
+
+    .mdl-progress.mdl-progress__indeterminate > .bar1 {
+        background-color: #ffef62;
+    }

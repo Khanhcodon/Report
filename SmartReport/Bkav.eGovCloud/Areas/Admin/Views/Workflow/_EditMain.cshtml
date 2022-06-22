@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Workflow/_Main.cshtml";
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/util/bkav.utilities.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".tabs .tab-menu").addClass(" ui-tabs-selected ui-state-active");
+        $(".tabs .tab-add").removeClass(" ui-tabs-selected ui-state-active");
+    });
+</script>
+
+<div id="tabsChild" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist">
+        <li class="tab-workflow">
+            @Html.ActionLink(Localizer("Workflow.CreateOrEdit.Tab.ViewAndEdit"), "Edit", "Workflow",
+            new { id = ViewBag.WorkflowId }, null)</li>
+
+        <li class="tab-docdield">
+            @Html.ActionLink(Localizer("Workflow.CreateOrEdit.Tab.DocField"),
+            "DocFieldWorkflow",
+            "Workflow", new { id = ViewBag.WorkflowId }, null)</li>
+
+        <li class="tab-doctype">
+            @Html.ActionLink(Localizer("Workflow.CreateOrEdit.Tab.DocType"),
+            "DocTypeWorkflow",
+            "Workflow", new { id = ViewBag.WorkflowId }, null)</li>
+    </ul>
+    <div style="padding-top: 10px;">
+        @RenderBody()
+    </div>
+</div>

@@ -1,0 +1,366 @@
+﻿@{
+    Layout = null;
+    var json = ViewBag.Json as string;
+    var docfields = ViewBag.DocFields as IEnumerable<SelectListItem>;
+    var catalogs = ViewBag.Catalogs as IEnumerable<SelectListItem>;
+    var exUseds = ViewBag.ExfieldUseds as string;
+    var caUseds = ViewBag.CatalogUseds as string;
+}
+@*Css*@
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" />
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bkav.egov/DesignForm.css")" />
+<style type="text/css">
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: -1px;
+        padding: 0px;
+        overflow: hidden;
+    }
+</style>
+
+@*Jquery*@
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/browser/jquery.browser.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.cookie.min.js")"></script>
+@*eForm*@
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/bkav.egov/libs/eForm/css/eform.css")" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/jsutilt.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/eForm.Libdata.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/eForm.Controls.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/eForm.Lib.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/eForm.DB.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/eForm.Tool.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/eForm/Resize.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+
+<script type="text/javascript">
+    var jsonModel = @(string.IsNullOrEmpty(json) ? MvcHtmlString.Create("{}") : Html.Raw(json));
+    var exfieldUseds = @(Html.Raw(exUseds));
+    var catalogUseds = @(Html.Raw(caUseds));
+    $(function () {
+        var itemModel = { schema: jsonModel };
+        eForm.Lib.Init();
+        eForm.efTools.init({}, "pnl_root", 3);
+        eForm.efTools.LoadEditForm(itemModel.schema, @ViewBag.MaxRow);
+
+        eForm.efTools.bindRowEvent();
+
+        $("#Catalogs option").each(function() {
+            var thisVal = $(this).val();
+            var catalog = _.find(catalogUseds, function(ca) {
+                return ca.toString() === thisVal;
+            });
+            if(catalog) {
+                $(this).attr("disabled", "disabled");
+            }
+        });
+
+        // Chế độ hiển thị nút xóa dòng khi hover
+        $('#pnl_root .icontainer').hover(function(){
+            $(this).children('.btnDeleteRow').css('visibility','visible');
+        }, function(){
+            $(this).children('.btnDeleteRow').css('visibility','hidden');
+        });
+
+        // Add label (khi sửa các form đã được sử dụng)
+        $('#btnAddLabel').click(function(){
+            eForm.efTools.Create("c1");
+        });
+
+        // Add event thêm 1 control mới
+        $("#btnAdd").click(function() {
+            eForm.efTools.Create($("#ctrlOpt :selected").val());
+        });
+
+        // Add event thêm 1 control Catalog mới
+        $("#btnAddCat").click(function() {
+            var controlId = $("#Catalogs :selected").val() != "" ? $("#Catalogs :selected").val() : 0;
+            var controlTitle = $("#Catalogs :selected").text();
+            eForm.efTools.CreateCat(controlId, controlTitle);
+            $("#Catalogs :selected").attr("disabled", "disabled");
+        });
+
+        // Add btnAddExtendField
+        $("#btnAddExtendField").click(function() {
+            eForm.efTools.CreateExtend($("#ddlExtendField :selected").val(), $("#ddlExtendField :selected").text());
+        });
+
+        $("#btnAddRow").click(function() {
+            var nRow = eForm.efTools.getNextRow();
+
+            // Trước khi thêm dòng cần hiển thị đường kẻ
+            $('.icontainer').removeClass('rowBorder');
+            // Thêm dòng
+            $('<div></div>').addClass('icontainer')
+                .attr('rid', nRow)
+                .hover(function(){
+                    $(this).children('.btnDeleteRow').css('visibility','visible');
+                }, function(){
+                    $(this).children('.btnDeleteRow').css('visibility','hidden');
+                })
+                .appendTo($("#pnl_root"));
+            // Kiểm tra xem số dòng hiển thị/không để thêm dòng mới hiển thị/không tương ứng
+            var itmVisible = $('.iRowNumber').css('visibility');
+            if (itmVisible=="visible") {
+                $('<span>'+ nRow +'</span>').addClass('iRowNumber').addClass('rowNumber')
+            .appendTo($('.icontainer[rid="' + nRow + '"]'));
+            }
+            else{
+                $('<span>'+ nRow +'</span>').addClass('iRowNumber')
+            .appendTo($('.icontainer[rid="' + nRow + '"]'));
+            }
+            $('<a class="btnDeleteRow"><b>Χ</b></a>')
+            .click(function(){
+                eForm.efTools.deleteRow(nRow);
+            })
+            .appendTo($('.icontainer[rid="' + nRow + '"]'));
+
+            // Thiết lập lại chiều cao của trang nếu số dòng cao hơn chiều cao mặc định
+            var itmHeight = 0;
+            var defaultHeight = $('#pnl_root').height() - 20;
+            $('.icontainer').each(function(){
+                itmHeight += $(this).height() + 1;
+            });
+            if(itmHeight > defaultHeight){
+                $('#pnl_root').height(itmHeight);
+            }
+
+            eForm.efTools.bindRowEvent();
+        });
+
+        $("#DocFields").change(function() {
+            var docfield = parseInt($(this).val());
+            $.ajax({
+                url: '@Url.Action("GetDoctypes", "Form")',
+                type: "POST",
+                data: {"docfieldId": docfield},
+                success: function(result) {
+                    var doctypes = $.parseJSON(result);
+                    $("#ddlDocType option[value!= '0']").remove();
+                    for(var i = 0; i < doctypes.length; i++) {
+                        var option = $("<option>").text(doctypes[i].Text).val(doctypes[i].Value);
+                        $("#ddlDocType").append(option);
+                    }
+                },
+                error: function(xhr) {
+                    alert(xhr.statusText);
+                }
+            });
+        });
+
+        $("#ddlDocType").change(function() {
+            var doctypeId = $(this).val();
+            if(doctypeId == "0")
+                return;
+            $.ajax({
+                url: '@Url.Action("GetExfields", "Form")',
+                type: "POST",
+                data: {"doctypeId": doctypeId},
+                success: function(result) {
+                    var exfields = $.parseJSON(result);
+                    $("#ddlExtendField option[value!= '0']").remove();
+                    for(var i = 0; i < exfields.length; i++) {
+                        var option = $("<option>").text(exfields[i].Text).val(exfields[i].Value);
+                        var exfield = _.find(exfieldUseds, function(ex) {
+                            return ex.toString() === exfields[i].Value;
+                        });
+                        if(exfield) {
+                            option.attr("disabled", "disabled");
+                        }
+                        $("#ddlExtendField").append(option);
+                    }
+                },
+                error: function(xhr) {
+                    alert(xhr.statusText);
+                }
+            });
+        });
+    });
+
+    // Add event Lưu form - tạo phiên bản mới
+    function Save(formId) {
+        $("#btnSave").attr("disabled", "disabled");
+        if(!eForm.database.hasControlC9C10(3)) {
+            alert('@Localizer("Common.Form.Create.Diaglog")');
+            return;
+        }
+        var json = eForm.database.JsonSerialize(3);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Save", "Form")',
+            data: { "json": json, "formid": formId},
+            success: function(result){
+                if(result) {
+                    alert('Lưu thành công');
+                }
+                else {
+                    alert('@Localizer("Common.Form.Create.Error.Diaglog")');
+                }
+            },
+            error: function(xhr) {
+                alert(xhr.statusText);
+            },
+            complete: function() {
+                $("#btnSave").removeAttr("disabled");
+            }
+        });
+    }
+
+    var myLayout; // a var is required because this page utilizes: myLayout.allowOverflow() method
+    $(function () {
+        // Hien thi Grid
+        $('#btnGrid').click(function () {
+            $('#pnl_root .icontainer').toggleClass('rowBorder');
+        });
+
+        // Hien thi so
+        $('#btnNumber').click(function () {
+            $('.iRowNumber').toggleClass('rowNumber');
+        });
+
+        // khoi tao chieu rong chieu cao cua cac thuoc tinh
+        window.onload = function () {
+            whenBrowserResize();
+            $('#hiddenMulti').focus();
+            // Gioi han so chu trong Danh sach cac thu tuc thong thuong
+            var limitChar = 100;
+            var numberChar = 0;
+            var textChar;
+            var newChar;
+            $('div.itmUsual h4').each(function () {
+                numberChar = $(this).html().length;
+                if (numberChar > limitChar) {
+                    textChar = $(this).html();
+                    newChar = textChar.substr(0, limitChar);
+                    $(this).html(newChar + '...');
+                }
+            });
+        };
+
+        function whenBrowserResize() {
+            // height = chieu cao cua man hinh hien thi (da tru di footer va header)
+            var height = getViewportHeight();
+            if (height > 0) {
+                var totalHeight = $('html').height();
+                var totalWidth = $('html').width();
+                var leftBoxWidth = $('.leftBox').width();
+                var controlBoxHeight = $('.controlBox').height();
+                var titleBoxHeight = $('.titleBox').height();
+                $('.bigWrapper').height(totalHeight);
+                $('.bigWrapper').width(totalWidth);
+                $('.rightBox').height(totalHeight - titleBoxHeight);
+                $('.rightBox').width(totalWidth - leftBoxWidth - 5);
+                $('#pnl_root_prop').height(totalHeight - titleBoxHeight - controlBoxHeight - 12);
+                $('#left-panel').height(totalHeight - titleBoxHeight);
+                $('#left-panel').width(totalWidth - leftBoxWidth - 6);
+                $('#pnl_root1').height(totalHeight - titleBoxHeight - 57);
+            }
+        }
+
+        // lay chieu cao thuc cua man hinh hien thi (ko phai do phan giai cua may)
+        // da tru di do cao cua footer va header
+        function getViewportHeight() {
+            var h = 0;
+            if (self.innerHeight)
+                h = window.innerHeight;
+            else if (document.documentElement && document.documentElement.clientHeight)
+                h = document.documentElement.clientHeight;
+            else if (document.body)
+                h = document.body.clientHeight;
+            return h - 65 - 7;
+        }
+
+        // su kien khi window resize
+        $(window).bind('resize', function () {
+            whenBrowserResize();
+        });
+    });
+</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Config</title>
+</head>
+<body>
+    <div class="leftBox">
+        <div id="right-panel" style="">
+            <div id="pnl_option" style="background-color: #E3EEFF; position: relative;" runat="server">
+                <div class="controlBox" style="padding: 4px; background: #BFDBFF; border-top-right-radius: 10px; -moz-border-radius-topright: 10px;">
+                    @if (ViewBag.IsTemp == false)
+                    {
+                        <div runat="server" id="divEdit">
+                            <span style="">@Localizer("Common.Form.Update.Error")</span>
+                            <div style="text-align: right;">
+                                <input id="btnAddLabel" type="button" value="@Localizer("Common.Form.AddTitle")" data-res="egov.resources.form.addtitle" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div runat="server" id="divDesign">
+                            <select id="ctrlOpt" style="width: 180px;">
+                                <option value="c1" data-res="egov.resources.form.title">@Localizer("Common.Form.Title")</option>
+                                <option value="c9" data-res="egov.resources.form.brand">@Localizer("Common.Form.BrandBox")</option>
+                            </select>
+                            <input type="button" id="btnAdd" value="@Localizer("Common.Button.CreateControl")" style="width: 120px;" />
+                            <br />
+                            @Html.DropDownList("Catalogs", catalogs, Localizer("Common.Form.ChooseCatelog"), new { style = "width: 180px;" })
+                            <input type="button" id="btnAddCat" value="@Localizer("Common.Form.AddCatelog")" style="width: 120px;" />
+                            <br />
+                            @Html.DropDownList("DocFields", docfields, Localizer("Common.Form.ChooseField"), new { style = "width: 180px;" })
+                            @Localizer("Common.Form.Docfield")
+                            <br />
+                            <select runat="server" id="ddlDocType" style="width: 180px;">
+                                <option value="0" data-res="egov.resources.form.choosedocumenttype">@Localizer("Common.Form.ChooseDoctype")</option>
+                            </select>
+                            @Localizer("Common.Form.Doctype")
+                            <br />
+                            <select runat="server" id="ddlExtendField" style="width: 180px;">
+                                <option value="0" data-res="egov.resources.form.chooseextendfield">@Localizer("Common.Form.ChooseExtendField")</option>
+                            </select>
+                            <input type="button" id="btnAddExtendField" value="@Localizer("Common.Form.AddExtendField")" style="width: 120px;" />
+                            <br />
+                        </div>
+                    }
+                    <input type="button" onclick="Save('@ViewBag.FormId    ')" id="btnSave" runat="server" value="@Localizer("Common.Form.SaveForm")" style='background-image: @Url.Content("~/Content/Images/save24.png"); width: auto; margin-right: 0;' />
+                </div>
+                <div id="pnl_root_prop" style="overflow-y: auto; overflow-x: hidden; background-color: White;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rightBox">
+        <div class="main-panel" style="position: relative;">
+            <div id="Div1" runat="server">
+                <div style="clear: both;">
+                </div>
+            </div>
+            <div id="left-panel" style="width: 875px; background-color: #E3EEFF;">
+                <div id="pnl_root_commands">
+                    <input type="button" id="btnGrid" value="@Localizer("Common.Form.ShowLine")" style="margin-left: 5px;" data-res="egov.resources.form.showgrid" />
+                    <input type="button" id="btnNumber" value="@Localizer("Common.Form.ShowNumber")" style="margin-right: 5px;" data-res="egov.resources.form.shownumber" />
+                    <input type="button" id="btnAddRow" value="@Localizer("Common.Editor.Table.AddRow")" style="margin-right: 20px;" data-res="egov.resources.form.addrow" />
+                </div>
+                @*<span id="lblDocTypeName" runat="server" text="" style="color: #467596; font-size: 14px; float: left; font-weight: bold; padding: 5px; text-align: center; clear: both; width: 99%;">@ViewBag.DoctypeName;</span>
+                *@
+                <div id="pnl_root1" style="float: left; background: white; overflow-y: scroll; width: 100%;">
+                    <div id="pnl_root" style="width: 820px;">
+                        <div class="icontainer css_SelectedRow" rid="1">
+                        </div>
+                        <div class="icontainer" rid="2">
+                        </div>
+                        <div class="icontainer" rid="3">
+                        </div>
+                        <div class="icontainer" rid="4">
+                        </div>
+                        <div class="icontainer" rid="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

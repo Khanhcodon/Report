@@ -1,0 +1,20 @@
+﻿@model BusinessTypeModel
+@*@using Bkav.eGovCloud.Entities
+@{
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+}*@
+
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.BusinessTypeId)
+<table>
+    <tr>
+        <td style="width:20%">
+            @Html.LabelRequireFor(model => model.BusinessTypeName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.BusinessTypeName)
+            @Html.ValidationMessageFor(model => model.BusinessTypeName)
+        </td>
+    </tr>    
+</table>

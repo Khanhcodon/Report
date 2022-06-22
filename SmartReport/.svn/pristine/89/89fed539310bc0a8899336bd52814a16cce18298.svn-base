@@ -1,0 +1,88 @@
+﻿<script id="supplementaryTemplate" type="text/x-jquery-tmpl">
+    <div id="dialogBoxListUser" style="width: 800px; height: 500px; font-size: 12px;">
+        <div class="dialog-center">
+            <div id="listUser" class="dialog-center-west ui-corner-all grid">
+                <div class="grid-header ui-layout-north">
+                    <div class="grid-header-wrap">
+                        <table class="table-main">
+                            <colgroup>
+                                <col style="width: 150px" />
+                                <col style="width: 100px" />
+                                <col />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header">Họ tên
+                                    </th>
+                                    <th class="header">Tài khoản
+                                    </th>
+                                    <th class="header">Đơn vị công tác
+                                    </th>
+                                    <th class="header">Xử lý chính
+                                    </th>
+                                    <th class="header">
+                                        <input type="checkbox" id="dongxulyAll" onchange="egov.cshtml.transfer.bindSendAllChange(this)" />
+                                        Đồng xử lý
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div id="Div1" class="grid-content ui-layout-center ">
+                    <table class="table-main" id="tblUsersTransfer">
+                        <colgroup>
+                            <col style="width: 150px" />
+                            <col style="width: 100px" />
+                            <col />
+                            <col style="width: 100px" />
+                            <col style="width: 100px" />
+                        </colgroup>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dialog-center-center ui-widget-content ui-corner-all">
+                <div class="ui-layout-content " style="padding: 0; background: #FFFFFF" id="divListUserTransfer">
+                    <div id="sendXlcLabel" style="font-weight: bold">
+                        Gửi bản chính cho:
+                    </div>
+                    <div id="divViewXulychinh" style="display: none">
+                    </div>
+                    <div id="divViewDongxuly" style="display: none">
+                    </div>
+                    <div id="divViewThongbao" style="display: none">
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-center-south">
+                <div id="divSearch" class="" style="text-align: center; width: 70%; float: left; padding-top: 2px;">
+                    <input type="text" id="searchUser" style="width: 99%" />
+                </div>
+                <div id="divButton" style="padding: 5px 5px 0px 0px; text-align: right">
+                </div>
+            </div>
+        </div>
+        <div class="dialog-south">
+            <h3>Thông tin yêu cầu bổ sung</h3>
+            <form name="supplementForm">
+                @Html.AntiForgeryToken()
+                <textarea id="commentSend" style="width: 99%"></textarea>
+                <span class="supp-common">Các yêu cầu bổ sung thường dùng</span><br />
+                <br />
+                <select name="SupplementType" onchange="egov.cshtml.transfer.supplementary.supplementaryTypeChange(this)">
+                    <option value="1">Tính lại thời gian</option>
+                    <option value="2">Tiếp tục xử lý</option>
+                    <option value="3">Cộng thêm ngày cố định</option>
+                </select>
+                <span class="supp-offset" style=""><span class="supp-offset-label">Số ngày</span>
+                    <input type="text" name="OffsetDay" class="supp-offset-day" value="1" />
+                    <span style="margin-left: 10px">ngày</span>
+                </span>
+            </form>
+        </div>
+    </div>
+</script>

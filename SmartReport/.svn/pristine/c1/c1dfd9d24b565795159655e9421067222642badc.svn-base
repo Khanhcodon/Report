@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    $(function () {
+
+        $(".doctype-select span").click(function () {
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            $(this).parents(".qtip").hide();
+        });
+
+    });
+</script>
+
+<div class="doctype-select menu-dropdown" id="DoctypeSelect">
+    <span><a href="#">Chức năng đang xây dựng...</a></span>
+    <span><a href="#">Tất cả</a></span>
+    <span class="selected"><a href="#">Hồ sơ công chứng</a></span>
+    <span><a href="#">Công văn nội bộ</a></span>
+    <span><a href="#">Đăng ký kinh doanh Hộ kinh doanh</a></span>
+    <span><a href="#">Bổ sung hộ tịch cho mọi trường hợp, không phân biệt độ tuổi</a></span>
+    <span><a href="#">Cải chính hộ tịch cho người từ đủ 14 tuổi trở lên</a></span>
+    <span><a href="#">Thực hiện chế độ ưu đãi với người hoạt động cách mạng, hoạt động kháng chiến bị địch bắt tù đày hoạt động kháng chiến</a></span>
+    <span><a href="#">Chứng thực chữ ký của người dịch trong các giấy tờ, văn bản từ tiếng việt sang tiếng nước ngoài hoặc từ tiếng nước ngoài sang tiếng việt</a></span>
+    <span><a href="#">Đề nghị cấp lại Bằng "Tổ quốc ghi công"</a></span>
+    <span><a href="#">Giải quyết chế độ người hoạt động kháng chiến bị nhiễm chất độc hóa học</a></span>
+    <span><a href="#">Giải quyết cấp thẻ BHYT</a></span>
+    <span><a href="#">Giải quyết chế độ người hoạt động kháng chiến giải phóng dân tộc</a></span>
+</div>

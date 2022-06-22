@@ -1,0 +1,142 @@
+﻿@model CitizenModel
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<div class="tab">
+    <table>
+        @if (Model.Id == 0)
+        {
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelRequireFor(model => model.Account):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Account,
+               new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.Account.Label") })
+                    @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelRequireFor(model => model.Password):
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.Password,
+               new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.Password.Label") })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelRequireFor(model => model.ConfirmPassword):
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.ConfirmPassword,
+               new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.ConfirmPassword.Label") })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td style="width: 15%">
+                    @Html.LabelFor(model => model.Account):
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Account)
+                     @Html.HiddenFor(model => model.Account)
+                </td>
+            </tr>
+        }
+
+         <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.IsActivated):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsActivated)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelRequireFor(model => model.Email):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Email,
+                 new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.Email.Label") })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.Address):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Address,
+                new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.Address.Label") })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.FirstName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.FirstName,
+                new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.FirstName.Label") })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.LastName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.LastName, 
+                new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.LastName.Label") })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.PhoneNumber):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.PhoneNumber,
+                new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.PhoneNumber.Label") })
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.IdCardNumber):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IdCardNumber, new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.IdCardNumber.Label") })
+                @Html.ValidationMessageFor(model => model.IdCardNumber, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.DateOfIssue):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DateOfIssue, new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.DateOfIssue.Label") })
+                @Html.ValidationMessageFor(model => model.DateOfIssue, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%">
+                @Html.LabelFor(model => model.PlaceOfIssue):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.PlaceOfIssue, new { @class = "form-control", @placeholder = Localizer("Citizen.CreateOrEdit.Fields.PlaceOfIssue.Label") })
+                @Html.ValidationMessageFor(model => model.PlaceOfIssue, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+       
+    </table>
+</div>

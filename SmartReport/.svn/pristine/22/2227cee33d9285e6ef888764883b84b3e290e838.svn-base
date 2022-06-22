@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+    var pdfSrc2 = String.Format("data:application/pdf;base64,{0}", ViewBag.Base64PDF2);
+    var imgSrc = String.Format("data:image/gif;base64,{0}", ViewBag.Base64Image);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Thông tin</title>
+</head>
+<body>
+    @*<object data="@pdfSrc2" type="application/pdf" width="1024" height="700">
+
+    </object>*@
+    <object data="@pdfSrc2" type="application/pdf" width="1024" height="700">
+        <embed src="@pdfSrc2" type="application/pdf">
+            <p>This browser does not support PDFs. Please download the PDF to view it: <a href="@pdfSrc2">Download PDF</a>.</p>
+        </embed>
+    </object>
+    @*<iframe src="@pdfSrc2" height="100%" width="100%"></iframe>*@
+</body>
+</html>

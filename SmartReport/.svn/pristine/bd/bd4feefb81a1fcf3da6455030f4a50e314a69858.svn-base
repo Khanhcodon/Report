@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.BusinessModel>
+@{
+    ViewBag.Title = "Danh sách doanh nghiệp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.js"></script>
+<script src="../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftAjax.js"></script>
+<script src="../../Scripts/bkav.egov/libs/MicrosoftMvcAjax.js"></script>
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/bkav.egov/libs/document/dialog.adapter.js"></script>
+<script type="text/javascript">
+    function deleteBusiness(id) {
+        messageBoxConfirm({
+            message: '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Business.ConfirmDelete"))',
+            buttonOkFunction: function () {
+                $("#formdelete" + id).submit();
+            }
+        });
+    }
+
+    function onBegin() {
+        $("#divListBusiness").blockpanel({ text: "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('#divListBusiness').unblockpanel();
+    }
+
+    function onFailure() {
+        alert(""@Localizer("Common.Error")"");
+        $('#divListBusiness').unblockpanel();
+    }
+</script>
+<div class="bkavegov-content-title">
+    <h3>
+        Danh sách doanh nghiệp</h3>
+</div>
+<div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#">
+            Danh sách</a></li>
+        <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+    </ul>
+    <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+        @Html.Partial("_Notifications")
+        <div id="divListBusiness">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+    </div>
+</div>

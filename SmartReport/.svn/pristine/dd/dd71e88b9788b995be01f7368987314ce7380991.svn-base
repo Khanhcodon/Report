@@ -1,0 +1,47 @@
+﻿@using Bkav.eGovCloud.Helper
+@model Surveys
+@if (Model != null)
+{
+    <ul class="list-group">
+        @foreach (var item in Model.Items)
+        {
+            <li class="list-group-item @(item.Active ? "active" : "")" id="@item.DocTypeId">
+                <p>@item.DocTypeName</p>
+                <div class="group-action">
+                    <i class="icon-remove2" doctype-id="@item.DocTypeId"></i>
+                </div>
+            </li>
+        }
+    </ul>
+    if (Model.Pager.EndPage > 1)
+    {
+        <ul class="pagination">
+            @if (Model.Pager.CurrentPage > 1)
+            {
+                <li>
+                    <a href="javascript:void(0)" data="1">First</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" data="@(Model.Pager.CurrentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+            {
+                <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+                    <a href="javascript:void(0)" data="@page">@page</a>
+                </li>
+            }
+
+            @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+            {
+                <li>
+                    <a href="javascript:void(0)" data="@(Model.Pager.CurrentPage + 1)">Next</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" data="@(Model.Pager.TotalPages)">Last</a>
+                </li>
+            }
+        </ul>
+    }
+}

@@ -1,0 +1,168 @@
+﻿@using ActiveQueryBuilder.Web.MVC
+@model ActiveQueryBuilder.Web.Server.QueryBuilder
+@{
+    ViewBag.Title = "Báo cáo tổng hợp";
+    var controls = Html.QueryBuilder(Model, s => s.Theme = "bootstrap");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bootswatch/cosmo/bootstrap.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/themes/black-tie/jquery-ui.css")" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.4.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.11.4.min.js")"></script>
+    <link href="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/webdatarocks.css" rel="stylesheet" />
+    <script src="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/webdatarocks.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/webdatarocks.toolbar.min.js"></script>
+
+    <script src="@Url.Content("~/assets/vendors/highcharts.js")"></script>
+    <script src="@Url.Content("~/assets/vendors/highcharts-more.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/webdatarocks-1.3.1/webdatarocks.highcharts.js")"></script>
+    <style>
+        .section-title, .body-content {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid body-content">
+        <div class="row">
+            <div class="col-md-12">
+                @controls.GetHtml()
+                <div class="qb-ui-layout">
+                    <div class="qb-ui-layout__top">
+                        <div class="qb-ui-layout__left">
+                            <div class="qb-ui-structure-tabs">
+                                <div class="qb-ui-structure-tabs__tab">
+                                    <input type="radio" id="tree-tab" name="qb-tabs" checked />
+                                    <label for="tree-tab">Database</label>
+                                    <div class="qb-ui-structure-tabs__content">
+                                        @controls.ObjectTreeView().GetHtml()
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qb-ui-layout__right">
+                            @controls.SubQueryNavigationBar().GetHtml()
+                            @controls.Canvas().GetHtml()
+                            @controls.StatusBar().GetHtml()
+                            @controls.Grid().GetHtml()
+                        </div>
+                    </div>
+                    <div class="qb-ui-layout__bottom">
+                        @controls.SqlEditor().GetHtml()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <button id="btnSaveQuery">Save</button>
+        </footer>
+        <div class="diagramWrapper">
+            <div id="pivotContainer" class="pane"></div>
+        </div>
+        <div>
+            <div id="highchartsContainer" style="width:500px;height:400px;"></div>
+            <div id="highchartsContainerColumn" style="width:500px;height:400px;"></div>
+            <div id="highchartsContainerLine" style="width:500px;height:400px;"></div>
+            <div id="highchartsContainerArea" style="width:500px;height:400px;"></div>
+            <div id="highchartsContainerBar" style="width:500px;height:400px;"></div>
+        </div>
+        <hr />
+        
+    </div>
+    <form action="/" method="post" id="formSubmit">
+        <input type="hidden" name="SqlQuery" class="SqlQuery" value="" />
+    </form>
+    <script>
+        $("#btnSaveQuery").click(function () {
+            var sqlFirst = RenameSql($(".qb-ui-editor").find("textarea").val())
+            var sql = "dashboard:" + sqlFirst;
+            $("#SqlQuery").val($(".qb-ui-editor").find("textarea").val());
+            $.ajax({
+                url: "GetDataConfigReport",
+                type: "post",
+                data: {
+                    sql: sql
+                },
+                success: function (result) {
+
+                    var pivot = new WebDataRocks({
+                        container: "pivotContainer",
+                        toolbar: true,
+                        report: {
+                            dataSource: {
+                                data: result
+                            }
+                        },
+                        reportcomplete: function () {
+                            pivot.off("reportcomplete");
+                            createChartColumn();
+                            createChartBar();
+                            createChartLine();
+                            createChartArea();
+                        }
+                    });
+                    function createChartColumn() {
+                        pivot.highcharts.getData({
+                            type: "column"
+                        }, function (data) {
+                            Highcharts.chart("highchartsContainerColumn", data);
+                        }, function (data) {
+                            Highcharts.chart("highchartsContainerColumn", data);
+                        });
+                    }
+
+                    function createChartBar() {
+                        pivot.highcharts.getData({
+                            type: "bar"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerBar', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerBar', data);
+                        });
+                    }
+                    function createChartLine() {
+                        pivot.highcharts.getData({
+                            type: "line"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerLine', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerLine', data);
+                        });
+                    }
+
+                    function createChartArea() {
+                        pivot.highcharts.getData({
+                            type: "area"
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerArea', data);
+                        }, function (data) {
+                            Highcharts.chart('highchartsContainerArea', data);
+                        });
+                    }
+                }
+            });
+        });
+        function RenameSql(sql) {
+            var sqlAfter = sql;
+            var strSelect = sql.split('Select').pop().split('From')[0];
+            var listSelect = strSelect.split(",");
+            for (var i = 0; i < listSelect.length; i++) {
+                var strColumn = listSelect[i].trim();
+                var listPropColumn = strColumn.split("As");
+                var name = listPropColumn[0];
+                var alias = listPropColumn[1].trim();
+                name = name.split(".").length > 1 ? name.split(".")[1].trim() : name.trim();
+                sqlAfter = sqlAfter.replace(alias, name);
+            }
+            return sqlAfter
+        }
+    </script>
+</body>
+</html>

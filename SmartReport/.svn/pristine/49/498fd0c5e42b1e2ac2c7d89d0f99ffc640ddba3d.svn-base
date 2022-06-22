@@ -1,0 +1,50 @@
+﻿@*@using StackExchange.Profiling*@
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap-theme.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bkav.egov/admin.css")" rel="stylesheet" />
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/browser/jquery.browser.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.cookie.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/resource/egov.resources.bindresource.min.js"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js")"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.min.js"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.nicescroll.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/hashbase64.js"></script>
+    <script src="../../../../Scripts/bkav.egov/locache/egov.locache.js"></script>
+    <script src="@Url.Content("~/Content/bootstrap/js/bootstrap.min.js")"></script>
+    <script type="text/javascript">
+        //$ = window.jQuery;
+        $(function () {
+            $(document).bindResources();
+            var interval = setInterval(function () {
+                var profiler = $("div.profiler-result").parent();
+                if (profiler.length > 0) {
+                    clearInterval(interval);
+                    profiler.css({ 'margin-left': 10 - profiler.width() + 'px' }).hover(function () {
+                        profiler.css({ 'margin-left': '0px' });
+                    }, function () {
+                        profiler.css({ 'margin-left': 10 - profiler.width() + 'px' });
+                    });
+                }
+            }, 100);
+            $('html').niceScroll({ styler: "fb", autohidemode: false, cursorborder: "1px solid #DDDDDD", cursorborderradius: "5px", cursorcolor: "#424242" });
+        });
+    </script>
+   @* @MiniProfiler.RenderIncludes()*@
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

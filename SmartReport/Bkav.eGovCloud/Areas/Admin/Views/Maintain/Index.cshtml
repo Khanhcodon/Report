@@ -1,0 +1,43 @@
+﻿@model MaintainModel
+@{
+    ViewBag.Title = "";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-folder"></i>
+        <span>Bảo trì hệ thống</span>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Dung lượng ổ đĩa: </label>
+            <div class="col-sm-12">
+                <p class="form-control-static">@Model.DiskTotalSize</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Dung lượng còn trống: </label>
+            <div class="col-sm-12">
+                <p class="form-control-static">@Model.DiskTotalFreeSpace</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Dung lượng thư mục lưu tạm tệp: </label>
+            <div class="col-sm-12">
+                <p class="form-control-static">@Model.TempSize</p>
+                <form action="/admin/maintain/DeleteTempFolder" method="post">
+                    <button class="btn btn-sm btn-info" type="submit">Làm trống</button>
+                </form>
+            </div>
+        </div>
+        <input type="text" value="@Model.CacheSize"/>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿<div class="doc-info-label">
+    <label> <span class="icon icon-tree"></span>Tình hình thực hiện khảo sát các đơn vị Đã có: ${totalReported} / ${total} đơn vị thực hiện phiếu khảo sát</label>
+    <a href="#" class="attachment-download-all pull-right" id="warningCompilationDetail">
+        <span class="icon icon-download4"></span> <span>Xem chi tiết</span>
+    </a>
+</div>
+<div class="doc-info-content" >
+    <div id="wrapWarningCompilation">
+        <table class="table table-bordered ">
+            <colgroup>
+                <col style="width:40px" />
+                <col />
+                <col style="width:140px; text-align: center" />
+            </colgroup>
+            <tr>
+                <th>STT</th>
+                <th>Tên đơn vị</th>
+                <th>Trạng thái</th>
+            </tr>
+            <tbody>
+                {{each data}}
+                <tr>
+                    <td>${$index + 1}</td>
+                    <td>${this.UserCurrentName}</td>
+                    <td>
+                        {{if this.Status == 4}}
+                        <span style="border: solid #30a000 2px;  padding: 3px 7px; border-radius: 5px;">Đã thực hiện</span>
+                        {{else}}
+                        <span style="border: solid #ff6a00 2px;  padding: 3px 7px; border-radius: 5px;">Chưa thực hiện</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

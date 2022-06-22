@@ -1,0 +1,82 @@
+﻿@*@model IEnumerable<EmbryonicFormModel>
+@{
+    var docTypeId = ViewBag.DocTypeId;
+}*@
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#tbSelectEmbryonicForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+</script>
+<table id="tbSelectEmbryonicForm">
+    <colgroup>
+        <col />
+        <col />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.EmbryonicForm.Index.List.Column.EmbryonicFormName")
+            </th>
+            <th class="header">@Localizer("Common.EmbryonicForm.Index.List.Column.IsActivated")</th>
+
+            <th class="header"><span data-res="egov.resources.tableheader.select">Chọn </span>
+                <input type="checkbox" id="checkAll" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int number = 0;
+            foreach (var item in Model)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                    <input  type="hidden" value="@item.EmbryonicFormId" id="embryonicFormId" />
+                </td>
+                <td>
+                    @item.EmbryonicFormName
+                </td>
+                <td style="text-align: center">
+                    @*@Html.CheckBoxFor(m => item.IsActivated, new { onchange = "changeStatus(this);", dataid = item.EmbryonicFormId })*@
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.resource.nodata">Không có resource nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/x-jquery-tmpl" id="tmpSelectEmbryonicForm">
+    <tr>
+        <td>${EmbryonicFormName}
+            <input type="hidden" value="${EmbryonicFormId}" />
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox" disabled="disabled" checked="${IsActivated}" />
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox" />
+        </td>
+    </tr>
+</script>

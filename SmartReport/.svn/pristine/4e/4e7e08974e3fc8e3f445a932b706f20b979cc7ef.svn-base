@@ -1,0 +1,4 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.Label.Error");
+}
+@Html.Partial("_Notifications")

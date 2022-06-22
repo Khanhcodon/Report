@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActiveQueryBuilder.SybaseMetadataProvider</name>
+    </assembly>
+    <members>
+        <member name="T:ActiveQueryBuilder.Core.SybaseMetadataProvider">
+            <summary> Metadata Provider for Sybase ASA. </summary>
+            <remarks> Working with Sybase ASE, use the <see cref="!:UniversalMetadataProvider">Universal Metadata Provider</see>.</remarks>
+        </member>
+    </members>
+</doc>

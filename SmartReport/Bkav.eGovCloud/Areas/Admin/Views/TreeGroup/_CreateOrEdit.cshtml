@@ -1,0 +1,104 @@
+﻿@model TreeGroupModel
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-list2"></i>
+        <span data-res="egov.resources.sitemap.treeGroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/treegroup/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm(Model.TreeGroupId == 0 ? "Create" : "Edit"))
+{
+    @Html.ValidationSummary(true)
+  
+    @Html.HiddenFor(model => model.TreeGroupId)
+
+    @Html.HiddenFor(model => model.Order)
+
+    <table id="timeJobInfo" style="width: 100%">
+        <tr>
+            <td style="width: 250px;">
+                @Html.LabelRequireFor(model => model.TreeGroupName):
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.TreeGroupName, 
+                                            new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+                  @if (Model.TreeGroupId == 0)
+            { 
+                <div>
+                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                </div>
+            }
+                @Html.ValidationMessageFor(model => model.TreeGroupName)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 250px;">
+                @Html.LabelFor(model => model.IsActived):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsActived)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 250px;">
+                @Html.LabelFor(model => model.IsDocumentTree):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsDocumentTree)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IsOtherSystems):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsOtherSystems)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 250px;">
+                @Html.LabelFor(model => model.IsShowUserFullName):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsShowUserFullName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IsShowTreeName):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsShowTreeName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Là node xử lý hồ sơ một cửa:
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsHsmc)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.HasChildrenContextMenuAdmin)
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasChildrenContextMenuAdmin)
+            </td>
+        </tr>
+    </table>
+}

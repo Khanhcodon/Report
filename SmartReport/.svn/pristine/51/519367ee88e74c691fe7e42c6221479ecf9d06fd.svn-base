@@ -1,0 +1,31 @@
+﻿<div class="documentRenewals">
+    {{if message}}
+    <span style="font-size: 12px; color: #ff6a00">${message}</span>
+    {{/if}}
+    <br /><br />
+    {{if !isNotNeedSign}}
+    <label class="radio-inline">
+        <input type="radio" name="IsSuccess" id="IsSuccessTrue" value="true" checked>
+        <span data-res="egov.resources.document.updateLastResult.ok"></span>
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="IsSuccess" id="IsSuccessFalse" value="false">
+        <span data-res="egov.resources.document.updateLastResult.deny"></span>
+    </label>
+    {{/if}}
+    
+    {{if isNotNeedSign}}
+    <div class="form-group">
+        <label data-res="egov.resources.document.updateLastResult.code"></label>
+        <input class="form-control updateLastResultCode" type="text" name="name" value="" />
+    </div>
+    <div class="form-group">
+        <label data-res="egov.resources.document.updateLastResult.datePublish"></label>
+        <input class="form-control updateLastResultDatePublish" type="text" name="name" value="" />
+    </div>
+    {{/if}}
+    <div class="form-group">
+        <label data-res="egov.resources.document.updateLastResult.comment"></label>
+        <textarea class="form-control updateLastResultComment" rows="2"></textarea>
+    </div>
+</div>

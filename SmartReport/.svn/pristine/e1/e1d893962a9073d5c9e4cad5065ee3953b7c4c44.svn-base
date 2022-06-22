@@ -1,0 +1,1758 @@
+﻿@using StackExchange.Profiling
+@{
+    var allReports = ViewBag.AllReports as string;
+    Layout = null;
+}
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/images/favicon.ico">
+    <title>Báo cáo tổng hợp</title>
+    <!-- Bootstrap 4.1.3-->
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href="@Url.Content("~/Content/jquery-ui-themes-1.12.1/jquery-ui.css")" rel="stylesheet" />
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/bootstrap-extend.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/master_style_btc.css">
+    <!-- Unique_Admin skins -->
+    <link rel="stylesheet" href="/Scripts/generalreport/main/css/skins/_all-skins_btc.css">
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_plugins/pace/pace.min.css">
+
+    <link href="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/webdatarocks.css" rel="stylesheet" />
+    <script src="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/wdt-client.js?v=12"></script>
+    <script src="~/Scripts/bkav.egov/libs/webdatarocks-1.2.0/webdatarocks.toolbar-custom.js"></script>
+    
+    @*<link href="../../Content/bkav.egov/sm/dashboard.css" rel="stylesheet" />*@
+
+    <link rel="stylesheet" href="/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+    <!-- Fontawesome -->
+    <link href="~/Scripts/generalreport/main/fontawesome/css/fontawesome.min.css" rel="stylesheet" />
+
+    <style>
+        #reportDataContent b, #reportDataContent strong {
+            font-weight: bold;
+        }
+
+        table.CSSTable {
+            border-width: 1px;
+            border-spacing: 0px;
+            border-style: solid;
+            border-color: black;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+            table.CSSTable th {
+                border-width: 1px;
+                padding: 0px;
+                border-style: solid;
+                border-color: black;
+                background-color: white;
+                -moz-border-radius:;
+            }
+
+            table.CSSTable td {
+                border-width: 1px;
+                padding: 0px;
+                border-style: solid;
+                border-color: black;
+                background-color: white;
+                -moz-border-radius:;
+            }
+
+        .wrapper {
+            background-image: url(../../Content/Images/home/background-web2.png);
+            background-size: 100%;
+        }
+
+        ::placeholder {
+            color: white;
+        }
+
+        .wraptext-header {
+            word-wrap: break-word;
+            text-overflow: unset !important;
+            white-space: normal;
+        }
+
+        .sidebar-fix {
+            height: 100vh !important;
+        }
+
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                width: 100%;
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                ul.tabs li.current {
+                    border-bottom: 2px solid blue;
+                    color: blue;
+                }
+
+        .tab-content {
+            margin-top: 5px;
+            display: none;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+
+            .activeBg {
+                background-color: #5a240c;
+            }
+            .activeBgOld {
+                background-color: rgba(200, 200, 200, 0.2);
+            }
+
+        ul.tabssub {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabssub li {
+                width: 100%;
+                background: none;
+                color: #222;
+                display: inline-block;
+                cursor: pointer;
+                font-size: 12px;
+            }
+
+                ul.tabssub li.current-sub {
+                    border-bottom: 2px solid #9b79e4;
+                    color: #9b79e4;
+                }
+
+        .tabsub-content {
+            margin-top: 5px;
+            display: none;
+            padding: 15px;
+        }
+
+            .tabsub-content.current-sub {
+                display: inherit;
+            }
+
+            .closeFile {
+                left: 10px !important; 
+            }
+            .openFile{  
+                left: 319px !important;           
+            }
+
+            .closeFileGroup {
+                left: 10px !important; 
+            }
+            .openFileGroup{  
+                left: 319px !important;           
+            }
+
+            .htBold{
+                font-weight: bold !important;
+            }
+
+            .htCenter{
+                text-align: center !important;
+            }
+            .htMiddle {
+                vertical-align: middle !important;
+            }
+            .firstVisibleColumn{
+                border-left: 1px solid #ccc !important;
+            }
+            .htLeft {
+                text-align: left !important;
+            }
+            .htDimmed {
+                color: #777 !important;
+            }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse" style="width:100%">
+    <div class="wrapper" id="reportContent" style="height:100vh">
+        @*<header class="main-header d-none" >
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Ẩn hiện</span>
+                </a>
+               
+                <ul class="navbar-nav bd-navbar-nav flex-row" style="margin-left:15px" >
+                    <li class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle btn-warning" type="button" data-toggle="dropdown" aria-expanded="false">Tải về</button>
+                            <div class="dropdown-menu dropdown-grid" id="btnExports" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item" export-type="5" href="#">
+                                    <span class="icon fa fa-file-pdf-o"></span>
+                                    <span class="title">PDF</span>
+                                </a>
+                                <a class="dropdown-item" id="btnExportExcel" export-type="15" href="#">
+                                    <span class="icon fa fa-file-excel-o"></span>
+                                    <span class="title">Excel</span>
+                                </a>
+                                <a class="dropdown-item" id="btnExportWord" export-type="25" href="#">
+                                    <span class="icon fa fa fa-file-word-o"></span>
+                                    <span class="title">Docx</span>
+                                </a>
+                                <a class="dropdown-item" export-type="12"  href="#">
+                                    <span class="icon fa fa-code"></span>
+                                    <span class="title">XML</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <span class="icon fa fa-bar-chart"></span>
+                                    <span class="title">Bar Chart</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <span class="icon fa fa-pie-chart"></span>
+                                    <span class="title">Pie Chart</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <span class="icon fa fa-line-chart"></span>
+                                    <span class="title">Line Chart</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <span class="icon fa fa-file-image-o"></span>
+                                    <span class="title">Ảnh</span>
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <span class="icon fa  fa-file-zip-o"></span>
+                                    <span class="title">Zip</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                    <li class="dropdown d-none">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span id="groupName">Không hiển thị nhóm</span> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="reportGroups"></ul>
+                    </li>
+                    <li class="nav-item dropdown show d-none">
+                        <a class="nav-item nav-link dropdown-toggle mr-md-2" style="color: rgb(0, 0, 0);" href="#" data-toggle="dropdown" id="dateConditionCurrent" aria-haspopup="true" aria-expanded="true">
+                            Trong tháng
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions" id="dateConditions">
+                            <a href="#" class="dropdown-item" type="TrongNgay">Trong ngày</a>
+                            <a href="#" class="dropdown-item" type="TrongTuan">Trong tuần</a>
+                            <a href="#" class="dropdown-item" type="TrongThang">Trong tháng</a>
+                            <a href="#" class="dropdown-item" type="TrongQuy">Trong quý</a>
+                            <a href="#" class="dropdown-item" type="TrongNam">Trong năm</a>
+                            <a href="#" class="dropdown-item" type="TuyChon">Tùy chọn thời gian</a>
+                        </div>
+                    </li>
+                </ul>
+                <select id="monthSelect" class="form-control input-sm d-none statistics-time" style="width:120px; display:none">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                </select>
+                <select id="quarterSelect" class="form-control input-sm d-none statistics-time" style="width:120px">
+                    <option value="1">Quý 1</option>
+                    <option value="2">Quý 2</option>
+                    <option value="3">Quý 3</option>
+                    <option value="4">Quý 4</option>
+                </select>
+                <select id="yearSelect" class="form-control input-sm d-none statistics-time" style="width:120px"></select>
+                <input placeholder="Từ ngày" id="from" type="text" class="form-control d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" style="width:120px; display:none !important">
+                <input placeholder="Đến ngày" id="to" type="text" class="form-control d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" style="width:120px; margin-right: 15px; display:none !important">
+                
+            </nav>
+        </header>*@
+
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar"  style="height:100vh">
+            <!-- sidebar -->
+            <section class="sidebar sidebar-fix">
+                <!-- Sidebar user panel -->
+                <div class="user-panel" style="height:70px">
+                    <div class="info text-white" style="padding-bottom: 10px">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm" style="background: transparent; border-radius: 50px;">
+                        @*<div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-addon"><i class="fa fa-check"></i></span>
+                        </div>*@
+                    </div>
+                </div>
+
+                <!-- sidebar menu -->
+                <ul class="sidebar-menu" data-widget="tree" id="reportTree" style="height:calc(100vh - 70px); overflow-y:auto">
+                
+                </ul>
+            </section>
+            @*<div class="sidebar-background" style="background-image: url(/Scripts/generalreport/images/sidebar-bg/08.jpg);"></div>*@
+        </aside>
+        
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" id="reportDataContent" style="height:100vh; overflow-y:auto; background-image:url(/Content/Images/home/bg.jpg); background-size:100%">
+            <section class="" style="">
+                <div  style="padding:10px 30px; font-size:13px">
+                    <div class="row" style="height: 36px;">
+                        <div class="main-header" style="max-height:36px;">
+                            <!-- Header Navbar -->
+                            <div class="" style="width: 100%;margin-left: 0;padding-right:7px; background-color:#eee !important;">
+                                <!-- Sidebar toggle button-->
+                                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="background-repeat: no-repeat;border: none;font-size: 12px;background: #ebebeb;color: black;padding-top: 19%;height: 36px;">
+                                    <span class="sr-only">Toggle navigation</span>
+                                </a> 
+                            </div>
+                        </div>
+                        <button style="height:36px" class="btn dropdown-toggle btn-warning" type="button" data-toggle="dropdown" aria-expanded="false">Tải về</button>
+                        <div class="dropdown-menu dropdown-grid" id="btnExports" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" export-type="5" href="#"  id="btnExportPDF">
+                                <span class="icon fa fa-file-pdf-o"></span>
+                                <span class="title">PDF</span>
+                            </a>
+                            <a class="dropdown-item" id="btnExportExcel" export-type="15" href="#">
+                                <span class="icon fa fa-file-excel-o"></span>
+                                <span class="title">Excel</span>
+                            </a>
+                            <a class="dropdown-item" id="btnExportWord" export-type="25" href="#">
+                                <span class="icon fa fa fa-file-word-o"></span>
+                                <span class="title">Docx</span>
+                            </a>
+                           
+                        </div>
+                        @*<button class="btn btn-warning" id="btnDownload">Xuất báo cáo</button>*@
+                        <button style="height:36px;display: none;"  id="btnDieuHanhNoiBo" onclick="convertToCanvas()" type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target=".dieuHanhNoiBo">Điều hành nội bộ</button>
+                        @Html.Hidden("ValaToken", (string)ViewBag.ValaToken)
+                        @Html.Hidden("ValaService", (string)ViewBag.ValaService)
+                        @Html.Hidden("MessageService", (string)ViewBag.MessageService)
+                        @Html.Hidden("ValaId", (string)ViewBag.ValaId)
+                        @Html.Hidden("ValaFactoryId", (string)ViewBag.ValaFactoryId)
+                        @Html.Hidden("IsActive", (string)ViewBag.IsActive)
+
+                        <div class="modal fade dieuHanhNoiBo" tabindex="-1" role="dialog"  aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Điều hành nội bộ</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="height:auto">
+                                        <div class="container">
+                                             <ul class="tabs row">
+                                                 <li class="col-md-4 tab-link current" data-tab="tab-1"><i class="fa fa-pencil" aria-hidden="true"></i> Chat</li>
+                                                 <li class="col-md-4 tab-link" data-tab="tab-2"><i class="fa fa-comments" aria-hidden="true"></i> Tin điều hành</li>
+                                                 <li class="col-md-4 tab-link" data-tab="tab-3"><i class="fa fa-tachometer" aria-hidden="true"></i> BMM</li>
+                                             </ul>
+                                        <!--- Chats -->
+                                            <div id="tab-1" class="tab-content current">
+                                                <form>
+                                                    <div class="font-weight-bold h5">
+                                                        <a class="downFile">
+                                                            <i class="fa fa-file-word-o" 
+                                                               aria-hidden="true"
+                                                               style="color:blue"></i> 
+                                                            <span data-name="" 
+                                                                  class="nameFile" style="color: red">Chưa chọn báo cáo </span>
+                                                        </a>
+                                                    </div> 
+                                                    <div class="form-group">
+                                                        <label for="noidung">Nội dung chỉ đạo </label><span style="display:none"
+                                                                                                              class="error1 text-danger">
+                                                                                                            Chưa có nội dung
+                                                                                                        </span>
+                                                            <textarea type="text" rows="6" class="form-control" id="noidung"
+                                                                   placeholder="Nội dung"></textarea>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-4">
+                                                            <label for="nguoidung">Chat gần đây</label>
+                                                            <input type="text" 
+                                                                   autocomplete="off"
+                                                                   class="form-control" 
+                                                                   data-user=""
+                                                                   id="nguoidung" 
+                                                                   placeholder="Tìm chat"
+                                                                   onkeyup="filterFunction('nguoidung','listUser')" />
+                                                            <ul style="width: auto; height: 125px; overflow: auto" id="listUser" class="list-group col-md-12"></ul>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label for="nguoidungmoi">Chat mới</label>
+                                                            <input type="text"
+                                                                   autocomplete="off"
+                                                                   class="form-control"
+                                                                   data-newuser=""
+                                                                   id="nguoidungmoi"
+                                                                   placeholder="Tìm chat mới"
+                                                                   onkeyup="filterFunction('nguoidungmoi','listNewUser')" />
+                                                            <ul style="width: 212px; height: 125px; overflow: auto" id="listNewUser" class="list-group col-md-12"></ul>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label for="nhomnguoidung">Group</label>
+                                                            <input type="text" 
+                                                                   autocomplete="off"
+                                                                   class="form-control" 
+                                                                   data-group=""
+                                                                   id="nhomnguoidung"
+                                                                   placeholder="Tìm nhóm"
+                                                                   onkeyup="filterFunction('nhomnguoidung', 'listGroup')" />
+                                                            <ul style="width: 212px; height: 125px; overflow: auto" id="listGroup" class="list-group col-md-12"></ul>
+                                                        </div>
+                                                    </div>
+                                                    <button id="sendChatss" type="submit" class="btn btn-primary float-right">Gửi</button>
+                                                </form>
+                                            </div>
+                                            <!--- Tin dieu hanh -->
+                                            <div id="tab-2" class="tab-content">
+                                                <form>
+                                                    <div class="font-weight-bold h5">
+                                                        <a class="downFile">
+                                                            <i class="fa fa-file-word-o"
+                                                               aria-hidden="true"
+                                                               style="color:blue"></i>
+                                                            <span data-name=""  class="nameFile" style="color: red">Chưa chọn báo cáo</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="noidungtab2">Nội dung chỉ đạo</label> <span style="display:none" 
+                                                                                                            class="error3 text-danger">Chưa có nội dung
+                                                                                                            </span>
+                                                        <textarea type="text" rows="6" class="form-control" id="noidungtab2" 
+                                                                  placeholder="Nội dung"></textarea>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label for="where">Gửi vào:</label>
+                                                        <input type="text" 
+                                                               autocomplete="off" 
+                                                               class="form-control" 
+                                                               data-where=""
+                                                               id="where"
+                                                               onkeyup="filterFunction('where','options')">
+                                                        <span style="display:none" class="error4 text-danger">Chưa chọn nơi gửi</span>
+                                                        <ul style="width: 203px; height: 100px; overflow: auto" id="options" class="list-group col-md-12"></ul>
+                                                    </div>
+                                                    <button id="sendNoiBo" type="submit" class="btn btn-primary float-right">Gửi</button>
+                                                </form>
+                                            </div>
+                                            <!--- BMM -->
+                                            <div id="tab-3" class="tab-content">
+                                                <div class="container">
+                                                    <ul class="tabssub row">
+                                                        <li class="col-md-6 tabsub-link current-sub" data-tabsub="tabsub-1"><i class="fa fa-users" aria-hidden="true"></i> Giao nhiệm vụ</li>
+                                                        <li class="col-md-6 tabsub-link" data-tabsub="tabsub-2"><i class="fa fa-info-circle" aria-hidden="true"></i> Chi tiết giao nhiệm vụ</li>
+                                                    </ul>
+                                                    <div id="tabsub-1" class="tabsub-content current-sub">
+                                                        <div style='width: 100%; height: 100%;'>
+                                                            <form id='formBmm'>
+                                                                <div class="font-weight-bold h5">
+                                                                    <a class="downFile">
+                                                                        <i class="fa fa-file-word-o"
+                                                                           aria-hidden="true"
+                                                                           style="color:blue"></i>
+                                                                        <span data-name="" class="nameFile" style="color: red">Chưa chọn báo cáo</span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Nội dung chỉ đạo:</label>
+                                                                    <textarea id="txtContent" class="form-control result" rows="2"></textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Thời gian xử lý:</label>
+                                                                    <input id="MissionDate" type="datetime" class="form-control datepicker" value="" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Người xử lý:</label>
+                                                                    <input type="hidden" id="txtUsername" name="txtUsername" value="">
+                                                                    <input type="hidden" id="txtCoUsername" name="txtCoUsername" value="">
+                                                                </div>
+                                                                <div id="content-listdata" class="form-group" style="border: 1px solid #BDBDBD;padding:5px;overflow:auto; overflow-x: hidden;height:250px;">
+                                                                    @*<div class="form-group" style="border-bottom: 1px solid #BDBDBD;padding-bottom:5px;">
+                            <div class="row align-middle">
+                                <div class="hidden-xs col-sm-4 col-md-4 col-lg-4 align-middle">
+                                    <label class="qtooltip align-middle">Người nhận</label>
+                                </div>
+                                <div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">
+                                    <label class="qtooltip">Xử lý chính</label>
+                                </div>
+                                <div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">
+                                    <label class="qtooltip">Đồng xử lý</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @for (int i = 0; i < 6; i++)
+                        {
+                            <div class="form-group" style="border-bottom: 1px solid #BDBDBD;">
+                                <label class="bold">Quach Dang Tien - tienqd</label>
+                                <div class="row">
+                                    <div class="hidden-xs col-sm-4 col-md-4 col-lg-4">
+                                        <div>
+                                            <span>Smart City</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">
+                                        <label class="checkbox document-color mission-main-process qtooltip" title="Người Xử lý chính" data="fdgfd">
+                                            <input name="checkbox[]" type="checkbox" data="" style="position: absolute;
+                                                                                                                                                bottom: 2px;
+                                                                                                                                                left: 40px;
+                                                                                                                                                opacity: 1;">
+                                        </label>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">
+                                        <label class="checkbox document-color mission-co-process qtooltip" title="Người phối hợp" data="'">
+                                            <input name="cocheckbox" type="checkbox" value="" data="" style="position: absolute;
+                                                                                                                                                            bottom: 2px;
+                                                                                                                                                            left: 40px;
+                                                                                                                                                            opacity: 1;">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        }*@
+                                                                </div>
+                                                                <button id="sendBMM" type="submit" class="btn btn-primary float-right">Tạo nhiệm vụ</button>
+                                                            </form>
+                                                            </div>
+                                                        </div>
+                                                        <div id="tabsub-2" class="tabsub-content">
+                                                            <iframe style='width:100%;height:400px;' src="@(  ViewBag.iframeBMM )"></iframe>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div><!-- container -->                                           
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                            <li class="dropdown d-none">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span id="groupName">Không hiển thị nhóm</span> <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" id="reportGroups"></ul>
+                            </li>
+                            <li class="nav-item dropdown show d-none">
+                                <a class="nav-item nav-link dropdown-toggle mr-md-2" style="color: rgb(0, 0, 0);" href="#" data-toggle="dropdown" id="dateConditionCurrent" aria-haspopup="true" aria-expanded="true">
+                                    Trong tháng
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions" id="dateConditions">
+                                    <a href="#" class="dropdown-item" type="TrongNgay">Trong ngày</a>
+                                    <a href="#" class="dropdown-item" type="TrongTuan">Trong tuần</a>
+                                    <a href="#" class="dropdown-item" type="TrongThang">Trong tháng</a>
+                                    <a href="#" class="dropdown-item" type="TrongQuy">Trong quý</a>
+                                    <a href="#" class="dropdown-item" type="TrongNam">Trong năm</a>
+                                    <a href="#" class="dropdown-item" type="TuyChon">Tùy chọn thời gian</a>
+                                    <a href="#" class="dropdown-item" type="ChinThang">Chín Tháng</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <select id="weekSelect" class="form-control input-sm d-none statistics-time" style="width: 150px;  margin: auto 5px;">
+                            <option value="1">Tuần 1</option>
+                            <option value="2">Tuần 2</option>
+                            <option value="3">Tuần 3</option>
+                            <option value="4">Tuần 4</option>
+                            <option value="5">Tuần 5</option>
+                            <option value="6">Tuần 6</option>
+                            <option value="7">Tuần 7</option>
+                            <option value="8">Tuần 8</option>
+                            <option value="9">Tuần 9</option>
+                            <option value="10">Tuần 10</option>
+                            <option value="11">Tuần 11</option>
+                            <option value="12">Tuần 12</option>
+                            <option value="13">Tuần 13</option>
+                            <option value="14">Tuần 14</option>
+                            <option value="15">Tuần 15</option>
+                            <option value="16">Tuần 16</option>
+                            <option value="17">Tuần 17</option>
+                            <option value="18">Tuần 18</option>
+                            <option value="19">Tuần 19</option>
+                            <option value="20">Tuần 20</option>
+                            <option value="21">Tuần 21</option>
+                            <option value="22">Tuần 22</option>
+                            <option value="23">Tuần 23</option>
+                            <option value="24">Tuần 24</option>
+                            <option value="25">Tuần 25</option>
+                            <option value="26">Tuần 26</option>
+                            <option value="27">Tuần 27</option>
+                            <option value="28">Tuần 28</option>
+                            <option value="29">Tuần 29</option>
+                            <option value="30">Tuần 30</option>
+                            <option value="31">Tuần 31</option>
+                            <option value="32">Tuần 32</option>
+                            <option value="33">Tuần 33</option>
+                            <option value="34">Tuần 34</option>
+                            <option value="35">Tuần 35</option>
+                            <option value="36">Tuần 36</option>
+                            <option value="37">Tuần 37</option>
+                            <option value="38">Tuần 38</option>
+                            <option value="39">Tuần 39</option>
+                            <option value="40">Tuần 40</option>
+                            <option value="41">Tuần 41</option>
+                            <option value="42">Tuần 42</option>
+                            <option value="43">Tuần 43</option>
+                            <option value="44">Tuần 44</option>
+                            <option value="45">Tuần 45</option>
+                            <option value="46">Tuần 46</option>
+                            <option value="47">Tuần 47</option>
+                            <option value="48">Tuần 48</option>
+                            <option value="49">Tuần 49</option>
+                            <option value="50">Tuần 50</option>
+                            <option value="51">Tuần 51</option>
+                            <option value="52">Tuần 52</option>
+                        </select>
+
+                        <select id="monthSelect" class="form-control input-sm d-none statistics-time" style="width: 150px;  margin: auto 5px;">
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                        <select id="quarterSelect" class="form-control input-sm d-none statistics-time" style="width: 150px; margin: auto 5px;">
+                            <option value="1">Quý 1</option>
+                            <option value="2">Quý 2</option>
+                            <option value="3">Quý 3</option>
+                            <option value="4">Quý 4</option>
+                        </select>
+
+                        <select id="nineSelect" class="form-control input-sm d-none statistics-time" style="width: 150px; margin: auto 5px;">
+                            <option value="9">Chín tháng</option>
+                        </select>
+                        <select id="halfSelect" class="form-control input-sm d-none statistics-time" style="width: 150px; margin: auto 5px;">
+                            <option value="1">6 tháng đầu năm</option>
+                            <option value="2">6 tháng cuối năm</option>
+                        </select>
+                        <select id="yearSelect" class="form-control input-sm statistics-time" style="width: 150px;margin: auto 5px;"></select>
+                        <input placeholder="Chọn thời gian" id="dateSelect" type="text" class="form-control d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" style="width:160px;margin-right: 15px;">
+                        <input placeholder="Từ ngày" id="from" type="text" class="form-control d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" style="width:120px;display:none !important">
+                        <input placeholder="Đến ngày" id="to" type="text" class="form-control d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" style="width:120px; margin-right: 15px; display:none !important">
+                        <button style="height:36px;" class="btn btn-warning" id="btnReport">Xem báo cáo</button>
+                    </div>
+                </div>
+               
+                <div class="col-12" style="padding-top:15px; font-size:13px">
+                    <div class="callout bg-pale-info">
+                        <span>Văn bản báo cáo.docx</span>
+                       
+                        <a href="#" id="readReport" class="pull-right" style="color:blue; font-size:16px" >
+                            @*<img width="20" src="/Scripts/generalreport/images/500px-Speaker_Icon.png" />*@ 
+                            <i class="glyphicon glyphicon-volume-up"></i>
+                        </a>
+                        @*<a href="#" class="pull-right" style="color:blue;margin-right: 15px;font-size:15px"export-type="25"  id="btnWord">
+                            <i class="fa fa-file-word-o" ></i>
+                        </a>*@
+                        
+                    </div>
+                </div>
+                <div id="canvas_content" class="" style="font-size: 16px;color:rgb(0, 0, 0)" >
+                   <div class="col-md-12" id="headerReport"></div>
+                </div>
+            </section>
+            <section class="">
+                <div class="">
+                        <div class="box" style="background-color:transparent; color: black;">
+                            <div class="box-header with-border" style="text-align:center">
+                                <h3 class="box-title reportName" style="font-size:24px;font-weight:bold;text-transform:uppercase">Chưa chọn báo cáo</h3>
+                                <div class="box-tools hidden">
+                                    <span id="total"></span>
+                                </div>
+                            </div>
+                            <!-- /.box-header  -->
+                            <div class="box-body no-padding" id="reportViewerMax">
+                                <div class="col-12 HeaderContent">
+                                    <div class="HeaderContentBody">
+
+                                    </div>
+                                </div>
+                                <div class="table-responsive" @*style="width:1920px; height: auto;"*@ >
+                                    <div class="col-12" id="reportViewer">  
+                                        <table class="table table-hover"  border="1" cellspacing="0"  style="border: 1px solid #e7e9fd; padding: 5px 8px; text-align: left;">
+                                            <tr>
+                                                <td><a href="javascript:void(0)">Bạn chưa chọn báo cáo nào</a></td>
+                                            </tr>
+                                        </table>  
+                                    </div>
+                                </div>
+                                <div class="col-12 FooterContent">
+                                    <div class="FooterContentBody">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box -->
+                </div>
+            </section>
+            <section class="">
+                <div class="" style="font-size: 16px;">
+                    <div class="col-md-12 home-overview" id="chart" dashboard-id="682">
+
+                        <div class="panel-body">
+                            <div class="dashboard is-desktop" id="dashboard">
+
+                            </div>
+                            <div class="dashboard is-desktop" id="dashboardDetail">
+
+                            </div>
+                        </div>
+                        @*<img src="https://zicxa.com/hinh-anh/wp-content/uploads/2019/06/T%E1%BB%95ng-h%E1%BB%A3p-nh%E1%BB%AFng-h%C3%ACnh-%E1%BA%A3nh-%C4%91%E1%BA%B9p-v%E1%BB%81-bi%E1%BB%83n-1.jpg" alt="Alternate Text" />*@
+                        @*<iframe width="100%" frameBorder="0" height="500" no src="http://bi.bkav.com/publish/683">
+
+                        </iframe>*@
+                    </div>
+                </div>
+                <div class="" style="font-size: 16px;color:rgb(0, 0, 0)">
+                    <div class="col-md-12" id="footerReport"></div>
+                </div>
+            </section>
+            <!-- /.content -->
+            <button  id="btnFile" class="btn btn-light btn-xs sidebar-toggle opentFile" data-toggle="push-menu" title="Phóng to"  style="background-repeat: no-repeat;border: none;font-size: 12px;background: #ebebeb;color: black;height: 36px;width: 36px;top: 7px;left: 319px;position:absolute; display: none">
+                @*<span class="sr-only fas fa-bars"></span>*@
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        @*<div id="layoutContent" class="content-wrapper d-none" style="height:100vh ;background: transparent;">
+            <div class="col-md-12">
+                <div class="user-panel" style="height:70px">
+                    <div class="info text-white" style="padding-bottom: 10px">
+                        <input type="text" id="searchBox" class="form-control" placeholder="Tìm kiếm" style="background: transparent; border-radius: 50px;">
+                    </div>
+                </div>
+            </div>
+           <div class="col-md-12">
+               <div id="contentReport" class="row contentFlex">
+                   <div class="col-md-4" >
+                       <div class="box box-inverse box-info" style="box-shadow: 0 0 8px #ffff00;border-radius:5px; ">
+                           <div class="box-body text-center">
+                               <h1 class="font-light text-white">2,064</h1>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+        </div>*@
+        <div id="layoutContent" class="content-wrapper d-none" style="height:100vh ;background: transparent;">
+            <div class="col-md-12">
+                <div class="col-md-2" style="position: absolute; top: 8px;">
+                    <button id="btnGroupFile" class="btn btn-light btn-xs sidebar-toggle opentFileGroup" data-toggle="push-menu" title="Phóng to" style="background-repeat: no-repeat;border: none;font-size: 12px;background: #ebebeb;color: black;height: 36px;width: 36px;top: 7px;position:absolute;">
+                        @*<span class="sr-only fas fa-bars"></span>*@
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+                <div class="col-md-10" style="margin-left: 9%">
+                    <div class="user-panel" style="height:70px">
+                        <div class="info text-white" style="padding-bottom: 10px">
+                            <input id="seachTreeGroupValue" type="text" class="form-control" placeholder="Tìm kiếm" style="background: #e6888800;border-radius: 50px;background-color: wheat;">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            @*<div class="col-md-12" style="display: flex;flex-flow: row wrap;justify-content: space-around;max-width: 100%;max-height: 100%;">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <div class="field-input">
+                            <select class="form-control" id="Description" name="Description" style="width: 100%">
+                                @foreach (var description in ViewBag.Description as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(description.Selected ? "selected" : "") value="@description.Value">@description.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input type="button" value="Tìm kiếm" style="padding: 7px 32px;"/>
+                </div>
+            </div>*@
+            <div class="col-md-12">
+                <div id="contentReport" style="display: flex;flex-flow: row wrap;justify-content: space-around;max-width: 100%;max-height: 100%;">
+                    <div class="col-md-4">
+                        <div class="box box-inverse box-info" style="box-shadow: 0 0 8px #ffff00;border-radius:5px; ">
+                            <div class="box-body text-center">
+                                <h1 class="font-light text-white">2,064</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+        <audio class="full-width" preload="metadata" id="playWav" style="display:none">
+            <source id="srcAudio" src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+   
+    <!-- ./wrapper -->
+    <!-- jQuery 3 -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <script src="/Scripts/generalreport/assets/vendor_components/PACE/pace.min.js"></script>
+    <!-- Bootstrap 4.1.3-->
+    <script src="/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <!-- Unique_Admin App -->
+    <script src="/Scripts/generalreport/main/js/template.js?v=@DateTime.Now.ToShortTimeString()"></script>
+    <!-- Unique_Admin for demo purposes -->
+
+   
+
+    <script src="/Scripts/generalreport/main/js/demo.js"></script>
+    <script src="/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+    <script src="/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="/Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+    <script src="/Scripts/generalreport/assets/vendor_components/jquery-ui/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        })
+    </script>
+    @*<script src="/Scripts/generalreport/eReport.js?v=@DateTime.Now.ToString("ssmmhh")"></script>*@
+    <script id="treeTemplate" type="text/x-jquery-tmpl">
+        <li class="treeview" style="white-space: normal;  border-bottom: 0.5px solid #95b0e0">
+            <a href="#" data-id="${id}"
+               group-id="${groupId}"
+               data-groupname="${treeGroupName}"
+               data-groupdisplayname="${name}"
+               data-group-value="${treeGroupValue}"
+               data-is-show-total="${isTotal}"
+               data-islabel="${isLabel}"
+               data-children="${ JSON.stringify($data.children) }"
+               >
+                {{if parentid == 0}}<i class="fa fa-circle" style="color:#FE69EA"></i>{{/if}}
+                <span style="cursor:pointer">${name}</span>
+                {{if state == 'closed'}}
+                <span class="pull-right-container btnToggleTree" style="cursor:default" >
+                    <i class="fa fa-angle-right pull-right"></i>
+                </span>
+                {{/if}}
+            </a>
+            {{if state == 'closed'}}
+            <ul class="treeview-menu"></ul>
+            {{/if}}
+        </li>
+    </script>
+
+    @*<script id="reportGroupTree" type="text/x-jquery-tmpl">
+        <div class="col-md-6 col-sm-6" style="padding: 10px 15px;">
+            <div class="box box-inverse box-info" style="box-shadow: 0 0 8px #ffff00;border-radius:5px;">
+                <div class="box-body text-center group-data" data-key="${treeGroupName}" data-group-value="${treeGroupValue}">
+                    <h2 class="font-light text-white">${name}</h2>
+                </div>
+            </div>
+        </div>
+    </script>*@
+
+    <script id="reportGroupTree" type="text/x-jquery-tmpl">
+        <div class="contentFlex" style="padding: 10px 15px; width: 50%;">
+            <div class="box box-inverse box-info" style="box-shadow: 0 0 8px #ffff00;border-radius:5px;height: 100%;">
+                <div class="box-body text-center group-data" data-key="${treeGroupName}" data-group-value="${treeGroupValue}">
+                    <h3 class="font-light text-white">${name}</h3>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="numberChartTemp">
+        <div class="db-kpi-content" style="position: relative;">
+            <div class="db-kpi-header">
+                <div class="db-kpi-title">
+                    <div class="db-kpi-order">${Order}</div>
+                    <div class="db-kpi-name">
+                        ${Name}
+                    </div>
+                </div>
+            </div>
+            <div class="db-kpi-body">
+                <div class="db-kpi-value">
+                    ${Data.value} {{if Data.unit}}<span class="db-kpi-unit">${Data.unit}</span>{{/if}}
+                </div>
+                {{if Data.target && Data.target != '' && Data.target != '0'}}
+                <div class="db-kpi-trend">
+                    <div class="chart">
+
+                    </div>
+                </div>
+                {{else}}
+                <div class="db-kpi-trend">
+                    {{if Data.changeType !== 1}}
+                    <img src="/Content/bkav.egov/sm/icons/Group-876.png" style="width: 100%" />
+                    {{else}}
+                    <img src="/Content/bkav.egov/sm/icons/Group-874.png" style="width: 100%" />
+                    {{/if}}
+                </div>
+                {{/if}}
+            </div>
+
+            <div class="db-kpi-footer">
+                <div>
+                    <span class="db-kpi-time">${Data.time}</span>
+                    {{if Data.changeValue !== ''}}
+                    <span class="db-kpi-increase">
+                        {{if Data.changeType === 1}}
+                        <span class="good"> ▲ ${Data.changeValue} ${Data.changeMsg}</span>
+                        {{else}}
+                        <span class="bad"> ▼ ${Data.changeValue} ${Data.changeMsg}</span>
+                        {{/if}}
+                    </span>
+                    {{/if}}
+
+                    {{if Data.target && Data.target != '' && Data.target != '0'}} <span class="db-kpi-target">Mục tiêu: <b>${Data.target} ${Data.unit}</b></span>{{/if}}
+                </div>
+            </div>
+
+            {{if egov.isMobile}}
+            {{else}}
+            <div style="position: absolute; right: 15px; top: 15px">
+                <div class="dropdown addBmm-menu">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="icon icon-user4"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="background: #000000a3;">
+                        <li><a href="#" style="color:white;" class="sendSms" data-id="${DashboardChartId}">Nhắn tin SMS</a></li>
+                        @*<li><a href="#" style="color:white;">Gọi điện</a></li>*@
+                        <li><a href="#" style="color:white;" class="postToVala" data-id="${DashboardChartId}">Tin điều hành nội bộ</a></li>
+                        <li><a href="#" style="color:white;" class="createChat" data-id="${DashboardChartId}">Chat</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" class="addBmm" data-id="${DashboardChartId}" style="color:white;">Giao nhiệm vụ</a></li>
+                    </ul>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </script>
+
+    <script type="text/template" id="smartNumberTemp">
+        <div>
+            {{if Data.target > 0}}
+            <div class="db-kpi-header">
+                <span class="db-kpi-gold">${Data.target}</span>
+            </div>
+            {{/if}}
+            <div class="db-kpi-body">
+                <div class="title">${Name}</div>
+                <div class="db-kpi-value">${Data.value} {{if Data.unit}}<span class="db-kpi-unit">${Data.unit}</span>{{/if}}</div>
+                {{if Data.changeValue}}
+                <div class="db-kpi-increase">
+                    {{if Data.changeType === 1}}
+                    <span style="color: #d0560f"> <img src="/Content/bkav.egov/sm/icons/Polygon 2.png" style="width: 16px;" /> ${Data.changeValue}</span>
+                    {{else}}
+                    <span style="color: #d0560f"> <img src="/Content/bkav.egov/sm/icons/Polygon 5.png" style="width: 16px;" /> ${Data.changeValue}</span>
+                    {{/if}}
+                    ${Data.changeMsg}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-jquery-tmpl" id="otherChartTemp">
+        <div class="db-kpi" data-id="${DashboardChartId}" child-page="${ChildPageId}" chart-id="${Id}">
+            <div class="db-kpi-header">
+                <div class="db-kpi-title">
+                    <div class="db-kpi-order">${Order}</div>
+                    <div class="db-kpi-name">
+                        ${Name}
+                    </div>
+                </div>
+            </div>
+            <div class="db-kpi-body">
+                {{if Type == 'radarchart' || Type == 'polarchart'}}
+                <canvas id="canvasChart${DashboardChartId}" style="width: 100%; height: 100%"></canvas>
+                {{/if}}
+            </div>
+        </div>
+    </script>
+
+
+    <script type="text/template" id="dashboardDetailTmp">
+        <div id="viewKpi" data-app="dashboard" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header  no-background header">
+                <div class="mdl-layout__header-row">
+                    <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList">
+                        <i class="material-icons">arrow_back</i>
+                    </div>
+                    <div class="header-app-name">${name}</div>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+            </header>
+
+            <div class="mdl-layout__content">
+                <div id="dashboardDetailContent" class="dashboard db-content" dashboard-id="${chartPageId}" dashboard-agencylevel="${agencyLevel}" dashboard-organizes="${organizes}"></div>
+            </div>
+        </div>
+
+    </script>
+ 
+    <script src="/Scripts/bkav.egov/libs/html-docx/html-docx.js"></script>
+    <script src="/Scripts/bkav.egov/libs/html-docx/FileSaver.js"></script>
+    <script src="/Scripts/bkav.egov/libs/html-docx/html2canvas.min.js"></script>
+
+    <script src="/Scripts/require.js?v=452" data-main="/Scripts/bkav.egov/views/home/chart_report.js?v=323"></script>
+    <script>
+        //search treegroupvalue
+        $(document).ready(function () {
+            $('#seachTreeGroupValue').keyup(function () {
+                var textSearch = $.trim($(this).val().toLowerCase());
+
+                // Hide all content class element
+                $('.contentFlex').hide();
+
+                // Search 
+                $('.contentFlex .box-inverse').each(function () {
+                    if ($(this).text().toLowerCase().indexOf("" + textSearch + "") != -1) {
+                        $(this).closest('.contentFlex').show();
+                    }
+                });
+            });
+        });
+        //and search treegroupvalue
+        $(document).ready(function () {
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            });
+
+            $('ul.tabssub li').click(function () {
+                var tab_id = $(this).attr('data-tabsub');
+
+                $('ul.tabssub li').removeClass('current-sub');
+                $('.tabsub-content').removeClass('current-sub');
+
+                $(this).addClass('current-sub');
+                $("#" + tab_id).addClass('current-sub');
+            });
+        })
+
+        //// Search 
+        //$('#searchBox').keyup(function () {
+        //    debugger
+        //    var textSearch = $.trim($(this).val().toLowerCase());
+        //    $('.contentFlex .box-inverse').each(function () {
+        //        if ($(this).text().toLowerCase().indexOf("" + textSearch + "") != -1) {
+        //            $(this).closest('.contentFlex').show();
+        //        }
+        //    });
+        //});
+        
+        // Search Tree
+        $(document).ready(function () {
+            $('#searchTree').keyup(function () {
+                var textSearch = $.trim($(this).val().toLowerCase());
+                //$('.treeview').jstree('search', textSearch);
+                //$(".treeview").jstree("open_all");
+                //$('#.treeview').on('ready.jstree', function () {
+                //    debugger
+                //    $(".treeview").jstree("open_all");
+                //});
+                $.ajax({
+                    type: "POST",
+                    url: "/ReportViewer/GetsSearchTree",
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (result) {
+                        if (result) {
+                            var output = '';
+                            $('#reportTree').hide();
+                            for (var i = 0; i < result.length; i++) {
+                                if (!textSearch || result.some(function (entry) { return $(this).Name.toLowerCase().indexOf(textSearch) != -1; })) {
+                                    debugger
+                                }
+                            }
+                            debugger
+                            $('#treeTemplate').tmpl(output).appendto("#reportTree");
+                        }                       
+                    },
+                    error: function () {
+                        console.log("Error!!");
+                    }                       
+                });
+            });
+        })
+
+        var ValaToken = $("#ValaToken").val();
+        var ValaService = $("#ValaService").val();
+        var MessageService = $("#MessageService").val();
+        var ValaId = $("#ValaId").val();
+        var ValaFactoryId = $("#ValaFactoryId").val();
+        var IsActive = $("#IsActive").val();
+        if (IsActive == "True") {
+
+            $("#btnDieuHanhNoiBo").css("display", "inline-block");
+            function MissionError(message) {
+                return message;
+            };
+
+            function _renderMissionUser(users) {
+                var result = '';
+                result = result + '<div class="form-group" style="border-bottom: 1px solid #BDBDBD;padding-bottom:5px;">'
+                    + '<div class="row align-middle">'
+                    + '<div class="hidden-xs col-sm-4 col-md-4 col-lg-4 align-middle">'
+                    + '<label class="qtooltip align-middle">Người nhận</label>'
+                    + '</div>'
+
+                    + '<div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">'
+                    + '<label class="qtooltip">Xử lý chính</label>'
+                    + '</div>'
+
+                    + '<div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">'
+                    + '<label class="qtooltip">Đồng xử lý</label>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>';
+
+                if (users) {
+                    users.forEach(function (item) {
+                        result = result + '<div class="form-group" style="border-bottom: 1px solid #BDBDBD;">'
+                            + '<label class="bold">' + item.FullName + ' - ' + item.UserName + '</label>'
+                            + '<div class="row">'
+                            + '<div class="hidden-xs col-sm-4 col-md-4 col-lg-4">'
+                            + '<div>'
+                            + '<span>' + item.UserDeptName + '</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '<div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">'
+                            + '<label class="checkbox document-color mission-main-process qtooltip" title="Người Xử lý chính" data="' + item.UserName + '">'
+                            + '<input name="checkbox[]" type="radio" style="position: absolute;bottom: 2px;left: 40px;opacity: 1;" data="' + item.UserName + '">'
+                            + ' </label>'
+                            + '</div>'
+                            + '<div class="col-xs-2 col-sm-4 col-md-4 col-lg-4">'
+                            + '<label class="checkbox document-color mission-co-process qtooltip" title="Người phối hợp"  data="' + item.UserName + '">'
+                            + '<input name="cocheckbox" type="checkbox" style="position: absolute;bottom: 2px;left: 40px; opacity: 1;" value="' + item.UserName + '" data="' + item.UserName + '">'
+                            + ' </label>'
+                            + '</div>'
+
+                            + '</div>'
+                            + '</div>';
+                    });
+                }
+                return result;
+            };
+
+            //Get data list user
+            $.ajax({
+                type: "get",
+                async: true,
+                url: '/Mission/GetListUser',
+                success: function (data) {
+                    var renderMissionUser = _renderMissionUser(data.Object);
+                    $("#content-listdata").append(renderMissionUser);
+                }
+            });
+
+            var textContent = $("#txtContent");
+            txtContent.focus();
+            var missionDate = $("#MissionDate");
+            missionDate.datepicker();
+            var username = $('#txtUsername');
+
+            textContent.on("change paste keyup", function () {
+                if (textContent.val() != "") {
+                    $(textContent).removeClass('border border-danger')
+                } else {
+                    $(textContent).addClass('border border-danger')
+                }
+            })
+
+            // Send BMM
+            $("#sendBMM").click(function (e) {
+                e.preventDefault();
+                var content = textContent.val();
+                var date = missionDate.val();
+
+                if (content === '' || content == null) {
+                    $(textContent).addClass('border border-danger').first().focus();
+                    return;
+                }
+                if (date === '' || date == null) {
+                    $(missionDate).addClass('border border-danger').first().focus();
+                    return;
+                }
+                var mission_main_process = $('input[name="checkbox[]"]:checked').attr("data");
+                var coUser = [];
+
+                $('input[name = cocheckbox]').each(function (e) {
+                    var item = $(this);
+                    var check = item.prop("checked");
+                    if (check) {
+                        coUser.push(item.val());
+                    }
+                });
+
+                if (mission_main_process == undefined && coUser == "") {
+                    alert("Chưa chọn người xử lý!");
+                } else {
+                    $.ajax({
+                        type: 'post',
+                        async: true,
+                        url: "/Mission/CreateMission",
+                        data: {
+                            docIds: window.currentId,
+                            content: content,
+                            tenbaocao: window.tenbaocao,
+                            kybaocao: window.kybaocao,
+                            fileContent: window.url_file,
+                            endDate: date,
+                            user: mission_main_process,
+                            coUsers: coUser
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                textContent.val("");
+                                missionDate.val("");
+                                alert(data.success);
+                            } else {
+                                alert(data.error);
+                            }
+                        },
+                        error: function (error) {
+                            console.log(data.error);
+                        }
+                    });
+
+                }
+            })
+
+            $("#sendChat").click(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/ReportViewer/ExportDocxHtml",
+                    data: settings,
+                    success: function (result) {
+                        if (result) {
+                            console.log("===================:" + result);
+                            $("<a>").attr("href", result).attr("target", "_blank")[0].click();
+                            // window.open(result, "_blank");
+                        }
+                    }
+                });
+            })
+            var image_url;
+            function convertToCanvas() {
+
+                html2canvas(document.getElementById("reportViewer"))
+                    .then(function (canvas) {
+                        image_url = canvas.toDataURL("image/jpeg", 0.9);
+                    });
+            }
+            function error_input() {
+                $('#nhomnguoidung').css({ "border": "1px solid red" });
+                $('#nguoidung').css({ "border": "1px solid red" });
+                $('#nguoidungmoi').css({ "border": "1px solid red" });
+            }
+
+            function valid_input() {
+                $('#nhomnguoidung').css({ "border": "1px solid black" });
+                $('#nguoidung').css({ "border": "1px solid black" });
+                $('#nguoidungmoi').css({ "border": "1px solid black" });
+            }
+            $("#nhomnguoidung").on("change paste keyup", function () {
+                valid_input();
+                if ($(this).val() == "") {
+                    $('#nhomnguoidung').attr('data-group', "");
+                    document.getElementById('listUser').style.display = 'none';
+                    $("#nguoidung").prop('disabled', false);
+                    $("#nguoidungmoi").prop('disabled', false);
+                    error_input();
+                }
+            });
+
+            $("#nguoidung").on("change paste keyup", function () {
+                valid_input();
+                if ($(this).val() == "") {
+                    $('#nguoidung').attr('data-user', "");
+                    document.getElementById('listGroup').style.display = 'none';
+                    $("#nhomnguoidung").prop('disabled', false);
+                    $("#nguoidungmoi").prop('disabled', false);
+                    error_input();
+                }
+            });
+
+            $("#nguoidungmoi").on("change paste keyup", function () {
+                valid_input();
+                if ($(this).val() == "") {
+                    $('#nguoidungmoi').attr('data-newuser', "");
+                    document.getElementById('listNewUser').style.display = 'none';
+                    $("#nhomnguoidung").prop('disabled', false);
+                    $("#nguoidung").prop('disabled', false);
+                    error_input();
+                }
+            });
+
+            $("#where").on("change paste keyup", function () {
+                valid_input();
+                if ($(this).val() == "") {
+                    $('#where').attr('data-where', "");
+                    document.getElementById('options').style.display = 'none';
+                    $('#where').css({ "border": "1px solid red" });
+                }
+            });
+
+            $('body').on('click', function (e) {
+                document.getElementById('listUser').style.display = 'none';
+                document.getElementById('listGroup').style.display = 'none';
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('listNewUser').style.display = 'none';
+            });
+
+            function filterFunction(a, idDiv) {
+                var input, filter, ul, li, a, i;
+                input = document.getElementById(a);
+
+                filter = input.value.toUpperCase();
+                div = document.getElementById(idDiv);
+                div.style.display = "block";
+                a = div.getElementsByTagName("li");
+                for (i = 0; i < a.length; i++) {
+                    txtValue = a[i].textContent || a[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        a[i].style.display = "";
+                    } else {
+                        a[i].style.display = "none";
+                    }
+                }
+            }
+            //Start Chi dao dieu hanh
+
+            function getValaGroups() {
+
+                if (!ValaService) return null;
+
+                var url = ValaService + "/" + ValaId + '/groups?type=&maxscore=0&minscore=0';
+                var success = (response) => {
+                    if (!response || !response.Group) return;
+
+                    var groupIds = GetGroupHasPermission(ValaId, response.HasPermissions)
+
+                    var groups = [];
+                    _.each(groupIds, (groupId) => {
+                        var g = response.Group[groupId];
+                        if (!g || !g.data || !g.config || g.config.publish == false) return;
+
+                        groups.push({
+                            "id": g.data.id,
+                            "name": g.data.name,
+                            parentId: g.data.parentId
+                        });
+                    });
+
+                    input = document.getElementById('where');
+                    options = document.getElementById('options');
+
+                    for (i = 0; i < groups.length; i++) {
+                        options.innerHTML += '<li class="list-group-item list-group-item-action user" data-id="' + groups[i].id + '">' + groups[i].name + '</li>';
+                    }
+
+                    for (i = 0; i < groups.length; i++) {
+                        options.getElementsByTagName('li')[i].onclick = function () {
+                            var idGroupdieuhanh = $(this).attr("data-id");
+                            console.log("idGroupDieuHanh" + idGroupdieuhanh);
+                            $('#where').attr('data-where', idGroupdieuhanh);
+                            document.getElementById('where').value = $(this).text();
+                        }
+                    }
+                };
+
+                request(url, 'Get', null, ValaToken, success);
+            }
+            getValaGroups();
+            //End chi dao dieu hanhclass
+
+            var lstUser = [];
+
+            function getValaUsers() {
+                var user = [];
+                if (!ValaService) return null;
+
+                var url = ValaService + '/' + ValaFactoryId + '/users';
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    async: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('company-id', ValaFactoryId);
+                        xhr.setRequestHeader('authorization', ValaToken);
+                    },
+                    error: function (a, b, c) {
+                    },
+                    success: function (response) {
+                        users = _.pluck(_.values(response.User), "data");
+                    }
+                });
+                options1 = document.getElementById('listNewUser');
+                if (users) {
+                    for (k = 0; k < users.length; k++) {
+                        options1.innerHTML += '<li class="list-group-item list-group-item-action group" data-id="'
+                            + users[k].id + '">'
+                            + users[k].account + '</li>';
+                    }
+                    for (k = 0; k < users.length; k++) {
+                        options1.getElementsByTagName('li')[k].onclick = function () {
+                            var idUser = $(this).attr("data-id");
+                            $('#nguoidungmoi').attr('data-newuser', idUser);
+                            document.getElementById('nguoidungmoi').value = $(this).text();
+                            $("#nhomnguoidung").prop('disabled', true);
+                            $("#nguoidung").prop('disabled', true);
+                        }
+                    }
+                } else {
+                    console.log("Error 500");
+                }
+
+
+            }
+            getValaUsers();
+
+            //start getThread
+
+            function getThreadChats() {
+                var chats = [];
+                var groupChats = [];
+
+
+                if (!MessageService) return null;
+                var url = MessageService + '/' + ValaId + '/threads';
+
+                var success = (response) => {
+                    if (!response || !response.threads) return;
+
+                    var threads = _.pluck(_.values(response.threads), "data");
+                    _.each(threads, (thread) => {
+                        if (thread.id.startsWith("cid")) {
+                            var userId = thread.id.split('.')[1];
+
+                            var url1 = ValaService + '/' + ValaFactoryId + '/users';
+                            $.ajax({
+                                url: url1,
+                                type: 'get',
+                                async: false,
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader('company-id', ValaFactoryId);
+                                    xhr.setRequestHeader('authorization', ValaToken);
+                                },
+                                error: function (a, b, c) {
+                                },
+                                success: function (response) {
+                                    lstUser = _.pluck(_.values(response.User), "data");
+                                    var user = _.find(lstUser, (u) => {
+                                        return u.id == userId;
+                                    });
+
+                                    thread.isDetaul = true;
+                                    if (user) {
+                                        thread.name = user.account;
+                                        thread.avatar = user.avatar == '' ? "/avatarprofile/noavatar.jpg" : user.avatar;
+                                        chats.push(thread);
+                                    }
+                                }
+                            });
+                            thread.isDetaul = true;
+
+                        } else {
+                            thread.avatar = "/avatarprofile/noavatar.jpg";
+                            groupChats.push(thread);
+                        }
+                    });
+                    options1 = document.getElementById('listUser');
+                    for (k = 0; k < chats.length; k++) {
+                        options1.innerHTML += '<li class="list-group-item list-group-item-action group" data-id="'
+                            + chats[k].id + '">'
+                            + chats[k].name + '</li>';
+                    }
+                    for (k = 0; k < chats.length; k++) {
+                        options1.getElementsByTagName('li')[k].onclick = function () {
+                            var idUser = $(this).attr("data-id");
+                            $('#nguoidung').attr('data-user', idUser);
+                            document.getElementById('nguoidung').value = $(this).text();
+                            $("#nhomnguoidung").prop('disabled', true);
+                            $("#nguoidungmoi").prop('disabled', true);
+                        }
+                    }
+
+                    options = document.getElementById('listGroup');
+                    for (i = 0; i < groupChats.length; i++) {
+                        options.innerHTML += '<li class="list-group-item list-group-item-action user" data-id="'
+                            + groupChats[i].id + '">'
+                            + groupChats[i].name + '</li>';
+                    }
+
+                    for (i = 0; i < groupChats.length; i++) {
+                        options.getElementsByTagName('li')[i].onclick = function () {
+                            var idGroup = $(this).attr("data-id");
+                            $('#nhomnguoidung').attr('data-group', idGroup);
+                            document.getElementById('nhomnguoidung').value = $(this).text();
+                            $("#nguoidung").prop('disabled', true);
+                            $("#nguoidungmoi").prop('disabled', true);
+                        }
+                    }
+                };
+                request(url, 'Get', null, ValaToken, success);
+
+            };
+            getThreadChats();
+            //end getThread
+
+            function request(url, type, data, authenToken, success) {
+                $.ajax({
+                    url: url,
+                    type: type,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: data,
+                    beforeSend: (xhr) => {
+                        xhr.setRequestHeader('company-id', ValaFactoryId);
+                        authenToken && xhr.setRequestHeader('authorization', ValaToken);
+                    },
+                    error: function () { },
+                    success: function (response) {
+                        typeof success === 'function' && success(response);
+                    }
+                });
+            }
+
+            function GetGroupHasPermission(userid, permission) {
+                var per = permission[userid];
+                var items = per.items;
+
+                if (!per || !items || items.length === 0) return [];
+
+                var result = [];
+                _.each(_.keys(items), (groupId) => {
+                    var groupPer = items[groupId];
+                    if (groupPer && groupPer.data && groupPer.data.roles && _.contains(groupPer.data.roles, "user.type.admin")) {
+                        result.push(groupId);
+                    }
+                });
+
+                return result;
+            }
+            //start send chat
+
+            $("#sendChatss").click(function (e) {
+                e.preventDefault();
+                var getNoidung = $("#noidung").val();
+                var getInput = $("#nhomnguoidung").val();
+                var nameFile = $('.nameFile').attr("data-name");
+                var gid = $("#nhomnguoidung").attr("data-group") != "" ? $("#nhomnguoidung").attr("data-group") : "";
+                var cid = $("#nguoidung").attr("data-user") != "" ? $("#nguoidung").attr("data-user") : "";
+                var _cid_newuser = $("#nguoidung").attr("data-newuser") != "" ? $("#nguoidungmoi").attr("data-newuser") : "";
+                var cid_newuser = "cid." + _cid_newuser;
+                var created = Date.now();
+                var domainName = window.location.origin;
+                var url = domainName + $(".nameFile").attr("data-name");
+
+                console.log("cid: " + cid + " gid: " + gid + " cid_newuser: " + cid_newuser);
+                var data = {
+                    "userId": ValaId,
+                    "toExistThead": [
+                       gid, cid, cid_newuser
+                    ],
+                    "toNewUserThread": [
+
+                    ],
+                    "toNewGroupThread": [
+
+                    ],
+                    data: {
+                        "content": getNoidung,
+                        "type": "photo",
+                        "attachment": {
+                            "width": 1080,
+                            "height": 1350,
+                            "url": image_url
+                        }
+                    }
+                }
+                if (nameFile != "") {
+                    if (getNoidung == "") {
+                        $(".error1").css("display", "inline-block");
+                    } else {
+                        if (gid == "" && cid == "" && _cid_newuser == "") {
+                            $(".error1").css("display", "none");
+                            error_input();
+                        } else {
+                            $(".error1").css("display", "none");
+                            $.ajax({
+                                url: MessageService + "/public/messages",
+                                type: 'Post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader('company-id', ValaFactoryId);
+                                    xhr.setRequestHeader('authorization', ValaToken);
+                                },
+                                error: function (a, b, c) {
+                                },
+                                success: function (response) {
+                                    alert("Gửi tin thành công");
+                                }
+                            });
+                        }
+                    }
+                }
+
+            });
+            //end send chat
+            //start _post sendNoiBo
+
+            $("#sendNoiBo").click(function (e) {
+                e.preventDefault();
+                var getNoidung = $("#noidungtab2").val();
+                var getInput = $("#where").val();
+                var nameFile = $('.nameFile').attr("data-name");
+                var linkDown = "\n Link tải file word";
+                var content = getNoidung + linkDown;
+                var offset = $("#noidungtab2").val().length + 2;
+                var length = linkDown.length - 2;
+                var domainName = window.location.origin;
+                var url = domainName + $(".nameFile").attr("data-name");
+                data = {
+                    "user-id": "70506183570482",
+                    "content": content,
+                    "contentMd": {
+                        "entities": [{
+                            "length": length,
+                            "offset": offset,
+                            "data": {
+                                "url": url
+                            },
+                            "type": "LINK"
+                        }]
+                    }
+                };
+                if (nameFile != "") {
+                    if (getNoidung != "") {
+
+                        $(".error3").css("display", "none");
+                        if (getInput != "") {
+                            var groupId = $("#where").attr("data-where");
+                            $.ajax({
+                                url: ValaService + '/public/' + groupId + '/entry',
+                                type: 'Post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader('company-id', ValaFactoryId);
+                                },
+                                error: function (a, b, c) {
+                                },
+                                success: function (response) {
+                                    alert("Gửi tin thành công");
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Gửi tin thành công',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    })
+                                }
+                            });
+                        } else {
+                            $(".error4").css("display", "inline-block");
+                        }
+                    } else {
+                        $(".error3").css("display", "inline");
+                    }
+                }
+
+            });
+        }
+        //end _post sendNoiBo
+
+
+        window.addEventListener('message', receiveMessage, false);
+
+        function receiveMessage(event) {
+            var origin = event.origin || event.originalEvent.origin;
+            if (origin.indexOf('*') >= 0) // check if message received from intended sender
+            {
+                if (event.data == "intended message format") // check if data received is in correct format
+                {
+                    // call functionality that closes popup containing iframe
+                } else { // data received is malacious
+                    return;
+                }
+
+            } else {  // message is not received from intended sender
+                return;
+            }
+        }
+
+        //xử lý toggle File
+        $(document).on('click', ".closeFile", function () {
+            $(this).addClass('opentFile');
+            $(this).removeClass('closeFile');
+        });
+
+        $(document).on('click', ".opentFile", function () {
+            $(this).removeClass('opentFile');
+            $(this).addClass('closeFile');
+        });
+
+        //toggle
+        $(document).on('click', ".closeFileGroup", function () {
+            $(this).addClass('opentFileGroup');
+            $(this).removeClass('closeFileGroup');
+        });
+
+        $(document).on('click', ".opentFileGroup", function () {
+            $(this).removeClass('opentFileGroup');
+            $(this).addClass('closeFileGroup');
+        });
+    </script>
+</body>
+</html>

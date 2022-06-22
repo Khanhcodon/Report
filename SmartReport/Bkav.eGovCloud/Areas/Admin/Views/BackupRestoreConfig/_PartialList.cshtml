@@ -1,0 +1,141 @@
+﻿@model IEnumerable<BackupRestoreConfigModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as string;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblBackupConfig").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+       // $("#tblBackupConfig").openLink({ urlOpen: '/Admin/BackupRestoreConfig/Edit' });
+    });
+
+</script>
+
+    <table id="tblBackupConfig" class="table table-hover table-bordered">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 200px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th>
+                @Ajax.SortLink("Domain", Localizer("BackupRestoreConfig.Index.List.Column.Domain"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    search = search,
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divListConfig",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th>
+                @Localizer("BackupRestoreConfig.Index.List.Column.Server")
+            </th>
+            <th>
+                @Localizer("BackupRestoreConfig.Index.List.Column.DatabaseName")
+            </th>
+            <th>
+                @Localizer("BackupRestoreConfig.Index.List.Column.DatabaseType")
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Detail")
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Edit")
+            </th>
+            <th>
+                @Localizer("Common.Resource.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                number++;
+            <tr data-id="@item.BackupRestoreConfigId">
+                <td>
+                    @number
+                </td>
+                <td>
+                    @item.Domain
+                </td>
+                <td>
+                    @item.Server
+                </td>
+                <td>
+                    @item.DatabaseName
+                </td>
+                <td>
+                    @((Bkav.eGovCloud.Entities.DatabaseType)item.DatabaseType)
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Detail.Button"), "Detail", new { Id = item.BackupRestoreConfigId })
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = item.BackupRestoreConfigId })
+                </td>
+                <td>
+                    <a href="javascript:deleteConfig(@(item.BackupRestoreConfigId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(item.BackupRestoreConfigId)" style="display: none"
+                            action="@Url.Action("Delete", new { Id = item.BackupRestoreConfigId })"
+                            method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="7">
+            @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                            sortAndPage.TotalRecordCount, "SortAndPaging",
+                            "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                            new
+                            {
+                                search = search,
+                                sortBy = sortAndPage.SortBy,
+                                isSortDesc = sortAndPage.IsSortDescending
+                            },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "divListConfig",
+                                OnBegin = "onBegin",
+                                OnSuccess = "onSuccess",
+                                OnFailure = "onFailure"
+                            }, listPageSize)
+        </td>
+    </tr>
+</tfoot>
+</table>

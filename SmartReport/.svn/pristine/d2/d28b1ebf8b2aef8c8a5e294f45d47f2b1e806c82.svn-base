@@ -1,0 +1,125 @@
+﻿<style>
+    .mbsc-select-ic {
+        margin-top: -19px !important;
+        margin-right: 7px;
+    }
+</style>
+<div class="document mdl-layout mdl-js-layout mdl-layout--fixed-header" style="background:url(../../Content/Images/home/back-ipad.jpg)">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <span class="mdl-layout-title doctypeName">
+                Tạo mới báo cáo
+            </span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link btnFinish hidden" href="">Kết thúc</a>
+                <a class="mdl-navigation__link btnUndoTransfer hidden">Lấy lại</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mdl-layout__content document-content" style="background-color:transparent !important">
+        <div class="detail-content">
+            <div class="document-form">
+                <div class="document-info document-infoCreate" data-id="">
+                    <div class="document-info-template">
+                        <div>
+                            <input type="hidden" name="DocTypeId" value="${DocTypeId}" />
+                        </div>
+                    </div>
+
+                    <div mbsc-form id="formEdit" class="hidden" style="background-color:transparent">
+                        <div class="mbsc-form-group">
+                            <label>
+                                <textarea cols="20" class="compendium" name="Compendium" rows="2" required placeholder="Trích yếu văn bản" style="color:white">${Compendium}</textarea>
+                            </label>
+                        </div>
+                        <!--<div class="mbsc-form-group">
+                            <label>
+                                Cơ quan báo cáo
+                                <select name="City" id="chooseInOutPlace" data-label-style="stacked" data-input-style="box" value="${InOutPlace}"></select>
+                            </label>
+                        </div>-->
+                    </div>
+                    <div id="divContentmobile" style="background-color:transparent!important" class="">
+                        <div mbsc-form id="formContentmbsc" style="background-color:transparent!important">
+
+                        </div>
+                        <div mbsc-form id="addItemFormDiv" style="background-color:transparent">
+                            <div class="mbsc-form-group" style="background-color:transparent">
+                                <div class="mbsc-btn-group-block">
+                                    <button id="addItemForm" style="color: white !important"><i class="material-icons">add</i>Thêm nội dung</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="document-attachment-mobile" style="display: none;">
+                        <div>
+                            <div id="wrapAttachment">
+                                <ul class="mdl-list attachment-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wrapComments">
+                        <div id="commentList" class="comment-list"></div>
+                        <div class="viewAllComment hidden">
+                            <span>Xem các ý kiến khác</span>
+                        </div>
+                    </div>
+                    <!--<div id="divContent" class="document-contents"  ></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fix-position-chat" style="position:unset;">
+        <div class="document-transfer active" style="display: none; background-color:#263238;padding:10px">
+            <div class="">
+                <!--<a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">camera_alt</i>
+                    <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">attachment</i>
+                    <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                </a>
+                <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}">
+                    <i class="material-icons">add</i>
+                </a>
+                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect" for="insertComment${DocumentCopyId}" id="commonCommentList"></ul>-->
+                <div class="user-comment">
+                    <div style="position:relative; border-radius:30px; margin-right:60px;box-shadow:0 1px 0 #f0f0f0bf, 0 0 0 rgba(0,0,0,.8), 0 -1px 0 rgba(0,0,0,0.16);padding:0px 5px">
+                        <textarea id="Comment" name="Comment" rows="1" cols="20" placeholder="Ý kiến xử lý" style="background-color:transparent;color:white"></textarea>
+
+                        <a href="#" class="btnInsertImage mdl-button mdl-js-button mdl-button--icon" style="position: absolute;  right: -7px; top: 7px;">
+                            <i class="material-icons" style="color:#c5c5c5">camera_alt</i>
+                            <input type="file" accept="image/*" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                        </a>
+                        <a href="#" class="btnInsertAttachment mdl-button mdl-js-button mdl-button--icon" style="position: absolute;  right: 25px; top: 7px;">
+                            <i class="material-icons" style="color:#c5c5c5">attachment</i>
+                            <input type="file" class="fileupload" data-url="/Attachment/UploadTemp" multiple name="files" style="cursor: default;" />
+                        </a>
+                        <a class="btnInsertTemplate mdl-button mdl-js-button mdl-button--icon" id="insertComment${DocumentCopyId}" style="position: absolute;  right: 0px;  top: 7px;">
+                            <i class="material-icons" style="color:#c5c5c5">add</i>
+                        </a>
+                    </div>
+                    <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect transferActions" for="btnTransfer${DocumentCopyId}"></ul>
+                    <button id="btnTransfer${DocumentCopyId}" class="mdl-button mdl-js-button mdl-button--icon btnTransfer" href="#" style="top: 7px">
+                        <i class="material-icons" style="color: white">send</i>
+                    </button>
+                </div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="commentExtend" style="display:none;">
+        <ul class="mdl-list comment-list" id="commentListCopy"></ul>
+    </div>-->
+
+</div>
+

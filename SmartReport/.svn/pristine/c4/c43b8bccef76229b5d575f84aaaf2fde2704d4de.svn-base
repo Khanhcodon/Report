@@ -1,0 +1,54 @@
+﻿define([], function () {
+    var AddIndicator = Backbone.View.extend({
+        initialize: function (options) {
+            var that = this;
+            that.doc = options.document;
+        },
+
+        renderIndicator: function () {
+            $.ajax({
+                url: "/webapi/user/GetAllDepartment",
+                type: 'Get',
+                error: function (a, b, c) {
+                },
+                success: function (response) {
+                    var templateTree = '<div id="indicatorTree">Chọn chỉ tiêu</div>';
+                    that.$el.find("#indicatorBodyTree").html(templateTree);
+
+                    var kpis = _.map(response, function (kpi) {
+                        kpi["icon"] = "fa fa-line-chart"
+                        return kpi
+                    });
+
+                    kpis = _.filter(kpis, function (kpi) {
+                        return kpi.indicatorDepartCheck == true
+                    })
+
+                    $("#indicatorTree").jstree({
+                        "plugins": ["search"],
+                        'core': {
+                            'data': kpis
+                        }
+                    }).bind("loaded.jstree", function (event, data) {
+                        $(this).jstree("open_all");
+                    });
+
+                    var to = false;
+                    $('#searchIndicator').keyup(function () {
+                        $('#indicatorTree').jstree(true).close_all();
+                        if (to) { clearTimeout(to); }
+                        to = setTimeout(function () {
+                            var v = $('#searchIndicator').val();
+                            if (!v) {
+                                $('#indicatorTree').jstree(true).open_all();
+                            }
+                            $('#indicatorTree').jstree(true).search(v);
+                        }, 250);
+                    });
+                }
+            });
+        }
+    });
+
+    return AddIndicator;
+});

@@ -1,0 +1,19 @@
+﻿<div class="col-md-13">
+        <div class="progress skill-bar">
+            <div class="progress-bar" role="progressbar" aria-valuenow="${Percent}" aria-valuemin="0" aria-valuemax="100" style="width: ${Percent}%; {{if Percent != 0}}background-color:rgba(25, 25, 25, 0.2){{/if}}">
+                <span class="sr-only">90% Complete</span>
+            </div>
+            <span class="progress-type">${TitleDetail}</span>
+            <span class="progress-completed">${Percent}%</span>
+        </div>
+</div>
+
+<div class="col-md-3">
+    <div class="dropdown">
+        <span class="{{if Option.IsPublic}}dropdown-toggle btnUserVote {{/if}} pull-right" type="button" data-toggle="dropdown" data-target="#ListUserVote" id="btnUserVote">
+            ${TotalVote}
+            <span style="color:#666">phiếu</span>
+            {{if Option.IsPublic}}<span class="caret"></span>{{/if}}
+        </span>
+    </div>
+</div>

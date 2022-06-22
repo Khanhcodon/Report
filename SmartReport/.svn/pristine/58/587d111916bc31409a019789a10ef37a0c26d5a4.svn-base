@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.IconList = "";
+    ViewBag.Criteria = "";
+    ViewBag.Check = "active";
+    ViewBag.Title = "Danh sách vi phạm";
+    Layout = "_LayoutEvaluationCriteria.cshtml";
+}
+@section script{
+    <script src="../Scripts/bkav.egov/rateemployee/bkav.egov.model.js"></script>
+    <script src="../Scripts/bkav.egov/rateemployee/bkav.egov.viewcheck.js"></script>
+}
+@section script_relate{
+    <script id="CheckInfringe" type="text/x-jQuery-tmpl">
+        <td class="stt text-center"></td>
+        <td data-toggle="tooltip" title="${Name}" style="text-align:left">
+            <span>${Name}</span>
+        </td>
+        <td data-toggle="tooltip" title="${DepartmentName}" style="text-align:left">${DepartmentName}</td>
+        <td data-toggle="tooltip" title="${Point}" class="text-center">${Point}</td>
+        <td class="text-center">
+            <a href="#" class="detail">
+                <span class="" style="color:blue">Xem</span>
+            </a>
+        </td>
+        <td class="text-center">
+            <a href="#" class="userinfringe">
+                <img src="/Scripts/img/user_add.png" width="30" height="30" />
+            </a>
+        </td>
+
+    </script>
+
+    <script id="NameCriteriaTemplate" type="text/x-jQuery-tmpl">
+        <select style="width:100%;" class="input-large form-control">
+            <optgroup label="Danh sách các điểm cộng ">
+                {{each data}}
+                {{if Point > 0}}
+                <option value="${RateEmployeeId}">${Name}</option>
+                {{/if}}
+                {{/each}}
+            </optgroup>
+
+            <optgroup label="Danh sách các điểm trừ">
+                {{each data}}
+                {{if Point < 0}}
+                <option value="${RateEmployeeId}">${Name}</option>
+                {{/if}}
+                {{/each}}
+            </optgroup>
+
+        </select>
+    </script>
+
+    <script id="InfoDepartmentRateTemplate" type="text/x-jQuery-tmpl">
+        <select id="selectdepartmentrate" class="input-large form-control">
+            {{each datadepartment}}
+            <option value="${DepartmentId}">${DepartmentName}</option>
+            {{/each}}
+        </select>
+    </script>
+    <script src="../Scripts/bkav.egov/rateemployee/egov.main.checkcriteria.js"></script>
+}
+
+<div class="col-sm-16">
+    <div class="row" style="padding-top:12px">
+        <div class="col-md-16">
+            <span>Tên Tiêu Chí</span>
+            <input type="hidden" name="name" value=" " placeholder="Tìm Kiếm" class="input-large form-control criterianame" />
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div>
+            <div class="row">
+                <b style="padding-left: 20px; padding-bottom:10px;">Các tiêu chí đánh giá</b>
+            </div>
+            <div class="" style="">
+                <div id="InfringeModal" class="modal modal-wide fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" style="color:blue;"><b>Thêm người Đánh giá</b></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <label class="control-label col-sm-4" for="accountnamediv">Account:</label>
+                                        <div class="col-sm-10" id="accountnamediv">
+                                            <input id="accountname" type="text" name="name" data="" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <label class="control-label col-sm-4" for="namecriteria">Tên Tiêu chí:</label>
+                                        <div id="namecriteria" class="col-md-10" style="text-align:left">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <label class="control-label col-sm-4" for="date">Chọn Ngày:</label>
+                                        <div class="col-sm-10" id="date" style="text-align:left">
+                                            <input id="datetimepicker" type="text" name="name" value="" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2"></div>
+                                        <label class="control-label col-sm-4" for="descriptioncriteria">Nội dung:</label>
+                                        <div class="col-sm-10" id="descriptioncriteria">
+                                            <textarea style="width:100%; height:100px" id="detailinfringe"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="">
+                                    <span id="dialogerror" style="color:red; display:none"><b>Bạn cần nhập đầy đủ thông tin</b></span>
+                                    <button type="button" class="btn btn-primary" id="savechangeinfringe">Lưu thay đổi</button>
+                                    <button type="button" class="btn btn-close" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
+        <div class="fluid-row">
+            <div class="grid-content ui-layout-pane ui-layout-pane-center" style="overflow-y: auto; width: 100%; z-index: 0; display: block; visibility: visible;">
+                <table class="table table-hover table-main table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1 header text-center">STT</th>
+                            <th class="col-md-8 header" data-field="date" data-sortable="true">Tên Tiêu Chí</th>
+                            <th class="col-md-3 header">Phạm vi áp dụng</th>
+                            <th class="col-md-1 header text-center">Điểm</th>
+                            <th class="col-md-1 header text-center">Chi Tiết</th>
+                            <th class="col-md-2 header text-center">Ghi Nhận</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyemployeeinfringed"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="dialog" title="Mô tả chi tiết">
+        <p></p>
+    </div>
+</div>
+

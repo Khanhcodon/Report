@@ -1,0 +1,241 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.EmailSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Email");
+    Layout = "_SettingLayout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        $("#testSendMail").click(function () {
+            $.ajax({
+                url: "/Admin/Setting/TestSendMail",
+                type: "get",
+                success: function (result) {
+                    var $dialog = $("#testSendMailDialog");
+                    $dialog.html(result);
+                    $dialog.dialog({
+                        title: "@Localizer("Admin.Title.Setting.Email.TestSendMail")",
+                        modal: true,
+                        width: 1000,
+                        height: 520,
+                        buttons: {
+                            "@Localizer("Common.Button.Send")": function () {
+                                var mail = $('#txtMail').val();
+                                if (!validateEmail(mail)) {
+                                    eGovMessage.notification('@Localizer("Customer.Setting.MailIsValid")', eGovMessage.messageTypes.error);
+                                    $('#txtMail').css({ "border": "1px solid red" }).focus();
+                                    return;
+                                }
+
+                                var body = bmailEditor.getContent();
+                                if (body == null || body == '') {
+                                    eGovMessage.notification('@Localizer("Customer.Setting.BodyMailIsValid")', eGovMessage.messageTypes.error);
+                                    return;
+                                }
+
+                                var that = this;
+                                sendMail(mail, body, function () {
+                                    $(that).dialog("destroy");
+                                });
+                            },
+                            "@Localizer("Common.Button.Destroy")": function () {
+                                showLoading(false);
+                                $(this).dialog("destroy");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    function sendMail(mail, body, callback) {
+        // var token = $('input[name=__RequestVerificationToken]', '#SettingTestSendMail').val();
+        $.post('@Url.Action("SendMail")',
+            {
+                mail: mail,
+                body: body,
+                // __RequestVerificationToken: token,
+                enableSsl: $("#EnableSsl").prop("checked"),
+                host: $("#SmtpServer").val(),
+                port: $("#SmtpPort").val(),
+                username: $("#SmtpUsername").val(),
+                password: $("#SmtpPassword").val()
+            }
+        )
+        .done(function (data) {
+            if (data.success) {
+                eGovMessage.notification(data.success, eGovMessage.messageTypes.success);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            } else if (data.error) {
+                eGovMessage.notification(data.error, eGovMessage.messageTypes.error);
+            }
+        })
+        .fail(function () {
+            eGovMessage.notification('<span data-res="egov.resources.aaaaa"></span>"@Localizer("Common.Error")" khi gửi mail', eGovMessage.messageTypes.error);
+        });
+    }
+
+    function validateEmail(email) {
+        var pattern = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return pattern.test(email);
+    }
+
+    function showLoading(show) {
+        if (show) {
+            $("#imgLoader").show();
+            $("#tabs input").prop('disabled', true);
+        } else {
+            $("#imgLoader").hide();
+            $("#tabs input").prop('disabled', false);
+        }
+    }
+</script>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="SettingTestSendMail" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <b data-res="egov.resources.setting.mail.active"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-3" style="padding-left: 0;"></td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.IsActivated)  @Html.LabelFor(model => model.IsActivated)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td colspan="2">
+                        <b data-res="egov.resources.setting.smtpsetting"></b>
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td class="col-md-3" style="padding-left: 0;">&nbsp;&nbsp;@Html.EgovLabelFor(model => model.SmtpServer):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.SmtpServer)
+                        @Html.ValidationMessageFor(model => model.SmtpServer)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.SmtpPort):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.SmtpPort)
+                        @Html.ValidationMessageFor(model => model.SmtpPort)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.EnableSsl):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.EnableSsl)
+                        @Html.ValidationMessageFor(model => model.EnableSsl)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.SmtpUsername):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.SmtpUsername)
+                        @Html.ValidationMessageFor(model => model.SmtpUsername)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.SmtpPassword):
+                    </td>
+                    <td>
+                        @Html.PasswordFor(model => model.SmtpPassword, new { @value = Model.SmtpPassword })
+                        @Html.ValidationMessageFor(model => model.SmtpPassword)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.DisplayName):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.DisplayName)
+                        @Html.ValidationMessageFor(model => model.DisplayName)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>
+                        <input type="button" value="@Localizer("Setting.Email.Button.TestSendMail")" id="testSendMail" class="btn" />
+                        &nbsp;&nbsp;
+                        <img id="imgLoader" style="display: none" src="@Url.Content("~/Content/Images/ajax-loader.gif")" height="24" width="24" alt="" />
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b data-res="egov.resources.setting.othersetting"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.LabelFor(model => model.TitleName):</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.TitleName)
+                        @Html.ValidationMessageFor(model => model.TitleName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.LabelFor(model => model.LinkApi):</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.LinkApi)
+                        @Html.ValidationMessageFor(model => model.LinkApi)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.LabelFor(model => model.TokenApi):</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.TokenApi)
+                        @Html.ValidationMessageFor(model => model.TokenApi)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.LabelFor(model => model.EmailHeader):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.EmailHeader)
+                        @Html.ValidationMessageFor(model => model.EmailHeader)
+                    </td>
+                </tr>
+                <tr style="display: none">
+                    <td>&nbsp;&nbsp;@Html.LabelFor(model => model.EmailSignature):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.EmailSignature, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.EmailSignature)
+                    </td>
+                </tr>
+            </table>
+        }
+        <br />
+        <fieldset>
+            <legend>
+                @Localizer("Admin.Setting.NotifyConfig.List.Label") </legend>
+            @{
+                Html.RenderPartial("_NotifyConfig", ViewBag.AllNotify as List<Bkav.eGovCloud.Areas.Admin.Models.NotifyConfigModel>);
+            }
+        </fieldset>
+    </div>
+    <div id="testSendMailDialog" style="display: none">
+    </div>
+</div>

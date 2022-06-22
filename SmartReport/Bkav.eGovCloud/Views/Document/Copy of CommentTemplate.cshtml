@@ -1,0 +1,236 @@
+﻿@*<div class="record-title main-title" style="float:left;width:100%">
+    <div></div>
+    <div class="send-date">Ngày tháng</div>
+    <div class="user-send-name">Người giải quyết</div>
+</div>*@
+
+@*Tiến độ xử lý hồ sơ*@
+{{if Sign.length > 0}}
+    <div class="record-div">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link">Tiến độ xử lý </span></div>
+        </div>
+    </div>
+{{/if}}
+
+    @*Kết quả xử lý hồ sơ*@
+{{if Success}}
+    <div class="record-div">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link">Kết quả xử lý cuối <span style="color: red; margin-left: 10px">${Success.Content}</span></span></div>
+        </div>
+    </div>
+{{/if}}
+
+    @*Ký duyệt*@
+{{if Sign.length > 0}}
+    <div class="record-div">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link" onclick="getSigns()">Tổng hợp kí duyệt</span></div>
+        </div>
+        <div class="record-content" id="divSign">
+            {{if Sign.length > 0 }}
+            <div class="co-processor">
+                {{each(j, sign) Sign}}
+                    <div class="co-processor-content">
+                        <div class="record-title sub-co-title">
+                            <div class="sub-content">Ý kiến duyệt: ${sign.Result}</div>
+                            <div class="send-date">${sign.DateCreatedString}</div>
+                            <div class="user-send-name">${sign.UserSend.Username}</div>
+                        </div>
+                        <div class="record-content">
+                            ${sign.Content}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}
+
+    @*Tổng hợp ý kiến*@
+{{if CoProcessor.length > 0 || Contribution.length > 0 }}
+    <div class="record-div">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link">Tổng hợp ý kiến</span></div>
+            <div class="send-date"></div>
+            <div class="user-send-name">Danh sách góp ý kiến</div>
+        </div>
+        <div class="record-content">
+            @*Đồng xử lý*@
+            {{if CoProcessor.length > 0 }}
+            <div class="co-processor">
+                <div class="record-title co-processor-title">
+                    <div class="sub-content">Đồng xử lý</div>
+                    <div class="send-date"></div>
+                    <div class="user-send-name"></div>
+                </div>
+                {{each(j, coprocessor) CoProcessor}}
+                    <div class="co-processor-content">
+                        <div class="record-title sub-co-title">
+                            <div class="sub-content">Ý kiến xử lý</div>
+                            <div class="send-date">${coprocessor.DateCreatedString}</div>
+                            <div class="user-send-name">${coprocessor.UserSend.Username}</div>
+                        </div>
+                        <div class="record-content">
+                            ${coprocessor.Content.Content}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+            @*Xin ý kiến*@
+            {{if Contribution.length > 0 }}
+            <div class="co-processor">
+                <div class="record-title co-processor-title">
+                    <div class="sub-content">Xin ý kiến</div>
+                    <div class="send-date"></div>
+                    <div class="user-send-name"></div>
+                </div>
+                {{each(i, contribution) Contribution}}
+                    <div class="contributions">
+                        <div class="contributions-content">
+                            ${contribution.Content}
+                        </div>
+                        {{each(j, child) Childs}}
+                        <div class="record-title sub-co-title">
+                            <div class="sub-content">Ý kiến đóng góp</div>
+                            <div class="send-date">${child.DateCreatedString}</div>
+                            <div class="user-send-name">${child.UserSend.Username}</div>
+                        </div>
+                        <div class="record-content">
+                            ${child.Content}
+                        </div>
+                        {{/each}}
+                    </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}
+
+
+    @*Yêu cầu bổ sung*@
+@*{{if Supplementary.length > 0}}
+    <div class="record-div">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link">Yêu cầu bổ sung (${Supplementary.length})</span></div>
+        </div>
+        <div class="record-content">
+            {{if Supplementary.length > 0 }}
+            <div class="co-processor">
+                {{each(i, supplementary) Supplementary}}
+                    <div class="co-processor-content supplementary">
+                        {{each(ind, supp) Childs}}
+                            <div class="record-title sub-co-title">
+                                <div class="sub-content">Yêu cầu bổ sung</div>
+                                <div class="send-date">${supp.DateCreatedString}</div>
+                                <div class="user-send-name">${supp.UserSend.Username}</div>
+                            </div>
+                            <div class="record-content supplementary-content">
+                                <span class="sub-content">${supp.Content}</span>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <div class="co-processor-content supplementary">
+                        <div class="record-title sub-co-title">
+                            <div class="sub-content">Kết quả bổ sung <span style="color: blue;">${supplementary.Result}</span></div>
+                            <div class="send-date">${supplementary.DateCreatedString}</div>
+                            <div class="user-send-name">{{if supplementary.UserSend}}${supplementary.UserSend.Username}{{/if}} </div>
+                        </div>
+                        <div class="record-content supplementary-content">
+                            <span class="sub-content">${supplementary.Content}</span>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}
+*@
+
+    @*Bàn giao*@
+{{each(i, processor) Processor}}
+    <div class="record-div processor">
+        <div class="record-title sub-title">
+            <div class="sub-content"><span class="sub-title-link">${processor.Content.SubContent}</span></div>
+            <div class="send-date">${processor.DateCreatedString}</div>
+            <div class="user-send-name">${processor.UserSend.Username}</div>
+        </div>
+        <div class="record-content">
+            ${processor.Content.Content}
+            {{if processor.Content.Transfers}}
+            <div class="separate"></div>
+                ${( $data.exitLabelXlc = 'false' ),''}
+                ${( $data.exitLabelDxl = 'false' ),''}
+                ${( $data.isFirstDxl = 'true' ),''}
+                ${( $data.exitLabelTb = 'false' ),''}
+                ${( $data.isFirstTb = 'true' ),''}
+                ${( $data.exitLabelXyk = 'false' ),''}
+                ${( $data.isFirstXyk = 'true' ),''}
+                {{each(j, transfer) processor.Content.Transfers}}
+                    {{if transfer.type == "xulychinh"}}
+                        <span class="transfer-label">Xử lý chính:</span>
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+                        ${( $data.exitLabelXlc = 'true' ),''}
+                    {{/if}}
+                    {{if transfer.type == "dongxuly"}}
+                        {{if isFirstDxl == 'true'}}
+                            ${( $data.isFirstDxl = 'false' ),''}
+                            {{if exitLabelXlc == 'true'}}
+                                <br />
+                            {{/if}}
+                        {{else}}
+                            <br />
+                        {{/if}}
+                        {{if exitLabelDxl == 'false'}}
+                            <span class="transfer-label">Đồng xử lý:</span>
+                            ${( $data.exitLabelDxl = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+                        {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+                    {{/if}}
+                    {{if transfer.type == "thongbao"}}
+                        {{if isFirstTb == 'true'}}
+                            ${( $data.isFirstTb = 'false' ),''}
+                            {{if exitLabelXlc == 'true' || exitLabelDxl == 'true'}}
+                                <br />
+                            {{/if}}
+                        {{else}}
+                            <br />
+                        {{/if}}
+                        {{if exitLabelTb == 'false'}}
+                            <span class="transfer-label">Thông báo:</span>
+                            ${( $data.exitLabelTb = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+                        {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+                    {{/if}}
+                    {{if transfer.type == "xinykien"}}
+                        {{if isFirstXyk == 'true'}}
+                            ${( $data.isFirstXyk = 'false' ),''}
+                            {{if exitLabelXlc == 'true' || exitLabelDxl == 'true'}}
+                                <br />
+                            {{/if}}
+                        {{else}}
+                            <br />
+                        {{/if}}
+                        {{if exitLabelXyk == 'false'}}
+                            <span class="transfer-label">Xin ý kiến:</span>
+                            ${( $data.exitLabelXyk = 'true' ),''}
+                        {{else}}
+                            <span class="transfer-label"></span>
+                        {{/if}}
+                        <span class="${transfer.value}  transfer-value">${transfer.label}</span>
+                    {{/if}}
+                {{/each}}
+            {{/if}}
+        </div>
+    </div>
+{{/each}}

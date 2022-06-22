@@ -1,0 +1,46 @@
+﻿@model Bkav.eGovCloud.Models.BusinessModel
+@{
+    ViewBag.Title = "Cập nhật doanh nghiệp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            messageBoxConfirm({
+                message: '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Business.ConfirmDelete"))',
+                buttonOkFunction: function () {
+                    $("#formdelete").submit();
+                }
+            });
+        });
+    });
+</script>
+@using (Html.BeginForm())
+{
+    <div class="bkavegov-content-title">
+        <h3>Cập nhật doanh nghiệp</h3>
+    </div>
+    <div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">@Html.ActionLink("Danh sách", "Index")</li>
+            <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+        </ul>
+        <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+            <div>
+                <button type="submit" name="save" value="save">@Localizer("Common.Button.Edit.Save")</button>
+                <button type="button" id="delete" name="delete" value="delete" onclick="deleteServer(@Model.BusinessId)">@Localizer("Common.Button.Delete")</button>
+                <button type="button" onclick="location.href='/Admin/Businesses'">
+                    @Localizer("Common.Button.Back")</button>
+            </div>
+        </div>
+    </div>
+}
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.BusinessId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

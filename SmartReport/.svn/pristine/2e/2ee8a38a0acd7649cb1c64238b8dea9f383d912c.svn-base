@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../images/bg/favicon.ico">
+
+    <title>Eform</title>
+
+    <!-- Bootstrap 4.1.3-->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap extend-->
+    <link href="~/Scripts/generalreport/main/css/bootstrap-extend.css" rel="stylesheet" />
+
+    <!-- daterange picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+    <!-- bootstrap datepicker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link href="~/Scripts/generalreport/assets/vendor_plugins/iCheck/all.css" rel="stylesheet" />
+
+    <!-- Bootstrap Color Picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap time Picker -->
+    <link href="~/Scripts/generalreport/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+    <!-- Select2 -->
+    <link href="~/Scripts/generalreport/assets/vendor_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Theme style -->
+    <link href="~/Scripts/generalreport/main/css/master_style.css" rel="stylesheet" />
+
+    <!-- Unique_Admin skins -->
+    <link href="~/Scripts/generalreport/main/css/skins/_all-skins.css" rel="stylesheet" />
+    <link href="~/Content/searchdocument/style.css" rel="stylesheet" />
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini scollPage">
+        <div id="BodySearch" class="content-wrapper scollPage" style="background-image: url(/Scripts/generalreport/imagesbg/bg/bg.jpg); overflow-y: auto; background-size: 100%;height: 908px;margin: 0px;background-repeat: round;background-attachment: fixed;height: auto;">
+            <!-- Main content -->
+            <section class="content" style="touch-action:none">
+                <!-- SELECT2 EXAMPLE -->
+                <div class="box" id="boxFix">
+                    <header class="main-header" style="display:none">
+                        <nav class="navbar navbar-static-top" style="width: 100%;margin-left: 0;display:none">
+                            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="background-repeat: no-repeat; border: none;background-color: transparent;color: black;font-size: 14px;">
+                                <span class="sr-only">Toggle navigation</span>
+                            </a>
+                        </nav>
+                    </header>
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Tra cứu báo cáo</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <!-- <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button> -->
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div>
+                        <div class="box-body" id="boxTotalSearch">
+                            
+                        </div>
+                    </div>  
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+                <div class="row" id="boxResultTable" style="width:100%;padding-left:30px;">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Kết quả tìm kiếm</h3>
+                                <button type="button" class="btn btn-main f14" id="btnExportExcelSearch"><i class="fa fa-download"></i> Xuất File Excel</button>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <div class="table table-wrapper-scroll-y my-custom-scrollbar">
+                                        <table id="example1" border="1" cellspacing="0" class="table table-bordered table-striped table-main persist-area">
+                                            <thead>
+                                                <tr style="text-align:center">
+                                                    @*<th>
+                                                        <input type="checkbox" id="checkBoxAllsSearch" name="checkBoxAllsSearch" class="custom-checkbox form-check-input labelThead" />
+                                                        <label class="form-check-label labelIndicatorID" for="checkBoxAllsSearch"></label>
+                                                    </th>*@
+                                                    <th style="font-weight: 700; font-size:14px;">Xuất Excel</th>
+                                                    <th style="font-weight: 700; font-size:14px;">STT</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Thao tác</th>
+                                                    <th hidden style="font-weight: 700; font-size:14px;">ID</th>                                    
+                                                    <th style="font-weight: 700; font-size:14px;">Chế độ báo cáo</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Tên báo cáo</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Ngày xuất bản</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Đơn vị giao</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Đơn vị nhận</th>
+                                                    <th style="font-weight: 700; font-size:14px;">Kỳ dữ liệu</th>
+                                                    @*<th style="font-weight: 700; font-size:14px;">Trạng thái</th>*@
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        <div class="paging">
+
+                                        </div>
+                                    </div>
+                                </div>  
+                                <!-- Paging viet o day -->
+                            </div>  
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    
+                    
+                          
+                </div>
+                <!-- /.row -->
+                
+            </section>
+            <!-- hien thi proess-->
+            <div class="alert egov-status alert-info" id="egovStatuss" style="left: 17px; bottom: 0px; display: none;position: absolute">
+                <div class="status-content">
+                    <img src="../../content/bkav.egov/status/images/processing.svg">
+                    <span>Đang xử lý...</span>
+                </div>
+            </div>
+            <!-- /.content -->
+        </div>
+        <div id="ifameFile">
+
+        </div>
+        <!-- /.content-wrapper -->
+    @*</div>*@
+    <!-- ./wrapper -->
+
+
+    <!-- Modal -->
+    <div class="modal fade right" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header-full-width modal-header text-center" id="fixTopView" style="height: 85px !important;border-bottom: none !important;">
+                    @*<h5 class="modal-title w-100" id="exampleModalPreviewLabel" style="font-weight: 500;font-family: 'Roboto', sans-serif; position:absolute; top:27px;">Xem chi tiết</h5>*@
+                    <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close" onclick="CloseModalFile()" id="CloseModalFile">
+                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="" id="bodyContentView" style="height: 100%;margin-top: 85px;">
+                </div> 
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade right" id="ViewModalFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header-full-width modal-header text-center" id="fixTopViewFile" style="height: 85px !important;border-bottom: none !important;">
+                    <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close">
+                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="" id="bodyContentViewFile" style="height: 100%">
+                    <iframe class="bodyFile">
+
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade right" id="ViewFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header-full-width modal-header text-center" id="fixTopView" style="height: 85px !important;border-bottom: none !important;">
+                    <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close" onclick="CloseModal()" id="closeModal">
+                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="" id="ViewFileAtt" style="height: 100%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade right" id="ViewModalProsess" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+            <div class="modal-content" @*style="height: 100%"*@>
+                <div class="modal-header-full-width modal-header text-center" style="height: 85px !important;">
+                    @*<h5 class="modal-title w-100" id="exampleModalPreviewLabel" style="font-weight: 500;font-family: 'Roboto', sans-serif;position:absolute; top:27px;">Xem chi tiết</h5>*@
+                    <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close" onclick="CloseModalProsess()" id="closeModalProsess">
+                        <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="box-body no-padding" id="BodyContent">
+                    <div class="col-12 HeaderContent">
+                        <div class="HeaderContentBody">
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <div class="table" id="bodyContentViewProsess">
+                            <table border="1" cellspacing="0" class="table table-bordered table-hover table-main persist-area table-striped" id="tblListDocumentProcess">
+                                <colgroup></colgroup>
+                                <thead>
+                                    <tr class="persist-header"></tr>
+                                </thead>
+                                <tbody style="text-align: center;">
+                                    <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 FooterContent">
+                        <div class="FooterContentBody">
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+    <div class="fixed-header">
+        <div class="modal-header-full-width modal-header text-center" style="width: 100%; height: 85px !important;">
+            @*<h5 class="modal-title w-100" id="exampleModalPreviewLabel" style="font-family: 'Roboto', sans-serif; position:absolute; top:27px;">Xem chi tiết</h5>*@
+            <button style="position:relative; top:10px;" type="button" class="close " data-dismiss="modal" aria-label="Close" onclick="CloseModalProsess()" id="closeModalProsessNew">
+                <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- jquery template-->
+    <script type="text/x-jquery-tmpl" id="searchNormalDocument">
+        <form class="form-horizontal" id="formBoxTotalSearch">
+            <div id="boxSearchDocument">
+                <div class="row rowSearch">
+                    <div class="col-md-3 col-12 col-sm">
+                        <div class="form-group">
+                            <label>Văn bản quy định</label>
+                            <select class="form-control select2 w-p100" id="ReportRuleId" name="ReportRuleId" data-width="100%">
+                                @foreach (var listReportModels in ViewBag.ListReportRules as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listReportModels.Selected ? "selected" : "") value="@listReportModels.Value">@listReportModels.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- /.form-group -->
+                    </div>   
+                    <div class="col-md-3 col-12 col-sm" id="row_1">
+                        <div class="form-group">
+                            <label>Chế độ báo cáo</label>
+                            <select class="form-control select2 w-p100" id="ReportModeId" name="ReportModeId" data-width="100%">
+                                @foreach (var listReportModels in ViewBag.ListReportModels as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listReportModels.Selected ? "selected" : "") value="@listReportModels.Value">@listReportModels.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- /.form-group -->
+                    </div>            
+                    <!-- /.col -->
+                    <div class="col-md-3 col-12 col-sm">
+                        <div class="form-group">
+                            <label>Mã báo cáo</label>
+                            <div class="input-group my-colorpicker2">
+                                <input type="text" id="DocTypeCode" name="DocTypeCode" class="form-control" placeholder="Nhập mã báo cáo">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+
+                        <!-- /.form-group -->
+                    </div>
+                    <div class="col-md-3 col-12 col-sm">
+                        <div class="form-group">
+                            <label>Tên báo cáo</label>
+
+                            @*<div class="input-group my-colorpicker2">
+                                <input type="text" id="CompendiumName"name="CompendiumName" class="form-control" placeholder="Nhập tên báo cáo" value="${Compendium}">
+                            </div>*@
+                            <select class="form-control select2 w-p100" id="CompendiumName" name="CompendiumName" data-width="100%">
+                                @foreach (var listCompendium in ViewBag.ListCompendium as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listCompendium.Selected ? "selected" : "") value="@listCompendium.Value">@listCompendium.Text</option>
+                                }
+                            </select>              
+                            <!-- /.input group -->
+                        </div>
+
+                        <!-- /.form-group -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+            <div id="boxSearchAdvanceDocument">
+                <!-- /.row -->
+                <div class="row rowSearch_1 d-none">
+                    <div class="col-md-4 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label>Đơn vị giao</label>
+                            <select class="form-control select2 w-p100" id="UserCreatedName" name="UserCreatedName" data-width="100%">
+                                @foreach (var listCompendium in ViewBag.ListSelectDepartment as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listCompendium.Selected ? "selected" : "") value="@listCompendium.Value">@listCompendium.Text</option>
+                                }
+                            </select> 
+                            @*<input type="text" id="UserCreatedName" name="UserCreatedName" class="form-control" placeholder="Nhập đơn vị giao" value="${UserCreatedName}"/>*@ 
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label>Đơn vị nhận</label>
+                            <select class="form-control select2 w-p100" id="InOutPlace" name="InOutPlace" data-width="100%">
+                                @foreach (var listCompendium in ViewBag.ListSelectDepartment as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listCompendium.Selected ? "selected" : "") value="@listCompendium.Value">@listCompendium.Text</option>
+                                }
+                            </select> 
+                            @*<input type="text" id="InOutPlace" name="InOutPlace" class="form-control" placeholder="Nhập đơn vị giao" value="${InOutPlace}"/>*@
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label>Trạng thái</label>
+                            <select class="form-control w-p100" id="Status" name="Status" data-width="100%">
+                                <option value="-1" selected="selected">Chọn tất cả</option>
+                                <option value="2">Chờ xử lý</option>
+                                <option value="4">Đã duyệt</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    @*<div class="col-md-4 col-12 col-sm">
+                        <div class="form-group">
+                            <label>Hiển thị file báo cáo</label>
+                            <select class="form-control  w-p100" id="Attachment" name="Attachment" data-width="100%">
+                                @foreach (var listAttachment in ViewBag.ListAttachment as IEnumerable<SelectListItem>)
+                                {
+                                    <option @(listAttachment.Selected ? "selected" : "") value="@listAttachment.Value">@listAttachment.Text</option>
+                                }
+                            </select> 
+                        </div>
+                    </div>*@
+
+                </div>
+
+                <div class="row rowSearch_1 d-none">
+                    
+                    <div class="col-md-4 col-12 col-sm" id="row_2">
+                        <div class="form-group">
+                            <label>Loại báo cáo</label>
+                            <select class="form-control w-p100" id="CategoryBusinessId" name="CategoryBusinessId" data-width="100%">
+                                <option value="-1" selected="selected">Chọn tất cả</option>
+                                <option value="4">Báo cáo số liệu</option>
+                                <option value="8">Báo cáo thuyết minh</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label>Kiểu kỳ báo cáo</label>
+                            <select class="form-control w-p100" id="ActionLevel" name="ActionLevel" data-width="100%">
+                                <option value="-1" selected="selected">Chọn tất cả</option>
+                                <option value="1">Năm</option>
+                                <option value="8">9 Tháng</option>
+                                <option value="2">6 Tháng</option>
+                                <option value="3">Quý</option>
+                                <option value="4">Tháng</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label>Từ ngày</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar calendarFrom"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="FromDateStr">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-12 col-sm">
+                        <!-- /.form-group -->
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label>Đến ngày</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar calendarTo"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="ToDateStr">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                </div>
+                <!-- and box-body -->
+            </div>
+            <div id="boxSearchButton" class="actions center" style="text-align: center;">
+                <button type="button" class="btn btn-second f14 open" style="min-width:100px; display: none;" id="btnAdv">
+                    <div>
+                        <span class="fa fa-sort-down"></span>
+                        <span class="name" style="position:relative; top:2px">Huỷ tìm kiếm nâng cao</span>
+                    </div>
+                </button>
+                <button type="button" class="btn btn-second f14 open" style="min-width:100px;" id="btnAdv_1">
+                    <div>
+                        <span class="fa fa-sort-up"></span>
+                        <span class="name" style="position:relative; bottom:2px">Tìm kiếm nâng cao</span>
+                    </div>
+                </button>
+                <button type="submit" class="btn btn-main f14" style="min-width:100px" id="btnView"><span class="fa fa-search"></span> Tìm kiếm</button>
+            </div>
+        </form>
+    </script>
+
+    <!--Modal kỳ báo cáo-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="TimeKeyCommon" tabindex="-1" role="dialog" aria-labelledby="TimeKeyCommonTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TimeKeyCommonLabel">Lựa chọn lựa chọn thông tin</h5>
+                    @*<button type="button" id="CloseTimeKey" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSaveTimeKeyCommon">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/x-jquery-tmpl" id="resultSearchDocument">
+        <tr>
+            <th>
+                <input type="checkbox" id="${DocumentId}" name="${DocumentId}" data-name="${Title}" class="custom-checkbox form-check-input labelThead" />
+                <label class="form-check-label labelIndicatorID" for="${DocumentId}"></label>
+            </th>
+            <td>${Index}</td>
+            <td hidden>${DocumentId}</td>
+            <td style="text-align:center;" class="view">
+                <i class="fa fa-eye-slash ViewDetail" onclick="ViewProcess('${DocumentId}')" data-toggle="modal" data-target="#ViewModalProsess" style="font-size: 14px;padding-right: 5px;"></i>
+                <i class="fa fa-tree ViewProcess" onclick="ViewDetail('${DocumentId}')" data-toggle="modal" data-target="#ViewModal" style="font-size: 13px;padding-right: 5px;"></i>
+                <i class="fa fa-file ViewFile" onclick="ViewAttachDocCopy('${DocumentCopyId}')" data-toggle="modal" data-target="#ViewModalFile" style="font-size: 14px;padding-right: 5px;"></i>
+            </td>   
+            <td>${ReportModeName}</td>
+            <td>${Title}</td>
+            <td>${DateArrived}</td>
+            <td>${UnitDeliveryStr}</td>
+            <td>${UnitReceiveStr}</td>
+            <td>${CategoryName}</td>
+            @*{{if ExtendInfo.Status == 1}}
+            <td><span>Chờ duyệt</span></td>
+            {{else ExtendInfo.Statuss == 2}}
+            <td><span>Đang xử lý</span></td>
+            {{else ExtendInfo.Statuss == 4}}
+            <td><span>Đã duyệt</span></td>
+            {{/if}}
+            <td>${ExtendInfo.Statuss}</td>*@
+            
+        </tr>
+    </script>
+    <!-- end jquery template-->
+
+    <!-- jQuery 3 -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/popper/dist/popper.min.js"></script>
+
+    <!-- Bootstrap 4.1.3-->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/select2/dist/js/select2.full.js"></script>
+
+    <!-- InputMask -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+
+    <!-- date-range-picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/moment/min/moment.min.js"></script>
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- bootstrap datepicker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    
+    <!-- bootstrap color picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+
+    <!-- bootstrap time picker -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <!-- SlimScroll -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- iCheck 1.0.1 -->
+    <script src="~/Scripts/generalreport/assets/vendor_plugins/iCheck/icheck.min.js"></script>
+
+    <!-- FastClick -->
+    <script src="~/Scripts/generalreport/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/generalreport/main/js/template.js"></script>
+
+    <!-- Unique_Admin for advanced form element -->
+    <script src="~/Scripts/generalreport/main/js/pages/advanced-form-element.js"></script>
+
+    <script src="~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/backbone/backbone-1.3.3.js"></script>
+
+    <script src="~/Scripts/bkav.egov/views/searchdocument/egovSearchDocument.js"></script>
+
+    <script src="~/Scripts/bkav.egov/views/searchdocument/egovSearchTable.js"></script>
+</body>
+</html>
+

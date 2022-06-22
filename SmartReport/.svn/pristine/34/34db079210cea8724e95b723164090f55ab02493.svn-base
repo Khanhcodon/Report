@@ -1,0 +1,960 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Config");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as string;
+    var allDocField = ViewBag.AllDocFields as string;
+    var allDocType = ViewBag.AllDocType as string;
+    var allWorkflow = ViewBag.AllWorkflow as string;
+    var cul = (Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode() == "vi-VN") ? "" : ".en";
+}
+
+<style type="text/css">
+    #divTreeDeptUserForAll li[rel="dept"] > a > .jstree-icon, .divTreeDeptsForAll li[rel="dept"] > a > .jstree-icon, #userDeptPopup li[rel="dept"] > a > .jstree-icon, #deptPopup li[rel="dept"] > a > .jstree-icon, #deparmentForJobtitlesSetting li[rel="dept"] > a > .jstree-icon, #deparmentForPositionSetting li[rel="dept"] > a > .jstree-icon, #positionDeptPopup li[rel="dept"] > a > .jstree-icon {
+        background-image: url("/Content/Images/dept.png");
+        background-position: 0 0;
+    }
+
+    #divTreeDeptUserForAll li[rel="people"] > a > .jstree-icon, #userDeptPopup li[rel="people"] > a > .jstree-icon, #deptPopup li[rel="people"] > a > .jstree-icon {
+        background-image: url("/Content/Images/people.png");
+        background-position: 0 0;
+    }
+
+    #divTreeDeptUserForAll li[rel="dept-deactivated"] > a > .jstree-icon {
+        background-image: url("/Content/Images/dept-deactivated.png");
+        background-position: 0 0;
+    }
+
+    #west li.doctype > a > .jstree-icon {
+        background-image: url("/Content/Images/doctype_normal.png");
+        background-position: 0 0;
+    }
+
+    #west li.doctype_active > a > .jstree-icon {
+        background-image: url("/Content/Images/doctype_activate.png");
+        background-position: 0 0;
+    }
+
+    #west li.workflow > a > .jstree-icon {
+        background-image: url("/Content/Images/workflow_normal.png");
+        background-position: 0 0;
+    }
+
+    #west li.active > a > .jstree-icon {
+        background-image: url("/Content/Images/workflow_activate.png");
+        background-position: 0 0;
+    }
+
+    #tree li.processfunction > a > .jstree-icon, #treeProfileJob li.processfunction > a > .jstree-icon {
+        background-image: url("/Content/Images/doctype_normal.png");
+        background-position: 0 0;
+    }
+
+    #tree li.processfunction_active > a > .jstree-icon, #treeProfileJob li.processfunction_active > a > .jstree-icon {
+        background-image: url("/Content/Images/doctype_activate.png");
+        background-position: 0 0;
+    }
+
+    #silverlightControlHost {
+        height: 100%;
+        text-align: center;
+    }
+
+    #center {
+        overflow: hidden;
+        padding: 0;
+        border: none;
+    }
+
+    #west {
+        border: none;
+    }
+</style>
+<script type="text/javascript" src="@Url.Content("~/Silverlight.js")"></script>
+
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/layout-default-latest.css" rel="stylesheet" />
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.css" rel="stylesheet" />
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.dialogextend.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/jquery.jstree.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+
+<script type="text/javascript">
+    var silverlightControl = null;
+    var allCategoryBusiness = @(string.IsNullOrEmpty(allCategoryBusiness) ? MvcHtmlString.Create("[]") : Html.Raw(allCategoryBusiness));
+    var allDocField = @(string.IsNullOrEmpty(allDocField) ? MvcHtmlString.Create("[]") : Html.Raw(allDocField));
+    var allDocType = @(string.IsNullOrEmpty(allDocType) ? MvcHtmlString.Create("[]") : Html.Raw(allDocType));
+    var allWorkflow = @(string.IsNullOrEmpty(allWorkflow) ? MvcHtmlString.Create("[]") : Html.Raw(allWorkflow));
+
+    var objDefineDialog = {
+        autoOpen: false,
+        height: 'auto',
+        width: 'auto',
+        modal: true,
+        close: function () {
+            $("#workflowName").val("");
+        }
+    };
+    var iscopy = false;
+    $(function () {
+        $("#addWorkflowType").click(function(e){
+            $("#workflowTypeTemplate").tmpl({}).appendTo($("#dialog-form table"))
+        });
+
+        $(".control-btn").remove();
+        var objDefineTree = {};
+        objDefineTree.plugins = ["themes", "html_data", "cookies", "ui", "crrm"];
+        objDefineTree.ui = { select_multiple_modifier: false };
+
+        $('#container').layout({
+            // center__maxwidth: 500,
+            west__spacing_open: 1,
+            center__paneSelector: "#center",
+            west__paneSelector: "#west",
+            center__onresize: function (name, elem) {
+                if(silverlightControl) {
+                    $("#silverlight").width($(elem).width());
+                    silverlightControl.Content.Workflow.ResizeWidthScroll($(elem).width());
+                }
+            }
+        });
+
+        var interval = setInterval(function () {
+            if (silverlightControl) {
+                clearInterval(interval);
+                $("#silverlight").width($("#center").width());
+                $("#silverlight").height($("#center").height());
+
+                silverlightControl.Content.Workflow.SetWidthHeight($("#center").width(), $("#center").height());
+                var tmp = $.cookie('jstree_select');
+                if (tmp && tmp.length) {
+                    var selected = tmp.replace("#workflow_", "");
+                    if (!isNaN(parseInt(selected))) {
+                        $.get(
+                            'GetWorkflow',
+                            {id: selected},
+                            function (data) {
+                                if(data.error) {
+                                    eGovMessage.show(data.error);
+                                } else {
+                                    if(silverlightControl) {
+                                        silverlightControl.Content.Workflow.DrawWorkflow(selected, data.workflow);
+                                    }
+                                }
+                            }
+                        ).fail(function () {
+                            eGovMessage.notification(egov.resources.doctype.downloadworkflowerror, eGovMessage.messageTypes.error);
+                        });
+                    } else {
+                        if($(tmp).length > 0) {
+                            var children = $(tmp).children().find('li');
+                            if(children && children.length > 0) {
+                                var active;
+                                for(var i = 0; i < children.length; i++) {
+                                    if($(children[i]).hasClass('active')) {
+                                        active = $(children[i]);
+                                        break;
+                                    }
+                                }
+                                if(active) {
+                                    getWorkflow(active.attr('id').replace('workflow_', ''));
+                                } else {
+                                    silverlightControl.Content.Workflow.DrawWorkflow(0, '');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, 100);
+
+        ////////////////////////////
+        $.each(allDocType, function(index, doctype) {
+            var workflows = _.filter(allWorkflow, function(workflow) {
+                return workflow.DocTypeId == doctype.DocTypeId;
+            });
+
+            if(workflows.length) {
+                doctype.IsLeaf = true;
+                if($.isArray(workflows)) {
+                    doctype.Workflows = workflows;
+                } else {
+                    doctype.Workflows = [];
+                    doctype.Workflows.push(workflows);
+                }
+                //var workflowActive = _.filter(workflows, function(workflow) {
+                //    return workflow.IsActivated == true;
+                //});
+                //if(workflows.length ==0 || workflowActive.length==0)
+                //{
+                //    doctype.IsActivated = false;
+                //}
+                //else
+                //{
+                //    doctype.IsActivated = true;
+                //}
+            } else {
+                doctype.IsLeaf = false;
+                doctype.Workflows = [];
+            }
+        });
+
+        $.each(allDocField, function(index, docfield){
+            docfield.DocTypes = _.filter(allDocType, function(doctype){
+                return doctype.DocFieldId == docfield.DocFieldId;
+            });
+        });
+
+        ///////////////////////////////
+        $.each(allCategoryBusiness, function(index, categorybusiness){
+            var docfields = _.filter(allDocField, function(docfield){
+                return (docfield.CategoryBusinessId & parseInt(categorybusiness.Value)) == parseInt(categorybusiness.Value);
+            });
+            if(docfields.length){
+                categorybusiness.DocFields = docfields;
+                var docTypesKhac =  _.filter(allDocType, function(doctype){
+                    return (!doctype.DocFieldId) && doctype.CategoryBusinessId == categorybusiness.Value;
+                });
+                if(docTypesKhac.length){
+                    var docFieldKhac= {'DocFieldId':'other', 'DocFieldName': "@Localizer("egov.resources.doctype.other")", 'DocTypes':docTypesKhac};
+                    categorybusiness.DocFields.push(docFieldKhac);
+                }
+                categorybusiness.DocTypes = [];
+            }else{
+                categorybusiness.DocFields = [];
+                categorybusiness.DocTypes = _.filter(allDocType, function(doctype){
+                    return doctype.CategoryBusinessId == categorybusiness.Value;
+                });
+            }
+        });
+
+        $("#categorybusinessTemplate").tmpl(allCategoryBusiness).appendTo("#west ul:first");
+
+        $("#west").jstree(objDefineTree)
+            .bind("loaded.jstree", function () {
+                createContextMenuForDocType();
+                createContextMenuForWorkflow();
+            })
+            .bind("paste.jstree", function (e, data) {
+                var itemcopy = $(data.rslt.nodes[0]);
+                var id = itemcopy.attr('id');
+                var parent = $(data.rslt.obj[0]);
+                $("#west").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                var token = $('input[name=__RequestVerificationToken]','#DocTypeCopyWorkflow').val();
+                $.post(
+                    'CopyWorkflow',
+                    {
+                        __RequestVerificationToken: token,
+                        "id": id.replace('workflow_', ''),
+                        "doctypeId": parent.attr('id').replace('doctype_', '')
+                    },
+                    function (r) {
+                        if(r.error) {
+                            eGovMessage.show(r.error);
+                        } else {
+                            if (!r.id) {
+                                $.jstree.rollback(data.rlbk);
+                            } else {
+                                var itemPaste = $("#copy_" + id);
+                                if(itemPaste && itemPaste.length) {
+                                    itemPaste.attr('id', 'workflow_' + r.id);
+                                    var link = itemPaste.find('a:first');
+                                    if (link) {
+                                        link.attr('onclick', 'getWorkflow(' + r.id + ')');
+                                    }
+                                    $("#west").jstree("deselect_node");
+                                    $("#west").jstree("select_node", '#' + itemPaste.attr('id'));
+                                    getWorkflow(r.id);
+                                    createContextMenuForWorkflow();
+                                }
+                            }
+                        }
+                    }
+                   ) .complete(function () {
+                       $("#west").unblockpanel();
+                   })
+                    .fail(function () {
+                        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                    });
+            });
+    });
+
+        function createContextMenuForDocType() {
+            $.contextMenu('destroy', 'li.doctype' );
+            $.contextMenu({
+                selector: 'li.doctype',
+                zIndex: 3,
+                build: function() {
+                    var options = {
+                        items: {
+                            "@Localizer("Common.Button.Create")": {
+                                name: egov.resources.doctype.newworkflow,
+                                icon: "add",
+                                callback: function() {
+                                    var self = this;
+                                    objDefineDialog.buttons = {
+                                        '@Html.Raw(Localizer("Common.Button.Create"))' : function () {
+                                            if ($("#workflowName").val().length == 0) {
+                                                eGovMessage.show(egov.resources.doctype.workflownameisrequired);
+                                            } else {
+                                                $("#west").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                                                var token = $('input[name=__RequestVerificationToken]','#DocTypeCreateWorkflow').val();
+                                                var workFlowTypes=[];
+                                                $(".workFlowTypes").each(function(i,item){
+                                                    workflowTypeName=$(item).find("td input.workflowTypeName").val();
+                                                    workflowTypeExpire=$(item).find("td input.workflowTypeExpire").val();
+                                                    workflowTypeId=$(item).find("td input.workflowTypeId").val();
+                                                    workFlowTypes.push({
+                                                        Id:workflowTypeId?workflowTypeId:null,
+                                                        Name:workflowTypeName,
+                                                        ExpireProcess:workflowTypeExpire
+                                                    });
+                                                });
+                                                $.post(
+                                                    'CreateWorkflow',
+                                                    {
+                                                        __RequestVerificationToken : token,
+                                                        "doctypeId": $(self).attr("id").replace('doctype_', ''),
+                                                        "workflowName": $("#workflowName").val(),
+                                                        "expireprocess":$("#workflowExpire").val(),
+                                                        "workFlowTypes":JSON.stringify(workFlowTypes)
+                                                    },
+                                                    function (r) {
+                                                        if(r.error) {
+                                                            eGovMessage.show(r.error);
+                                                        } else {
+                                                            if (r.id) {
+                                                                $('#west')
+                                                                .jstree(
+                                                                    'create',
+                                                                    $(self),
+                                                                    'last',
+                                                                    {
+                                                                        'attr': {
+                                                                            'id': 'workflow_' + r.id,
+                                                                            'class': 'workflow',
+                                                                            'expire-template': $("#workflowExpire").val()
+                                                                        },
+                                                                        'data': {
+                                                                            'title': $("#workflowName").val(),
+                                                                            'attr': {
+                                                                                'onclick':'getWorkflow(' + r.id + ')',
+                                                                                'href': '#'
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    null,
+                                                                    true
+                                                                );
+                                                                $("#west").jstree("deselect_node");
+                                                                $("#west").jstree("select_node", '#workflow_' + r.id);
+                                                                if(silverlightControl) {
+                                                                    silverlightControl.Content.Workflow.DrawWorkflow(r.id, '');
+                                                                }
+                                                                createContextMenuForWorkflow();
+                                                            }
+                                                        }
+                                                    }
+                                                )
+                                                .complete(function () {
+                                                    $("#west").unblockpanel();
+                                                    $("#dialog-form").dialog("close");
+                                                })
+                                                .fail(function () {
+                                                    eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                                                });
+                                            }
+                                        },
+                                        "@Localizer("Common.Button.Cancel")": function () {
+                                            $(this).dialog("close");
+                                        }
+                                    };
+                                    $("#ui-dialog-title-dialog-form").text(egov.resources.doctype.newworkflow);
+                                    var oldWorkFlowTypes=$("#dialog-form").find(".workFlowTypes");
+                                    if(oldWorkFlowTypes.length>0){
+                                        oldWorkFlowTypes.remove();
+                                    }
+                                    $("#workflowTypeTemplate").tmpl({}).appendTo($("#dialog-form table"))
+                                    $("#workflowName").val("");
+                                    $("#dialog-form").dialog(objDefineDialog);
+                                    $("#dialog-form").dialog("open");
+                                }
+                            }
+                        }
+                    };
+
+                    if (iscopy) {
+                        options.items.pasteWorkflow = {
+                            name: egov.resources.doctype.pasteworkflow,
+                            icon: "paste",
+                            callback: function() {
+                                iscopy = false;
+                                var self = this;
+                                $("#west").jstree("paste", self);
+                            }
+                        };
+                    } else {
+                        if(options.items.pasteWorkflow) {
+                            delete options.items.pasteWorkflow;
+                        }
+                    }
+
+                    return options;
+                }
+            });
+        }
+
+        function createContextMenuForWorkflow() {
+            $.contextMenu('destroy', 'li.workflow' );
+            $.contextMenu({
+                selector: 'li.workflow',
+                zIndex: 3,
+                build: function($trigger) {
+                    var isActivated = $trigger.hasClass('active');
+                    var options = {
+                        items: {
+                            "useWorkflow": {
+                                name: egov.resources.doctype.usethisworkflow,
+                                icon: "accept",
+                                callback: function() {
+                                    var self = this;
+                                    eGovMessage.show(
+                                        egov.resources.doctype.comfirmtocancel1 + (isActivated ? egov.resources.doctype.comfirmtocancel2 : '') + egov.resources.doctype.comfirmtocancel1,
+                                        null,
+                                        eGovMessage.messageButtons.YesNo,
+                                        function() {
+                                            $("#west").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                                            var token = $('input[name=__RequestVerificationToken]','#DocTypeSetIsActiveWorkflow').val();
+                                            $.post(
+                                                'SetIsActiveWorkflow',
+                                                {
+                                                    __RequestVerificationToken: token,
+                                                    "id": $(self).attr('id').replace('workflow_', ''),
+                                                    "isActivated": !isActivated
+                                                },
+                                                function (r) {
+                                                    if(r.error) {
+                                                        eGovMessage.show(r.error);
+                                                    } else {
+                                                        if(isActivated) {
+                                                            $(self).removeClass('active');
+                                                            $(self).parents('ul').parents('li').removeClass('doctype_active');
+                                                        } else {
+                                                            $(self).addClass('active');
+                                                            $(self).siblings('li').removeClass('active');
+                                                            $(self).parents('ul').parents('li').addClass('doctype_active');
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                            .complete(function () {
+                                                $("#west").unblockpanel();
+                                            })
+                                            .fail(function () {
+                                                eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                                            });
+                                        }
+                                );
+                                }
+                            },
+                            "editWorkflow": {
+                                name: egov.resources.doctype.editthisworkflow,
+                                icon: "edit",
+                                callback: function() {
+                                    var self = this;
+                                    var updateButton = egov.resources.editor.update;
+                                    var cancelButton = egov.resources.buttons.cancel;
+                                    objDefineDialog.buttons = {
+                                        updateButton: function () {
+                                            if ($("#workflowName").val().length == 0) {
+                                                eGovMessage.show(egov.resources.doctype.workflownameisrequired);
+                                            } else {
+                                                $("#west").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                                                var expire = $("#TimeType").val()==0?24*$("#workflowExpire").val():$("#workflowExpire").val();
+                                                var token = $('input[name=__RequestVerificationToken]','#DocTypeUpdateWorkflow').val();
+                                                var workFlowTypes=[];
+                                                $(".workFlowTypes").each(function(i,item){
+                                                    workflowTypeName=$(item).find("td input.workflowTypeName").val();
+                                                    workflowTypeExpire=$(item).find("td input.workflowTypeExpire").val();
+                                                    workflowTypeId=$(item).find("td input.workflowTypeId").val();
+                                                    workFlowTypes.push({
+                                                        Id:workflowTypeId?workflowTypeId:null,
+                                                        Name:workflowTypeName,
+                                                        ExpireProcess:workflowTypeExpire
+                                                    });
+
+                                                });
+                                                $.post(
+                                                    'UpdateWorkflow',
+                                                    {
+                                                        __RequestVerificationToken:token,
+                                                        "id": $(self).attr("id").replace('workflow_', ''),
+                                                        "workflowName": $('#workflowName').val(),
+                                                        "expireprocess":expire,
+                                                        "workFlowTypes":JSON.stringify(workFlowTypes)
+                                                    },
+                                                    function (r) {
+                                                        if(r.error) {
+                                                            eGovMessage.show(r.error);
+                                                        } else {
+                                                            $(self).data("workflowtypejson",workFlowTypes);
+                                                            $('#west')
+                                                                .jstree(
+                                                                    'rename',
+                                                                    $(self),
+                                                                    $("#oldName").val(),
+                                                                    $('#workflowName').val()
+                                                                );
+                                                        }
+                                                    }
+                                                )
+                                                .complete(function () {
+                                                    $("#west").unblockpanel();
+                                                    $("#dialog-form").dialog("close");
+                                                })
+                                                .fail(function () {
+                                                    eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                                                });
+                                            }
+                                        },
+                                        cancelButton: function () {
+                                            $(this).dialog("close");
+                                        }
+                                    };
+                                    $("#ui-dialog-title-dialog-form").text(egov.resources.doctype.update);
+                                    $("#dialog-form").dialog(objDefineDialog);
+                                    var workflowTypeJson=$(this).data("workflowtypejson");
+                                    var oldWorkFlowTypes=$("#dialog-form").find(".workFlowTypes");
+                                    if(oldWorkFlowTypes.length>0){
+                                        oldWorkFlowTypes.remove();
+                                    }
+                                    if(workflowTypeJson.length==0){
+                                        $("#workflowTypeTemplate").tmpl({}).appendTo($("#dialog-form table"))
+                                    }
+                                    $.each(workflowTypeJson,function(i,item){
+                                        $("#workflowTypeTemplate").tmpl(item).appendTo($("#dialog-form table"))
+                                    })
+                                    var name = $.trim($('li[id=' + $(this).attr('id') + '] a:first').text());
+                                    var expire = $(this).attr('expire-template');
+                                    $("#workflowName").val(name);
+                                    $("#workflowExpire").val(expire);
+                                    $("#oldName").val(name),
+                                    $("#dialog-form").dialog("open");
+                                }
+                            },
+                            "editTemplateWorkflow": {
+                                name: egov.resources.doctype.editTemplateWorkflow,
+                                icon: "edit",
+                                callback: function() {
+                                    openConfigTemplateWorkflow($(this).attr("id").replace('workflow_', ''));
+                                }
+                            },
+                            "copyWorkflow": {
+                                name: egov.resources.doctype.copythisworkflow,
+                                icon: "copy",
+                                callback: function() {
+                                    iscopy = true;
+                                    var self = this;
+                                    $("#west").jstree("copy", self);
+                                }
+                            },
+                            "sep1": "---------",
+                            "deleteWorkflow": {
+                                name: egov.resources.doctype.deletethisworkflow,
+                                icon: "delete",
+                                callback: function() {
+                                    var self = this;
+                                    eGovMessage.show(
+                                        egov.resources.doctype.confirmtodeltethisworkflow,
+                                        null,
+                                        eGovMessage.messageButtons.YesNo,
+                                        function() {
+                                            $("#west").blockpanel({text: "@Localizer("Common.Processing")", borderWidth: 1});
+                                            var token = $('input[name=__RequestVerificationToken]','#DocTypeDeleteWorkflow').val();
+                                            $.post(
+                                                'DeleteWorkflow',
+                                                {
+                                                    __RequestVerificationToken:token,
+                                                    "id": $(self).attr('id').replace('workflow_', '')
+                                                },
+                                                function (r) {
+                                                    if(r.error) {
+                                                        eGovMessage.show(r.error);
+                                                    } else {
+                                                        $('#west').jstree('remove', $(self));
+                                                        $("#west").jstree("deselect_node");
+                                                        silverlightControl.Content.Workflow.DrawWorkflow(0, '');
+                                                    }
+                                                }
+                                            )
+                                            .complete(function () {
+                                                $("#west").unblockpanel();
+                                            })
+                                            .fail(function () {
+                                                eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                                            });
+                                        }
+                );
+                                }
+                            }
+                        }
+                    };
+                    if(isActivated) {
+                        options.items.useWorkflow.name = egov.resources.doctype.notyouthisworkflow;
+                        options.items.useWorkflow.icon = "cancel";
+                    }
+                    return options;
+                }
+            });
+            }
+
+            function getWorkflowOfDoctype(target) {
+                var children = $(target).siblings().find('li');
+                if(children && children.length > 0) {
+                    var active;
+                    for(var i = 0; i < children.length; i++) {
+                        if($(children[i]).hasClass('active')) {
+                            active = $(children[i]);
+                            break;
+                        }
+                    }
+                    if(active) {
+                        getWorkflow(active.attr('id').replace('workflow_', ''));
+                    } else {
+                        silverlightControl.Content.Workflow.DrawWorkflow(0, '');
+                    }
+                }
+            }
+
+            function getWorkflow(id) {
+                $("#center").blockpanel({text: egov.resources.notifications.loading, borderWidth: 1});
+                $("#silverlight").width($("#center").width());
+                $("#silverlight").height($("#center").height());
+                silverlightControl.Content.Workflow.SetWidthHeight($("#center").width(), $("#center").height());
+                $.get(
+                    'GetWorkflow',
+                    {id: id},
+                    function (data) {
+                        if(data.error) {
+                            eGovMessage.show(data.error);
+                        } else {
+                            debugger
+                            silverlightControl.Content.Workflow.DrawWorkflow(id, data.workflow);
+                        }
+                    }
+                )
+                    .complete(function () {
+                        $("#center").unblockpanel();
+                    })
+                    .fail(function () {
+                        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+                    });
+
+                return false;
+            }
+
+            function openConfigNode(workflowId, nodeId) {
+                if ($('#iframe_' + workflowId + '_' + nodeId).length > 0) {
+                    $("#dialog-edit-node").dialog("open");
+                } else {
+                    $("#dialog-edit-node iframe").remove();
+                    $("#dialog-edit-node").dialog({
+                        autoOpen: false,
+                        height: 600,
+                        width: 1000,
+                        modal: true,
+                        resizable: true,
+                    }).dialogExtend({
+                        close : true,
+                        maximize : true,
+                        dblclick: 'maximize',
+                        events : {
+                            maximize : function(e, dlg) {
+                                $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                            },
+                            restore: function(e, dlg) {
+                                $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                            }
+                        }
+                    });
+
+                    $("#dialog-edit-node").dialog("open");
+                    $("#dialog-edit-node").css({padding:'0'});
+
+                    var $newIframe = $('<iframe id="iframe_' + workflowId + '_' + nodeId + '" scr="" height="700px" width="100%" style="border:none"></iframe>');
+                    var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+                    $("#dialog-edit-node").html('').append($imgLoading).append($newIframe);
+                    var frame = $newIframe[0];
+                    frame.src = '@Url.Action("Workflow")' + '/' + workflowId + '?nodeId=' + nodeId;
+                    $(frame).load(function () {
+                        $imgLoading.remove();
+                    });
+                }
+            }
+
+            function openConfigTemplateWorkflow(workflowId) {
+                openConfigTemplate('@Url.Action("ConfigTemplateWorkflow")' + '/' + workflowId);
+            }
+
+            function openConfigTemplateNode(workflowId, nodeId) {
+                openConfigTemplate('@Url.Action("ConfigTemplateNode")' + '?workflowId=' + workflowId + '&nodeId=' + nodeId);
+            }
+
+            function openConfigTemplate(url) {
+                $("#dialog-edit-template iframe").remove();
+                $("#dialog-edit-template")
+                    .dialog({
+                        autoOpen: false,
+                        height: 600,
+                        width: 1000,
+                        modal: true,
+                        resizable: true,
+                        close: function() {
+                            $("#dialog-edit-template").dialog("destroy");
+                        }
+                    })
+                    .dialogExtend({
+                        close : true,
+                        maximize : true,
+                        dblclick: 'maximize',
+                        events : {
+                            maximize : function(e, dlg) {
+                                $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                            },
+                            restore: function(e, dlg) {
+                                $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                            }
+                        }
+                    });
+                $("#dialog-edit-template").dialog('open');
+                $("#dialog-edit-template").css({padding:'0'});
+
+                var $newIframe = $('<iframe id="iframe_' + url.replace(/\//g, '') + '" scr="" height="550px" width="100%" style="border:none"></iframe>');
+                var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+                $("#dialog-edit-template").append($imgLoading).append($newIframe);
+                var frame = $newIframe[0];
+                frame.src = url;
+                $(frame).load(function () {
+                    $imgLoading.remove();
+                });
+            }
+
+            function closeConfigNode(workflowId, reload) {
+                $("#dialog-edit-node").dialog("close");
+                if (reload) {
+                    getWorkflow(workflowId);
+                }
+            }
+
+            function closeConfigTemplate() {
+                $("#dialog-edit-template").dialog("close");
+            }
+
+            function onSilverlightError(sender, args) {
+                var appSource = "";
+                if (sender != null && sender != 0) {
+                    appSource = sender.getHost().Source;
+                }
+
+                var errorType = args.ErrorType;
+                var iErrorCode = args.ErrorCode;
+
+                if (errorType == "ImageError" || errorType == "MediaError") {
+                    return;
+                }
+
+                var errMsg = "Unhandled Error in Silverlight Application " + appSource + "\n";
+
+                errMsg += "Code: " + iErrorCode + "    \n";
+                errMsg += "Category: " + errorType + "       \n";
+                errMsg += "Message: " + args.ErrorMessage + "     \n";
+
+                if (errorType == "ParserError") {
+                    errMsg += "File: " + args.xamlFile + "     \n";
+                    errMsg += "Line: " + args.lineNumber + "     \n";
+                    errMsg += "Position: " + args.charPosition + "     \n";
+                }
+                else if (errorType == "RuntimeError") {
+                    if (args.lineNumber != 0) {
+                        errMsg += "Line: " + args.lineNumber + "     \n";
+                        errMsg += "Position: " + args.charPosition + "     \n";
+                    }
+                    errMsg += "MethodName: " + args.methodName + "     \n";
+                }
+
+                throw new Error(errMsg);
+            }
+
+            function saveWorkflow(id, workflow) {
+                var token = $('input[name=__RequestVerificationToken]','#DocTypeSaveWorkflow').val();
+                $.post(
+                    'SaveWorkflow',
+                    {
+                        __RequestVerificationToken:token,
+                        id: id,
+                        json: workflow
+                    },
+                    function (data) {
+                        if(data.error) {
+                            window.parent.eGovMessage.show(data.error);
+                        }
+                        // window.parent.eGovMessage.show(data.success);
+                    }
+                )
+                .fail(function () {
+                    eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            });
+        }
+
+        function pluginLoaded(sender) {
+            silverlightControl = sender.getHost();
+        }
+</script>
+<!-- Load Nghiệp vụ-->
+<script id="categorybusinessTemplate" type="text/x-jquery-tmpl">
+    <li id="categorybusiness_${Value}" class="categorybusiness {{if IsActivated}} categorybusiness_active {{/if}}">
+        <a href='#'>${Text}</a>
+
+        {{if DocFields.length}}
+        <ul>
+            {{tmpl(DocFields) "#docfieldTemplate"}}
+        </ul>
+        {{else DocTypes.length}}
+        <ul>
+            {{tmpl(DocTypes) "#doctypeTemplate"}}
+        </ul>
+        {{/if}}
+    </li>
+</script>
+<!-- Load Lĩnh vực -->
+<script id="docfieldTemplate" type="text/x-jquery-tmpl">
+    <li id="docfield_${DocFieldId}" class="docfield {{if IsActivated}} docfield_active {{/if}}">{{if DocTypes.length}}
+        <a href='#'>${DocFieldName}</a>
+        <ul>
+            {{tmpl(DocTypes) "#doctypeTemplate"}}
+        </ul>
+        {{else}}
+        <a href='#'>${DocFieldName}</a>
+        {{/if}}
+    </li>
+</script>
+<!-- Load Loại văn bản hồ sơ -->
+<script id="doctypeTemplate" type="text/x-jquery-tmpl">
+    <li id="doctype_${DocTypeId}" class="doctype {{if IsActivated}} doctype_active {{/if}}">{{if IsLeaf}}
+        <a href='#' onclick='getWorkflowOfDoctype(this)'>${DocTypeName}</a>
+        <ul>
+            {{tmpl(Workflows) "#workflowTemplate"}}
+        </ul>
+        {{else}}
+        <a href='#'>${DocTypeName}</a>
+        {{/if}}
+    </li>
+</script>
+<!-- Load Quy trình -->
+<script id="workflowTemplate" type="text/x-jquery-tmpl">
+    <li id="workflow_${WorkflowId}" data-template="${Template}" expire-template="${ExpireProcess}" data-workflowtypejson="${WorkflowTypeJson}" class="workflow {{if IsActivated}} active {{/if}}">
+        <a href='#' onclick='getWorkflow(${WorkflowId})'>${WorkflowName}</a>
+    </li>
+</script>
+<script id="workflowTypeTemplate" type="text/x-jquery-tmpl">
+    <tr class="workFlowTypes">
+        <td></td>
+        <td>
+            <input type="hidden" class="workflowTypeId form-control" value="${Id}" />
+            <input type="text" class="workflowTypeName form-control" value="${Name}" />
+        </td>
+        <td>
+            <input type="text" class="workflowTypeExpire form-control" style="width: 146px; display: inline;" value="${ExpireProcess}" />
+            &nbsp;&nbsp;<span data-res="egov.resources.doctype.date">
+        </td>
+    </tr>
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-shuffle"></i>
+        <span data-res="egov.resources.sitemap.configworkflow"></span>
+    </div>
+    <div class="options">
+    </div>
+</div>
+
+<div id="container" style="height: 100%; width: 100%; min-height: 750px;">
+    <div id="west" class="ui-layout-west" style="padding: 0; background: #ffffff;">
+        <ul style="height: 100%"></ul>
+    </div>
+    <div id="center" class="ui-layout-center" style="height: 100%; width: 100%;">
+        @* token*@
+        <div id="DocTypeCreateWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+        <div id="DocTypeSetIsActiveWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+        <div id="DocTypeUpdateWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+        <div id="DocTypeDeleteWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+        <div id="DocTypeCopyWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+
+        <div id="silverlightControlHost">
+            <object id="silverlight" data="data:application/x-silverlight-2," type="application/x-silverlight-2">
+                <param name="source" value="@Url.Content("~/ClientBin/Bkav.eGovCloud.Workflow" + @cul + ".xap")" />
+                <param name="onError" value="onSilverlightError" />
+                <param name="windowless" value="true" />
+                <param name="background" value="white" />
+                <param name="minRuntimeVersion" value="5.0.61118.0" />
+                <param name="autoUpgrade" value="true" />
+                <param name="onLoad" value="pluginLoaded" />
+                @*<a href="https://go.microsoft.com/fwlink/?LinkID=149156&v=5.0.61118.0" style="text-decoration: none">
+                    <img src="https://go.microsoft.com/fwlink/?LinkId=161376" alt="Get Microsoft Silverlight"
+                        style="border-style: none" />
+                </a>*@
+            </object>
+            <iframe id="_sl_historyFrame" style="visibility: hidden; height: 0px; width: 0px; border: 0px"></iframe>
+        </div>
+    </div>
+</div>
+<div id="dialog-form" title="Thêm mới quy trình" data-restitle="egov.resources.doctype.create" style="display: none">
+    <form>
+        <div id="DocTypeSaveWorkflow" style="display: none">@Html.AntiForgeryToken()</div>
+
+        <table>
+
+            <tr>
+                <td style="width: 100px">
+                    <label for="workflowName" data-res="egov.resources.doctype.workflowname">
+                    </label>
+                </td>
+                <td colspan="2">
+                    <input type="text" name="workflowName" id="workflowName" class="text ui-widget-content ui-corner-all" />
+                    <input type="hidden" name="oldName" id="oldName" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="workflowExpire" data-res="egov.resources.doctype.exprisedate">
+                    </label>
+                </td>
+                <td colspan="2">
+                    <input type="text" name="workflowExpire" id="workflowExpire" class="text ui-widget-content ui-corner-all"
+                        style="width: 146px; display: inline;" />
+                    &nbsp;&nbsp;<span data-res="egov.resources.doctype.date">
+                    </span>
+                    @*<select name="TimeType" id="TimeType" style="width: 80px;" class="text ui-widget-content ui-corner-all">
+                            <option value="0" selected="selected">Ngày</option>
+                            <option value="1">Giờ</option>
+                        </select>*@
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="workflowExpire" data-res="egov.resources.workflow.workflowTypes">
+                    </label>
+                </td>
+                <td>
+                    <input type="button" id="addWorkflowType" data-res="egov.resources.workflow.addWorkflowType" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="dialog-edit-node" title="@Localizer("Admin.Workflow.UpdateNode")" date-restitle="egov.resources.doctype.updatenode" style="display: none;">
+</div>
+<div id="dialog-edit-template" title="@Localizer("Admin.Workflow.InterfaceConfig")" date-restitle="egov.resources.doctype.interfaceconfig" style="display: none;">
+</div>

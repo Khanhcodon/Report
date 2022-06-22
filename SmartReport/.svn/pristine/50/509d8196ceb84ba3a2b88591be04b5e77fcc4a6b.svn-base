@@ -1,0 +1,223 @@
+﻿@model DisaggregationModel
+@{
+    ViewBag.Title = "Quản lý tiêu thức phân tổ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border leftRightDis">
+                    <div class="leftdisaggregation">
+                        <h3 class="box-title">Tiêu thức phân tổ</h3>
+                    </div>
+                    <div class="rightdisaggregation">
+                        <a href="/Reports/TemplateDisaggregation.xlsx" style="font-style: italic; color: #008ae6;width: 100%;">
+                            <span class="fa fa-download"></span> Download file mẫu
+                        </a>
+                        @using (Html.BeginForm("ExportToExcel", "Disaggregation", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormImport" }))
+                        {
+                            @Html.Raw(ViewBag.Error)
+                            <div style="height: 33px;margin-right: 4px;">
+                                <label class="custom-file-upload">
+                                    <input type="file" name="excelfile" />
+                                    <i class="fa fa-cloud-upload"></i> Import Excel
+                                </label>
+                            </div>
+                            <br />
+                            <input type="submit" class="btn btn-brown" value="Lưu File" />
+                        }
+
+                        <a class="popup-with-form btn btn-block  btn-successs" id="tagForm" href="#myForm" style="background-color:aquamarine;margin-right: 4px;">
+                            <i class="fa fa-plus-square"></i> Thêm
+                        </a>
+                        <button type="button" id="deleteMul" class="btn btn-block  btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+
+                        <!-- form itself -->
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myForm", @class = "mfp-hide white-popup-block" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.AntiForgeryToken()
+
+                            <h1 style="text-align: center;">Thêm tiêu thức phân tổ</h1>
+                            <br />
+                            <fieldset style="border:0;">
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <label class="control-label" for="inputName">Tiêu thức phân tổ</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="txtNAME_FIELD" name="IndicatorName" placeholder="Tiêu thức phân tổ">
+                                        @Html.ValidationMessageFor(model => model.IndicatorName)
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <label class="control-label" for="textarea">Mô tả</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" id="txtDES_FIELD" name="IndicatorDesctiption" placeholder="Mô tả" rows="7"></textarea>
+                                        @Html.ValidationMessageFor(model => model.IndicatorDesctiption)
+                                    </div>
+
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="IsActivated" name="IsActivated" value="true">
+                                    <label class="form-check-label" for="IsActivated">Sử dụng</label>
+                                </div>
+
+                                <button class="btn btn-primary" id="btnAdd" style="padding-top: 10px; float:right;margin-right: 3%;">
+                                    <span class="-ap icon icon-plus3"></span> Lưu lại
+                                </button>
+                            </fieldset>
+                            @Html.HiddenFor(model => model.IndicatorId)
+                        }
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="disaggregation" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="checkBoxAlls" name="checkBoxAll" class="custom-checkbox form-check-input labelThead" />
+                                        <label class="form-check-label labelIndicatorID" for="checkBoxAlls"></label>
+                                    </th>
+                                    <th hidden class="text-center">ID</th>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Tiêu thức phân tổ</th>
+                                    <th class="text-center">Mô tả</th>
+                                    <th class="text-center">Sử dụng</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Indicators != null)
+                                {
+                                    var stt = 0;
+                                    foreach (var item in Model.Indicators)
+                                    {
+                                        <tr class="checkId">
+                                            <td class="tdInDi">
+                                                <input type="checkbox" id="@item.IndicatorId" name="@item.IndicatorId" value="@item.IndicatorId"
+                                                       class="custom-checkbox form-check-input chkCheckBoxId" />
+                                                <label class="form-check-label labelIndicatorID" for="@item.IndicatorId"></label>
+                                            </td>
+                                            <td hidden class="text-center">@item.IndicatorId</td>
+                                            <td class="text-center">@(stt + 1)</td>
+                                            <td class="text-center">@item.IndicatorName</td>
+                                            <td class="text-center">@item.IndicatorDesctiption</td>
+                                            <td class="text-center">
+                                                @if (item.IsActivated == true)
+                                                {
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="@item.IsActivated" disabled>
+                                                    <label for="md_checkbox_27"></label>
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="@item.IsActivated" disabled>
+                                                    <label for="md_checkbox_27"></label>
+                                                }
+                                            </td>
+                                            <td class="text-center" style="font-size: 23px;">
+                                                <i onclick="EditIndicator('@item.IndicatorId')" class="fa fa-edit fa-hover" title="Sửa tiêu thức" aria-hidden="true" style="color: blue;"></i>
+                                                <i onclick="RemoveIndicator('@item.IndicatorId')" class="fa fa-remove fa-hover" title="Xóa tiêu thức" aria-hidden="true" style="color: darkred;"></i>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<link href="~/Content/admin/disaggregation/style.css" rel="stylesheet" />
+<!-- js -->
+<script src="~/Scripts/admin/disaggregation/createOrEditDisaggregation.js"></script>
+<script type="text/javascript">
+        var checkCreate = "@ViewBag.Creates";
+        var checkUpdate = "@ViewBag.Updates";
+        var checkSuccess = "@ViewBag.Success";
+        var checkError = "@ViewBag.Success";
+        if (checkCreate == "TC" && checkUpdate == "L") {
+            swal("Thành công!", "thêm tiêu thức thành công", "success");
+        } else if (checkUpdate == "TC" && checkCreate == "L") {
+            swal("Thành công!", "cập nhật tiêu thức thành công", "success");
+        }
+
+        if (checkSuccess == "SS"){
+            swal("Thành công!", "Import File Excel Thành công", "success");
+        }else if(checkError == "ER"){
+            swal("Error!", "Có lỗi trong quá trình Import File", "warring");
+        }
+
+    function EditIndicator(indicatorId) {
+        $.ajax({
+            url: '/Disaggregation/Edit',
+            data: { id: indicatorId },
+            success: function (result) {
+                var indicatorId = result.IndicatorId;
+                var indiDes = result.IndicatorDesctiption;
+                var indiName = result.IndicatorName;
+                var indiActive = result.IsActivated;
+                $('#IndicatorId').val(indicatorId);
+                $('#txtNAME_FIELD').val(indiName);
+                $('#txtDES_FIELD').val(indiDes);
+                $("#IsActivated").attr("checked", indiActive);
+                $('#tagForm').click();
+            },
+            error: function (xhr) { },
+            complete: function () {
+            }
+        });
+    }
+    function RemoveIndicator(indicatorId) {
+        swal({
+            title: "Bạn có chắc?",
+            text: "Xóa tiêu thức phân tổ này không?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Đồng ý!",
+            cancelButtonText: "Hủy bỏ!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/Disaggregation/Delete',
+                    type: 'POST',
+                    data: { id: indicatorId },
+                    success: function (result) {
+
+                    },
+                    error: function (xhr) {
+                        swal("Hủy bỏ", "Hủy xóa tiêu thức không thành công :)", "warning");
+                    },
+                    complete: function () {
+                        swal("Thành công!", "Xóa tiêu thức thành công", "success");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000)
+                    }
+                });
+            } else {
+                swal("Hủy bỏ", "Hủy xóa thành công!", "warning");
+            }
+        });
+    }
+</script>

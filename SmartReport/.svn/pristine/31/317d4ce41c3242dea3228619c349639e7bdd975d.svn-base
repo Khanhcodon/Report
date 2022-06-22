@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"AttributesConstant.min.js",
+"lineCount":1,
+"mappings":"AAMAA,SAASA,kBAAkB,CAAA,CAAE,EAG7BA,kBAAkBC,UAAUC,YAAa,CAAE,EAAE,CAC7CF,kBAAkBC,UAAUE,MAAO,CAAE,EAAE,CACvCH,kBAAkBC,UAAUG,UAAW,CAAE,CAAA,CAAE,CAE3CJ,kBAAkBK,aAAc,CAAE,CAAA,CAAW,CAC7CL,kBAAkBM,aAAc,CAAE,CAAA,CAAW,CAC7CN,kBAAkBO,aAAc,CAAE,CAAA,CAAW,CAC7CP,kBAAkBQ,gBAAiB,CAAE,CAAA,CAAW",
+"sources":["AttributesConstant.js"],
+"names":["AttributesConstant","prototype","displayName","email","signature","bmailContact","yahooContact","gmailContact","facebookContact"]
+}

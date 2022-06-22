@@ -1,0 +1,36 @@
+﻿@using Bkav.eGovCloud.Entities
+@{
+    Layout = null;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+}
+
+<script type="text/ecmascript">
+    $(function () {
+        var pageSize = egov.cshtml.home.listdocuments.pageSize();
+        if (!pageSize) {
+            pageSize = @ViewBag.DefaultPageSize;
+        }
+        $('.page-size-select a').each(function() {
+            if($(this).text() == pageSize){
+                $(this).parent().addClass("selected");
+                return false;
+            }
+        });
+        $(".page-size-select span").click(function () {
+            $(this).siblings().removeClass("selected");
+            $(this).addClass("selected");
+            $(this).parents(".qtip").hide();
+           
+            egov.cshtml.home.listdocuments.changePageSize($(this).text());
+            egov.cshtml.home.listdocuments.pageSize( $(this).text());
+          //  currentDocuments.renderPage(1);
+        });
+    });
+</script>
+
+<div class="page-size-select menu-dropdown">
+    @foreach (var page in listPageSize)
+    {
+        <span><a href="#">@page</a></span>
+    }
+</div>

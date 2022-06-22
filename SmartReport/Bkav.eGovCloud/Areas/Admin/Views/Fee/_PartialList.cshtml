@@ -1,0 +1,119 @@
+﻿@model IEnumerable<FeeModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as FeeSearchModel;    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblFee").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblFee").openLink({ urlOpen: '/admin/Fee/Edit' });
+    });
+
+    function deleteFee(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Fee.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+</script>
+<table class="table-main table" id="tblFee" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 180px" />
+        <col />
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Type")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("FeeName", Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.FeeName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                {
+                                    page = sortAndPage.CurrentPage,
+                                    pageSize = sortAndPage.PageSize,
+                                    categoryBusinessId = search.CategoryBusinessId,
+                                    docFieldId = search.DocFieldId,
+                                    docTypeId = search.DocTypeId
+                                },
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "divListFee",
+                                    OnBegin = "onBegin",
+                                    OnSuccess = "onSuccess",
+                                    OnFailure = "onFailure"
+                                })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.CreateOrEdit.Fields.Price.Label")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Requierd")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var fee in Model)
+            {
+                number += 1;
+            <tr data-id="@fee.FeeId">
+                <td>@number
+                </td>
+                <td>
+                    @fee.FeeTypeName
+                </td>
+                <td>@fee.FeeName
+                </td>
+                <td>
+                    @fee.Price
+            </td>
+                <td style="text-align: center">
+                    @(fee.IsRequired ? "X" : "")
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Column.Edit.Button"), "Edit", new { Id = fee.FeeId })
+                </td>
+                <td>
+                    <a href="javascript:deleteFee(@(fee.FeeId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(fee.FeeId)" style="display: none" action="@Url.Action("Delete", new { Id = fee.FeeId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">@Localizer("Bkav.eGovCloud.Areas.Admin.Fee.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

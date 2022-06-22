@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/ecmascript">
+    $(function () {
+        $("#DocumentImportantSelect1 li span").click(function () {
+            $("#DocumentImportantSelect1 li span").removeClass("selected");
+            var $this = $(this);
+            $this.siblings().removeClass("selected");
+            $this.addClass("selected");
+            $this.parents(".qtip").hide();
+            egov.cshtml.home.listdocuments.sortByTypeAndIsView();
+            //var currentDocuments = egov.cshtml.home.currentDocuments;
+            //currentDocuments.isImportantFiltering = false;
+            //currentDocuments.isUnreadFiltering = false;
+            //if ($this.hasClass('document-important'))
+            //{
+            //    currentDocuments.isImportantFiltering = true;
+            //}
+            //if ($this.hasClass('document-unread'))
+            //{
+            //    currentDocuments.isUnreadFiltering = true;
+            //}
+            $('#DocumentImportantSelect a').html('Xem: ' + $this.text() + '<b></b>');
+            //egov.cshtml.home.currentDocuments.renderClientFilter();
+        });
+    });
+</script>
+
+<div class="user-option menu-dropdown" id="DocumentImportantSelect1">
+    <ul>
+        <li>
+            <span class="selected alldocument"><a href="javascript:void(0);">Tất cả</a></span>
+        </li>
+        <li>
+            <span class="document-important"><a href="javascript:void(0);">VB Quan trọng</a></span>
+        </li>
+        <li>
+            <span class="document-unread"><a href="javascript:void(0);">VB Chưa đọc</a></span>
+        </li>
+    </ul>
+</div>
+

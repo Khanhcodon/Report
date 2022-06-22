@@ -1,0 +1,344 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Config");
+    var cul = (Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode() == "vi-VN") ? ".vn" : ".en";
+    var workflows = ViewBag.AllWorkflow as IEnumerable<Bkav.eGovCloud.Entities.Customer.Workflow>;
+    var currentId = (int)ViewBag.Id;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    body > div {
+        font-size: 12.5px;
+    }
+
+    #silverlightControlHost {
+        height: 100%;
+        text-align: center;
+    }
+
+    #center {
+        overflow: hidden;
+        padding: 0;
+        border: none;
+    }
+
+    #west {
+        border: none;
+    }
+
+    #silverlight {
+        border: 1px solid #e3e3e3;
+    }
+
+    .notSupported {
+        display: none;
+        padding: 15px;
+    }
+
+    .silverlight-soft {
+        margin-top: 70px;
+    }
+
+        .silverlight-soft > div {
+            float: left;
+            margin-right: 50px;
+        }
+
+        .silverlight-soft img {
+            width: 75px;
+            /*border: 1px solid #CCCCCC;*/
+            padding: 10px;
+        }
+</style>
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.dialogextend.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var plugins = navigator.plugins;
+        console.log(plugins);
+        var hasSilverlightPlugin = _.find(plugins, function (p) {
+            return p.name === "Silverlight Plug-In";
+        });
+
+        if (!hasSilverlightPlugin) {
+            $(".notSupported").show();
+            $("#container").hide();
+        }
+    });
+</script>
+
+<script type="text/javascript" src="@Url.Content("~/Silverlight.js")"></script>
+
+<script type="text/javascript">
+    var silverlightControl = null;
+
+    function pluginLoaded(sender) {
+        silverlightControl = sender.getHost();
+    }
+
+    $(function () {
+        var interval = setInterval(function () {
+            if (silverlightControl) {
+                clearInterval(interval);
+                var w = $("body").width() - 135;
+                $("#silverlight").width(w);
+                $("#silverlight").height($("body").height());
+
+                silverlightControl.Content.Workflow.SetWidthHeight(w, $("body").height());
+                silverlightControl.Content.Workflow.DrawWorkflow('@ViewBag.Id', '@Html.Raw(ViewBag.Json)');
+            }
+        }, 100);
+    });
+
+    function openConfigNode(workflowId, nodeId) {
+        if ($('#iframe_' + workflowId + '_' + nodeId).length > 0) {
+            $("#dialog-edit-node").dialog("open");
+        } else {
+            $("#dialog-edit-node iframe").remove();
+            $("#dialog-edit-node").dialog({
+                autoOpen: false,
+                height: 650,
+                width: 1000,
+                modal: true,
+                resizable: true,
+            }).dialogExtend({
+                close: true,
+                maximize: true,
+                dblclick: 'maximize',
+                events: {
+                    maximize: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    },
+                    restore: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    }
+                }
+            });
+
+            $("#dialog-edit-node").dialog("open");
+            $("#dialog-edit-node").css({ padding: '0' });
+
+            var $newIframe = $('<iframe id="iframe_' + workflowId + '_' + nodeId + '" scr="" height="650px" width="100%" style="border:none"></iframe>');
+            var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+            $("#dialog-edit-node").html('').append($imgLoading).append($newIframe);
+            var frame = $newIframe[0];
+            frame.src = '@Url.Action("Workflow")' + '/' + workflowId + '?nodeId=' + nodeId;
+            $(frame).load(function () {
+                $imgLoading.remove();
+            });
+        }
+    }
+
+    function closeConfigNode(workflowId, reload) {
+        $("#dialog-edit-node").dialog("close");
+        if (reload) {
+            getWorkflow(workflowId);
+        }
+    }
+
+    function closeConfigTemplate() {
+        $("#dialog-edit-template").dialog("close");
+    }
+
+    function getWorkflow(id) {
+        $.get('/Admin/Workflow/GetWorkflow',
+            { id: id },
+            function (data) {
+                if (data.error) {
+                    eGovMessage.show(data.error);
+                } else {
+                    silverlightControl.Content.Workflow.DrawWorkflow(id, data.workflow);
+                }
+            }
+        ).complete(function () {
+            $("#center").unblockpanel();
+        })
+            .fail(function () {
+                eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            });
+    }
+
+    function openConfigTemplateNode(workflowId, nodeId) {
+        openConfigTemplate('/Admin/Workflow/ConfigTemplateNode' + '?workflowId=' + workflowId + '&nodeId=' + nodeId);
+    }
+
+    function openConfigTemplateWorkflow(workflowId) {
+        openConfigTemplate('/Admin/Workflow/ConfigTemplateWorkflow/' + workflowId);
+    }
+    function openConfigTemplate(url) {
+        $("#dialog-edit-template iframe").remove();
+        $("#dialog-edit-template")
+            .dialog({
+                autoOpen: false,
+                height: 600,
+                width: 1000,
+                modal: true,
+                resizable: true,
+                close: function () {
+                    $("#dialog-edit-template").dialog("destroy");
+                }
+            })
+            .dialogExtend({
+                close: true,
+                maximize: true,
+                dblclick: 'maximize',
+                events: {
+                    maximize: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    },
+                    restore: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    }
+                }
+            });
+        $("#dialog-edit-template").dialog('open');
+        $("#dialog-edit-template").css({ padding: '0' });
+
+        var $newIframe = $('<iframe id="iframe_' + url.replace(/\//g, '') + '" scr="" height="550px" width="100%" style="border:none"></iframe>');
+        var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+        $("#dialog-edit-template").append($imgLoading).append($newIframe);
+        var frame = $newIframe[0];
+        frame.src = url;
+        $(frame).load(function () {
+            $imgLoading.remove();
+        });
+    }
+
+    function onSilverlightError(sender, args) {
+        var appSource = "";
+        if (sender != null && sender != 0) {
+            appSource = sender.getHost().Source;
+        }
+
+        var errorType = args.ErrorType;
+        var iErrorCode = args.ErrorCode;
+
+        if (errorType == "ImageError" || errorType == "MediaError") {
+            return;
+        }
+
+        var errMsg = "Unhandled Error in Silverlight Application " + appSource + "\n";
+
+        errMsg += "Code: " + iErrorCode + "    \n";
+        errMsg += "Category: " + errorType + "       \n";
+        errMsg += "Message: " + args.ErrorMessage + "     \n";
+
+        if (errorType == "ParserError") {
+            errMsg += "File: " + args.xamlFile + "     \n";
+            errMsg += "Line: " + args.lineNumber + "     \n";
+            errMsg += "Position: " + args.charPosition + "     \n";
+        }
+        else if (errorType == "RuntimeError") {
+            if (args.lineNumber != 0) {
+                errMsg += "Line: " + args.lineNumber + "     \n";
+                errMsg += "Position: " + args.charPosition + "     \n";
+            }
+            errMsg += "MethodName: " + args.methodName + "     \n";
+        }
+
+        throw new Error(errMsg);
+    }
+
+    function saveWorkflow(id, workflow) {
+        $.post('/Admin/Workflow/SaveWorkflow',
+            {
+                id: id,
+                json: workflow
+            },
+            function (data) {
+                if (data.error) {
+                    window.parent.eGovMessage.show(data.error);
+                }
+            }
+        ).fail(function () {
+            eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        });
+    }
+
+    function changeWorkflow() {
+        var id = $("#workflowList").val();
+        document.location.href = "/admin/Workflow/ConfigWorkflow/" + id;
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.configworkflow"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/Workflow/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div class="notSupported">
+    <div style="font-size:20px; font-weight: bold">Không thể hiển thị quy trình xử lý.</div>
+    <div>Do trình duyệt bạn đang sử dụng hiện không hỗ trợ <a href="https://www.microsoft.com/getsilverlight/get-started/install/default.aspx?reason=unsupportedbrowser&_helpmsg=ChromeVersionDoesNotSupportPlugins#" target="_blank">Microsoft Silverlight</a>.</div>
+
+    <div style="margin-top: 20px">Vui lòng cài đặt Microsoft Silverlight và truy cập lại với Internet Explorer (IE) hoặc Firefox để thực hiện chức năng này!</div>
+    Click vào ảnh bên dưới để tải về.
+    <div class="silverlight-soft">
+        <div style="float: left">
+            <a target="_blank" href="https://www.microsoft.com/getsilverlight/get-started/install/default.aspx?reason=unsupportedbrowser&_helpmsg=ChromeVersionDoesNotSupportPlugins#">
+                <img src="@Url.Content("~/Content/bkav.egov/images/silverlight.jpg")" />
+            </a>
+        </div>
+        <div style="float: left">
+            <a target="_blank" href="http://khophanmem.vn/detail?softwareId=813">
+                <img src="@Url.Content("~/Content/bkav.egov/images/ie 10.png")" />
+            </a>
+        </div>
+        <div style="float: left">
+            <a target="_blank" href="http://khophanmem.vn/detail?softwareId=12404">
+                <img src="@Url.Content("~/Content/bkav.egov/images/firefox.png")" />
+            </a>
+        </div>
+    </div>
+</div>
+<div id="container" style="height: 100%; width: 100%;">
+    <div style="margin-bottom: 10px;">
+        <span>Quy trình:</span>
+        <select style="display: inline-block;" onchange="changeWorkflow()" id="workflowList">
+            @foreach (var workflow in workflows)
+            {
+                <option class="form-control input-sm" value="@workflow.WorkflowId" @(workflow.WorkflowId == currentId ? "selected" : "")>
+                    @workflow.WorkflowName
+                </option>
+            }
+        </select>
+    </div>
+    <div id="center" class="ui-layout-center" style="height: 100%; width: 100%;">
+        <div id="silverlightControlHost">
+            <object id="silverlight" data="data:application/x-silverlight-2," type="application/x-silverlight-2">
+                <param name="source" value="@Url.Content("~/ClientBin/Bkav.eGovCloud.Workflow" + @cul + ".xap")" />
+                <param name="onError" value="onSilverlightError" />
+                <param name="windowless" value="true" />
+                <param name="background" value="white" />
+                <param name="minRuntimeVersion" value="5.0.61118.0" />
+                <param name="autoUpgrade" value="true" />
+                <param name="onLoad" value="pluginLoaded" />
+                @*<a href="https://go.microsoft.com/fwlink/?LinkID=149156&v=5.0.61118.0" style="text-decoration: none">
+                        <img src="https://go.microsoft.com/fwlink/?LinkId=161376" alt="Get Microsoft Silverlight"
+                            style="border-style: none" />
+                    </a>*@
+                >
+            </object>
+
+            <iframe id="_sl_historyFrame" style="visibility: hidden; height: 0px; width: 0px; border: 0px"></iframe>
+        </div>
+    </div>
+
+</div>
+
+<div id="dialog-edit-node" title="@Localizer("Admin.Workflow.UpdateNode")" date-restitle="egov.resources.doctype.updatenode" style="display: none;">
+</div>
+<div id="dialog-edit-template" title="@Localizer("Admin.Workflow.InterfaceConfig")" date-restitle="egov.resources.doctype.interfaceconfig" style="display: none;">
+</div>

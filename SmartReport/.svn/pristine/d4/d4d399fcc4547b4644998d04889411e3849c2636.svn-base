@@ -1,0 +1,147 @@
+﻿@model IEnumerable<WardModel>
+@{
+    var allCity = ViewBag.AllCity as IEnumerable<CityModel>;
+    var allDistrict = ViewBag.AllDistrict as IEnumerable<DistrictModel>;
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as WardSearchModel;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblWard").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblWard").openLink({ urlOpen: '/admin/Ward/Edit' });
+    })
+    function doSubmit(form) {
+        form.attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        form.submit();
+    }
+</script>
+@using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListWard", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <div style="margin-bottom: 4px;">
+        <span data-res="egov.resources.ward.city">Tỉnh/thành phố:</span>
+        <select id="CityCode" name="CityCode" style="width: 167px" onchange="doSubmit($(this).parents('form'));">
+            @if (allCity != null && allCity.Any())
+            {
+                foreach (var city in allCity)
+                {
+                <option value="@city.CityCode" @(search.CityCode != null && search.CityCode == city.CityCode ? "selected='selected'" : "")>@city.CityName</option>
+                }
+            }
+        </select>
+        <span data-res="egov.resources.ward.district">Quận/huyện:</span>
+        <select id="DistrictCode" name="DistrictCode" style="width: 167px" onchange="doSubmit($(this).parents('form'));">
+            @if (allDistrict != null && allDistrict.Any())
+            {
+                foreach (var district in allDistrict)
+                {
+                <option value="@district.DistrictCode" @(search.DistrictCode != null && search.DistrictCode == district.DistrictCode ? "selected='selected'" : "")>@district.DistrictName</option>
+                }
+            }
+        </select>
+    </div>
+}
+<div style="clear: both">
+</div>
+<br />
+<table class="table-main table" id="tblWard">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("WardName", Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.WardName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        cityCode = search.CityCode,
+                        districtCode = search.DistrictCode
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListWard",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var ward in Model)
+            {
+                number += 1;
+            <tr data-id="@ward.WardId">
+                <td>@number
+                </td>
+                <td>@ward.WardName
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.Edit.Button"), "Edit", new { Id = ward.WardId })
+                </td>
+                <td>
+                    <a href="javascript:deleteWard(@(ward.WardId))">@Localizer("Bkav.eGovCloud.Areas.Admin.Ward.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(ward.WardId)" style="display: none" action="@Url.Action("Delete", new { Id = ward.WardId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" data-res="egov.resources.ward.nodata">
+                    Không có xã/phường nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      cityCode = search.CityCode,
+                                      districtCode = search.DistrictCode,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListWard",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

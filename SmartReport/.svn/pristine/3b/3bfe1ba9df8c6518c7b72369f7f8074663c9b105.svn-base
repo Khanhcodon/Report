@@ -1,0 +1,21 @@
+﻿<div>
+    <table>
+        <tbody>
+            <tr>
+                <td class="col-md-4" style="padding-left: 0;"><span data-res="egov.resources.document.changeDateCreatedDialog.dateCreated"></span></td>
+                <td class="col-md-6"><input type="text" class="newDateCreatedDate form-control datepicker" value="${dateCreatedDate}"/></td>
+                <td class="col-md-6"><input type="text" class="newDateCreatedTime form-control timepicker" value="${dateCreatedTime}"/></td>
+            </tr>
+            <tr>
+                <td><span data-res="egov.resources.document.changeDateCreatedDialog.delayReason"></span></td>
+                <td colspan="2" class="col-md-13" style="padding-top:7px"><textarea class="newDelayReason form-control">${delayReason}</textarea></td>
+            </tr>
+         </tbody>
+        <!--<tfoot>
+            <tr>
+                <td></td>
+                <td colspan="2" class="col-md-12"><input type="checkbox" class="applyAll" checked="checked"/> <span data-res="egov.resources.document.changeDateCreatedDialog.applyAll"></span></td>
+            </tr>
+        </tfoot>-->
+    </table>
+</div>

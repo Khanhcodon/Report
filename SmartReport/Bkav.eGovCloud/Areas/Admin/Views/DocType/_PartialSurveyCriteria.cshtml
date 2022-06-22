@@ -1,0 +1,689 @@
+﻿<style>
+    input[name=alias].visited:invalid, select[name=name]:invalid {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+</style>
+
+<div class="svd_container">
+    <div class="svd_content">
+        <div style="">
+            <survey-logic>
+                <div class="svd-logic-tab">
+                    <div style="">
+                        <h4 class="svd-logic-tab__rule-editor__title">
+                            Định nghĩa tiêu chí
+                        </h4>
+                        <svd-property-editor>
+                            <svd-property-editor-error>
+                                <div class="alert alert-danger" role="alert" style="display: none;">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>
+                                    <span></span>
+                                </div>
+                            </svd-property-editor-error>
+                            <div></div>
+                            <div class="svd-propertyeditor-condition">
+                                <div class="svd-expression-content" style="margin-top: 0;">
+                                    <div>
+                                        <div class="svd-expression-setup" style="display: none;"></div>
+                                        <table class="svd-propertyeditor-condition-wide-table" style="width: 100%;">
+                                            <tbody></tbody>
+                                        </table>
+                                        <div class="form-inline form-group">
+                                            <input type="button" class="form-control btn sv-btn btn-primary svd-logic-button svd-logic-add-condition-button svd-focusable" value="Thêm tiêu chí">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div></div>
+                        </svd-property-editor>
+                        <div class="criteria-advance"></div>
+                        <p></p>
+                        <p></p>
+                        <div>
+                            <svd-property-editor-error>
+                                <div class="alert alert-danger" role="alert" style="display: none;">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>
+                                    <span></span>
+                                </div>
+                            </svd-property-editor-error>
+                        </div>
+                        <div class="form-inline form-group">
+                            <input type="button" class="form-control btn sv-btn btn-primary svd-logic-button svd-criteria-save-button" value="Lưu" title="Lưu">
+                        </div>
+                        <p></p>
+                    </div>
+                </div>
+            </survey-logic>
+        </div>
+    </div>
+</div>
+
+<script>
+    var ID_REGEXP = /[a-zA-Z_0-9{\*\/\<\>\=\!\$\.\-\u00A2-\uFFFF]/;
+    var operations = [
+        {
+            value: "and",
+            title: "logical 'and' operator",
+        },
+        {
+            value: "&&",
+            title: "logical 'and' operator",
+        },
+        {
+            value: "or",
+            title: "logical 'or' operator",
+        },
+        {
+            value: "||",
+            title: "logical 'or' operator",
+        },
+        {
+            value: "empty",
+            title: "returns true if the left operand is empty	{questionName} empty",
+        },
+        {
+            value: "notempty",
+            title: "returns true if the left operand is not empty	{questionName} notempty",
+        },
+        {
+            value: "=",
+            title: "returns true if two values are equal	{questionName} = 5, {questionName} == 'abc', {questionName} equal 124",
+        },
+        {
+            value: "==",
+            title: "returns true if two values are equal	{questionName} = 5, {questionName} == 'abc', {questionName} equal 124",
+        },
+        {
+            value: "equal",
+            title: "returns true if two values are equal	{questionName} = 5, {questionName} == 'abc', {questionName} equal 124",
+        },
+        {
+            value: "<>",
+            title: "returns true if two values are not equal	{questionName} <> 5, {questionName} != 'abc', {questionName} notequal 124",
+        },
+        {
+            value: "!=",
+            title: "returns true if two values are not equal	{questionName} <> 5, {questionName} != 'abc', {questionName} notequal 124",
+        },
+        {
+            value: "notequal",
+            title: "returns true if two values are not equal	{questionName} <> 5, {questionName} != 'abc', {questionName} notequal 124",
+        },
+        {
+            value: ">",
+            title: "returns true if the left operand greater then the second operand	{questionName} > 2, {questionName} greater 'a'",
+        },
+        {
+            value: "greater",
+            title: "returns true if the left operand greater then the second operand	{questionName} > 2, {questionName} greater 'a'",
+        },
+        {
+            value: "<",
+            title: "returns true if the left operand less than the second operand	{questionName} < 2, {questionName} less 'a'",
+        },
+        {
+            value: "less",
+            title: "returns true if the left operand less than the second operand	{questionName} < 2, {questionName} less 'a'",
+        },
+        {
+            value: ">=",
+            title: "returns true if the left operand equal or greater then the second operand	{questionName} >= 2, {questionName} greaterorequal 'a'",
+        },
+        {
+            value: "greaterorequal",
+            title: "returns true if the left operand equal or greater then the second operand	{questionName} >= 2, {questionName} greaterorequal 'a'",
+        },
+        {
+            value: "<=",
+            title: "returns true if the left operand equal or less than the second operand	{questionName} <= 2, {questionName} lessorequal 'a'",
+        },
+        {
+            value: "lessorequal",
+            title: "returns true if the left operand equal or less than the second operand	{questionName} <= 2, {questionName} lessorequal 'a'",
+        },
+        {
+            value: "contains",
+            title: "return true if the left operand is an array and it contains a value of the second operand	{questionName} contains 'a'",
+        },
+        {
+            value: "notcontains",
+            title: "return true if the left operand is an array and it does not contain a value of the second operand",
+        },
+        {
+            value: "anyof",
+            title: "return true if the left operand is an array and it contains any value of the second array operand",
+        },
+        {
+            value: "allof",
+            title: "return true if the left operand is an array and it contains all values of the second array operand",
+        },
+    ];
+
+    var questions = [];
+    var criteriaArr = null;
+
+    function doGetCompletions(prefix, completer = null) {
+        var completions = [];
+        if (!!questions) {
+            var operationsFiltered = operations.filter(
+                (op) => !prefix || op.value.indexOf(prefix) !== -1
+            );
+            var questionsFiltered = questions.filter(
+                (op) => !prefix || op.name.indexOf(prefix) !== -1
+            );
+
+            completions = completions
+                .concat(
+                    questionsFiltered.map((q) => {
+                        return {
+                            completer: completer,
+                            name: "",
+                            value: "{" + q.name + "}",
+                            some: "",
+                            meta: q.title,
+                            identifierRegex: ID_REGEXP,
+                        };
+                    })
+                )
+                .concat(
+                    operationsFiltered.map((op) => {
+                        return {
+                            name: "",
+                            value: op.value,
+                            some: "",
+                            meta: op.title,
+                            identifierRegex: ID_REGEXP,
+                        };
+                    })
+                );
+        }
+        return completions;
+    }
+
+    function insertMatch(editor, data) {
+        if (editor.completer.completions.filterText) {
+            var allRanges = editor.selection.getAllRanges();
+            for (
+                var rangeIndex = 0, range;
+                (range = allRanges[rangeIndex]);
+                rangeIndex++
+            ) {
+                range.start.column -= editor.completer.completions.filterText.length;
+                var rangeText = editor.session.getTextRange(range);
+                if (rangeText.indexOf("{") !== 0) {
+                    var extRange = range.clone();
+                    extRange.start.column--;
+                    if (editor.session.getTextRange(extRange).indexOf("{") === 0) {
+                        range = extRange;
+                    }
+                }
+                editor.session.remove(range);
+            }
+        }
+        editor.execCommand("insertstring", data.value || data);
+    }
+
+    function checkDuplicateAlias() {
+        var hasDuplicate = false;
+        var aliasElArr = $('input[name=alias]').toArray();
+        aliasElArr.forEach(function (el) { el.setCustomValidity(''); });
+        for (var i = 0; i < aliasElArr.length; i++) {
+            var currentValue = aliasElArr[i].value;
+            for (var j = i + 1; j < aliasElArr.length; j++) {
+                if (!aliasElArr[j].checkValidity()) continue;
+                if (currentValue != aliasElArr[j].value) continue;
+                hasDuplicate = true;
+                aliasElArr[i].setCustomValidity("Tên tiêu chí đã tồn tại. Hãy nhập giá trị khác.");
+                aliasElArr[j].setCustomValidity("Tên tiêu chí đã tồn tại. Hãy nhập giá trị khác.");
+            }
+        }
+
+        return hasDuplicate;
+    }
+
+    function markInputAsVisited() {
+        $('input[name=alias]').addClass('visited');
+        $('select[name=name]').attr('required', '');
+    }
+
+    $(function () {
+        $('#criteria-advance-tmpl').tmpl().appendTo('.criteria-advance');
+        
+        $('.nav-pills a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href") // activated tab
+            if (target === '#3a') {
+                questions = surveyDesLogic.getAllQuestionsName();
+                $('#3a .svd-propertyeditor-condition-wide-table tbody').empty();
+                if (criteriaArr != null && criteriaArr.length > 0) {
+                    _.each(questions,
+                        function (q, idx) {
+                            _.each(criteriaArr,
+                                function (e, i) {
+                                    if (e.name == q.name)
+                                        criteriaArr[i].choices = q.choices;
+                                });
+                        });
+                }
+                $('#sv_row').tmpl(criteriaArr || questions).appendTo('#3a .svd-propertyeditor-condition-wide-table tbody');
+            }
+        });
+
+        $(document).on('change', '[name=operator]', function () {
+            var sv_row = $(this).closest('.sv_row');
+
+            var questionName = $(this).closest('form').find('[name=name]').val();
+            var questionType = $(this).closest('form').find('input[name=type]').val();
+            var question = questions.filter(q => q.name === questionName)[0];
+            if (questionType === 'checkbox') {
+                if ((this.value === 'contains' || this.value === 'notcontains')) {
+                    if (sv_row.find('.question-value').length === 0) {
+                        sv_row.next().remove();
+                        $('#dropdown-template').tmpl(question).appendTo(sv_row);
+                    }
+                } else {
+                    if (sv_row.next().length === 0) {
+                        sv_row.find('.question-value').remove();
+                        $('#checkbox-template').tmpl(question).insertAfter(sv_row);
+                    }
+                }
+            } else if (questionType === 'radiogroup' || questionType === 'dropdown') {
+                if ((this.value === 'anyof')) {
+                    if (sv_row.next().length === 0) {
+                        sv_row.find('.question-value').remove();
+                        $('#checkbox-template').tmpl(question).insertAfter(sv_row);
+                    }
+                } else {
+                    if (sv_row.find('.question-value').length === 0) {
+                        sv_row.next().remove();
+                        $('#dropdown-template').tmpl(question).appendTo(sv_row);
+                    }
+                }
+            }
+
+            sv_row.find('[name=value]').attr('disabled', this.value === 'empty' || this.value === 'notempty');
+            sv_row.next().find('input:checkbox').attr('disabled', this.value === 'empty' || this.value === 'notempty');
+        });
+
+        var langTools = ace.require("ace/ext/language_tools");
+        var criteriaEditor = ace.edit('criteria-expression');
+
+        var completer = {
+            identifierRegexps: [ID_REGEXP],
+            insertMatch: insertMatch,
+            getCompletions: function (editor, session, pos, prefix, callback) {
+                var completions = doGetCompletions(prefix, completer);
+                callback(null, completions);
+            },
+            getDocTooltip: function (item) {
+                item.docHTML = "<div style='max-width: 300px; white-space: normal;'>" + item.meta + "</div>";
+            },
+        };
+        langTools.setCompleters([completer]);
+
+        criteriaEditor.setOptions({
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+        });
+
+        /** Thêm tiêu chí **/
+        $('#3a .svd-logic-add-condition-button').on('click', function (e) {
+            var row = $('#sv_row').tmpl({ addRow: true, questions: questions, type: '' });
+            var selectQuestion = row.find('.question-name select');
+            /** Chọn câu hỏi **/
+            selectQuestion.on('change', function (e) {
+                var questionName = this.value;
+                var question = questions.filter(function (q) { return q.name == questionName; })[0] || { addRow: true, type: '' };
+                row.find('.question-value').remove();
+                row.find('.sv_row + .sv_row').remove();
+
+                row.find('input[name=type]').val(question.type);
+                row.find('select[name=formula], select[name=operator]').val('').attr('disabled', !!question.addRow);
+
+                var operatorOption = row.find('select[name=operator] option');
+                operatorOption.attr('disabled', false);
+
+                var sv_row = row.find('.sv_row');
+                if (question.type === 'text' || question.type === '') {
+                    $('#text-template').tmpl(question).appendTo(sv_row);
+                    operatorOption.filter(function () { return this.value === 'allof' || this.value === 'anyof' }).attr('disabled', true);
+                } else if (question.type === 'checkbox') {
+                    $('#checkbox-template').tmpl(question).insertAfter(sv_row);
+                    operatorOption.filter(function () { return this.value === 'greater' || this.value === 'less' || this.value === 'greaterorequal' || this.value === 'lessorequal' }).attr('disabled', true);
+                } else {
+                    $('#dropdown-template').tmpl(question).appendTo(sv_row);
+                    operatorOption.filter(function () { return this.value === 'contains' || this.value === 'notcontains' || this.value === 'allof' }).attr('disabled', true);
+                }
+            });
+            row.appendTo('#3a .svd-propertyeditor-condition-wide-table tbody');
+        });
+
+        /** Thêm tiêu chí nâng cao **/
+        $('#criteria-name').on('change', function () {
+            this.setCustomValidity('');
+        });
+        $('#3a .criteria-advance form').on('submit', function (e) {
+            var criteriaNameEl = $('#criteria-name')[0];
+            var aliasArr = $('input[name=alias]').toArray().map(function (el) { return el.value; });
+            if (aliasArr.indexOf(criteriaNameEl.value) >= 0) {
+                criteriaNameEl.setCustomValidity('Tên tiêu chí đã tồn tại. Hãy nhập giá trị khác.');
+                return;
+            }
+            $('#sv_row').tmpl({
+                alias: $('#criteria-name').val(),
+                name: $('#criteria-name').val(),
+                value: criteriaEditor.getValue(),
+                type: 'advance'
+            }).appendTo('#3a .svd-propertyeditor-condition-wide-table tbody');
+
+            $('#criteria-name').val('');
+            criteriaEditor.setValue('');
+        });
+
+        /** Lưu tiêu chí **/
+        $('#3a .svd-criteria-save-button').on('click', function (e) {
+            markInputAsVisited();
+            checkDuplicateAlias();
+            var lastEl = $('input[name=alias].visited, select[name=name]').toArray().filter(function (el) { return !el.checkValidity(); }).pop();
+            if (lastEl) {
+                $(lastEl).closest('form').find('input:submit').click();
+                return;
+            }
+            criteriaArr = [];
+            var rows = $('#3a .svd-propertyeditor-condition-wide-table tbody form');
+            rows.each(function (index) {
+                var arr = $(this).serializeArray();
+                var criteriaObj = {};
+                arr.forEach(function (prop) {
+                    criteriaObj[prop.name] = prop.value;
+                });
+
+                var checkboxes = $(this).find('.checkbox input:checkbox');
+                if (checkboxes.length) {
+                    criteriaObj.value = [];
+                    checkboxes.each(function () {
+                        if (this.checked) {
+                            criteriaObj.value.push(this.name.split('_')[1]);
+                            delete criteriaObj[this.name];
+                        }
+                    });
+                }
+
+                if (criteriaObj.type === 'checkbox' && (criteriaObj.operator === 'contains' || criteriaObj.operator === 'notcontains')) {
+                    criteriaObj.value = [criteriaObj.value];
+                }
+
+                var question = questions.filter(function (q) { return q.name === criteriaObj.name; })[0];
+                if (question) criteriaObj.choices = question.choices;
+                if (criteriaObj.name) criteriaArr.push(criteriaObj);
+            });
+
+            eGovMessage.notification('Lưu tạm tiêu chí thành công!', eGovMessage.messageTypes.success, true);
+        });
+
+        /** Xoá tiêu chí **/
+        $(document).on('click', '#3a .svd-propertyeditor-condition-item-delete-icon', function (e) {
+            $(this).closest('tr').remove();
+        });
+
+        $(document).on({
+            change: function (e) {
+                checkDuplicateAlias();
+                $(this).addClass('visited');
+                $(this).closest('form').find('input:submit').click();
+            }
+        }, 'input[name=alias]');
+    });
+</script>
+
+<script id="sv_row" type="text/x-jquery-tmpl">
+    <tr>
+        <td>
+            <div class="svd_wrap_elements">
+                <survey-widget>
+                    <div class="sv_main sv_bootstrap_css">
+                        <form onsubmit="return false;">
+                            <div class="sv_custom_header"></div>
+                            <div class="sv_container">
+                                <div class="panel-body card-block mt-4 svd-property-editor-survey">
+                                    <div>
+                                        <div class="svd-property-editor-survey-page">
+                                            <div class="sv_row">
+                                                <div class="sv_qstn svd-survey-nopadding question-alias" style="flex: 1 1 15%; min-width: 50px; max-width: initial; width: 15%; padding-right: 20px;">
+                                                    <div>
+                                                        <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                        <input type="text" size="25" placeholder="Nhập tên tiêu chí" aria-required="true" aria-label="Nhập tên tiêu chí" class="form-control ${$data.alias ? 'visited' : ''}" name="alias" value="${alias}" required autocomplete="off">
+                                                        <div class="small" style="display: none;">
+                                                            <span style="position: static;"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="sv_qstn svd-survey-nopadding question-name" style="padding-right: 20px; flex: 1 1 30%; width: 30%; min-width: 50px; max-width: initial;">
+                                                    <div>
+                                                        <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                        {{if $data.addRow}}
+                                                        <div>
+                                                            <select aria-label="questionName" class="form-control" name="name">
+                                                                <option value="">Chọn câu hỏi...</option>
+                                                                {{each(i) questions}}
+                                                                <option value="${name}">${name}</option>
+                                                                {{/each}}
+                                                            </select>
+                                                        </div>
+                                                        {{else}}
+                                                        <div class="form-control">${name}</div>
+                                                        <input type="hidden" name="name" value="${name}">
+                                                        {{/if}}
+                                                        <div class="small" style="display: none;">
+                                                            <span style="position: static;"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="sv_qstn svd-survey-nopadding question-formula" style="padding-right: 20px; flex: 1 1 15%; width: 15%; min-width: 50px; max-width: initial;">
+                                                    <div>
+                                                        <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                        <div>
+                                                            <select aria-label="questionFormula" class="form-control" name="formula" value="${formula}" ${$data.addRow ? 'disabled' : ''}>
+                                                                <option value="">Chọn công thức... </option>
+                                                                <option value="sum" ${$data.formula == 'sum' ? 'selected' : '' }>Tổng</option>
+                                                                <option value="count" ${$data.formula == 'count' ? 'selected' : '' }>Đếm</option>
+                                                                <option value="avg" ${$data.formula == 'avg' ? 'selected' : '' }>Trung bình</option>
+                                                                <option value="min" ${$data.formula == 'min' ? 'selected' : '' }>Nhỏ nhất</option>
+                                                                <option value="max" ${$data.formula == 'max' ? 'selected' : '' }>Lớn nhất</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="small" style="display: none;">
+                                                            <span style="position: static;"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="sv_qstn svd-survey-nopadding operator" style="flex: 1 1 15%; width: 15%; min-width: 50px; max-width: initial; padding-right: 20px;">
+                                                    <div>
+                                                        <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                                                        <div>
+                                                            <select aria-label="operator" class="form-control" name="operator" value="${operator}" ${$data.addRow ? 'disabled' : ''}>
+                                                                <option value="">Chọn điều kiện...</option>
+                                                                <option value="empty"           ${$data.operator == 'empty'             ? 'selected' : '' }>trống</option>
+                                                                <option value="notempty"        ${$data.operator == 'notempty'          ? 'selected' : '' }>không trống</option>
+                                                                <option value="equal"           ${$data.operator == 'equal'             ? 'selected' : '' }>bằng</option>
+                                                                <option value="notequal"        ${$data.operator == 'notequal'          ? 'selected' : '' }>không bằng</option>
+                                                                <option value="contains"        ${$data.operator == 'contains'          ? 'selected' : '' } ${type != 'text' && type != 'advance' && type != 'checkbox' ? 'disabled' : ''}>chứa</option>
+                                                                <option value="notcontains"     ${$data.operator == 'notcontains'       ? 'selected' : '' } ${type != 'text' && type != 'advance' && type != 'checkbox' ? 'disabled' : ''}>không chứa</option>
+                                                                <option value="anyof"           ${$data.operator == 'anyof'             ? 'selected' : '' } ${type == 'text' || type == 'advance'                       ? 'disabled' : ''}>bất kỳ</option>
+                                                                <option value="allof"           ${$data.operator == 'allof'             ? 'selected' : '' } ${type != 'checkbox'                                        ? 'disabled' : ''}>tất cả</option>
+                                                                <option value="greater"         ${$data.operator == 'greater'           ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>lớn hơn</option>
+                                                                <option value="less"            ${$data.operator == 'less'              ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>nhỏ hơn</option>
+                                                                <option value="greaterorequal"  ${$data.operator == 'greaterorequal'    ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>lớn hơn hoặc bằng</option>
+                                                                <option value="lessorequal"     ${$data.operator == 'lessorequal'       ? 'selected' : '' } ${type == 'checkbox'                                        ? 'disabled' : ''}>nhỏ hơn hoặc bằng</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="small" style="display: none;">
+                                                            <span style="position: static;"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{if $data.addRow || type == 'text' || type == 'advance'}}
+                                                {{tmpl() '#text-template'}}
+                                                {{else type == 'checkbox' && $data.operator != 'contains' && $data.operator != 'notcontains' || type != 'checkbox' && $data.operator == 'anyof'}}
+                                                {{else}}
+                                                {{tmpl() '#dropdown-template'}}
+                                                {{/if}}
+                                            </div>
+                                            {{if type == 'checkbox' && $data.operator != 'contains' && $data.operator != 'notcontains' || type != 'checkbox' && $data.operator == 'anyof'}}
+                                            {{tmpl() '#checkbox-template'}}
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sv_hidden_field" style="display: none;">
+                                <input type="hidden" name="type" value="${type}">
+                                <input type="submit">
+                            </div>
+                        </form>
+                    </div>
+                </survey-widget>
+            </div>
+        </td>
+        <td>
+            <span class="svd-propertyeditor-condition-item-delete-icon" title="Xoá" tabindex="0">
+                <svg-icon class="svd-danger-icon icon-actiondelete"><svg class="svd-svg-icon" style="width: 16px; height: 16px;"><use xlink:href="#icon-actiondelete"></use></svg></svg-icon>
+            </span>
+        </td>
+    </tr>
+</script>
+
+<script id="text-template" type="text/x-jquery-tmpl">
+    <div class="sv_qstn svd-survey-nopadding question-value" style="flex: 1 1 25%; min-width: 50px; max-width: initial; width: 25%; padding-right: 20px;">
+        <div>
+            <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+            <input type="text" size="25" placeholder="" aria-required="true" aria-label="Hãy nhập/chọn giá trị" class="form-control" name="value" value="${value}"
+                   ${$data.addRow || $data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+            <div class="small" style="display: none;">
+                <span style="position: static;"></span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="dropdown-template" type="text/x-jquery-tmpl">
+    <div class="sv_qstn svd-survey-nopadding question-value" style="flex: 1 1 25%; min-width: 50px; max-width: initial; width: 25%; padding-right: 20px;">
+        <div>
+            <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+            <div>
+                <select aria-label="Hãy nhập/chọn giá trị" class="form-control" name="value" value="${value}" ${$data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+                    <option value="">Chọn giá trị...</option>
+                    {{each(i) choices}}
+                    <option value="${value}" ${$data.value ==  value ? 'selected' : '' }>${text}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="small" style="display: none;">
+                <span style="position: static;"></span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="checkbox-template" type="text/x-jquery-tmpl">
+    <div class="sv_row">
+        <div class="sv_qstn svd-survey-nopadding question-value" role="group" aria-labelledby="sq_249_ariaTitle" style="flex: 1 1 100%; width: 100%; min-width: 50px; max-width: initial; padding-right: 20px;">
+            <div>
+                <h5 aria-label="Hãy nhập/chọn giá trị">
+                    <span style="position: static;">Hãy nhập/chọn giá trị</span>
+                    <span class="sv_q_required_text"></span>
+                </h5>
+                <div class="small">
+                    <span style="position: static;"></span>
+                </div>
+            </div>
+            <div>
+                <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+                <fieldset class="sv_qcbc sv_qcbx form-inline">
+                    <legend aria-label="Hãy nhập/chọn giá trị"></legend>
+                    {{each(i) choices}}
+                    <div class="checkbox sv-q-col-1 undefined">
+                        <label>
+                            <input type="checkbox" name="value_${value}" aria-required="true" aria-label="${text}" ${($data.value || []).indexOf(value) >= 0 ? 'checked' : ''}
+                                   ${$data.operator == 'empty' || $data.operator == 'notempty' ? 'disabled' : ''}>
+                            <span class="checkbox-material">
+                                <svg viewBox="0 0 24 24" class="sv-hidden">
+                                    <path d="M5,13l2-2l3,3l7-7l2,2l-9,9L5,13z"></path>
+                                </svg>
+                                <span class="check"></span>
+                            </span>
+                            <span title="${text}">
+                                <span style="position: static;">${text}</span>
+                            </span>
+                        </label>
+                    </div>
+                    {{/each}}
+                </fieldset>
+                <div class="small" style="display: none;">
+                    <span style="position: static;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="criteria-advance-tmpl" type="text/x-jquery-tmpl">
+    <form onsubmit="return false;">
+        <h4 class="svd-logic-tab__rule-editor__title">Thêm nâng cao</h4>
+        <div class="svd-logic-tab__item">
+            <div style="max-width:800px">
+                <svd-accordion role="tablist">
+                    <div class="svd-accordion-tab-content" role="tab">
+                        <div class="row svd-popup-editor-tab-general" id="editor_tab_id_general">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div data-property="setToName">
+                                        <svd-property-editor>
+                                            <label class="svd-control-label">Tên tiêu chí</label>
+                                            <svd-property-editor-error>
+                                                <div class="alert alert-danger" role="alert" style="display: none;">
+                                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                                    <span class="sr-only">Error:</span>
+                                                    <span></span>
+                                                </div>
+                                            </svd-property-editor-error>
+                                            <input type="text" id="criteria-name" size="25" placeholder="" aria-required="true" aria-label="Hãy nhập/chọn giá trị" class="form-control" required>
+                                        </svd-property-editor>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div data-property="runExpression">
+                                        <svd-property-editor>
+                                            <label class="svd-control-label">Chạy biểu thức</label>
+                                            <svd-property-editor-error>
+                                                <div class="alert alert-danger" role="alert" style="display: none;">
+                                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                                    <span class="sr-only">Error:</span>
+                                                    <span></span>
+                                                </div>
+                                            </svd-property-editor-error>
+                                            <div></div>
+                                            <div class="propertyeditor-expression">
+                                                <span>Nhấn ctrl+space để hiển thị gợi ý biểu thức</span>
+                                                <div id="criteria-expression" style="height: 150px; width: 100%;"></div>
+                                                <span style="white-space:normal">Hãy nhập biểu thức. Bạn có thể sử dụng dấu ngoặc nhọn để truy cập giá trị câu hỏi: '{câu hỏi1} + {câu hỏi2}', '({giá}*{số lượng}) * (100 - {giảm giá})'</span>
+                                            </div>
+                                            <div></div>
+                                        </svd-property-editor>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </svd-accordion>
+            </div>
+        </div>
+        <p></p>
+        <div style="width:200px;padding-bottom:20px">
+            <input type="submit" class="form-control sv-btn btn btn-primary svd-logic-button svd-logic-add-new-advance-criteria-button" value="Thêm tiêu chí nâng cao">
+        </div>
+    </form>
+</script>

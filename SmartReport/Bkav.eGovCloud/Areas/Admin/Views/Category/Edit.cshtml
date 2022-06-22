@@ -1,0 +1,42 @@
+﻿@model CategoryModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Category.Updated");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Category.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-copy2"></i>
+        <span data-res="egov.resources.sitemap.category"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/category/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+    </div>
+}

@@ -1,0 +1,79 @@
+﻿@model Bkav.eGovCloud.Models.LoginModel
+@{
+    ViewBag.Title = "LoginViaOpenId";
+    var token = ViewBag.Token as string;
+    var ssoDomain = ViewBag.SsoDomain as string;
+}
+<link href="@Url.Content("~/Content/openid-shadow.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/openid.css")" rel="stylesheet" type="text/css" />
+
+<script src="../../Scripts/bkav.egov/libs/openid-en.js"></script>
+<script src="../../Scripts/bkav.egov/libs/openid-jquery.js"></script>
+<script src="../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+
+@if (string.IsNullOrWhiteSpace(token))
+{
+    <script type="text/javascript">
+        $(function () {
+            openid.init('loginIdentifier');
+        });
+    </script>
+}
+else
+{
+    <script type="text/javascript">
+        $(function () {
+            openid.init('loginIdentifier');
+            $.get
+            (
+                '@ssoDomain/User/LoginToken?callback=?',
+                {
+                    token: '@token',
+                    domain: '@ViewBag.Domain',
+                    remember: false
+                },
+                function (ssodata) {
+                    console.log(ssodata);
+                    if (ssodata.LoginTokenResult.Status == 'DENIED') {
+                        $("#error").text('Login Failed').show();
+                    } else {
+                        document.location = '@Url.Action("Login", "Account")';
+                    }
+                },
+                'jsonp'
+            );
+        });
+    </script>
+}
+<div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("User.Login.Normal.Tab.Title"), "LoginForm")</li>
+        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#">
+            @Localizer("User.Login.OpenID.Tab.Title")</a></li>
+    </ul>
+    <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <form action="@Url.Action("LoginViaOpenId", new { ReturnUrl = HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]) })" method="post" id="openid_form">
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="action" value="verify" />
+            <div class="openid_choice">
+                <p data-res="egov.resources.setting.login.choseServicer">
+                    Hãy chọn 1 nhà cung cấp dịch vụ OpenID:
+                </p>
+                <div id="openid_btns">
+                </div>
+            </div>
+            <div id="openid_input_area">
+                @Html.TextBox("loginIdentifier")
+                <input type="submit" value="Log On" />
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(token))
+                {
+                    <p id="error" style="display: none; color: Red;"></p>
+                }
+            </div>
+        </form>
+    </div>
+</div>

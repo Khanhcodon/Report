@@ -1,0 +1,52 @@
+﻿@model Bkav.eGovCloud.Entities.Admin.Apps
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/css/jquery.fileupload-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script>
+    $(function () {
+        var $submitBtn = $("#submitBtn");
+        $submitBtn.click(function (e) {
+            //prevent Default functionality
+            e.preventDefault();
+            $submitBtn.button("loading");
+            var $form = $("#newapp form");
+            //get the action-url of the form
+            var actionurl = $form.attr("action");
+
+            //do your own request an handle the results
+            $.ajax({
+                url: actionurl,
+                type: 'post',
+                dataType: 'json',
+                data: $form.serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        location.reload();
+                    }
+
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+            });
+            $("#closeBtn").click();
+        });
+    })
+</script>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span><span class="sr-only">x</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">Tạo mới liên kết</h4>
+</div>
+<div class="modal-body" id="newapp">
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("_CreateOrEditNewApp", Model)
+    }
+</div>
+<div class="modal-footer">
+    <button type="submit" id="submitBtn" class="btn btn-primary" data-loading-text="Đang tạo ..." data-res="egov.resources.buttons.add"></button>
+    <button type="button" id="closeBtn" class="btn btn-default" data-dismiss="modal" data-res="egov.resources.closeBtn"></button>
+</div>

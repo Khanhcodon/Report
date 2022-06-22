@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--jQuery dependencies-->
+    <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui-themes-1.9.1/themes/base/jquery-ui.css")" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-1.9.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.9.2.min.js")"></script>
+
+    <!--PQ Grid files-->
+    <link rel="stylesheet" href="../../../../Scripts/bkav.egov/libs/paramquery/pqgrid.min.css" />
+    <script src="../../../../Scripts/bkav.egov/libs/paramquery/pqgrid.min.js"></script>
+    <!--jqueryui touch punch for touch devices-->
+    <script src="touch-punch/touch-punch.min.js"></script>
+
+    <!--PQ Grid Office theme-->
+    <link rel='stylesheet' href='../../../../Scripts/bkav.egov/libs/paramquery/themes/office/pqgrid.css' />
+
+    <script>
+        $(function () {
+            var dataType = ["Chuỗi ký tự", "Số nguyên", "Số thực"];
+            var align = ["Căn trái", "Căn giữa", "Căn phải"];
+            var autoCompleteEditor = function (ui) {
+                var $inp = ui.$cell.find("input");
+
+                //initialize the editor
+                $inp.autocomplete({
+                    appendTo: ui.$cell, //for grid in maximized state.
+                    source: ui.dataIndx == "datatype" ? dataType : align,
+                    selectItem: { on: true }, //custom option
+                    highlightText: { on: true }, //custom option
+                    minLength: 0
+                }).focus(function () {
+                    //open the autocomplete upon focus                
+                    $(this).autocomplete("search", "");
+                });
+            }
+            var toolbar = {
+                items: [
+                  { type: 'button', icon: 'ui-icon-plus', label: 'Thêm Cột', listener:
+                        { "click": function (evt, ui) {
+                            //append empty row at the end.                            
+                            var $grid = $(this).closest(".pq-grid");
+                            var rowData = { columnname: '', datatype: 'integer', align: 'left' }; //empty row
+                            var rowIndx = $grid.pqGrid("addRow", { rowData: rowData });
+                            $grid.pqGrid("goToPage", { rowIndx: rowIndx });
+                            $grid.pqGrid("setSelection", null);
+                            $grid.pqGrid("setSelection", { rowIndx: rowIndx, dataIndx: 'ProductName' });
+                            $grid.pqGrid("editFirstCellInRow", { rowIndx: rowIndx });
+                        }
+                        }
+                  }
+                ]
+            };
+
+            var data = [
+               
+            ];
+            var obj = {
+                numberCell: { resizable: true, title: "#", width: 30, minWidth: 30 },
+                editor: {
+                    type: 'textbox'
+                },
+                title: "Cấu hình báo cáo",
+                resizable: true,
+                toolbar: toolbar,
+                scrollModel: { autoFit: true, theme: true }
+            };
+            obj.colModel = [
+                { title: "Tên Cột", width: 200, dataType: "string", dataIndx: "columnname" },
+                {
+                    title: "Kiểu dữ liệu", width: 150, dataType: "string", align: "right", dataIndx: "datatype",
+                    editor: {
+                        type: "textbox",
+                        init: autoCompleteEditor
+                    }
+                },
+                {
+                    title: "Căn lề", width: 150, dataType: "string", align: "right", dataIndx: "align",
+                    editor: {
+                        type: "textbox",
+                        init: autoCompleteEditor
+                    }
+                }
+            ];
+           
+            obj.dataModel = {
+                data: data
+            };
+            var pqGrid = $("#grid_json").pqGrid(obj);
+        });
+
+    </script>
+</head>
+<body>
+    <div id="grid_json" style="margin:20px;"></div>
+</body>
+
+</html>

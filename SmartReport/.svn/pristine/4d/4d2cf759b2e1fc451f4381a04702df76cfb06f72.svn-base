@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="icon" href="http://uniquepro-admin-templates.websitedesignmarketingagency.com/images/favicon.ico">
+      <title>Tiêu Thức Phân Tổ</title>
+
+      <!-- Bootstrap 4.1.3-->
+      <link rel="stylesheet" href="../../../assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
+      <!-- Bootstrap extend-->
+      <link rel="stylesheet" href="../../css/bootstrap-extend.css">
+      <!-- Theme style -->
+      <link rel="stylesheet" href="../../css/master_style.css">
+      <!-- Unique_Admin skins -->
+      <link rel="stylesheet" href="../../css/skins/_all-skins.css">
+
+      <link rel="stylesheet" href="../../css/style.css">
+   
+      <!--alerts CSS -->
+      <link href="../../../assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+
+   </head>
+   <body class="hold-transition skin-blue sidebar-mini">
+      <div class="wrapper">
+         <header class="main-header">         
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top">
+               <!-- Sidebar toggle button-->
+               <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+               <span class="sr-only">Toggle navigation</span>
+               </a>
+            </nav>
+         </header>
+         <!-- Left side column. contains the logo and sidebar -->
+         <aside class="main-sidebar">
+            <!-- sidebar -->
+            <section class="sidebar">
+              <ul class="sidebar-menu" data-widget="tree">  
+                  <li class="treeview active">
+                     <a href="#">
+                     <i class="fa fa-table"></i> <span>Tables</span>
+                     <span class="pull-right-container">
+                     <i class="fa fa-angle-right pull-right"></i>
+                     </span>
+                     </a>
+                     <ul class="treeview-menu">
+                        <li><a href="simple.html">Simple tables</a></li>
+                        <li class="active"><a href="data.html">Data tables</a></li>
+                        <li><a href="editable-tables.html">Editable Tables</a></li>
+                        <li><a href="table-color.html">Table Color</a></li>
+                     </ul>
+                  </li>
+                  <li class="treeview">
+                     <a href="#">
+                     <i class="fa fa-map"></i> <span>Map</span>
+                     <span class="pull-right-container">
+                     <i class="fa fa-angle-right pull-right"></i>
+                     </span>
+                     </a>
+                     <ul class="treeview-menu">
+                        <li><a href="../map/map-google.html">Google Map</a></li>
+                        <li><a href="../map/map-vector.html">Vector Map</a></li>
+                     </ul>
+                  </li>
+               </ul>
+            </section>
+            <div class="sidebar-background" style="background-image: url(../../../images/sidebar-bg/08.jpg);"></div>
+         </aside>
+         <!-- Content Wrapper. Contains page content -->
+         <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+               <div class="row">
+                  <div class="col-12">
+                     <div class="box">
+                        <div class="box-header with-border leftRightDis">
+                           <div class="leftdisaggregation">
+                              <h3 class="box-title">Tiêu thức phân tổ</h3> 
+                           </div>
+                           <div class="rightdisaggregation">
+                              <button type="button" class="btn btn-block btn-rounded btn-success"><i class="fa fa-plus-square"></i> Thêm</button>
+                              <button type="button" class="btn btn-block btn-rounded btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+                           </div>                        
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                           <div class="table-responsive">
+                              <table id="disaggregation" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                                 <thead>
+                                    <tr>
+                                       <th>Name</th>
+                                       <th>Position</th>
+                                       <th>Office</th>
+                                       <th>Age</th>
+                                       <th>Start date</th>
+                                       <th>Salary</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr>
+                                       <td>Tiger Nixon</td>
+                                       <td>System Architect</td>
+                                       <td>Edinburgh</td>
+                                       <td>61</td>
+                                       <td>2011/04/25</td>
+                                       <td>$320,800</td>
+                                    </tr>
+                                    <tr>
+                                       <td>Garrett Winters</td>
+                                       <td>Accountant</td>
+                                       <td>Tokyo</td>
+                                       <td>63</td>
+                                       <td>2011/07/25</td>
+                                       <td>$170,750</td>
+                                    </tr>
+                                    <tr>
+                                       <td>Ashton Cox</td>
+                                       <td>Junior Technical Author</td>
+                                       <td>San Francisco</td>
+                                       <td>66</td>
+                                       <td>2009/01/12</td>
+                                       <td>$86,000</td>
+                                    </tr>   
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                        <!-- /.box-body -->                       
+                     </div>     
+                  </div>
+                  <div class="col-md-8 col-lg-8" id="registerDisaggregation">
+                     <div class="box">
+                     <div class="box-header with-border">
+                        <h4 class="box-title">Box <strong>controls</strong></h4>
+                        <ul class="box-controls pull-right">
+                           <li><a class="box-btn-close" href="#"></a></li>
+                           <li><a class="box-btn-slide"  href="#"></a></li>	
+                           <li><a class="box-btn-fullscreen" href="#"></a></li>
+                        </ul>
+                     </div>
+
+                     <div class="box-content">
+                        <div class="callout callout-danger mb-0" role="alert">
+                           Toggle button requires the box content to be wrapped inside a <code>.box-body</code>.
+                        </div>
+                        <div class="box-body">
+                           <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
+                              totam rem aperiam, eaque ipsa quae ab illo
+                               inventore veritatis et quasi architecto beatae v
+                               itae dicta sunt explicabo. Nemo enim ipsam voluptate
+                               m quia voluptas sit aspernatur aut odit aut fugit, sed
+                                quia consequuntur magni dolores eos qui ratione voluptatem seq
+                                ui nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolo
+                                r sit amet, consectetur, adipisci velit, sed quia non numquam eius modi
+                                 tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                        </div>
+                     </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6">
+                     <div class="box">
+                     <div class="box-header">
+                        <h3 class="box-title">Success Message</h3>
+                        <p class="m-0">(Click on image)</p> 
+                     </div>
+                     <div class="box-body pad res-tb-block">
+                        <img src="../../../images/alert/alert3.png" alt="alert" class="model_img img-fluid" id="sa-success">              
+                     </div>
+                     <!-- /.box-body -->
+                     </div>
+                     <!-- /.box -->
+                  </div>
+                  <!-- /.col -->
+               </div>
+               <!-- /.row -->
+            </section>
+            <!-- /.content -->
+         </div>
+      </div>
+
+
+      <!-- jQuery 3 -->
+      <script src="../../../assets/vendor_components/jquery/dist/jquery.min.js"></script>
+      <!-- popper -->
+      <script src="../../../assets/vendor_components/popper/dist/popper.min.js"></script>
+      <!-- Bootstrap 4.1.3-->
+      <script src="../../../assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <!-- DataTables -->
+      <script src="../../../assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>
+      <script src="../../../assets/vendor_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+      <!-- SlimScroll -->
+      <script src="../../../assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+      <!-- FastClick -->
+      <script src="../../../assets/vendor_components/fastclick/lib/fastclick.js"></script>
+      <!-- Unique_Admin App -->
+      <script src="../../js/template.js"></script>
+      <!-- Unique_Admin for demo purposes -->
+      <script src="../../js/demo.js"></script>
+      <!-- This is data table -->
+      <script src="../../../assets/vendor_plugins/DataTables-1.10.15/media/js/jquery.dataTables.min.js"></script>
+      <script src="../../js/pages/data-table.js"></script>  
+      <!-- Sweet-Alert  -->
+      <script src="../../../assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+      <script src="../../../assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js"></script>
+
+   </body>
+</html>

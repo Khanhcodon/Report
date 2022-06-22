@@ -1,0 +1,56 @@
+﻿@model IEnumerable<DocFieldModel>
+@{
+    ViewBag.Title = Localizer("Common.DocField.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.min.js")"></script>
+
+<script type="text/javascript">
+    function deleteDocField(id) {
+        eGovMessage.show(
+            'Việc xóa Lĩnh vực sẽ xóa luôn tất cả dữ liệu liên quan. Bạn có chắc chắn muốn xóa lĩnh vực này?',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListDocFields").blockpanel({ text: egov.resources.notifications.loading, borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListDocFields').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListDocFields').unblockpanel();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span data-res="egov.resources.sitemap.docfield"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/docfield/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div id="divListDocFields">
+        @Html.Partial("_Notifications")
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

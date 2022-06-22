@@ -1,0 +1,108 @@
+﻿@model IEnumerable<OnlineTemplateModel>
+    @{
+        var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+        var listPageSize = ViewBag.ListPageSize as List<int>;
+        var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+
+    }
+    <script>
+        $(function () {
+            $("#tblData").openLink({ urlOpen: '/admin/OnlineTemplate/Edit' });
+        });
+    </script>
+    <table id="tblData" class="table table-bordered table-hover">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="">
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th  style="white-space: nowrap;">
+                    @Ajax.SortLink("Name", Localizer("Common.OnlineTemplate.Index.List.Column.OnlineTemplate"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        onlineTemplateName = ViewBag.Search,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListTemplates",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+                </th>
+                <th class="text-center ">
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                <th class="text-center ">
+                    @Localizer(" Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var onlineTemplate in Model)
+                {
+                    number += 1;
+                    <tr data-id="@onlineTemplate.OnlineTemplateId">
+                        <td>
+                            @number
+                        </td>
+                        <td>
+                            @onlineTemplate.Name
+                        </td>
+                        <td>
+                            @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = onlineTemplate.OnlineTemplateId })
+                        </td>
+                        <td>
+                            <a href="javascript:deleteDocField(@(onlineTemplate.OnlineTemplateId))">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(onlineTemplate.OnlineTemplateId)" style="display: none" action="@Url.Action("Delete", new { Id =onlineTemplate.OnlineTemplateId})" method="POST">
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">
+                        @Localizer("Common.OnlineTemplate.List.NoData")
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <table>
+        <tr>
+            <td class="" colspan="4" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                     onlineTemplateName = ViewBag.Search,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListTemplates",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </table>

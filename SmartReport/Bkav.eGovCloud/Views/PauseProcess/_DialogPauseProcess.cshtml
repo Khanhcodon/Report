@@ -1,0 +1,66 @@
+﻿<style type="text/css">
+    .dialog-south-stopprocess
+    {
+        text-align: right;
+        border: 0;
+        padding: 0;
+    }
+    .dialog-center-stopprocess
+    {
+        border: 0;
+        padding: 0;
+    }
+</style>
+<div id="dialogPauseProcess" style="display: none;">
+    <div class="dialog-center-stopprocess ui-widget-content">
+        <div class="pane-header ui-state-active">
+            Cán bộ dừng xử lý:<b> @(User.Identity.Name)</b></div>
+        <div class="ui-layout-content ui-widget-content">
+            <table id="tblPauseProcess" class="table-main" style="width: 100%">
+                <colgroup>
+                    <col style="text-align: left" />
+                    <col style="text-align: center" />
+                    <col style="width: 80px; text-align: center" />
+                    <col style="width: 80px; text-align: center" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            Hướng dừng xử lý
+                        </th>
+                        <th class="header">
+                            Lý do dừng
+                        </th>
+                        <th class="header">
+                            Số ngày dừng
+                        </th>
+                        <th class="header">
+                            Chọn dừng
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-south-stopprocess ui-widget-content">
+        <input type="button" value="Xác nhận" id="btnConfirmPause" />
+        <input type="button" value="Bỏ qua" id="btnDong" />
+    </div>
+</div>
+<script id="actionPauseTemplate" type="text/x-jquery-tmpl">
+    <tr id="${ID}">
+        <td>${NAME}</td>
+        <td><textarea rows="3" style="width: 98%"/></td>
+        <td><select style="width: 100%">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </td>
+        <td style="text-align: center;vertical-align: middle;"><input type="checkbox" title="Chọn dừng xử lý" /></td>
+    </tr>
+</script>

@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Xem dữ liệu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@*<link href="~/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
+@*<link href="~/assets/vendors/datatables/datatables.min.css" rel="stylesheet" />*@
+<script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+<link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+@*<script src="~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+    <script src="~/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>*@
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span data-res="egov.resources.sitemap.datasource">Xem dữ liệu</span>
+    </div>
+
+    <div class="options">
+        <a class="btn btn-primary btn-xs pull-right ml-3" href="../DataField/@ViewBag.DataId">Xem trường dữ liệu</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-16">
+        <div class="box-body">
+            <table class="table stripe row-border" id="tbl"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var data = @Html.Raw(ViewBag.Data);
+    $(function () {
+        var container = $("#tbl");
+        if(!data || data.length === 0){
+            container.InnerHtml = "Không có dữ liệu";
+            return;
+        }
+        var dimensions = _.keys(data[0]);
+        var option = {};
+        option.columns = [];
+        dimensions.forEach((d, idx) => {
+            option.columns.push({
+                data: d,
+                title: d,
+                width: null,
+                className: null// idx === 0 ? null : 'text-right',
+            });
+        });
+        data.forEach((r, idx) => {
+            r.stt = idx + 1;
+        });
+
+        option = $.extend(true, {}, option, {
+            data: data
+        });
+        container.DataTable(option);
+    });
+</script>

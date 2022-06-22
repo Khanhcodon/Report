@@ -1,0 +1,38 @@
+﻿@model RegisterLicenseModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.License.AddLicense");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span data-res="egov.resources.sitemap.license">Đăng ký bản quyền</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/license/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div>
+    @Html.Partial("_Notifications")
+    <form method="post" action="@Url.Action("Activate")" class="form-horizontal">
+        <div class="form-group">
+            <label class="form-label">Tài khoản khách hàng</label>
+            <div>
+                <input class="form-control" type="text" name="Name" value="@ViewBag.CustomerName" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Mã kích hoạt</label>
+            <div>
+                <input class="form-control" type="text" name="Key" value="@ViewBag.Key"/>
+            </div>
+        </div>
+    </form>
+</div>

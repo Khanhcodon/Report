@@ -1,0 +1,9 @@
+﻿@model BussinessDocFieldDocTypeGroupModel
+@{
+    ViewBag.Title = Localizer("Admin.Title.BussinessDocFieldDocTypeGroup.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+@Html.Partial("_Notifications")
+@Html.Partial("_CreateOrEdit", Model)

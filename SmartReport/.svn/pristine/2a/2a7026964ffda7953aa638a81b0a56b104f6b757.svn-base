@@ -1,0 +1,32 @@
+﻿
+<li class="mdl-list__item mdl-js-ripple-effect {{if isPublicFolder}} publicFolder {{/if}} {{if hasChildren}}hasChildren{{/if}}
+            {{if visible == false}} hidden {{/if}} mail-folder-item" name="${path}" id="${id}">
+    <div class="mdl-list__item--data" name="${path}" id="${id}">
+        <div class="hidden path">${path}</div>
+        <span class="material-icons mdl-list__item-icon">${icon}</span>
+        <span class="node-name">${pathName}</span>
+    </div>
+    {{if children && children.length > 0}}
+    <div>
+        <ul class="mdl-list children" parent-id="${id}">
+            {{each(i, c) children}}
+            <li class="mdl-list__item mdl-js-ripple-effect {{if isPublicFolder}} publicFolder {{/if}} {{if visible == false}} hidden {{/if}} mail-folder-children " name="${path}" id="${id}">
+                <div class="mdl-list__item--data isChildren" name="${path}" id="${id}">
+                    <div class="hidden path">${path}</div>
+                    <span class="material-icons mdl-list__item-icon">folder_open</span>
+                    <span class="node-name">${pathName}</span>
+                </div>
+                {{if children && children.length > 0}}
+                <div>
+                    {{each(i, d) children}}
+
+                    {{/each}}
+                </div>
+                {{/if}}
+            </li>
+
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+</li>

@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.AccountModel>
+
+@{
+    ViewBag.Title = "Danh sách domain";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDomain = ViewBag.AllDomain as IEnumerable<SelectListItem>;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblAccount").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    })
+
+
+    function onBegin() {
+        $("#divListAccount").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListAccount').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListAccount').unblockpanel();
+    }
+
+    function doSubmit(form) {
+        form.submit();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-archive"></i>
+        <span>@Localizer("Setting.ConnectionSetting.Tab.Title")</span>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    @using (Ajax.BeginForm("Search", new AjaxOptions
+    {
+        UpdateTargetId = "divListAccount",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }))
+    {
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="domainId">Cơ quan: </label>
+                <select class="form-control" id="domainId" name="domainId" onchange="doSubmit($(this).parents('form'));">
+                    @if (allDomain != null && allDomain.Any())
+                    {
+                        foreach (var domain in allDomain)
+                        {
+                            <option value="@domain.Value" @(domain.Selected ? "selected" : "")>@domain.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="searchName">Tìm kiếm: </label>
+                <input type="text" name="searchName" id="searchName" value="@ViewBag.SearchName"
+                       class="form-control" style="width: 300px"/>
+            </div>
+            <input type="submit" class="btn btn-primary" value="@Localizer("Common.Category.Submit")" />
+        </div>
+    }
+    <div id="divListAccount">
+        @Html.Partial("_Notifications")
+        @{
+            Html.RenderPartial("PartialList", Model);
+        }
+    </div>
+</div>

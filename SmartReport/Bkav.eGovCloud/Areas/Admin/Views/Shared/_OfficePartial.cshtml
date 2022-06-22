@@ -1,0 +1,65 @@
+﻿@{
+    var domains = ViewBag.Domains as IEnumerable<Bkav.eGovCloud.Entities.Admin.Domain>;
+    var adminPath = "/admin/";
+    var path = HttpContext.Current.Request.Path.ToLower();
+    var id = path.IndexOf("/", path.IndexOf(adminPath) + adminPath.Count() + 1);
+    if (id > 0)
+    {
+        path = path.Substring(0, id);
+    }
+}
+
+<script type="text/javascript">
+    function openSubDomain(url) {
+        // document.location.href = url;
+        $.post("/admin/domain/clearcache", {},
+            function (data) {
+                if (data.success) {
+                    document.location.href = url;
+                }
+            });
+    }
+    $(function () {
+        var currentOffice = $(".officeUrl").filter(function () {
+            return  $(this).children().attr("domain") == "@Request.Url.Host";
+        });
+        $(currentOffice).addClass('active');
+    })
+    //function openSubDomain(domainId) {
+    //    document.location.href = "/admin/domain/changedomain?domainId=" + domainId;
+    //}
+</script>
+
+<div class="btn-group toppad pull-right">
+    <button class="btn dropdown-toggle navbar-tool" data-toggle="dropdown" style="padding-top: 10px;">
+        <i class="icon-cog"></i>
+    </button>
+    <ul class="dropdown-menu">
+        @if (domains != null && domains.Any())
+        {
+            foreach (var domain in domains)
+            {
+                <li class="officeUrl">
+                    <a href='#' domain="@domain.DomainName" onclick="openSubDomain('http://@(domain.DomainName + path)')" title="@(domain.DomainName)">
+                        @if (domain.IsPrimary)
+                        {
+                            <i class="icon-home"></i>
+                        }
+                        else
+                        {
+                            <i class="icon-earth"></i>
+                        }
+                        @(domain.CustomerName)
+                    </a>
+                </li>               
+            }
+            <li class="divider"></li>
+        }
+        <li>
+            <a href="/admin/Setting/ClearCache">
+                <i class="icon-remove2"></i>
+                @Localizer("Common.Home.ClearCache.Label")
+            </a>
+        </li>
+    </ul>
+</div>

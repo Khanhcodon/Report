@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ExportToFile" targetNamespace="http://tempuri.org/ExportToFile.xsd" xmlns:mstns="http://tempuri.org/ExportToFile.xsd" xmlns="http://tempuri.org/ExportToFile.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ExportToFile" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ExportToFile" msprop:Generator_UserDSName="ExportToFile">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataReport" msprop:Generator_TableClassName="DataReportDataTable" msprop:Generator_TableVarName="tableDataReport" msprop:Generator_TablePropName="DataReport" msprop:Generator_RowDeletingName="DataReportRowDeleting" msprop:Generator_RowChangingName="DataReportRowChanging" msprop:Generator_RowEvHandlerName="DataReportRowChangeEventHandler" msprop:Generator_RowDeletedName="DataReportRowDeleted" msprop:Generator_UserTableName="DataReport" msprop:Generator_RowChangedName="DataReportRowChanged" msprop:Generator_RowEvArgName="DataReportRowChangeEvent" msprop:Generator_RowClassName="DataReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DocCode" msprop:Generator_ColumnVarNameInTable="columnDocCode" msprop:Generator_ColumnPropNameInRow="DocCode" msprop:Generator_ColumnPropNameInTable="DocCodeColumn" msprop:Generator_UserColumnName="DocCode" type="xs:string" minOccurs="0" />
+              <xs:element name="CitizenName" msprop:Generator_ColumnVarNameInTable="columnCitizenName" msprop:Generator_ColumnPropNameInRow="CitizenName" msprop:Generator_ColumnPropNameInTable="CitizenNameColumn" msprop:Generator_UserColumnName="CitizenName" type="xs:string" minOccurs="0" />
+              <xs:element name="DateCreated" msprop:Generator_ColumnVarNameInTable="columnDateCreated" msprop:Generator_ColumnPropNameInRow="DateCreated" msprop:Generator_ColumnPropNameInTable="DateCreatedColumn" msprop:Generator_UserColumnName="DateCreated" type="xs:string" minOccurs="0" />
+              <xs:element name="DateAppointed" msprop:Generator_ColumnVarNameInTable="columnDateAppointed" msprop:Generator_ColumnPropNameInRow="DateAppointed" msprop:Generator_ColumnPropNameInTable="DateAppointedColumn" msprop:Generator_UserColumnName="DateAppointed" type="xs:string" minOccurs="0" />
+              <xs:element name="RemainTime" msprop:Generator_ColumnVarNameInTable="columnRemainTime" msprop:Generator_ColumnPropNameInRow="RemainTime" msprop:Generator_ColumnPropNameInTable="RemainTimeColumn" msprop:Generator_UserColumnName="RemainTime" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

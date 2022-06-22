@@ -1,0 +1,62 @@
+﻿@model RoleModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Role.Edit");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#delete").click(function () {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Role.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete").submit();
+                }
+            );
+        });
+    });
+    function submitSaveRole() {
+        if ($("form").find(".input-validation-error").length == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-users3"></i>
+        <span data-res="egov.resources.sitemap.role"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/role/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+<div id="divEditRole">
+    @using (Html.BeginForm())
+    {
+        <div id="tabs" class="bkavegov">
+            @Html.Partial("_Notifications")
+            @Html.Partial("_CreateOrEdit", Model)
+            @Html.AntiForgeryToken()
+        </div>
+    }
+</div>
+<form id="formdelete" style="display: none" action="@Url.Action("Delete", new { Id = Model.RoleId })" method="POST">
+    @Html.AntiForgeryToken()
+</form>

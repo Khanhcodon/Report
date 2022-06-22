@@ -1,0 +1,103 @@
+﻿<div class="supp-receive-main">
+    {{if message}}
+    <span style="font-weight: bold;font-size: 12px; color: #5C5CF7">${message}</span>
+    {{/if}}
+    <div style="margin-bottom: 10px"><strong data-res="egov.resources.document.supplementary.title"></strong></div>
+    {{each model}}
+    <div class="supp-item">
+        <div class="container-fluid">
+            <div class="row">
+                <span class="col-md-12">
+                    - ${UserSendName}:
+                    <span class="comment-${SupplementaryDetailId}">${Comment}</span>
+                </span>
+                <span class="col-md-4 text-right">${DateSend}</span>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+    <div class="supp-info">
+        <div class="paper-fee row">
+            <div class="div-paper col-md-8">
+                <span>
+                    <b><span data-res="egov.resources.document.supplementary.paper">Giấy tờ</span></b>
+                    <a href="#" class="doctypeManager">Quản lý</a>
+                </span>
+                <ul class="ul-papers list-group">
+                    {{each Papers}}
+                    <li class="list-group-item clearfix">
+                        <label>- </label>
+                        <label class="paper-name">${PaperName}</label>
+                        <label class="pull-right">${Amount}</label>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="div-fee col-md-8">
+                <span>
+                    <b><span data-res="egov.resources.document.supplementary.fee">Lệ phí</span></b>
+                </span>
+                <ul class="ul-fees list-group">
+                    {{each Fee}}
+                    <li class="list-group-item clearfix">
+                        <label class="fee-id">- </label>
+                        <label class="fee-name">${FeeName}</label>
+                        <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                        <label class="pull-right">${Price}</label>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <strong data-res="egov.resources.document.supplementary.requiredTitle">Thông tin bổ sung</strong>
+        <span style="color: red; margin-bottom: 5px; margin-left: 20px; display: none">
+            <input type="checkbox" id="IsUnsuccess" {{if Supplementary.IsSuccess == false && Supplementary.UserReceivedId}} checked {{/if}} />
+            <b><label data-res="egov.resources.document.supplementary.noAdditional" for="IsUnsuccess"></label></b>
+        </span>
+    </div>
+    <div>
+        <div class="">
+            <div class="">
+                <p id="suppComment">- ${Supplementary.CommentReceived}</p>
+                <!--<textarea id="suppComment" class="form-control" data-placeholer="egov.resources.document.supplementary.requiredTitle">${Supplementary.CommentReceived}</textarea>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="supp-info">
+        <div class="row">
+            <div class="col-md-10">
+                <div><strong data-res="egov.resources.document.supplementary.newDateAppointed">Tính ngày hẹn trả</strong></div>
+                <div class="supp-type">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <select class="form-control input-sm" id="ddlSuppType" disabled>
+                                <option value="1" data-res="egov.resources.document.supplementary.supplementType.renew" selected></option>
+                                <option value="2" data-res="egov.resources.document.supplementary.supplementType.continue"></option>
+                                <option value="3" data-res="egov.resources.document.supplementary.supplementType.add"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-9">
+                            <span data-res="egov.resources.document.supplementary.dateAppointed"></span>
+                            <b><span class="form-control-static pull-right" id="newDateAppointed">${Supplementary.NewDateAppointed}</span></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div><strong data-res="egov.resources.document.supplementary.printTemplate">Mẫu in</strong></div>
+                <div>
+                    <select class="form-control input-sm" id="ddlTemplate">
+                        {{each PrintTemplates}}
+                        <option value="${TemplateId}">${Name}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

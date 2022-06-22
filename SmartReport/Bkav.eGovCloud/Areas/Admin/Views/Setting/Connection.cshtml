@@ -1,0 +1,250 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.ConnectionSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.Connection");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+    var listMailType = ViewBag.ListMailType as List<SelectListItem>;
+    var order = 0;
+}
+<style>
+    #BmailLink {
+        width: 60%;
+        float: left;
+    }
+
+    #MailType {
+        width: 20%;
+    }
+
+    #tblApps th {
+        text-align: center;
+    }
+
+    #tblApps td {
+        background: white;
+    }
+</style>
+<script>
+    var fixHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+    $(function () {
+        $("#tblApps tbody").sortable({
+            helper: fixHelper,
+            update: function () {
+                var orderArray = [];
+                $('.connectedSortable').each(function () {
+                    var that = $(this);
+                    var order = that.index() + 1;
+                    orderArray.push({
+                        appId: that.attr("appid"),
+                        order: order
+                    })
+                    that.find('td:first').html(order);
+                });
+                $("#AppOrder").val(JSON.stringify(orderArray));
+            }
+        }).disableSelection();
+        $("[name='appsParse.IsBackgroundApp']").change(function () {
+            var appId = $(this).attr("appId");
+            $.ajax({
+                url: '@Url.Action("ChangeBackgroundApp", "Setting")',
+                type: 'post',
+                dataType: 'json',
+                data: { appId: appId },
+                success: function (data) {
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+            });
+        });
+        $("[name='appsParse.IsActived']").change(function () {
+            var appId = $(this).attr("appId");
+            $.ajax({
+                url: '@Url.Action("ChangeActiveApp", "Setting")',
+                type: 'post',
+                dataType: 'json',
+                data: { appId: appId },
+                success: function (data) {
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+            });
+        });
+        $("[name='appsParse.IsDefaultApp']").change(function () {
+            $("[name='appsParse.IsDefaultApp']").not(this).attr("checked", false);
+            var appId = $(this).attr("appId");
+            $.ajax({
+                url: '@Url.Action("ChangeDefaultApp", "Setting")',
+                type: 'post',
+                dataType: 'json',
+                data: { appId: appId },
+                success: function (data) {
+
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+            });
+        });
+        
+
+    })
+</script>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.AppOrder)
+    <table>
+        <tr>
+            <td colspan="2">
+                <b>Các hệ thống được tích hợp</b>
+                
+                <a href="@Url.Action("CreateApp", "Setting")" id="btnNewApp" data-toggle="modal" data-target="#newAppDialog" class="btn btn-success pull-right" title="Thêm mới">
+                    Thêm mới
+                </a> 
+                <br />
+            </td>
+        </tr>
+        @if (Model.AppsParse.Count > 0)
+        {
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <table id="tblApps" class="table table-bordered">
+                            <colgroup>
+                                <col style="width: 50px" />
+                                <col />
+                                <col />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                                <col style="width: 100px" />
+                                <col style="width: 120px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên</th>
+                                    <th>Đường dẫn</th>
+                                    <th>Mặc định</th>
+                                    <th>Chạy ngầm</th>
+                                    <th>Kích hoạt</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appsParse in Model.AppsParse)
+                                {
+                                    order++;
+                                    <tr class="connectedSortable" appid="@appsParse.Id">
+                                        <td align="center">@order</td>
+                                        <td>@appsParse.Title</td>
+                                        <td>@appsParse.AppUrl</td>
+                                        <td align="center">@Html.CheckBoxFor(x => appsParse.IsDefaultApp, new { appid = appsParse.Id })</td>
+                                        <td align="center">@Html.CheckBoxFor(x => appsParse.IsBackgroundApp, new { appid = appsParse.Id })</td>
+                                        <td align="center">@Html.CheckBoxFor(x => appsParse.IsActived, new { appid = appsParse.Id })</td>
+                                        <td align="center">
+                                            <a href="@Url.Action("EditApp", "Setting", new { id = appsParse.Id })" data-toggle="modal" data-target="#editAppDialog">Sửa</a>
+                                            |&nbsp;<a href="@Url.Action("DeleteApp", "Setting", new { id = appsParse.Id })">Xóa</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td style="width:250px;">
+                @Html.LabelFor(model => model.BmailLink)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BmailLink)
+                @Html.DropDownListFor(model => model.MailType, listMailType)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <b>Thông tin xác thực giữa các hệ thống</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOParentDomain)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOParentDomain)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOCookieName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOCookieName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOKeyVersion)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOKeyVersion)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOSecretKey)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOSecretKey)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOExpire)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOExpire)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.UserInfoCookie)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.UserInfoCookie)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BkavSSOCookieUsername)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BkavSSOCookieUsername)
+            </td>
+        </tr>
+    </table>
+}
+<div class="modal" id="newAppDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 600px; height: 350px">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<div class="modal" id="editAppDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" style="width: 600px; height: 350px">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,191 @@
+﻿<form>
+    <div class="form-horizontal" role="form">
+        <div class="form-group form-group-sm">
+            <label for="Compendium" class="col-md-2 control-label">Trích yếu</label>
+            <div class="col-md-14">
+                <input type="text" class="form-control" id="Compendium" placeholder="Từ khóa tìm kiếm theo Trích yếu, số ký hiệu hoặc số đến đi.">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group form-group-sm">
+                    <label for="DocCode" class="col-md-4 control-label" data-res="">
+                        Mã báo cáo
+                    </label>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="DocCode" data-respholder="Mã báo cáo">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group form-group-sm hidden">
+                    <label for="InOutCode" class="col-md-5 control-label" data-res="egov.resources.search.inoutcode"></label>
+                    <div class="col-md-11">
+                        <input type="text" class="form-control" id="InOutCode" data-respholder="egov.resources.search.inoutcode">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden">
+            <div class="form-group form-group-sm">
+                <div class="col-sm-offset-5"></div>
+                <div class="col-md-11">
+                    <input type="checkbox" id="IsMainProces">
+                    <label for="IsMainProcess" class="col-md-5 control-label" data-res="egov.resources.search.inoutcode"></label>
+                </div>
+            </div>
+        </div>
+        <div class="search-advance" style="display: none;">
+            <div class="form-group form-group-sm hidden">
+                <label for="Content" class="col-md-2 control-label" data-res="egov.resources.search.content"></label>
+                <div class="col-md-14">
+                    <textarea class="form-control" id="Content" rows="2" data-respholder="egov.resources.search.content"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group form-group-sm">
+                        <label for="CategoryId" class="col-md-4 control-label" data-res="egov.resources.search.category"></label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="CategoryId" name="CategoryId">
+                                <option value="0">Tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="KeyWord" class="col-md-4 control-label" data-res="egov.resources.search.keyword"></label>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="KeyWord" data-respholder="egov.resources.search.keyword">
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="UrgentId" class="col-md-4 control-label" data-res="egov.resources.search.urgent"></label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="UrgentId"></select>
+
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="CategoryBusinessId" class="col-md-4 control-label" data-res="egov.resources.search.categorybusiness.name">Nghiệp vụ</label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="CategoryBusinessId">
+                                <option value="0" data-res="egov.resources.search.categorybusiness.all">Tất cả</option>
+                                <option value="1" data-res="egov.resources.search.categorybusiness.in">Văn bản đến</option>
+                                <option value="2" data-res="egov.resources.search.categorybusiness.out">Văn bản đi</option>
+                                <option value="4" data-res="egov.resources.search.categorybusiness.one">Hồ sơ một cửa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="StorePrivateId" class="col-md-4 control-label" data-res="egov.resources.search.storeprivate">Sổ văn bản</label>
+                        <div class="col-md-12">
+                            <select class="form-control" id="StorePrivateId">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="StorePrivateId" class="col-md-4 control-label" data-res="egov.resources.search.FromDateStr">Từ ngày</label>
+                        <div class="col-md-12">
+                            <input type="text" id="FromDateStr" name="FromDateStr" class="form-control" style="width: 150px"
+                                   placeholder="dd/mm/yyy" />
+                            <div>
+                                <label for="FromDateStr" generated="true" class="error"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="form-group form-group-sm">
+                        <label for="InOutPlace" class="col-md-5 control-label" data-res="egov.resources.search.InOutPlace">Cơ quan gửi</label>
+                        <div class="col-md-11">
+                            <input type="text" class="form-control" id="InOutPlace" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="OrganizationCreate" class="col-md-5 control-label" data-res="egov.resources.search.OrganizationCreate">Cơ quan ban hành</label>
+                        <div class="col-md-11">
+                            <input type="text" id="OrganizationCreate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="DocFieldId" class="col-md-5 control-label" data-res="egov.resources.search.DocField">Lĩnh vực</label>
+                        <div class="col-md-11">
+                            <select class="form-control" id="DocFieldId">
+                                <option value="0">Tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="UserSuccessId" class="col-md-5 control-label" data-res="egov.resources.search.UserSuccess">Người ký</label>
+                        <div class="col-md-11">
+                            <input type="text" class="form-control" name="UserSuccessId" />
+                            <input type="hidden" id="UserSuccessId" value="0" />
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="CurrentUserId" class="col-md-5 control-label" data-res="egov.resources.search.CurrentUser">Người đang giữ</label>
+                        <div class="col-md-11">
+                            <input type="text" class="form-control" name="CurrentUserId" />
+                            <input type="hidden" value="0" id="CurrentUserId" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="CurrentUserId" class="col-md-5 control-label" data-res="egov.resources.search.ToDateStr">Đến ngày</label>
+                        <div class="col-md-11">
+                            <input type="text" id="ToDateStr" name="ToDateStr" class="form-control" style="width: 150px" placeholder="dd/mm/yyy" />
+                            <div>
+                                <label for="ToDateStr" generated="true" class="error"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal search-button">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+
+                <input type="checkbox" class="checkbox checkbox-inline cbxAdvance" />
+                <span data-res="egov.resources.search.showsearch">
+                    Hiển thị tìm kiếm nâng cao
+                </span>
+            </div>
+            <div class="col-md-3"></div>
+            <input type="submit" class="btn btn-primary btnSearch" value="Tìm kiếm" style="float: right; margin-right: 15px" />
+        </div>
+    </div>
+</form>
+<div class="searchResult">
+    <table class="table table-hover table-main" id="docSearchResult" style="margin-top: 15px">
+        <colgroup>
+            <col style="width: 45px" />
+            <col style="width: 100px" />
+            <col />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <label class="checkbox document-color checkAll">
+                        <input name="checkbox[]" value="" type="checkbox">
+                        <span class="document-color-1"><i class="icon-check glyphicon"></i></span>
+                    </label>
+                </th>
+                <th data-res="egov.resources.search.doccode">Số ký hiệu</th>
+                <th data-res="egov.resources.search.compendium">Trích yếu</th>
+                <th data-res="egov.resources.search.createdate">Ngày khởi tạo</th>
+                <th data-res="egov.resources.search.CurrentUser">Người đang giữ</th>
+                <th data-res="egov.resources.search.status">Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

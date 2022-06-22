@@ -1,0 +1,74 @@
+﻿@model ReportQueryModel
+@{
+    ViewBag.Title = "Truy vấn báo cáo - Chỉnh sửa";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/highline-mysql/codemirror.css" rel="stylesheet" />
+<link href="~/Content/highline-mysql/show-hint.css" rel="stylesheet" />
+
+<script src="~/Content/highline-mysql/codemirror.js"></script>
+<script src="~/Content/highline-mysql/matchbrackets.js"></script>
+<script src="~/Content/highline-mysql/show-hint.js"></script>
+<script src="~/Content/highline-mysql/sql-hint.js"></script>
+<script src="~/Content/highline-mysql/sql.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".tab-form").addClass(" ui-tabs-selected ui-state-active");
+        $(".tab-form").siblings().removeClass(" ui-tabs-selected ui-state-active");
+        $("#IsPrimary, #FormTypeId").attr("disabled", "disabled");
+    });
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span>Truy vấn báo cáo - Chỉnh sửa</span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/ReportQuery/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div class="">
+    <div id="divForm" class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="divList" style="padding-top: 10px;">
+            @using (Html.BeginForm("Edit", "ReportQuery"))
+            {
+                Html.RenderPartial("_CreateOrEdit", Model);
+                @Html.AntiForgeryToken()
+            }
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('Query'), {
+            mode: "text/x-mysql",
+            lineNumbers: true,
+            indentWithTabs: true,
+            smartIndent: true,
+            lineNumbers: true,
+            matchBrackets: true,
+            autofocus: true,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+            hintOptions: {
+                tables: {
+                    users: { name: null, score: null, birthDate: null },
+                    countries: { name: null, population: null, size: null }
+                }
+            }
+        });
+
+    };
+
+</script>

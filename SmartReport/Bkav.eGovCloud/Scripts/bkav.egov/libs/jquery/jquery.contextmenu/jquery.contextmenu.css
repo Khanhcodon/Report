@@ -1,0 +1,381 @@
+/*!
+ * jQuery contextMenu - Plugin for simple contextMenu handling
+ *
+ * Version: git-master
+ *
+ * Authors: Rodney Rehm, Addy Osmani (patches for FF)
+ * Web: http://medialize.github.com/jQuery-contextMenu/
+ *
+ * Licensed under
+ *   MIT License http://www.opensource.org/licenses/mit-license
+ *   GPL v3 http://opensource.org/licenses/GPL-3.0
+ *
+ */
+
+.context-menu-list {
+    margin: 0;
+    padding: 2px;
+    min-width: 120px;
+    display: inline-block;
+    position: absolute;
+    list-style-type: none;
+    background: #fff;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+.context-menu-item {
+    padding: 3px 2px 3px 24px;
+    background-color: #fff;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.context-menu-separator {
+    padding-bottom: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+.context-menu-item > label > input, .context-menu-item > label > textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.context-menu-item.hover {
+    cursor: pointer;
+    background-color: #39F;
+    color: white;
+}
+
+.context-menu-item.disabled {
+    color: #666;
+}
+
+    .context-menu-input.hover, .context-menu-item.disabled.hover {
+        cursor: default;
+        background-color: #EEE;
+    }
+
+.context-menu-submenu:after {
+    content: ">";
+    color: #666;
+    position: absolute;
+    top: 0;
+    right: 3px;
+    z-index: 1;
+}
+
+/* icons
+    #protip:
+    In case you want to use sprites for icons (which I would suggest you do) have a look at
+    http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement 
+    .context-menu-item.icon:before {}
+ */
+.context-menu-item.icon {
+    min-height: 18px;
+    background-repeat: no-repeat;
+    background-position: 4px 2px;
+    -moz-background-size: 16px;
+    -o-background-size: 16px;
+    -webkit-background-size: 16px;
+    background-size: 16px;
+}
+
+.context-menu-item.icon-accept {
+    background-image: url(images/accept.png);
+}
+
+.context-menu-item.icon-cancel {
+    background-image: url(images/cancel.png);
+}
+
+.context-menu-item.icon-edit {
+    background-image: url(images/page_white_edit.png);
+}
+
+.context-menu-item.icon-cut {
+    background-image: url(images/cut.png);
+}
+
+.context-menu-item.icon-copy {
+    background-image: url(images/page_white_copy.png);
+}
+
+.context-menu-item.icon-paste {
+    background-image: url(images/page_white_paste.png);
+}
+
+.context-menu-item.icon-delete {
+    background-image: url(images/page_white_delete.png);
+}
+
+.context-menu-item.icon-add {
+    background-image: url(images/page_white_add.png);
+}
+
+.context-menu-item.icon-add2 {
+    background-image: url(images/add2.png);
+}
+
+.context-menu-item.icon-quit {
+    background-image: url(images/door.png);
+}
+
+.context-menu-item.icon-download {
+    background-image: url(images/download.png);
+}
+
+.context-menu-item.icon-remove {
+    background-image: url(images/delete.png);
+}
+
+.context-menu-item.icon-undo {
+    background-image: url(images/undo.png);
+}
+
+.context-menu-item.icon-openattach {
+    background-image: url(images/mail.png);
+}
+
+.context-menu-item.icon-word {
+    background-image: url(images/ms_word.png);
+}
+
+.context-menu-item.icon-excel {
+    background-image: url(images/ms_excel.png);
+}
+
+.context-menu-item.icon-pdf {
+    background-image: url(images/pdf.png);
+}
+
+.context-menu-item.icon-crystal {
+    background-image: url(images/report.png);
+}
+
+/* vertically align inside labels */
+.context-menu-input > label > * {
+    vertical-align: top;
+}
+
+/* position checkboxes and radios as icons */
+.context-menu-input > label > input[type="checkbox"], .context-menu-input > label > input[type="radio"] {
+    margin-left: -17px;
+}
+
+.context-menu-input > label > span {
+    margin-left: 5px;
+}
+
+.context-menu-input > label, .context-menu-input > label > input[type="text"], .context-menu-input > label > textarea, .context-menu-input > label > select {
+    display: block;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+    .context-menu-input > label > textarea {
+        height: 100px;
+    }
+
+.context-menu-item > .context-menu-list {
+    display: none; /* re-positioned by js */
+    right: -5px;
+    top: 5px;
+}
+
+.context-menu-item.hover > .context-menu-list {
+    display: block;
+}
+
+.context-menu-accesskey {
+    text-decoration: underline;
+}
+
+
+/*Phần bổ sung css cho context menu eGov*/
+
+.context-menu-item.icon-xemvanban {
+    background-image: url(images/document_view.png);
+}
+
+.context-menu-item.icon-suavanban {
+    background-image: url(images/document_edit.png);
+}
+
+.context-menu-item.icon-guiykien {
+    background-image: url(images/document_comments.png);
+}
+
+.context-menu-item.icon-bangiao {
+    background-image: url(images/file_transfer.png);
+}
+
+.context-menu-item.icon-thongbao {
+    background-image: url(images/group_go.png);
+}
+
+.context-menu-item.icon-inphieutrinh {
+    background-image: url(images/printer.png);
+}
+
+.context-menu-item.icon-intomtat {
+    background-image: url(images/printer.png);
+}
+
+.context-menu-item.icon-laylaivanban {
+    background-image: url(images/document_redo.png);
+}
+
+.context-menu-item.icon-ketthucxuly {
+    background-image: url(images/end_process.png);
+}
+
+.context-menu-item.icon-xacnhanxuly {
+    background-image: url(images/confirm.png);
+}
+
+.context-menu-item.icon-xacnhanbangiao {
+    background-image: url(images/confirm.png);
+}
+
+.context-menu-item.icon-capnhattiendo {
+    background-image: url(images/refresh.png);
+}
+
+.context-menu-item.icon-xoakhoiduthao {
+    background-image: url(images/delete.png);
+}
+
+.context-menu-item.icon-dungxuly {
+    background-image: url(images/gear_pause.png);
+}
+
+.context-menu-item.icon-giahanxuly {
+    background-image: url(images/clock_add.png);
+}
+
+.context-menu-item.icon-createdocument {
+    background-image: url(images/document.png);
+}
+
+.context-menu-item.icon-transferdocument {
+    background-image: url(images/file_transfer.png);
+}
+
+.context-menu-item.icon-print {
+    background-image: url(images/printer.png);
+}
+
+.context-menu-item.icon-xinykien {
+    background-image: url(images/document_comments.png);
+}
+
+.context-menu-item.icon-huyvanban {
+    background-image: url(images/document_delete.png);
+}
+
+.context-menu-item.icon-kyduyet {
+    background-image: url(images/kyduyet.png);
+}
+
+/*Bổ sung icon cho các hướng chuyển đặc biệt*/
+
+.context-menu-item.icon-LuuSoVaPhatHanhNoiBo {
+    background-image: url(images/LuuSoVaPhatHanhNoiBo.png);
+}
+
+.context-menu-item.icon-LuuSoNoiBo {
+    background-image: url(images/LuuSoNoiBo.png);
+}
+
+.context-menu-item.icon-LuuSoVaPhatHanhRaNgoai {
+    background-image: url(images/save.png);
+}
+
+.context-menu-item.icon-ChuyenNguoiKhoiTao {
+    background-image: url(images/ChuyenNguoiKhoiTao.png);
+}
+
+.context-menu-item.icon-ChuyenYKienDongGopVbDxl {
+    background-image: url(images/document_comments.png);
+    font-weight: bold;
+    color: Red;
+}
+
+.context-menu-item.icon-TiepTucXuLy {
+    background-image: url(images/continue.png);
+}
+
+.context-menu-item.icon-ChuyenNguoiCoQuyenDongGopYKien {
+    background-image: url(images/ChuyenNguoiCoQuyenDongGopYKien.png);
+    font-weight: bold;
+    color: Red;
+}
+
+.context-menu-item.icon-TiepNhanHoSo {
+    background-image: url(images/newdocument.png);
+    font-weight: bold;
+}
+
+.context-menu-item.icon-TiepNhanHoSoVaTiepTuc {
+    background-image: url(images/newdocument.png);
+    font-weight: bold;
+}
+
+.context-menu-item.icon-CapNhatKetQuaDungXuLy {
+    background-image: url(images/document_refresh.png);
+}
+
+.context-menu-item.icon-ChuyenYKienDongGopVbXinYKien {
+    background-image: url(images/document_comments.png);
+    font-weight: bold;
+    color: Red;
+}
+
+.context-menu-item.icon-ChuyenNguoiGui {
+    background-image: url(images/ChuyenNguoiGui.png);
+}
+
+.context-menu-item.icon-newdocument {
+    background-image: url(images/newdocument.png);
+}
+
+.context-menu-item.icon-attachment1 {
+    background-image: url(images/attachment.png);
+}
+
+.context-menu-item.icon-certificate {
+    background-image: url('images/certificate.png');
+    -moz-background-size: 20px;
+    -o-background-size: 20px;
+    -webkit-background-size: 20px;
+    background-size: 20px;
+    background-position-x: 0px;
+}
+
+.context-menu-item.icon-scan {
+    background-image: url('images/scanner.png');
+}
+
+.context-menu-item.icon-dukienchuyen {
+    background-image: url('images/file_transfer.png');
+}
+
+.context-menu-item.separated {
+    min-height: 1px;
+    border-bottom:1px solid #000;
+}

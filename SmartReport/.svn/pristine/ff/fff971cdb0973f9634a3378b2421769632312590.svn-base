@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.PrintDocumentModel>
+<style type="text/css">
+    .doc-print td.label {
+        padding-left: 10px;
+        font-weight: bold;
+        width: 120px;
+    }
+
+    .doc-print table tr {
+        height: 25px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(".print-group").each(function () {
+        var checkAll = $(this).find(":checkbox[value='all']");
+        var children = $(this).find(".print-group-list :checkbox");
+        egov.utilities.checkbox.checkAndUnCheckAll(checkAll, children);
+    });
+
+    $(".printTemplateList").each(function () {
+        var $this = $(this);
+        var docCopyIds = [parseInt($this.parents(".print-group").find(".print-group-list :checkbox").first().val())];
+        //$this.parents(".print-group").find(".print-group-list :checked").each(function () {
+        //    docCopyIds.push(parseInt($(this).val()));
+        //});
+        $.ajax({
+            url: "@Url.Action("GetPrintByDocCopys")",
+            type: "GET",
+            data: { docCopyIds: JSON.stringify(docCopyIds) },
+            success: function (data) {
+                var prints = JSON.parse(data.success);
+                for (var i = 0; i < prints.length; i++) {
+                    var option = $("<option>");
+                    option.text(prints[i].Name);
+                    option.val(prints[i].TemplateId);
+                    $this.append(option);
+                }
+            },
+            error: function (xhr) {
+                //alert(xhr.statusText);
+            }
+        });
+    });
+</script>
+
+<div class="doc-print">
+    @if (Model.Any())
+    {
+        foreach (var document in Model)
+        {
+        <div class="print-group">
+            <div class="print-group-title">
+                <input type="checkbox" value="all" title="Chọn / bỏ chọn tất cả" />
+                <span>@(document.DocCode + " - " + document.Compendium)</span>
+                <span class="print-template">
+                    <span>Mẫu phiếu in: </span>
+                    <select class="printTemplateList"></select>
+                </span>
+            </div>
+            <div class="print-group-list">
+                @foreach (var docCopy in document.DocumentCopys)
+                { 
+                    <div class="print-list-item">
+                        @if (docCopy.DocumentCopyTypeInEnum == Bkav.eGovCloud.Core.Document.DocumentCopyTypes.XuLyChinh)
+                        {
+                            <input type="checkbox" value="@docCopy.DocumentCopyId"/>
+                            <span class="doc-citizen">Văn bản xử lý chính</span>
+                        }
+                        else
+                        {
+                            <input type="checkbox" value="@docCopy.DocumentCopyId"/>
+                            <span class="doc-citizen">Văn bản đồng xử lý</span>
+                        }
+                        <span class="doc-compendium">@docCopy.UserCurrent.FullName</span>
+                        <span class="doc-time-created">@docCopy.NodeCurrentName</span>
+                    </div>
+                }
+            </div>
+        </div>
+        }
+    }
+    else
+    { 
+        <span>Không có hồ sơ, văn bản nào hợp lệ.</span>
+    }
+</div>

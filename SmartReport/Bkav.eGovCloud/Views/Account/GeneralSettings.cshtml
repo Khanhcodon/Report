@@ -1,0 +1,220 @@
+﻿@model Bkav.eGovCloud.Models.UserSettingModel
+@{
+    Layout = null;
+    var quickView = ViewBag.QuickViewTypes as List<SelectListItem>;
+    var fontSize = ViewBag.FontSizes as List<SelectListItem>;
+    var mudimMethodType = ViewBag.MudimMethodType as List<SelectListItem>;
+    var printers = ViewBag.Printers as List<SelectListItem>;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<style>
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+
+        .bootstrap-tagsinput input {
+            display: none;
+        }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+            return;
+        });
+
+        ///Kiểm tra người dùng  nếu chọn phần trang tải dữ liệu là scroll chuột thì không hiển thị danh sách lấy số bản ghỉ trên 1 trang
+        var isScroll=@(Model.IsLoadPageScroll ? "true" : "false");
+        console.log(isScroll);
+        var isLoadPageScroll = $("#IsLoadPageScroll");
+        var pageShow = $(".pageshow");
+        if (isLoadPageScroll.prop("checked")) {
+            pageShow.hide();
+        } else {
+            pageShow.show();
+        }
+
+        $("input[type='radio'][name='IsLoadPageScroll'][value='True']").click(function () {
+            pageShow.hide();
+            if(isScroll==false){
+                $("#IsChangePageType").val("True");
+            }else{
+                $("#IsChangePageType").val("False");
+            }
+        });
+        $("input[type='radio'][name='IsLoadPageScroll'][value='False']").click(function () {
+            pageShow.show();
+            if(isScroll==true){
+                $("#IsChangePageType").val("True");
+            }else{
+                $("#IsChangePageType").val("False");
+            }
+        });
+        var enumResources = egov.resources.enumResource;
+        $.each($("select.form-control").not("#MudimMethod,#PrinterId"), function(){
+            var resources = enumResources[this.name.toLocaleLowerCase()];
+            $.each($(this).children(), function(){
+                this.textContent = resources[this.textContent.toLocaleLowerCase()];
+            })
+        });
+        $(document).bindResources();
+    })
+</script>
+<div>
+    @using (Ajax.BeginForm("GeneralSettings", "Account", new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "menuRight",
+        OnSuccess = "onSuccess"
+    }, new { refreshPage = true }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Thiết lập chung: xử lý văn bản, tìm kiếm,...</div>
+            <div class="panel-body">
+                <div>
+                    <div style="font-weight: bold;color:blue">
+                        Thiết lập xử lý văn bản
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.HasHideLuuSo)
+                            <span>Không hiển thị <b>Lưu Sổ</b> khi kết thúc văn bản.</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsSaveOpenTab)
+                            <span>Lưu các văn bản đang mở cho phiên làm việc kế tiếp.</span>
+                        </label>
+                    </div>                   
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.AlwaysDisplayFullDocumentInfo)
+                            <span>Luôn hiển thị giao diện <b>Đầy Đủ</b> khi mở văn bản xử lý.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="font-weight:bold;color:blue">Thiết lập bàn giao văn bản</div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.IgnoreConfirmRelation)
+                            <span>Luôn gửi các văn bản liên quan khi chuyển văn bản đi.</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.HasShowDongGui)
+                            <span>Luôn hiển thị phần <b>Đồng Gửi</b> khi bàn giao văn bản.</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.DisplayPopupTransferTheoLo)
+                            <span>Hiển thị giao diện nhập ý kiến khi chuyển văn bản theo lô.</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.ShowTranferFormWhenQuickAction)
+                            <span>Hiển thị giao diện bàn giao khi chọn hướng chuyển nhanh: chuyển người khởi tạo, chuyển người gửi.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <b style="color:blue">Thiết lập tìm kiếm</b>
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.FindProcessDocument)
+                            <p>Chỉ tìm kiếm văn bản có tham gia xử lý.</p>
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label data-res="egov.resources.setting.general.QuickView" style="color:blue"></label>      
+                    @*<div>Vị trí hiển thị thông tin văn bản trên danh sách</div>*@
+                    <div class="radio hidden">
+                        <label>
+                            @Html.RadioButtonFor(model => model.QuickView, 0, Model.QuickView == 0 ? new { @checked = "checked" } : null)
+                            <span>Không hiển thị</span>
+                        </label>
+                        &nbsp;
+                        <label>
+                            @Html.RadioButtonFor(model => model.QuickView, 2, Model.QuickView == 2 ? new { @checked = "checked" } : null)
+                            <span>Hiển thị bên dưới</span>
+                        </label>                        &nbsp;
+                        <label class="hidden">
+                            @Html.RadioButtonFor(model => model.QuickView, 3, Model.QuickView == 3 ? new { @checked = "checked" } : null)
+                            <span>Hiển thị bên phải</span>
+                        </label>
+                    </div>
+                    <div>Nội dung thông tin văn bản trên danh sách</div>
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(model => model.isFullQuickView, true, Model.isFullQuickView ? new { @checked = "" } : null)
+                            <span data-res="egov.resources.setting.general.showDetailDocument"></span>
+                        </label>
+                        &nbsp;
+                        <label>
+                            @Html.RadioButtonFor(model => model.isFullQuickView, false, !Model.isFullQuickView ? new { @checked = "" } : null)
+                            <span data-res="egov.resources.setting.general.showQuickView"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <b style="color:blue">Thiết lập khác</b>
+
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.AutoInsertDocumentInfoScan)
+                            <p>Sử dụng chế độ tiếp nhận văn bản đến thông minh (beta).</p>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="hidden">
+                    <label data-res="egov.resources.setting.general.MudimMethod"></label>
+                    <div class="radio">
+                        @Html.DropDownListFor(model => model.MudimMethod, mudimMethodType, new { @class = "form-control", @style = "width:200px" })
+                    </div>
+                </div>
+
+                <div class="form-group hidden">
+                    <label data-res="egov.resources.setting.general.FontSize"></label>
+                    @Html.DropDownListFor(model => model.FontSize, fontSize, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group hidden">
+                    <label data-res="egov.resources.setting.general.DefaultPageSizeHome"></label>
+                    @Html.TextBoxFor(model => model.DefaultPageSizeHome, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DefaultPageSizeHome)
+                </div>
+                <div class="form-group pageshow hidden">
+                    <label data-res="egov.resources.setting.general.ListPageSizeHome"></label>
+                    @Html.TextBoxFor(model => model.ListPageSizeHome, new { @class = "form-control" })
+                </div>
+
+                <div class="checkbox hidden">
+                    <label>
+                        @Html.CheckBoxFor(model => model.ViewDocInPopUp)
+                        <p data-res="egov.resources.setting.general.ViewDocInPopUp"></p>
+                    </label>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<FormGroupModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblFormGroup").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblFormGroup").openLink({ urlOpen: '/admin/FormGroup/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+        $('tr th').css("line-height", "2.5");
+    })
+</script>
+<table class="table-main table" id="tblFormGroup" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("FormGroupName", Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.FormGroupName"),
+                                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                                "SortAndPaging", "sort asc", "sort desc",
+                                new
+                                    {
+                                        page = sortAndPage.CurrentPage,
+                                        pageSize = sortAndPage.PageSize,
+                                        name = ViewBag.Name,
+                                    },
+                                new AjaxOptions
+                                    {
+                                        UpdateTargetId = "divListFormGroup",
+                                        OnBegin = "onBegin",
+                                        OnSuccess = "onSuccess",
+                                        OnFailure = "onFailure"
+                                    })
+            </th>
+
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var formGroup in Model)
+            {
+                number += 1;
+            <tr data-id="@formGroup.FormGroupId">
+                <td>@number
+                </td>
+                <td>@formGroup.FormGroupName
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Edit.Button"), "Edit", new { id = formGroup.FormGroupId })
+                </td>
+                <td>
+                    <a href="javascript:deleteIncrease(@(formGroup.FormGroupId))">@Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(formGroup.FormGroupId)" style="display: none" action="@Url.Action("Delete", new { Id = formGroup.FormGroupId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">@Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

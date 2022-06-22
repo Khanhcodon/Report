@@ -1,0 +1,26 @@
+﻿<ul class="bottommenu list-group menu-items">
+    <li href="javascript:void(0)" class="list-group-item bmail" data-theme="bmail-theme" data-ng-app="bmail">
+        <span class="icon icon-mail5"></span>
+        <span class="hidden-xs">Tin điều hành</span>
+    </li>
+    <li href="javascript:void(0)" class="list-group-item document" data-theme="egov-theme" data-ng-app="documents">
+        <span class="icon icon-folder-open"> </span>
+        <span class="hidden-xs">Xử lý văn bản</span>
+    </li>
+    <li href="javascript:void(0)" class="list-group-item chat" data-theme="chat-theme" data-ng-app="chat">
+        <span class="icon icon-chat"></span>
+        <span class="hidden-xs">Chat</span>
+    </li>
+    <li href="javascript:void(0)" class="list-group-item calendar" data-theme="calendar-theme" data-ng-app="calendar">
+        <span class="icon icon-calendar"></span>
+        <span class="hidden-xs">Lịch làm việc</span>
+    </li>
+    <li href="javascript:void(0)" class="list-group-item calendar" data-theme="calendar-theme" data-ng-app="calendar">
+        <span class="icon icon-users"></span>
+        <span class="hidden-xs">Sổ liên lạc</span>
+    </li>
+    <li href="javascript:void(0)" class="list-group-item calendar" data-theme="calendar-theme" data-ng-app="calendar">
+        <span class="icon icon-statistics"></span>
+        <span class="hidden-xs">Thống kê</span>
+    </li>
+</ul>

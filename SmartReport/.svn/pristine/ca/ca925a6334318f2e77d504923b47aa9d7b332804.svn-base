@@ -1,0 +1,10 @@
+﻿
+<div class="commentMobilePage trans trans-right display">
+    <div class="mdl-layout__header mdl-layout__header--seamed" style="display: block;">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="backDocumentPage" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+        </div>
+    </div>    
+</div>

@@ -1,0 +1,122 @@
+﻿.icon {
+    font-size: 14px!important;
+}
+
+.icon-search:before {
+    content: "\e67f";
+}
+
+.icon-important:before {
+    content: "\e034";
+}
+
+.icon-refresh:before {
+    content: "\e031";
+}
+
+.icon-alert:before {
+    content: "\e122";
+}
+
+.icon-book:before {
+    content: "\e7c7";
+}
+
+.icon-sendcomment:before {
+    content: "\270f";
+}
+
+
+
+
+.icon-xemvanban {
+    background: url('/Content/Images/Toolbar/24x24/xemvanban.png') no-repeat center;
+}
+
+.icon-suavanban {
+    background: url('/Content/Images/Toolbar/24x24/suavanban.png') no-repeat center;
+}
+
+.icon-guiykien {
+    background: url('/Content/Images/Toolbar/24x24/guiykien.png') no-repeat center;
+}
+
+.icon-xinykien {
+    background: url('/Content/Images/Toolbar/24x24/xinykien.png') no-repeat center;
+}
+
+.icon-bangiao {
+    background: url('/Content/Images/Toolbar/24x24/bangiao.png') no-repeat center;
+}
+
+.icon-thongbao {
+    background: url('/Content/Images/Toolbar/24x24/thongbao.png') no-repeat center;
+}
+
+.icon-laylaivanban {
+    background: url('/Content/Images/Toolbar/24x24/laylaivanban.png') no-repeat center;
+}
+
+.icon-xacnhanbangiao {
+    background: url('/Content/Images/Toolbar/24x24/xacnhanbangiao.png') no-repeat center;
+}
+
+.icon-xacnhanxuly {
+    background: url('/Content/Images/Toolbar/24x24/xacnhanxuly.png') no-repeat center;
+}
+
+.icon-yeucaubosung {
+    background: url('/Content/Images/Toolbar/24x24/yeucaubosung.png') no-repeat center;
+}
+
+.icon-tiepnhanbosung {
+    background: url('/Content/Images/Toolbar/24x24/tiepnhanbosung.png') no-repeat center;
+}
+
+.icon-kyduyet {
+    background: url('/Content/Images/Toolbar/24x24/kyduyet.png') no-repeat center;
+}
+
+.icon-ketthucxuly {
+    background: url('/Content/Images/Toolbar/24x24/ketthucxuly.png') no-repeat center;
+}
+
+.icon-huyvanban {
+    background: url('/Content/Images/Toolbar/24x24/huyvanban.png') no-repeat center;
+}
+
+.icon-capnhatketquaxulycuoi {
+    background: url('/Content/Images/Toolbar/24x24/capnhatketquaxulycuoi.png') no-repeat center;
+}
+
+.icon-inphieutrinh {
+    background: url('/Content/Images/Toolbar/24x24/inphieutrinh.png') no-repeat center;
+}
+
+.icon-intomtat {
+    background: url('/Content/Images/Toolbar/24x24/intomtat.png') no-repeat center;
+}
+
+.icon-capnhattiendo {
+    background: url('/Content/Images/Toolbar/24x24/capnhattiendo.png') no-repeat center;
+}
+
+.icon-xoakhoiduthao {
+    background: url('/Content/Images/Toolbar/24x24/xoakhoiduthao.png') no-repeat center;
+}
+
+.icon-contextheodoi {
+    background: url('/Content/Images/Toolbar/24x24/contextheodoi.png') no-repeat center;
+}
+
+.icon-dungxuly {
+    background: url('/Content/Images/Toolbar/24x24/dungxuly.png') no-repeat center;
+}
+
+.icon-giahanxuly {
+    background: url('/Content/Images/Toolbar/24x24/giahanxuly.png') no-repeat center;
+}
+
+.icon-chitietvanban {
+    background: url('/Content/Images/Toolbar/24x24/chitietvanban.png') no-repeat center;
+}

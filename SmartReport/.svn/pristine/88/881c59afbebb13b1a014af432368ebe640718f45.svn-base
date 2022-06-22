@@ -1,0 +1,173 @@
+﻿@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as LogSearchModel;
+    var logs = ViewBag.Logs as IEnumerable<LogModel>;
+}
+<script type="text/javascript">
+
+    $(function () {
+        $("#tblLog").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblLog").openLink({ urlOpen: '/admin/Log/View' });
+
+        $('#tblLog input[name=logids]').change(function () {
+            if (this.checked) {
+                if ($("#formdelete input[value=" + this.value + "]").length === 0) {
+                    $("#formdelete").append('<input type="hidden" name="logids" value="' + this.value + '" />');
+                }
+                if ($("#tblLog input[name=logids]:checked").length === $('#tblLog input[name=logids]').length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#formdelete input[value=" + this.value + "]").remove();
+                $("#checkAll").prop('checked', false);
+            }
+        });
+
+        $("#checkAll").change(function () {
+            $('#tblLog input[name=logids]').prop('checked', this.checked);
+            if (this.checked) {
+                $('#tblLog input[name=logids]').each(function () {
+                    $("#formdelete").append('<input type="hidden" name="logids" value="' + this.value + '" />');
+                });
+            } else {
+                $("#formdelete input[name=logids]").remove();
+            }
+        });
+    });
+
+</script>
+<form id="formdelete" style="display:none" action="@Url.Action("DeleteCheckBox")" method="POST">
+    @Html.AntiForgeryToken()
+</form>
+
+<table class="table-main table" id="tblLog">
+    <colgroup>
+        <col style="width: 50px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col/>
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Log.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Common.Log.Index.List.Column.LogType")
+            </th>
+            <th class="header">
+                @Localizer("Common.Log.Index.List.Column.IpAddress")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("ShortMessage", Localizer("Common.Log.Index.List.Column.ShortMessage"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    toDate = search.ToDate,
+                    fromDate = search.FromDate
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divLogs",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="header">
+                @Ajax.SortLink("CreatedOnDate", Localizer("Common.Log.Index.List.Column.CreatedOnDate"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    toDate = search.ToDate,
+                    fromDate = search.FromDate
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divLogs",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="header">
+                @Localizer("Common.Log.Index.List.Column.View")
+            </th>
+            <th>
+                <input type="checkbox" id="checkAll" data-restitle="egov.resources.buttons.selectAll" title="Chọn tất" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (logs != null && logs.Any())
+        {
+            foreach (var log in logs)
+            {
+                number += 1;
+                <tr data-id="@log.LogId">
+                    <td>@number
+                    </td>
+                    <td>@log.LogTypeValue
+                    </td>
+                    <td>@log.IpAddress
+                    </td>
+                    <td>@log.ShortMessage
+                    </td>
+                    <td>@log.CreatedOnDate.ToString("dd/MM/yyyy hh:mm:ss tt")
+                    </td>
+                    <td align="center">
+                        @Html.ActionLink(Localizer("Common.Log.Index.List.Column.View.Button"), "View", new { Id = log.LogId })
+                    </td>
+                    <td align="center">
+                       <input type="checkbox" name="logids" value="@log.LogId" />
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.notifications.nolog">
+                    Không có nhật ký nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>@Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  toDate = search.ToDate,
+                                  fromDate = search.FromDate,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divLogs",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)</td>
+        </tr>
+    </tfoot>
+</table>
+

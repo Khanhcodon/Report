@@ -1,0 +1,161 @@
+﻿@model Bkav.eGovCloud.Models.DatabaseSettingModel
+@{
+    ViewBag.Title = "Database Settings";
+    Layout = null;
+}
+
+<style type="text/css">
+    .header {
+        background-image: url(../../Content/Images/top_bg.PNG);
+        background-repeat: no-repeat;
+        height: 100px;
+    }
+
+    .hint {
+        color: #808080;
+        font-size: 11px;
+    }
+</style>
+<link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("input[name='ConfigType']").click(function () {
+            var type = $(this).val();
+            if (type === "1") {
+                $(".connectionString").show();
+                $(".connectionStringDetail").hide();
+            } else {
+                $(".connectionString").hide();
+                $(".connectionStringDetail").show();
+            }
+        });
+    });
+
+    function submit() {
+        var hasResetDb = $("#OverrideCurrentData").prop("checked");
+        if (hasResetDb) {
+            if (confirm("Lựa chọn 'Reset dữ liệu database' sẽ xóa hết tất cả dữ liệu trong cơ sở dữ liệu hiện tại của bạn, bạn có chắc muốn thực hiện điều này?")) {
+                $("form").submit();
+            }
+        } else {
+            $("form").submit();
+        }
+        return false;
+    }
+</script>
+
+<div class="header"></div>
+<div class="container">
+    <h3>Thiết lập kết nối cơ sở dữ liệu
+    </h3>
+
+    <form class="form-horizontal" method="post">
+        <div class="connectionStringDetail">
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Tên cơ quan</label>
+                <div class="col-md-13">
+                    <input type="text" name="OfficeName" id="OfficeName" class="form-control input-sm" placeholder="" value="@Model.OfficeName" />
+                    <span class="hint">Tên cơ quan, vd: Bkav Corporation</span>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Domain mặc định</label>
+                <div class="col-md-13">
+                    <input type="text" name="DomainName" id="DomainName" class="form-control input-sm" placeholder="" value="@Model.DomainName" />
+                    <span class="hint">Domain đăng nhập mặc định của người dùng, vd: bkav.com</span>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Địa chỉ server</label>
+                <div class="col-md-13">
+                    <input type="text" name="Server" id="Server" class="form-control input-sm" placeholder="Tên hoặc Ip server, vd: localhost" value="@Model.Server" />
+                </div>
+            </div>
+            @*<div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Loại CSDL</label>
+                <div class="col-md-13">
+                    <select name="DbProvider" id="DbProvider" class="form-control input-sm">
+                        <option value="MySql">MySql</option>
+                        <option value="SqlServer">SqlServer</option>
+                        <option value="Oracle">Oracle</option>
+                    </select>
+                </div>
+            </div>*@
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Cổng</label>
+                <div class="col-md-13">
+                    <input type="text" name="Port" id="Port" class="form-control" placeholder="Cổng kết nối" value="@Model.Port" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Tài khoản database</label>
+                <div class="col-md-13">
+                    <input type="text" name="Username" id="Username" class="form-control" placeholder="Tên truy cập, vd: admin" value="@Model.Username" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Mật khẩu</label>
+                <div class="col-md-13">
+                    <input type="password" name="Password" id="Password" class="form-control" placeholder="Mật khẩu truy cập" value="@Model.Password" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Tên CSDL</label>
+                <div class="col-md-13">
+                    <input type="text" name="Database" id="Database" class="form-control" placeholder="Tên cơ sở dữ liệu" value="@Model.Database" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Tài khoản quản trị</label>
+                <div class="col-md-13">
+                    <input type="text" name="DefaultAdmin" id="DefaultAdmin" class="form-control" placeholder="Tài khoản quản trị mặc định, vd: admin" value="@Model.DefaultAdmin" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label col-md-3">Mật khẩu quản trị</label>
+                <div class="col-md-13">
+                    <input type="password" name="DefaultPass" id="DefaultPass" class="form-control" placeholder="Mật khẩu tài khoản quản trị" value="@Model.DefaultPass" />
+                </div>
+            </div>
+            @if (IsQuanTriTapTrungEdition)
+            {
+                <div class="form-group form-group-sm">
+                    <label class="form-label col-md-3">Tên CSDL eGov mặc định</label>
+                    <div class="col-md-13">
+                        <input type="text" name="DefaulteGovDatabase" id="DefaulteGovDatabase" class="form-control" placeholder="Cơ sở dữ liệu mặc định cho eGov" value="@Model.DefaulteGovDatabase" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-offset-3 col-md-13">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="IsCreateDatabaseIfNotExist" id="IsCreateDatabaseIfNotExist" value="true">
+                        Tự động tạo database nếu không tồn tại.
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-offset-3 col-md-13">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="OverrideCurrentData" id="OverrideCurrentData" value="true">
+                        Reset dữ liệu database.
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div>
+            @ViewBag.Error
+        </div>
+    </form>
+    <div class="form-group form-group-sm">
+        <div class="col-md-offset-3 col-md-13">
+            <button type="button" class="btn btn-primary btn-sm" onclick="return submit();">Lưu thiết lập</button>
+        </div>
+    </div>
+</div>

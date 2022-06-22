@@ -1,0 +1,52 @@
+﻿@model IEnumerable<PaperModel>
+    @{
+        Layout = null;
+    }
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/util/bt.util.string.min.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#SearchKey").focus();
+
+            $("#SearchKey").keyup(function () {
+                var term = $(this).val().toLowerCase().removeVietnamChars();
+                if (term == "") {
+                    $(".paper-name").parents("tr").show();
+                    return;
+                }
+                $(".paper-name").each(function () {
+                    var text = $(this).text().toLowerCase().removeVietnamChars();
+                    if (text.indexOf(term) >= 0) {
+                        $(this).parents("tr").show();
+                    } else {
+                        $(this).parents("tr").hide();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <div>
+        <input type="text" id="SearchKey" name="SearchKey" class="form-control" />
+    </div>
+    <br />
+    <table id="tblPaper" class="table table-bordered table-hover">
+        <colgroup>
+            <col style="width:50px" />
+            <col />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>@Localizer("Bkav.eGovCloud.Areas.Admin.DisplayPapers.Select")</th>
+                <th>@Localizer("Bkav.eGovCloud.Areas.Admin.DisplayPapers.Name")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var paper in Model)
+            {
+                <tr>
+                    <td align="center"><input type="checkbox" data-id="@paper.PaperId" data-name="@paper.PaperName" class="chose" /></td>
+                    <td class="paper-name" value="@paper.PaperName">@paper.PaperName</td>
+                </tr>
+            }
+        </tbody>
+    </table>

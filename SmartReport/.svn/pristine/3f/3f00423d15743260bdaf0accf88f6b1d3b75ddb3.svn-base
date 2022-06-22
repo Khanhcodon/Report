@@ -1,0 +1,12 @@
+﻿[
+    {
+        "icon": "/Content/bkav.egov/emoticons/yahoo/18.gif",
+        "name": "yahoo",
+        "path": "~/Content/bkav.egov/emoticons/yahoo/"
+    },
+    {
+        "icon": "/Content/bkav.egov/emoticons/yahoo/04.gif",
+        "name": "eOffice",
+        "path": "~/Content/bkav.egov/emoticons/yahoo/"
+    }
+]

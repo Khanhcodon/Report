@@ -1,0 +1,2699 @@
+﻿{
+  "code": 200,
+  "msg": "OK",
+  "data": {
+    "units": [
+      {
+        "ParentID": "7e83842e-de6e-4c5a-bdf5-597443d48ac9",
+        "ID": "005d94c4-41c6-485d-8bf9-571113cb6bfa",
+        "ShortName": "",
+        "Name": "Ban lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/Bộ chỉ huy quân sự/Ban lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "0174e6e5-c256-4ab2-bd5e-cfc2e09ddf01",
+        "ShortName": "",
+        "Name": "Phòng Lao động - Việc làm - Tiền lương - Bảo hiểm xã hội",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Lao động - Việc làm - Tiền lương - Bảo hiểm xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "018d1ec3-d9db-4666-b8d6-6f705d7f4185",
+        "ShortName": "",
+        "Name": "Ban quản lý các công trình giáo dục",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Ban quản lý các công trình giáo dục",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ShortName": "",
+        "Name": "TP Hạ Long",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ShortName": "",
+        "Name": "Sở Công thương",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1dba2927-2321-42b9-ab91-aed72cb9bdc7",
+        "ID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ShortName": "",
+        "Name": "Phòng, Ban chức năng",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "0317aba5-1dff-44ee-9519-3f9438ca244a",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "036f0cdd-adde-4166-ac7f-41047dfec11c",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "04136717-8731-414a-a566-f88486b30d7d",
+        "ShortName": "",
+        "Name": "Cơ sở Bảo trợ, chăm sóc trẻ em có hoàn cảnh đặc biệt Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Cơ sở Bảo trợ, chăm sóc trẻ em có hoàn cảnh đặc biệt Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "0448abd0-c7bb-422a-ba53-768d812c9db3",
+        "ShortName": "",
+        "Name": "Trung tâm Dịch vụ việc làm Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Trung tâm Dịch vụ việc làm Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "04f50ca5-8c2e-412b-8b84-355f2810adff",
+        "ShortName": "",
+        "Name": "Phòng Hạ tầng kỹ thuật và Phát triển đô thị",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Phòng Hạ tầng kỹ thuật và Phát triển đô thị",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "056cfbe5-60ad-4fc9-8a27-006571f87ada",
+        "ShortName": "",
+        "Name": "Trung tâm Công nghệ thông tin và Truyền thông",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Trung tâm Công nghệ thông tin và Truyền thông",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "06a075af-8fa0-4f33-91d8-d18f6bbc910a",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ShortName": "",
+        "Name": "Tỉnh ủy",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "0927ff43-3820-4546-b7d3-44ac985fc49c",
+        "ShortName": "",
+        "Name": "Phòng Người có công",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Người có công",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "09889ea8-4213-4881-bc2d-76d78bef9f82",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "0a2c246d-49be-467a-8e7b-6cf64302b3bc",
+        "ShortName": "",
+        "Name": "Chi cục bảo vệ môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Chi cục bảo vệ môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "0a76227f-fe18-4fec-940d-54ba5b1d99a8",
+        "ShortName": "",
+        "Name": "Phòng Thư ký - Tổng hợp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Thư ký - Tổng hợp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "0ac3b55f-92d5-48fa-b4a3-ad0a185c62dc",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục Tiểu học",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Giáo dục Tiểu học",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "0aedca01-cda7-400e-8ba5-c61327a94299",
+        "ShortName": "",
+        "Name": "Phòng quản lý đo đạc Bản đồ và Viễn thám",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Phòng quản lý đo đạc Bản đồ và Viễn thám",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "0c575c43-8096-4676-bc85-09f3987b999f",
+        "ShortName": "",
+        "Name": "Phòng Kế hoạch-Phát triển Tài nguyên Du lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Phòng Kế hoạch-Phát triển Tài nguyên Du lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "0d0d7ae8-d9b8-4845-b73c-c094c742eaf7",
+        "ShortName": "",
+        "Name": "Phòng Kế hoạch - Tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Kế hoạch - Tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "0dcd5423-209f-4b02-a872-8ec44e5010ef",
+        "ShortName": "",
+        "Name": "Phòng Tài chính - Kế hoạch",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Tài chính - Kế hoạch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "0fc423ff-58ee-4e29-9079-0053510a5720",
+        "ShortName": "",
+        "Name": "Phòng tài chính doanh nghiệp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Phòng tài chính doanh nghiệp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "1125d977-b463-46fb-874a-d64775808ab2",
+        "ShortName": "",
+        "Name": "Thường trực Đảng ủy",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Thường trực Đảng ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "1293d812-b62c-432a-976e-32d2e969f403",
+        "ShortName": "",
+        "Name": "Phòng Tài nguyên nước - Khoáng sản và Biến đổi khí hậu",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Phòng Tài nguyên nước - Khoáng sản và Biến đổi khí hậu",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "1404a27d-fdae-45b1-94ea-5c10f307d14d",
+        "ShortName": "",
+        "Name": "Trung tâm Bảo trợ xã hội Quảng Ninh Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Trung tâm Bảo trợ xã hội Quảng Ninh Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "15a6a100-91de-4989-88f5-d08c8c5971e0",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "",
+        "ID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ShortName": "TQN",
+        "Name": "Tỉnh Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "172c4e67-2367-42fd-b189-8b8074e7c27b",
+        "ShortName": "",
+        "Name": "Phòng nghiệp vụ Dược",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Phòng nghiệp vụ Dược",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "175dbf1c-10e7-45ac-8be1-1395b33879ae",
+        "ShortName": "",
+        "Name": "Phòng Cải cách hành chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Phòng Cải cách hành chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "17f84928-a0a6-4573-8f05-f1cae345ac02",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức – Hành chính",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Tổ chức – Hành chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "cd862507-feae-4529-a553-78a8b03c1cb8",
+        "ID": "1896b146-6701-49aa-8cec-9851e3d439d8",
+        "ShortName": "",
+        "Name": "Thường trực Liên hiệp Hội",
+        "FullName": "Tỉnh Quảng Ninh/Liên hiệp các hội khoa học và kỹ thuật/Thường trực Liên hiệp Hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "18a4ffbf-0518-496e-88b8-cb8c033b8f01",
+        "ShortName": "",
+        "Name": "Phòng nghiệp vụ TDTT",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Phòng nghiệp vụ TDTT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "1a8e601d-caa1-4eb0-b152-378600e51250",
+        "ShortName": "",
+        "Name": "Phòng Thanh tra Thống kê",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Thanh tra Thống kê",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ShortName": "",
+        "Name": "Sở GTVT",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "1b60a2e7-3575-4f5d-aadf-82ac91185da8",
+        "ShortName": "",
+        "Name": "Phòng Bổ trợ tư pháp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Bổ trợ tư pháp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "1bbf3630-4e97-4704-bee0-ae3994fa5831",
+        "ShortName": "",
+        "Name": "Lãnh đạo sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Lãnh đạo sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ShortName": "",
+        "Name": "UBND",
+        "FullName": "Tỉnh Quảng Ninh/UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ShortName": "",
+        "Name": "Sở NN & PTNT",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9e52142-deac-455b-8cb9-6bc11db95fc3",
+        "ID": "1cba7d81-1b7d-4b48-8d51-2b4d23e6e1b4",
+        "ShortName": "",
+        "Name": "Ban lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/Cục hải quan/Ban lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "1d517fc6-2c56-446e-a7d1-0fd2af4cec9a",
+        "ShortName": "",
+        "Name": "Nhà khách Văn phòng UBND tỉnh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Nhà khách Văn phòng UBND tỉnh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "1dba2927-2321-42b9-ab91-aed72cb9bdc7",
+        "ShortName": "",
+        "Name": "Thành phố Móng Cái",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ShortName": "",
+        "Name": "Kho bạc nhà nước",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "203ae326-d865-4c1c-95fa-3203e4c187aa",
+        "ShortName": "",
+        "Name": "Phòng Lao động TBXH",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Lao động TBXH",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "2191ee8f-5e8c-47f6-9207-5c177295b338",
+        "ShortName": "",
+        "Name": "Trung tâm Kỹ thuật Tiêu chuẩn Đo lường Chất lượng - Chi cục TĐC",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Trung tâm Kỹ thuật Tiêu chuẩn Đo lường Chất lượng - Chi cục TĐC",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "21ab0cc1-27f4-43e2-bad6-3e970aae57d4",
+        "ShortName": "",
+        "Name": "Phòng Kế hoạch, Tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Phòng Kế hoạch, Tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ShortName": "",
+        "Name": "Sở Tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ShortName": "",
+        "Name": "Sở Kế hoạch và Đầu tư",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "2364dda5-e539-4272-93c8-a4f436b288e7",
+        "ShortName": "",
+        "Name": "Ban Lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/Ban Lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "25c1a3f2-acfe-4120-8c4a-866924c81bd3",
+        "ShortName": "",
+        "Name": "Văn Phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Văn Phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "25d2e57b-6af2-4d51-b207-8e88873f875c",
+        "ShortName": "",
+        "Name": "Phòng Thống kê Tổng Hợp",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Thống kê Tổng Hợp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "2627b945-1672-4192-b136-86b85cceb363",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ShortName": "",
+        "Name": "Sở Y tế",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "282f46a8-0d3d-4a36-a872-af5b79847035",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế và Vật liệu xây dựng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Phòng Kinh tế và Vật liệu xây dựng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "28960eee-c514-4501-a01a-ce7b80522169",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức cán bộ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Phòng Tổ chức cán bộ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e6ed3367-d12b-47ed-ab06-ef724a6a9be7",
+        "ID": "297ad582-7f4b-4747-8256-87ac7da8092a",
+        "ShortName": "",
+        "Name": "Ban Chấp hành",
+        "FullName": "Tỉnh Quảng Ninh/Hội bảo trợ Người khuyết tật/Ban Chấp hành",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "29ede62b-ce0e-42a5-a465-b39dff2dc4af",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "2a49f39e-e422-4379-bc5e-44ed10a658b6",
+        "ShortName": "",
+        "Name": "Phòng Tin hoc",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Phòng Tin hoc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "2a512404-30bd-4d18-a415-9c484ed7e0fb",
+        "ShortName": "",
+        "Name": "Công đoàn Ngành Y tế",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Công đoàn Ngành Y tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "2be097a5-0bd0-43fd-9ec3-34681b34a2dc",
+        "ShortName": "",
+        "Name": "Trung tâm Quan trắc Tài nguyên và Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Trung tâm Quan trắc Tài nguyên và Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "2bf46224-7164-4d1b-8f0b-365840b3a920",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế ngành",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng Kinh tế ngành",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "2d94c0a8-cf77-4a3d-bcf0-49b78ff58c0f",
+        "ShortName": "",
+        "Name": "Ban Tuyên giáo",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Ban Tuyên giáo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "2f1700ab-7b27-4aa5-9711-602a06377609",
+        "ShortName": "",
+        "Name": "Phòng Khai thác - Thu nợ",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng Khai thác - Thu nợ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ShortName": "",
+        "Name": "Sở Nội vụ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "3174e230-381e-4896-8c51-75ce51ea446f",
+        "ShortName": "",
+        "Name": "Phòng Quản lý kết cấu hạ tầng và an toàn giao thông",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Phòng Quản lý kết cấu hạ tầng và an toàn giao thông",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "31ccd6b4-60b5-4ec0-823b-fb049688e0ad",
+        "ShortName": "",
+        "Name": "Ban Tuyên giáo và TT Bồi dưỡng chính trị",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Tuyên giáo và TT Bồi dưỡng chính trị",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "322129f4-b426-4f1d-bde4-9ef0b6333a90",
+        "ShortName": "",
+        "Name": "Văn phòng Thành uỷ",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Văn phòng Thành uỷ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "326535e4-45b9-4d47-a626-e4b5735ea97d",
+        "ShortName": "",
+        "Name": "Văn phòng Đăng ký Đất đai",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Văn phòng Đăng ký Đất đai",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "3446bac8-93c9-4c11-9f3c-4807205c6040",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế - Tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Kinh tế - Tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "34d649f0-a07a-44ae-b0b7-2cd498cab5b2",
+        "ShortName": "",
+        "Name": "Phòng Thanh tra-  Kiểm tra",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng Thanh tra-  Kiểm tra",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "354da28a-df3c-42b2-a6be-f4c70ec6ebb1",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "35a3270a-44c9-4015-aa19-30d6b95ff6be",
+        "ShortName": "",
+        "Name": "Phòng Công chức, viên chức",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Phòng Công chức, viên chức",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "35b18631-f053-4a53-8b5c-5394978a343f",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "3751ed2a-5ef9-48e5-ab1a-76024818b54e",
+        "ShortName": "",
+        "Name": "Phòng Y tế",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Y tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "37bc1e68-603b-4750-b3b0-414aa542d011",
+        "ShortName": "",
+        "Name": "Trung tâm dịch vụ đấu giá tài sản",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Trung tâm dịch vụ đấu giá tài sản",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "3995bc30-801e-4a2c-9cc0-ed602ee47041",
+        "ShortName": "",
+        "Name": "Phòng kế hoạch và tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng kế hoạch và tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "39a35007-83b9-439c-80b5-eafced5bb0c8",
+        "ShortName": "",
+        "Name": "Phòng Hành chính tư pháp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Hành chính tư pháp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "3aa9ea9c-4143-4d60-a8a0-36891d2492eb",
+        "ShortName": "",
+        "Name": "Phòng Quản lý ngân sách",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Phòng Quản lý ngân sách",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "3e3632d8-f089-4432-8658-3c3cc2a67025",
+        "ShortName": "",
+        "Name": "Phòng Văn hóa - Thông tin",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Văn hóa - Thông tin",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "3f19517f-3575-4411-99cd-d0b0994d2850",
+        "ShortName": "",
+        "Name": "Phòng quản lí biên giới",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/Phòng quản lí biên giới",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "412a1cca-8ba0-483b-be10-a8c284b56b75",
+        "ShortName": "",
+        "Name": "Ban lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Ban lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "41610aeb-9a6d-4607-a39b-7a2f2700d5e1",
+        "ShortName": "",
+        "Name": "Phòng Công chứng số 2",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Công chứng số 2",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "4169a5ed-2c5c-431c-8054-53c9f2d55422",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "419efabc-6ec8-4b48-95cf-753608b5e99e",
+        "ShortName": "",
+        "Name": "Văn Phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/Văn Phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "4291d905-c523-4ee9-a5c5-70bfc567521d",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "42fbffc4-4870-498f-95f6-f43dea59e402",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục Thành phố",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Giáo dục Thành phố",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "430912ba-782d-40af-8cf8-d96a5c887226",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "43e14c58-c898-49ac-9e4e-671ca01a1ec1",
+        "ShortName": "",
+        "Name": "Phòng Chính trị, tư tưởng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Chính trị, tư tưởng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "4447e621-e923-449d-8253-b77fce1dd338",
+        "ShortName": "",
+        "Name": "Phòng Quản lý công nghiệp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Phòng Quản lý công nghiệp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "4611b056-6252-450e-a58c-b5de38b94789",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ShortName": "",
+        "Name": "Sở TN&MT",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1dba2927-2321-42b9-ab91-aed72cb9bdc7",
+        "ID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ShortName": "",
+        "Name": "Thành ủy Móng Cái",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "486295ff-2491-460a-9744-5992e3d24f8d",
+        "ShortName": "",
+        "Name": "Phòng Du lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Du lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "48c7dc78-a87b-458c-9a84-df7a808a34c0",
+        "ShortName": "",
+        "Name": "Phòng Văn hóa - Xã hội",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Văn hóa - Xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "49c06dc5-41fb-4bdc-949a-4d751b4f5e8d",
+        "ShortName": "",
+        "Name": "Phòng Phổ biến, giáo dục pháp luật",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Phổ biến, giáo dục pháp luật",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "4ae33e22-5e54-4821-974c-b3d5c062c0d8",
+        "ShortName": "",
+        "Name": "Trung tâm Kỹ thuật Tài nguyên và Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Trung tâm Kỹ thuật Tài nguyên và Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "4af46e99-0446-4bbe-a8a1-8ff9c4412a1e",
+        "ShortName": "",
+        "Name": "Phòng Quản lý di sản",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Phòng Quản lý di sản",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ShortName": "",
+        "Name": "Sở Du lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "4e517918-a0fd-474f-8cde-3f44b99100d3",
+        "ShortName": "",
+        "Name": "Thống kê Dân số - Văn xã",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Thống kê Dân số - Văn xã",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "51e126c1-daf2-4d2c-bdf8-5c2f31575cf5",
+        "ShortName": "",
+        "Name": "Phòng chế độ bảo hiểm xã hội",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng chế độ bảo hiểm xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "524c1f00-32e8-415b-bdc8-97f6e2a4034c",
+        "ShortName": "",
+        "Name": "Chi Cục Tiêu chuẩn đo lường chất lượng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Chi Cục Tiêu chuẩn đo lường chất lượng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "528f84c0-388d-4a33-8f58-4f58c1c28c8f",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "529affe4-42a3-4e35-8aa9-bcceda4378c6",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "547b2460-6b5d-4479-8f83-94894f24b519",
+        "ShortName": "",
+        "Name": "Phòng Tổng hợp, quy hoạch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng Tổng hợp, quy hoạch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "54cd0364-422f-488f-b953-caeb8a9a9655",
+        "ShortName": "",
+        "Name": "Phòng Y tế",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Y tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "54fd1e9e-2646-4b99-8e0c-ff55407211ac",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "566b9567-0ee6-4e0b-9d6b-455d6da99b76",
+        "ShortName": "",
+        "Name": "Phòng Lao động - TB&XH",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Lao động - TB&XH",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "593a5870-4162-40ff-905d-13c17e876221",
+        "ShortName": "",
+        "Name": "Thường trực HĐND",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Thường trực HĐND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "5b55fa18-ce5e-4c8e-9409-0af58f529531",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục Trung học",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Giáo dục Trung học",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "5bcc8c58-604d-4c8d-8042-ab2bb880e45f",
+        "ShortName": "",
+        "Name": "Phòng Quản lý nhà và Thị trường Bất động sản",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Phòng Quản lý nhà và Thị trường Bất động sản",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "5c5ccea8-81f6-435d-b4a3-822a69505e54",
+        "ShortName": "",
+        "Name": "TRUNG TÂM DỊCH VỤ ĐỐI NGOẠI",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/TRUNG TÂM DỊCH VỤ ĐỐI NGOẠI",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "5f334e59-1215-4c82-80f6-707813d0cad7",
+        "ShortName": "",
+        "Name": "Phòng Quản lý năng lượng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Phòng Quản lý năng lượng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "5f4df4b0-af0e-4aeb-b70d-db8fca6fad97",
+        "ShortName": "",
+        "Name": "Thường trực HĐND",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Thường trực HĐND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "615be4e3-cd7a-42ca-9d6a-7749c97150e3",
+        "ShortName": "",
+        "Name": "Phòng Quản lý Hành nghề Y - Dược tư nhân",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Phòng Quản lý Hành nghề Y - Dược tư nhân",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "61c40613-cbc2-404d-b00b-d046076fad7f",
+        "ShortName": "",
+        "Name": "Phòng Kiểm soát thủ tục hành chính và Chính quyền điện tử",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Kiểm soát thủ tục hành chính và Chính quyền điện tử",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ShortName": "",
+        "Name": "Sở Ngoại vụ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "63ff6446-5cbc-4d7a-9553-8f2b2371da29",
+        "ShortName": "",
+        "Name": "Phòng Tài vụ",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Phòng Tài vụ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "64b1a3cc-b7fc-45b6-a49c-d223cdaf5a5d",
+        "ShortName": "",
+        "Name": "Chi cục Thống kê",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Chi cục Thống kê",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1dba2927-2321-42b9-ab91-aed72cb9bdc7",
+        "ID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ShortName": "",
+        "Name": "HĐND - UBND TP Móng Cái",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "67bc51b5-6661-453b-b196-1c6b2cc30bb5",
+        "ShortName": "",
+        "Name": "PHÒNG LÃNH SỰ - HỢP TÁC QUỐC TẾ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/PHÒNG LÃNH SỰ - HỢP TÁC QUỐC TẾ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "67d417c2-81a5-46a4-b611-26b6b57de788",
+        "ShortName": "",
+        "Name": "Phòng Quản lý xây dựng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Phòng Quản lý xây dựng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "691a19f1-9927-4688-9496-7b4b4c861ace",
+        "ShortName": "",
+        "Name": "Ban Pháp chế",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Ban Pháp chế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "696f62a1-71ee-46f2-9566-0a9797b6cffe",
+        "ShortName": "",
+        "Name": "Ban Nội chính Tỉnh ủy",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Nội chính Tỉnh ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "6995ac95-5cda-44a5-b046-716c4e74b645",
+        "ShortName": "",
+        "Name": "Phòng Quản lý vận tải và phương tiện",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Phòng Quản lý vận tải và phương tiện",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "69a9297b-c47b-49ac-a776-9b047e581851",
+        "ShortName": "",
+        "Name": "Phòng CNTT",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng CNTT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "69b1d4c3-5b2a-4808-b9a2-ad7670d7278f",
+        "ShortName": "",
+        "Name": "Phòng Kế hoạch tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Phòng Kế hoạch tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "6e3227ff-80f4-4846-9326-5d4a0c6a60fa",
+        "ShortName": "",
+        "Name": "Trung tâm Khuyến công và Tư vấn phát triển công nghiệp Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Trung tâm Khuyến công và Tư vấn phát triển công nghiệp Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "6e8bdc93-fcbf-4503-8994-b42bac56e371",
+        "ShortName": "",
+        "Name": "Ủy ban Kiểm tra",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Ủy ban Kiểm tra",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "6fe9a491-31d5-4ad0-be75-97bf296451d4",
+        "ShortName": "",
+        "Name": "Phòng tài chính đầu tư",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Phòng tài chính đầu tư",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "7047dbd0-c296-4bc3-ae27-fe078c91def9",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "706fca19-2b16-4743-9375-ae7ba36502d5",
+        "ShortName": "",
+        "Name": "Chi cục Phòng, chống tệ nạn xã hội",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Chi cục Phòng, chống tệ nạn xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "708b10cd-3efd-4dbb-8b61-bd31e4023b13",
+        "ShortName": "",
+        "Name": "Đoàn thanh niên",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Đoàn thanh niên",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ShortName": "",
+        "Name": "Sở Giáo dục và Đào tạo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "70cda09a-1178-4950-b2ae-1b760534314a",
+        "ShortName": "",
+        "Name": "Phòng Công nghệ thông tin",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Phòng Công nghệ thông tin",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "7325d87c-2e6b-498a-b4f2-0f7a7d85175f",
+        "ShortName": "",
+        "Name": "Ủy ban kiểm tra Tỉnh ủy",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ủy ban kiểm tra Tỉnh ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ShortName": "",
+        "Name": "Sở Tư pháp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "764ef071-2768-4f07-986b-232850cd91db",
+        "ShortName": "",
+        "Name": "Phòng Đăng ký đất đai",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Phòng Đăng ký đất đai",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "76848155-48e5-49e4-bdcf-49e1d6bffdc6",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức cán bộ",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Phòng Tổ chức cán bộ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "76ccc66c-eaa6-46c3-bf83-33b4b3b1a05b",
+        "ShortName": "",
+        "Name": "Phòng Quản lý Cơ sở lưu trú và Dịch vụ Du Lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Phòng Quản lý Cơ sở lưu trú và Dịch vụ Du Lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "76f51d32-0c32-4bad-9135-d7f0140c3d9d",
+        "ShortName": "",
+        "Name": "Ban Chấp hành Đảng bộ Tỉnh",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Chấp hành Đảng bộ Tỉnh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "7701d24b-e2a2-4f20-90ee-a3a257ebfc7b",
+        "ShortName": "",
+        "Name": "Cơ sở cai nghiện ma túy tỉnh Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Cơ sở cai nghiện ma túy tỉnh Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "776b7aa0-e8f1-4436-9168-a901bba987cb",
+        "ShortName": "",
+        "Name": "Phòng Quản lý đô thị",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Quản lý đô thị",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "777eb0bf-2fee-47f8-97f2-533f0165361c",
+        "ShortName": "",
+        "Name": "Văn phòng HĐND & UBND",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Văn phòng HĐND & UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "7a0ed606-dfc7-45f5-b63c-860fe2b02c4c",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "7c5f0a4a-614e-484f-9639-b587fb06e005",
+        "ShortName": "",
+        "Name": "Phòng Kỹ thuật - Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Phòng Kỹ thuật - Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "7cf8f685-6077-4e53-87c2-7ec9b73a9eb0",
+        "ShortName": "",
+        "Name": "Phòng Quản lý xây dựng công trình",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Phòng Quản lý xây dựng công trình",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "7d81325c-a949-4cd9-823b-509083ddb27b",
+        "ShortName": "",
+        "Name": "Văn phòng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Văn phòng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "7e83842e-de6e-4c5a-bdf5-597443d48ac9",
+        "ShortName": "",
+        "Name": "Bộ chỉ huy quân sự",
+        "FullName": "Tỉnh Quảng Ninh/Bộ chỉ huy quân sự",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "7f340694-a71f-4afd-add0-ede228b1b853",
+        "ShortName": "",
+        "Name": "Phòng Quản lý Chuyên ngành",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Phòng Quản lý Chuyên ngành",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "7f5c5fd1-4485-4788-bb18-fc85f8a50814",
+        "ShortName": "",
+        "Name": "Chi cục Biển và Hải đảo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Chi cục Biển và Hải đảo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ShortName": "",
+        "Name": "Sở KHCN",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "7ff6e181-4241-44f9-942c-586deb921ea2",
+        "ShortName": "",
+        "Name": "Phòng Thống kê Nông Nghiệp",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Thống kê Nông Nghiệp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "8020eda9-83b0-4588-8d68-7fcc2f9636a3",
+        "ShortName": "",
+        "Name": "Phòng Bưu chính Viễn thông",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Phòng Bưu chính Viễn thông",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "823c7c5d-2d9e-4d80-b6b1-65a888aa8188",
+        "ShortName": "",
+        "Name": "Phòng Tài nguyên và Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Tài nguyên và Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "834e104d-9db2-4200-b729-1a46d153741f",
+        "ShortName": "",
+        "Name": "Chi cục Văn thư - Lưu trữ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Chi cục Văn thư - Lưu trữ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "840a0dfb-b3a8-44af-addc-cf82e85bd87d",
+        "ShortName": "",
+        "Name": "Phòng Tiếp nhận và TKQTTHC",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng Tiếp nhận và TKQTTHC",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "8566afa7-bfbd-433b-bae6-d7849d55f739",
+        "ShortName": "",
+        "Name": "Trung tâm Phát triển quỹ đất",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Trung tâm Phát triển quỹ đất",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "8852de9b-0a00-4b96-8f4a-2d8d9b3c9c9c",
+        "ShortName": "",
+        "Name": "Phòng Quy hoạch - Tài nguyên và Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Quy hoạch - Tài nguyên và Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "8865a335-ed89-4085-86ea-e1607abe1d43",
+        "ShortName": "",
+        "Name": "Hội Cựu Chiến binh Khối",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Hội Cựu Chiến binh Khối",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ShortName": "",
+        "Name": "Đảng ủy khối cơ quan",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "8c99c776-a0c4-45d1-a7e4-bbdeb0e74bcc",
+        "ShortName": "",
+        "Name": "Phòng Quản lý đô thị",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Quản lý đô thị",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "8ce585bb-9c91-4676-add9-5810e4ef3add",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "8d84ba6a-3f64-42cf-b8c0-e9ba52834fde",
+        "ShortName": "",
+        "Name": "Ban Tổ chức",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Ban Tổ chức",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "8dea8690-f9e6-4297-9c63-a1d600126b5c",
+        "ShortName": "",
+        "Name": "Phòng quản lý giá và Công sản",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Phòng quản lý giá và Công sản",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "8e04cef1-5d01-4690-ad85-45581973cbbd",
+        "ShortName": "",
+        "Name": "Văn học nghệ thuật",
+        "FullName": "Tỉnh Quảng Ninh/Văn học nghệ thuật",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "8e744fb5-74ba-45b7-b4d8-3761fc48c918",
+        "ShortName": "",
+        "Name": "Ban Tôn giáo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Ban Tôn giáo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "8e04cef1-5d01-4690-ad85-45581973cbbd",
+        "ID": "8e74843a-20fb-472c-b51e-7e5e19a4d7b2",
+        "ShortName": "",
+        "Name": "Văn phòng Hội",
+        "FullName": "Tỉnh Quảng Ninh/Văn học nghệ thuật/Văn phòng Hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "904a7b36-ea0e-4c2f-a401-c101363a98be",
+        "ShortName": "",
+        "Name": "Phòng Bình Đẳng giới",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Bình Đẳng giới",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "905e7582-87ce-4a84-babc-392e8514d80d",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức, biên chế và tổ chức phi chính phủ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Phòng Tổ chức, biên chế và tổ chức phi chính phủ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "92c9b385-c845-4a66-bb11-5fe54f83bb19",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "93a50d60-ce3a-422f-b00c-e2d35892009d",
+        "ShortName": "",
+        "Name": "Phòng Văn hóa - Thông tin",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Văn hóa - Thông tin",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "94b83abe-0f52-4214-b453-ceb7783e8873",
+        "ShortName": "",
+        "Name": "Phòng nghiệp vụ văn hóa và gia đình",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Phòng nghiệp vụ văn hóa và gia đình",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "9546bfdd-7239-4c6b-97b3-a6b8db1a5b14",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục Mầm non",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Giáo dục Mầm non",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "9549035e-eb8e-46a2-86cd-a12be42b003c",
+        "ShortName": "",
+        "Name": "Phòng Thống kê Thương Mại",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Thống kê Thương Mại",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "cd862507-feae-4529-a553-78a8b03c1cb8",
+        "ID": "97680406-1b99-4f91-9344-3f423eebb1f0",
+        "ShortName": "",
+        "Name": "Ban Thông tin, phổ biến kiến thức và Hội viên",
+        "FullName": "Tỉnh Quảng Ninh/Liên hiệp các hội khoa học và kỹ thuật/Ban Thông tin, phổ biến kiến thức và Hội viên",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ShortName": "",
+        "Name": "Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "997b7a11-26a2-4470-98bf-e7159b1997a1",
+        "ShortName": "",
+        "Name": "Ban lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Ban lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "997efe39-ebfe-4e9c-84aa-04db4abc2737",
+        "ShortName": "",
+        "Name": "Ban Tổ chức Thành uỷ",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Ban Tổ chức Thành uỷ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "9b15f06e-d24b-4040-89b0-c74691e5053f",
+        "ShortName": "",
+        "Name": "Phòng Bảo vệ, Chăm sóc trẻ em",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Bảo vệ, Chăm sóc trẻ em",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "9b835a09-6e5c-43fe-ad15-c12ef1ebdfb6",
+        "ShortName": "",
+        "Name": "Công đoàn Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Công đoàn Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "9bf792ae-9e28-443e-b19e-3bc425e17556",
+        "ShortName": "",
+        "Name": "Trung tâm Thông tin",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Trung tâm Thông tin",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "9d0e4755-c63c-4081-accc-255af1d1a368",
+        "ShortName": "",
+        "Name": "Ủy viên UBND",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Ủy viên UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "9dd93ca9-a891-46a4-b8a7-0bb906dbce3d",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ShortName": "",
+        "Name": "Sở Xây dựng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "9e54a07a-c416-4e42-b6d1-0ce817e34cfb",
+        "ShortName": "",
+        "Name": "Phòng Quản lý khoa học",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Phòng Quản lý khoa học",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "9f7b13d6-b193-4c26-84b6-c0654bad3bc1",
+        "ShortName": "",
+        "Name": "Phòng Thông tin - Báo chí - Xuất bản",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Phòng Thông tin - Báo chí - Xuất bản",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "9fb4a1a3-7bbe-4a3a-a90f-78d8e4ed5b9a",
+        "ShortName": "",
+        "Name": "Phòng tổ chức cán bộ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng tổ chức cán bộ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "a2b32371-451c-46ff-8904-3c0df3109c96",
+        "ShortName": "",
+        "Name": "Phòng Quy hoạch-Kiến trúc",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Phòng Quy hoạch-Kiến trúc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "a324168c-a003-4da1-8a1e-bd5948cd5dc1",
+        "ShortName": "",
+        "Name": "Quỹ phát triển Khoa học và Công nghệ tỉnh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Quỹ phát triển Khoa học và Công nghệ tỉnh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "a5b38b44-05ab-4e20-b1eb-b04a9f71e346",
+        "ShortName": "",
+        "Name": "Phòng Tư pháp",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Tư pháp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "a62119a1-dc40-460a-a8a5-580d5546227d",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ShortName": "",
+        "Name": "Sở Lao động Thương binh XH",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "a62ab400-4c9d-4ad5-9a22-62ab19275ad6",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Kinh tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "a7a2eafd-918a-4867-964f-17646ae75e96",
+        "ShortName": "",
+        "Name": "Phòng Tài chính - Kế hoạch",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Tài chính - Kế hoạch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "a7c0d767-76c5-484f-b62f-7afe4d5496cf",
+        "ShortName": "",
+        "Name": "Phòng Tài nguyên - Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Tài nguyên - Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "a8bb70a0-9906-4bda-9cdd-65cdb953590b",
+        "ShortName": "",
+        "Name": "Phòng giám định BHYT",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng giám định BHYT",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "a9143030-bf7a-44de-9c87-12c410725a55",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức cán bộ",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng Tổ chức cán bộ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ShortName": "",
+        "Name": "Sở Văn hóa Thể thao & Du lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "ac48d283-c1ee-44a6-90af-59a7b6e87db0",
+        "ShortName": "",
+        "Name": "Phòng Công chứng số 3",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Công chứng số 3",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "ad682ba6-8fd0-4e0e-a4cb-53eb9ecb9bcb",
+        "ShortName": "",
+        "Name": "Phòng thẩm định và Giám sát đầu tư",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng thẩm định và Giám sát đầu tư",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "af78db1d-ad55-4b3b-a9ba-cdcd02a2ae04",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "afb1b420-c7d2-42b8-8301-b74d53dea36b",
+        "ShortName": "",
+        "Name": "Phòng hành chính sự nghiệp",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Phòng hành chính sự nghiệp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "b00cbf59-01c8-4ecc-98af-edefaac39e0d",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "cd862507-feae-4529-a553-78a8b03c1cb8",
+        "ID": "b158d881-124e-450b-83f7-87290bfd8be2",
+        "ShortName": "",
+        "Name": "Văn phòng Liên hiệp Hội",
+        "FullName": "Tỉnh Quảng Ninh/Liên hiệp các hội khoa học và kỹ thuật/Văn phòng Liên hiệp Hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "b1db5d8c-bf95-4da9-9c9d-04ef26a7fd05",
+        "ShortName": "",
+        "Name": "Phòng Quản lý Công nghệ và thị trường công nghệ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Phòng Quản lý Công nghệ và thị trường công nghệ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "b23f13c8-c4bc-42f0-870b-0d7ec42f433a",
+        "ShortName": "",
+        "Name": "Phòng Đăng ký kinh doanh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng Đăng ký kinh doanh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "b289b3a1-0fff-4859-b11b-43ce2b0b4734",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "b4801dd8-c9c1-44a5-881a-75979b6eee80",
+        "ShortName": "",
+        "Name": "Phòng Dạy nghề",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Dạy nghề",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "b4ac1565-9d27-48fb-b554-2e70fa0c33ec",
+        "ShortName": "",
+        "Name": "Phòng GT-CN & XD",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng GT-CN & XD",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "b5a1e2c3-f964-4a0a-bd39-6a001e95c42e",
+        "ShortName": "",
+        "Name": "Trung tâm Công nghệ thông tin Tài nguyên và Môi trường",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Trung tâm Công nghệ thông tin Tài nguyên và Môi trường",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "b627f4f8-51fa-4ff2-bd28-afd895ac3fc2",
+        "ShortName": "",
+        "Name": "Phòng Nội chính - Pháp chế",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Nội chính - Pháp chế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "b86bebfc-9c7c-4ed1-a535-4cd97bcee512",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "b9f536c3-a35c-4e9d-b4d1-c50d9d7acd89",
+        "ShortName": "",
+        "Name": "Phòng Kiểm soát chi NSNN",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Phòng Kiểm soát chi NSNN",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "ba23c3ab-1726-4f78-b5ce-b7a8bc4f1b1e",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "bab30289-5a23-4b6d-b1c0-dff884d05ce7",
+        "ShortName": "",
+        "Name": "Trung tâm trợ giúp pháp lý Nhà nước",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Trung tâm trợ giúp pháp lý Nhà nước",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "bb695406-ee50-478c-8ca7-e4867ac54282",
+        "ShortName": "",
+        "Name": "Thanh tra",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Thanh tra",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "bbb186f0-20c1-45a2-91f6-41359b9ee5a5",
+        "ShortName": "",
+        "Name": "Ban Kinh tế - xã hội",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Ban Kinh tế - xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "bcad8ba3-194f-4ca7-b7d1-77ad18b921d2",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục và Đào tạo",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Phòng Giáo dục và Đào tạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "bccf462c-6229-4c50-b84c-75c5caeda90c",
+        "ShortName": "",
+        "Name": "Uỷ ban kiểm tra Thành uỷ",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Uỷ ban kiểm tra Thành uỷ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "bd0a4639-2252-4968-9b25-0257b5990d0d",
+        "ShortName": "",
+        "Name": "Thường trực Thành ủy",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Thường trực Thành ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "bd11c951-06f8-4cee-a048-b2ad3bdb1e42",
+        "ShortName": "",
+        "Name": "Phòng Quản lý chất lượng công trình giao thông",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Phòng Quản lý chất lượng công trình giao thông",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "bd4e74c1-da62-4f95-bba0-dc04b03eaf53",
+        "ShortName": "",
+        "Name": "Ban giám đốc",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Ban giám đốc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "bdc1937c-e134-44c5-ab99-c40ce89203d0",
+        "ShortName": "",
+        "Name": "Ban Tuyên giáo Thành uỷ",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Ban Tuyên giáo Thành uỷ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "bdda8495-e670-4ba0-bfc7-73465bdc9aff",
+        "ShortName": "",
+        "Name": "Trung tâm Ứng dụng và Thống kê Khoa học và Công nghệ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Trung tâm Ứng dụng và Thống kê Khoa học và Công nghệ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "bded8418-91bd-4c84-b77c-3bfcf8956779",
+        "ShortName": "",
+        "Name": "Ban Lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Ban Lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "be05216d-f048-4a0f-84cb-59fc4d63b927",
+        "ShortName": "",
+        "Name": "Ban Tuyên giáo",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Tuyên giáo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "bf4d1f7c-6075-4bc2-b237-02c2c6e724aa",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Kinh tế",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "c03ce2ca-5f4a-47b1-8105-2a8ddb2f9021",
+        "ShortName": "",
+        "Name": "Công đoàn Viên chức tỉnh",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Công đoàn Viên chức tỉnh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "c4afcca0-a94e-40f9-a1f9-e1a352652ace",
+        "ShortName": "",
+        "Name": "Phòng nghiệp vụ Y",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Phòng nghiệp vụ Y",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "c4dbf549-f46e-4d22-9da0-bee1fdeae3ae",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "887d28ed-031a-4029-abf9-b6c7d257efa9",
+        "ID": "c5b64610-fc4f-471f-a6ca-df8ee150d484",
+        "ShortName": "",
+        "Name": "Văn phòng",
+        "FullName": "Tỉnh Quảng Ninh/Đảng ủy khối cơ quan/Văn phòng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "c62a39cf-b71e-4d1c-bfa2-ab96542fa0d0",
+        "ShortName": "",
+        "Name": "Phòng Quy hoạch, Kế hoạch đất đai",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Phòng Quy hoạch, Kế hoạch đất đai",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "c68b7bd2-68b5-46ee-bb05-2e912c2a7f76",
+        "ShortName": "",
+        "Name": "Ban Tiếp công dân",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Ban Tiếp công dân",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "662d681d-ce5e-4da1-b211-c25bbca224e9",
+        "ID": "ca10ba11-c2ff-426e-9bdb-1a191976ad15",
+        "ShortName": "",
+        "Name": "Thường trực UBND",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/HĐND - UBND TP Móng Cái/Thường trực UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "cab56737-9e6d-4e38-af7f-cc5acc440a3a",
+        "ShortName": "",
+        "Name": "Quỹ bảo vệ môi trường Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Quỹ bảo vệ môi trường Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "aae73a96-7129-4af3-b976-47ee6a608cb7",
+        "ID": "cb0ee623-41cf-4bc6-80bf-9430edaaae12",
+        "ShortName": "",
+        "Name": "Ban Giám đốc",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Văn hóa Thể thao & Du lịch/Ban Giám đốc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "cb98ab44-8cc4-42c6-a5a7-58c82e6872ed",
+        "ShortName": "",
+        "Name": "Phòng Nội vụ",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Nội vụ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "cd862507-feae-4529-a553-78a8b03c1cb8",
+        "ShortName": "",
+        "Name": "Liên hiệp các hội khoa học và kỹ thuật",
+        "FullName": "Tỉnh Quảng Ninh/Liên hiệp các hội khoa học và kỹ thuật",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "cde15f21-f9b1-4ec6-872a-8438386a10f5",
+        "ShortName": "",
+        "Name": "Phòng Kinh tế đối ngoại",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng Kinh tế đối ngoại",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "ce88939a-8372-4c70-a515-b64c39f53d7f",
+        "ShortName": "",
+        "Name": "Phòng quản lý lữ hành",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Phòng quản lý lữ hành",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "ce92c865-62f7-4313-b8ed-df946a44e929",
+        "ShortName": "",
+        "Name": "Phòng Thống kê Công nghiệp",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Phòng Thống kê Công nghiệp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "cf2dfad1-f0e6-44e1-87b2-829dc05340ca",
+        "ShortName": "",
+        "Name": "Trung tâm xúc tiến thương mại",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Trung tâm xúc tiến thương mại",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "cfd3aa89-c199-444c-9c96-67aa5614791e",
+        "ShortName": "",
+        "Name": "Văn phòng",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Văn phòng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "cfe5716c-f799-49d7-b228-861a302ea3ed",
+        "ShortName": "",
+        "Name": "Ban Thi đua - Khen thưởng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Ban Thi đua - Khen thưởng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "cffe04fc-f4e5-442d-b7e7-66c92e58590f",
+        "ShortName": "",
+        "Name": "Thường trực UBND",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Thường trực UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "d0133f46-dde7-4f3b-b6fc-2074e6664753",
+        "ShortName": "",
+        "Name": "Phòng Tư pháp",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Phòng Tư pháp",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "d0442397-37eb-4f03-97fc-0696c7d09698",
+        "ShortName": "",
+        "Name": "Phòng Quản lý thương mại",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Phòng Quản lý thương mại",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4797046e-4e43-4ea7-9cc0-5985b57a3b78",
+        "ID": "d2be4a68-712e-47c2-9cea-8140489e63f0",
+        "ShortName": "",
+        "Name": "Thanh tra sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở TN&MT/Thanh tra sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "d3f50003-51c3-4f40-b456-38268961e95a",
+        "ShortName": "",
+        "Name": "Trung tâm Điều dưỡng người có công Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Trung tâm Điều dưỡng người có công Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "d628ec25-0216-4ae4-9653-9fa6fe8af58d",
+        "ShortName": "",
+        "Name": "Trung tâm bồi dưỡng chính trị",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Trung tâm bồi dưỡng chính trị",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "d6b371d6-2242-469c-9588-e4daf81b40cb",
+        "ShortName": "",
+        "Name": "Phòng Thanh tra",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Phòng Thanh tra",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "63ddca17-2dcd-44f8-8899-6090ae34c67a",
+        "ID": "d7204b4e-bb2a-4239-a59e-1f5162b10cc0",
+        "ShortName": "",
+        "Name": "PHÒNG LỄ TÂN - BIÊN PHIÊN DỊCH",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Ngoại vụ/PHÒNG LỄ TÂN - BIÊN PHIÊN DỊCH",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "d77c1924-beb2-449a-98b9-507ff44a1a28",
+        "ShortName": "",
+        "Name": "Ban Tổ chức Tỉnh ủy",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Tổ chức Tỉnh ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "d7bcc238-04e9-4b69-8fbc-4ae59890e913",
+        "ShortName": "",
+        "Name": "Phòng cấp số thẻ",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng cấp số thẻ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "d89b8b0e-acd3-4aeb-a74f-d18f8658299a",
+        "ShortName": "",
+        "Name": "Phòng kế hoạch tài chính",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng kế hoạch tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02c67566-7dcb-4e5f-9998-8c0f75e3fc8f",
+        "ID": "da36869c-e528-48e3-badc-e5a4c00d119b",
+        "ShortName": "",
+        "Name": "Thanh tra Móng Cái",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Phòng, Ban chức năng/Thanh tra Móng Cái",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "dddab809-57a7-4e5e-a634-5e5e654bb575",
+        "ShortName": "",
+        "Name": "Phòng Hành chính - Tổ chức - Quản trị - Tài vụ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Phòng Hành chính - Tổ chức - Quản trị - Tài vụ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "df6dbb60-bca2-43d7-b20a-7d2f7061d1ba",
+        "ShortName": "",
+        "Name": "Phòng Quản lý đào tạo và sát hạch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Phòng Quản lý đào tạo và sát hạch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "47b3cad8-e017-46a1-8057-f4a8a4b435fa",
+        "ID": "dfb910a2-0942-47c2-80e1-e41590216bcf",
+        "ShortName": "",
+        "Name": "Ban Dân vận",
+        "FullName": "Tỉnh Quảng Ninh/Thành phố Móng Cái/Thành ủy Móng Cái/Ban Dân vận",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "3039e54b-c954-45a6-a3f7-a391ec981aff",
+        "ID": "e00b3b4a-0183-4344-8fad-2081a6e86a7a",
+        "ShortName": "",
+        "Name": "Phòng Xây dựng chính quyền và công tác thanh niên",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Nội vụ/Phòng Xây dựng chính quyền và công tác thanh niên",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7fabf100-02c3-4fd3-9ce9-21b62fa74b46",
+        "ID": "e08d7e64-55ea-4168-a517-fb37eb305ed4",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở KHCN/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ID": "e159237b-d7a9-4bbf-b3da-39dea8f3cc1e",
+        "ShortName": "",
+        "Name": "Ban giám đốc",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông/Ban giám đốc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "e1d1bca9-9ef3-424d-acea-4a9e18573a62",
+        "ShortName": "",
+        "Name": "Phòng Bảo trợ xã hội",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Phòng Bảo trợ xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "e3aff5d2-e0b9-4271-9f52-a3b4276eb47f",
+        "ShortName": "",
+        "Name": "Phòng quản lý thu",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Phòng quản lý thu",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ID": "e4626ec3-fb7a-4ea0-a0e7-d5c0c4f60525",
+        "ShortName": "",
+        "Name": "Văn phòng",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội/Văn phòng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "e6ed3367-d12b-47ed-ab06-ef724a6a9be7",
+        "ShortName": "",
+        "Name": "Hội bảo trợ Người khuyết tật",
+        "FullName": "Tỉnh Quảng Ninh/Hội bảo trợ Người khuyết tật",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "9e20060e-a0bb-463d-8ba0-bc28c1f6c016",
+        "ID": "e71f3d7e-d413-4c9b-b712-55bfcddb9cb5",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Xây dựng/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "e72d8b42-11dd-41e1-b86d-8ef78189fc9b",
+        "ShortName": "",
+        "Name": "Ban Dân vận",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Dân vận",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "e77840ac-f6ac-4a6c-8761-e5fd77ac5a02",
+        "ShortName": "",
+        "Name": "Phòng Văn bản và Theo dõi thi hành pháp luật",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Văn bản và Theo dõi thi hành pháp luật",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "e84d892b-b1de-432d-9696-a2cbbbe3a44e",
+        "ShortName": "",
+        "Name": "Phòng Quản lý xuất nhập khẩu",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Phòng Quản lý xuất nhập khẩu",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "e8767c39-f1c8-4b0f-b12f-43f0eb844a90",
+        "ShortName": "",
+        "Name": "Lãnh đạo sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Lãnh đạo sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "e9ef8283-e05c-4264-b715-3b7c935d0694",
+        "ShortName": "",
+        "Name": "Ban giám đốc",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Ban giám đốc",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "e9f291de-e8d8-4ad0-81ff-7cf7af9b95e9",
+        "ShortName": "",
+        "Name": "Bảo hiểm xã hội",
+        "FullName": "Tỉnh Quảng Ninh/Bảo hiểm xã hội",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "ebb2b8e4-618e-4c5c-8915-c4220e7275ae",
+        "ShortName": "",
+        "Name": "Phòng Giáo dục chuyên nghiệp và Giáo dục thường xuyên",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Giáo dục chuyên nghiệp và Giáo dục thường xuyên",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "a62a6c6a-c7d4-415c-afe7-7cd01810662f",
+        "ID": "ec0e777c-c80e-42db-9a6e-fa5ab03be35e",
+        "ShortName": "",
+        "Name": "Trung tâm Công tác xã hội Quảng Ninh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Lao động Thương binh XH/Trung tâm Công tác xã hội Quảng Ninh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "ecb8c3ed-daa5-4f1a-8d8e-d4318fb6abd8",
+        "ShortName": "",
+        "Name": "Lãnh đạo sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Lãnh đạo sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "281f26b9-fb55-4cc4-8d98-ede77b101469",
+        "ID": "ee2afc7a-1678-4702-8842-cddc25f20773",
+        "ShortName": "",
+        "Name": "Phòng Tổ chức cán bộ",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Y tế/Phòng Tổ chức cán bộ",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1b43e6a9-b562-4793-9e7a-4815fda4086e",
+        "ID": "eeab9f8a-d2fa-4e7d-8869-34fdf5f4eca1",
+        "ShortName": "",
+        "Name": "Phòng Kế hoạch tài chính",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở GTVT/Phòng Kế hoạch tài chính",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "ef97eb59-9fee-46d1-bb99-fe97eef89b5d",
+        "ShortName": "",
+        "Name": "Công đoàn ngành giáo dục tỉnh",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Công đoàn ngành giáo dục tỉnh",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "f10fa80d-b809-4815-970e-c6ca73a232f6",
+        "ShortName": "",
+        "Name": "Lãnh đạo UBND",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Lãnh đạo UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1c018590-8bb8-4912-a3bd-89733cfc7d68",
+        "ID": "f2b55206-71e6-491b-8c8b-64dfff2de35f",
+        "ShortName": "",
+        "Name": "Thanh tra Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở NN & PTNT/Thanh tra Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "025e28f6-17cc-49d6-9ac6-ef54ff08b0cd",
+        "ID": "f2bf6376-c74b-4765-a776-0166f8734c61",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Công thương/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ID": "f3d2326f-d629-4194-8c02-063db4a57e84",
+        "ShortName": "",
+        "Name": "Ban lãnh đạo",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê/Ban lãnh đạo",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "f4d0cea6-9a2e-4d09-bbd9-0a6b18311d6a",
+        "ShortName": "",
+        "Name": "Văn Phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Văn Phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "02065566-d2da-408b-89bf-26a0d2d5b51a",
+        "ID": "f4da9325-bb7c-4a9f-89e0-a6a5645375a3",
+        "ShortName": "",
+        "Name": "Văn phòng HĐND - UBND",
+        "FullName": "Tỉnh Quảng Ninh/TP Hạ Long/Văn phòng HĐND - UBND",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "f602af1e-bf9f-45ee-86a8-09c1227405e2",
+        "ShortName": "",
+        "Name": "Phòng Công chứng số 1",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Phòng Công chứng số 1",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "f6c8a5b0-2c35-4487-8ef1-abc57c38cf1f",
+        "ShortName": "",
+        "Name": "Trung tâm Thông tin và Xúc tiến Du Lịch",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Trung tâm Thông tin và Xúc tiến Du Lịch",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "99539857-f915-43fa-8017-3ff2f52d54c1",
+        "ID": "f9c13f71-a32f-46b8-add5-26419153bdda",
+        "ShortName": "",
+        "Name": "Sở Thông tin và Truyền thông",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Thông tin và Truyền thông",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "f9e52142-deac-455b-8cb9-6bc11db95fc3",
+        "ShortName": "",
+        "Name": "Cục hải quan",
+        "FullName": "Tỉnh Quảng Ninh/Cục hải quan",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "7547a414-47a2-48a1-8c32-658d4f111173",
+        "ID": "fa23cef8-9d81-4365-b076-c884ba7fc944",
+        "ShortName": "",
+        "Name": "Văn phòng Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tư pháp/Văn phòng Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "4cd02f99-08f8-41e2-b5c2-e8484ba05f64",
+        "ID": "fac45639-8887-4248-8740-9064477e65f3",
+        "ShortName": "",
+        "Name": "Lãnh đạo Sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Du lịch/Lãnh đạo Sở",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1fe9cafd-3033-473c-8143-3573dd67edc2",
+        "ID": "fc2c2a40-ff2b-423a-ad50-2863d630ff55",
+        "ShortName": "",
+        "Name": "Kế toán nhà nước",
+        "FullName": "Tỉnh Quảng Ninh/Kho bạc nhà nước/Kế toán nhà nước",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "22d703dc-ba8c-48c9-9ee6-97d0be8e0711",
+        "ID": "fcec1a25-489d-4fa7-82d7-d86a6d07dcc5",
+        "ShortName": "",
+        "Name": "Phòng Khoa giáo, Văn xã",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Kế hoạch và Đầu tư/Phòng Khoa giáo, Văn xã",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "1bc1f5ec-12e0-4962-b206-ae7401b2452e",
+        "ID": "fd343748-2cbb-4429-a9d6-26fbc179a8a7",
+        "ShortName": "",
+        "Name": "Lãnh đạo văn phòng",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Lãnh đạo văn phòng",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "70bf085a-5dce-4b81-b3a9-c8c57c7df847",
+        "ID": "fdfb0e3f-5a59-4fd5-8166-f44195f2c2ca",
+        "ShortName": "",
+        "Name": "Phòng Khảo thí và Kiểm định chất lượng Giáo dục",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Giáo dục và Đào tạo/Phòng Khảo thí và Kiểm định chất lượng Giáo dục",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "08159cc3-533a-4db9-a0a8-8542d3274a74",
+        "ID": "feee827c-f8a5-4791-9337-4f4d41b15e70",
+        "ShortName": "",
+        "Name": "Ban Thường trực Tỉnh ủy",
+        "FullName": "Tỉnh Quảng Ninh/Tỉnh ủy/Ban Thường trực Tỉnh ủy",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "16dfaa8b-f102-4dd2-b163-45d51e3ec19f",
+        "ID": "ff263159-17e1-4381-baa8-a9138f5172e4",
+        "ShortName": "",
+        "Name": "Cục thống kê",
+        "FullName": "Tỉnh Quảng Ninh/Cục thống kê",
+        "IsActive": true,
+        "Lever": 0
+      },
+      {
+        "ParentID": "221fd549-1f56-4a07-84d6-0956b555df73",
+        "ID": "fffc74a1-9751-4b0c-ac76-77bc872c7d6d",
+        "ShortName": "",
+        "Name": "Văn phòng sở",
+        "FullName": "Tỉnh Quảng Ninh/UBND/Sở/Sở Tài chính/Văn phòng sở",
+        "IsActive": true,
+        "Lever": 0
+      }
+    ]
+  }
+}

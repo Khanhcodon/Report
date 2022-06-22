@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = Localizer("Common.Form.Label.Copy");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var formGroups = ViewBag.FormGroups as IEnumerable<SelectListItem>;
+    var allFormGroup = ViewBag.AllFormGroup as IEnumerable<FormGroupModel>;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#delete").remove();
+        $(".tab-form").addClass(" ui-tabs-selected ui-state-active");
+        $(".tab-form").siblings().removeClass(" ui-tabs-selected ui-state-active");
+        $("#TxtFormName").focus();
+        $("#FormGroups").change(function () {
+            var formgroupid = parseInt($(this).val());
+            if (formgroupid == "0")
+                return;
+            GetForms(formgroupid);
+        });
+        $(".submit").bind("click", function () {
+            Copy();
+        });
+    });
+
+    function GetForms(formgroupId) {
+        $("#ddlForm option[value!= '0']").remove();
+        $.ajax({
+            url: '@Url.Action("GetForms", "Form")',
+            type: "POST",
+            data: { "formgroupId": formgroupId },
+            success: function (result) {
+                var forms = $.parseJSON(result);
+                for (var i = 0; i < forms.length; i++) {
+                    var option = $("<option>").text(forms[i].Text).val(forms[i].Value);
+                    $("#ddlForm").append(option);
+                }
+            },
+            error: function (xhr) {
+                alert(xhr.statusText);
+            }
+        });
+    }
+
+    function Copy() {
+        var formName = $("#TxtFormName").val();
+        if (formName == "") {
+            $("#sMessage").text('@Localizer("Common.Form.Name.NotNull")');
+            $("#TxtFormName").focus();
+            return;
+        }
+        var formId = $("#ddlForm :selected").val();
+        if (formId == "0") {
+            $("#sMessage").text('@Localizer("Common.Form.NotSelect")');
+            $("#ddlForm").focus();
+            return;
+        }
+        var des = $("#TxtDescription").val();
+        var formgroupid = $("#FormGroupId").val();
+        $.ajax({
+            url: '@Url.Action("CopyForm", "Form")',
+            type: "POST",
+            data: { "name": formName, "des": des, "formId": formId, "formgroupId": formgroupid },
+            success: function (result) {
+                if (result) {
+                    document.location = '@Url.Action("Index")';
+                }
+            },
+            error: function (xhr) {
+                alert(xhr.statusText);
+            }
+        });
+    }
+</script>
+<style>
+    .form-control {
+        width:60%;
+    }
+</style>
+@*<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Common.List"), "Index")</li>
+        <li>@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+        <li>@Html.ActionLink(Localizer("Common.Button.CopyForm"), "CopyForm", null, new { @class = "selected" })</li>
+    </ul>
+</div>*@
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-text"></i>
+        <span data-res="egov.resources.sitemap.form"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn submit" href="#">
+            <span class="icon icon-copy"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.copy"></span>
+        </a>
+    </div>
+</div>
+<div class="">
+    <div id="divForm" class="bkavegov">
+        <div id="divList" style="padding-top: 10px;">
+            <table>
+                <tr>
+                    <td style="width:13%">@Localizer("Common.FormGroup.Index")
+                    </td>
+                    <td>
+                        <select id="FormGroupId" name="FormGroupId"">
+                            @if (allFormGroup != null && allFormGroup.Any())
+                            {
+                                foreach (var formgroup in allFormGroup)
+                                {
+                                <option value="@formgroup.FormGroupId">@formgroup.FormGroupName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Localizer("Common.Form.Name.Index") <span class="spanRequire">*</span>
+                    </td>
+                    <td>
+                        <input type="text" id="TxtFormName"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Localizer("Common.Form.Description")
+                    </td>
+                    <td>
+                        <input type="text" id="TxtDescription"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Localizer("Common.Form.Index.Select")
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td style="width:13%">@Localizer("Common.FormGroup.Index")
+                                </td>
+                                <td>
+                                    @Html.DropDownList("FormGroups", formGroups, Localizer("Common.FormGroup.Select"))
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>@Localizer("Common.TemplateForm.Index")
+                                </td>
+                                <td>
+                                    <select runat="server" id="ddlForm">
+                                        <option value="0">@Localizer("Common.Form.Select")</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span style="color: red" id="sMessage"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

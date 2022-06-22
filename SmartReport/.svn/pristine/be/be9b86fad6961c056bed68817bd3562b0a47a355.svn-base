@@ -1,0 +1,28 @@
+﻿
+<div class="row">
+    <!--<div class="hidden-checkbox col-xs-2 col-sm-2 chkCheck">-->
+    <div class="col-xs-2 col-sm-2 chkCheck">
+        <img src="${UserAvatar}" width="48" class="img-circle imgAvatar" onerror="this.src = getErrorAvatar()" />
+
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect checkbox" for="chk_list_question_${QuestionId}}">
+            <input name="checkbox[]" checked="checked" type="checkbox" id="chk_list_question_${QuestionId}" class="mdl-checkbox__input">
+        </label>
+    </div>
+    <div class="col-xs-14 col-sm-14 colinfo">
+        <div class="row first-line">
+            <div class="col-xs-16 col-sm-16 wraptext">
+                <span class="compendium">${Name}</span>
+            </div>
+        </div>
+        <div class="document-info row secondary-line">
+            <div class="col-xs-8 col-sm-8 wraptext">
+                <span class="pull-left wraptext">
+                    ${AskPeople}
+                </span>
+            </div>
+            <div class="col-xs-8 col-sm-8 wraptext" style="text-align: right;">
+                ${DateLabel}
+            </div>
+        </div>
+    </div>
+</div>

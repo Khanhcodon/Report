@@ -1,0 +1,270 @@
+﻿@using Bkav.eGovCloud.Entities
+@model Bkav.eGovCloud.Models.SearchAdvangeModel
+@{
+    var allUsers = ViewBag.AllUsers as string;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var usersApprove = ViewBag.UsersApprove as string;
+    var allOrganization = ViewBag.Organization as string;
+    if (ViewContext.FormContext == null)
+    {
+        ViewContext.FormContext = new FormContext();
+    }
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<style type="text/css">
+    .search-advance-table td {
+        padding: 2px;
+    }
+</style>
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var usersApprove = @(string.IsNullOrEmpty(usersApprove) ? MvcHtmlString.Create("[]") : Html.Raw(usersApprove));
+    var allOrganization = @(string.IsNullOrEmpty(allOrganization) ? MvcHtmlString.Create("[]") : Html.Raw(allOrganization));
+    var heightDialog;
+    $(function () {
+        $("input[type=text],select,textarea").addClass("form-control");
+        $("@(Model.FormId) #ToDateStr").datepicker({
+            changeMonth: true,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                $("@(Model.FormId) #FromDateStr").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+        $('@(Model.FormId) #FromDateStr').datepicker({
+            changeMonth: true,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                $("@(Model.FormId) #ToDateStr").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("@(Model.FormId) #CurrentUser").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("@(Model.FormId) #CurrentUser").val(ui.item.username);
+                $("@(Model.FormId) #CurrentUserId").val(ui.item.value);
+                return false;
+            }
+        });
+        $("@(Model.FormId) #UserSuccess").autocomplete({
+            minLength: 1,
+            source: usersApprove,
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("@(Model.FormId) #UserSuccess").val(ui.item.username);
+                $("@(Model.FormId) #UserSuccessId").val(ui.item.value);
+                return false;
+            }
+        });
+
+        $("@(Model.FormId) #InOutPlace").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allDepartments, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("@(Model.FormId) #InOutPlace").val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("@(Model.FormId) #OrganizationCreate").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allOrganization, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("@(Model.FormId) #OrganizationCreate").val(ui.item.label);
+                return false;
+            }
+        });
+        $.validator.unobtrusive.parse('@(Model.FormId)');
+
+    });
+</script>
+<table class="search-advance-table" style="width: 80%">
+    <tr class="form-group">
+        <td style="width: 12%">
+            @Html.LabelFor(model => model.Compendium)
+        </td>
+        <td colspan="3">
+            @Html.TextBoxFor(model => model.Compendium, new { width = "100%", @class = "form-control" })
+        </td>
+    </tr>
+    <tr class="form-group">
+        <td>
+            @Html.LabelFor(model => model.DocCode)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocCode)
+        </td>
+        <td style="width:12%">
+            @Html.LabelFor(model => model.InOutCode)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.InOutCode)
+        </td>
+    </tr>
+    <tr class="form-group">
+        <td>
+            @Html.LabelFor(model => model.CategoryId)
+        </td>
+        <td colspan="3">
+            @Html.DropDownList("CategoryId", "Tất cả")
+        </td>
+    </tr>
+    <tr class="form-group">
+        <td>
+            @Html.LabelFor(model => model.KeyWord)
+        </td>
+        <td colspan="3">
+            @Html.TextBoxFor(model => model.KeyWord)
+        </td>
+    </tr>
+
+    <tr class="search-advance form-group">
+        <td>
+            @Html.LabelFor(model => model.Content)
+        </td>
+        <td colspan="3">
+            @Html.TextAreaFor(model => model.Content, new { style = "min-height:50px" })
+        </td>
+    </tr>
+    <tr class="search-advance form-group">
+        <td>
+            @Html.LabelFor(model => model.UrgentId)
+        </td>
+        <td>
+            @Html.DropDownList("UrgentId", "Tất cả")
+        </td>
+        <td>
+            @Html.LabelFor(model => model.CategoryBusinessId)
+        </td>
+        <td>
+            <select name="CategoryBusinessId">
+                @if (IsXuLyVanBanEdition)
+                {
+                    <option>Tất cả</option>
+                    <option value="@((int)CategoryBusinessTypes.VbDen)">Văn bản đến</option>
+                    <option value="@((int)CategoryBusinessTypes.VbDi)">Văn bản đi</option>
+                }
+                else if (IsHoSoMotCuaEdition)
+                {
+                    <option value="@((int)CategoryBusinessTypes.Hsmc)">Hồ sơ một cửa</option>
+                }
+                else if (IsFullEdition)
+                {
+                    <option>Tất cả</option>
+                    <option value="@((int)CategoryBusinessTypes.VbDen)">Văn bản đến</option>
+                    <option value="@((int)CategoryBusinessTypes.VbDi)">Văn bản đi</option>
+                    <option value="@((int)CategoryBusinessTypes.Hsmc)">Hồ sơ một cửa</option>
+                }
+            </select>
+        </td>
+    </tr>
+    <tr class="search-advance form-group">
+        <td>
+            @Html.LabelFor(model => model.StorePrivateId)
+        </td>
+        <td>
+            @Html.DropDownList("StorePrivateId", "Tất cả")
+        </td>
+        <td>
+            @Html.LabelFor(model => model.CurrentUserId)
+        </td>
+        <td>
+            @Html.TextBox("CurrentUser")
+            @Html.HiddenFor(model => model.CurrentUserId)
+        </td>
+    </tr>
+    @*<div class="search-advance">
+    <span class="row-label">
+        <label style="color: firebrick; font-weight: bold; font-size: 1em">Khoảng thời gian tìm kiếm </label>
+    </span>
+</div>*@
+    <tr class="search-advance form-group">
+        <td>
+            @*<input type="radio" name="group1" value="rdFromDate" />*@
+            @Html.LabelFor(model => model.FromDateStr)
+        </td>
+        <td>@Html.TextBoxFor(model => model.FromDateStr)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ToDateStr)</td>
+        <td>
+            @Html.TextBoxFor(model => model.ToDateStr)
+        </td>
+    </tr>
+    @*<div class="search-advance">
+    <div>
+        <span>
+            <input type="radio" name="group1" value="rdBeforeDate" />@Html.LabelFor(model => model.BeforeDate)</span>
+        <div>
+            @Html.TextBoxFor(model => model.BeforeDate)
+        </div>
+    </div>
+    <div>
+        <span>
+            <input type="radio" name="group1" value="rdAfterDate" />@Html.LabelFor(model => model.AfterDate)</span>
+        <div>
+            @Html.TextBoxFor(model => model.AfterDate)
+        </div>
+    </div>
+</div>*@
+    <tr class="search-advance form-group">
+        <td>
+            @Html.LabelFor(model => model.InOutPlace)  </td>
+        <td>
+            @Html.TextBoxFor(model => model.InOutPlace)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.OrganizationCreate)  </td>
+        <td>
+            @Html.TextBoxFor(model => model.OrganizationCreate)
+        </td>
+    </tr>
+    <tr class="search-advance form-group">
+        <td>
+            @Html.LabelFor(model => model.DocFieldId)  </td>
+        <td>
+            @Html.DropDownList("DocFieldId", "Tất cả")
+        </td>
+        <td>
+            @Html.LabelFor(model => model.UserSuccessId)  </td>
+        <td>
+            @Html.TextBox("UserSuccess")
+            @Html.HiddenFor(model => model.UserSuccessId)
+        </td>
+    </tr>
+    <tr class="form-group">
+            <td>
+                <button type="submit" id="btnSearch2" class="btn btn-submit">Tìm kiếm</button>
+            </td>
+        </tr>
+</table>

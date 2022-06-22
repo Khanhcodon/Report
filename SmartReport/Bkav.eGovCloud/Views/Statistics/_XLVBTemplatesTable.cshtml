@@ -1,0 +1,504 @@
+﻿@{
+    Layout = null;
+    var stylePrint = "border: 1px solid #e7e9fd; padding: 8px;";
+}
+
+@*Lưu ý: giữ nguyên style inline để export*@
+<div class="viewer">
+
+    <div class="" id="tonghop_vbden">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+                <col style="width: 250px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+            </colgroup>
+            <div style="display:none">
+                <jsonheader>
+                    [{"Title":"Họ và tên","Justify":null,"Font":null,"Merge":"A1:A3","Width":"50"}
+                    ,{"Title":"Tồn đâu kỳ","Justify":null,"Font":null,"Merge":"B1:C1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"B2:B3","Width":"10"}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"C2:C3","Width":"10"}
+                    ,{"Title":"Nhận trong kỳ","Justify":null,"Font":null,"Merge":"D1:D3","Width":"10"}
+                    ,{"Title":"Đã xử lý","Justify":null,"Font":null,"Merge":"E1:I1","Width":null}
+                    ,{"Title":"Tồn cuối kỳ","Justify":null,"Font":null,"Merge":"J1:K1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"E2:E3","Width":"10"}
+                    ,{"Title":"Đúng hạn","Justify":null,"Font":null,"Merge":"F2:G2","Width":null}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"H2:I2","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"J2:J3","Width":"10"}
+                    ,{"Title":"Quá Hạn","Justify":null,"Font":null,"Merge":"K2:K3","Width":"10"}
+                    ,{"Title":"Để Biết","Justify":null,"Font":null,"Merge":"F3","Width":"10"}
+                    ,{"Title":"Để xử lý","Justify":null,"Font":null,"Merge":"G3","Width":"10"}
+                    ,{"Title":"Để Biết","Justify":null,"Font":null,"Merge":"H3","Width":"10"}
+                    ,{"Title":"Để xử lý","Justify":null,"Font":null,"Merge":"I3","Width":"10"}]
+                </jsonheader>
+                <jsonheadercount>4</jsonheadercount>
+            </div>
+            <thead>
+                <tr>
+                    <th rowspan="3" style="@stylePrint">Họ và Tên</th>
+                    <th colspan="2" style="@stylePrint">Tồn đầu kỳ</th>
+                    <th rowspan="3" style="@stylePrint">Nhận trong kỳ</th>
+                    <th colspan="5" style="@stylePrint">Đã xử lý</th>
+                    <th colspan="2" style="@stylePrint">Tồn cuối kỳ</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" style="@stylePrint">Tổng</th>
+                    <th rowspan="2" style="@stylePrint">Quá hạn</th>
+                    <th rowspan="2" style="@stylePrint">Tổng</th>
+                    <th colspan="2" style="@stylePrint">Đúng hạn</th>
+                    <th colspan="2" style="@stylePrint">Quá hạn</th>
+                    <th rowspan="2" style="@stylePrint">Tổng</th>
+                    <th rowspan="2" style="@stylePrint">Quá hạn</th>
+                </tr>
+                <tr>
+                    <th style="@stylePrint">Để biết</th>
+                    <th style="@stylePrint">Xử lý</th>
+                    <th style="@stylePrint">Để biết</th>
+                    <th style="@stylePrint">Xử lý</th>
+                </tr>
+                <tr style="display:none">
+                    <th style="@stylePrint">Họ và Tên</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Quá hạn</th>
+                    <th style="@stylePrint">Đã xử lý/Nhận trong kỳ</th>
+                    <th style="@stylePrint">Đã xử lý/Tổng</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Xử lý</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Xử lý</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Quá hạn</th>
+                </tr>
+
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="" id="tonghop_vbden_normal_basic">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+
+                <col style="width: 250px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+            </colgroup>
+            <div style="display:none">
+                <jsonheader>
+                    [{"Title":"Họ và tên","Justify":null,"Font":null,"Merge":"A1:A2","Width":"50"}
+                    ,{"Title":"Nhận trong kỳ","Justify":null,"Font":null,"Merge":"B1:B2","Width":"10"}
+                    ,{"Title":"Đã xử lý","Justify":null,"Font":null,"Merge":"C1:E1","Width":null}
+                    ,{"Title":"Chưa xử lý","Justify":null,"Font":null,"Merge":"F1:H1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"C2","Width":"10"}
+                    ,{"Title":"Đúng hạn","Justify":null,"Font":null,"Merge":"D2","Width":null}
+                    ,{"Title":"Trễ hạn","Justify":null,"Font":null,"Merge":"E2","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"F2","Width":"10"}
+                    ,{"Title":"Chưa đến hạn","Justify":null,"Font":null,"Merge":"G2","Width":"10"}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"H2","Width":"10"}]
+                </jsonheader>
+                <jsonheadercount>3</jsonheadercount>
+            </div>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="@stylePrint">Họ và Tên</th>
+                    <th rowspan="2" style="@stylePrint">Nhận trong kỳ</th>
+                    <th colspan="3" style="@stylePrint">Đã xử lý</th>
+                    <th colspan="3" style="@stylePrint">Chưa xử lý</th>
+                </tr>
+                <tr>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th colspan="1" style="@stylePrint">Đúng hạn</th>
+                    <th colspan="1" style="@stylePrint">Trễ hạn</th>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th rowspan="1" style="@stylePrint">Chưa đến hạn</th>
+                    <th rowspan="1" style="@stylePrint">Quá hạn</th>
+                </tr>
+                <tr style="display:none">
+                    <th style="@stylePrint">Họ và Tên</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Quá hạn</th>
+                    <th style="@stylePrint">Đã xử lý/Nhận trong kỳ</th>
+                    <th style="@stylePrint">Đã xử lý/Tổng</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Xử lý</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Xử lý</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Quá hạn</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="" id="tonghop_vbhoibao">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+
+                <col style="width: 250px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+            </colgroup>
+            <div style="display:none">
+                <jsonheader>
+                    [{"Title":"Tên","Justify":null,"Font":null,"Merge":"A1:A2","Width":"50"}
+                    ,{"Title":"Nhận trong kỳ","Justify":null,"Font":null,"Merge":"B1:B2","Width":"10"}
+                    ,{"Title":"Đã phản hồi","Justify":null,"Font":null,"Merge":"C1:E1","Width":null}
+                    ,{"Title":"Chưa phản hồi","Justify":null,"Font":null,"Merge":"F1:H1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"C2","Width":"10"}
+                    ,{"Title":"Đúng hạn","Justify":null,"Font":null,"Merge":"D2","Width":null}
+                    ,{"Title":"Trễ hạn","Justify":null,"Font":null,"Merge":"E2","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"F2","Width":"10"}
+                    ,{"Title":"Chưa đến hạn","Justify":null,"Font":null,"Merge":"G2","Width":"10"}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"H2","Width":"10"}]
+                </jsonheader>
+                <jsonheadercount>3</jsonheadercount>
+            </div>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="@stylePrint">Tên</th>
+                    <th rowspan="2" style="@stylePrint">Tổng</th>
+                    <th colspan="3" style="@stylePrint">Đã phản hồi</th>
+                    <th colspan="3" style="@stylePrint">Chưa phản hồi</th>
+                </tr>
+                <tr>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th colspan="1" style="@stylePrint">Đúng hạn</th>
+                    <th colspan="1" style="@stylePrint">Trễ hạn</th>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th rowspan="1" style="@stylePrint">Chưa đến hạn</th>
+                    <th rowspan="1" style="@stylePrint">Quá hạn</th>
+                </tr>
+                <tr style="display:none">
+                    <th style="@stylePrint">Họ và Tên</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Quá hạn</th>
+                    <th style="@stylePrint">Đã xử lý/Nhận trong kỳ</th>
+                    <th style="@stylePrint">Đã xử lý/Tổng</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Xử lý</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Xử lý</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Quá hạn</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    <div class="" id="tonghop_vbdihb">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+                <col style="width: 250px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+            </colgroup>
+            <div style="display:none">
+                <jsonheader>
+                    [{"Title":"Tên","Justify":null,"Font":null,"Merge":"A1:A2","Width":"50"}
+                    ,{"Title":"Nhận trong kỳ","Justify":null,"Font":null,"Merge":"B1:B2","Width":"10"}
+                    ,{"Title":"Đã phản hồi","Justify":null,"Font":null,"Merge":"C1:E1","Width":null}
+                    ,{"Title":"Chưa phản hồi","Justify":null,"Font":null,"Merge":"F1:H1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"C2","Width":"10"}
+                    ,{"Title":"Đúng hạn","Justify":null,"Font":null,"Merge":"D2","Width":null}
+                    ,{"Title":"Trễ hạn","Justify":null,"Font":null,"Merge":"E2","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"F2","Width":"10"}
+                    ,{"Title":"Chưa đến hạn","Justify":null,"Font":null,"Merge":"G2","Width":"10"}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"H2","Width":"10"}]
+                </jsonheader>
+                <jsonheadercount>3</jsonheadercount>
+            </div>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="@stylePrint">Họ và Tên</th>
+                    <th rowspan="2" style="@stylePrint">Tổng Văn bản đi</th>
+                    <th rowspan="2" style="@stylePrint">Tổng văn bản yêu cầu hồi báo</th>
+                    <th colspan="3" style="@stylePrint">Đã phản hồi</th>
+                    <th colspan="3" style="@stylePrint">Chưa phản hồi</th>
+                </tr>
+                <tr>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th colspan="1" style="@stylePrint">Đúng hạn</th>
+                    <th colspan="1" style="@stylePrint">Trễ hạn</th>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th rowspan="1" style="@stylePrint">Chưa đến hạn</th>
+                    <th rowspan="1" style="@stylePrint">Quá hạn</th>
+                </tr>
+                <tr style="display:none">
+                    <th style="@stylePrint">Họ và Tên</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Quá hạn</th>
+                    <th style="@stylePrint">Đã xử lý/Nhận trong kỳ</th>
+                    <th style="@stylePrint">Đã xử lý/Tổng</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Xử lý</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Xử lý</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Quá hạn</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    <div class="" id="tonghop_vbhb">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+
+                <col style="width: 250px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+                <col style="width: 70px" />
+            </colgroup>
+            <div style="display:none">
+                <jsonheader>
+                    [{"Title":"Tên","Justify":null,"Font":null,"Merge":"A1:A2","Width":"50"}
+                    ,{"Title":"Nhận trong kỳ","Justify":null,"Font":null,"Merge":"B1:B2","Width":"10"}
+                    ,{"Title":"Đã phản hồi","Justify":null,"Font":null,"Merge":"C1:E1","Width":null}
+                    ,{"Title":"Chưa phản hồi","Justify":null,"Font":null,"Merge":"F1:H1","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"C2","Width":"10"}
+                    ,{"Title":"Đúng hạn","Justify":null,"Font":null,"Merge":"D2","Width":null}
+                    ,{"Title":"Trễ hạn","Justify":null,"Font":null,"Merge":"E2","Width":null}
+                    ,{"Title":"Tổng","Justify":null,"Font":null,"Merge":"F2","Width":"10"}
+                    ,{"Title":"Chưa đến hạn","Justify":null,"Font":null,"Merge":"G2","Width":"10"}
+                    ,{"Title":"Quá hạn","Justify":null,"Font":null,"Merge":"H2","Width":"10"}]
+                </jsonheader>
+                <jsonheadercount>3</jsonheadercount>
+            </div>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="@stylePrint">Họ và Tên</th>
+                    <th rowspan="2" style="@stylePrint">Tổng văn bản yêu cầu hồi báo</th>
+                    <th colspan="3" style="@stylePrint">Đã phản hồi</th>
+                    <th colspan="3" style="@stylePrint">Chưa phản hồi</th>
+                </tr>
+                <tr>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th colspan="1" style="@stylePrint">Đúng hạn</th>
+                    <th colspan="1" style="@stylePrint">Trễ hạn</th>
+                    <th rowspan="1" style="@stylePrint">Tổng</th>
+                    <th rowspan="1" style="@stylePrint">Chưa đến hạn</th>
+                    <th rowspan="1" style="@stylePrint">Quá hạn</th>
+                </tr>
+                <tr style="display:none">
+                    <th style="@stylePrint">Họ và Tên</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn đầu kỳ/Quá hạn</th>
+                    <th style="@stylePrint">Đã xử lý/Nhận trong kỳ</th>
+                    <th style="@stylePrint">Đã xử lý/Tổng</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Đúng hạn/Xử lý</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Để biết</th>
+                    <th style="@stylePrint">Đã xử lý/Quá hạn/Xử lý</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Tổng</th>
+                    <th style="@stylePrint">Tồn cuối kỳ/Quá hạn</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+
+    <div id="tonghop_vbden_detail">
+        <table class="table table-bordered table-hover" style="border: 1px solid #e7e9fd; border-collapse: collapse;">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 150px" />
+                <col style="" />
+                <col style="width: 150px" />
+                <col style="width: 100px" />
+                <col style="width: 100px" />
+                <col style="width: 100px" />
+                <col style="width: 100px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="" style="@stylePrint">STT</th>
+                    <th rowspan="" style="@stylePrint">Số ký hiệu</th>
+                    <th rowspan="" style="@stylePrint">Trích yếu văn bản</th>
+                    <th rowspan="" style="@stylePrint">Người xử lý</th>
+                    <th rowspan="" style="@stylePrint">Thời gian nhận</th>
+                    <th rowspan="" style="@stylePrint">Hạn xử lý</th>
+                    <th colspan="" style="@stylePrint">Thời gian xử lý</th>
+                    <th colspan="" style="@stylePrint">Trạng thái</th>
+                    <th colspan="" style="@stylePrint">Văn bản trả lời</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="tonghop_vbdi">
+        <table class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 120px" />
+                <col style="width: 350px" />
+                <col style="width: 120px" />
+                <col style="width: 150px" />
+                <col style="width: 350px" />
+                <col style="width: 100px" />
+            </colgroup>
+            <div style="display:none">
+               
+            </div>
+            <thead>
+                <tr>
+                    <th style="@stylePrint">STT</th>
+                    <th style="@stylePrint">Số ký hiệu</th>
+                    <th style="@stylePrint">Trích yếu</th>
+                    <th style="@stylePrint">Ngày ban hành</th>
+                    <th style="@stylePrint">Người ký</th>
+                    <th style="@stylePrint">Nơi nhận</th>
+                    <th style="@stylePrint">Nơi nhận bản lưu</th>
+                    <th style="@stylePrint">Ghi chú</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="tonghop_hoibao">
+        <table class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 120px" />
+                <col style="width: 350px" />
+                <col style="width: 120px" />
+                <col style="width: 350px" />
+                <col style="width: 120px" />
+                <col style="width: 150px" />
+                <col style="width: 100px" />
+            </colgroup>
+            <div style="display:none">
+               
+            </div>
+            <thead>
+                <tr>
+                    <th style="@stylePrint">STT</th>
+                    <th style="@stylePrint">Số ký hiệu</th>
+                    <th style="@stylePrint">Trích yếu</th>
+                    <th style="@stylePrint">Ngày ban hành</th>
+                    <th style="@stylePrint">Nơi nhận</th>
+                    <th style="@stylePrint">Người xử lý</th>
+                    <th style="@stylePrint">Hạn hồi báo</th>
+                    <th style="@stylePrint">Ngày phản hồi</th>
+                    <th style="@stylePrint">Văn bản phản hồi</th>
+                    <th style="@stylePrint">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    <div id="tonghop_hoibao_cqbh">
+        <table class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col style="width: 120px" />
+                <col style="width: 120px" />
+                <col style="width: 350px" />
+                <col style="width: 350px" />
+                <col style="width: 150px" />
+                <col style="width: 100px" />
+            </colgroup>
+            <div style="display:none">
+               
+            </div>
+            <thead>
+                <tr>
+                    <th style="@stylePrint">STT</th>
+                    <th style="@stylePrint">Văn bản đến</th>
+                    <th style="@stylePrint">Văn bản giao</th>
+                    <th style="@stylePrint">Trích yếu</th>
+                    @*<th style="@stylePrint">Ngày ban hành</th>*@
+                    <th style="@stylePrint">Cơ quan tham mưu</th>
+                    <th style="@stylePrint">Hạn hồi báo</th>
+                    <th style="@stylePrint">Ngày phản hồi</th>
+                    <th style="@stylePrint">Văn bản phản hồi</th>
+                    <th style="@stylePrint">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="tonghop_sovbden">
+        <table class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 120px" />
+                <col style="width: 120px" />
+                <col style="width: 250px" />
+                <col style="width: 120px" />
+                <col style="width: 120px" />
+                <col style="width: 350px" />
+                <col style="width: 200px" />
+                <col style="width: 120px" />
+                <col style="width: 120px" />
+            </colgroup>
+            <div style="display:none">
+               
+            </div>
+            <thead>
+                <tr>
+                    <th style="@stylePrint">Ngày đến</th>
+                    <th style="@stylePrint">Số đến</th>
+                    <th style="@stylePrint">Cơ quan ban hành</th>
+                    <th style="@stylePrint">Số ký hiệu</th>
+                    <th style="@stylePrint">Ngày tháng</th>
+                    <th style="@stylePrint">Trích yếu</th>
+                    <th style="@stylePrint">Nơi nhận</th>
+                    <th style="@stylePrint">Thời hạn xử lý</th>
+                    <th style="@stylePrint">Văn bản trả lời</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

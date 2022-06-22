@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    
+    <script>
+        // Ignore this in your implementation
+        window.isMbscDemo = true;
+    </script>
+
+    <title>Mobile form</title>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+    <!-- Mobiscroll JS and CSS Includes -->
+    <link rel="stylesheet" href="css/mobiscroll.jquery.lite.min.css">
+    <script src="js/mobiscroll.jquery.lite.min.js"></script>
+
+    <style type="text/css">
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    </style>
+
+</head>
+<body>
+
+<div mbsc-page class="demo-mobile">
+    <div mbsc-form>
+        <div class="mbsc-form-group">
+            <div class="mbsc-form-group-title">User Data</div>
+            <label for="firstname">
+                First Name
+                <input id="firstname" type="text" placeholder="First Name" />
+            </label>
+            <label for="lastname">
+                Last Name
+                <input id="lastname" type="text" placeholder="Last Name" />
+            </label>
+            <label for="username">
+                User Name
+                <input id="username" type="text" placeholder="User Name" />
+            </label>
+            <label for="company">
+                Company
+                <input id="company" type="text" placeholder="Company Name" />
+            </label>
+            <label for="email">
+                Email
+                <input id="email" type="text" placeholder="Email Address" />
+            </label>
+        </div>
+        <div class="mbsc-form-group">
+            <div class="mbsc-form-group-title">Phone Number</div>
+            <label for="home">
+                Home
+                <input id="home" type="text" placeholder="Home" />
+            </label>
+            <label for="business">
+                Business
+                <input id="business" type="text" placeholder="Business" />
+            </label>
+            <label for="fax">
+                Fax
+                <input id="fax" type="text" placeholder="Fax" />
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    mobiscroll.settings = {
+        lang: 'en',   // Specify language like: lang: 'pl' or omit setting to use default
+        theme: 'ios'  // Specify theme like: theme: 'ios' or omit setting to use default
+    };
+</script>
+
+</body>
+</html>

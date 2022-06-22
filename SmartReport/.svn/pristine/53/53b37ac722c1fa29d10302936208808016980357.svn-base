@@ -1,0 +1,339 @@
+﻿@model Ad_LocalityModel
+@{
+    ViewBag.Title = " Quản lý địa bàn ";
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://uniquepro-admin-templates.websitedesignmarketingagency.com/images/favicon.ico">
+    <title>Quản lý địa bàn</title>
+
+    <!-- Bootstrap 4.1.3-->
+    <link href="~/Scripts/disaggregation/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap extend-->
+    <link href="~/Scripts/disaggregation/main/css/bootstrap-extend.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/Scripts/disaggregation/main/css/master_style.css" rel="stylesheet" />
+    <!-- Unique_Admin skins -->
+    <link href="~/Scripts/disaggregation/main/css/skins/_all-skins.css" rel="stylesheet" />
+
+    <link href="~/Scripts/disaggregation/main/css/style.css" rel="stylesheet" />
+
+    <!--alerts CSS -->
+    <link href="~/Scripts/disaggregation/assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/Scripts/disaggregation/assets/vendor_components/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet" />
+
+    <!--Style-->
+    <link href="~/Content/disaggregation/style.css" rel="stylesheet" />
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper hold-transition skin-blue sidebar-mini">
+        <header class="main-header">
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar -->
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="treeview active">
+                        <a href="#">
+                            <i class="fa fa-table"></i> <span>Tables</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="simple.html">Simple tables</a></li>
+                            <li class="active"><a href="data.html">Data tables</a></li>
+                            <li><a href="editable-tables.html">Editable Tables</a></li>
+                            <li><a href="table-color.html">Table Color</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-map"></i> <span>Map</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="../map/map-google.html">Google Map</a></li>
+                            <li><a href="../map/map-vector.html">Vector Map</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <div class="sidebar-background" style="background-image: url(../../../images/sidebar-bg/08.jpg);"></div>
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border leftRightDis">
+                                <div class="leftdisaggregation">
+                                    <h3 class="box-title">Danh sách địa bàn</h3>
+                                </div>
+                                <div class="rightdisaggregation">
+                                    <!-- <button type="button" class="btn btn-block btn-rounded btn-success"><i class="fa fa-plus-square"></i> Thêm</button>
+                                    <button type="button" class="btn btn-block btn-rounded btn-danger"><i class="fa fa-times-circle"></i> Xóa</button> -->
+                                    <a class="popup-with-form btn btn-block btn-rounded btn-successs" id="tagForm" href="#myForm" style="background-color:aquamarine">
+                                        <i class="fa fa-plus-square"></i> Thêm</a>
+                                    <button type="button" id="deleteMul" class="btn btn-block btn-rounded btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+
+                                    <!-- form itself -->
+                                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myForm", @class = "mfp-hide white-popup-block" }))
+                                    {
+                                        @Html.ValidationSummary(true)
+                                        @Html.AntiForgeryToken()
+
+                                        <h1>Thêm mới địa bàn</h1>
+                                        <fieldset style="border:0;">
+                                            <div class="form-group">
+                                                <label class="control-label" for="inputName">Tên địa bàn</label>
+                                                <br />
+                                                <input type="text" class="form-control" id="txtNAME_FIELD" name="LocalityName" placeholder="Tên địa bàn">
+                                                @Html.ValidationMessageFor(model => model.LocalityName)
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="inputName">Mã địa bàn</label>
+                                                <br />
+                                                <input type="text" class="form-control" id="txtId_FIELD" name="Id" placeholder="Mã địa bàn">
+                                                @Html.ValidationMessageFor(model => model.Id)
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="inputName">Loại địa bàn</label>
+                                                <select type="text" class="form-control" id="txtTYPE_FIELD" name="Type" placeholder="Loại địa bàn">
+                                                    <option value="3">Xã/Phường/Thị trấn</option>
+                                                    <option value="2">Quận/Huyện/Thị xã</option>
+                                                    <option value="1">Tỉnh/Thành phố</option>
+                                                </select>
+                                                @*<input type="text" class="form-control" id="txtTYPE_FIELD" name="Type" placeholder="Loại địa bàn">*@
+                                                @Html.ValidationMessageFor(model => model.Type)
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="inputName">Địa bàn cha</label>
+                                                <br />
+
+                                                <select class="form-control" id="txtPAR_FIELD" name="ParentId" placeholder="Địa bàn cha">
+                                                    @if(ViewBag.ListOption != null){
+
+                                                        foreach (var item in ViewBag.ListOption as IEnumerable<SelectListItem>)
+                                                        {
+                                                            <option @(item.Selected ? "selected" : "") value="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+
+                                                </select>
+                                                @Html.ValidationMessageFor(model => model.ParentId)
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="textarea">Mô tả</label>
+                                                <br>
+                                                <textarea class="form-control" id="txtDES_FIELD" name="Description" placeholder="Mô tả" rows="7"></textarea>
+                                                @Html.ValidationMessageFor(model => model.Description)
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" value="true">
+                                                <label class="form-check-label" for="IsActive">Sử dụng</label>
+                                            </div>
+
+                                            <button class="btn btn-primary" id="btnAdd" style="padding-top: 10px; float:right">
+                                                <span class="-ap icon icon-plus3"></span> Lưu lại
+                                            </button>
+                                        </fieldset>
+                                        @Html.HiddenFor(model => model.LocalityId)
+                                    }
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table id="disaggregation" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" id="checkBoxAlls" name="checkBoxAll" class="custom-checkbox form-check-input labelThead" />
+                                                    <label class="form-check-label" for="checkBoxAlls"></label>
+                                                </th>
+                                                <th hidden class="text-center">ID_Guid</th>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Tên địa bàn</th>
+                                                <th class="text-center">Mã địa bàn</th>
+                                                <th class="text-center">Loại địa bàn</th>
+                                                <th class="text-center">Địa bàn cha</th>
+                                                <th class="text-center">Mô tả</th>
+                                                <th class="text-center">Sử dụng</th>
+                                                <th class="text-center">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.Ad_Localitys != null)
+                                            {
+                                                var stt = 0;
+                                                foreach (var item in Model.Ad_Localitys)
+                                                {
+                                            <tr class="checkId">
+                                                <td class="tdInDi">
+                                                    <input type="checkbox" id="@item.LocalityId" name="@item.LocalityId" value="@item.LocalityId"
+                                                           class="custom-checkbox form-check-input chkCheckBoxId" />
+                                                    <label class="form-check-label labelLocalityId" for="@item.LocalityId"></label>
+                                                </td>
+                                                <td hidden class="text-center">@item.LocalityId</td>
+                                                <td class="text-center">@(stt + 1)</td>
+                                                <td class="text-center">@item.LocalityName</td>
+                                                <td class="text-center">@item.Id</td>
+                                                <td class="text-center">
+                                                    @if (item.Type == 3)
+                                                    {
+                                                        <label class="text-center"> Xã/Phường/Thị trấn </label>
+                                                    }
+                                                    else
+                                                        if (item.Type == 2)
+                                                    {
+                                                        <label class="text-center">Quận/Huyện/Thị xã</label>
+                                                    }
+                                                    else
+                                                    if (item.Type == 1)
+                                                    {
+                                                        <label class="text-center">Tỉnh/Thành phố</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-center">Dữ liệu không xác định</label>
+                                                    }
+
+                                                </td>
+                                                <td class="text-center">@item.ParentId</td>
+                                                <td class="text-center">@item.Description</td>
+                                                <td class="text-center">
+                                                    @if (item.IsActive == true)
+                                                    {
+                                                        <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="@item.IsActive" disabled>
+                                                        <label for="md_checkbox_27"></label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="@item.IsActive" disabled>
+                                                        <label for="md_checkbox_27"></label>
+                                                    }
+                                                </td>
+                                                <td class="text-center" style="font-size: 23px;">
+                                                    <i onclick="EditLocality('@item.LocalityId')" class="fa fa-edit fa-hover" title="Sửa địa bàn" aria-hidden="true" style="color: blue;"></i>
+                                                    <i onclick="RemoveLocality('@item.LocalityId')" class="fa fa-remove fa-hover" title="Xóa địan bàn" aria-hidden="true" style="color: darkred;"></i>
+                                                </td>
+                                            </tr>
+                                                    stt++;
+                                                }
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+
+
+    <!-- jQuery 3 -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/jquery/dist/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/popper/dist/popper.min.js"></script>
+    <!-- Bootstrap 4.1.3-->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/disaggregation/assets/vendor_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <!-- Unique_Admin App -->
+    <script src="~/Scripts/disaggregation/main/js/template.js"></script>
+    <!-- Unique_Admin for demo purposes -->
+    <script src="~/Scripts/disaggregation/main/js/demo.js"></script>
+    <!-- This is data table -->
+    <script src="~/Scripts/disaggregation/assets/vendor_plugins/DataTables-1.10.15/media/js/jquery.dataTables.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="~/Scripts/disaggregation/assets/vendor_components/sweetalert/sweetalert.min.js"></script>
+    <script src="~/Scripts/disaggregation/assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js"></script>
+    <script src="~/Scripts/disaggregation/assets/vendor_components/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="~/Scripts/disaggregation/assets/vendor_components/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
+
+    <!-- js -->
+    <script src="~/Scripts/admin/disaggregation/createOrEditDisaggregation.js"></script>
+    <script type="text/javascript">
+        function EditLocality(localityId) {
+            $.ajax({
+                url: '/Ad_Locality/Edit',
+                data: { id: localityId },
+                success: function (result) {
+                    var localityId = result.LocalityId;
+                    var localityName = result.LocalityName;
+                    var parentId = result.ParentId;
+                    var type = result.Type;
+                    var description = result.Description;
+                    var isActive = result.IsActive;
+                    var id = result.Id;
+                    $('#LocalityId').val(localityId);
+                    $('#txtNAME_FIELD').val(localityName);
+                    $('#txtPAR_FIELD').val(parentId);
+                    $('#txtTYPE_FIELD').val(type);
+                    $('#txtDES_FIELD').val(description);
+                    $("#IsActive").attr("checked", isActive);
+                    $('#txtId_FIELD').val(id);
+                    $('#tagForm').click();
+                                                        },
+                error: function (xhr) { },
+                complete: function () {
+                                                        }
+                                                    });
+        }
+        function RemoveLocality(localityId) {
+            $.ajax({
+                url: '/Ad_Locality/Delete',
+                type: 'POST',
+                data: { id: localityId },
+                success: function (result) {
+
+                },
+                error: function (xhr) { },
+                complete: function () {
+                    swal("Thành công!", "Xóa địa bàn thành công", "success");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000)
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

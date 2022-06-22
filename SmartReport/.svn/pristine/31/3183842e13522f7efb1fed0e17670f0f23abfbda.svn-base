@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ScopeAreaModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblScopeArea").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblScopeArea").openLink({ urlOpen: '/admin/ScopeArea/Edit' });
+        $(".table-main").addClass("table-bordered");
+    })
+</script>
+
+<table id="tblScopeArea" class="table table-hover table-bordered">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="text-center">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th>
+                @Ajax.SortLink("Key", Localizer("Common.ScopeArea.Index.List.Column.Key"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        key = ViewBag.Key,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListScopeArea",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th>
+                @Ajax.SortLink("Name", Localizer("Common.ScopeArea.Index.List.Column.Name"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        key = ViewBag.Key,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListScopeArea",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+        
+            <th class="text-center">
+                @Localizer("Common.Resource.Index.List.Column.Edit")
+            </th>
+            <th class="text-center">
+                @Localizer("Common.ScopeArea.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var scopeArea in Model)
+            {
+                number += 1;
+            <tr data-id="@scopeArea.Id">
+                <td class="text-center">
+                    @number
+                </td>
+                <td>
+                    @scopeArea.Key
+                </td>
+                <td>
+                    @scopeArea.Name
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = scopeArea.Id })
+                </td>
+                <td>
+                    <a href="javascript:deleteScopeArea(@(scopeArea.Id ))"> 
+                        @Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(scopeArea.Id )" style="display: none" 
+                        action="@Url.Action("Delete", new { Id =scopeArea.Id })" method="POST">
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" data-res="egov.resources.scopearea.nodata">
+                    Không có ScopeArea nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<table>
+    <tr>
+        <td class="" colspan="7" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+            @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      key = ViewBag.Key,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListScopeArea",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+        </td>
+    </tr>
+</table>

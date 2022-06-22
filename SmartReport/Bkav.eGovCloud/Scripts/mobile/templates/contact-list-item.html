@@ -1,0 +1,17 @@
+﻿
+<li class="mdl-list__item mdl-list__item--three-line" jid="${jid}" userid="${userid}">
+    <div class="mdl-list__item-primary-content wrap-text {{if status == "available"}}online{{/if}}">
+        <div class="mdl-list__item-avatar" style="position:relative;">
+            <img src="${avatar}" style="width: 100%; height: 100%; border-radius: inherit;" />
+            <span class="online-status">on</span>
+        </div>
+        <span>${fullname}</span>
+        <span class="mdl-list__item-text-body">
+            ${username} - ${departments[0] == null? "":departments[0].jobTitlesName} <br />
+            ${departments[0] == null? "":departments[0].deptName}
+        </span>
+    </div>
+    <span class="mdl-list__item-secondary-content">
+        <a class="mdl-list__item-secondary-action btnChatWith" href="#"><i class="material-icons">chat</i></a>
+    </span>
+</li>

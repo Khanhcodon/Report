@@ -1,0 +1,286 @@
+﻿@model Bkav.eGovCloud.Models.AuthorizeModel
+@using Bkav.eGovCloud.Entities
+@{
+    var isCreate = (bool)ViewBag.IsCreate;
+    var allUsers = ViewBag.AllUsers as string;
+    var allPermission = ViewBag.AllPermission as List<SelectListItem>;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+}
+
+<style>
+    .form-group {
+        height: 25px;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    ul.ui-autocomplete {
+        background-color: #fff;
+        list-style: none;
+    }
+
+    .ui-menu {
+        list-style: none;
+        padding: 2px;
+        margin: 0;
+        display: block;
+        float: left;
+    }
+
+        .ui-menu .ui-menu {
+            margin-top: -3px;
+        }
+
+        .ui-menu .ui-menu-item.ui-state-focus {
+            background: #f0f0f0;
+        }
+
+        .ui-menu .ui-menu-item a.ui-state-hover,
+        .ui-menu .ui-menu-item a.ui-state-active {
+            font-weight: normal;
+            margin: -1px;
+            background: #f0f0f0;
+        }
+
+        .ui-menu li {
+            padding: 5px;
+            font-size: 13px;
+        }
+
+    .ui-datepicker {
+        background: white;
+        padding: 15px;
+        -moz-box-shadow: 0 0 5px grey;
+        -webkit-box-shadow: 0 0 5px grey;
+        box-shadow: 0 0 5px grey;
+        width: 200px;
+    }
+
+        .ui-datepicker a.ui-datepicker-prev {
+            float: left;
+        }
+
+        .ui-datepicker a.ui-datepicker-next {
+            float: right;
+        }
+
+        .ui-datepicker .ui-datepicker-title {
+            text-align: center;
+        }
+
+        .ui-datepicker .ui-datepicker-calendar {
+            width: 100%;
+        }
+
+            .ui-datepicker .ui-datepicker-calendar td > a {
+                width: 26px;
+                display: inline-block;
+                text-align: center;
+            }
+
+                .ui-datepicker .ui-datepicker-calendar td > a:hover,
+                .ui-datepicker .ui-datepicker-calendar td > a.ui-state-highlight {
+                    background: #E3E3E3;
+                }
+</style>
+
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var doctypeSelected = @(string.IsNullOrEmpty(Model.DocTypeId) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DocTypeId));
+
+    $(function () {
+        //focus vào ô text account người dùng nhận ủy quyền
+        $("#AuthorizedUserName").focus();
+
+        //Tạo datetime picker
+        $("#DateBegin,#DateEnd").datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        //Danh sách loại văn bản
+        $("#tblDoctype tbody").append($('#tempDoctypes').tmpl(allDocTypes));
+        $.each(doctypeSelected, function(i, item) {
+            $('#tblDoctype input[value=' + item + ']').prop('checked', true);
+        });
+
+        if ($("#tblDoctype tbody input[type=checkbox]:checked").length === allDocTypes.length) {
+            $("#checkAll").prop('checked', true);
+        }
+
+        console.log(allUsers);
+        //Tạo autocomplele
+        $("#AuthorizedUserName").autocomplete({
+            minLength: 1,
+            source: allUsers,
+            selectFirst: true,
+            focus: function() {
+                return false;
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.label);
+                $("#AuthorizedUserId").val(ui.item.value);
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function(ul, item) {
+            ul.css("position", "absolute");
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };  
+
+        //Chọn/ bỏ chọn loại văn bản
+        $("#checkAll").change(function () {
+            $("#tblDoctype tbody input[type=checkbox]").prop('checked', this.checked);
+            var doctypeIds=[];
+            $("#tblDoctype tbody input[type=checkbox]:checked").each(function() {
+                doctypeIds.push($(this).val());
+            });
+            $("#DocTypeId").val(JSON.stringify(doctypeIds));
+        });
+
+        //Chọn loại văn bản
+        $("#tblDoctype tbody input[type=checkbox]").change(function() {
+            if (this.checked) {
+                if ($("#tblDoctype tbody input[type=checkbox]:checked").length === allDocTypes.length) {
+                    $("#checkAll").prop('checked', true);
+                }
+            } else {
+                $("#checkAll").prop('checked', false);
+            }
+
+            var doctypeIds=[];
+            $("#tblDoctype tbody input[type=checkbox]:checked").each(function() {
+                doctypeIds.push($(this).val());
+            });
+            $("#DocTypeId").val(JSON.stringify(doctypeIds));
+        });
+    });
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.AuthorizeId)
+@Html.HiddenFor(model => model.AuthorizeUserId)
+<fieldset class="profile-config row">
+    <legend>
+        @if (isCreate)
+        {
+            @Html.AntiForgeryToken()  
+            <p data-res="egov.resources.setting.authorize.titleCreate">
+                Thêm mới người nhận ủy quyền</p>
+        }
+        else
+        { 
+            @Html.AntiForgeryToken()
+            <p data-res="egov.resources.setting.authorize.titleEdit">
+               Cập nhật người nhận ủy quyền</p>
+    }
+
+    </legend>
+    <div class="col-md-16">
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelRequireFor(model => model.AuthorizedUserId)
+            </div>
+            <div class="col-md-11">
+                @Html.HiddenFor(model => Model.AuthorizedUserId)
+                @Html.TextBoxFor(model => model.AuthorizedUserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AuthorizedUserId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelRequireFor(model => model.DateBegin)
+            </div>
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.DateBegin, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DateBegin)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelRequireFor(model => model.DateEnd)
+            </div>
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.DateEnd, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DateEnd)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Permission)
+            </div>
+            <div class="col-md-11">
+                @if (allPermission != null && allPermission.Any())
+                {
+                    foreach (var permission in allPermission)
+                    {
+                        var permissionValue = Convert.ToInt32(permission.Value);
+                    <input type="checkbox" name="Permissions" value="@permission.Value" 
+                         @((Model.Permission & permissionValue) == permissionValue ? "checked='checked'" : "")/> @permission.Text
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-11">
+                @Html.CheckBoxFor(model => model.Active)<label>@Html.LabelFor(model => model.Active)</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Note)
+            </div>
+            <div class="col-md-11">
+                @Html.TextBoxFor(model => model.Note, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-11">
+                @Html.LabelFor(model => model.DocTypeId)
+            </div>
+
+            @Html.HiddenFor(model => model.DocTypeId)
+            <div class="col-md-11">
+                <table class="table-main table" id="tblDoctype">
+                    <colgroup>
+                        <col style="width: 30px" />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="checkAll" name="checkAll" /></th>
+                            <th data-res="egov.resources.setting.authorize.table.header.nameDocType">Tên loại hồ sơ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<script type="text/x-jquery-tmpl" id="tempDoctypes">
+    <tr>
+        <td>
+            <input type="checkbox" name="${DocTypeId}" id="${DocTypeId}" value="${DocTypeId}" />
+        </td>
+        <td>${DocTypeName}
+        </td>
+    </tr>
+</script>
+
+@Html.Partial("_Notifications")

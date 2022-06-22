@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Simple Upload with Progress";
+}
+<script type="text/javascript">
+    function CuteWebUI_AjaxUploader_OnPostback() {
+        //submit the form after the file have been uploaded:
+        document.forms[0].submit();
+    }
+</script>
+
+<script src="../../Content/Avartar/jquery.min.js"></script>
+<script src="../../Content/Avartar/jquery.Jcrop.js"></script>
+<link href="../../Content/Avartar/demo.css" rel="stylesheet" />
+<link href="../../Content/Avartar/jquery.Jcrop.css" rel="stylesheet" />
+<script type="text/javascript">
+    var x, y, x2, y2, w, h;
+    $(function () {
+        $('.image-cropper').each(function (unusedIndex, container) {
+            container = $(container);
+            var image = container.find("img.image");
+            var path = image.attr('src'); if (path.indexOf('?') > 0) path = path.substr(0, path.indexOf('?'));
+            var update = function (coords) {
+                if (parseInt(coords.w) <= 0 || parseInt(coords.h) <= 0) return;
+                var url = path + '?crop=(' + coords.x + ',' + coords.y + ',' + coords.x2 + ',' + coords.y2 +
+                ')&cropxunits=' + image.width() + '&cropyunits=' + image.height()
+                // container.find('a.result').attr('href', url);
+                x = coords.x;
+                y = coords.y;
+                x2 = coords.x2;
+                y2 = coords.y2;
+            }
+            image.Jcrop({ onChange: update, onSelect: update, bgColor: 'black', bgOpacity: 0.5 });
+        });
+    });
+    function hopcv() {
+        alert('crop=(' + x + ',' + y + ',' + x2 + ',' + y2 + ',' + ')');
+    };
+</script>
+
+@{Html.BeginForm();}
+@Html.Raw(ViewBag.uploaderhtml)
+@{Html.EndForm();}
+<br />
+<br />
+<div>
+    @if (ViewBag.UploadedMessage != null)
+    {
+		
+        <div class="image-cropper">
+            <img id="demo" src=" @ViewBag.UploadedMessage" class="image" width="365px" height=" 274px" />
+            <p onclick="hopcv();">click</p>
+
+        </div>
+    }
+</div>

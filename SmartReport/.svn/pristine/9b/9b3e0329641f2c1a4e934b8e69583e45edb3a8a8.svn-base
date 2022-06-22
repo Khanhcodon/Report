@@ -1,0 +1,132 @@
+﻿@model IEnumerable<LawModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;  
+}
+    <script>
+        $(function () {
+            $("#tblData").grid({
+                isResizeColumn: true,
+                isFixHeightContent: false
+            });
+            $("#tblData").openLink({ urlOpen: '/admin/Law/Edit' });
+        });
+    </script>
+    
+<table id="tblData"  class="table table-bordered table-hover"> 
+    <colgroup>
+        <col style="width: 40px" />
+        <col style="width: 150px"/>
+        <col />
+        <col style="width: 45px" />
+        <col style="width: 45px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+               @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header" style="white-space: nowrap;">
+                @Ajax.SortLink("NumberSign",Localizer("Common.Law.Index.List.Column.LawName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        lawName = ViewBag.Search,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListLaws",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+             <th class="header">
+                @Ajax.SortLink("SubContent", Localizer("Common.Law.Index.List.Column.LawSubContent"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                        lawName = ViewBag.Search,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListLaws",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="text-center ">
+                  @Localizer("Common.Resource.Index.List.Column.Edit")
+            </th>
+            <th class="text-center ">
+              @Localizer(" Common.Resource.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var law in Model)
+            {
+                number += 1;
+            <tr data-id="@law.LawId">
+                <td>@number
+                </td>
+                <td>
+                   @law.NumberSign
+                </td>
+                  <td> @law.SubContent
+                </td>
+                 <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = law.LawId })
+                </td>
+                <td>
+                    <a href="javascript:deleteLaw(@(law.LawId))">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(law.LawId)" style="display: none" action="@Url.Action("Delete", new { Id =law.LawId})" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                    @Localizer("Common.Law.List.NoData")
+                </td>
+            </tr>
+        }
+    </tbody>
+      
+</table>
+<table>
+        <tr>
+            <td class="" colspan="4" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      lawName = ViewBag.Search,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListLaw",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+</table>

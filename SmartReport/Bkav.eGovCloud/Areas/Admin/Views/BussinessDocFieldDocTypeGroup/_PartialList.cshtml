@@ -1,0 +1,132 @@
+﻿@model IEnumerable<BussinessDocFieldDocTypeGroupModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Areas.Admin.Models.BussinessDocFieldDocTypeGroupSearchModel;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblGroup").grid({
+            isResizeColumn: false,
+            isFixHeightContent: false,
+            isUseCookie: false
+        });
+        $("#tblGroup").openLink({ urlOpen: '/Admin/BussinessDocFieldDocTypeGroup/Edit' });
+
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+
+</script>
+   <table id="tblGroup" class="table table-hover" style="width: 100%">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 200px" />
+            <col style="width: 100px" />
+            <col style="width: 50px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Numbers")
+                </th>
+                <th>
+                    @Localizer("BussinessDocFieldDocTypeGroup.Index.List.Column.Name")
+                </th> 
+                <th>
+                    @Ajax.SortLink("CreatedDate", Localizer("BussinessDocFieldDocTypeGroup.Index.List.Column.CreatedDate"),
+                    sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                    "SortAndPaging", "sort asc", "sort desc",
+                    new
+                        {   search=search,
+                            page = sortAndPage.CurrentPage,
+                            pageSize = sortAndPage.PageSize
+                        },
+                    new AjaxOptions
+                        {
+                            UpdateTargetId = "divGroup",
+                            OnBegin = "onBegin",
+                            OnSuccess = "onSuccess",
+                            OnFailure = "onFailure"
+                        })
+                </th>
+                <th>
+                    @Localizer("BussinessDocFieldDocTypeGroup.Index.List.Column.IsActivated")
+                </th>
+                <th>
+                    @Localizer("Common.Resource.Index.List.Column.Edit")
+                </th>
+                 <th>
+                    @Localizer("Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    number++;
+                <tr data-id="@item.BussinessDocFieldDocTypeGroupId">
+                    <td>
+                        @number
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+
+                     <td>@item.CreatedDate
+                    </td>
+                  
+                    <td>
+                        @(item.IsActived ? "X" : "")
+                    </td>
+                    <td>
+                        @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = item.BussinessDocFieldDocTypeGroupId })
+                    </td>
+                       <td>
+                        <a href="javascript:deleteGroup(@(item.BussinessDocFieldDocTypeGroupId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(item.BussinessDocFieldDocTypeGroupId)" style="display: none"
+                             action="@Url.Action("Delete", new { Id = item.BussinessDocFieldDocTypeGroupId })"
+                             method="POST">
+                        </form>
+                    </td>
+                </tr>
+                }
+            }else{
+            <tr>
+             <td colspan="6" data-res="egov.resources.template.nodata">
+                    Không có mẫu nào
+                </td>
+            </tr>
+            }
+
+        </tbody>
+          <tfoot>
+        <tr>
+            <td colspan="6">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending,
+                                      search=search
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divGroup",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+

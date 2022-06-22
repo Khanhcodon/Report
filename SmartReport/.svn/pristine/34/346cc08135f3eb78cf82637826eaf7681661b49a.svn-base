@@ -1,0 +1,369 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+    var docTypeId = ViewBag.DocTypeId;
+    var allEmbryonicForm = ViewBag.AllEmbryonicForm as string;
+    var existDocTypeEmbryonicForms = ViewBag.ExistDocTypeEmbryonicForms as string;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+
+<script type="text/javascript">
+    var allEmbryonicForm=@(string.IsNullOrEmpty(allEmbryonicForm) ? MvcHtmlString.Create("[]") : Html.Raw(allEmbryonicForm));
+    var existDocTypeEmbryonicForms=@(string.IsNullOrEmpty(existDocTypeEmbryonicForms) ? MvcHtmlString.Create("[]") : Html.Raw(existDocTypeEmbryonicForms));
+
+    $(function () {
+        $("#submit").remove();
+        $("#tbExistEmbryonicForm").append($('#tmplDocTypeEmbryonicForm').tmpl(existDocTypeEmbryonicForms));
+
+        $("#tbExistEmbryonicForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover .table-striped");
+        $("#tbEmbryonicForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#tbAddEmbryonicForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".tab-embryonicform").addClass("active");
+    });
+
+    function deleteDocTypeEmbryonicForm(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Common.DocTypeEmbryonicForm.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formDeleteDocTypeEmbryonicForm_" + id).submit();
+            }
+        );
+    }
+
+    var notExistEmbryonicForms=[];
+    var addEmbryonicForms=[];
+
+    function showAddEmbryonic(docTypeId)
+    {
+        $("#tbEmbryonicForm tr").remove();
+        $("#tbAddEmbryonicForm tr").remove();
+        $('#selectAll').prop('checked',false);
+        addEmbryonicForms=[];
+        existDocTypeEmbryonicFormsId=_.pluck(existDocTypeEmbryonicForms,'value');
+        notExistEmbryonicForms=_.reject(allEmbryonicForm,function(item){
+            return  _.contains(existDocTypeEmbryonicFormsId,item.value);
+        });
+        $("#tbEmbryonicForm").append($('#tmplAddEmbryonicForms').tmpl(notExistEmbryonicForms));
+        $('#divEmbryonicForm').niceScroll({ styler: "fb", autohidemode: true});
+        $('#divAddEmbryonicForm').niceScroll({ styler: "fb", autohidemode: true});
+        bindEmbryonicForm(notExistEmbryonicForms);
+
+        var $dialog = $("#my-dialog");
+        $dialog.dialog({
+            modal: true,
+            width: 900,
+            height: "auto",
+            buttons: {
+                "@Html.Raw(Localizer("Common.EmbryonicForm.Create"))": function () {
+                    updateEmbryonicForm(docTypeId);
+                    $(this).dialog("destroy");
+                },
+                "@Localizer("Common.Button.Destroy")": function () {
+                    $(this).dialog("destroy");
+                }
+            }
+        });
+    }
+
+    function changeActive(item, embryonicFormId, docTypeId)
+    {
+        var status=$(item).prop('checked');
+        var token= $("input[name='__RequestVerificationToken']","#DocTypeChangeDocTypeEmbryonic").val();
+        if(embryonicFormId != null && docTypeId != null)
+        {
+            $.ajax({
+                url:"/admin/DocType/ChangeDocTypeEmbryonic",
+                data:{
+                    embryonicFormId : embryonicFormId,
+                    status : status,
+                    docTypeId : docTypeId,
+                    __RequestVerificationToken:token},
+                type:"get",
+                success:function(result){
+                    if(result.success)
+                    {
+                        eGovMessage.notification(result.message, eGovMessage.messageTypes.success);
+                    }
+                    else
+                    {
+                        eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                    }
+                }
+            });
+        }
+    }
+
+    function selectAll(item)
+    {
+        var check=$(item).prop('checked');
+        $('#tbEmbryonicForm tbody input[type=checkbox]').prop('checked', check);
+        if(check)
+        {
+            $('#tbAddEmbryonicForm tbody tr').remove();
+            var addId=_.pluck(addEmbryonicForms,'value');
+            var add=_.reject(notExistEmbryonicForms,function(i){
+                return _.contains(addId,i.value);
+            });
+
+            addEmbryonicForms=_.union(addEmbryonicForms,add);
+            for(var i =0; i<addEmbryonicForms.length;i++)
+            {
+                addEmbryonicForm(addEmbryonicForms[i]);
+            }
+        }
+        else{
+            addEmbryonicForms=[];
+            $('#tbAddEmbryonicForm tbody tr').remove();
+        }
+    }
+
+    function selectItem(item)
+    {
+        var check=$(item).prop('checked');
+        var value= $(item).attr('data-id');
+        if(check) {
+            var exist = _.find(addEmbryonicForms, function (i) {
+                return i.value == value;
+            });
+            if (!exist) {
+                var embryonicForm=_.find(notExistEmbryonicForms, function(i){
+                    return i.value == value;
+                });
+                addEmbryonicForms.push(embryonicForm);
+                addEmbryonicForm(embryonicForm);
+            }
+        }
+        else {
+            addEmbryonicForms = _.reject(addEmbryonicForms, function (i) {
+                return i.value == value;
+            });
+            $('#tbAddEmbryonicForm #id_'+value).closest('tr').remove();
+        }
+    }
+
+    function bindEmbryonicForm (embryonicForms) {
+        $("#embryonicFormName").autocomplete({
+            minLength: 1,
+            source: embryonicForms,
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#embryonicFormName").val('');
+                var exist = _.find(addEmbryonicForms, function (i) {
+                    return i.value == ui.item.value;
+                });
+                if (!exist) {
+                    addEmbryonicForms.push(ui.item);
+                    addEmbryonicForm(ui.item);
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $(".ui-autocomplete-input").bind("autocompleteopen", function () {
+            var autocomplete = $(this).data("autocomplete"), menu = autocomplete.menu;
+            if (!autocomplete.options.selectFirst) {
+                return;
+            }
+            menu.activate($.Event({ type: "mousehover" }), menu.element.children().first());
+        });
+    };
+
+    function addEmbryonicForm (item) {
+        var $newtr = $('<tr></tr>');
+        $newtr.append('<td>' + item.label + '<input type="hidden" id="id_'+item.value+'" /></td>');
+        var $newtdDelete = $('<td></td>');
+        var $a = $('<a href="javascript:void(0)">' + egov.resources.buttons.delete + '</a>');
+        $a.click(function () {
+            $(this).parents('tr:first').remove();
+            $('#tbEmbryonicForm #select_'+item.value).prop('checked', false);
+            addEmbryonicForms=_.reject(addEmbryonicForms,function(i){
+                return i.value == item.value;
+            });
+        });
+        $newtdDelete.append($a);
+        $newtr.append($newtdDelete);
+        $('#tbEmbryonicForm #select_'+item.value).prop('checked', true);
+        $('#tbAddEmbryonicForm').append($newtr);
+        $("#divEmbryonicForm").getNiceScroll().resize();
+    };
+
+    function updateEmbryonicForm(docTypeId)
+    {
+        var addId=_.pluck(addEmbryonicForms, 'value');
+        var token= $("input[name='__RequestVerificationToken']","#DocTypeUpdateDocTypeEmbryonic").val();
+        if(addId.length>0)
+        {
+            $.ajax({
+                url: "/admin/DocType/UpdateDocTypeEmbryonic",
+                data: {
+                    docTypeId: docTypeId,
+                    embryonicIds: addId,
+                    __RequestVerificationToken: token},
+                type:"POST",
+                traditional: true,
+                success: function (result) {
+                    if(result.success){
+                        eGovMessage.notification(result.message, eGovMessage.messageTypes.success);
+                        var length=addEmbryonicForms.length;
+                        for(var i=0 ; i<length; i++)
+                        {
+                            existDocTypeEmbryonicForms.push({value:addEmbryonicForms[i].value , label:addEmbryonicForms[i].label, activiti:true});
+                        }
+                        existDocTypeEmbryonicForms= _.uniq(existDocTypeEmbryonicForms);
+                        $('#tbExistEmbryonicForm tbody tr').remove();
+                        $('#tbExistEmbryonicForm').append($('#tmplDocTypeEmbryonicForm').tmpl(existDocTypeEmbryonicForms));
+                    }
+                    else{
+                        eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+                    }
+                }
+            });
+        }
+        else {
+            eGovMessage.notification('@Localizer("Common.EmbryonicForm.NullSelect")', eGovMessage.messageTypes.error);
+        }
+    }
+</script>
+<div id="my-dialog" style="display: none">
+    <div id="DocTypeUpdateDocTypeEmbryonic" style="display: none">
+        @Html.AntiForgeryToken()
+    </div>
+    <table style="width: 100%">
+        <tbody>
+            <tr>
+                <td valign="top">
+                    <div>
+                        <b>@Localizer("Common.EmbryonicForm.List.Title")</b>
+                    </div>
+                    <div id="divEmbryonicForm">
+                        <table id="tbEmbryonicForm">
+                            <colgroup>
+                                <col />
+                                <col style="width: 120px" />
+                                <col style="width: 40px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header">
+                                        @Localizer("Common.EmbryonicForm.Index.List.Column.EmbryonicFormName")
+                                    </th>
+                                    <th class="header  text-center">
+                                        @Localizer("Common.EmbryonicForm.Index.List.Column.IsActivated")
+                                    </th>
+                                    <th class=" text-center">
+                                        <input type="checkbox" id="selectAll" onchange="javascript:selectAll(this);" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td valign="top">
+                    <div>
+                        <b>@Localizer("Common.EmbryonicForm.List.Select")</b>
+                    </div>
+                    <div id="divAddEmbryonicForm">
+                        <table id="tbAddEmbryonicForm" style="width: 100%">
+                            <colgroup>
+                                <col style="width: 250px" />
+                                <col style="width: 70px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header">
+                                        @Localizer("Common.EmbryonicForm.Index.List.Column.EmbryonicFormName")
+                                    </th>
+                                    <th class="header text-center">@Localizer("Common.Resource.Index.List.Column.Delete")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    <input type="text" id="embryonicFormName" style="width: 298px"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div>
+    <input type="button" class="btn"value="@Localizer("Common.EmbryonicForm.Create")" onclick='showAddEmbryonic("@docTypeId    ")' />
+    <div id="DocTypeChangeDocTypeEmbryonic" style="display: none">
+        @Html.AntiForgeryToken()
+    </div>
+    <table id="tbExistEmbryonicForm" class="table-main table table-hover table-bordered">
+        <colgroup>
+            <col />
+            <col style="width: 100px" />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    @Localizer("Common.EmbryonicForm.Index.List.Column.EmbryonicFormName")
+                </th>
+                <th class="header">@Localizer("Common.EmbryonicForm.Index.List.Column.IsActivated")</th>
+
+                <th class="header">
+                    @Localizer("Common.Resource.Index.List.Column.Delete")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script type="text/x-jquery-tmpl" id="tmplDocTypeEmbryonicForm">
+    <tr>
+        <td>${label}
+        </td>
+        <td style="text-align: center">
+            <input type="checkbox"  onchange="changeActive(this, ${value}, '@docTypeId');"  {{if activiti == true}} checked = "checked"  {{else}} " " {{/if}}) />
+        </td>
+        <td style="text-align: center">
+            <a href="javascript:deleteDocTypeEmbryonicForm(${value})">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+            <form id="formDeleteDocTypeEmbryonicForm_${value}" style="display: none" action="/admin/DocType/DeleteEmbryonicForm/${value}?docTypeId=@docTypeId" method="POST">
+                @Html.AntiForgeryToken()
+            </form>
+        </td>
+    </tr>
+</script>
+<script id="tmplAddEmbryonicForms" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${label}
+        </td>
+        <td>{{if activiti==true}}@Localizer("Common.Yes") {{else}}@Localizer("Common.No") {{/if}} </td>
+        <td style="text-align: center">
+            <input type="checkbox" data-id="${value}" id="select_${value}" onchange="selectItem(this);" />
+        </td>
+    </tr>
+</script>

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<RequiredSupplementaryModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.RequiredSupplementary.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allDocFields = ViewBag.AllDocFields as string;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+    var search = ViewBag.Search as RequiredSupplementarySearchModel;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+<script src="../../../../Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    var allDocFields = @(string.IsNullOrEmpty(allDocFields) ? MvcHtmlString.Create("[]") : Html.Raw(allDocFields));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+    var docfieldSelected = '@search.DocFieldId';
+    var doctypeSelected = '@search.DocTypeId';
+    $(function () {
+        $("#DocFieldId").html('');
+        $("#DocFieldId").append('<option value=""> [Tất cả]</option>');
+        $.each(allDocFields, function(i, item) {
+            var selected= (docfieldSelected == item.DocFieldId)?"selected":"";
+            $("#DocFieldId").append('<option value="' + item.DocFieldId + '" '+selected+' >' + item.DocFieldName + '</option>');
+        });
+        changeDocField(doctypeSelected);
+
+        $("#DocFieldId").change(function () {
+            changeDocField();
+            $(this).parent().submit();
+        });
+        $("#DocTypeId").change(function () {
+            $(this).parent().submit();
+        });
+    });
+
+    function changeDocField(selected) {
+        var docfieldId = parseInt($('#DocFieldId').val());
+        var doctypes;
+        if (docfieldId > 0) {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return item.DocFieldId === docfieldId;
+            });
+        } else {
+            doctypes = _.filter(allDocTypes, function(item) {
+                return !item.DocFieldId;
+            });
+        }
+        $("#DocTypeId").html('');
+        $.each(doctypes, function(i, item) {
+            $("#DocTypeId").append('<option value="' + item.DocTypeId + '">' + item.DocTypeName + '</option>');
+        });
+        if (selected) {
+            $('#DocTypeId option[value=' + selected + ']').attr('selected', 'selected');
+        }
+    }
+
+    function deletePaper(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.RequiredSupplementary.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+
+    function onBegin() {
+        $("#divListPaper").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+        }
+
+        function onSuccess() {$('tr th').css("line-height", "2.5");
+            $('#divListPaper').unblockpanel();
+        }
+
+        function onFailure() {
+            eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            $('#divListPaper').unblockpanel();
+        }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-folder"></i>
+        <span data-res="egov.resources.sitemap.requiredSupplementary"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/requiredSupplementary/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListPaper", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+    {
+        <div style="margin-bottom: 4px;">
+            <span data-res="egov.resources.paper.docfield"></span>:
+                <select id="DocFieldId" name="DocFieldId" style="width: 200px; display: inline"></select>
+            <span data-res="egov.resources.paper.doctype"></span>:
+                <select id="DocTypeId" name="DocTypeId" style="width: 200px; display: inline"></select>
+        </div>
+    }
+    <div style="clear: both">
+    </div>
+    <br />
+    <div id="divListPaper">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

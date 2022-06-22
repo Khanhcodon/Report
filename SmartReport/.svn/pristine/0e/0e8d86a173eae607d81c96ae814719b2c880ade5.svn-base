@@ -1,0 +1,87 @@
+﻿
+<div id="bmailFrame" data-app="bmail" class="egov-app trans trans-right">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header egov-header">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title">
+                    <span class="wraptext">
+                        <span class="header-title">
+                            Tin điều hành
+                        </span>
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="btnSearchMail" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <i class="material-icons">search</i>
+                </button>
+                <button id="btnNewMail" class="mdl-button mdl-js-button mdl-button--icon pull-right" data-upgraded=",MaterialButton">
+                    <i class="material-icons">create</i>
+                </button>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer egov-leftmenu">
+            <div class="mdl-layout__drawer">
+                <div class="useroption main-bg-color">
+                    <img class="avatar" src="" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wraptext"></div>
+                        <div class="wraptext fullmail"></div>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu1">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu1">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>
+                <div class="treelist">
+                    <nav class="treemenu">
+                        <div data-app="bmail">
+                            <ul class="mdl-list" id="folderlist"></ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="egov-maincontent">
+                <div class="no-element-content hidden">
+                    <div class="message">
+                        <span class="material-icons mdl-list__item-icon"></span>
+                        <div style="font-size: 18px;">Không có thư trong</div>
+                        <div class="message-info"></div>
+                    </div>
+                </div>
+                <div class="page-content list-mails" id="mailList">
+                    <div class="group-label" data-group="new">
+                        <span>Mới</span>
+                    </div>
+                    <div class="dataList" data-group="new">
+                        <ul class="mdl-list list-mails"></ul>
+                    </div>
+                    <div class="group-label" data-group="old">
+                        <span>Trước đó</span>
+                    </div>
+                    <div class="dataList" data-group="old">
+                        <ul class="mdl-list list-mails"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

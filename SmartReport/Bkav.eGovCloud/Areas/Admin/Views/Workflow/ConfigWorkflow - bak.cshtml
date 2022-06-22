@@ -1,0 +1,244 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Workflow.Config");
+    var cul = (Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode() == "vi-VN") ? "" : ".en";
+}
+
+<style type="text/css">
+    #silverlightControlHost {
+        height: 100%;
+        text-align: center;
+    }
+
+    #center {
+        overflow: hidden;
+        padding: 0;
+        border: none;
+    }
+
+    #west {
+        border: none;
+    }
+</style>
+
+
+
+
+    <link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.ui.layout/layout-default-latest.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-1.7.2.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.min.js")"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+    <script src="../../../../Scripts/release/bkav.egov/libs/jquery/jquery.dialogextend.min.js"></script>
+    <script src="../../../../Scripts/release/bkav.egov/libs/underscore/underscore-min.js"></script>
+    <script src="../../../../Scripts/release/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="../../../../Scripts/release/bkav.egov/libs/jquery/jquery.contextmenu/jquery.contextmenu.min.js"></script>
+    <script src="../../../../Scripts/release/bkav.egov/libs/bkav/bkav.blockpanel.min.js"></script>
+<script type="text/javascript" src="@Url.Content("~/Silverlight.js")"></script>
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    var silverlightControl = null;
+
+    function pluginLoaded(sender) {
+        silverlightControl = sender.getHost();
+    }
+
+    $(function () {
+        $('#container').layout({
+            west__spacing_open: 1,
+            center__paneSelector: "#center",
+            center__onresize: function (name, elem) {
+                if (silverlightControl) {
+                    $("#silverlight").width($(elem).width());
+                    silverlightControl.Content.Workflow.ResizeWidthScroll($(elem).width());
+                }
+            }
+        });
+
+        var interval = setInterval(function () {
+            if (silverlightControl) {
+                clearInterval(interval);
+                $("#silverlight").width($("body").width());
+                $("#silverlight").height($("body").height());
+
+                silverlightControl.Content.Workflow.SetWidthHeight($("body").width(), $("body").height());
+                silverlightControl.Content.Workflow.DrawWorkflow('@ViewBag.Id', '@Html.Raw(ViewBag.Json)');
+            }
+        }, 100);
+    });
+
+    function openConfigNode(workflowId, nodeId) {
+        if ($('#iframe_' + workflowId + '_' + nodeId).length > 0) {
+            $("#dialog-edit-node").dialog("open");
+        } else {
+            $("#dialog-edit-node iframe").remove();
+            $("#dialog-edit-node").dialog({
+                autoOpen: false,
+                height: 800,
+                width: 1000,
+                modal: true,
+                resizable: true,
+            }).dialogExtend({
+                close: true,
+                maximize: true,
+                dblclick: 'maximize',
+                events: {
+                    maximize: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    },
+                    restore: function (e, dlg) {
+                        $(dlg).children('iframe').attr('height', ($(dlg).height() - 4) + 'px');
+                    }
+                }
+            });
+
+            $("#dialog-edit-node").dialog("open");
+            $("#dialog-edit-node").css({ padding: '0' });
+
+            var $newIframe = $('<iframe id="iframe_' + workflowId + '_' + nodeId + '" scr="" height="700px" width="100%" style="border:none"></iframe>');
+            var $imgLoading = $('<img src="/Content/Images/ajax-loader.gif" width="24px" height="24px" />');
+            $("#dialog-edit-node").html('').append($imgLoading).append($newIframe);
+            var frame = $newIframe[0];
+            frame.src = '@Url.Action("Workflow")' + '/' + workflowId + '?nodeId=' + nodeId;
+            $(frame).load(function () {
+                $imgLoading.remove();
+            });
+        }
+    }
+
+    function closeConfigNode(workflowId, reload) {
+        $("#dialog-edit-node").dialog("close");
+        if (reload) {
+            getWorkflow(workflowId);
+        }
+    }
+
+    function closeConfigTemplate() {
+        $('#dialog-edit-template').dialog("close");
+    }
+
+    function getWorkflow(id) {
+        $.get('/Workflow/GetWorkflow',
+            { id: id },
+            function (data) {
+                if (data.error) {
+                    eGovMessage.show(data.error);
+                } else {
+                    silverlightControl.Content.Workflow.DrawWorkflow(id, data.workflow);
+                }
+            }
+        ).complete(function () {
+            $("#center").unblockpanel();
+        })
+            .fail(function () {
+                eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+            });
+    }
+
+    function openConfigTemplateNode(workflowId, nodeId) {
+        openConfigTemplate('@Url.Action("ConfigTemplateNode", "Workflow")' + '?workflowId=' + workflowId + '&nodeId=' + nodeId);
+    }
+
+    function openConfigTemplateWorkflow(workflowId) {
+        openConfigTemplate('@Url.Action("ConfigTemplateWorkflow", "Workflow")' + '/' + workflowId);
+    }
+
+    function openConfigTemplate(url) {
+        $("#dialog-edit-template").dialog({
+            width: 300,
+            height: 170,
+            resizable: true,
+            modal: true,
+            open: function (event, ui) {
+                $("#dialog-edit-template").empty();
+                $("#dialog-edit-template").load(url);
+            },
+            buttons: {
+                "@Html.Raw(Localizer("Common.Button.Edit.Save"))": function (e) {
+                saveTemplate();
+            }
+            }
+        });
+    }
+
+
+function onSilverlightError(sender, args) {
+    var appSource = "";
+    if (sender != null && sender != 0) {
+        appSource = sender.getHost().Source;
+    }
+
+    var errorType = args.ErrorType;
+    var iErrorCode = args.ErrorCode;
+
+    if (errorType == "ImageError" || errorType == "MediaError") {
+        return;
+    }
+
+    var errMsg = "Unhandled Error in Silverlight Application " + appSource + "\n";
+
+    errMsg += "Code: " + iErrorCode + "    \n";
+    errMsg += "Category: " + errorType + "       \n";
+    errMsg += "Message: " + args.ErrorMessage + "     \n";
+
+    if (errorType == "ParserError") {
+        errMsg += "File: " + args.xamlFile + "     \n";
+        errMsg += "Line: " + args.lineNumber + "     \n";
+        errMsg += "Position: " + args.charPosition + "     \n";
+    }
+    else if (errorType == "RuntimeError") {
+        if (args.lineNumber != 0) {
+            errMsg += "Line: " + args.lineNumber + "     \n";
+            errMsg += "Position: " + args.charPosition + "     \n";
+        }
+        errMsg += "MethodName: " + args.methodName + "     \n";
+    }
+
+    throw new Error(errMsg);
+}
+
+function saveWorkflow(id, workflow) {
+    $.post('/Workflow/SaveWorkflow',
+        {
+            id: id,
+            json: workflow
+        },
+        function (data) {
+            if (data.error) {
+                window.parent.eGovMessage.show(data.error);
+            }
+        }
+    ).fail(function () {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+     });
+ }
+</script>
+
+<div id="container" style="height: 100%; width: 100%;">
+    <div id="center" class="ui-layout-center" style="height: 100%; width: 100%;">
+        <div id="silverlightControlHost">
+            <object id="silverlight" data="data:application/x-silverlight-2," type="application/x-silverlight-2">
+                <param name="source" value="@Url.Content("~/ClientBin/Bkav.eGovCloud.Workflow" + @cul + ".xap")" />
+                <param name="onError" value="onSilverlightError" />
+                <param name="windowless" value="true" />
+                <param name="background" value="white" />
+                <param name="minRuntimeVersion" value="5.0.61118.0" />
+                <param name="autoUpgrade" value="true" />
+                <param name="onLoad" value="pluginLoaded" />
+                @*<a href="https://go.microsoft.com/fwlink/?LinkID=149156&v=5.0.61118.0" style="text-decoration: none">
+                    <img src="https://go.microsoft.com/fwlink/?LinkId=161376" alt="Get Microsoft Silverlight"
+                        style="border-style: none" />
+                </a>*@
+            </object>
+
+            <iframe id="_sl_historyFrame" style="visibility: hidden; height: 0px; width: 0px; border: 0px"></iframe>
+        </div>
+    </div>
+
+</div>
+
+<div id="dialog-edit-node" title="@Localizer("Admin.Workflow.UpdateNode")" date-restitle="egov.resources.doctype.updatenode" style="display: none;">
+</div>
+
+<div id="dialog-edit-template" title="@Localizer("Admin.Workflow.InterfaceConfig")" date-restitle="egov.resources.doctype.interfaceconfig" style="display: none;">
+</div>

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<FormRelationModel>
+    @{
+        ViewBag.Title = Localizer("Common.FormRelation.Label.List");
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }
+    <script type="text/javascript">
+        $(function () {
+            $(".tab-form").addClass(" ui-tabs-selected ui-state-active");
+            $(".tab-form").siblings().removeClass(" ui-tabs-selected ui-state-active");
+            $('#FormGroupId, #FormTypeId').change(function () {
+                doSubmit($(this).parents('form:first'));
+            });
+
+            $("#btnSubmit").click(function () {
+                doSubmit($(this).parents('form:first'));
+            });
+        });
+
+        function doSubmit(form) {
+            form.attr('action', '@Url.Action("GetForm")?pageSize=' + $('select[name=pageSize]:first').val());
+            form.submit();
+        }
+
+        function deleteFormRelation(id) {
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.FormRelation.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+        }
+
+        function onBegin() {
+            $("#divList").blockpanel({ text: "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divList').unblockpanel();
+        }
+
+        function onFailure() {
+            alert("Có lỗi xảy ra");
+            $('#divList').unblockpanel();
+        }
+    </script>
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-docs"></i>
+            <span data-res="egov.resources.sitemap.formrelation">@ViewBag.Title</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/admin/FormRelation/Create">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+            </a>
+        </div>
+    </div>
+    <div id="tabs" class="bkavegov">
+        <div class="bkavegov">
+            <div id="divListFormRelation">
+                @{
+                    Html.RenderPartial("_PartialList", Model);
+                }
+            </div>
+        </div>
+    </div>

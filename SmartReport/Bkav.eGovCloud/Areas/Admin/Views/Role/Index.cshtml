@@ -1,0 +1,120 @@
+﻿@model IEnumerable<RoleModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Role.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblRole").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblRole").openLink({ urlOpen: '/admin/Role/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    });
+    function deleteRole(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Role.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-users3"></i>
+        <span data-res="egov.resources.sitemap.role"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/role/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="divListRoles">
+            <table class="table-main table" id="tblRole">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col />
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 50px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.Numbers")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.RoleKey")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.RoleName")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.Description")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.IsActivated")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.Edit")
+                        </th>
+                        <th class="header">
+                            @Localizer("Role.Index.List.Column.Delete")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var number = 0;
+                        foreach (var role in Model)
+                        {
+                            number += 1;
+                        <tr data-id="@role.RoleId">
+                            <td>@number
+                            </td>
+                            <td>@role.RoleKey
+                            </td>
+                            <td>@role.RoleName
+                            </td>
+                            <td>@role.Description
+                            </td>
+                            <td align="center">@(role.IsActivated ? Localizer("Common.Yes") : Localizer("Common.No"))
+                            </td>
+                            <td align="center">
+                                @Html.ActionLink(Localizer("Role.Index.List.Column.Edit.Button"), "Edit", new { Id = role.RoleId })
+                            </td>
+                            <td align="center">
+                                <a href="javascript:deleteRole(@(role.RoleId))">@Localizer("Role.Index.List.Column.Delete.Button")</a>
+                                <form id="formdelete@(role.RoleId)" style="display: none" action="@Url.Action("Delete", new { Id = role.RoleId })" method="POST">
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            </td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" data-res="egov.resources.role.nodatagroup">Không có nhóm người dùng nào
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

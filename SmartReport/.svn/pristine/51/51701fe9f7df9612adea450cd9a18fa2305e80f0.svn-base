@@ -1,0 +1,10 @@
+﻿body {
+}
+
+
+.egov-dashboard {
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    padding-top: 20px;
+}

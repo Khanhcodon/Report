@@ -1,0 +1,168 @@
+﻿/* get the required local files */
+        @font-face {
+            font-family: 'Roboto-Bold';
+            src: url('../../Content/fonts/Roboto-Bold.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Roboto-Regular';
+            src: url('../../Content/fonts/Roboto-Regular.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Roboto-BoldItalic';
+            src: url('../../Content/fonts/Roboto-BoldItalic.ttf') format('truetype');
+        }
+        /* use the font */
+        body {
+          font-family: 'Roboto', sans-serif;
+        }
+        #btnAdv {
+            border-color: #CE7A58;
+            color: #CE7A58;
+            background-color: #fff;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        #btnView {
+            border-color: #CE7A58;
+            color: #fff;
+            background-color: #CE7A58;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        #btnAdv_1 {
+            border-color: #CE7A58;
+            color: #CE7A58;
+            background-color: #fff;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        .displayNone {
+            display: none;
+        }
+
+
+     .modal-dialog-full-width {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width:none !important;
+
+    }
+
+    .modal-content-full-width  {
+        height: auto !important;
+        min-height: 100% !important;
+        border-radius: 0 !important;
+        background-color: #ececec !important 
+    }
+
+    .modal-header-full-width  {
+        border-bottom: 1px solid #9ea2a2 !important;
+    }
+
+    .table td, .table th {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .htBold{
+        font-weight: bold !important;
+    }
+
+    .htCenter{
+        text-align: center !important;
+        vertical-align: middle !important;
+        color: #2d2929;
+    }
+    .htMiddle {
+        vertical-align: middle !important;
+        color: #2d2929;
+    }
+    .htRight{
+        text-align: right !important;
+    }
+    .htLeft{
+        text-align: left !important;
+    }
+    .textRight{
+        text-align: right !important;
+    }
+    .firstVisibleColumn{
+        border-left: 1px solid #ccc !important;
+    }
+    .htDimmed {
+        color: #777 !important;
+    }
+
+        .fixed-header {
+        z-index: 9999;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: -8px;
+        display: none;
+    }
+
+    .fixed-header .modal-header {
+        background-color: #fff;
+        width: 598px;
+        margin: 0 auto;
+    }
+
+    .affixed {
+        display: block;
+    }
+    .skin-blue.sidebar-collapse .sidebar-menu>li:hover>a, .skin-blue.sidebar-collapse .sidebar-menu>li.active>a, .skin-blue.sidebar-collapse .sidebar-menu>li.menu-open>a{
+        background: #9f6858 !important;
+    }
+
+    .displayProsess{
+        display: block;
+    }
+    .content {
+        padding: 0 !important;
+    }
+
+    #tblListDocumentProcess{
+        border: 1px solid #afafaf !important;
+    }
+
+    .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 1px solid #afafaf !important;
+    }
+
+    .select2{
+        max-width: 100%;
+    }
+
+    .scollPage {
+        overflow-y: hidden !important;
+    }
+
+    .my-custom-scrollbar {
+        position: relative;
+        height: 500px;
+        overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+    @media only screen and (max-width: 768px){
+        .my-custom-scrollbar {
+            height: 300px !important;
+        }
+    }
+    @media screen and (max-width: 990px){
+        .my-custom-scrollbar {
+            height: 300px !important;
+        }
+    }
+
+    @media screen and (max-width: 320px){
+        .my-custom-scrollbar {
+            height: 200px !important;
+        }
+    }

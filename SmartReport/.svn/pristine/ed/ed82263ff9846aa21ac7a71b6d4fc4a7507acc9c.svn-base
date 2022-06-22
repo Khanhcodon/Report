@@ -1,0 +1,115 @@
+﻿@using StackExchange.Profiling
+@{
+    ViewBag.Title = "Chỉ tiêu Phòng ban";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+<style>
+    .jstree-themeicon {
+        font-size: 19px;
+        color: #188ef4;
+    }
+
+    .modal.fade.modal-right .modal-dialog {
+        width: 50%;
+    }
+    #bodyTree{
+        height: 650px;
+        overflow: scroll;
+    }
+    
+</style>
+
+<script src="~/Scripts/admin/indicatorDepartment/indicatorDepartment.js?v=@DateTime.Now.ToString("hhmmss")"></script>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Phòng Ban
+                <small>Phòng Ban</small>
+            </h1>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-6">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Phòng ban</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <label class="switch switch-border switch-info">
+                                        <input type="checkbox" checked="">
+                                        <span class="switch-indicator"></span>
+                                        <span class="switch-description"></span>
+                                    </label>
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" name="s" id="searchDepartment" placeholder="Tên phòng ban">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <div id="department"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Chỉ tiêu quản lý</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <label class="switch switch-border switch-info">
+                                        <input type="checkbox" checked="">
+                                        <span class="switch-indicator"></span>
+                                        <span class="switch-description"></span>
+                                    </label>
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" id="searchIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" id="ChooseIndicator">Chọn chỉ tiêu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div  class="box-body" id="indicatorBodyTree">
+                            <div  id="indicatorTree"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="modal modal-right fade" id="modalIndicator" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chọn chỉ tiêu</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Chỉ tiêu quản lý</h4>
+                            <div class="box-controls pull-right">
+                                <div class="box-header-actions">
+                                    <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                                        <input type="text" id="searchChooseIndicator" name="s" placeholder="Tên chỉ tiêu">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-body" id="bodyTree">
+                            <div id="chooseIndicatorTree">Chọn chỉ tiêu</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" id="btnSaveIndicator" class="btn btn-bold btn-pure btn-primary float-right">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>

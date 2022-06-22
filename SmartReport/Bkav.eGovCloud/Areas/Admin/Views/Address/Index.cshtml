@@ -1,0 +1,141 @@
+﻿@model IEnumerable<AddressModel>
+@{
+    ViewBag.Title = Localizer("Common.Address.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var key = ViewBag.Search as string;
+}
+
+<script type="text/javascript">
+    function deleteAddress(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Address.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.OkCancel,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListAddress").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListAddress').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListAddress').unblockpanel();
+    }
+
+    function searchAddress(_this) {
+        $(_this).parent().parent().parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-map"></i>
+        <span data-res="egov.resources.sitemap.address"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/address/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @using (Ajax.BeginForm("Search", null,
+        new AjaxOptions
+        {
+            UpdateTargetId = "divListAddress",
+            OnBegin = "onBegin",
+            OnSuccess = "onSuccess",
+            OnFailure = "onFailure",
+            HttpMethod = "Get"
+        }, new { @class = "form-horizontal" }))
+    {
+        <div class="form-group form-group-sm" style="margin-bottom: 5px">
+            <label for="filter" class="col-sm-3 control-label">Từ khoá</label>
+            <div class="col-sm-9">
+                <input type="text" id="filter" name="filter" value="@key" data-value="@key"
+                       class="form-control" style="display:inline; " />
+            </div>
+        </div>
+    <div class="form-group form-group-sm" style="margin-bottom: 5px">
+        <label for="GroupName" class="col-sm-3 control-label">Nhóm</label>
+        <div class="col-sm-9">
+            @Html.DropDownList("GroupName", null, null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group form-group-sm" style="margin-bottom: 5px">
+        <label for="" class="col-sm-3 control-label">Cấp độ cơ quan</label>
+        <div class="col-sm-9">
+            <select name="LevelEdocId" class="form-control">
+                <option value="2">Cấp độ 2</option>
+                <option value="3">Cấp độ 3</option>
+                <option value="4">Cấp độ 4</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm" style="margin-bottom: 5px">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="optGroup" id="optGroupAll">Tất cả</label>
+            <label class="radio-inline"><input type="radio" name="optGroup" id="optGroupAny">Phân nhóm</label>
+            <label class="radio-inline"><input type="radio" name="optGroup" id="optGroupEmpty">Không phân nhóm</label>
+        </div>
+    </div>
+ 
+    <div class="form-group form-group-sm" style="margin-bottom: 5px">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-9">
+            <input id="btnSearch" type="submit" value="@Localizer("Common.Log.Index.Search.Button.Search")"
+                   class="btn pull-right" onclick="searchAddress(this)" style="display:inline; margin-right:20%" />
+        </div>
+    </div>
+    }
+    <br />
+   
+    <div id="divListAddress">
+        @Html.Partial("_Notifications")
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+<script>
+    $("#GroupName").on("change",function () {
+        $("#btnSearch").click();
+    });
+
+    $("#optGroupAll").click(function (e) {
+        $("#GroupName").val("");
+        $("#GroupName").show();
+        $("#GroupName option[value='cpn']").attr('disabled', false);
+        $("#btnSearch").click();
+    });
+    $("#optGroupAny").click(function (e) {
+        $("#GroupName").show();
+        $("#GroupName option[value='cpn']").attr('disabled', 'disabled');
+        $("#GroupName").val("");
+        $("#btnSearch").click();
+    });
+    $("#optGroupEmpty").click(function (e) {
+        $("#GroupName").val("cpn");
+        $("#GroupName option[value='cpn']").attr('disabled', false);
+        $("#GroupName").hide();
+        $("#btnSearch").click();
+    });
+    $("#optGroupEmpty").click(function (e) {
+        $("#GroupName").val("cpn");
+        $("#GroupName option[value='cnv']").attr('disabled', false);
+        $("#GroupName").hide();
+        $("#btnSearch").click();
+    })
+</script>
+</div>

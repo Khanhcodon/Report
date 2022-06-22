@@ -1,0 +1,76 @@
+﻿@model IEnumerable<LawModel>
+@{
+    ViewBag.Title = Localizer("Common.Law.Index.Title");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteLaw(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Law.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListLaws").blockpanel({ text: egov.resources.notifications.loading, borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListLaws').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListLaws').unblockpanel();
+    }
+
+    function searchLaw(_this) {
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-file"></i>
+        <span data-res="egov.resources.sitemap.law">@Localizer("Common.Law.Index.Title")</span>
+    </div>
+    <div class="options">
+        <a class="btn btn-warning control-btn" href="/admin/Law/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov ">
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search",
+    new AjaxOptions
+    {
+        UpdateTargetId = "divListLaws",
+        OnBegin = "onBegin",
+        OnSuccess = "onSuccess",
+        OnFailure = "onFailure",
+        HttpMethod = "Get"
+    }))
+        {
+            <input type="text" class="form-control" name="search" id="search" value="@(ViewBag.Search ?? "")"
+         placeholder="@Localizer("Common.Law.Index.Search.Fields.Search.Label")" style="width: 40%;" />
+            <input class="btn btn-warning"  type="submit"  onclick="searchLaw(this)" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+    </div>
+    <div id="divListLaws">
+        @Html.Partial("_Notifications")
+
+        @{
+            Html.RenderPartial("_LawList", Model);
+        }
+    </div>
+</div>

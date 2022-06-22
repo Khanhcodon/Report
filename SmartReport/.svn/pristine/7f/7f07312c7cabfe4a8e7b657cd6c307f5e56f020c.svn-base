@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.BusinessLicenseModel>
+@{
+    ViewBag.Title = "Danh sách giấy phép";
+    Layout = null;
+}
+<script src="@Url.Content("~/Scripts/bkav.blockpanel.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.ui.layout/jquery.layout-latest.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bkav.grid.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/MicrosoftAjax.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function onBegin() {
+        $("#divListBusinessLicense").blockpanel({ text: "Đang tìm...", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('#divListBusinessLicense').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("Có lỗi xảy ra");
+        $('#divListBusinessLicense').unblockpanel();
+    }
+</script>
+<div class="bkavegov-content-title">
+    <h3>
+        Danh sách giấy phép</h3>
+</div>
+<div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+        @Html.Partial("_Notifications")
+        <div id="divListBusinessLicense">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+    </div>
+</div>

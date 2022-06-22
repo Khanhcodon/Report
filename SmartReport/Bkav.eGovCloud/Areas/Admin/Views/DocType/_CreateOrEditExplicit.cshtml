@@ -1,0 +1,540 @@
+﻿@using Newtonsoft.Json
+@model DocTypeFormModel
+@{
+    var isCreate = new Guid().CompareTo(@Model.Form.FormId) == 0;
+    var catalogs = ViewBag.Catalogs;
+
+    var queryTemplateKeys = JsonConvert.SerializeObject(ViewBag.QueryTemplateKeys);
+    var htmlTemplateKeys = JsonConvert.SerializeObject(ViewBag.HtmlTemplateKeys);
+
+    var reportKeys = ViewBag.ReportKeys;
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<!--Jquery FileUpload-->
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+<script src="~/Content/bkav.egov/libs/dist/jstree.min.js"></script>
+<link href="~/Content/bkav.egov/libs/dist/themes/default/style.min.css" rel="stylesheet" />
+<link href="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/noUiSlider/nouislider.min.js"></script>
+<link href="~/Scripts/bkav.egov/libs/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/ckeditor.js")"></script>
+<style src="@Url.Content("~/Scripts/bkav.egov/libs/ckeditor-v4/contents.css")"></style>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highstock.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/map.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/data.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-more.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-3d.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/exporting.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/funnel.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/solid-gauge.js"></script>
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/accessibility.js"></script>
+
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.complete.js"></script>
+<link href="~/Scripts/bkav.egov/libs/highchart_editor/highcharts-editor.min.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/highchart_editor/integrations/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+<script>
+
+    $(document).ready(function () {
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 200;
+            config.toolbarCanCollapse = true;
+            config.removePlugins = 'image,forms';
+        };
+        CKEDITOR.replace('Form_ExplicitTemplate', {
+            height: 400,
+            allowedContent: true,
+            extraPlugins: 'highcharts,ruler'
+            //mentions: [{
+            //    feed: dataFeed,
+            //    itemTemplate: '<li data-id="{id}">' +
+            //        '<strong class="Name">{Name}</strong>' + " - " +
+            //        '<span class="Code">{Code}</span>' +
+            //        '</li>',
+            //    outputTemplate: '<li id="{id}" class="Name"><strong>&#64;&#64;{Name}&#64;&#64;</strong></li>',
+            //    minChars: 0
+            //},
+            //{
+            //    feed: dataFeedTable,
+            //    marker: '#',
+            //    itemTemplate: '<li data-id="{id}">' +
+            //        '<strong class="Name">{Name}</strong>' + " - " +
+            //        '<span class="Code">{Code}</span>' +
+            //        '</li>',
+            //    outputTemplate: '<li id="{id}"><strong class="Name">##{Name}##</strong></li>',
+            //    minChars: 0
+            //}]
+        });
+        CKEDITOR.config.ruler = {
+            values: 21,     // segment number of the ruler
+            step: 0.25,     // accuracy of sliders
+            sliders: {
+                left: 2,    // left slider value
+                right: 19   // right slider value (21-19 = 2)
+            },
+            padding: {
+                top: 20,    // top 'canvas' padding (px)
+                bottom: 20  // bottom 'canvas' padding (px)
+            }
+        };
+        $('#queryTemplateKeys').change(function () {
+            CKEDITOR.instances["Form_ExplicitTemplate"].insertHtml("&#64;&#64;" + $(this).children("option:selected").text().trim() + "&#64;&#64;");
+            ckeditorName = '';
+        });
+
+        $('#htmlTemplateKeys').change(function () {
+            CKEDITOR.instances["Form_ExplicitTemplate"].insertHtml("##" + $(this).children("option:selected").text().trim() + "##");
+            ckeditorName = '';
+        });
+
+        @*function dataFeed(opts, callback) {
+            var templateKeys = JSON.parse('@Html.Raw(Json.Encode(templateKeys))');
+            var matchProperty = 'Name',
+                data = templateKeys.filter(function (item) {
+                    return item[matchProperty].toLowerCase().indexOf(opts.query.toLowerCase()) == 0;
+                });
+
+            data = data.sort(function (a, b) {
+                return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                    sensitivity: 'accent'
+                });
+            });
+
+            callback(data);
+        }
+
+        function dataFeedTable(opts, callback) {
+            var templateKeys = JSON.parse('@Html.Raw(Json.Encode(templateKeys))');
+            var matchProperty = 'Name',
+                data = templateKeys.filter(function (item) {
+                    return item[matchProperty].indexOf(opts.query.toLowerCase()) == 0;
+                });
+
+            data = data.sort(function (a, b) {
+                return a[matchProperty].localeCompare(b[matchProperty], undefined, {
+                    sensitivity: 'accent'
+                });
+            });
+
+            callback(data);
+        }*@
+
+        CKEDITOR.instances["Form_ExplicitTemplate"].on("instanceReady", function (ev) {
+            var nav = buildNav();
+            nav.appendTo($('#explicit-template-navigation-content'));
+            ev.editor.dataProcessor.htmlFilter.addRules({
+                elements: {
+                    p: function (e) {
+                        var fontFamily = 'font-family:Times New Roman,Times,serif';
+                        if (e.attributes.style) {
+                            if (e.attributes.style.indexOf('font-family') < 0) e.attributes.style += ';' + fontFamily;
+                            else e.attributes.style = e.attributes.style.replace(/font-family:[^;]*(;?)/, `${fontFamily}$1`);
+                        } else e.attributes.style = fontFamily;
+                    }
+                }
+            });
+        });
+
+        CKEDITOR.instances["Form_ExplicitTemplate"].on("change", function () {
+            var nav = buildNav();
+            nav.appendTo($('#explicit-template-navigation-content').empty());
+        });
+
+        $("#toggle-navigation-btn").on("click", function (e) {
+            if ($("#toggle-navigation").hasClass("show-nav")) {
+                $("#toggle-navigation").removeClass("show-nav").addClass("hide-nav");
+                $("#explicit-template-navigation").css("max-width", 0);
+                setTimeout(function () { $("#explicit-template-navigation").hide(); }, 500);
+            } else {
+                $("#toggle-navigation").removeClass("hide-nav").addClass("show-nav");
+                $("#explicit-template-navigation").show();
+                setTimeout(function () { $("#explicit-template-navigation").css("max-width", "100%"); }, 0);
+            }
+        });
+    });
+
+    function buildNav() {
+        var element = $('<div>'),
+        container = $('<ol>');
+        container.appendTo(element);
+
+        var editor = CKEDITOR.instances["Form_ExplicitTemplate"];
+        var headings = editor.editable().find('h1,h2,h3,h4,h5,h6'),
+            parentLevel = 1,
+            length = headings.count();
+
+        //get each heading
+        for (var i = 0; i < length; ++i) {
+
+            var currentHeading = headings.getItem(i),
+                text = currentHeading.getText(),
+                newLevel = parseInt(currentHeading.getName().substr(1, 1));
+            var diff = (newLevel - parentLevel);
+
+            //set the start level incase it is not h1
+            if (i === 0) { diff = 0; parentLevel = newLevel; }
+
+            //we need a new ul if the new level has a higher number than its parents number
+
+            if (diff > 0) {
+                var containerLiNode = container.children().last();
+
+
+                var olNode = $('<ol>');
+                olNode.appendTo(containerLiNode);
+                container = olNode;
+                parentLevel = newLevel;
+            }
+
+
+            //we need to get a previous ul if the new level has a lower number than its parents number
+            if (diff < 0) {
+                while (0 !== diff++) {
+                    parent = container.parent().parent();
+                    var tagName = parent.prop('tagName');
+                    container = (tagName != null && tagName.toLowerCase() === 'ol' ? parent : container);
+                }
+                parentLevel = newLevel;
+            }
+
+            //we can add the list item if there is no difference
+
+            //if(text === ''){text = 'empty'}
+
+
+            if (text == null || text.trim() === '') {
+                text = '&nbsp;'
+            }
+
+            var aNode = $('<a href="#" data-index="' + i + '">' + text + '</a>');
+            aNode.on('click', function (e) {
+                e.preventDefault();
+                var index = this.dataset.index;
+                currentHeading = headings.getItem(index);
+                currentHeading.scrollIntoView();
+
+                var editor = CKEDITOR.instances["Form_ExplicitTemplate"];
+                var selection = editor.getSelection();
+                selection.selectElement(currentHeading);
+                var range = selection.getRanges()[0];
+
+                var newRange = new CKEDITOR.dom.range(range.document);
+                newRange.moveToPosition(currentHeading, CKEDITOR.POSITION_BEFORE_START);
+                editor.focus();
+            });
+            var liNode = $('<li>');
+            aNode.appendTo(liNode);
+            liNode.appendTo(container);
+        }
+
+        return element;
+    }
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("#FormName").focus();
+
+        $("#deleteForm").click(function(e) {
+
+            eGovMessage.show(
+                '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Form.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function() {
+                    $.ajax({
+                        url: "/Admin/doctype/DeleteFormNRef?id=" +
+                            "@Model.Form.FormId" +
+                            "&docTypeId=" +
+                            "@Model.DocType.DocTypeId",
+                        type: 'GET',
+                        data: {}
+                    }).done(function(result) {
+                        if (result.success) {
+                            $.notify({
+                                    message: "Xóa biểu mẫu thành công"
+                                },
+                                {
+                                    type: 'success',
+                                    placement: {
+                                        from: "bottom",
+                                        align: "right"
+                                    }
+                                });
+                            location.href = "/Admin/docType/EditPlus/" + "@Model.DocType.DocTypeId";
+                        }
+                    });
+                }
+            );
+        });
+        var data = [];
+        var obj = {
+            "id": 0,
+            "text": "Template Key",
+            "icon": "/Content/Images/doctype_activate.png",
+            "children": []
+        };
+        var objDefault = {
+            "id": 0,
+            "text": "Template Key mặc định",
+            "icon": "/Content/Images/doctype_activate.png",
+            "children": []
+        }
+        var arr = [
+            { Value: "Phongbanhientai", Text: "Phòng ban hiện tại" },
+            { Value: "PHONGBANHIENTAI", Text: "PHÒNG BAN HIỆN TẠI" },
+            { Value: "dd", Text: "dd" },
+            { Value: "MM", Text: "MM" },
+            { Value: "yyyy", Text: "yyyy" },
+            { Value: "dd-mm-yyyy", Text: "dd-MM-yyyy" },
+            { Value: "dd-MM-yyyy hh:mm", Text: "dd-MM-yyyy hh:mm" }
+        ];
+        _.each(arr, function(x) {
+            objDefault.children.push({
+                "id": `default_${x.Value}`,
+                "text": x.Value,
+                "icon": "/Content/Images/doctype_key.png"
+            });
+        });
+
+        _.each(JSON.parse(decodeHTML("@queryTemplateKeys")),function(x) {
+            obj.children.push({
+                "id": `query_${x.Value}`,
+                "text": x.Text,
+                "icon": "/Content/Images/doctype_key.png"
+            });
+        });
+        _.each(JSON.parse(decodeHTML("@htmlTemplateKeys")),function(x) {
+            obj.children.push({
+                "id": `html_${x.Value}`,
+                "text": x.Text,
+                "icon": "/Content/Images/doctype_key.png"
+            });
+        });
+        data.push(obj);
+        data.push(objDefault);
+        $('#tree').on("select_node.jstree",
+            function (evt, data) {
+                if(data.node.id == "0") return;
+                var check = false;
+                if (data.node.id.includes("query") || data.node.id.includes("default")) {
+                    //_.each(CKEDITOR.instances["Form_ExplicitTemplate"].getData().match(/@@@@(.*?)@@@@/gm), (x) =>
+                    //    {
+                    //        if (decodeHTML(x).replace("@@@@", "").replace("@@@@", "") === data.node.text) {
+                    //            check = true;
+                    //            return;
+                    //        }
+                    //    });
+                    if (!check ) {
+                        CKEDITOR.instances["Form_ExplicitTemplate"].insertHtml(`&#64;&#64;${data.node.text}&#64;&#64;`);
+                    }
+                }
+                else {
+                    //_.each(CKEDITOR.instances["Form_ExplicitTemplate"].getData().match(/##(.*?)##/gm), (x) =>
+                    //{
+                    //    if (decodeHTML(x).replace("##", "").replace("##", "") === data.node.text) {
+                    //        check = true;
+                    //        return;
+                    //    }
+                    //});
+                    if (!check ) {
+                        CKEDITOR.instances["Form_ExplicitTemplate"].insertHtml(`##${data.node.text}##`);
+                    }
+                }
+            }).jstree({
+            'core': {
+                "animation": 0,
+                'check_callback': true,
+                'multiple': false,
+                "themes": { "stripes": true },
+                'data': data
+            },
+            "search": {
+                "case_sensitive": false,
+                "show_only_matches": true
+            },
+            "plugins": ["dnd", "search"]
+            });
+        $("#search-input").keyup(function () {
+            var searchString = $(this).val();
+            $('#tree').jstree('search', searchString);
+        });
+    });
+
+    function decodeHTML(text) {
+        return $("#decode")
+            .html(text)
+            .text();
+    }
+</script>
+@Html.HiddenFor(model => model.Form.FormId)
+<style>
+
+    tr.spaceUnder > td {
+        padding-bottom: 1em;
+    }
+
+    .icon-flash:before {
+        content: "\e162";
+    }
+
+    #explicit-template {
+        display: flex;
+    }
+
+    #explicit-template-navigation {
+        flex: 1;
+        border: 1px solid #d1d1d1;
+        max-width: 100%;
+        overflow: hidden;
+        transition: max-width .5s ease;
+    }
+
+    #explicit-template-navigation-title {
+        border-bottom: 2px solid #d1d1d1;
+        padding: 5px;
+    }
+
+    #explicit-template-navigation-content ol {
+        margin-left: 10px;
+        padding-right: 0px;
+        counter-reset: item;
+        padding-inline-start: 15px;
+    }
+
+        #explicit-template-navigation-content ol li {
+            display: block;
+            position: relative;
+        }
+
+            #explicit-template-navigation-content ol li:before {
+                content: counters(item, ".");
+                counter-increment: item;
+                position: absolute;
+                margin-right: 100%;
+                right: 0.5rem;
+            }
+
+            #explicit-template-navigation-content ol li a {
+                color: #0782C1;
+                text-decoration: none;
+            }
+
+    #toggle-navigation {
+        min-width: 8px;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid #d1d1d1;
+        border-bottom: 1px solid #d1d1d1;
+    }
+
+        #toggle-navigation.hide-nav {
+            border-left: 1px solid #d1d1d1;
+        }
+
+    #toggle-navigation-btn {
+        flex: 1;
+        height: 50px;
+        background: #c1c1c1;
+        border-radius: 2px;
+        position: relative;
+        cursor: pointer;
+    }
+
+        #toggle-navigation-btn:after {
+            content: '';
+            width: 100%;
+            height: 10px;
+            position: absolute;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            top: calc(50% - 7px);
+        }
+
+    .show-nav #toggle-navigation-btn:after {
+        border-right: 7px solid #525252;
+    }
+
+    .hide-nav #toggle-navigation-btn:after {
+        border-left: 7px solid #525252;
+    }
+
+    #cke_Form_ExplicitTemplate {
+        flex: 3;
+    }
+        #cke_Form_ExplicitTemplate .cke_contents {
+            display: flex;
+            flex-direction: column;
+        }
+</style>
+<textarea id="decode" style="display: none"></textarea>
+<table>
+    <tr class="spaceUnder">
+        <td style="width: 20%; padding-right: 1.5em">
+            @*@Html.LabelRequireFor(model => model.Form.ExplicitTemplate)*@
+            @* <b>Template Key (truy vấn)</b>*@
+            <input id="search-input" class="form-control" />
+            <div id="tree" style="background-color: white; width: 100%; height: 250px; padding: 2px; overflow-x: hidden">
+            </div>
+            @*<select class="custom-select" id="queryTemplateKeys" multiple style="height: 90%">
+                    @if (queryTemplateKeys != null)
+                    {
+                        foreach (var key in queryTemplateKeys)
+                        {
+                            <option value="@key.Value" customAttribute="@key.Text">
+                                @key.Text
+                            </option>
+                        }
+                    }
+
+                </select>*@
+            @*<b>Template Key (có html)</b>
+                <input id="search-input-html" class="form-control" />
+                <div id="htmlTemplateKeys" style="background-color: white; width: 100%; height: 250px; padding: 2px; overflow-x: hidden">
+                </div>*@
+            @*<select class="custom-select" id="htmlTemplateKeys" multiple style="height: 90%">
+                @if (htmlTemplateKeys != null)
+                {
+                    foreach (var key in htmlTemplateKeys)
+                    {
+                        <option value="@key.Value" customAttribute="@key.Text">
+                            @key.Text
+                        </option>
+                    }
+                }
+                </select>*@
+        </td>
+        <td>
+            <div id="explicit-template">
+                <div id="explicit-template-navigation">
+                    <div id="explicit-template-navigation-title">Mục lục</div>
+                    <div id="explicit-template-navigation-content"></div>
+                </div>
+                <div id="toggle-navigation" class="show-nav">
+                    <div id="toggle-navigation-btn"></div>
+                </div>
+                @Html.TextAreaFor(model => model.Form.ExplicitTemplate)
+            </div>
+        </td>
+    </tr>
+    <tr class="">
+        <td>
+            Children Form
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Form.ChildCompilationId)
+        </td>
+    </tr>
+    @if (Model.Form.FormId != Guid.Empty)
+    {
+        <tr>
+            <td>
+                <input type="button" id="deleteForm" class="btn btn-danger" value="Xóa biêu mẫu" style="" />
+            </td>
+        </tr>
+    }
+</table>

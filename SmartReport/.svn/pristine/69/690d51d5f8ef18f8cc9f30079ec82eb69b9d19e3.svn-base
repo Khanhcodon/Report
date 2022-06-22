@@ -1,0 +1,142 @@
+﻿
+<div id="chatFrame" data-app="chat" class="egov-app trans trans-right">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+        <header class="mdl-layout__header egov-header">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title">
+                    <span class="wraptext">
+                        <span class="header-title">
+                            Hội thoại
+                        </span>
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right txtSearchChat">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="txtSearchChat">
+                        <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="sample" id="txtSearchChat">
+                    </div>
+                </div>
+            </div>
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                <a href="#chat-histories" class="mdl-layout__tab is-active">Tin nhắn</a>
+                <a href="#chat-groups" class="mdl-layout__tab">Nhóm</a>
+                <a href="#chat-departments" class="mdl-layout__tab">Tổ chức</a>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer egov-leftmenu">
+            <div class="mdl-layout__drawer">
+                <div class="useroption main-bg-color">
+                    <img class="avatar" src="" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wraptext"></div>
+                        <div class="wraptext fullmail"></div>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu4">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu4">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>
+                <div class="treelist">
+                    <nav class="treemenu">
+                        <div data-app="chat">
+                            <ul class="mdl-list" id="folderlist"></ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="conversation">
+                <section class="mdl-layout__tab-panel is-active" id="chat-histories">
+                    <div id="chat-histories-list">
+                        <div class="page-content">
+                            <ul class="mdl-list">
+                                <li class="mdl-list__item">Đang tải dữ liệu</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="chat-groups">
+                    <div class="page-content">
+                        <ul class="mdl-list">
+                            <li class="mdl-list__item">Danh sách nhóm</li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="chat-departments">
+                    <div id="user-department-list">
+                        <div class="page-content">
+                            <div style="padding: 0 16px;">
+                                <span class="mdl-chip mdl-chip--contact" data-online="off">
+                                    <span class="mdl-chip__contact mdl-color-text--white count-all">0</span>
+                                    <span class="mdl-chip__text">Người dùng</span>
+                                </span>
+                                <span class="mdl-chip mdl-chip--contact is-focused" data-online="on">
+                                    <span class="mdl-chip__contact mdl-color-text--white count-online">0</span>
+                                    <span class="mdl-chip__text">Hoạt động</span>
+                                </span>
+
+                                <button id="demo-menu-lower-right" style="float: right;"
+                                        class="mdl-button mdl-js-button mdl-button--icon">
+                                    <i class="material-icons">filter_list</i>
+                                </button>
+
+                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                    for="demo-menu-lower-right" id="department-list" style="height: 300px; overflow-y: auto;"></ul>
+
+                                <div class="filter-department-data hidden">
+                                    <span class="filter-name"></span> <a href="#" style="float: right;" class="removeFilter">Xóa</a>
+                                </div>
+                            </div>
+                            <ul class="mdl-list contacts"></ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="search" id="chatSearch" style="display:none">
+                <div class="search-suggestions">
+                    <div>
+                        <div class="recent-chats">
+                            <div>Hội thoại gần đây</div>
+                            <div class="recent-chats-list"></div>
+                        </div>
+                        <div class="recent-groups">
+                            <div>Nhóm chat gần đây</div>
+                            <div class="recent-groups-list"></div>
+                        </div>
+                        <div class="recent-suggestions">
+                            <div>Gợi ý</div>
+                            <div class="recent-suggestions-list">
+                                <ul class="mdl-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-result" style="display: none;">
+                    <ul class="mdl-list"></ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

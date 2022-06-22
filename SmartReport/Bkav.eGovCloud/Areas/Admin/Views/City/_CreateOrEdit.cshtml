@@ -1,0 +1,24 @@
+﻿@model CityModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.CityId)
+
+<table>
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.CityName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.CityName, new { style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.CityName)
+        </td>
+    </tr>   
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.CityCode):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.CityCode, new { style = "width:300px" })
+            @Html.ValidationMessageFor(model => model.CityCode)
+        </td>
+    </tr>   
+</table>

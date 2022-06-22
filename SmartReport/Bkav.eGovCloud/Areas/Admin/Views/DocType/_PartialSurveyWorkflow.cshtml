@@ -1,0 +1,159 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.WorkflowModel>
+<script type="text/javascript">
+    $(function () {
+        $("#submit").remove();
+        $(".tab-workflow").addClass("active");
+        $(".tab-workflow").siblings().removeClass(" ui-tabs-selected ui-state-active");
+
+        $("#tblListWorkflow").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+    });
+    function updateSurveyWorkflow() {
+        var workflowIds = [];
+        $("#tbodyWorkflow input[name=selected]").each(function () {
+            if ($(this).prop('checked')) {
+                workflowIds.push(parseInt($(this).attr("value")));
+            }
+        });
+        if (workflowIds.length <= 0) {
+            return;
+        }
+        $.ajax({
+            url: "@Url.Action("UpdateSurveyWorkflow")",
+            type: "POST",
+            traditional: true,
+            data: {
+                workflowIds: workflowIds,
+                id: '@ViewData["DoctypeId"]'
+            },
+            success: function (result) {
+                if (result.success) {
+                    $("#notificationSuccess").html(result.mess || "");
+                    eGovMessage.notification($('#notificationSuccess').html(), eGovMessage.messageTypes.success, true);
+                    $('#6a').html(result.html || "");
+                } else {
+                    $("#notificationError").html(result.mess || "");
+                    eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                }
+            }
+        });
+    }
+
+    function changeSurveyWorkflowStatus(_this, workflowId, docTypeId){
+        var status = $(_this).is(":checked");
+        $.ajax({
+            url: "@Url.Action("ChangeSurveyWorkflowStatus")",
+            type: "post",
+            data: {workflowId: workflowId, docTypeId: docTypeId, status: status},
+            success: function(result){
+                if (result.success) {
+                    $("#notificationSuccess").html(result.mess || "");
+                    eGovMessage.notification($('#notificationSuccess').html(), eGovMessage.messageTypes.success, true);
+                    $('#6a').html(result.html || "");
+                } else {
+                    $("#notificationError").html(result.mess || "");
+                    eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                }
+            }
+        });
+    }
+    function deleteSurveyWorkflow(id, workflowId) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Admin.SurveyWorkflow.ConfirmDelete"))',
+            null,eGovMessage.messageButtons.YesNo,function () {
+                $.ajax({
+                    url: "@Url.Action("DeleteSurveyWorkflow")",
+                    type: "post",
+                    data: { id: id, workflowId: workflowId},
+                    success: function(result){
+                        if (result.success) {
+                            $("#notificationSuccess").html(result.mess || "");
+                            eGovMessage.notification($('#notificationSuccess').html(), eGovMessage.messageTypes.success, true);
+                            $('#6a').html(result.html || "");
+                        } else {
+                            $("#notificationError").html(result.mess || "");
+                            eGovMessage.notification($('#notificationError').html(), eGovMessage.messageTypes.error);
+                        }
+                    }
+                });
+            }
+        );
+    }
+
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            width: 1000,
+            height: 600,
+            resizable: true,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: {"@Html.Raw(Localizer("Common.DocTypeWorkflow.Create"))": function (e) {
+                updateSurveyWorkflow();
+                $('#my-dialog').dialog("close");
+                $("#my-dialog").dialog('destroy').remove();
+            }
+            }
+        });
+    }
+</script>
+<style>
+    .table {
+        margin-bottom: 0;
+    }
+</style>
+<div id="my-dialog">
+</div>
+<button class="btn" type="button" onclick="openDialog('@Url.Action("AddSurveyWorkflow", "DocType", new { id = ViewData["DoctypeId"] })')">
+    @Localizer("Admin.DocTypeWorkflow.AddNewWorkflow")
+</button>
+
+<table class="table-main table" id="tblListWorkflow">
+    <colgroup>
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.Name")</th>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.IsActivated")</th>
+            <th class="header" style="line-height: 2.5">Xem</th>
+            <th class="header" style="line-height: 2.5">@Localizer("Admin.DocTypeWorkflow.Index.List.Column.Delete")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="td-filter">
+                        @item.WorkflowName
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" @(item.IsActivated ? "checked='checked'" : "") onclick="changeSurveyWorkflowStatus(this,'@item.WorkflowId', '@ViewData["DoctypeId"]')" />
+                    </td>
+                    <td>
+                        <a href="/admin/workflow/ConfigWorkflow/@item.WorkflowId">Xem</a>
+                    </td>
+                    <td>
+                        <a href="javascript:deleteSurveyWorkflow('@ViewData["DoctypeId"]','@(item.WorkflowId)')">
+                            @Localizer("Customer.DocType.Index.List.Column.Delete.Button")
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" data-res="egov.resources.doctype.noformdata"></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,18 @@
+﻿
+<td>
+    <img src="../content/bkav.egov/images/file-extensions/${Extension}.svg" onerror="this.src = '../content/bkav.egov/images/file-extensions/notype.svg'" />
+    ${egov.fileExtension.getFileName(Name)}
+</td>
+<td style="text-align:center;text-transform:uppercase;">${Extension} - ${Size}</td>
+<td>
+    {{if !isRemoved}}
+    <span class="attachment-item-secondary-action attachment-function">
+        <a href="#" class="attachment-open" title="Mở, sửa file">
+            <i class="icon icon-enter"></i>
+        </a>
+        <a href="#" class="attachment-download" title="Tải về">
+            <i class="icon icon-download3"></i>
+        </a>
+    </span>
+    {{/if}}
+</td>

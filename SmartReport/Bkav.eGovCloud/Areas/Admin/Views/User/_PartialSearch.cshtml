@@ -1,0 +1,55 @@
+﻿@model UserSearchModel
+@{
+    var allRoles = ViewBag.AllRoles as IEnumerable<SelectListItem>;
+    var allPos = ViewBag.AllPositions as IEnumerable<SelectListItem>;
+}
+<table>
+
+    <tr>
+        <td>@Html.LabelFor(model => model.PositionId)</td>
+        <td>
+            @Html.DropDownListFor(model => model.PositionId, allPos, Localizer("Common.All.Label"))
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.RoleId)</td>
+        <td>
+            @Html.DropDownListFor(model => model.RoleId, allRoles, Localizer("Common.All.Label"))
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.IsActivated)</td>
+        <td>
+            <select name="IsActivated" id="IsActivated">
+                <option value="">@Localizer("Common.All.Label")</option>
+                <option value="true" @(Model.IsActivated.HasValue && Model.IsActivated.Value ? "selected='selected'" : "") data-res="egov.resources.user.active"></option>
+                <option value="false" @(Model.IsActivated.HasValue && !Model.IsActivated.Value ? "selected='selected'" : "") data-res="egov.resources.user.unactive"></option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 15%">@Html.LabelFor(model => model.Username)</td>
+        <td>
+            @Html.EditorFor(model => model.Username)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.FullName)</td>
+        <td>
+            @Html.EditorFor(model => model.FullName)
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>
+            <input class="btn" type="submit" value="@Localizer("User.Index.Search.Button.Search")" onclick="onSearch()" /></td>
+    </tr>
+</table>
+
+<script>
+    function onSearch() {
+        $('#formSearch').attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        //  $('#formSearch').submit();
+    }
+</script>

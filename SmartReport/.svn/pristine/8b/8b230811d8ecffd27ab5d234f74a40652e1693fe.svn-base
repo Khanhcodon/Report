@@ -1,0 +1,5 @@
+﻿<td class="wraptext">${Index}</td>
+<td class="wraptext">{{html Title}}</td>
+<td class="wraptext">{{html HighLight}}</td>
+<td class="wraptext openFile icon icon-eye3  attachment-open" data-restitle="egov.resources.search.openattachmentfile" title="Mở file đính kèm"></td>
+<td class="wraptext downloadFile icon icon-download2 attachment-download" data-restitle="egov.resources.search.downloadattachmentfile" title="Tải file đính kèm"></td>

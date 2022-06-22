@@ -1,0 +1,454 @@
+﻿@model CatalogModel
+@{
+    var catalogValues = ViewBag.CatalogValues as string;
+}
+<style type="text/css">
+
+    #tabChilds
+    {
+        border: none;
+    }
+
+    .drag-hover
+    {
+        background-color: #ff6a00;
+    }
+</style>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+<script type="text/javascript">
+    var catalogValues = @(string.IsNullOrEmpty(catalogValues) ? MvcHtmlString.Create("[]") : Html.Raw(catalogValues));
+    $(function () {
+        $('#CatalogName').focus();
+        BindValues();
+        $("#aValueTab, #aInfoTab").click(function(){
+            if($(this).attr("id") == "aValueTab")
+            {
+                $("#TxtValue").focus();
+            }
+            else
+            {
+                $("#CatalogName").focus();
+            }
+        });
+
+        $('#TxtValue').keypress(function(e){
+            if(e.keyCode == 13) {
+                AddValue();
+                return false;
+            }
+            return true;
+        });
+
+    });
+
+    function AddValue() {
+        $("#ErrorMessage").text("");
+        var valueObj = $('#TxtValue');
+        var value = valueObj.val().trim();
+        var valueKey = $('#CatalogKey').val();
+        if (value == null || value == "" || ExistValue(value)) {
+            $("#ErrorMessage").text('@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.txtValue.Error"))');
+            valueObj.focus();
+            return false;
+        }
+        if(value.length > 255) {
+            $("#ErrorMessage").text('@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.txtValue.ErrorLenght"))');
+            valueObj.focus();
+            return false;
+        }
+
+        if (valueKey == null || valueKey == "" || ExistValue(valueKey)) {
+            $("#ErrorMessageKey").text('@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.txtValue.Error"))');
+            valueObj.focus();
+            return false;
+        }
+
+        if (valueKey.length > 255) {
+            $("#ErrorMessageKey").text('@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.txtValue.ErrorLenght"))');
+            valueObj.focus();
+            return false;
+        }
+
+        var catalogValue = @(Html.Raw("{}"));
+        catalogValue.Value = value;
+        catalogValue.CatalogValueId = '00000000-0000-0000-0000-000000000000';
+        catalogValue.Order = $(".dragobj").length;
+        catalogValue.CatalogKey = valueKey;
+
+        catalogValues.Key = valueKey;
+        catalogValues.push(catalogValue);
+        BindValues();
+        valueObj.val("").focus();
+        $('#CatalogKey').val("");
+        return true;
+    }
+
+    function BindValues() {
+        $("#tblValue tbody").html("");
+        catalogValues.map(obj => {
+            if (typeof obj.CatalogKey === "undefined") obj.CatalogKey = "";
+            if (typeof obj.Value === "undefined") obj.Value = "";
+                return obj;
+        });
+        if(catalogValues == null || catalogValues.length === 0)
+        {
+            $("#tblValue tbody").append(
+                "<tr id='noresult'><td colspan='4'>" + '@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Null")' + "</td></tr>");
+        }
+        else
+        {
+            $("#ValueTmp").tmpl(catalogValues).appendTo("#tblValue tbody");
+
+        }
+        RebindIdentity();
+        BindDragDropEvent();
+    }
+
+    function RemoveValue(_this, name, id){
+        eGovMessage.show(
+            '@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.QuestionYesNo")'
+            ,""
+            ,eGovMessage.messageButtons.OkCancel,function(){
+                Remove(_this,name);
+            });
+    }
+
+    function Remove(_this, name)
+    {
+        var removeItm= _.find(catalogValues,function(item){
+            return item.Value == name;
+        });
+
+        if(removeItm)
+        {
+            removeItm.Value='';
+        }
+        BindValues();
+    }
+
+    function ExistValue(name)
+    {
+        var exist = _.find(catalogValues, function(value) {
+            return value.Value === name;
+        });
+
+        if(!exist)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    function Edit(_this){
+        ShowHideEdit(_this);
+        $(_this).parents("tr").find(".txtChangeValue").focus();
+        ShowHideEditKey(_this);
+    }
+
+    function CancelEdit(_this)
+    {
+        ShowHideEdit(_this);
+    }
+
+    function ChangeValue(_this, id)
+    {
+        $(_this).parent().find('.sMessage').text("");
+        var value = $(_this).parent().find(".txtChangeValue").val();
+        var exist = _.find(catalogValues, function(value) {
+            return value.Value === value;
+        });
+        if(value == "" || exist)
+        {
+            $(_this).parent().find('.sMessage').text('@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.NullOrExist")');
+                $(_this).parent().find(".txtChangeValue").focus();
+                return;
+            }
+            var catalogValue = _.find(catalogValues, function(value) {
+                return value.CatalogValueId === id;
+            });
+            if(catalogValue) {
+                catalogValue.Value = value;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Catalog/ChangeValue",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: '{id:"' + id + '", value:"' + value + '"}',
+            success: function (msg) {
+                console.log(msg);
+            },
+            complete: function (msg) {
+                console.log(msg);
+            }
+        });
+            ShowHideEdit(_this);
+            $(_this).parents("tr").find(".txt-value-name").val(value);
+            $(_this).parents("tr").find(".sValue").text(value);
+        }
+
+        function ShowHideEdit(obj)
+        {
+            $(obj).parents("tr").find(".value-view, .value-edit").toggle();
+        }
+
+        function SubmitChangeValue(e, _this, id){
+            if(e.keyCode == 13) {
+                ChangeValue(_this, id);
+                return false;
+            }
+            return true;
+    }
+
+
+
+    function ChangeValueKey(_this, id){
+        $(_this).parent().find('.sMessageKey').text("");
+        var value = $(_this).parent().find(".txtChangeValueKey").val();
+        var exist = _.find(catalogValues, function(value) {
+            return value.CatalogKey === value;
+        });
+        if(value == "" || exist){
+            $(_this).parent().find('.sMessageKey').text('@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.NullOrExist")');
+                $(_this).parent().find(".txtChangeValueKey").focus();
+                return;
+            }
+            var catalogValue = _.find(catalogValues, function(value) {
+                return value.CatalogValueId === id;
+            });
+            if(catalogValue) {
+                catalogValue.CatalogKey = value;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Catalog/ChangeValueKey",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: '{id:"'+id+'", value:"'+value +'"}',
+            success: function (msg) {
+                //console.log(msg);
+            },
+            complete: function (msg) {
+                //console.log(msg);
+            }
+        });
+
+        ShowHideEditKey(_this);
+        $(_this).parents("tr").find(".txt-value-name-key").val(value);
+        $(_this).parents("tr").find(".sValueKey").text(value);
+    }
+
+    function ShowHideEditKey(obj) {
+        $(obj).parents("tr").find(".value-view-key, .value-edit-key").toggle();
+    }
+
+
+    function SubmitChangeValueKey(e, _this, id) {
+        if (e.keyCode == 13) {
+            ChangeValueKey(_this, id);
+            return false;
+        }
+        return true;
+    }
+
+        function BindDragDropEvent()
+        {
+            $(".dragobj")
+                .draggable({
+                    helper: "clone",
+                    opacity: .65,
+                    revert: "invalid",
+                    revertDuration: 300,
+                    scroll: true,
+                    cursor: "pointer",
+                    distance: 10
+                })
+                .droppable({
+                    accept: ".dragobj",
+                    hoverClass: "drag-hover",
+                    drop: function(e, ui) {
+                        $(this).before($(ui.draggable));
+                        RebindIdentity();
+                    }
+                });
+        }
+
+        function RebindIdentity(){
+            var number = 1;
+            $(".dragobj").each(function(){
+                var val1 = $(this).find(".txt-value-name").val();
+                if($(this).css("display") != "none") {
+                    var sttObj = $(this).find("td:first-child");
+                    if (sttObj != null) {
+                        $(sttObj).text(number);
+                    }
+                    // cập nhật lại order trong model.
+                    var catalog = _.find(catalogValues, function(val) {
+                        return val.Value == val1;
+                    });
+                    if(catalog && number != $(".dragobj").length) {
+                        catalog.Order = number;
+                    }
+                }
+                number++;
+            });
+            catalogValues = _.sortBy(catalogValues, function(val) {
+                return val.Order;
+            });
+        }
+
+        $(function(){
+            $("#delete").remove();
+            $('#tablist a').bind("click", function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+                var id = $(this).attr("href");
+                $("#tabChilds>div").hide();
+                $(id).show();
+            });
+        });
+</script>
+@Html.HiddenFor(model => model.CatalogId)
+<input type="hidden" id="HidValues" />
+<div id="tabChilds">
+    @*   <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom:20px">
+            <li class="active"><a href="#infoTab" role="tab" data-toggle="tab">@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.List")</a></li>
+            <li><a href="#valuesTab" role="tab" data-toggle="tab">@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.ListObject")</a></li>
+        </ul>*@
+    @*<div id="infoTab" class="bkavegov">*@
+    <table>
+        <tr>
+            <td style="width: 13%">
+                @Html.LabelRequireFor(model => model.CatalogName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.CatalogName)
+                @Html.ValidationMessageFor(model => model.CatalogName)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label>
+                    @Html.CheckBoxFor(model => model.IsActivated)
+                    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.LabelUsing")</span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Name.Label")
+            </td>
+            <td>
+                <input type="text" id="TxtValue" style="display:inline;"
+                       placeholder="@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Name.Label")" />
+                <img src="@Url.Content("~/Content/Images/add.png")" style="width: 20px;" title=""
+                     data-restitle="egov.resources.catalog.addbewobject" onclick="AddValue()" />
+                <span id="ErrorMessage" style="color: red; display: block"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 13%">
+                @Html.LabelRequireFor(model => model.CatalogKey)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.CatalogKey)
+                @Html.ValidationMessageFor(model => model.CatalogKey)
+                <span id="ErrorMessageKey" style="color: red; display: block"></span>
+            </td>
+        </tr>
+    </table>
+    <div class="grid" style="margin-top: 10px;">
+        <div class="grid-header">
+            <div class="grid-header-wrap">
+                <table class="table-main table-bordered table-hover">
+                    <colgroup>
+                        <col style="width: 50px" />
+                        <col style="" />
+                        <col style="width: 250px" />
+                        <col style="width: 50px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Numbers")</th>
+                            <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Name.Label")</th>
+                            <th class="header">@Localizer("Catalog.Index.List.Column.CatalogKey")</th>
+                            <th class="header text-center">@Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Edit")</th>
+                            <th class="header text-center">@Localizer("Bkav.eGovCloud.Areas.Admin.BusinessType.Index.List.Column.Delete")</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible">
+            <table class="table-main table table-bordered table-hover" id="tblValue">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col style="width: 250px" />
+                    <col style="width: 50px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Catalog.Notes.Label")</span>
+</div>
+<script type="text/x-jquery-tmpl" id="ValueTmp">
+    <tr id="${CatalogValueId}" class="dragobj" style='{{if Value == ""}}display: none{{/if}}'>
+        <td></td>
+        <td class="tdValue">
+            <div class="value-view">
+                <span class="sValue">${Value}</span>
+                <input type="hidden" class="txt-value-name" name="valueNames" value="${Value}" />
+
+                @*<input type="hidden" class="txt-value-name" name="ListCatalogV[${Order}].Value" value="${Value}" />
+                    <input type="hidden" class="txt-value-name" name="ListCatalogV[${Order}].Order" value="${Order}" />*@
+                <input type="hidden" class="" name="CatalogValueIds" value="${CatalogValueId}" />
+            </div>
+            <div class="value-edit" style="display: none;">
+                <input type="text" value="${Value}" class="txtChangeValue"
+                       onkeypress="return SubmitChangeValue(event, this, '${CatalogValueId}');" />
+                <img src="@Url.Content("~/Content/Images/tick.png")" alt="cancel" style="width: 16px"
+                     onclick="return ChangeValue(this, '${CatalogValueId}')" />
+                <img src="@Url.Content("~/Content/Images/no.png")" alt="cancel" style="width: 16px"
+                     onclick="return CancelEdit(this)" />
+                <span style="color: red;" class="sMessage"></span>
+            </div>
+        </td>
+        <td class="tdValueKey">
+            <div class="value-view-key">
+                <span class="sValueKey">${CatalogKey}</span>
+                <input type="hidden" class="txt-value-name" name="CatalogKeys" value="${CatalogKey}" />
+                @*<input type="hidden" class="txt-value-name-key" name="ListCatalogV[${Order}].CatalogKey" value="${CatalogKey}" />*@
+            </div>
+            <div class="value-edit-key" style="display: none;">
+                <input type="text" value="${CatalogKey}" class="txtChangeValueKey"
+                       onkeypress="return SubmitChangeValueKey(event, this, '${CatalogValueId}');" />
+                <img src="@Url.Content("~/Content/Images/tick.png")" alt="cancel" style="width: 16px"
+                     onclick="return ChangeValueKey(this, '${CatalogValueId}')" />
+                <img src="@Url.Content("~/Content/Images/no.png")" alt="cancel" style="width: 16px"
+                     onclick="return CancelEdit(this)" />
+                <span style="color: red;" class="sMessageKey"></span>
+            </div>
+        </td>
+        <td class="text-center">
+            <span onclick="return Edit(this);" style="color: blue; text-decoration: underline;cursor: pointer;">
+                @Localizer("Common.Label.Edit")
+            </span>
+        </td>
+        <td class="text-center">
+            <span onclick="return RemoveValue(this, '${Value}', '${CatalogValueId}');"
+                  style="color: blue; text-decoration: underline; cursor: pointer;">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.address.Index.List.Column.Delete.Button")
+            </span>
+        </td>
+    </tr>
+</script>
+@*</div>*@

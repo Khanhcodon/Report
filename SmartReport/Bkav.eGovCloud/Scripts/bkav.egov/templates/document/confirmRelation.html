@@ -1,0 +1,44 @@
+﻿<div class="confirmRelationDialog">
+    <table class="table table-hover">
+        <colgroup>
+            <col style="width: 30px" />
+            <col />
+<!--            <col style="width: 30px" />
+            <col style="width: 80px" />-->
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <label class="checkbox document-color checkAll">
+                        <input name="checkbox[]" value="" type="checkbox" checked="checked">
+                        <span class="document-color-1"><i class="icon-check glyphicon"></i></span>
+                    </label>
+                </th>
+                <th class="header">
+                    <span data-res="egov.resources.document.checkAll"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each relations}}
+            {{if !IsRemoved}}
+            <tr>
+                <td style="border-left: none;">
+                    <label class="checkbox document-color">
+                        <input name="checkbox[]" value="${RelationCopyId}" type="checkbox" checked="checked">
+                        <span class="document-color-1"><i class="icon-check glyphicon"></i></span>
+                    </label>
+                </td>
+                <td class="wraptext" colspan="4">${Compendium}
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="ignoreConfirmRelationArea">
+        <div class="ignoreConfirmRelationWarning">
+            <span data-res="egov.resources.document.ignoreConfirmRelationWarning"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="../../Content/bootstrap/css/bootstrap-theme.css" rel="stylesheet" />*@
+    <link href="../../Content/bkav.egov/egov.main.css" rel="stylesheet" />
+    <link href="../../Content/bkav.egov/egov.color.css" rel="stylesheet" />
+    <link href="../../Content/bkav.egov/egov.dashboard.css" rel="stylesheet" />
+
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/bootstrap/bootstrap.min.js"></script>
+    <script src="../../Scripts/bkav.egov/libs/jquery/jquery-layout-latest.js"></script>
+</head>
+<body>
+    <div class="egov-dashboard">
+        <div class="container-fluid">
+            <div class="">
+
+                @*Giải trình*@
+                @*  <div>
+                        @Html.Partial("_Explanation")
+                    </div>*@
+
+                @*  KQKLMR*@
+                @*  <div>
+                        @Html.Partial("_KQKLMR")
+                    </div>*@
+
+                @*  BSDP*@
+                @*<div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                BSDP
+                            </div>
+                            <div class="panel-body">
+                                Không có dự án nào đến hoặc quá hạn.
+                            </div>
+                        </div>
+                    </div>*@
+
+                @*Công việc quá hạn*@
+                <div >
+                    @Html.Partial("_DocOverDue")
+                </div>
+            </div>
+
+            <div class="hidden-sm col-md-0" style="display: none">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-alarm2"></span>
+                        Thời gian làm việc
+                            <div class="btn-group dropdown pull-right">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon-cog"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Ẩn</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="efood-day">Đến lúc:</span> <span class="label label-danger">Chưa quẹt thẻ đến buổi sáng</span>
+                        </div>
+                        <div class="list-group-item">
+                            <span class="efood-day">Về lúc:</span> 17h30
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-calendar"></span>
+                        Lịch làm việc
+                            <div class="btn-group dropdown pull-right">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon-cog"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Ẩn</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            16h30 - Hôm nay - PH3 - Họp thống nhất các vấn đề về giao diện bản mobile
+                                <a href="#" class="btn btn-info pull-right">Chi tiết</a>
+                        </div>
+                        <div class="list-group-item">
+                            10h00 - Ngày mai - Ph4 - Họp báo cáo tiến độ dự án
+                                <a href="#" class="btn btn-info pull-right">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-accessibility"></span>
+                        Tích thể dục
+                            <div class="btn-group dropdown pull-right">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon-cog"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Ẩn</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="panel-body">
+                        Chưa đến giờ tích thể dục
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-food"></span>
+                        Efood
+                            <div class="btn-group dropdown pull-right">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon-cog"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Ẩn</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="efood-day">Hôm nay:</span> Gà rang gừng - 1 suất - 2A
+                        </div>
+                        <div class="list-group-item">
+                            <span class="efood-day">Ngày mai:</span> Cá sốt cà chua - 1 suất - 2A
+                                <a href="#" class="btn btn-info pull-right">Bỏ đặt</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-pushpin"></span>
+                        Tick lỗi
+                            <span class="panel-label">
+                                <span class="doctype">1 Tick từ 1/7/2015</span>
+                            </span>
+                        <div class="btn-group dropdown pull-right">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="icon-cog"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Ẩn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            30/07/2015 - QĐ về hệ thống KQKL - Quá 3 ngày làm việc kể từ thời điểm hết hạn, công việc KQKL MR không được cập nhật thông tin lên hệ thống
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <span class="icon icon-blog"></span>
+                        Bkav Blog
+                            <div class="btn-group dropdown pull-right">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon-cog"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Ẩn</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">Bản tin CLB Bkav số 86
+                                <a class="btn btn-info pull-right">Xem</a>
+                        </li>
+                        <li class="list-group-item">Bình chọn bài viết xuất sắc của cuộc thi “Tự hào Bkav”
+                                <a class="btn btn-info pull-right">Xem</a>
+                        </li>
+                        <li class="list-group-item">Từ Bphone nghĩ về cách đầu tư cho khoa học công nghệ
+                                <a class="btn btn-info pull-right">Xem</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

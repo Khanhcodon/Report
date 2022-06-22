@@ -1,0 +1,210 @@
+﻿@model DocumentDraftModel
+@using Bkav.eGovCloud.Entities.Customer
+
+@{
+    Layout = "~/Views/Shared/_DocumentLayout.cshtml";
+
+    var listDocTypes = ViewBag.ListDocTypes as IEnumerable<DocType>;
+}
+
+<link href="~/Content/bkav.egov/datepicker.css" rel="stylesheet" />
+<link href="~/Content/bkav.egov/egovdocument.min.css" rel="stylesheet" />
+<link href="~/Scripts/bkav.egov/libs/select2/select2.css" rel="stylesheet" />
+<script src="~/Scripts/bkav.egov/libs/jquery-1.7.1.min.js"></script>
+<script src="~/Scripts/bkav.egov/vendor.min.js"></script>
+<script src="~/scripts/bkav.egov/libs/select2/select2.min.js"></script>
+
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label class="control-label">Loại báo cáo</label>
+            <div class="control-value">
+                <select name="DocTypeId" id="DocTypeId" class="js-example-basic-single form-control">
+                    <option value="">--Select--</option>
+                    @foreach (var docType in listDocTypes)
+                    {
+                        <option value="@docType.DocTypeId" data-action-level="@docType.ActionLevel">
+                            @docType.DocTypeName
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Thời gian</label>
+            <div class="control-value">
+                <select class="form-control date-published hidden" id="bcnam" name="bcnam">
+                    @foreach (var i in Enumerable.Range(2010, 20))
+                    {
+                        <option value="@i/1/1">Năm @i</option>
+                    }
+                </select>
+
+                <div class="hidden" id="group-1" style="display: flex; align-items: baseline;">
+                    <div>
+                        <select class="form-control date-published hidden" id="bcnuanam" name="bcnuanam">
+                            <option value="01/01">6 tháng đầu</option>
+                            <option value="07/01">6 tháng cuối</option>
+                        </select>
+
+                        <select class="form-control date-published hidden" id="bcquy" name="bcquy">
+                            @foreach (var i in Enumerable.Range(0, 4))
+                            {
+                                <option value="@(i * 3 + 1)/01">Quý @(i + 1)</option>
+                            }
+                        </select>
+
+                        <select class="form-control date-published hidden" id="bcthang" name="bcthang">
+                            @foreach (var i in Enumerable.Range(1, 12))
+                            {
+                                <option value="@i/01">Tháng @i</option>
+                            }
+                        </select>
+
+                        <select class="form-control date-published hidden" id="bctuan" name="bctuan">
+                            @foreach (var i in Enumerable.Range(1, 52))
+                            {
+                                <option value="@i">Tuần @i</option>
+                            }
+                        </select>
+                    </div>
+                    <span style="margin: 0 10px;">năm</span>
+                    <select class="form-control" id="nam" name="nam" style="flex-basis: 100px;">
+                        @foreach (var i in Enumerable.Range(2010, 20))
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+
+                <input type="text" name="DatePublished" class="form-control date-published datepicker" id="bcngay" />
+            </div>
+        </div>
+        <button class="btn btn-default" id="btn-create">Tạo mới</button>
+    </form>
+    <div id="message"></div>
+</div>
+
+<script>
+    $("#DocTypeId").select2();
+    $(".datepicker").datepicker();
+
+    var datePublished;
+    var actionLevel;
+    $("#DocTypeId").on("change", function (e) {
+        var optionSelected = $("option:selected", this);
+        actionLevel = optionSelected.data("actionLevel");
+
+        datePublished = null;
+        if (actionLevel == 1) {
+            $("#bcnam").removeClass("hidden");
+            $("#group-1").addClass("hidden");
+            $("#bcngay").addClass("hidden");
+            datePublished = new Date($("#bcnam").val());
+        } else {
+            $("#bcnam").addClass("hidden");
+            $("#group-1").removeClass("hidden");
+            $("#group-1 .date-published").addClass("hidden");
+            $("#bcngay").addClass("hidden");
+
+            var nam = $("#nam").val();
+
+            if (actionLevel == 2) {
+                $("#bcnuanam").removeClass("hidden");
+                datePublished = new Date(nam + "/" + $("#bcnuanam").val());
+            }
+
+            if (actionLevel == 3) {
+                $("#bcquy").removeClass("hidden");
+                datePublished = new Date(nam + "/" + $("#bcquy").val());
+            }
+
+            if (actionLevel == 4) {
+                $("#bcthang").removeClass("hidden");
+                datePublished = new Date(nam + "/" + $("#bcthang").val());
+            }
+
+            if (actionLevel == 5) {
+                $("#bctuan").removeClass("hidden");
+                var monday = getFirstMondayOfYear(nam);
+                monday.setDate(monday.getDate() + ($("#bctuan").val() - 1) * 7);
+                datePublished = monday;
+            }
+
+            if (actionLevel == 6) {
+                $("#bcnam").addClass("hidden");
+                $("#group-1").addClass("hidden");
+                $("#bcngay").removeClass("hidden");
+                var d = $("#bcngay").val().split("/");
+                if (d.length >= 3)
+                    datePublished = new Date(d[2], d[1] - 1, d[0]);
+            }
+        }
+    });
+
+    $(".date-published").on("change", function (e) {
+        if ($(this).is("#bcnam")) {
+            datePublished = new Date(this.value);
+        } else if ($(this).is("#bcngay")) {
+            var d = this.value.split("/");
+            if (d.length >= 3)
+                datePublished = new Date(d[2], d[1] - 1, d[0]);
+        } else {
+            var nam = $("#nam").val();
+            if ($(this).is("#bctuan")) {
+                datePublished = getFirstMondayOfYear(nam);
+                datePublished.setDate(datePublished.getDate() + (this.value - 1) * 7);
+            } else {
+                datePublished = new Date(nam + "/" + this.value);
+            }
+        }
+    });
+
+    $("#nam").on("change", function (e) {
+        if (actionLevel == 5) { // bao cao tuan
+            datePublished = getFirstMondayOfYear(this.value);
+            datePublished.setDate(datePublished.getDate() + ($("#bctuan").val() - 1) * 7);
+        } else {
+            datePublished = new Date(this.value + "/" + $("#group-1 .date-published:not(.hidden)").val());
+        }
+    });
+
+    $("#btn-create").on("click", function (e) {
+        e.preventDefault();
+        var docTypeId = $("#DocTypeId").val();
+        if (!docTypeId) {
+            $("#message").html("<b>Chưa chọn loại báo cáo</b>");
+            return;
+        }
+        if (!datePublished) {
+            $("#message").html("<b>Chưa chọn thời gian</b>");
+            return;
+        }
+
+        var url = `/webapi/Document/SaveDocDraft?docTypeId=${docTypeId}&datePublished=${datePublished.toLocaleDateString()}`;
+        $("#message").html("<b>Đang tạo văn bản</b>");
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                if (res.success) {
+                    $("#message").html(`<b>Đã tạo ${res.data.length} văn bản cho:</b>`);
+                    var li = res.data.map(d => $(`<li>${d}</li>`));
+                    var ul = $('<ul style="padding-inline-start: 40px;"></ul>');
+                    ul.append(li);
+                    $("#message").append(ul);
+                } else {
+                    $("#message").text("Lỗi khi tạo văn bản: " + res.message);
+                }
+            }
+        });
+    });
+
+    function getFirstMondayOfYear(year) {
+        var date = new Date(year, 0);
+        while (date.getDay() != 1) {
+            date.setDate(date.getDate() + 1);
+        }
+        return date;
+    }
+</script>

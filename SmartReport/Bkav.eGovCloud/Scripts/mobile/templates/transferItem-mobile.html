@@ -1,0 +1,17 @@
+﻿<li class="mdl-list__item mdl-list__item--two-line user-received-item"  data="${label}" value="${value}">
+    <span class="mdl-list__item-primary-content wraptext">
+        <img src="${avatar}" alt="${fullname}" class="mdl-list__item-avatar"
+             onerror="this.onerror = null; this.src = '/AvatarProfile/noavatar2.jpg';" />
+        <span>${fullname}</span>
+        <span class="mdl-list__item-sub-title">${position}</span>
+    </span>
+    <span class="mdl-list__item-secondary-action">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect " for="list-checkbox-xlc-${value}">
+            <input type="checkbox" id="list-checkbox-xlc-${value}" class="mdl-checkbox__input isXlc"/>
+        </label>
+
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect hidden" for="list-checkbox-dxl-${value}">
+            <input type="checkbox" id="list-checkbox-dxl-${value}" class="mdl-checkbox__input isDxl" />
+        </label>
+    </span>
+</li>

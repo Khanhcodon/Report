@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CitizenModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Citizen.Index");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function onBegin() {
+        $("#divListCitizen").blockpanel({ text: egov.resources.notifications.loading || "Đang tải...", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListCitizen').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+        $('#divListCitizen').unblockpanel();
+    }
+</script>
+
+<div class="bkavegov">
+    @Html.Partial("_Notifications")
+
+    <div class="section-header">
+        <div class="title">
+            <i class="fa icon-users2"></i>
+            <span data-res="egov.resources.sitemap.citizen">Công dân / doanh nghiệp</span>
+        </div>
+        <div class="options">
+            <a class="btn  btn-warning control-btn" href="/admin/citizen/ImportCitizen">
+                <span class="icon icon-plus"></span>
+                <span class="text-uppercase">Import</span>
+            </a>
+        </div>
+    </div>
+    <div id="divListCitizen">
+        @{
+            Html.RenderPartial("_List", Model);
+        }
+    </div>
+</div>

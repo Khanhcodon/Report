@@ -1,0 +1,195 @@
+﻿function ViewDetail(documentId) {
+    $('#egovStatuss').removeClass('display');
+    $("#bodyContentView").append(' <iframe id="iframe-tree" style="width: 100%; height: 100%; border: none; " src="/DocumentReport/timeline?docId=' + documentId + '"></iframe> ');
+    $('#egovStatuss').addClass('displayProsess');
+}
+
+function ViewProcess(documentId) {
+    //
+    $('#egovStatuss').removeClass('display');
+    HeaderFooter();
+    var that = this;
+    $.ajax({
+        url: "/ReportViewer/GetDocumentDetail",
+        data: { id: documentId },
+        beforeSend: function () {
+            showProgress();
+        },
+        success: function (result) {
+                var dataProcessInfo = JSON.parse(result.ProcessInfo);
+                var dataKey =  _.keys(dataProcessInfo.header);
+                var obj = {};
+                if (dataProcessInfo != undefined && dataProcessInfo.headerFooter != undefined) {
+                    var dataHeader = JSON.parse(dataProcessInfo.headerFooter);
+                    obj.FormHeader = dataHeader.FormHeader;
+                    obj.FormFooter = dataHeader.FormFooter
+                }
+                for (var i = 0 ; i < dataProcessInfo.extra.headerSetting.length ; i++) {
+                    var string = "";
+                    for (var j = 0 ; j < dataProcessInfo.extra.headerSetting[i].length; j++)
+                        if (dataProcessInfo.extra.headerSetting[i][j] != " " && dataProcessInfo.extra.headerSetting[i][j] != "") {
+                            var width = dataProcessInfo.colWidths[j] ? dataProcessInfo.colWidths[j] : "";
+
+                            if (dataProcessInfo.extra.mergedCells.length) {
+                                _.each(dataProcessInfo.extra.mergedCells, function (element) {
+                                    if (element.row == i && element.col == j)
+                                        if (i == dataProcessInfo.extra.headerSetting.length - 1 && element.colspan) {
+                                            for (var k = 0; k < element.colspan - 1; k++) {
+                                                if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                                    string = string + "<th width='" + width + "' hidden>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                                else string = string + "<th width='" + width + "'>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                            }
+                                        } else {
+                                            if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                                string = string + "<th width='" + width + "' colspan = '" + element.colspan + "' rowspan ='" + element.rowspan + "' hidden>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                            else string = string + "<th width='" + width + "' colspan = '" + element.colspan + "' rowspan ='" + element.rowspan + "' >" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                        }
+                                });
+                            } else if (dataProcessInfo.headerNested) {
+                                _.each(dataProcessInfo.headerNested, function (element) {
+                                    if (element.row == i && element.col == j)
+                                        if (i == dataProcessInfo.extra.headerSetting.length - 1 && element.colspan) {
+                                            for (var k = 0; k < element.colspan - 1; k++) {
+                                                if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                                    string = string + "<th width='" + width + "' hidden>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                                else string = string + "<th width='" + width + "'>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                            }
+                                        }
+                                        else {
+                                            if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                                string = string + "<th width='" + width + "' colspan = '" + element.colspan + "' rowspan ='" + element.rowspan + "' hidden>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                            else string = string + "<th width='" + width + "' colspan = '" + element.colspan + "' rowspan ='" + element.rowspan + "' >" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                        }
+                                });
+
+                            }
+
+                            if (i == dataProcessInfo.extra.headerSetting.length - 1)
+                                if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                    string = string + "<th width='" + width + "' hidden>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                                else string = string + "<th width='" + width + "'>" + dataProcessInfo.extra.headerSetting[i][j] + "</th >";
+                        }
+                    //iframe
+                    $('#bodyContentViewProsess').find('#tblListDocumentProcess').find('thead').append("<tr>" + string + "</tr>");
+                    $('.HeaderContent .HeaderContentBody').append(obj.FormHeader);
+                    $('.FooterContent .FooterContentBody').append(obj.FormFooter);
+                    $('#bodyContentViewProsess > #tblListDocumentProcess > thead > tr > th').each(function (i, item) {
+                        $this = $(item);
+                        $this.addClass('htBold');
+                        $this.addClass('htCenter');
+                    });
+                    //hiepns
+                }
+                //var countTr = $('#bodyContentViewProsess').find('#tblListDocumentProcess').find('thead').find('tr').length;
+                //if (countTr > 2) {
+                //    $('#bodyContentViewProsess > #tblListDocumentProcess > thead > tr:last').remove();
+                //}
+        },
+        error: function (xhr) { },
+        complete: function () { }
+    });
+
+
+    $.ajax({
+        url: "/ReportViewer/GetDocumentDetail",
+        data: { id: documentId },
+        beforeSend: function () {
+            showProgress();
+        },
+        success: function (result) {
+                var dataProcessInfo = JSON.parse(result.ProcessInfo);
+                var dataKey = _.keys(dataProcessInfo.header);
+                var noteSS = JSON.parse(result.Note);
+                var dataSS = dataProcessInfo.data;
+                //so sanh 2 array lay du lieu do vao 
+
+                //var dataConvert = _.map(dataSS, function (element) {
+                //    var findNoteSS = _.findWhere(noteSS, { madinhdanh: element.madinhdanh });
+                //    var findDataSS = _.findWhere(dataSS, { madinhdanh: element.madinhdanh });
+                //    findNoteSS.dvt = findDataSS.dvt;
+                //    return _.extend(element, findNoteSS);
+                //});
+
+                dataProcessInfo.data = noteSS;
+
+                //for (var i = 0 ; i < dataProcessInfo.data.length ; i++) {
+                //    dataProcessInfo.data[i].pos = i;
+                //}
+                //hiepns
+
+                var items = _.map(dataKey, function (item) {
+                    return item.split("!!", 1);
+                });
+
+                var string;
+                if (dataProcessInfo.classCells) {
+                    for (var i = 0 ; i < dataProcessInfo.data.length ; i++) {
+                        string = "";
+                        for (var j = 0; j < items.length; j++) {
+                            if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                string = string + "<td class='" + dataProcessInfo.classCells[i][j] + "' hidden >${" + items[j] + "}</td>";
+                            else string = string + "<td>${" + items[j] + "}</td>";
+                        }
+                        var template = "<tr>" + string + "</tr>";
+                        var data = $.tmpl(template, dataProcessInfo.data[i]);
+                        $('#bodyContentViewProsess').find('#tblListDocumentProcess').find('tbody').append(data);
+                    }
+                } else {
+                    for (var i = 0; i < dataProcessInfo.data.length; i++) {
+                        string = "";
+                        for (var j = 0; j < items.length; j++) {
+                            if (dataProcessInfo.extra.columnSetting[dataKey[j]]["Hidden"])
+                                string = string + "<td hidden >${" + items[j] + "}</td>";
+                            else string = string + "<td>${" + items[j] + "}</td>";
+                        }
+                        var template = "<tr>" + string + "</tr>";
+                        var data = $.tmpl(template, dataProcessInfo.data[i]);
+                        $('#bodyContentViewProsess').find('#tblListDocumentProcess').find('tbody').append(data);
+                    }
+                }
+        },
+        error: function (xhr) { },
+        complete: function () { }
+    });
+    $('#egovStatuss').addClass('displayProsess');
+}
+
+function CloseModal() {
+    $('#bodyContentView').find('#iframe-tree').remove();
+}
+
+function CloseModalProsess() {
+    HeaderFooter();
+    $('#bodyContentViewProsess > #tblListDocumentProcess > thead > tr').remove();
+    $('#bodyContentViewProsess > #tblListDocumentProcess > tbody > tr').remove();
+}
+
+function HeaderFooter() {
+    $('#BodyContent .HeaderContent .HeaderContentBody').remove();
+    $('#BodyContent .FooterContent .FooterContentBody').remove();
+    $('#BodyContent .HeaderContent').append('<div class="HeaderContentBody"></div>');
+    $('#BodyContent .FooterContent').append('<div class="FooterContentBody"></div>');
+}
+
+function showProgress() {
+    $(".status").show();
+}
+
+$('#ViewModalProsess').on('scroll', function () {
+    var threshold = 60;
+
+    if ($('#ViewModalProsess').scrollTop() > threshold) {
+        $('.fixed-header').addClass('affixed');
+    }
+    else {
+        $('.fixed-header').removeClass('affixed');
+    }
+});
+
+$('#ViewModalProsess').on('hide.bs.modal', function (e) {
+    $('.fixed-header').removeClass('affixed');
+});
+
+$('.fixed-header button').click(function () {
+    $('#ViewModalProsess').modal('hide');
+});

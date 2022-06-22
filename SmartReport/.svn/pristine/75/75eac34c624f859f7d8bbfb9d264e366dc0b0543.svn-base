@@ -1,0 +1,117 @@
+﻿@model IEnumerable<ActionLevelModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;        
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tblActionLevel").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $("#tblActionLevel").openLink({ urlOpen: '/admin/ActionLevel/Edit' });
+        $(".table-main").addClass("table-bordered table-hover");
+    })
+</script>
+<table class="table-main table" id="tblActionLevel" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 250px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("ActionLevelName", Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.Index.List.Column.ActionLevelName"),
+            sortAndPage.SortBy, sortAndPage.IsSortDescending,
+            "SortAndPaging", "sort asc", "sort desc",
+            new
+                {
+                    page = sortAndPage.CurrentPage,
+                    pageSize = sortAndPage.PageSize,
+                    resourceKey = ViewBag.ResourceKey,
+                    codeName = ViewBag.CodeName,
+                    groupId =  ViewBag.GroupId
+                },
+            new AjaxOptions
+                {
+                    UpdateTargetId = "divListCode",
+                    OnBegin = "onBegin",
+                    OnSuccess = "onSuccess",
+                    OnFailure = "onFailure"
+                })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.Index.List.Column.TemplateKey")
+            </th>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Common.Resource.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var actionLevel in Model)
+            {
+                number += 1;
+            <tr data-id="@actionLevel.ActionLevelId">
+                <td>@number
+                </td>
+                <td>@actionLevel.ActionLevelName
+                </td>
+                <td>@actionLevel.TemplateKey
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "Edit", new { Id = actionLevel.ActionLevelId })
+                </td>
+                <td>
+                    <a href="javascript:deleteCode(@(actionLevel.ActionLevelId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(actionLevel.ActionLevelId)" style="display: none" action="@Url.Action("Delete", new { Id = actionLevel.ActionLevelId })" method="POST">
+                         @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">
+                   @Localizer("Bkav.eGovCloud.Areas.Admin.ActionLevel.Index.List.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending,
+                                      actionLevelName = ViewBag.ActionLevelName
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListCode",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

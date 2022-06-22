@@ -1,0 +1,78 @@
+﻿@model IEnumerable<InterfaceConfigModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.InterfaceConfig.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var search = ViewBag.KeySearch as InterfaceConfigSearchModel;
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.min.js")"></script>
+
+<script type="text/javascript">
+    function onBegin() {
+        $("#divListInterfaceConfig").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListInterfaceConfig').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListInterfaceConfig').unblockpanel();
+    }
+
+    function searchInterface(_this){
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    function onChange(){
+        $("#search").click();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-insert-template"></i>
+        <span data-res="egov.resources.sitemap.interfaceConfig"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/InterfaceConfig/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Config")
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search",
+            new AjaxOptions
+            {
+                HttpMethod = "Get",
+                UpdateTargetId = "divListInterfaceConfig",
+                OnBegin = "onBegin",
+                OnFailure = "onFailure",
+                OnSuccess = "onSuccess"
+            }))
+    {
+          <span>@Localizer("Admin.InterfaceConfig.Search.FindText.Label")</span>
+           <input style="display:inline;width:300px" type="text" 
+                name="FindText" id="FindText" value="@search.FindText"
+                 placeholder="@Localizer("Admin.InterfaceConfig.Search.FindText.Label")" />
+  
+            <input style="display:inline" class="btn" type="submit" 
+            id="search" onclick="searchInterface(this)" 
+                value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+
+    <br />
+
+    <div id="divListInterfaceConfig">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

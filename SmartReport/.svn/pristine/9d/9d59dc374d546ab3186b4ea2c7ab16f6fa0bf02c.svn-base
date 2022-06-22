@@ -1,0 +1,273 @@
+﻿@{
+    Layout = null;
+    var allUser = ViewBag.Users as IEnumerable<dynamic>;
+    var allDepartment = ViewBag.Departments as IEnumerable<dynamic>;
+    var allJobTitile = ViewBag.Jobtitles as IEnumerable<dynamic>;
+    var allPosition = ViewBag.Positions as IEnumerable<dynamic>;
+    var allUserDepartmentJobTitlesPosition = ViewBag.UserDepartmentJobTitlesPositions as IEnumerable<dynamic>;
+}
+
+<!DOCTYPE html>
+<link href="/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Content/bootstrap/icomoon.css" rel="stylesheet" />
+<link href="/Content/bkav.egov/addressBook/addressBook.css" rel="stylesheet" />
+<link href="/Content/bkav.egov/addressBook/addressBookMobile.css" rel="stylesheet" />
+<link href="/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+<style>
+    .icon-search-btn {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 0px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+</style>
+
+<script type="text/javascript">
+    document.domain = '@ViewBag.Domain';
+</script>
+<script src="/Scripts/bkav.egov/mvendor.min.js" type="text/javascript"></script>
+<script src="/Scripts/bkav.egov/libs/jstree_pre1.0_fix_1/jquery.jstree.js" type="text/javascript"></script>
+
+<script src="/Scripts/bkav.egov/util/bt.util.date.min.js"></script>
+<script src="/Scripts/bkav.egov/libs/bkav/bkav.grid.min.js" type="text/javascript"></script>
+<script src="/Scripts/bkav.egov/resource/egov.resources.vi-VN.min.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div id="eGovAddressBookMobile">
+        <div class="col-sm-16" id="detailMobile" style="left:-500px; height : 0px">
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="#" id="backList">
+                    <i class="icon icon-backward"></i>
+                    </a></div>
+                <div class="panel-body text-left">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <center>
+                                <a class="" href="#">
+                                    <img class="media-object dp img-circle" src="data:image/jpeg;base64,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" style="width: 180px;height:180px;">
+                                </a>
+                            </center>
+                        </div>
+                        <div class="col-md-12">
+                            <h2>Sachith Seram</h2>
+                            <p>Software Developer at ceymplon</p>
+                            <p>
+                                <a href="#" class="remove-decoration"><i class="glyphicon glyphicon-envelope"></i> poolsachitha@gmail.com</a> <br>
+                                <a href="http://sachitha-seram.branded.me/" target="_blank" class="remove-decoration"><i class="glyphicon glyphicon-globe"></i> www.sachitha-seram.branded.me </a><br>
+                                <a href="#" class="remove-decoration"> <i class="glyphicon glyphicon-phone"></i> +94 710 000 000</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="IdFooter" class="panel-footer text-right">
+                    <ul class="social-network social-circle">
+                        <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>
+                        <li><a href="https://www.facebook.com/blood.pssus" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="https://lk.linkedin.com/pub/sachitha-seram/85/a2a/618" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="element custom">
+            <div class="element-header">
+                <input id="searchMobile" type="text" name="s" value="" placeholder="search" autocomplete="off">
+                <h2>Danh bạ</h2>
+            </div>
+
+            <div class="element-content">
+
+                <ul class="list" id="listUser">
+                   
+                </ul>
+                <div class="element-sidebar">
+                    <a href="#index-#">#</a>
+                    <a href="#index-A">A</a>
+                    <a href="#index-B">B</a>
+                    <a href="#index-C">C</a>
+                    <a href="#index-D">D</a>
+                    <a href="#index-E">E</a>
+                    <a href="#index-F">F</a>
+                    <a href="#index-G">G</a>
+                    <a href="#index-H">H</a>
+                    <a href="#index-I">I</a>
+                    <a href="#index-J">J</a>
+                    <a href="#index-K">K</a>
+                    <a href="#index-L">L</a>
+                    <a href="#index-M">M</a>
+                    <a href="#index-N">N</a>
+                    <a href="#index-O">O</a>
+                    <a href="#index-P">P</a>
+                    <a href="#index-Q">Q</a>
+                    <a href="#index-R">R</a>
+                    <a href="#index-S">S</a>
+                    <a href="#index-T">T</a>
+                    <a href="#index-U">U</a>
+                    <a href="#index-V">V</a>
+                    <a href="#index-W">W</a>
+                    <a href="#index-X">X</a>
+                    <a href="#index-Y">Y</a>
+                    <a href="#index-Z">Z</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="egov" id="eGovAddressBook">
+        <div id="container" class="report-container">
+            <div id="left">
+                <nav class="navbar navbar-default" style="display: table; width:100%">
+                    <b style="display: table-cell; vertical-align: middle;color:#3a3aff">Danh sách các phòng ban đơn vị</b>
+                </nav>
+                <div id="tree">
+                    <ul id="department"></ul>
+                </div>
+            </div>
+            <div id="right" style="background-color:#ebebeb">
+                <div>
+                    <nav class="navbar navbar-default">
+                        <div class="">
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="" id="bs-example-navbar-collapse-1">
+                                <div class="navbar-form  pull-left">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Tải danh bạ
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="navbar-form navbar-right">
+                                    <div class="form-group form-group-sm">
+                                        <input type="text" id="inputSearch" class="form-control input-sm" placeholder="Nhập số điện thoại/họ tên/tài khoản" style="width:300px">
+                                        <button type="submit" id="btnSearch" class="btn icon-search-btn"><i class="icon icon-search2"></i></button>
+                                    </div>
+                                </div>
+                            </div><!-- /.navbar-collapse -->
+                        </div><!-- /.container-fluid -->
+                    </nav>
+                </div>
+                <div id="contentRight" style=" height: calc(100% - 50px);      overflow: auto;">
+                    <div id="addressBookViewer" class=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailModal" tabindex="" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="formDetail" style="padding:0px">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/Scripts/bkav.egov/addressbook/departmentTree.js"></script>
+    <script type="text/html" id="DepartmentTemplate">
+        <h5 class="tooltip-col text-center">
+            ${data}
+            <span class="tooltiptext">${attr.label}</span>
+        </h5>
+        @*<h5 data-toggle="tooltip" data-placement="right" title="${attr.label}">${data}</h5>*@
+        <table class="table table-bordered table-hover table-main" id="" style="border-bottom: solid 1px #e7e9fd;background-color:#FFF">
+            <colgroup>
+                <col style="width: 30px">
+                <col style="width: 120px">
+                <col>
+                <col style="width: 120px">
+                <col style="width: 120px">
+                @*<col style="width: 120px">*@
+                <col style="width: 150px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th data-column="" style="text-align:center">Stt</th>
+                    <th data-column="" style="text-align:center">
+                        <a href="#" data-column="" class="sort">Ảnh</a>
+                    </th>
+                    <th data-column="" style="text-align:center"><a href="#" data-column="" class="sort">Họ và tên</a></th>
+                    <th data-column="" style="text-align:center"><a href="#" data-column="" class="sort">Tài khoản</a></th>
+                    @*<th data-column="" style="text-align:center"><a href="#" data-column="" class="sort">Số cơ quan</a></th>*@
+                    <th data-column="" style="text-align:center"><a href="#" data-column="" class="sort">Số di động</a></th>
+                    <th data-column="" style="text-align:center"><a href="#" data-column="" class="sort">Chức vụ</a></th>
+                </tr>
+            </thead>
+            <tbody class="user-depart-job"></tbody>
+        </table>
+    </script>   
+
+    <script id="UserTemplate" type="text/html">
+        <td class="text-center record-number" style="text-align:center;vertical-align:middle"></td>
+        <td style="text-align:center;vertical-align:middle" data-column="">
+            <img width="40" height="40" style="border-radius:50px" src="${avatar}" alt="Alternate Text" />
+        </td>
+        <td style="text-align:center;vertical-align:middle" data-column="">${fullname}</td>
+        <td style="text-align:center;vertical-align:middle" data-column="">${username}</td>
+        @*<td style="text-align:center;vertical-align:middle" data-column="">${bithday}</td>*@
+        <td style="text-align:center; vertical-align:middle" data-column="">${phone}</td>
+        <td style="text-align:center; vertical-align:middle" data-column="">${jobtitleName}</td>
+    </script>
+
+    <script id="UserTemplateMobile" type="text/html">
+            <a href="#">${username}<span>${fullname}</span></a>
+    </script>
+
+    <script id="DetailTemplate" type="text/html">
+        <div class="panel panel-primary" style="margin-bottom:0px">
+            <div class="panel-heading">
+                <span class="panel-title">Thông tin cá nhân</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 hidden-xs hidden-sm">
+                        <img class="img-circle" src="${avatar}" alt="User Pic">
+                    </div>
+                    <div class=" col-md-12 col-lg-12 hidden-xs hidden-sm">
+                        <strong>${fullname}</strong><br>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Tài khoản:</td>
+                                    <td>${username}</td>
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại:</td>
+                                    <td>${phone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Số di động</td>
+                                    <td>${phone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chức vụ:</td>
+                                    <td>${jobtitleName}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @*<div class="panel-footer">
+                <span class="pull-right">
+                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal" data-toggle="tooltip" data-original-title="Remove this user">Đóng</button>
+                </span>
+            </div>*@
+        </div>
+    </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+﻿
+.main-bg {
+    background: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: white;
+}
+
+.highlight-color {
+    color: #455ede;
+}
+
+.btn-link {
+    color: black;
+}
+
+.system-tree > ul#menu-document li > a:hover {
+    background: transparent;
+}
+
+.system-tree > ul#menu-document li > a:focus,
+.system-tree > ul#menu-document li > a.active:focus {
+    background: transparent;
+    color: black;
+}
+
+#ulTabs > li > a:hover {
+    background: transparent;
+}
+
+#ulTabs.nav-tabs > li.active > a {
+    background: white;
+    color: black;
+}
+
+.table-main th.header,
+.table-main th.header a {
+    background: #FFFFFF;
+}
+
+/*#region Bmail */
+
+.bmail-theme {
+    background: #3F51B5;
+}
+
+    .bmail-theme .bmail-color {
+        color: #3F51B5;
+    }
+
+    .bmail-theme .navbar-default,
+    .bmail-theme .main-menu, .bmail-theme .main-menu:focus, .bmail-theme .main-menu.active, .bmail-theme .main-menu:hover {
+        background: #3F51B5;
+    }
+
+        .bmail-theme .navbar-default .navbar-nav > li > a.menu,
+        .bmail-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .bmail-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .bmail-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .bmail-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .bmail-theme .main-menu .form-search:hover {
+            background: #303F9F;
+            color: white;
+        }
+
+    .bmail-theme .table-main th.header,
+    .bmail-theme .table-main th.header a {
+        color: #303F9F;
+    }
+
+    /*.bmail-theme .rowSelected {
+        background: #3F51B5;
+        color: white;
+    }*/
+
+    /*.bmail-theme .table-hover > tbody > tr.rowSelected > td,
+    .bmail-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #3F51B5;
+        border-left-color: #3F51B5;
+        color: white;
+    }*/
+
+    .bmail-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #3F51B5;
+    }
+
+    .bmail-theme .icon,
+    .bmail-theme #ulTabs > li > a:hover,
+    .bmail-theme .system-tree > ul.nav li > a:hover:not(.active) > .node-name,
+    .bmail-theme .tab-content .toolbar.nav > li > a:hover,
+    .bmail-theme .main-nav .navbar-form.navbar-right.in .form-group .input-group .btn-default,
+    .bmail-theme .main-nav .form-search:not(.in):hover {
+        color: #3F51B5;
+    }
+
+    .bmail-theme div.chat-panel {
+        border: 1px solid #3F51B5;
+    }
+
+    .bmail-theme .chat-form .panel-heading,
+    .bmail-theme div.chat-panel .panel-heading {
+        background-color: #3F51B5;
+    }
+
+/*#endregion */
+
+/*#region eGov */
+
+.egov-theme {
+    background: #0a6e80; /*#008299*/
+}
+
+    .egov-theme .egov-color {
+        color: #0a6e80;
+    }
+
+    .egov-theme .navbar-default,
+    .egov-theme .main-menu, .egov-theme .main-menu:focus, .egov-theme .main-menu.active, .egov-theme .main-menu:hover {
+        background: #0a6171;
+    }
+
+        .egov-theme .navbar-default .navbar-nav > li > a.menu,
+        .egov-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .egov-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .egov-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .egov-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .egov-theme .main-nav .form-search:not(.in):hover {
+            background:rgba(21, 61, 90, 0.23);  /*#016E81*/
+            color: white;
+        }
+
+    .egov-theme .table-main th.header,
+    .egov-theme .table-main th.header a {
+        color: #0a6e80;
+    }
+
+        .egov-theme .table-main th.header:hover a {
+            text-decoration: underline;
+        }
+    /*.egov-theme .table-hover > tbody > tr.rowSelected > td,
+    .egov-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #008299;
+        border-left-color: #008299;
+        color: white;
+    }*/
+
+    /*.egov-theme .rowSelected {
+        background: #008299;
+        color: white;
+    }*/
+
+    .egov-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #0a6e80;
+    }
+
+    .egov-theme .icon,
+    .egov-theme #ulTabs > li:not(.disabled) > a:hover,
+    .egov-theme .system-tree > ul.nav li > a:hover:not(.active) > .node-name,
+    .egov-theme .tab-content .toolbar.nav > li:not(.disabled) > a:hover,
+    .egov-theme .main-nav .navbar-form.navbar-right.in .form-group .input-group .btn-default {
+        color: #044f5d;
+    }
+
+    .egov-theme .chat-form > li > div,
+    .egov-theme div.chat-panel {
+        border: 1px solid #0a6e80;
+    }
+
+    .egov-theme .chat-form .panel-heading,
+    .egov-theme div.chat-panel .panel-heading {
+        background-color: #0a6e80;
+    }
+
+/*#endregion */
+
+/*#region Chat */
+
+.chat-theme {
+    background: #4CAF50;
+}
+
+    .chat-theme .chat-color {
+        color: #4CAF50;
+    }
+
+    .chat-theme .navbar-default,
+    .chat-theme .main-menu, .chat-theme .main-menu:focus, .chat-theme .main-menu.active, .chat-theme .main-menu:hover {
+        background: #4CAF50;
+    }
+
+        .chat-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .chat-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .chat-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .chat-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .chat-theme .main-menu, .chat-theme .main-menu:hover {
+            background: #388E3C;
+            color: white;
+        }
+
+    .chat-theme .table-main th.header,
+    .chat-theme .table-main th.header a {
+        color: #4CAF50;
+    }
+
+    /*.chat-theme .rowSelected {
+        background: #4CAF50;
+        color: white;
+    }*/
+
+    /*.chat-theme .table-hover > tbody > tr.rowSelected > td,
+    .chat-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #4CAF50;
+        border-left-color: #4CAF50;
+        color: white;
+    }*/
+
+    .chat-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #4CAF50;
+    }
+
+    .chat-theme .icon {
+        color: #4CAF50;
+    }
+
+    .chat-theme #ulTabs > li > a:hover {
+        color: #4CAF50;
+    }
+
+    .chat-theme .nav-tabs > li.active > a:before {
+    }
+
+    .chat-theme .tab-content .toolbar.nav > li > a:hover {
+        color: #4CAF50;
+    }
+
+    .chat-theme .chat-form > li > div,
+    .chat-theme div.chat-panel {
+        border: 1px solid #4CAF50;
+    }
+
+    .chat-theme .chat-form .panel-heading,
+    .chat-theme div.chat-panel .panel-heading {
+        background-color: #4CAF50;
+    }
+
+/*#endregion */
+
+/*#region Calendar */
+
+.calendar-theme {
+    background: #FF9800;
+}
+
+    .calendar-theme .calendar-color {
+        color: #FF9800;
+    }
+
+    .calendar-theme .navbar-default {
+        background: #FF9800;
+    }
+
+    .calendar-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+    .calendar-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+    .calendar-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+    .calendar-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+    .calendar-theme .main-menu, .calendar-theme .main-menu:hover {
+        background: #F57C00;
+        color: white;
+    }
+
+    .calendar-theme .table-main th.header,
+    .calendar-theme .table-main th.header a {
+        color: #FF9800;
+    }
+
+    /*.calendar-theme .rowSelected {
+        background: #FF9800;
+        color: white;
+    }*/
+
+    /*.calendar-theme .table-hover > tbody > tr.rowSelected > td,
+    .calendar-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #FF9800;
+        border-left-color: #FF9800;
+        color: white;
+    }*/
+
+    .calendar-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #FF9800;
+    }
+
+    .calendar-theme .icon {
+        color: #FF9800;
+    }
+
+    .calendar-theme #ulTabs > li > a:hover {
+        color: #FF9800;
+    }
+
+    .calendar-theme .nav-tabs > li.active > a:before {
+    }
+
+    .calendar-theme .tab-content .toolbar.nav > li > a:hover {
+        color: #FF9800;
+    }
+
+    .calendar-theme .chat-form > li > div,
+    .calendar-theme div.chat-panel {
+        border: 1px solid #FF9800;
+    }
+
+    .calendar-theme .chat-form .panel-heading,
+    .calendar-theme div.chat-panel .panel-heading {
+        background-color: #FF9800;
+    }
+
+/*#endregion */
+
+/*#region Contact */
+
+.contacts-theme {
+    background: #00BCD4;
+}
+
+    .contacts-theme .contacts-color {
+        color: #00BCD4;
+    }
+
+    .contacts-theme .navbar-default {
+        background: #00BCD4;
+    }
+
+    .contacts-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+    .contacts-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+    .contacts-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+    .contacts-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+    .contacts-theme .main-menu, .contacts-theme .main-menu:hover {
+        background: #0097A7;
+        color: white;
+    }
+
+    .contacts-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #00BCD4;
+    }
+
+    .contacts-theme .table-main th.header,
+    .contacts-theme .table-main th.header a {
+        color: #00BCD4;
+    }
+
+    /*.contacts-theme .rowSelected {
+        background: #00BCD4;
+        color: white;
+    }*/
+
+    /*.contacts-theme .table-hover > tbody > tr.rowSelected > td,
+    .contacts-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #00BCD4;
+        border-left-color: #00BCD4;
+        color: white;
+    }*/
+
+    .contacts-theme .icon {
+        color: #00BCD4;
+    }
+
+    .contacts-theme #ulTabs > li > a:hover {
+        color: #00BCD4;
+    }
+
+    .contacts-theme .nav-tabs > li.active > a:before {
+    }
+
+    .contacts-theme .tab-content .toolbar.nav > li > a:hover {
+        color: #00BCD4;
+    }
+
+
+
+
+/*#endregion */
+
+/*#region kntc */
+
+.kntc-theme {
+    background: #989a22;
+}
+
+    .kntc-theme .kntc-color {
+        color: #989a22;
+    }
+
+    .kntc-theme .navbar-default,
+    .kntc-theme .main-menu, .kntc-theme .main-menu:focus, .kntc-theme .main-menu.active, .kntc-theme .main-menu:hover {
+        background: #989a22;
+    }
+
+        .kntc-theme .navbar-default .navbar-nav > li > a.menu,
+        .kntc-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .kntc-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .kntc-theme .header-nav ul:not(.dropdown-menu) > li > a:hover:not(.not-hover),
+        .kntc-theme .header-nav ul:not(.dropdown-menu) > li > a:focus:not(.not-hover),
+        .kntc-theme .main-nav .form-search:not(.in):hover {
+            background: #989a22;
+            color: white;
+        }
+
+    .kntc-theme .table-main th.header,
+    .kntc-theme .table-main th.header a {
+        color: #989a22;
+    }
+
+        .kntc-theme .table-main th.header:hover a {
+            text-decoration: underline;
+        }
+    /*.kntc-theme .table-hover > tbody > tr.rowSelected > td,
+    .kntc-theme .table-hover > tbody > tr.rowSelected:hover {
+        background-color: #008299;
+        border-left-color: #008299;
+        color: white;
+    }*/
+
+    /*.kntc-theme .rowSelected {
+        background: #008299;
+        color: white;
+    }*/
+
+    .kntc-theme .header-nav ul:not(.dropdown-menu) > li > a.img-menu:focus {
+        background: #989a22;
+    }
+
+    .kntc-theme .icon,
+    .kntc-theme #ulTabs > li:not(.disabled) > a:hover,
+    .kntc-theme .system-tree > ul.nav li > a:hover:not(.active) > .node-name,
+    .kntc-theme .tab-content .toolbar.nav > li:not(.disabled) > a:hover,
+    .kntc-theme .main-nav .navbar-form.navbar-right.in .form-group .input-group .btn-default {
+        color: #989a22;
+    }
+
+    .kntc-theme .chat-form > li > div,
+    .kntc-theme div.chat-panel {
+        border: 1px solid #989a22;
+    }
+
+    .kntc-theme .chat-form .panel-heading,
+    .kntc-theme div.chat-panel .panel-heading {
+        background-color: #989a22;
+    }
+
+/*#endregion */
+
+li.rowSelected .icon {
+    color: #FFF;
+}
+
+#docSearchResult em, #wrapAttachment em {
+    background-color: yellow;
+}

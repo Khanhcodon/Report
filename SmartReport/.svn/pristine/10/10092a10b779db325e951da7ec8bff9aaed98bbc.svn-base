@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <h1>
+        Bkav eGovernment Release Notes
+    </h1>
+    <div>
+        <h2>Version 1.0.15</h2>
+        <div>
+            Bổ sung tính năng và sửa các lỗi, bao gồm:
+            <ul>
+                <li>
+                    Preview tệp đính kèm: cho phép xem các file Office và Cho phép In.
+                </li>
+                <li>
+                    Ký số: Ký số khi phát hành văn bản đi, tự động chèn số ký hiệu vào file ký.
+                </li>
+                <li>
+                    Tìm kiếm: tối ưu tìm kiếm nhanh và tìm kiếm nâng cao.
+                </li>
+                <li>
+                    Hồi báo: Quản lý các văn bản phát hành cần hồi báo.
+                </li>
+                <li>
+                    Trưng cầu ý kiến.
+                </li>
+                <li>
+                    Reset mật khẩu: cho phép người dùng tự reset mật khẩu của mình thông qua email, sđt đăng ký.
+                </li>
+                <li>
+                    Tối ưu, xử lý các lỗi lặt vặt khác.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>Version 1.0.14</h2>
+        <div>
+            Bổ sung tính năng và sửa các lỗi, bao gồm:
+            <ul>
+                <li>
+                    Preview tệp đính kèm: cho phép xem các file Office và Cho phép In.
+                </li>
+                <li>
+                    Tối ưu và xử lý các lỗi lặt vặt khác.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>Version 1.0.13</h2>
+        <div>
+            Bổ sung tính năng và sửa các lỗi, bao gồm:
+            <ul>
+                <li>
+                    Xem trực tiếp các tệp pdf và tệp dạng ảnh trực tiếp trên web.
+                </li>
+                <li>
+                    Tối ưu và xử lý các lỗi lặt vặt khác.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>Version 1.0.12</h2>
+        <div>
+            Bổ sung tính năng và sửa các lỗi, bao gồm:
+            <ul>
+                <li>
+                    Lưu sổ và phát hành: Phát hành nội bộ đến các phòng ban, bổ sung nội dung phát hành trên danh sách lịch sử xử lý.
+                </li>
+                <li>
+                    Thông báo: kết thúc và lưu sổ văn bản thông báo.
+                </li>
+                <li>
+                    Báo cáo thống kê: Bổ sung đầy đủ các báo cáo.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>Version 1.0.11</h2>
+        <div>
+            Bổ sung tính năng và sửa các lỗi, bao gồm:
+            <ul>
+                <li>
+                    Lưu sổ và phát hành: bổ sung cấu hình cán bộ nhận văn bản đến khi phát hành.
+                </li>
+                <li>
+                    Tối ưu xử lý  notifications.
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

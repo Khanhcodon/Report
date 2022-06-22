@@ -1,0 +1,190 @@
+﻿@model ProcessFunctionTypeModel
+<script type="text/javascript">
+    var listParam = @(string.IsNullOrEmpty(Model.Param) ? MvcHtmlString.Create("[]") : Html.Raw(Model.Param));
+
+    $(function () { 
+
+        $("#listParam").parents("form:first").attr("data-bind", "submit: save");
+        var paramLine = function (lines, paramName, columnName, compareName) {
+            var self = this;
+            self.columnName = columnName ? ko.observable(columnName).extend({ required: { message: '*'} }) : ko.observable().extend({ required: { message: '*'} });
+            self.paramName = paramName ? ko.observable(paramName).extend({ required: { message: '*'} }) : ko.observable().extend({ required: { message: '*'} });
+
+            self.compareName = compareName ? ko.observable(compareName).extend({ required: { message: '*'} }) : ko.observable().extend({ required: { message: '*'} });
+
+            self.index = ko.computed(function () {
+                return lines ? lines.indexOf(self) + 1 : 0;
+            });
+            self.background = ko.computed(function () {
+                var index = lines ? lines.indexOf(self) : 0;
+                return index % 2 == 1 ? 'whiteSmoke' : 'white';
+            });
+        };
+
+        var params = function (array) {
+            var self = this;
+            self.paramLines = ko.observableArray([]);
+            if (array && $.isArray(array) && array.length > 0) {
+                for (var i = 0; i < array.length; i++) {
+                    self.paramLines.push(new paramLine(self.paramLines, array[i].ParamName, array[i].ValueField,array[i].CompareName));
+                }
+            }
+
+            self.disableSubmit = function (line, event) {
+                if (event.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            };
+
+            self.addParam = function () {
+                self.paramLines.push(new paramLine(self.paramLines, null, null,null));
+                var allrow = $("#tblParam tbody tr");
+                allrow.eq(allrow.length - 1).children('td').eq(0).children('input').focus();
+                self.errors = ko.validation.group(self, { deep: true });
+            };
+
+            self.removeParam = function (line) {
+                if(self.paramLines().length > 1) {
+                    self.paramLines.remove(line);
+                    self.errors = ko.validation.group(self, { deep: true });
+                }
+            };
+
+            self.save = function () {
+                return validate(self);
+            };
+
+            self.errors = ko.validation.group(self, { deep: true });
+        };
+        if(listParam.length === 0){
+            listParam.push({ ParamName: null, ValueField: null ,CompareName:null});
+        }
+        ko.applyBindings(new params(listParam), $("#listParam").parents("form:first")[0]);
+    });
+
+    function validate(self) {
+        if(self.errors().length == 0) {
+            var dataToSave = $.map(self.paramLines(), function(line) {
+                return line.paramName() ? {
+                    ParamName: line.paramName(),
+                    ValueField: line.columnName(),
+                    CompareName:line.compareName()
+                } : undefined;
+            });
+            $("#Param").val(JSON.stringify(dataToSave));
+            return true;
+        } else {
+            self.errors.showAllMessages();
+            eGovMessage.show("@("Bkav.eGovCloud.Areas.Admin.Title.ProcessFunction.SomeInfo.Required")");
+            return false;
+        }
+    }
+</script>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.ProcessFunctionTypeId)
+<table>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Name):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Query):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Query, 3, 5, null)
+            @Html.ValidationMessageFor(model => model.Query)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.TextField):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.TextField)
+            @Html.ValidationMessageFor(model => model.TextField)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.EgovLabelFor(model => model.Param):
+        </td>
+        <td>
+            <i data-res="egov.resources.commonlabel.note">*Lưu ý:</i> <span data-res="egov.resources.processfunction.docfieldnote1">Nếu tham số có cột giá trị là DocFieldId thì hệ thống sẽ </span>
+            <br />
+            <span data-res="egov.resources.processfunction.docfieldnote2">ngầm hiểu là cây văn bản đó sẽ lọc theo lĩnh vực và loại hồ sơ</span>
+            @Html.HiddenFor(model => model.Param)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <div id="listParam" style="width: 600px">
+                <div class="grid">
+                    <div class="grid-header">
+                        <div class="grid-header-wrap">
+                            <table class="table-main table">
+                                <colgroup>
+                                    <col />
+                                    <col />
+                                    <col />
+                                    <col style="width: 50px" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="header" data-res="egov.resources.processfunction.paraname">Tên tham số
+                                        </th>
+                                        <th class="header" data-res="egov.resources.processfunction.columnname">Tên cột giá trị
+                                        </th>
+                                        <th class="header" data-res="egov.resources.processfunction.comparename">Tên so sánh
+                                        </th>
+                                        <th class="header" data-res="egov.resources.tableheader.delete">Xóa
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible;">
+                        <table class="table-main table" id="tblParam">
+                            <colgroup>
+                                <col />
+                                <col />
+                                <col />
+                                <col style="width: 50px" />
+                            </colgroup>
+                            <tbody data-bind='foreach: paramLines'>
+                                <tr data-bind="style: { 'background-color': background() }">
+                                    <td>
+                                        <input data-bind='value: paramName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                            style="width: 90%" />
+                                    </td>
+                                    <td>
+                                        <input data-bind='value: columnName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                            style="width: 90%" />
+                                    </td>
+                                    <td>
+                                        <input data-bind='value: compareName, valueUpdate: "afterkeydown", event: { keypress: $parent.disableSubmit, keyup: $parent.keyEvent }'
+                                            style="width: 90%" />
+                                    </td>
+                                    <td align="center">
+                                        <img src="@Url.Content("~/Content/Images/delete.png")" alt="Xóa" data-bind='click: $parent.removeParam' style="cursor: pointer" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <button type="button" data-bind='click: addParam' data-res="egov.resources.buttons.addparameter">
+                Thêm tham số
+            </button>
+        </td>
+    </tr>
+</table>

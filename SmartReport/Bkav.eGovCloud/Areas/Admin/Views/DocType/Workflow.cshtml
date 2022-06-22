@@ -1,0 +1,1571 @@
+﻿@using Bkav.eGovCloud.Core.Workflow
+@model NodeModel
+@{
+    var allPosition = ViewBag.AllPositions as string;
+    var allUsers = ViewBag.AllUsers as string;
+    var viewOption = ViewBag.ViewOption as List<int>;
+    //var nodesForAdd = ViewBag.NodesForAdd as string;
+    var allNodesInPath = ViewBag.AllNodesInPath as string;
+    var selectedNodes = ViewBag.SelectedNodes as string;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allDeptUserPosition = ViewBag.AllDeptUserPosition as string;
+    var maxDepartmentLevel = ViewBag.MaxDepartmentLevel;
+    var pathId = ViewBag.PathId;
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Localizer("Common.Doctype.Workflow.Update.Title")</title>
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .notSubported {
+            display: none;
+        }
+    </style>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.ui.layout/jquery.layout-latest.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.cookie.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.resizecolumn.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-1.8.3.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources.bindresource.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/hovertable.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.workflow.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/util/bkav.utilities.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/jquery.jstree.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.cookie.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jstree/_lib/jquery.hotkeys.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.nicescroll.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/MicrosoftAjax.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/MicrosoftMvcAjax.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.messagebox.min.js")"></script>
+
+    <script type="text/javascript">
+        var nodesForAdd;
+        var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+        var allNodesInPath = @(string.IsNullOrEmpty(allNodesInPath) ? MvcHtmlString.Create("[]") : Html.Raw(allNodesInPath));
+        var selectedNodes = @(string.IsNullOrEmpty(selectedNodes) ? MvcHtmlString.Create("[{NODE_FROM : 0, NODE_NAME_FROM : 'Bất kỳ']") : Html.Raw(selectedNodes));
+        var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+        var allPosition = @(string.IsNullOrEmpty(allPosition) ? MvcHtmlString.Create("[]") : Html.Raw(allPosition));
+        var allDeptUserPosition = @(string.IsNullOrEmpty(allDeptUserPosition) ? MvcHtmlString.Create("[]") : Html.Raw(allDeptUserPosition));
+        var checkLoadDeptTree = false;
+        var checkLoadDeptTreeForPosition = false;
+        var usersNotification =[];
+        var dialogLayout,dialogLayout_settings = {
+            zIndex:0      // HANDLE BUG IN CHROME - required if using 'modal' (background mask)
+            , resizeWithWindow:false // resizes with the dialog, not the window
+            , west__size: '50%'
+            , center__paneSelector: ".dialog-center"
+            , west__paneSelector: ".dialog-west"
+            , resizable: false
+            , closable:  false
+            , spacing_open:1
+            , spacing_closed: 1
+            , slidable:  false
+            ,togglerLength_closed: 0
+        };
+
+        //Theo quan hệ
+        var relationType = {
+            CanBoCungDonVi: 'CanBoCungDonVi',
+            CanBoCungCap: 'CanBoCungCap',
+            CanBoCungNutCha: 'CanBoCungNutCha',
+            CanBoCapDuoi: 'CanBoCapDuoi',
+            CanBoCapTren: 'CanBoCapTren'
+        };
+
+        //Theo vị trí
+        var positionType = {
+            DonViHienTai: 'DonViHienTai',
+            DonViTrucThuoc: 'DonViTrucThuoc',
+            DonViCapDuoi: 'DonViCapDuoi'
+        };
+
+        //Theo
+        var queryType = {
+            TheoCanBo: 'TheoCanBo',
+            TheoCap: 'TheoCap',
+            TheoViTri: 'TheoViTri',
+            TheoQuanHe: 'TheoQuanHe'
+        };
+
+        $(function () {
+            $("#container").layout({
+                north__paneSelector: "#node-header"
+                , resizable: false
+                , closable: false
+                , spacing_open:1
+                , spacing_closed:1
+                , slidable: false
+                , center__paneSelector:	"#centerContainer"
+                , west__paneSelector: "#westContainer"
+                , west__size:"75%"
+                , west__minSize: 300
+                , north__size: 30
+            });
+
+            $('#westContainer').layout({
+                resizable: false
+                , closable: false
+                , spacing_open:1
+                , spacing_closed: 1
+                , slidable: false
+                , west__size: "30%"
+                , north__paneSelector:"#nodefrom-header"
+                , center__paneSelector:"#nodeFromSetting"
+                , west__paneSelector:"#nodeFromList"
+                ,  west__childOptions:{
+                    minSize: 50	// ALL panes
+                }
+            });
+
+            $('form:first').submit(function() {
+                $("#NodeAddress").val(JSON.stringify(selectedNodes));
+            });
+
+            $('#btCancel').click(function() {
+                window.parent.closeConfigNode($('#PathId').val(), false);
+            });
+
+            //Thêm user vào cấu hình bằng autocomplete
+            $("#UserInNode").autocomplete({
+                minLength: 1,
+                source: allUsers,
+                focus: function() {
+                    return false;
+                },
+                selectFirst: true,
+                select: function(event, ui) {
+                    $("#UserInNode").val('');
+                    var selected = _.find(allUsers, function(user) {
+                        return user.value === ui.item.value;
+                    });
+                    if (selected) {
+                        var noresult = $("#tblUsersBySetting tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        var nodeId = $("#tblNodeFrom tbody tr.highlight-row").attr("id");
+                        var nodeFrom = _.find(selectedNodes, function(node){ return node.NODE_FROM == nodeId; });
+                        if (nodeFrom) {
+                            var userAdd;
+                            var newUserQuery = { UserId: selected.value, Type: queryType.TheoCanBo };
+                            if (nodeFrom.USER_QUERIES) {
+                                var exist = _.find(nodeFrom.USER_QUERIES, function(user) {
+                                    return user.UserId == ui.item.value;
+                                });
+                                if (!exist) {
+                                    nodeFrom.USER_QUERIES.push(newUserQuery);
+                                    userAdd = {
+                                        "queryType": queryType.TheoCanBo
+                                        , "label": selected.username + " - " + selected.fullname
+                                        , "objecttype": '@Localizer("Common.Doctype.Workflow.Officer")'
+                                        , "value": JSON.stringify(newUserQuery)
+                                    };
+                                    $("#selectedUserTemplate").tmpl(userAdd).appendTo("#tblUsersBySetting tbody");
+                                }
+                            } else {
+                                nodeFrom.USER_QUERIES = [];
+                                nodeFrom.USER_QUERIES.push(newUserQuery);
+                                userAdd = {
+                                    "queryType": queryType.TheoCanBo
+                                    , "label": selected.username + " - " + selected.fullname
+                                    , "objecttype":  '@Localizer("Common.Doctype.Workflow.Officer")'
+                                    , "value": JSON.stringify(newUserQuery) };
+                                $("#selectedUserTemplate").tmpl(userAdd).appendTo("#tblUsersBySetting tbody");
+                            }
+                        }
+                    }
+                    return false;
+                }
+            })
+            .data("autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append("<a>" + item.label + "</a>")
+                    .appendTo(ul);
+            };
+
+            $("#UserInNode").keypress(function(e) {
+                if(e.keyCode == 13) {
+                    return false;
+                }
+                return true;
+            });
+
+            //CheckOption để hiển thị thuộc tính khi tạo mới văn bản.
+            //Chỉ được chọn 1 trong 2 điều kiện "?" hoặc "Bỏ qua".
+            $("#fsViewOption input:checkbox").click(function () {
+                if ($(this).is(':checked')) {
+                    var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+                    $(group).attr("checked", false);
+                    $(this).attr("checked", true);
+                } else {
+                    $(this).attr("checked", false);
+                }
+            });
+
+            $("#divListUsersBySetting").resizecolumn({
+                isResizeColumn: true,
+                isFixHeightContent: true
+            });
+
+            $("#divUsersReceiveNotification").resizecolumn({
+                isResizeColumn: true,
+                isFixHeightContent: true
+            });
+
+            //Phần hiển thị các select(chức danh):cho cấu hình cấp, vị trí, quan hệ.
+            if(allPosition.length > 0) {
+                $("#positionTemplate").tmpl(allPosition).appendTo("#positionInLevelSetting, #positionInPositionSetting, #positionInRelationSetting");
+            }
+
+            //Phần hiển thị node đến
+            if(selectedNodes.length > 0) {
+                selectedNodes = _.sortBy(selectedNodes, function(node) {
+                    return node.NODE_FROM;
+                });
+
+                $("#selectedNodeTemplate") .tmpl(selectedNodes).appendTo("#tblNodeFrom tbody");
+            }
+
+            hoverTable.addHover("tblNodeFrom");
+
+            var selectedNodeId = _.pluck(selectedNodes, 'NODE_FROM');
+            nodesForAdd = _.filter(allNodesInPath, function(node) {
+                return !_.contains(selectedNodeId, node.Id);
+            });
+
+            if(nodesForAdd && nodesForAdd.length > 0) {
+                _.each(nodesForAdd, function(node){
+                    $('#selectAddNodeFrom').append('<option value="'+ node.Id +'">'+ node.Id + '. ' + node.NodeName +'</option>');
+                });
+            }
+
+            //Phần hiển thị danh sách user nhận thông báo
+            if (usersNotification.length > 0) {
+                $("#tblUsersReceiveNotification tbody").html("");
+                $("#userNotificationTemplate").tmpl(usersNotification).appendTo("#tblUsersReceiveNotification tbody");
+            } else {
+                $("#tblUsersReceiveNotification tbody").html("<tr id='noresult'><td colspan='3'>" + egov.resources.doctype.noconfiguration + "</td></tr>");
+            }
+
+            $("#ReceiveSupplementary").click(function() {
+                if($("#ReceiveSupplementary").is(":checked")) {
+                    $("#StopProcess").attr("checked", "checked");
+                }
+            });
+
+            $("#IsChangeType").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#IsChangeExpire').prop('disabled', false);
+                } else {
+                    $('#IsChangeExpire').prop('disabled', true);
+                    $('#IsChangeExpire').prop('checked', false );
+                }
+            });
+        });
+
+        //Hàm lấy 1 mảng các cấu hình của 1 Node dựa vào Id của Node đó.
+        function addressNodeFrom(id) {
+            var node = _.find(selectedNodes, function(n) {
+                return n.NODE_FROM == id;
+            });
+
+            if(!node){
+                $("#tblUsersBySetting tbody").html("<tr id='noresult'><td colspan='3'> " +egov.resources.doctype.noconfiguration+ "</td></tr>");
+            } else {
+                var itemSetting = egov.workflow.getAddressByNodeFrom(node, allDepartments, allPosition, allUsers);
+                if(itemSetting.length>0){
+                    $("#tblUsersBySetting tbody tr").remove();
+                    $("#selectedUserTemplate").tmpl(itemSetting).appendTo("#tblUsersBySetting tbody");
+                } else {
+                    $("#tblUsersBySetting tbody").html("<tr id='noresult'><td colspan='3'> " +egov.resources.doctype.noconfiguration+ "</td></tr>");
+                }
+            }
+
+            $("#nodeFromInRelationSetting").val(id == 0 ?'' : 'Node.' + id);
+        }
+
+        //Xóa row trên bảng cấu hình cho node đến
+        function removeSetting(type, value, target) {
+            //Xóa row trên table
+            $(target).parents("tr:first").remove();
+            if($("#tblUsersBySetting tbody tr").length == 0) {
+                $("#tblUsersBySetting tbody").html("<tr id='noresult'><td colspan='3'> " +egov.resources.doctype.noconfiguration+ " </td></tr>");
+            }
+
+            var nodeId = $("#tblNodeFrom tbody tr.highlight-row").attr("id");
+            var nodeFrom = _.find(selectedNodes, function(node){ return node.NODE_FROM == nodeId; });
+            var query = JSON.parse(value);
+            if (nodeFrom) {
+                if (type === queryType.TheoCanBo) {
+                    if (nodeFrom.USER_QUERIES) {
+                        nodeFrom.USER_QUERIES = _.reject(nodeFrom.USER_QUERIES, function(user) {
+                            return user.UserId == query.UserId;
+                        });
+                    }
+                } else if (type === queryType.TheoCap) {
+                    if (nodeFrom.LEVEL_QUERIES) {
+                        nodeFrom.LEVEL_QUERIES = _.reject(nodeFrom.LEVEL_QUERIES, function(user) {
+                            return user.Level == query.Level && user.PositionId == query.PositionId;
+                        });
+                    }
+                } else if (type === queryType.TheoViTri) {
+                    if (nodeFrom.POSITION_QUERIES) {
+                        nodeFrom.POSITION_QUERIES = _.reject(nodeFrom.POSITION_QUERIES, function(user) {
+                            return user.Position == query.Position && user.PositionId == query.PositionId && user.DepId == query.DepId;
+                        });
+                    }
+                } else if (type === queryType.TheoQuanHe) {
+                    if (nodeFrom.RELATION_QUERIES) {
+                        nodeFrom.RELATION_QUERIES = _.reject(nodeFrom.RELATION_QUERIES, function(user) {
+                            return user.Relation == query.Relation && user.PositionId == query.PositionId && user.NodeId == query.NodeId;
+                        });
+                    }
+                }
+            }
+        }
+
+        //Xóa 1 Node đến trong danh sách
+        function removeNodeFrom(id) {
+            eGovMessage.show(
+                egov.resources.doctype.confirmtodeletereceivenode,
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    selectedNodes = _.reject(selectedNodes, function(node) {
+                        return node.NODE_FROM === id;
+                    });
+                    //Xóa các option trong select thêm node đến
+                    $("#selectAddNodeFrom option").remove();
+                    var selected = _.find(allNodesInPath, function(node) {
+                        return node.Id === id;
+                    });
+                    nodesForAdd.push(selected);
+                    nodesForAdd = _.sortBy(nodesForAdd, function(node) {
+                        return node.value;
+                    });
+                    //Xóa trên table
+                    if($("#tblNodeFrom tbody").find("tr#"+id).hasClass('highlight-row')){
+                        var prevRow = $("#tblNodeFrom tbody").find("tr#"+id).prev();
+                        prevRow.addClass('highlight-row');
+                        addressNodeFrom(parseInt(prevRow.attr('id')));
+                    }
+
+                    $("#tblNodeFrom tbody").find("tr#"+id).remove();
+                    //Thêm vào list node thêm mới
+                    _.each(nodesForAdd, function(node){
+                        $('#selectAddNodeFrom').append('<option value="'+ node.Id +'">'+ node.Id + '. ' + node.NodeName +'</option>');
+                    });
+                }
+            );
+        }
+
+        //Xóa khỏi danh sách cấu hình user nhận thông báo.
+        function removeUserNotification(id,addvalue) {
+            //Xóa row trên table
+            $("#tblUsersReceiveNotification tbody").find("tr#"+id).remove();
+            usersNotification = _.reject(usersNotification, function(notification) {
+                return notification.storevalue === addvalue;
+            });
+
+            if(usersNotification.length == 0) {
+                $("#tblUsersReceiveNotification tbody").html("<tr id='noresult'><td colspan='3'> " +egov.resources.doctype.noconfiguration+ " </td></tr>");
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        //Phần xử lý cho node đến
+        $(function () {
+            //Phần hiền thị thông tin cấu hình cho node đến mặc định: ở đây là node bất kỳ.
+            addressNodeFrom(0);
+
+            //Phần xử lý sự kiện thêm mới 1 node đến vào danh sách.
+            $("#btAddNodeFrom").click(function () {
+                var selectedNode = $('#selectAddNodeFrom');
+                if (selectedNode.val() != 0) {
+                    var selected = _.find(allNodesInPath, function (node) {
+                        return node.Id === parseInt(selectedNode.val());
+                    });
+                    if (selected) {
+                        nodesForAdd = _.reject(nodesForAdd, function (node) {
+                            return node.Id === parseInt(selectedNode.val());
+                        });
+                        selectedNodes.push({ NODE_FROM: selected.Id, NODE_NAME_FROM: selected.NodeName });
+                        selectedNodes = _.sortBy(selectedNodes, function (node) {
+                            return node.NODE_FROM;
+                        });
+                        var rowSelected = $("#tblNodeFrom tbody tr.highlight-row").attr('id');
+                        $("#tblNodeFrom tbody tr").remove();
+                        var tempNode = $("#selectedNodeTemplate").tmpl(selectedNodes);
+                        tempNode.appendTo("#tblNodeFrom tbody");
+                        tempNode.click(function () {
+                            var id = parseInt($(this).attr('id'));
+                            addressNodeFrom(id);
+                        });
+                        $("#tblNodeFrom tbody").find("tr#0").removeClass('highlight-row');
+                        $("#tblNodeFrom tbody").find("tr#" + rowSelected).addClass('highlight-row');
+                        addressNodeFrom(parseInt(rowSelected));
+                        hoverTable.addHover("tblNodeFrom");
+                        $("#selectAddNodeFrom option[value='" + selectedNode.val() + "']").remove();
+                    }
+                }
+            });
+
+            //Xử lý sự kiện khi click lên 1 node đến.
+            $("#tblNodeFrom tbody tr").bind("click", function () {
+                var id = parseInt($(this).attr('id'));
+                addressNodeFrom(id);
+            });
+
+            //Xử lý các sự kiện khi thêm cấu hình cho 1 node đến.
+            //Phần thêm cấu hình cho node đến theo cấp độ.
+            $("#addUserByLevel").bind("click", function () {
+                var $positionInLevelSetting = $("#positionInLevelSetting");
+                var $levelOfTree = $("#levelOfTree");
+                if ($positionInLevelSetting.val() == 0 || $levelOfTree.val() == 0) {
+                    eGovMessage.show('@Localizer("Common.Doctype.Workflow.PositionInLevelSetting.Null")');
+                }
+                else {
+                    var noresult = $("#tblUsersBySetting tbody #noresult");
+                    if (noresult.length > 0) {
+                        noresult.remove();
+                    }
+                    var nodeId = $("#tblNodeFrom tbody tr.highlight-row").attr("id");
+                    var nodeFrom = _.find(selectedNodes, function (node) { return node.NODE_FROM == nodeId; });
+                    if (nodeFrom) {
+                        var levelAdd;
+                        var label = "Cấp " + $levelOfTree.val() + "\\" + $("#positionInLevelSetting option[value='" + $positionInLevelSetting.val() + "']").text();
+                        var newLevelQuery = {
+                            Level: parseInt($levelOfTree.val())
+                            , Type: queryType.TheoCap
+                            , PositionId: parseInt($positionInLevelSetting.val())
+                        };
+
+                        if (nodeFrom.LEVEL_QUERIES && nodeFrom.LEVEL_QUERIES.length > 0) {
+                            var exist = _.find(nodeFrom.LEVEL_QUERIES, function (level) {
+                                return level.Level == $levelOfTree.val()
+                                    && level.PositionId == $positionInLevelSetting.val();
+                            });
+
+                            if (!exist) {
+                                nodeFrom.LEVEL_QUERIES.push(newLevelQuery);
+                                levelAdd = {
+                                    "queryType": queryType.TheoCap
+                                    , "label": label
+                                    , "objecttype": egov.resources.doctype.level
+                                    , "value": JSON.stringify(newLevelQuery)
+                                };
+                                $("#selectedUserTemplate").tmpl(levelAdd).appendTo("#tblUsersBySetting tbody");
+                            }
+                        } else {
+                            nodeFrom.LEVEL_QUERIES = [];
+                            nodeFrom.LEVEL_QUERIES.push(newLevelQuery);
+                            levelAdd = {
+                                "queryType": queryType.TheoCap
+                                , "label": label,
+                                "objecttype": egov.resources.doctype.level
+                                , "value": JSON.stringify(newLevelQuery)
+                            };
+                            $("#selectedUserTemplate").tmpl(levelAdd).appendTo("#tblUsersBySetting tbody");
+                        }
+                    }
+                    $levelOfTree.val('0');
+                    $positionInLevelSetting.val('0');
+                }
+            });
+
+            //Phần thêm cấu hình cho node đến theo quan hệ.
+            $("#addUserByRelation").bind("click", function () {
+                var selectedNodeFrom = $("#tblNodeFrom tbody tr.highlight-row").attr('id');
+                if (selectedNodeFrom != 0) {
+                    var $positionInRelationSetting = $("#positionInRelationSetting");
+                    var $relationUserInRelationSetting = $("#relationUserInRelationSetting");
+                    if ($positionInRelationSetting.val() == 0 || $relationUserInRelationSetting.val() == 0) {
+                        eGovMessage.show(egov.resources.doctype.fieldisrequired);
+                    }
+                    else {
+                        var noresult = $("#tblUsersBySetting tbody #noresult");
+                        if (noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        var nodeId = $("#tblNodeFrom tbody tr.highlight-row").attr("id");
+                        var nodeFrom = _.find(selectedNodes, function (node) { return node.NODE_FROM == nodeId; });
+                        if (nodeFrom) {
+                            var relationAdd;
+                            var label = "Node " + selectedNodeFrom + "\\" + $("#relationUserInRelationSetting option[value='" + $relationUserInRelationSetting.val() + "']").text();
+                            label += "\\" + $("#positionInRelationSetting option[value='" + $positionInRelationSetting.val() + "']").text();
+                            var newRelationQuery = {
+                                NodeId: parseInt(selectedNodeFrom)
+                                , Type: queryType.TheoQuanHe
+                                , Relation: $relationUserInRelationSetting.val()
+                                , PositionId: parseInt($positionInRelationSetting.val())
+                            };
+
+                            if (nodeFrom.RELATION_QUERIES && nodeFrom.RELATION_QUERIES.length > 0) {
+                                var exist = _.find(nodeFrom.RELATION_QUERIES, function (relation) {
+                                    return relation.NodeId == selectedNodeFrom
+                                        && relation.PositionId == $positionInRelationSetting.val()
+                                        && relation.Relation == $relationUserInRelationSetting.val();
+                                });
+                                if (!exist) {
+                                    nodeFrom.RELATION_QUERIES.push(newRelationQuery);
+                                    relationAdd = {
+                                        "queryType": queryType.TheoQuanHe
+                                        , "label": label
+                                        , "objecttype": '@Localizer("Common.Doctype.Workflow.Relative")'
+                                        , "value": JSON.stringify(newRelationQuery)
+                                    };
+                                    $("#selectedUserTemplate").tmpl(relationAdd).appendTo("#tblUsersBySetting tbody");
+                                }
+                            } else {
+                                nodeFrom.RELATION_QUERIES = [];
+                                nodeFrom.RELATION_QUERIES.push(newRelationQuery);
+                                relationAdd = {
+                                    "queryType": queryType.TheoQuanHe
+                                    , "label": label
+                                    , "objecttype": '@Localizer("Common.Doctype.Workflow.Relative")'
+                                    , "value": JSON.stringify(newRelationQuery)
+                                };
+                                $("#selectedUserTemplate").tmpl(relationAdd).appendTo("#tblUsersBySetting tbody");
+                            }
+                        }
+                        $positionInRelationSetting.val('0');
+                        $relationUserInRelationSetting.val('0');
+                    }
+                }
+                else {
+                    eGovMessage.show('@Localizer("Common.Doctype.Workflow.Node")');
+                }
+            });
+
+            //Phần thêm cấu hình cho node đến theo vị trí.
+            $("#addUserByPosition").bind("click", function () {
+                var $positionInPositionSetting = $("#positionInPositionSetting");
+                var $positionUserInPositionSetting = $("#positionUserInPositionSetting");
+                var $txtDepartmentName = $("#txtDepartmentName");
+                if ($positionInPositionSetting.val() == 0 || $positionUserInPositionSetting.val() == 0 || $txtDepartmentName.val() == '') {
+                    eGovMessage.show(egov.resources.doctype.fieldisrequired);
+                }
+                else {
+                    var noresult = $("#tblUsersBySetting tbody #noresult");
+                    if (noresult.length > 0) {
+                        noresult.remove();
+                    }
+
+                    var nodeId = $("#tblNodeFrom tbody tr.highlight-row").attr("id");
+                    var nodeFrom = _.find(selectedNodes, function (node) { return node.NODE_FROM == nodeId; });
+                    if (nodeFrom) {
+                        var positionAdd;
+                        var positionUserInPositionSettingText = "";
+                        if ($positionUserInPositionSetting.val() !== positionType.DonViHienTai) {
+                            positionUserInPositionSettingText = "\\" + $("#positionUserInPositionSetting option[value='" + $positionUserInPositionSetting.val() + "']").text();
+                        }
+                        var label = $txtDepartmentName.val() + positionUserInPositionSettingText;
+                        label += "\\" + $("#positionInPositionSetting option[value='" + $positionInPositionSetting.val() + "']").text();
+
+                        var newPositionQuery = {
+                            DepId: egov.workflow.getDepIdFromDepExt($txtDepartmentName.attr('name')),
+                            Type: queryType.TheoViTri,
+                            Position: $positionUserInPositionSetting.val(),
+                            PositionId: parseInt($positionInPositionSetting.val())
+                        };
+
+                        if (nodeFrom.POSITION_QUERIES) {
+                            var exist = _.find(nodeFrom.POSITION_QUERIES, function (position) {
+                                return position.DepId == newPositionQuery.DepId
+                                    && position.PositionId == $positionInPositionSetting.val()
+                                    && position.Position == $positionUserInPositionSetting.val();
+                            });
+                            if (!exist) {
+                                nodeFrom.POSITION_QUERIES.push(newPositionQuery);
+                                console.log(newPositionQuery)
+                                positionAdd = {
+                                    "queryType": queryType.TheoViTri
+                                    , "label": label
+                                    , "objecttype": '@Localizer("Common.Doctype.Workflow.Location")'
+                                    , "value": JSON.stringify(newPositionQuery)
+                                };
+                                $("#selectedUserTemplate").tmpl(positionAdd).appendTo("#tblUsersBySetting tbody");
+                            }
+                        } else {
+                            nodeFrom.POSITION_QUERIES = [];
+                            nodeFrom.POSITION_QUERIES.push(newPositionQuery);
+                            positionAdd = {
+                                "queryType": queryType.TheoViTri
+                                , "label": label
+                                , "objecttype": '@Localizer("Common.Doctype.Workflow.Location")'
+                                , "value": JSON.stringify(newPositionQuery) };
+                            $("#selectedUserTemplate").tmpl(positionAdd).appendTo("#tblUsersBySetting tbody");
+                        }
+                    }
+
+                    $positionInPositionSetting.val('0');
+                    $positionUserInPositionSetting.val('0');
+                    $txtDepartmentName.val('');
+                }
+            });
+
+            //Phần xem danh sách user cấu hình theo cấp độ
+            $("#viewUserByLevel").click(function () {
+                var positionInLevelSetting = $("#positionInLevelSetting");
+                var levelOfTree = $("#levelOfTree");
+                if (levelOfTree.val() != 0 && positionInLevelSetting.val() != 0) {
+                    var usersInDept = egov.workflow.getUserByLevel(levelOfTree.val(), positionInLevelSetting.val(), allDeptUserPosition, allUsers);
+                    dialogViewUserSetting(usersInDept, $("#viewUserByLevel"));
+                }
+            });
+
+            //Phần xem danh sách user cấu hình theo vị trí
+            $("#viewUserByPosition").click(function () {
+                var positionInPositionSetting = $("#positionInPositionSetting");
+                var positionUserInPositionSetting = $("#positionUserInPositionSetting");
+                var txtDepartmentName = $("#txtDepartmentName");
+                if (positionInPositionSetting.val() != 0 && positionUserInPositionSetting.val() != 0 && txtDepartmentName.val() != '') {
+                    var dept = _.find(allDepartments, function (u) { return u.idext == txtDepartmentName.attr("name"); });
+                    var usersInDept = egov.workflow.getUserByPosition(dept.idext,
+                                                                    positionUserInPositionSetting.val(),
+                                                                    positionInPositionSetting.val(),
+                                                                    allDeptUserPosition,
+                                                                    allUsers);
+                    dialogViewUserSetting(usersInDept, $("#viewUserByPosition"));
+                }
+            });
+
+            //Hiển thị danh sách phòng ban để chọn phòng ban khi cấu hình vị trí
+            $("#imgSelectDeptForPosition, #txtDepartmentName").click(function () {
+                $("#dialogBoxOfPosition").dialog({
+                    title: 'Chọn phòng ban'
+                    , width: 260
+                    , height: 300
+                    , resizable: false
+                    , autoOpen: true
+                    , closeOnEsc: true
+                    , modal: true
+                    , position: {
+                        my: 'right bottom',
+                        at: 'right top',
+                        of: $('#imgSelectDeptForPosition')
+                    }
+                    , open: function () {
+                        if (!checkLoadDeptTreeForPosition) {
+                            $("#deparmentForPositionSetting").html('');
+                            egov.utilities.jstree.bindJsTree($("#deparmentForPositionSetting"), false, false, false, allDepartments, [], []);
+                            $("#dialogBoxOfPosition").mousedown(function () {
+                                $("#deparmentForPositionSetting").bind("select_node.jstree", function (event, data) {
+                                    var nodePath = $("#deparmentForPositionSetting").jstree("get_path", data.rslt.obj).toString().replace(/,/g, "\\");
+                                    $("#txtDepartmentName").val(nodePath);
+                                    var dept = _.find(allDepartments, function (u) { return u.value == data.rslt.obj.attr("id").trim(); });
+                                    if (dept) {
+                                        $("#txtDepartmentName").attr('name', dept.idext).attr('data-id', dept.value);
+                                    }
+                                    $("#dialogBoxOfPosition").dialog('close');
+                                }).delegate("a", "click", function (event) { event.preventDefault(); });
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        function dialogViewUserSetting(arrUsers, buttonShow) {
+            if (arrUsers && arrUsers.length > 0) {
+                $("#dialogBoxViewUsers").html('');
+                _.each(arrUsers, function (u) {
+                    $("#dialogBoxViewUsers ").append("<span>" + u.fullname + " - " + u.username + "</span></br>");
+                });
+
+                $("#dialogBoxViewUsers").dialog({
+                    title: 'Danh sách user',
+                    width: 250,
+                    height: 300,
+                    resizable: false,
+                    autoOpen: true,
+                    closeOnEsc: true,
+                    modal: true,
+                    position: {
+                        my: 'left',
+                        at: 'top',
+                        of: buttonShow
+                    }
+                });
+            }
+            else{
+                window.parent.eGovMessage.notification("Không có cán bộ nào!", eGovMessage.messageTypes.warning);
+            }
+        }
+
+        function onBegin() {
+
+        }
+
+        function onSuccess(data) {
+            if (data) {
+                if (data.error) {
+                    if (data.message) {
+                        eGovMessage.notification(data.message, eGovMessage.messageTypes.error);
+                    } else {
+                        eGovMessage.notification(egov.resources.commonlabel.haveerrortryagain, eGovMessage.messageTypes.error);
+                    }
+                } else if (data.success) {
+                    window.parent.closeConfigNode($('#PathId').val(), true);
+                }
+            }
+        }
+
+        function onFailure() {
+            eGovMessage.notification( haveerrortryagain, eGovMessage.messageTypes.error);
+        }
+    </script>
+    <script type="text/javascript">
+        //Phần xử lý khi thêm cấu hình danh sách người nhận thông báo
+        $(function () {
+            //Hiển thị popup để chọn người nhận thông báo trong cấu hình node
+            $("#addUserNotification").click(function () {
+                $("#dialogBox").dialog({
+                    title: 'Thêm user nhận thông báo'
+                    , width: Math.floor($('body').width() * .60)
+                    , height: Math.floor($('body').height() * .85)
+                    , autoOpen: true
+                    , closeOnEsc: true
+                    , modal: true
+                    , open: function () {
+                        if (!dialogLayout) {   // init layout *the first time* dialog opens
+                            dialogLayout = $("#dialogBox").layout(dialogLayout_settings);
+                            $("#dialogBox .dialog-west").layout({
+                                south__size: '50%'
+                                , center__paneSelector: ".dialog-west-center"
+                                , south__paneSelector: ".dialog-west-south"
+                                , resizable: false
+                                , center__spacing_open: 1
+                                , spacing_open: 1
+                                , slidable: false
+                            });
+                            $("#dialogBox .dialog-center").layout({
+                                south__size: '50%'
+                                , center__paneSelector: ".dialog-center-center"
+                                , south__paneSelector: ".dialog-center-south"
+                                , resizable: false
+                                , center__spacing_open: 1
+                                , spacing_open: 1
+                                , slidable: false
+                            });
+                        }
+                        else {  // just in case - probably not required
+                            dialogLayout.resizeAll();
+                        }
+                        $("#closeDialog").bind("click", function () {
+                            $("#dialogBox").dialog('close');
+                        });
+                    }
+                    , resize: function () { if (dialogLayout) dialogLayout.resizeAll(); }
+                });
+
+                //Phần thêm list chức danh trên popup.
+                if ($("#tblPositionForAllPeoples tbody tr").length == 0) {
+                    $("#positionTemplatePopupAll").tmpl(allPosition).appendTo("#tblPositionForAllPeoples tbody");
+                }
+                if ($("#tblPositionForDept tbody tr").length == 0) {
+                    $("#positionTemplatePopupDept").tmpl(allPosition).appendTo("#tblPositionForDept tbody");
+                }
+
+                egov.utilities.checkbox.checkAndUnCheckAll($("#allPosition"), $(".positionItemPopupAll"));
+                egov.utilities.checkbox.checkAndUnCheckAll($("#allPositionForDept"), $(".positionItemPopupDept"));
+
+                $('#allPosition, .positionItemPopupAll, #allPositionForDept, .positionItemPopupDept').attr('checked', false);
+
+                //Phần thêm cây phòng ban - user trên popup.
+                if (!checkLoadDeptTree) {
+                    egov.utilities.jstree.bindJsTree($("#deptPopup"), false, true, false, allDepartments, [], []);
+                    egov.utilities.jstree.bindJsTree($("#userDeptPopup"), true, true, false, allDepartments, allUsers, allDeptUserPosition);
+                    checkLoadDeptTree = true;
+                }
+                else {
+                    $("#deptPopup, #userDeptPopup").find("ul >li").removeClass("jstree-checked");
+                    $("#deptPopup, #userDeptPopup").find("ul >li").addClass("jstree-unchecked");
+                }
+            });
+
+            function pushUsersNotification(item, val) {
+                if (_.contains(_.pluck(usersNotification, 'value'), item.value) == false) {
+                    usersNotification.push(item);
+                    $("#Notification").val($("#Notification").val() + val);
+                }
+            }
+
+            //Đồng ý trên dialogBox
+            $("#okDialog").click(function () {
+                var selected;
+                if ($("#allPosition").is(':checked')) {
+                    selected = {
+                        "value": "pos_positionall"
+                        , "label": egov.resources.doctype.alljobtitle
+                        , "objecttype": egov.resources.user.position
+                        , "storevalue": "$pos:*|*"
+                    };
+                    pushUsersNotification(selected, "$pos:*|*");
+                } else if ($("#allPositionForDept").is(':checked') && $("#deptPopup").find("li").length == $("#deptPopup").find("li.jstree-checked").length && $("#deptPopup").find("li").length > 0) {
+                    selected = {
+                        "value": "pos_position_deptall"
+                        , "label": egov.resources.doctype.alljobtitleof + $("#deptPopup ul > li:first").children("a").text().trim()
+                        , "objecttype": egov.resources.doctype.jobtitledepartment
+                        , "storevalue": "$pos:" + $("#deptPopup ul > li:first").attr('id') + "!*"
+                    };
+                    pushUsersNotification(selected, "$pos:" + $("#deptPopup ul > li:first").attr('id') + "!*");
+                }
+                else if ($("#userDeptPopup").find("li").length == $("#userDeptPopup").find("li.jstree-checked").length && $("#userDeptPopup").find("li").length > 0) {
+                    selected = {
+                        "value": "pos_position_userall"
+                        , "label": egov.resources.doctype.alluserof + $("#userDeptPopup ul > li:first").children("a").text().trim()
+                        , "objecttype": "user", "storevalue": "$pos:" + $("#userDeptPopup ul > li:first").attr('id') + "!*"
+                    };
+                    pushUsersNotification(selected, "$pos:" + $("#userDeptPopup ul > li:first").attr('id') + "!*");
+                }
+                else {
+                    //Trường hợp lấy user theo các chức danh
+                    if ($(".positionItemPopupAll:checked").length > 0) {
+                        $(".positionItemPopupAll:checked").each(function () {
+                            var positionId = $(this).parent().parent().attr('id');
+                            positionId = positionId.toString().replace('forall_', '').trim();
+                            var positionName = $(this).parent().text().trim();
+                            selected = {
+                                "value": "pos_position_" + positionId
+                                , "label": egov.resources.doctype.alljobtitleof1 + positionName
+                                , "objecttype": "Chức danh"
+                                , "storevalue": "$pos:*!" + positionId
+                            };
+                            pushUsersNotification(selected, "$pos:*!" + positionId);
+                        });
+                    }
+
+                    //Trường hợp lấy user theo phòng ban - chức danh
+                    var listchildren = [];
+                    $("#deptPopup").jstree("get_checked", null, true).each(function () {
+                        var nodeId = parseInt(this.id);
+                        var node = $(this);
+                        if (!_.contains(listchildren, nodeId)) {
+                            var children = _.filter(allDepartments, function (num) { return num.parentid == nodeId; });
+                            listchildren.push.apply(listchildren, _.pluck(children, 'value'));
+                            if ($("#allPositionForDept").is(':checked')) {
+                                selected = {
+                                    "value": "pos_positionall_dept_" + nodeId
+                                    , "label": egov.resources.doctype.alljobtitleof + node.children('a').text().trim()
+                                    , "objecttype": egov.resources.doctype.jobtitledepartment
+                                    , "storevalue": "$pos:" + nodeId + "!*"
+                                };
+                                pushUsersNotification(selected, "$pos:" + nodeId + "!*");
+                            }
+                            else {
+                                $(".positionItemPopupDept:checked").each(function () {
+                                    var positionId = $(this).parent().parent().attr('id');
+                                    positionId = positionId.toString().replace('fordept_', '').trim();
+                                    var positionName = $(this).parent().text().trim();
+                                    selected = {
+                                        "value": "pos_position_dept_" + positionId + "_" + nodeId
+                                        , "label": egov.resources.doctype.alljobtitleof1 + positionName + egov.resources.doctype.alljobtitleof2 + node.children('a').text().trim()
+                                        , "objecttype": egov.resources.doctype.jobtitledepartment
+                                        , "storevalue": "$pos:" + nodeId + "!" + positionId };
+                                    pushUsersNotification(selected, "$pos:" + nodeId + "!" + positionId);
+                                });
+                            }
+                        }
+                    });
+
+                    //Trường hợp lấy user theo cây phòng ban - user
+                    var listchildrenDeptUser = [];
+                    $("#userDeptPopup").jstree("get_checked", null, true).each(function () {
+                        var nodeId = this.id;
+                        var node = $(this);
+                        if (nodeId.indexOf('user_') == -1) {
+                            if (!_.contains(listchildrenDeptUser, parseInt(nodeId))) {
+                                listchildrenDeptUser.push.apply(listchildrenDeptUser,
+                                    _.pluck(_.filter(allDepartments, function (num) { return num.parentid == parseInt(nodeId); }), 'value'));
+                                selected = {
+                                    "value": "pos_positionall_dept_" + nodeId
+                                    , "label": egov.resources.doctype.alljobtitleof + node.children('a').text().trim()
+                                    , "objecttype": egov.resources.doctype.jobtitledepartment
+                                    , "storevalue": "$pos:" + nodeId + "!*"
+                                };
+                                pushUsersNotification(selected, "$pos:" + nodeId + "!*");
+                            }
+                        }
+                        else {
+                            selected = {
+                                "value": "pos_" + nodeId
+                                , "label": node.children('a').text().trim()
+                                , "objecttype": "User"
+                                , "storevalue": "$id:" + nodeId.replace('user_', '').trim()
+                            };
+                            pushUsersNotification(selected, "$id:" + nodeId.replace('user_', '').trim());
+                        }
+                    });
+                }
+                if (usersNotification.length > 0) {
+                    $("#tblUsersReceiveNotification tbody").html("");
+                    $("#userNotificationTemplate").tmpl(usersNotification).appendTo("#tblUsersReceiveNotification tbody");
+                }
+                else {
+                    $("#tblUsersReceiveNotification tbody").html("<tr id='noresult'><td colspan='3'>" + egov.resources.doctype.noconfiguration + "</td></tr>");
+                }
+                $("#dialogBox").dialog('close');
+            });
+
+            //Xóa hết danh sách nhận thông báo
+            $("#deleteAllUsersNotification").click(function () {
+                eGovMessage.show(
+                    egov.resources.doctype.removeReceiveList,
+                    null,
+                    eGovMessage.messageButtons.YesNo,
+                    function () {
+                        usersNotification = [];
+                        $("#tblUsersReceiveNotification tbody").html("<tr id='noresult'><td colspan='3'>" + egov.resources.doctype.noconfiguration + "</td></tr>");
+                    }
+                );
+            });
+        });
+    </script>
+
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: auto; /* when page gets too small */
+        }
+        /* STYLE LAYOUT ELEMENTS */
+        #node-header {
+            border: 0 0 1px;
+            padding-bottom: 0;
+        }
+        /* has header/content-div */
+        #westContainer {
+            border-top: 0;
+            padding: 0;
+        }
+        /* hide panes until layout inits... */
+        #node-header, #centerContainer, #westContainer /* outer-layout panes */ {
+            display: none;
+        }
+        /* inner-layout panes */
+        /* STYLE DEMO ELEMENTS */
+        #container {
+            height: 100%;
+            min-height: 500px;
+            _height: 500px; /* min-height for IE6 */ /* WIDTH */
+            width: 100%;
+            max-width: 1024px;
+            min-width: 700px;
+            _width: 700px; /* min-width for IE6 */ /* HORIZONTAL CENTERING */
+            margin: 0 auto;
+            background: white;
+        }
+
+        #dialogBox {
+            overflow: hidden; /* eliminate space for scrollbar in dialog - not needed when using a layout */
+            display: none;
+            padding: 0; /* nullify ui-widget-content */
+            padding-top: 4px; /* add some white-space below titlebar for cosmetics */ /* COULD add a border and/or padding if desire a different look...
+            padding:	6px;
+            border:		1px solid #BBB;
+            */
+        }
+
+        #dialogBox {
+            /*
+             *	THIS HACK FIXES A DIALOG BOX POSITIONING BUG
+             *	prevents incorrect top/left values that are applied from taking effect
+             *	This page now uses a patched version of UI 1.8.1, so this hack no longer required
+             *	SEE UI Ticket #5662 - http://dev.jqueryui.com/ticket/5662#comment:3
+            top:		0 !important;
+            left:		0 !important;
+             */ /* background:	#AFA; DEBUGGING */ /*position:	relative; - triggers resizeable._alsoResize bug when using Opera */
+        }
+
+            #dialogBox .ui-widget-content {
+                /* nullify ui-widget-content bg-image - but KEEP widget bg-color */
+                background-image: none;
+            }
+
+            #dialogBox .ui-layout-pane {
+                /* start by removing all padding & scrolling */
+                padding: 0;
+                overflow: hidden;
+            }
+
+            #dialogBox .pane-header, #dialogBox .ui-layout-content, #dialogBox .ui-layout-south {
+                padding: 5px 10px;
+            }
+
+            #dialogBox .pane-header {
+                border-width: 0 0 1px; /* nullify ui-widget-content border, except bottom */
+            }
+
+            #dialogBox .pane-footer {
+                border-width: 1px 0 0; /* nullify ui-widget-content border, except top */
+                font-size: .85em;
+                font-weight: normal;
+                padding: 2px 10px 4px;
+            }
+
+            #dialogBox .ui-layout-content {
+                border: 0; /* nullify ui-widget-content border - 'pane' already has this */
+                overflow: auto;
+            }
+
+            #dialogBox .ui-layout-south {
+                /* has ui-widget-header for cosmetics - override defaults */
+                font-weight: normal; /* NOT bold in statusbar */
+                font-size: .85em; /* smaller text */
+                padding-top: 2px; /* nice and small */
+                padding-bottom: 3px;
+            }
+
+            #dialogBox .ui-layout-resizer-west {
+                /* NOTE: SOMETHING in the theme CSS is setting opacity here */
+                opacity: .01;
+                filter: alpha(opacity=1);
+            }
+
+            #dialogBox .ui-layout-resizer-west-closed {
+                border: 1px solid #6C0;
+                border-width: 1px 0;
+                opacity: .70;
+                filter: alpha(opacity=70);
+            }
+
+            #dialogBox .ui-layout-resizer-dragging, #dialogBox .ui-layout-resizer-sliding, #dialogBox .ui-layout-resizer:hover {
+                opacity: 1;
+                filter: alpha(opacity=100);
+            }
+
+        .imageInputWrapper {
+            border: 1px solid #DDDDDD;
+            display: inline-block;
+            width: 135px;
+            height: 24px;
+            background: #f0f0f0;
+        }
+
+            .imageInputWrapper input {
+                width: 113px;
+                border: none;
+                height: 21px;
+            }
+
+            .imageInputWrapper img {
+                cursor: pointer;
+                margin-top: -2px;
+                vertical-align: middle;
+            }
+
+        h5 {
+            background: none repeat scroll 0 0 #F6F6F6;
+            border-bottom: 1px solid #BBBBBB;
+            margin: 0;
+            padding: 5px 15px;
+            color: firebrick;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        @using (Ajax.BeginForm("Workflow", new AjaxOptions { HttpMethod = "POST", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure" }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="node-header" style="padding-left: 15px; padding-top: 4px;">
+                <b>Tên node:</b>
+                <input type="text" name="NodeName" id="NodeName" value="@Model.NodeName" style="width: 80%" />
+            </div>
+            <div id="westContainer">
+                <input type="hidden" name="NodeAddress" id="NodeAddress" />
+                <input type="hidden" name="Notification" id="Notification" value="@Model.Notification" />
+                <input type="hidden" name="PathId" id="PathId" value="@pathId" />
+                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                <div id="nodefrom-header">
+                    <h5>
+                        @Localizer("Common.Workflow.Information")
+                    </h5>
+                </div>
+                <div id="nodeFromList" class="ui-widget-content">
+                    <div class="ui-layout-center" id="divNodesFrom">
+                        <table id="tblNodeFrom" style="width: 100%; padding: 2px;" cellpadding="0" cellspacing="0">
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="ui-layout-south">
+                        <h5>
+                            @Localizer("Common.Workflow.Add")
+                        </h5>
+                        <div style="padding: 4px;">
+                            <select id="selectAddNodeFrom" style="width: 155px">
+                                <option value="0"></option>
+                            </select>
+                            <input type="button" id="btAddNodeFrom" value="Thêm" />
+                        </div>
+                    </div>
+                </div>
+                <div id="nodeFromSetting" class="ui-widget-content">
+                    <div class="ui-layout-center">
+                        <h5>
+                            @Localizer("Common.Workflow.NodeFromSetting")
+                        </h5>
+                        <div id="divListUsersBySetting">
+                            <div class="grid">
+                                <div class="grid-header">
+                                    <div class="grid-header-wrap">
+                                        <table class="table-main table">
+                                            <colgroup>
+                                                <col style="width: 150px" />
+                                                <col style="width: 250px" />
+                                                <col style="width: 50px" />
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th class="header">
+                                                        @Localizer("Common.Workflow.ObjectType")
+                                                    </th>
+                                                    <th class="header">
+                                                        @Localizer("Common.Workflow.Value")
+                                                    </th>
+                                                    <th class="header">
+                                                        @Localizer("Common.Workflow.Delete")
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="grid-content" style="height: 120px;">
+                                    <table class="table-main table" id="tblUsersBySetting">
+                                        <colgroup>
+                                            <col style="width: 150px" />
+                                            <col style="width: 250px" />
+                                            <col style="width: 50px" />
+                                        </colgroup>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <fieldset>
+                            <legend data-res="egov.resources.doctype.user">Người sử dụng</legend>
+                            <span data-res="egov.resources.buttons.add">Thêm</span>:
+                            <input name="UserInNode" id="UserInNode" type="text" style="width: 89%" />
+                        </fieldset>
+                        <fieldset>
+                            <legend data-res="egov.resources.doctype.level">Cấp</legend>
+                            <select id="positionInLevelSetting" style="width: 311px">
+                                <option value="0"></option>
+                                <option value="-1" data-res="egov.resources.doctype.allpeople">Tất cả mọi người</option>
+                            </select>
+                            <span style="padding: 0 2px 0 2px" data-res="egov.resources.doctype.level">Cấp</span>
+                            <select id="levelOfTree" style="width: 50px">
+                                <option value="0"></option>
+                                @if (maxDepartmentLevel != null && maxDepartmentLevel > 0)
+                                {
+                                    for (var i = 1; i <= maxDepartmentLevel; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                            <input type="button" id="viewUserByLevel" value="Xem" />
+                            <input type="button" id="addUserByLevel" value="Thêm" />
+                        </fieldset>
+                        <fieldset>
+                            <legend>Vị trí</legend>
+                            <select id="positionInPositionSetting" style="width: 110px">
+                                <option value="0"></option>
+                                <option value="-1" data-res="egov.resources.doctype.allpeople">Tất cả mọi người</option>
+                            </select>
+                            <select id="positionUserInPositionSetting" style="width: 110px">
+                                <option value="0"></option>
+                                @foreach (var postionUser in PositionUser.AllPositionUsers)
+                                {
+                                    <option value="@postionUser.Key">@Localizer(postionUser.Value)</option>
+                                }
+                            </select>
+                            <span style="padding: 0 2px 0 2px" data-res="egov.resources.doctype.of">Của</span>
+                            <div class="imageInputWrapper">
+                                <input id="txtDepartmentName" type="text" readonly="readonly" />
+                                <img alt='' id="imgSelectDeptForPosition" src="@Url.Content("~/Content/Images/drop-hidden.png")" />
+                            </div>
+                            <input type="button" id="viewUserByPosition" value="Xem" data-res="egov.resources.buttons.view" />
+                            <input type="button" id="addUserByPosition" value="Thêm" data-res="egov.resources.buttons.add" />
+                        </fieldset>
+                        <fieldset>
+                            <legend data-res="egov.resources.form.references">Quan hệ</legend>
+                            <select id="positionInRelationSetting" style="width: 110px">
+                                <option value="0"></option>
+                                <option value="-1" data-res="egov.resources.doctype.allpeople">Tất cả mọi người</option>
+                            </select>
+                            <select id="relationUserInRelationSetting" style="width: 110px">
+                                <option value="0"></option>
+                                @foreach (var relationUser in RelationUser.AllRelationUsers)
+                                {
+                                    <option value="@relationUser.Key">@relationUser.Value</option>
+                                }
+                            </select>
+                            <span style="padding: 0 2px 0 2px" data-res="egov.resources.doctype.of">Của</span>
+                            <input type="text" disable="disable" value="" id="nodeFromInRelationSetting" style="width: 178px;
+                                font-weight: bold" />
+                            <input type="button" id="addUserByRelation" value="Thêm" data-res="egov.resources.buttons.add" />
+                        </fieldset>
+                    </div>
+                    <div class="ui-layout-south">
+                        <h5 style="border-top: 1px solid #BBBBBB" data-res="egov.resources.doctype.receivepostlist">
+                            Danh sách nhận thông báo
+                        </h5>
+                        <div id="divUsersReceiveNotification">
+                            <div class="grid">
+                                <div class="grid-header">
+                                    <div class="grid-header-wrap">
+                                        <table class="table-main table">
+                                            <colgroup>
+                                                <col style="width: 150px" />
+                                                <col style="width: 250px" />
+                                                <col style="width: 50px" />
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th class="header" data-res="egov.resources.doctype.objectype">
+                                                        Kiểu đối tượng
+                                                    </th>
+                                                    <th class="header" data-res="egov.resources.doctype.value">
+                                                        Giá trị
+                                                    </th>
+                                                    <th class="header" data-res="egov.resources.doctype.delete">
+                                                        Xóa
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="grid-content" style="height: 85px;">
+                                    <table class="table-main table" id="tblUsersReceiveNotification">
+                                        <colgroup>
+                                            <col style="width: 150px" />
+                                            <col style="width: 250px" />
+                                            <col style="width: 50px" />
+                                        </colgroup>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right">
+                            <input type="button" id="deleteAllUsersNotification" value="Xóa hết" data-res="egov.resources.buttons.deleteall" />
+                            <input type="button" id="addUserNotification" value="Thêm" data-res="egov.resources.buttons.add" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="centerContainer">
+                <div class="ui-layout-north">
+                    <h5>
+                        @Localizer("Common.Workflow.Node.Attributes")
+                    </h5>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsStart)
+                            @Localizer("Common.Workflow.Node.IsStart")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsClose)
+                            @Localizer("Common.Workflow.Node.IsClose")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsSaveRecordAndInternalRelease)
+                            @Localizer("Common.Workflow.Node.IsSaveRecordAndInternalRelease")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsChangeType)
+                            @Localizer("Common.Workflow.Node.IsChangeType")
+                        </label>
+                    </div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>
+                            @if (Model.IsChangeType)
+                            {
+                                @Html.CheckBoxFor(model => model.IsChangeExpire)
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(model => model.IsChangeExpire, new { @disabled = "disabled" })
+                            }
+                            @Localizer("Common.Workflow.Node.IsChangeExpire")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsStamp)
+                            @Localizer("Common.Workflow.Node.IsStamp")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsChangeContent)
+                            @Localizer("Common.Workflow.Node.IsChangeContent")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsSaveRecordAndRelease)
+                            @Localizer("Common.Workflow.Node.IsSaveRecordAndRelease")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.IsInternalSaveRecord)
+                            @Localizer("Common.Workflow.Node.IsInternalSaveRecord")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.Approve)
+                            @Localizer("Common.Workflow.Node.Approve")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.UpdateResult)
+                            @Localizer("Common.Workflow.Node.UpdateResult")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.ReturnResult)
+                            @Localizer("Common.Workflow.Node.ReturnResult")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.RequestSupplementary)
+                            @Localizer("Common.Workflow.Node.RequestSupplementary")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.ReceiveSupplementary)
+                            @Localizer("Common.Workflow.Node.ReceiveSupplementary")
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            @Html.CheckBoxFor(model => model.StopProcess)
+                            @Localizer("Common.Workflow.Node.StopProcess")
+                        </label>
+                    </div>
+                    <hr />
+                    <div>
+                        <span> @Localizer("Common.Workflow.Node.TimeInNode")</span>
+                        @Html.TextBoxFor(model => model.TimeInNode, new { style = "width:80px" })
+                        @Html.DropDownListFor(model => model.TimeType, ViewBag.GetTimeType as IEnumerable<SelectListItem>)
+                    </div>
+                    <div>
+                        <i>@Localizer("Common.Workflow.Node.TimeInNode.Label")</i>
+                    </div>
+                    <br />
+                </div>
+                <div class="ui-layout-center" id="fsViewOption">
+                    <h5>
+                        @Localizer("Common.Workflow.Node.Select")
+                    </h5>
+                    <span style="padding-left: 7px;">?</span><span style="padding-left: 7px;" data-res="egov.resources.buttons.ignore">Bỏ qua</span>
+                    <div>
+                        <input type="checkbox" name="DocTypeView" value="DocTypeConfirm" @(viewOption.Contains(13) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="DocTypeView" value="DocTypeIgnore" @(viewOption.Contains(12) ? "checked='checked'" : "") />
+                        @Localizer("Admin.Template.CreateOrEdit.Fields.DoctypeId.Label")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="PageNumberView" value="PageNumberConfirm" @(viewOption.Contains(11) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="PageNumberView" value="PageNumberIgnore" @(viewOption.Contains(5) ? "checked='checked'" : "") />
+                        @Localizer("Document.TotalPage.Field.Label")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="DocFieldView" value="DocFieldConfirm" @(viewOption.Contains(6) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="DocFieldView" value="DocFieldIgnore" @(viewOption.Contains(0) ? "checked='checked'" : "") />
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Index")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="KeywordView" value="KeywordConfirm" @(viewOption.Contains(7) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="KeywordView" value="KeywordIgnore" @(viewOption.Contains(1) ? "checked='checked'" : "") />
+                        @Localizer("Bkav.eGovCloud.Areas.Admin.KeyWord.Index.List.Column.KeyWordName")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="GroupView" value="GroupConfirm" @(viewOption.Contains(8) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="GroupView" value="GroupIgnore" @(viewOption.Contains(2) ? "checked='checked'" : "") />
+                        @Localizer("Common.Doctype.Group.Index")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="SendTypeView" value="SendTypeConfirm" @(viewOption.Contains(9) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="SendTypeView" value="SendTypeIgnore" @(viewOption.Contains(3) ? "checked='checked'" : "") />
+                        @Localizer("Common.Doctype.SendType.Index")
+                    </div>
+                    <div>
+                        <input type="checkbox" name="DestinationView" value="DestinationConfirm" @(viewOption.Contains(10) ? "checked='checked'" : "") />
+                        <input type="checkbox" name="DestinationView" value="DestinationIgnore" @(viewOption.Contains(4) ? "checked='checked'" : "") />
+                        @Localizer("Common.Doctype.Destination.Index")
+                    </div>
+                </div>
+                <div class="ui-layout-south" style="height: auto; vertical-align: bottom">
+                    <button type="submit" name="save" id="btSave" value="save">@Localizer("Common.Button.Save")</button>
+                    <button type="button" name="cancel" id="btCancel" value="cancel">@Localizer("Common.Button.Cancel")</button>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="dialogBox">
+        <div class="dialog-west">
+            <div class="dialog-west-south ui-widget-content ui-corner-all">
+                <div class="pane-header ui-state-active">
+                    @Localizer("Common.Workflow.Department.List")
+                </div>
+                <div class="ui-layout-content ui-widget-content ui-corner-all" style="padding: 0;">
+                    <div id="deptPopup">
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-west-center ui-widget-content ui-corner-all">
+                <div class="pane-header ui-state-active">
+                    @Localizer("Common.Workflow.Personal.List")
+                </div>
+                <div class="ui-layout-content ui-widget-content ui-corner-all" style="padding: 0;">
+                    <div id="userDeptPopup">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dialog-center">
+            <div class="dialog-center-south ui-widget-content ui-corner-all">
+                <div class="pane-header ui-state-active">
+                    @Localizer("Common.Workflow.Position")
+                </div>
+                <div class="ui-layout-content ui-widget-content ui-corner-all" style="padding: 0;">
+                    <table class="table-main table" id="tblPositionForDept">
+                        <thead>
+                            <tr>
+                                <th class="header-unresize" style="text-align: left">
+                                    <input type="checkbox" id="allPositionForDept" />
+                                    @Localizer("Common.Workflow.Position.List")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dialog-center-center ui-widget-content ui-corner-all">
+                <div class="pane-header ui-state-active">
+                    @Localizer("Common.Workflow.Position.Index.List")
+                </div>
+                <div class="ui-layout-content ui-widget-content ui-corner-all" style="padding: 0;">
+                    <table class="table-main table" id="tblPositionForAllPeoples">
+                        <thead>
+                            <tr>
+                                <th class="header-unresize" style="text-align: left">
+                                    <input type="checkbox" id="allPosition" />
+                                    @Localizer("Common.Workflow.Position.List")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="ui-layout-south ui-widget-header ui-corner-all" style="text-align: right">
+            <input type="button" value="Đồng ý" id="okDialog" data-res="egov.resources.buttons.agree" />
+            <input type="button" value="Bỏ qua" id="closeDialog" data-res="egov.resources.buttons.ignore" />
+        </div>
+    </div>
+
+    <div id="dialogBoxOfPosition">
+        <div id="deparmentForPositionSetting" style="padding: 0px; background: #ffffff;">
+        </div>
+    </div>
+
+    <div id="dialogBoxViewUsers">
+        @* <table class="table-main table" id="tblViewUsers" style="width: 100%">
+                <tbody>
+                </tbody>
+            </table>*@
+    </div>
+
+    <script id="userNotificationTemplate" type="text/x-jquery-tmpl">
+        <tr id="${value}">
+            <td style="text-align: center">${objecttype}</td>
+            <td>${label}</td>
+            <td style="text-align: center"><a href="javascript:removeUserNotification('${value}','${storevalue}')" data-res="egov.resources.buttons.delete">Xóa</a></td>
+        </tr>
+    </script>
+
+    <script id="selectedUserTemplate" type="text/x-jquery-tmpl">
+        <tr>
+            <td style="text-align: center">${objecttype}</td>
+            <td>${label}</td>
+            <td style="text-align: center"><a href="javascript:void(0);" onclick="removeSetting('${queryType}', '${value}', this)" data-res="egov.resources.buttons.delete">Xóa</a></td>
+        </tr>
+    </script>
+
+    <script id="selectedNodeTemplate" type="text/x-jquery-tmpl">
+        <tr id="${NODE_FROM}" {{if NODE_FROM==0}} class=highlight-row {{/if}} style="height:22px">
+            {{if NODE_FROM==0}}
+            <td colspan="2" style="padding-left:19px;">
+                ${NODE_NAME_FROM}
+            </td>
+            {{else}}
+            <td style="width: 80%">
+                ${NODE_FROM}. ${NODE_NAME_FROM}
+            </td>
+            <td style="text-align:center">
+                <a href="javascript:removeNodeFrom(${NODE_FROM},'${NODE_NAME_FROM}')" data-res="egov.resources.buttons.delete">Xóa</a>
+            </td>
+            {{/if}}
+        </tr>
+    </script>
+
+    <script id="positionTemplate" type="text/x-jquery-tmpl">
+        <option value="${value}">${label}</option>
+    </script>
+
+    <script id="positionTemplatePopupAll" type="text/x-jquery-tmpl">
+        <tr id="forall_${value}">
+            <td>
+                <input type="checkbox" class="positionItemPopupAll" />${label}
+            </td>
+        </tr>
+    </script>
+
+    <script id="positionTemplatePopupDept" type="text/x-jquery-tmpl">
+        <tr id="fordept_${value}">
+            <td>
+                <input type="checkbox" class="positionItemPopupDept" />${label}
+            </td>
+        </tr>
+    </script>
+    <script>
+        $(function(){
+            $(document).bindResources();
+        });
+    </script>
+</body>
+</html>

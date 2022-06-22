@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+    var pdfSrc = String.Format("data:application/pdf;base64,{0}", ViewBag.Base64PDF);
+    var pdfSrc2 = String.Format("data:application/pdf;base64,{0}", ViewBag.Base64PDF2);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Thông tin CLS</title>
+</head>
+<body>
+        <object data="@pdfSrc" type="application/pdf"  width="1024" height="700">
+            <embed src="@pdfSrc" type="application/pdf">
+                <p>This browser does not support PDFs. Please download the PDF to view it: <a href="@pdfSrc">Download PDF</a>.</p>
+            </embed>
+        </object>
+    <object data="@pdfSrc2" type="application/pdf" width="1024" height="700"></object>
+</body>
+</html>

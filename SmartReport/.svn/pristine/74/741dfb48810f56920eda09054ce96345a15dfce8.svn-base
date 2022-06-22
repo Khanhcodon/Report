@@ -1,0 +1,136 @@
+﻿@model Bkav.eGovCloud.Models.UserProfileModel
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            url: '/Account/AvatarUpload',
+            autoUpload: true,
+            done: function (e, data) {
+                if (data.result.success) {
+                    $('#Avatar, .avatar').attr('src', data.result.Avatar);
+                    return;
+                }
+                else {
+                    alert(data.result.message);
+                }
+                console.log(e);
+                console.log(data);
+            }
+        });
+
+        $.each($("select#Gender").children(), function () {
+            if ($(this).val() == "true") {
+                this.textContent = egov.resources.setting.profile.male;
+            }
+            else if ($(this).val() == "false") {
+                this.textContent = egov.resources.setting.profile.female;
+            }
+        });
+
+        $('.profile-config').on('keydown', '.phone-number', function (e) { -1 !== $.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) || /65|67|86|88/.test(e.keyCode) && (!0 === e.ctrlKey || !0 === e.metaKey) || 35 <= e.keyCode && 40 >= e.keyCode || (e.shiftKey || 48 > e.keyCode || 57 < e.keyCode) && (96 > e.keyCode || 105 < e.keyCode) && e.preventDefault() });
+
+        $(document).bindResources();
+    });
+</script>
+
+
+@using (Ajax.BeginForm("ProfileConfig", "Account", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "menuRight",
+    OnSuccess = "onSuccessGetFullName"
+}, new { enctype = "multipart/form-data", refreshPage = true }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <form id="profile">
+        <div class="profile-config row" id="resultparent">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label for="LastName" data-res="egov.resources.setting.profile.lastname"></label>
+                    @*                <label for="LastName">@Html.EgovLabelFor(model => model.LastName)</label>*@
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label data-res="egov.resources.setting.profile.firstname"></label>
+                    @*@Html.EgovLabelFor(model => model.FirstName)*@
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                    <span class="errormsg">@Html.ValidationMessageFor(model => model.FirstName)</span>
+                </div>
+                <div class="form-group">
+                    @Html.EgovLabelFor(model => model.Gender)
+                    @Html.DropDownListFor(model => model.Gender, ViewBag.GenderList as List<SelectListItem>, "-------", new { @class = "form-control" })
+                    <span class="errormsg">@Html.ValidationMessageFor(model => model.Gender)</span>
+                </div>
+                <div class="form-group">
+                    @Html.EgovLabelFor(model => model.Phone)
+                    @*<div class="status-phone" style="float:right;">
+                        <span class="label label-success">@ViewBag.PhoneValidateSuccess</span>
+                        <span class="label label-danger phonestatus">@ViewBag.PhoneValidate</span>
+                    </div>*@
+                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control phone-number" })
+                </div>
+                <div class="form-group">
+                    @Html.EgovLabelFor(model => model.Email)
+                    <div class="status" style="float:right;">
+                        <span class="label label-success">@ViewBag.EmailValidateSuccess</span>
+                        <span class="label label-danger">@ViewBag.EmailValidate</span>
+                    </div>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                </div>
+                <input type="hidden" name="IsShowCode" value="@Model.IsShowCode" />
+                @if (Model.IsShowCode)
+                {
+                    <div class="form-group">
+                        @Html.Label("enterCode", "Nhập mã xác thực")
+                        <div class="status" style="float:right;">
+                            <span class="label label-success">@ViewBag.SuccessStatus</span>
+                            <span class="label label-danger">@ViewBag.FailStatus</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Code, new { @class = "form-control email" })
+                    </div>
+                }
+                <div class="form-group hidden">
+                    <label data-res="egov.resources.setting.profile.fax"></label>
+                    @*@Html.EgovLabelFor(model => model.Fax)*@
+                    @Html.TextBoxFor(model => model.Fax, new { @class = "form-control" })
+                    <span class="errormsg">@Html.ValidationMessageFor(model => model.Fax)</span>
+                </div>
+
+                <div class="form-group hidden">
+                    <label data-res="egov.resources.setting.profile.address"></label>
+                    @*@Html.EgovLabelFor(model => model.Address)*@
+                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                    <span class="errormsg">@Html.ValidationMessageFor(model => model.Address)</span>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h3 data-res="egov.resources.setting.profile.avatar"></h3>
+                <div class="form-group">
+                    <div>
+                        @if ((bool)ViewBag.ShowAvatar)
+                        {
+                            <img src="@ViewBag.Avatar" width="@ViewBag.Width " height="@ViewBag.Height" id="Avatar" name="Avatar" class="avatar img-thumbnail" />
+                        }
+                        else
+                        {
+                            <img src="../AvatarProfile/noavatar.jpg" id="Avatar" name="Avatar" class="avatar img-thumbnail" />
+                        }
+                        <div>
+                            <span class="btn btn-default fileinput-button" style="margin-top: 20px;">
+                                <p data-res="egov.resources.setting.profile.choseAvatar"></p>
+                                <input id="fileupload" type="file" name="file">
+                            </span>
+                            <span id="message" style="color: red; margin-left: 10px"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}

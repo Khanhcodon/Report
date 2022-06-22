@@ -1,0 +1,53 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.SSOAPISettingsModel
+@{
+    ViewBag.Title = Localizer("Setting.SSOApiSettings.Tab.Title");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+<style>
+    #DomainUrl {
+        width: 40%;
+        float: left;
+    }
+
+    #NotifyPathUrl {
+        width: 40%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Cấu hình kết nối HRM</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.HttpAddressSSO)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.HttpAddressSSO, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.ClientIdSSO)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.ClientIdSSO, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px;">
+                    @Html.LabelHintFor(model => model.SecretKeySSO)
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.SecretKeySSO, new { @class = "form-control" })
+                </td>
+            </tr>
+        </table>
+    </div>
+}

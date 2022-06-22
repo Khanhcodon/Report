@@ -1,0 +1,230 @@
+﻿<style>
+    li {
+        cursor: pointer;
+    }
+</style>
+<li class="dropdown {{if !viewIconBangiao}}disabled{{/if}}">
+    <a class="dropdown-toggle btnTransfer" data-toggle="dropdown" href="#">
+        <span class="icon icon-forward4"></span>
+        <span>Gửi báo cáo</span>
+    </a>
+    {{if viewIconBangiao}}
+    <ul class="dropdown-menu transferActions" role="menu"></ul>
+    {{/if}}
+</li>
+<li class="divider"></li>
+
+{{if viewIconKyDuyet}}
+<li class="dropdown hidden">
+    <a class="dropdown-toggle btnApprover yes" data-toggle="dropdown" href="#">
+        <span class="icon icon-checkmark3"></span>
+        <span data-res="egov.resources.toolbar.allow"></span>
+    </a>
+    <ul class="dropdown-menu transferActions" role="menu"></ul>
+</li>
+
+<li class="dropdown hidden">
+    <a class="dropdown-toggle btnApprover no" data-toggle="dropdown" href="#">
+        <span class="icon icon-cross"></span>
+        <span data-res="egov.resources.toolbar.deny"></span>
+    </a>
+    <ul class="dropdown-menu transferActions" role="menu"></ul>
+</li>
+
+<li class="dropdown">
+    <a class="dropdown-toggle btnFinishAndPublish" data-toggle="dropdown" href="#">
+        <span class="icon icon-checkmark"></span>
+        <span data-res="egov.resources.toolbar.finish"></span>
+    </a>
+</li>
+<li class="divider"></li>
+{{/if}}
+
+{{if viewIconAttach}}
+<li id="tagfile" class="hidden dropdown {{if !viewIconBangiao && !viewIconDaPhatHanhOrKetThuc && !viewIconLuuvanban}}disabled{{/if}}">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="icon icon-paperclip"></span>
+        <span data-res="egov.resources.toolbar.attachBtn"></span>
+        <span class="caret"></span>
+    </a>
+
+    {{if (viewIconBangiao || viewIconLuuvanban) && !viewIconDaPhatHanhOrKetThuc}}
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            <a href="#" class="btnInsertRelation">
+                <span class="icon icon-link2"></span>
+                <span data-res="egov.resources.toolbar.relation"></span>
+            </a>
+        </li>
+        <li class="fileinput-button">
+            <a href="#" class="btnInsertAttachment">
+                <span class="icon icon-paperclip"></span>
+                <span data-res="egov.resources.toolbar.attachment"></span>
+            </a>
+
+            <input type="file" class="fileupload" data-url="/Attachment/UploadTemp"
+                   multiple="multiple" name="files" style="cursor: default;" />
+        </li>
+    </ul>
+    {{/if}}
+</li>
+{{/if}}
+
+{{if viewIconHuyVanBan}}
+
+<li class="divider"></li>
+
+<li class="">
+    <a class="btnDestroy" href="#">
+        <span class="icon icon-trash"></span>
+        <span data-res="egov.resources.toolbar.destroy"></span>
+    </a>
+</li>
+{{/if}}
+
+{{if phatHanhSurvey}}
+<li class="dropdown">
+    <a class="dropdown-toggle btnSurveyReleased" data-toggle="dropdown" href="#">
+        <span class="icon icon-forward4"></span>
+        <span>Phát hành</span>
+        <!--<span data-res="egov.resources.toolbar.finish"></span>-->
+    </a>
+</li>
+<li class="divider"></li>
+
+{{/if}}
+{{if phatHanhTHSoLieu}}
+<li class="dropdown">
+    <a class="dropdown-toggle btnphatHanhSoLieu" data-toggle="dropdown" href="#">
+        <span class="icon  icon-archive"></span>
+        <span>Phát hành</span>
+        <!--<span data-res="egov.resources.toolbar.finish"></span>-->
+    </a>
+</li>
+<li class="divider"></li>
+{{/if}}
+
+<li class="dropdown surveyComplete hidden">
+    <a class="dropdown-toggle btnsurveyComplete" data-toggle="dropdown" href="#">
+        <span class="icon icon-checkmark"></span>
+        <span>Hoàn thành</span>
+    </a>
+</li>
+<li class="divider surveyComplete hidden"></li>
+
+{{if viewIconKetthuc}}
+<li class="dropdown">
+    <a class="dropdown-toggle btnFinish" data-toggle="dropdown" href="#">
+        <span class="icon icon-checkmark"></span>
+        <span data-res="egov.resources.toolbar.finish"></span>
+    </a>
+</li>
+<li class="divider"></li>
+
+{{/if}}
+
+{{if viewIconLuuDuThao}}
+<li class="dropdown">
+    <a class="dropdown-toggle btnSaveDraft" data-toggle="dropdown" href="#">
+        <span class="icon icon-archive"></span>
+        <span data-res="egov.resources.toolbar.btnSaveDraft"></span>
+    </a>
+</li>
+<li class="divider"></li>
+{{/if}}
+
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="icon icon-paperclip"></span>
+        <span>Xuất file</span>
+        <span class="caret"></span>
+    </a>
+
+    <ul class="dropdown-menu" role="menu">
+        {{if viewSurvey}}
+        <li class="">
+            <a href="#" class="btnExportSurveyPDF">
+                <span class="icon icon-file-pdf"></span>
+                <span>PDF</span>
+            </a>
+        </li>
+        {{else}}
+        <li class="">
+            <a href="#" class="btnExportExcel">
+                <span class="icon icon-file-excel"></span>
+                <span>Excel</span>
+            </a>
+        </li>
+        {{if viewTuongMinh}}
+        <li class="">
+            <a href="#" class="btnExportPDF">
+                <span class="icon icon-file-pdf"></span>
+                <span>PDF</span>
+            </a>
+        </li>
+        <li class="">
+            <a href="#" class="btnExportWord">
+                <span class="icon icon-file-word"></span>
+                <span>Doc</span>
+            </a>
+        </li>
+        {{/if}}
+        {{/if}}
+    </ul>
+</li>
+<li class="divider"></li>
+{{if !viewSurvey}}
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="icon icon-paperclip"></span>
+        <span>Nhập file</span>
+        <span class="caret"></span>
+    </a>
+
+    <ul class="dropdown-menu" role="menu">
+        {{if !viewTuongMinh}}
+        <li class="">
+            <a href="#" class="btnImportExcel">
+                <span class="icon icon-file-excel"></span>
+                <span>Excel</span>
+            </a>
+        </li>
+        {{/if}}
+        {{if viewTuongMinh}}
+        <li class="">
+            <a href="#" class="btnImportWord">
+                <span class="icon icon-file-word"></span>
+                <span>Doc</span>
+            </a>
+        </li>
+        {{/if}}
+    </ul>
+</li>
+{{/if}}  
+{{if viewLuongChuyen}}
+<li class="dropdown">
+    <a class="dropdown-toggle btnViewLeaff" data-toggle="dropdown" href="#">
+        <span class="icon icon-tree"></span>
+        <span>Luồng chuyển</span>
+        <!--<span data-res="egov.resources.toolbar.finish"></span>-->
+    </a>
+</li>
+{{/if}}
+
+<li class="dropdown">
+    <a class="dropdown-toggle btnAddIndicator" data-toggle="dropdown" href="#">
+        <span class="icon icon-plus"></span>
+        <span>Thêm chỉ tiêu</span>
+        <!--<span data-res="egov.resources.toolbar.finish"></span>-->
+    </a>
+</li>
+
+{{if viewConfigKey}}
+<li class="divider"></li>
+<li>
+    <a href="#" id="btnKey">
+        <span class="icon icon-cog"></span>
+        <span>Cấu hình key</span>
+    </a>
+</li>
+{{/if}}

@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Logout";
+    Layout = null;
+    var ssoDomain = ViewBag.SsoDomain as string;
+    var IsQuanTriTapTrungEdition = ViewBag.IsQuanTriTapTrungEdition != null && (bool)ViewBag.IsQuanTriTapTrungEdition;
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/views/login/jquery-2.2.3.min.js")"></script>
+@if (!IsQuanTriTapTrungEdition)
+{
+    <script type="text/javascript">
+        $(function () {
+            document.location = '@Url.Action("Main", "Home")';
+        });
+    </script>
+}
+else
+{
+    <script type="text/javascript">
+        $(function () {
+            document.location = '@Url.Action("Login", "Account")';
+            // logoutSso();
+            @*$.get
+            (
+                '@ssoDomain/User/GetAllDomainIsAuthenticated?callback=?',
+                {
+                    domain: '@ViewBag.Domain',
+                    username: '@ViewBag.Username'
+                },
+		        function (data) {
+		            if (data) {
+		                if (data.GetAllDomainIsAuthenticatedResult) {
+		                    var domains = data.GetAllDomainIsAuthenticatedResult;
+		                    var count = 0;
+		                    if (domains.length > 0) {
+		                        $.ajaxSetup({ async: false });
+		                        $.each(domains, function (index, domain) {
+		                            $.get(
+		                                'https://' + domain + '@Url.Action("SignOut")',
+		                                {},
+		                                function () {
+		                                    count++;
+		                                },
+		                                'jsonp'
+		                            )
+    		                        .fail(function (xhr) {
+    		                            console.log("Logout " + domain);
+    		                            console.log(xhr);
+    		                        });
+		                        });
+                            }
+                            var interval = setInterval(function () {
+                                if (count == domains.length) {
+                                    clearInterval(interval);
+                                    logoutSso();
+                                }
+                            }, 500);
+                        }
+                    }
+		        },
+                'jsonp'
+            )
+            .fail(function (xhr) {
+                console.log("Get domain is authenticated");
+                console.log(xhr);
+            });*@
+        });
+
+    function logoutSso() {
+        $.get(
+            '@ssoDomain/User/Logout?callback=?',
+        { username: '@ViewBag.Username' },
+        function () {
+            console.log("redirect");
+            document.location = '@Url.Action("Login", "Account")';
+        },
+        'jsonp'
+    )
+    .fail(function (xhr) {
+        console.log("Logout sso");
+        console.log(xhr);
+    });
+    }
+    </script>
+}

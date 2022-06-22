@@ -1,0 +1,28 @@
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<link rel="stylesheet" href="css/bmailEditor.css">
+		<script src="js/jquery.js"></script>
+		<script src="js/yui.js"></script>
+		<script src="js/language.js"></script>
+		<script src="js/Config.js"></script>
+		<script src="js/MenuButton.js"></script>
+		<script src="js/EditorControl.js"></script>
+		<script src="js/Controls.js"></script>
+		<script src="js/BmailEditor.js"></script>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+		$( document ).ready(function() {
+    		var bmailEditor = new BmailEditor("#editor");
+			bmailEditor.render();
+			bmailEditor.setHeight(450);
+			
+  		});
+		</script>
+		<div id="editor" class="rte-editor"></div>
+	</body>
+
+</html>

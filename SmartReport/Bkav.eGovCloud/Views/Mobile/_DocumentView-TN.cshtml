@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    egov = egov || {};
+    egov.documentMenuInMainView = true;
+</script>
+
+<div id="documentFrame" data-theme="documents" data-app="documents" class="egov-app trans trans-left">
+    <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header egov-header">
+            <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button" data-badge="0" id="btnMenu">
+                <i class="material-icons"></i>
+            </div>
+            <div class="mdl-layout__header-row">
+                <div aria-expanded="false" id="btnbacktolist" role="button" tabindex="0" class="backtoList" style="display: none;">
+                    <i class="material-icons">arrow_back</i>
+                </div>
+                <span class="mdl-layout-title">
+                    <span class="wraptext">
+                        <span class="header-title">
+                            Xử lý Văn bản
+                        </span>
+                    </span>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="btnSearch" class="mdl-button mdl-js-button mdl-button--icon pull-right">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer egov-leftmenu">
+            <div class="mdl-layout__drawer">
+                <div class="useroption main-bg-color">
+                    <img class="avatar" src="https://danhba.bkav.com/avatars/TienBV.bmp" alt="avatar">
+                    <div class="full-info userinfo">
+                        <div class="wraptext">Bùi Văn Tiến</div>
+                        <div class="wraptext fullmail">tienbv@bkav.com</div>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--icon userOptionMenu" id="userOptionMenu">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="userOptionMenu">
+                        <li class="mdl-menu__item reloadApp">
+                            Khởi động lại
+                        </li>
+                        <li class="mdl-menu__item logout">
+                            Đăng nhập lại
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <main class="mdl-layout__content" style="overflow:hidden">
+            <div class="treelist" style="overflow: auto">
+                <nav class="treemenu">
+                    <div class="documents documents-dataTree" data-app="documents">
+                        <ul id="menu-document" class="mdl-list autoscroll-y">
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đi chờ xử lý</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DiChoXL"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2&v=1" style="padding-left: 35px;">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đi chờ xử lý đã xem</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DiChoXL_Seen"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=2&v=0" style="padding-left: 35px;">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đi chờ xử lý chưa xem</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DiChoXL_New"></span>
+                                </span>
+                            </li>
+
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=1">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đến chờ xử lý</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DenChoXL"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=1&v=1" style="padding-left: 35px;">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đến chờ xử lý đã xem</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DenChoXL_seen"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getProcessings?c=1&v=0" style="padding-left: 35px;">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">inbox</i>
+                                    <span class="node-name">VB đến chờ xử lý chưa xem</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="DenChoXL_new"></span>
+                                </span>
+                            </li>
+
+                            <li class="mdl-list__item mdl-js-ripple-effect hidden" data-url="/mobile/getDrafts">
+                                <span class="material-icons mdl-list__item-icon">description</span>
+                                <span class="node-name">VB đang dự thảo</span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getSents">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">send</i>
+                                    <span class="node-name">VB đang theo dõi</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="TheoDoi"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAnnoucements">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">announcement</i>
+                                    <span class="node-name">VB được thông báo</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="Thongbao"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getAuthorized">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">how_to_reg</i>
+                                    <span class="node-name">
+                                        VB được ủy quyền xử lý
+                                    </span>
+                                </span>
+                                <span class="mdl-list__item-secondary-action">
+                                    <span class="node-count" data-target="UyQuyen"></span>
+                                </span>
+                            </li>
+                            <li class="mdl-list__item mdl-js-ripple-effect" data-url="/mobile/getFinished">
+                                <span class="material-icons mdl-list__item-icon">label</span>
+                                <span class="node-name">VB đã kết thúc</span>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="egov-maincontent hidden" id="egovMaincontent">
+                <div class="no-element-content hidden">
+                    <div class="message">
+                        <span class="material-icons mdl-list__item-icon"></span>
+                        <div style="font-size: 18px;">Không có văn bản</div>
+                        <div class="message-info"></div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="group-label" data-group="today">
+                        <span>Hôm nay</span>
+                    </div>
+                    <div class="dataList" data-group="today">
+                        <ul class="mdl-list list-document"></ul>
+                    </div>
+                    <div class="group-label" data-group="yesterday">
+                        Hôm qua
+                    </div>
+                    <div class="dataList" data-group="yesterday">
+                        <ul class="mdl-list list-document"></ul>
+                    </div>
+                    <div class="group-label" data-group="normal">
+                        Cũ hơn
+                    </div>
+                    <div class="dataList" data-group="normal">
+                        <ul class="mdl-list list-group list-document"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

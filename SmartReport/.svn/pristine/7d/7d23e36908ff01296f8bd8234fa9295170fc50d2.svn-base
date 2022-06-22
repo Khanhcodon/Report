@@ -1,0 +1,88 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.FileUploadSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.FileUpload");
+    Layout = "_SettingLayout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+        //$("td").addClass("col-md-6");
+    })
+</script>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <b>@Localizer("Setting.FileUpload.FileUploadTitle")</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 0; width: 26%">&nbsp;&nbsp;@Html.EgovLabelFor(model => model.FileUploadMaximumSizeMegaBytes):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.FileUploadMaximumSizeMegaBytes) (MB)
+                        @Html.ValidationMessageFor(model => model.FileUploadMaximumSizeMegaBytes)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.FileUploadAllowedExtensionsParsed):
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.FileUploadAllowedExtensionsParsed) (.doc, .pdf, ...)
+                        @Html.ValidationMessageFor(model => model.FileUploadAllowedExtensionsParsed)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>@Localizer("Setting.FileUpload.PictureUserTitle")</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.ProfilePictureMaximumSizeKiloBytes):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ProfilePictureMaximumSizeKiloBytes) (KB)
+                        @Html.ValidationMessageFor(model => model.ProfilePictureMaximumSizeKiloBytes)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.ProfilePictureAllowedExtensionsParsed):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ProfilePictureAllowedExtensionsParsed)
+                        (.jpg, .png...)
+                        @Html.ValidationMessageFor(model => model.ProfilePictureAllowedExtensionsParsed)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.ProfilePictureMaximumHeight):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ProfilePictureMaximumHeight) (pixel)
+                        @Html.ValidationMessageFor(model => model.ProfilePictureMaximumHeight)
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;@Html.EgovLabelFor(model => model.ProfilePictureMaximumWidth):
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ProfilePictureMaximumWidth) (pixel)
+                        @Html.ValidationMessageFor(model => model.ProfilePictureMaximumWidth)
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>

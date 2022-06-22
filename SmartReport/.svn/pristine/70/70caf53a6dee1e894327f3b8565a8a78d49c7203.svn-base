@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.TemplateKey.CustomKey");
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script type="text/javascript">
+    function importKey() {
+        var keySelecteds = $("#key-import .key-element");
+        var keys = [];
+        keySelecteds.each(function () {
+            var key = JSON.parse($(this).find("input[type='hidden']").val());
+            keys.push(key);
+        });
+        if (keys.length > 0) {
+            $.ajax({
+                url: '@Url.Action("ImportKey", "TemplateKey")',
+                data: { keys: JSON.stringify(keys) },
+                success: function (result) {
+                    if (result.success) {
+                        document.location.reload();
+                    }
+                }
+            });
+        }
+        else {
+            $("#dialog").dialog("destroy");
+        }
+    }
+    $(function () {
+        $(".key-get>input").removeClass("btn");
+    });
+</script>
+<div id="tabs" class="bkavegov">
+    <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom:20px;">
+        <li>
+            @Html.ActionLink(Localizer("Common.Button.Create"), "Create")
+        </li>
+        <li class="active"><a href="#">@Localizer("Common.TemplateKey.CustomKey")</a></li>
+    </ul>
+    <div>
+        <div id="divListKey">
+            @{
+                Html.RenderPartial("_CustomKey");
+            }
+        </div>
+    </div>
+</div>

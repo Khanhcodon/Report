@@ -1,0 +1,479 @@
+﻿@using Bkav.eGovCloud.Entities.Enum
+@model TimeJobModel
+@{
+    ViewBag.DayOfWeek = new List<SelectListItem>
+    {
+        new SelectListItem{ Text = DayOfWeek.Monday.ToString(), Value = DayOfWeek.Monday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Tuesday.ToString(), Value = DayOfWeek.Tuesday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Wednesday.ToString(), Value = DayOfWeek.Wednesday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Thursday.ToString(), Value = DayOfWeek.Thursday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Friday.ToString(), Value = DayOfWeek.Friday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Saturday.ToString(), Value = DayOfWeek.Saturday.ToString()},
+        new SelectListItem{ Text = DayOfWeek.Sunday.ToString(), Value = DayOfWeek.Sunday.ToString()}
+    };
+
+    var allEgovJobEnum = ViewBag.AllEgovJobEnum as List<SelectListItem>;
+    var allScheduleType = ViewBag.AllScheduleType as List<SelectListItem>;
+}
+
+<style type="text/css">
+    .schedule-config input {
+        width: 50px;
+        display: inline-block!important;
+    }
+</style>
+
+<script type="text/javascript">
+    var config = @(Html.Raw(Model.ScheduleConfig));
+    $(function () {
+        $("#ScheduleTypeEnum").bind("change",function () {
+            var inf = $("." + $(this).val());
+            inf.show();
+            inf.siblings().hide();
+        });
+
+        $("#byDayOfWeek").bind("change",function () {
+            $(this).parent().find("div." + $(this).val()).show();
+            $(this).parent().find("div").not("." + $(this).val()).hide();
+        });
+
+        rebindScheduleConfig(config);
+        $('.number').attr("maxlength","2");
+        $('.number').bind('keypress',function(event){
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            } 
+            return true;
+        });
+    });
+
+    function rebindScheduleConfig(config) {
+        debugger
+        var type = config.Type;
+        switch (type) {
+            case "@ScheduleType.HangPhut":
+                $(".@ScheduleType.HangPhut .minute").val(config.Minutes);
+                break;
+            case "@ScheduleType.HangGio":
+                $(".@ScheduleType.HangGio .from-minute").val(config.FromMinute);
+                $(".@ScheduleType.HangGio .to-minute").val(config.ToMinute);
+                break;
+            case "@ScheduleType.HangNgay":
+                $(".@ScheduleType.HangNgay .from-hour").val(config.FromHour);
+                $(".@ScheduleType.HangNgay .from-minute").val(config.FromMinute);
+                $(".@ScheduleType.HangNgay .to-hour").val(config.ToHour);
+                $(".@ScheduleType.HangNgay .to-minute").val(config.ToMinute);
+                break;
+            case "@ScheduleType.HangTuan":
+                $(".@ScheduleType.HangTuan .from-dayofweek").val(config.FromDayOfWeek);
+                $(".@ScheduleType.HangTuan .to-dayofweek").val(config.ToDayOfWeek);
+                $(".@ScheduleType.HangTuan .from-hour").val(config.FromHour);
+                $(".@ScheduleType.HangTuan .from-minute").val(config.FromMinute);
+                $(".@ScheduleType.HangTuan .to-hour").val(config.ToHour);
+                $(".@ScheduleType.HangTuan .to-minute").val(config.ToMinute);
+                break;
+            case "@ScheduleType.HangThang":
+                $("#byDayOfWeek").val(config.ByDayOfWeek);
+                if (config.ByDayOfWeek === "day") {
+                    $(".@ScheduleType.HangThang .day").show();
+                    $(".@ScheduleType.HangThang .dayofweek").hide();
+                    $(".@ScheduleType.HangThang .from-dayofmonth").val(config.FromDayOfMonth);
+                    $(".@ScheduleType.HangThang .to-dayofmonth").val(config.ToDayOfMonth);
+                    $(".@ScheduleType.HangThang .day .from-hour").val(config.FromHour);
+                    $(".@ScheduleType.HangThang .day .from-minute").val(config.FromMinute);
+                    $(".@ScheduleType.HangThang .day .to-hour").val(config.ToHour);
+                    $(".@ScheduleType.HangThang .day .to-minute").val(config.ToMinute);
+                }
+                else {
+                    $(".@ScheduleType.HangThang .dayofweek").show();
+                    $(".@ScheduleType.HangThang .day").hide();
+                    $(".@ScheduleType.HangThang .dayofweek .to-dayofweek").val(config.dayOfWeek);
+                    $(".@ScheduleType.HangThang .dayofweek .weekofmonth").val(config.weekOfMonth);
+                    $(".@ScheduleType.HangThang .dayofweek .form-hour").val(config.FromHour);
+                    $(".@ScheduleType.HangThang .dayofweek .from-minute").val(config.FromMinute);
+                }
+                break;
+            case "@ScheduleType.HangNam":
+                $(".@ScheduleType.HangNam .from-month").val(config.FromMonth);
+                $(".@ScheduleType.HangNam .to-month").val(config.ToMonth);
+                $(".@ScheduleType.HangNam .from-dayofweek").val(config.FromDayOfWeek);
+                $(".@ScheduleType.HangNam .to-dayofweek").val(config.ToDayOfWeek);
+                $(".@ScheduleType.HangNam .from-hour").val(config.FromHour);
+                $(".@ScheduleType.HangNam .from-minute").val(config.FromMinute);
+                $(".@ScheduleType.HangNam .to-hour").val(config.ToHour);
+                $(".@ScheduleType.HangNam .to-minute").val(config.ToMinute);
+                break;
+            default:
+                break;
+        }
+    }
+
+    function beforeSubmit() {
+        var scheduleConfig = {};
+        scheduleConfig.Type = $("#ScheduleTypeEnum").val();
+       
+        if (!validInput(scheduleConfig.Type)) {
+            alert("Bạn chưa nhập đúng dữ liệu");
+            return false;
+        }
+
+        switch (scheduleConfig.Type) {
+            case "@ScheduleType.HangPhut":
+                var minutes = $(".@ScheduleType.HangPhut .minute").val();
+                scheduleConfig.Minutes =parseInt( minutes);
+                break;
+            case "@ScheduleType.HangGio":
+                var from = $(".@ScheduleType.HangGio .from-minute").val();
+                var to = $(".@ScheduleType.HangGio .to-minute").val();
+                scheduleConfig.FromMinute =parseInt( from);
+                scheduleConfig.ToMinute = parseInt(to);
+                break;
+            case "@ScheduleType.HangNgay":
+                var fromHour = $(".@ScheduleType.HangNgay .from-hour").val();
+                var fromMinute = $(".@ScheduleType.HangNgay .from-minute").val();
+                var toHour = $(".@ScheduleType.HangNgay .to-hour").val();
+                var toMinute = $(".@ScheduleType.HangNgay .to-minute").val();
+                scheduleConfig.FromHour =parseInt( fromHour);
+                scheduleConfig.FromMinute =parseInt( fromMinute);
+                scheduleConfig.ToHour = parseInt(toHour);
+                scheduleConfig.ToMinute = parseInt(toMinute);
+                break;
+            case "@ScheduleType.HangTuan":
+                var fromDayOfWeek = $(".@ScheduleType.HangTuan .from-dayofweek").val();
+                var toDayOfWeek = $(".@ScheduleType.HangTuan .to-dayofweek").val();
+                var fromHour = $(".@ScheduleType.HangTuan .from-hour").val();
+                var fromMinute = $(".@ScheduleType.HangTuan .from-minute").val();
+                var toHour = $(".@ScheduleType.HangTuan .to-hour").val();
+                var toMinute = $(".@ScheduleType.HangTuan .to-minute").val();
+
+                scheduleConfig.FromDayOfWeek = fromDayOfWeek;
+                scheduleConfig.ToDayOfWeek = toDayOfWeek;
+                scheduleConfig.FromHour = parseInt(fromHour);
+                scheduleConfig.FromMinute = parseInt(fromMinute);
+                scheduleConfig.ToHour = parseInt(toHour);
+                scheduleConfig.ToMinute = parseInt(toMinute);
+                break;
+            case "@ScheduleType.HangThang":
+                var byDayOfWeek = $("#byDayOfWeek").val();
+                scheduleConfig.ByDayOfWeek = byDayOfWeek;
+                if (scheduleConfig.ByDayOfWeek === "day") {
+                    var fromDayOfMonth = $(".@ScheduleType.HangThang .from-dayofmonth").val();
+                    var toDayOfMonth = $(".@ScheduleType.HangThang .to-dayofmonth").val();
+                    var fromHour = $(".@ScheduleType.HangThang .day .from-hour").val();
+                    var fromMinute = $(".@ScheduleType.HangThang .day .from-minute").val();
+                    var toHour = $(".@ScheduleType.HangThang .day .to-hour").val();
+                    var toMinute = $(".@ScheduleType.HangThang .day .to-minute").val();
+
+                    scheduleConfig.FromDayOfMonth = fromDayOfMonth;
+                    scheduleConfig.ToDayOfMonth = toDayOfMonth;
+                    scheduleConfig.FromHour = parseInt(fromHour);
+                    scheduleConfig.FromMinute =parseInt( fromMinute);
+                    scheduleConfig.ToHour = parseInt(toHour);
+                    scheduleConfig.ToMinute =parseInt( toMinute);
+                }
+                else {
+                    var dayOfWeek = $(".@ScheduleType.HangThang .to-dayofweek").val();
+                    var weekOfMonth = $(".@ScheduleType.HangThang .weekofmonth").val();
+                    var fromHour = $(".@ScheduleType.HangThang .dayofweek .from-hour").val();
+                    var fromMinute = $(".@ScheduleType.HangThang .dayofweek .from-minute").val();
+
+                    scheduleConfig.DayOfWeek = dayOfWeek;
+                    scheduleConfig.WeekOfMonth = weekOfMonth;
+                    scheduleConfig.FromHour = parseInt(fromHour);
+                    scheduleConfig.FromMinute = parseInt(fromMinute);
+                }
+                break;
+
+            case "@ScheduleType.HangNam":
+                var fromMonth= $(".@ScheduleType.HangNam .from-month").val();
+                var toMonth = $(".@ScheduleType.HangNam .to-month").val();
+                var fromDayOfMonth = $(".@ScheduleType.HangNam .from-dayofmonth").val();
+                var toDayOfMonth = $(".@ScheduleType.HangNam .to-dayofmonth").val();
+                var fromHour = $(".@ScheduleType.HangNam .from-hour").val();
+                var fromMinute = $(".@ScheduleType.HangNam .from-minute").val();
+                var toHour = $(".@ScheduleType.HangNam .to-hour").val();
+                var toMinute = $(".@ScheduleType.HangNam .to-minute").val();
+
+                scheduleConfig.FromMonth= fromMonth;
+                scheduleConfig.ToMonth = toMonth;
+                scheduleConfig.FromDayOfMonth = fromDayOfMonth;
+                scheduleConfig.ToDayOfMonth = toDayOfMonth;
+                scheduleConfig.FromHour = parseInt(fromHour);
+                scheduleConfig.FromMinute = parseInt(fromMinute);
+                scheduleConfig.ToHour =parseInt( toHour);
+                scheduleConfig.ToMinute = parseInt(toMinute);
+                break;
+        }
+
+        $("#ScheduleConfig").val(JSON.stringify(scheduleConfig));
+        return true;
+    }
+
+    function validInput(type) {
+        var result = true;
+        $(".schedule-config ." + type + " input").each(function () {
+            var value = parseInt($(this).val());
+            if (isNaN(value)) {
+                result = false;
+            }
+            if ($(this).hasClass("minute") && (value < 0 || value > 59)) {
+                result = false;
+            }
+            if ($(this).hasClass("hour") && (value < 0 || value > 23)) {
+                result = false;
+            }
+            if ($(this).hasClass("minute") && (value < 0 || value > 59)) {
+                result = false;
+            }
+        });
+        var from = $(".schedule-config ." + type + " [class^='from']");
+        var to = $(".schedule-config ." + type + " [class^='to']");
+        for (var i = 0; max = from.length, i < max; i++)
+        {
+            var fromVal = parseInt($(from[i]).val());
+            var toVal = parseInt($(to[i]).val());
+            if (fromVal > toVal) {
+                result = false;
+                break;
+            }
+            else if(toVal > fromVal)
+            {
+                break;
+            }
+        }
+        return result;
+    }
+</script>
+
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-stopwatch"></i>
+        <span data-res="egov.resources.sitemap.egovjob"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#" onmousedown=" return beforeSubmit();">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/timejob/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @using (Html.BeginForm(Model.TimeJobId == 0 ? "Create" : "Edit"))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.ScheduleConfig)
+        @Html.HiddenFor(model => model.TimeJobId)
+        <table id="timeJobInfo" style="width: 100%">
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelFor(model => model.TimerJobType):
+                </td>
+                <td>
+                    @Html.DropDownList("TimerJobTypeEnum", allEgovJobEnum)
+                    @Html.ValidationMessageFor(model => model.TimerJobType)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelRequireFor(model => model.Name):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.IsActive):
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.IsActive)
+                </td>
+            </tr>
+            <tr>
+                <td>Cấu hình thời điểm kích hoạt</td>
+                <td>
+                    @Html.DropDownList("ScheduleTypeEnum", allScheduleType)
+                </td>
+            </tr>
+            <tr class="schedule-config">
+                <td>Khoảng thời gian kích hoạt:</td>
+                <td>
+                    <div class="@ScheduleType.HangPhut" style="@(Model.ScheduleTypeEnum == ScheduleType.HangPhut ? "" : "display: none")">
+                        <b>Thực thi sau mỗi </b>
+                        <div>
+                            <input type="text" value="1" class="minute number" />
+                            <span>phút</span>
+                        </div>
+                    </div>
+
+                    <div class="@ScheduleType.HangGio" style="@(Model.ScheduleTypeEnum == ScheduleType.HangGio ? "" : "display: none")">
+                        <b>Thực thi hàng giờ</b>
+                        <br />
+                        <div>
+                            Từ phút thứ
+                            <input type="text" value="1" class="from-minute minute number" /><br />
+                            đến trước phút thứ
+                            <input type="text" value="59" class="to-minute minute number" />
+
+                        </div>
+                    </div>
+
+                    <div class="@ScheduleType.HangNgay" style="@(Model.ScheduleTypeEnum == ScheduleType.HangNgay ? "" : "display: none")">
+                        <b>Thực thi hàng ngày</b>
+                        <br />
+                        <div>
+                            Từ
+                            <input type="text" value="0" class="from-hour hour number" />
+                            giờ
+                            <input type="text" value="0" class="from-minute minute number" />
+                            phút
+
+                        </div>
+                        <br />
+                        <div>
+                            Đến trước
+                            <input type="text" value="23" class="to-hour hour number" />
+                            giờ
+                            <input type="text" value="59" class="to-minute minute number" />
+                            phút
+                        </div>
+                    </div>
+
+                    <div class="@ScheduleType.HangTuan" style="@(Model.ScheduleTypeEnum == ScheduleType.HangTuan ? "" : "display: none")">
+                        <b>Thực thi hàng tuần</b>
+                        <br />
+                        <div style="display: inline-flex;">
+                            &nbsp;  Từ thứ &nbsp; @Html.DropDownList("DayOfWeek", null, new { @class = "from-dayofweek", style = "width: 150px" })&nbsp; lúc&nbsp;
+                            <input type="text" value="1" class="from-hour hour number" />
+                            &nbsp;   giờ &nbsp;
+                            <input type="text" value="1" class="from-minute minute number" />
+                            &nbsp;  phút&nbsp;
+                        </div>
+                        <br />
+                        <div style="display: inline-flex;">
+                            &nbsp;  đến trước thứ &nbsp; @Html.DropDownList("DayOfWeek", null, new { @class = "to-dayofweek", style = "width: 150px" })&nbsp; lúc&nbsp;
+                            <input type="text" value="1" class="to-hour hour number" />
+                            &nbsp;   giờ&nbsp;
+                            <input type="text" value="1" class="to-minute minute number" />
+                            &nbsp; phút&nbsp;
+                        </div>
+                    </div>
+
+                    <div class="@ScheduleType.HangThang" style="@(Model.ScheduleTypeEnum == ScheduleType.HangThang ? "" : "display: none")">
+                        <b>Thực thi hàng tháng theo </b>
+                        <select id="byDayOfWeek">
+                            <option value="day">Ngày</option>
+                            <option value="dayofweek">Thứ</option>
+                        </select>
+                        <div class="day">
+                            <div style="display: inline-flex;">
+                                &nbsp; Từ ngày mùng &nbsp;
+                            <select class="from-dayofmonth">
+                                @for (var i = 1; i < 32; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                                &nbsp; lúc&nbsp;
+                            <input type="text" value="1" class="from-hour hour number" />
+                                &nbsp; giờ&nbsp;
+                            <input type="text" value="1" class="from-minute minute number" />
+                                &nbsp;  phút&nbsp;
+                            </div>
+                            <br />
+                            <div style="display: inline-flex;">
+                                &nbsp; Tới ngày mùng&nbsp;
+                            <select class="to-dayofmonth">
+                                @for (var i = 1; i < 32; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                                &nbsp;  lúc&nbsp;
+                            <input type="text" value="1" class="to-hour hour number" />
+                                &nbsp;   giờ&nbsp;
+                            <input type="text" value="1" class="to-minute minute number" />
+                                &nbsp;    phút&nbsp;
+                            </div>
+                        </div>
+
+                        <div class="dayofweek" style="display: none">
+                            Vào thứ @Html.DropDownList("DayOfWeek", null, new { @class = "to-dayofweek" }) của
+                            <select class="weekofmonth" style="width: 150px">
+                                <option value="1">Tuần đầu tiên</option>
+                                <option value="2">Tuần thứ 2</option>
+                                <option value="3">Tuần thứ 3</option>
+                                <option value="4">Tuần thứ 4</option>
+                            </select>
+                            của tháng
+                            <br />
+                            Lúc
+                            <input type="text" value="1" class="from-hour hour number" />
+                            giờ
+                            <input type="text" value="1" class="from-minute minute number" />
+                            phút
+                        </div>
+                    </div>
+
+                    <div class="@ScheduleType.HangNam" style="@(Model.ScheduleTypeEnum == ScheduleType.HangNam ? "" : "display: none")">
+                        <div style="display: inline-flex;">
+                            &nbsp;  Từ tháng  &nbsp; 
+                            <select class="from-month">
+                                @for (var i = 1; i < 12; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+
+                            &nbsp;  ngày  &nbsp;
+                            <select class="from-dayofmonth">
+                                @for (var i = 1; i < 32; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                            &nbsp; lúc&nbsp;
+                            <input type="text" value="1" class="from-hour hour number" />
+                            &nbsp; giờ&nbsp;
+                            <input type="text" value="1" class="from-minute minute number" />
+                            &nbsp;  phút&nbsp; 
+                        </div>
+
+                        <br />
+                        <div style="display: inline-flex;">
+                            &nbsp; Tới tháng  &nbsp; 
+                             <select class="to-month">
+                                 @for (var i = 1; i < 12; i++)
+                                 {
+                                     <option value="@i">@i</option>
+                                 }
+                             </select>
+                            &nbsp;  ngày &nbsp;
+                            <select class="to-dayofmonth">
+                                @for (var i = 1; i < 32; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                            &nbsp;  lúc&nbsp;
+                            <input type="text" value="1" class="to-hour hour number" />
+                            &nbsp;   giờ&nbsp;
+                            <input type="text" value="1" class="to-minute minute number" />
+                            &nbsp;    phút&nbsp;
+                        </div>
+
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    }
+</div>

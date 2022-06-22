@@ -1,0 +1,268 @@
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: NO): 
+error connection mail Access denied for user 'root'@'localhost' (using password: NO): 
+DoctypeScheduleStart
+DocTypeScheduler
+error connection doctypeschedule
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: NO): 
+error connection mail Access denied for user 'root'@'localhost' (using password: NO): 
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+DoctypeScheduleStart
+DocTypeScheduler
+error connection mail Access denied for user 'root'@'localhost' (using password: NO): 
+error connection sms Access denied for user 'root'@'localhost' (using password: NO): 
+error connection doctypeschedule
+SmsStart
+SendEmailJobStart
+error connection sms Access denied for user 'root'@'localhost' (using password: NO): 
+error connection mail Access denied for user 'root'@'localhost' (using password: NO): 
+SmsStart
+error connection sms Access denied for user 'root'@'localhost' (using password: NO): 
+error connection mail Access denied for user 'root'@'localhost' (using password: NO): 
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+DoctypeScheduleStart
+DocTypeScheduler
+empty table sms db
+empty table mails in db
+SmsStart
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table mails in db
+SmsStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+DocTypeScheduler
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table mails in db
+SmsStart
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+DoctypeScheduleStart
+DocTypeScheduler
+empty table sms db
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+SmsStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+empty table mails in db
+SendEmailJobStart
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table mails in db
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+SendEmailJobStart
+empty table sms db
+empty table mails in db
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+eGovScheduler
+connections 1
+DoctypeScheduleStart
+DocTypeScheduler
+SmsStart
+SendEmailJobStart
+SmsStart
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+empty table mails in db
+empty table sms db
+SmsStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table mails in db
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+SendEmailJobStart
+empty table mails in db
+DoctypeScheduleStart
+DocTypeScheduler
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+DoctypeScheduleStart
+DocTypeScheduler
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table sms db
+SmsStart
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+SmsStart
+empty table mails in db
+empty table sms db
+SmsStart
+empty table sms db
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+DoctypeScheduleStart
+SendEmailJobStart
+DocTypeScheduler
+empty table mails in db
+empty table sms db
+eGovScheduler
+connections 1
+SmsStart
+DoctypeScheduleStart
+SendEmailJobStart
+DocTypeScheduler
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SendEmailJobStart
+empty table sms db
+SmsStart
+empty table mails in db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table sms db
+empty table mails in db
+SmsStart
+empty table mails in db
+SendEmailJobStart
+empty table mails in db
+SmsStart
+empty table mails in db
+SmsStart
+empty table sms db
+SmsStart
+empty table sms db
+SendEmailJobStart
+empty table mails in db

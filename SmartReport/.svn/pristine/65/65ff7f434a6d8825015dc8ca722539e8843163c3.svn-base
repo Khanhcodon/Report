@@ -1,0 +1,398 @@
+﻿@model CodeModel
+@{
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allGroup = ViewBag.AllGroup as IEnumerable<SelectListItem>;
+}
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.CodeId)
+
+<script type="text/javascript">
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var selectedDepartments = @(string.IsNullOrEmpty(Model.DepartmentId) ? MvcHtmlString.Create("[]") : Html.Raw(Model.DepartmentId));
+
+    $(function () {
+        $(document).bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                if ($("form").valid())
+                    $("form").submit();
+            }
+        });
+
+        $("#selectedDepartment").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term ), "i" );
+                response($.grep(allDepartments, function( value ) {
+                    value = value.label || value.value || value;
+                    return matcher.test( value ) || matcher.test( egov.utilities.string.stripVietnameseChars( value ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#selectedDepartment").val('');
+                var exist = _.find(selectedDepartments, function(item) {
+                    return item == ui.item.value;
+                });
+                if (!exist) {
+                    var selected = _.find(allDepartments, function(item) {
+                        return item.value === ui.item.value;
+                    });
+                    if (selected) {
+                        selectedDepartments.push(ui.item.value);
+                        var noresult = $("#tblDepartment tbody #noresult");
+                        if(noresult.length > 0) {
+                            noresult.remove();
+                        }
+                        $("#selectedDepartmentTemplate")
+                            .tmpl(selected, {
+                                getNumbers: function() {
+                                    return selectedDepartments.length;
+                                }
+                            })
+                            .appendTo("#tblDepartment tbody");
+                        $("#DepartmentId").val(JSON.stringify(selectedDepartments));
+                    }
+                }
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.path + "</a>")
+                .appendTo(ul);
+        };
+
+        $.each(selectedDepartments, function(i, value) {
+            var selected = _.find(allDepartments, function(item) {
+                return item.value === value;
+            });
+            if (selected) {
+                $("#selectedDepartmentTemplate").tmpl(selected, {
+                    getNumbers: function() {
+                        return i + 1;
+                    }
+                }).appendTo("#tblDepartment tbody");
+            }
+        });
+        if(selectedDepartments == null || (selectedDepartments != null && selectedDepartments.length == 0)) {
+            $("#tblDepartment tbody").html("<tr id='noresult'><td colspan='3'>'@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Using.Null")'</td></tr>");
+    }
+
+        var templateedit = $("#txtTemplate").val();
+        replacevalue(templateedit);
+
+        $("#txtTemplate").blur(function () {
+            var template = $(this).val();
+            replacevalue(template);
+        });
+
+        $("input[name='configTemplate']").bind('click',function(){
+            addtext($(this).val());
+        });
+
+        $("#choseDept").bind("click",function(){
+            showDialog();
+        });
+    });
+
+function removeDepartment(id) {
+    eGovMessage.show(
+        '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Code.ConfirmDeleteDepartment"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    selectedDepartments = _.reject(selectedDepartments, function(department) {
+                        return department == id;
+                    });
+                    $("#DepartmentId").val(JSON.stringify(selectedDepartments));
+                    if(selectedDepartments.length > 0) {
+                        $("#tblDepartment tbody tr#" + id).remove();
+                        $("#tblDepartment tbody tr td:first-child").each(function(index, el) {
+                            $(el).text(index + 1);
+                        });
+                    } else {
+                        $("#tblDepartment tbody").html("<tr id='noresult'><td colspan='3'>'@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Using.Null")'</td></tr>");
+                    }
+                }
+            );
+            }
+
+            function addtext(value) {
+                var template = $("#txtTemplate").val();
+                var templaceclick;
+                if (template == "") {
+                    templaceclick = value;
+                }
+                else if (template.indexOf(value) == -1) {
+                    templaceclick = template + value;
+                }
+                else {
+                    templaceclick = template;
+                }
+                $("#txtTemplate").val(templaceclick);
+                replacevalue(templaceclick);
+            }
+
+            function replacevalue(value) {
+                var currentDate = new Date();
+                var day = currentDate.getDate();
+                var month = currentDate.getMonth() + 1;
+                var year = currentDate.getFullYear();
+
+                value = value.replace("$N$", "124");
+                value = value.replace("$n$", "124");
+                value = value.replace("$D$", day < 10 ? "0" + day : day);
+                value = value.replace("$d$", day);
+                value = value.replace("$M$", month < 10 ? "0" + month : month);
+                value = value.replace("$m$", month);
+                value = value.replace("$Y$", year);
+                value = value.replace("$y$", year.toString().substr(2,2));
+
+                $("#txtXemthu").text(value);
+            }
+
+            var dialogSelectnodeIds = [];//danh sách phòng ban được chọn trên dialog
+            var dialogRemovenodeIds = [];//danh sách phòng ban  bị xóa trên dialog
+            function showDialog() {
+                var $dialog = $("#dialog");
+                $dialog.dialog({
+                    title:"@Localizer("Common.Workflow.Department.List")",
+            modal: true,
+            width: 300,
+            height: 400,
+            open: function () {
+                egov.utilities.jstree.bindJsTree($("#depts"), false, true, true, allDepartments, [],[],function(){
+                    if(selectedDepartments && selectedDepartments.length > 0) {
+                        for(var i = 0;i < selectedDepartments.length;i++) {
+                            var deptItem = 'li#' + selectedDepartments[i];
+                            var deptItems =  $("#depts").find(deptItem);
+                            if (typeof deptItems !== 'undefined' && deptItems.length > 0) {
+                                $("#depts").jstree("check_node", deptItems);
+                            }
+                        }
+                    }
+                    dialogSelectnodeIds = selectedDepartments;
+                    $("#depts").bind("check_node.jstree", function (e, data) {
+                        var nodeid = parseInt( data.rslt.obj.attr("id"));
+                        //Loại bỏ khỏi danh sách xóa
+                        dialogRemovenodeIds = _.filter(dialogRemovenodeIds,function(val){
+                            return val != nodeid;
+                        });
+                        dialogSelectnodeIds.push(nodeid);
+
+                        $("#depts li").removeClass("jstree-checked jstree-undetermined").addClass("jstree-unchecked");
+                        for(var i = 0;i < dialogSelectnodeIds.length;i++) {
+                            var deptItem = 'li#' + dialogSelectnodeIds[i];
+                            $("#depts").find(deptItem).removeClass("jstree-unchecked jstree-undetermined").addClass("jstree-checked");
+                        }
+                    });
+
+                    $("#depts").bind("uncheck_node.jstree", function (e, data) {
+                        var nodeid = parseInt( data.rslt.obj.attr("id"));
+                        //Loại bỏ khỏi danh sách chọn
+                        dialogSelectnodeIds = _.filter(dialogSelectnodeIds,function(val){
+                            return val != nodeid;
+                        });
+                        dialogRemovenodeIds.push(nodeid);
+
+                        $("#depts li").removeClass("jstree-checked jstree-undetermined").addClass("jstree-unchecked");
+                        if(dialogSelectnodeIds.length>0){
+                            for(var i = 0;i < dialogSelectnodeIds.length;i++) {
+                                var deptItem = 'li#' + dialogSelectnodeIds[i];
+                                $("#depts").find(deptItem).removeClass("jstree-unchecked jstree-undetermined").addClass("jstree-checked");
+                            }
+                        }
+                    });
+
+                },null,false,false);
+            },
+            buttons: {
+                "@Html.Raw(Localizer("Common.Label.Add"))": function () {
+                    var deptIds = [];
+                    //loại bỏ danh sách phòng ban bị xóa
+                    selectedDepartments=_.filter(selectedDepartments, function(item){
+                        return  !_.contains(dialogRemovenodeIds, item );
+                    });
+                    //gom lại những phòng ban được chọn
+                    selectedDepartments=_.union(selectedDepartments,dialogSelectnodeIds);
+
+                    var selected = _.filter(allDepartments, function(item) {
+                        return _.contains(selectedDepartments, item.value );
+                    });
+
+                    $("#tblDepartment tbody").empty();
+                    if(selected && selected.length > 0){
+                        for(var i = 0 ; i < selected.length;i++) {
+                            $("#selectedDepartmentTemplate").tmpl(selected[i], {
+                                getNumbers: function() {
+                                    return i + 1;
+                                }
+                            }).appendTo("#tblDepartment tbody");
+                        }
+                    }
+
+                    $("#DepartmentId").val(JSON.stringify(selectedDepartments));
+                    $(this).dialog("destroy");
+                },
+                "@Html.Raw(Localizer("Common.Button.Destroy"))": function () {
+                    $(this).dialog("destroy");
+                }
+            }
+        });
+    }
+
+</script>
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto; /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    #depts li[rel="dept"] > a > .jstree-icon {
+        background-image: url("/Content/Images/dept.png");
+        background-position: 0 0;
+    }
+</style>
+<table>
+    <tr>
+        <td style="width: 20%">
+            @Html.LabelRequireFor(model => model.CodeName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.CodeName)
+            @Html.ValidationMessageFor(model => model.CodeName)
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%">
+            @Html.LabelRequireFor(model => model.BussinessDocFieldDocTypeGroupId):
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.BussinessDocFieldDocTypeGroupId, allGroup, Localizer("Common.All.Label"))
+            @Html.ValidationMessageFor(model => model.BussinessDocFieldDocTypeGroupId)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.Template):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Template, new { id = "txtTemplate" })
+            @Html.ValidationMessageFor(model => model.Template)
+            Sử dụng:
+            <input type="button" name="configTemplate" value="$N$" title="Nhảy số" data-restitle="egov.resources.code.name" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$D$" title="Lấy ngày hiện tại, nếu nhỏ hơn 10 thì thêm số 0 đằng trước" data-restitle="egov.resources.code.config1" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$d$" title="Lấy ngày hiện tại" data-restitle="egov.resources.code.config2" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$M$" title="Lấy tháng hiện tại, nếu nhỏ hơn 10 thì thêm số 0 đằng trước" data-restitle="egov.resources.code.config3" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$m$" title="Lấy tháng hiện tại" data-restitle="egov.resources.code.config4" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$Y$" title="Lấy năm hiện tại" data-restitle="egov.resources.code.config5" />
+            &nbsp;
+            <input type="button" name="configTemplate" value="$y$" title="Lấy 2 số cuối của năm hiện tại" data-restitle="egov.resources.code.config6" />
+        </td>
+    </tr>
+    <tr>
+        <td>@Localizer("Bkav.eGovCloud.Areas.Admin.ShowPreview")
+        </td>
+        <td>
+            <b><span id="txtXemthu"></span></b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IncreaseId):
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.IncreaseId, ViewBag.Increase as IEnumerable<SelectListItem>)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            
+        </td>
+        <td>
+            @Html.EditorFor(model => model.HasCapSoTruoc)
+            <label for="HasCapSoTruoc">Cho phép cấp số trước</label>
+        </td>
+    </tr>
+    <tr>
+        <td>@Localizer("Bkav.eGovCloud.Areas.Admin.Department.Title")
+        </td>
+        <td>
+            <input id="selectedDepartment" type="text" />
+            <input id="choseDept" type="button" name="choseDept" value="Chọn phòng ban" data-res="egov.resources.code.choosedeparment" />
+            @Html.HiddenFor(model => model.DepartmentId)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <div class="grid" style="width: 80%">
+                <div class="grid-header">
+                    <div class="grid-header-wrap">
+                        <table class="table-main table-bordered">
+                            <colgroup>
+                                <col style="width: 50px" />
+                                <col />
+                                <col style="width: 50px" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="header">@Localizer("Common.Code.Index.List.Column.Numbers")
+                                    </th>
+                                    <th class="header">@Localizer("Common.Code.Index.List.Column.DepartmentName")
+                                    </th>
+                                    <th class="header" style="text-align: center">@Localizer("Common.Code.Index.List.Column.Delete")
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible">
+                    <table class="table-main  table table-hover table-bordered" id="tblDepartment">
+                        <colgroup>
+                            <col style="width: 50px" />
+                            <col />
+                            <col style="width: 50px" />
+                        </colgroup>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="dialog" style="background: white; padding: 0; display: none">
+    <div class="col-md-16">
+        <div id="depts"></div>
+    </div>
+</div>
+
+<script id="selectedDepartmentTemplate" type="text/x-jquery-tmpl">
+    <tr id="${value}">
+        <td style="text-align: center">${$item.getNumbers()}</td>
+        <td>${path}
+        </td>
+        <td style="text-align: center"><a href="javascript:removeDepartment(${value})">@Localizer("Common.Code.Index.List.Column.Delete")</a></td>
+    </tr>
+</script>

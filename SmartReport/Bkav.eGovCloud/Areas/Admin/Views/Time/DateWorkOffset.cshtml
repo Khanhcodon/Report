@@ -1,0 +1,110 @@
+﻿@using System.Globalization
+@model IEnumerable<HolidayModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Time.DateWorkOffset");
+    Layout = "~/Areas/Admin/Views/Time/_TimeLayout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".options").remove();
+        $("#tblTime").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover");
+        $("#dateworkoffset a").addClass("selected");
+
+        $("#Years").change(function () {
+            var year = $(this).val();
+            document.location = "/admin/Time/DateWorkOffset?year=" + year;
+        });
+    });
+
+    function deleteDateWorkOffset(id) {
+        eGovMessage.show(
+            '@Localizer("Admin.Time.WorkTime.Confirm.DeleteOffsetDay")',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete_" + id).submit();
+            }
+        );
+    }
+</script>
+<style>
+    #Years {
+        width: auto;
+        display: inline;
+    }
+</style>
+@Html.Partial("_Notifications")
+<p>
+    <span data-res="egov.resources.time.listoffsetday">Danh sách ngày làm bù trong năm</span>
+    @Html.DropDownList("Years")
+</p>
+
+<table class="table-main table" id="tblTime">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header" data-res="egov.resources.tableheader.stt"></th>
+            <th class="header" data-res="egov.resources.time.freeday"></th>
+            <th class="header" data-res="egov.resources.time.DL"></th>
+            <th class="header" data-res="egov.resources.time.day"></th>
+            <th class="header" data-res="egov.resources.tableheader.edit"></th>
+            <th class="header" data-res="egov.resources.tableheader.delete"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+
+            var stt = 0;
+            foreach (var holiday in Model)
+            {
+                stt += 1;
+            <tr>
+                <td>@stt
+                </td>
+                <td>@holiday.HolidayName
+                </td>
+                <td>
+                    @holiday.HolidayDate.ToString("d")
+                </td>
+                <td>
+                    <span style="@(ViewBag.Weekend.Contains(holiday.HolidayDate.DayOfWeek.ToString()) ? "color: red" : "color: black")">
+                        @DateTimeFormatInfo.CurrentInfo.GetDayName(holiday.HolidayDate.DayOfWeek)
+                    </span>
+                </td>
+
+                <td>
+                    @Html.ActionLink(Localizer("Catalog.Index.List.Column.Edit.Button"), "EditDateWorkOffset", new { Id = holiday.HolidayId })
+                </td>
+                <td>
+                    <a href="javascript:deleteDateWorkOffset(@(holiday.HolidayId))" data-res="egov.resources.tableheader.delete"></a>
+                    <form id="formdelete_@(holiday.HolidayId)" style="display: none" action="@Url.Action("DeleteDateWorkOffset", new { Id = holiday.HolidayId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" data-res="egov.resources.time.nodata">Không có ngày nghỉ nào
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

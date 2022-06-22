@@ -1,0 +1,1661 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Các thao tác xử lý văn bản trên eOffice</TITLE>
+	<META NAME="GENERATOR" CONTENT="LibreOffice 4.1.6.2 (Linux)">
+	<META NAME="AUTHOR" CONTENT="QuyNX">
+	<META NAME="CREATED" CONTENT="20180409;31200000000000">
+	<META NAME="CHANGEDBY" CONTENT="doannx">
+	<META NAME="CHANGED" CONTENT="20180806;53500000000000">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin-right: 1in; margin-top: 0.95in; margin-bottom: 0.97in }
+		P { margin-bottom: 0.08in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		P.western { font-family: "Times New Roman", serif; font-size: 14pt; so-language: en-US }
+		P.cjk { font-family: "Times New Roman", serif; font-size: 14pt }
+		P.ctl { font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA }
+		H1 { margin-bottom: 0.04in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		H1.western { font-family: "Times New Roman", serif; font-size: 14pt; so-language: en-US }
+		H1.cjk { font-family: "Times New Roman", serif; font-size: 14pt }
+		H1.ctl { font-family: "Arial", sans-serif; font-size: 14pt; so-language: ar-SA }
+		H3 { margin-bottom: 0.04in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		H3.western { font-family: "Arial", sans-serif; font-size: 13pt; so-language: en-US }
+		H3.cjk { font-family: "Times New Roman", serif; font-size: 13pt }
+		H3.ctl { font-family: "Arial", sans-serif; font-size: 13pt; so-language: ar-SA }
+		H4 { margin-bottom: 0.04in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		H4.western { font-size: 14pt; so-language: en-US }
+		H4.cjk { font-family: "Times New Roman", serif; font-size: 14pt }
+		H4.ctl { font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA }
+		H1.eoffice---đề-muc-lớn-western { margin-top: 0in; margin-bottom: 0in; color: #000080; font-family: "Times New Roman", serif; font-size: 16pt; so-language: en-US; line-height: 150% }
+		H1.eoffice---đề-muc-lớn-cjk { margin-top: 0in; margin-bottom: 0in; color: #000080; font-family: "Times New Roman", serif; font-size: 16pt; line-height: 150% }
+		H1.eoffice---đề-muc-lớn-ctl { margin-top: 0in; margin-bottom: 0in; color: #000080; font-family: "Times New Roman", serif; font-size: 20pt; so-language: ar-SA; line-height: 150% }
+		H3.eoffice---đề-mục-nhỏ---nhỏ-western { margin-top: 0.08in; margin-bottom: 0.08in; color: #000080; font-size: 13pt; so-language: en-US; line-height: 130%; text-align: justify }
+		H3.eoffice---đề-mục-nhỏ---nhỏ-cjk { margin-top: 0.08in; margin-bottom: 0.08in; color: #000080; font-family: "Times New Roman", serif; font-size: 13pt; line-height: 130%; text-align: justify }
+		H3.eoffice---đề-mục-nhỏ---nhỏ-ctl { margin-top: 0.08in; margin-bottom: 0.08in; color: #000080; font-family: "Times New Roman", serif; font-size: 10pt; so-language: ar-SA; line-height: 130%; text-align: justify }
+		H4.eoffice---đề-muc-lớn-nho-western { margin-left: 0.35in; font-size: 14pt; so-language: en-US }
+		H4.eoffice---đề-muc-lớn-nho-cjk { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt }
+		H4.eoffice---đề-muc-lớn-nho-ctl { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA }
+		H4.style-heading-4-+-italic-western { font-size: 14pt; so-language: en-US; font-style: italic }
+		H4.style-heading-4-+-italic-cjk { font-family: "Times New Roman", serif; font-size: 14pt; font-style: italic }
+		H4.style-heading-4-+-italic-ctl { font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA; font-style: italic }
+		H4.style-eoffice---đề-muc-lớn-nho-+-italic-western { margin-left: 0.35in; font-size: 14pt; so-language: en-US; font-style: italic }
+		H4.style-eoffice---đề-muc-lớn-nho-+-italic-cjk { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt; font-style: italic }
+		H4.style-eoffice---đề-muc-lớn-nho-+-italic-ctl { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA; font-style: italic }
+		H4.eoffice---đề-muc-lớn-nho-nho-western { margin-left: 0.35in; font-size: 14pt; so-language: en-US }
+		H4.eoffice---đề-muc-lớn-nho-nho-cjk { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt }
+		H4.eoffice---đề-muc-lớn-nho-nho-ctl { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA }
+		H4.eoffice---đề-muc-lớn-nho-nho-nho-western { margin-left: 0.35in; font-size: 14pt; so-language: en-US }
+		H4.eoffice---đề-muc-lớn-nho-nho-nho-cjk { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt }
+		H4.eoffice---đề-muc-lớn-nho-nho-nho-ctl { margin-left: 0.35in; font-family: "Times New Roman", serif; font-size: 14pt; so-language: ar-SA }
+		A:link { color: #0000ff }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" TEXT="#000000" LINK="#0000ff" DIR="LTR">
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<SPAN CLASS="sd-abs-pos" STYLE="position: absolute; top: -0.81in; left: -1in; width: 793px"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_1619d6d5.gif" ALIGN=LEFT HSPACE=12></SPAN><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%; page-break-before: always">
+<BR>
+</P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0.11in; line-height: 150%">
+<FONT FACE="Arial, sans-serif"><FONT SIZE=3 STYLE="font-size: 13pt"><B>MỤC
+LỤC</B></FONT></FONT></P>
+<DIV ID="Table of Contents1" DIR="LTR">
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__1_1551966159"> PHẦN I: TRAO ĐỔI THÔNG
+	TIN, ĐIỀU HÀNH TÁC NGHIỆP	4</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__3_1551966159">1. Đăng nhập hệ thống	4</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__5_1551966159">2. Hướng dẫn cài đặt
+	Plug in và Bkav eGov Extention Sau khi đăng nhập thành công,
+	đưa chuột vào tên đăng nhập (trên cùng bên phải) và
+	click chọn Cài Extention như hình dưới	5</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__7_1551966159">3. Giao diện phần mềm
+	eGov	8</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__9_1551966159">4. Đặt Ảnh đại diện	9</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__11_1551966159">5. Đổi mật khẩu	11</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__13_1551966159">6. Cấu hình chữ ký	12</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__15_1551966159">7. Cấu hình ủy quyền	12</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__17_1551966159">8. Trung tâm thông báo	13</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__19_1551966159">9. Quản lý thiết bị	14</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__21_1551966159">10. Hội thoại	15</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__23_1551966159">11. Đọc thông báo mới	18</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__25_1551966159">12. Gửi email cho người
+	khác	19</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__27_1551966159">
+	5.1. Gửi email cho người khác	19</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__29_1551966159">
+	5.1. Trả lời email	19</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__31_1551966159"> 5.2 Gửi tin vào các mục
+	tin (Thông báo, Công cộng…)	20</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__33_1551966159"> 6. Lịch làm việc	22</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__35_1551966159"> PHẦN II: XỬ LÝ VĂN
+	BẢN	24</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__37_1551966159">1. Xử lý văn bản đến	24</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__39_1551966159">1.1
+	Thao tác xử lý khi nhận văn bản đến	24</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__41_1551966159">
+	1.2 Các nút công cụ có trong cửa sổ xứ lý văn bản
+	đến	26</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__43_1551966159">
+	1.3 Ghi ý kiến xử lý vào văn bản	27</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__45_1551966159">
+	1.4 Chuyển xử lý văn bản đến	28</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__47_1551966159">2. Xử lý văn bản đi	29</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__49_1551966159">
+	2.1 Khởi tạo một văn bản đi mới	29</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__51_1551966159">
+	2.2 Khởi tạo một văn bản đi trả lời cho văn bản
+	đến:	35</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__53_1551966159">
+	2.3 Để chỉnh sửa nội dung tài liệu kèm theo khi nhận
+	văn bản đi	36</A></P>
+	<P STYLE="margin-left: 0.19in; margin-bottom: 0in"><A HREF="#__RefHeading__55_1551966159">
+	2.4 Kết thúc xử lý văn bản	36</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__57_1551966159">3. Theo dõi, tìm kiếm văn
+	bản	37</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__59_1551966159"> Chức năng tìm kiếm
+	nâng cao	38</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__61_1551966159">4. Báo cáo	39</A></P>
+	<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.08in">
+	<A HREF="#__RefHeading__63_1551966159">5. Giám sát	40</A></P>
+</DIV>
+<P LANG="en-US" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-top: 0.04in; margin-bottom: 0.1in; line-height: 150%; page-break-before: always">
+<FONT SIZE=3 STYLE="font-size: 13pt"><I><B>(Khuyến cáo:</B></I></FONT><FONT SIZE=3 STYLE="font-size: 13pt"><I>
+Bạn hãy vừa đọc hướng dẫn này vừa thao tác luôn
+trên phần mềm để đạt hiệu quả cao nhất</I></FONT><FONT SIZE=3 STYLE="font-size: 13pt"><I><B>)</B></I></FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="eoffice---đề-muc-lớn-western"><A NAME="__RefHeading__1_1551966159"></A>
+<FONT COLOR="#000000"><FONT SIZE=3 STYLE="font-size: 13pt">PHẦN I:
+TRAO ĐỔI THÔNG TIN, ĐIỀU HÀNH TÁC NGHIỆP</FONT></FONT></H1>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__3_1551966159"></A>
+<FONT SIZE=3>1.Đăng nhập hệ thống</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để đăng nhập vào hệ
+thống, bạn làm theo các bước sau đây:</FONT></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Truy cập vào trình duyệt
+		(khuyến cáo dùng Chrome) =&gt; Gõ địa chỉ kết nối tùy
+		theo từng Sở như bên dưới đây:</FONT></P>
+		<TABLE WIDTH=552 CELLPADDING=7 CELLSPACING=0>
+			<COL WIDTH=220>
+			<COL WIDTH=304>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>Sở
+					TTTT:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovstttt.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>Sở
+					Nội vụ:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovsnv.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>Sở
+					Tài nguyên Môi trường:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovstnmt.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>BQL
+					TTHC:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovbqltthc.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>Sở
+					Công thương:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovsct.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+			<TR>
+				<TD WIDTH=220 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>Sở
+					LĐTBXH:</B></FONT></P>
+				</TD>
+				<TD WIDTH=304 STYLE="border: none; padding: 0in">
+					<P CLASS="western"><FONT SIZE=3 STYLE="font-size: 13pt"><B>egovsldtbxh.lamdong.gov.vn</B></FONT></P>
+				</TD>
+			</TR>
+		</TABLE>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Cửa sổ đăng nhập sẽ
+		hiện ra, bạn khai báo lần lượt vào 2 ô như sau:</FONT></P>
+		<UL>
+			<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+			<FONT SIZE=3 STYLE="font-size: 13pt">username vào ô (1) =&gt; ví
+			dụ: anh </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>“Nguyễn
+			Ngọc Minh”</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> =&gt;
+			 thì account sẽ là </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>minhnn</B></FONT></P>
+			<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+			<FONT SIZE=3 STYLE="font-size: 13pt"><B>password</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+			vào ô (2), mặc định là 123456a@</FONT></P>
+		</UL>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6c4fbbf0.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=601 HEIGHT=286 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Tick chọn “Duy trì đăng
+		nhập” để lần đăng nhập sau không phải gõ lại
+		account/ password truy cập nữa.</FONT></P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Bấm nút “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Đăng
+		nhập</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">” hoặc
+		</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Enter </B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">để
+		vào hệ thống.</FONT></P>
+	</UL>
+</OL>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__5_1551966159"></A>
+2.<FONT SIZE=3 STYLE="font-size: 13pt">Hướng dẫn cài đặt
+Plug in và Bkav eGov Extention<BR></FONT><FONT SIZE=3 STYLE="font-size: 13pt"><SPAN STYLE="font-weight: normal">Sau
+khi đăng nhập thành công, đưa chuột vào tên đăng nhập
+(trên cùng bên phải) và click chọn Cài Extention như hình
+dưới</SPAN></FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_1ffe5a30.png" NAME="Picture 9" ALIGN=BOTTOM WIDTH=624 HEIGHT=202 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Sau
+đó chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Tải về
+Plugin</B></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_64e7f612.png" NAME="Picture 2" ALIGN=BOTTOM WIDTH=624 HEIGHT=247 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Đợi
+1 lát trình duyệt google Chrome sẽ tải về file cài đặt.
+Chọn lần lượt từ 1 đến 2 để tới nới lưu file cài
+đặt trên máy tính như hình dưới (trường hợp người
+dùng không dùng chương trình hỗ trợ download file)</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_55f8cf9.png" NAME="Picture 3" ALIGN=BOTTOM WIDTH=623 HEIGHT=267 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Sau
+đó tiến hành giải nén, chuột phải vào file cài đặt
+chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Run as
+administrator</B></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6b1ab65e.png" NAME="Picture 10" ALIGN=BOTTOM WIDTH=624 HEIGHT=366 BORDER=0><FONT SIZE=3 STYLE="font-size: 13pt">	</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Quá
+trình cài đặt rất đơn giản, chỉ cần bấm Next và Ok
+là xong. Sau khi cài xong ta chuyển lại qua trình duyệt
+Google Chrome và chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Cài
+đặt Extention</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> như
+hình dưới</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_e94b2a21.png" NAME="Picture 4" ALIGN=BOTTOM WIDTH=623 HEIGHT=249 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Sau
+khi chọn Cài đặt Extention xong, một cửa sổ sẽ xuất
+hiện, ta tiếp tục làm theo hướng dẫn bên dưới</FONT></P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_2e586782.png" NAME="Picture 6" ALIGN=LEFT HSPACE=12 WIDTH=624 HEIGHT=249 BORDER=0><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="text-indent: 0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="text-indent: 0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="text-indent: 0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Cuối
+cùng chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Add to
+Chrome</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> để kết
+thúc quá trình cài đặt.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">	</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><SPAN LANG="en-US"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_763d4067.png" NAME="Picture 7" ALIGN=BOTTOM WIDTH=624 HEIGHT=241 BORDER=0></SPAN></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">	</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_df9f87cc.png" NAME="Picture 8" ALIGN=BOTTOM WIDTH=624 HEIGHT=274 BORDER=0></P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__7_1551966159"></A>
+3.<FONT SIZE=3 STYLE="font-size: 13pt">Giao diện phần mềm eGov</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Trên giao diện phần mềm
+có các thanh công cụ chính như sau;</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(1): Ph</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ầ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">n
+m</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ề</FONT><FONT SIZE=3 STYLE="font-size: 13pt">m
+Mail đư</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ợ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">c
+tích h</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ợ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">p
+s</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ẵ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">n
+trên giao di</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ệ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">n
+ph</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ầ</FONT><FONT SIZE=3 STYLE="font-size: 13pt">n
+m</FONT><FONT SIZE=3 STYLE="font-size: 13pt">ề</FONT><FONT SIZE=3 STYLE="font-size: 13pt">m</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(2): Phần xử lý văn bản</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(3): Phần hội thoại</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(4): Phần Lịch công tác</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(5): Nút này cho phép người
+dùng </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Soạn thư</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">,
+Khởi tạo văn bản theo quy trình sẵn có</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(6): Ô này cho phép Tìm kiếm
+email, văn bản, file đính kèm…</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(7): Mục này hiển thị các
+cảnh báo cho người dùng biết các văn bản cần xử lý</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(8): Phần này cho phép tra
+cứu, báo cáo, thống kê</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P LANG="en-US" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_359ed634.gif" ALIGN=LEFT HSPACE=12><BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; text-indent: -0.56in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_a68a8f1c.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=601 HEIGHT=278 BORDER=0><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_cf3fb2b4.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_5186fbbb.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_a0037aff.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_d5739d34.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_df056509.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_64149c5b.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6c323475.gif" ALIGN=LEFT HSPACE=12></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.13in; text-indent: -0.56in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__9_1551966159"></A>
+<FONT SIZE=3>4.Đặt Ảnh đại diện</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Phần mềm cho phép người
+dùng đặt ảnh đại diện cá nhân để khi giao tiếp với
+người khác thì hệ thống sẽ hiện ảnh đại diện để
+mọi người nhận biết nhau dễ dàng hơn.</FONT></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Bấm vào biểu tượng ở
+		góc trên cùng bên phải màn hình, chọn “Thiết lập”</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_48f04774.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=255 HEIGHT=426 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Trong phần </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Thông
+		tin cá nhân</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">, bấm
+		nút “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Chọn” </B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">và
+		chọn đường dẫn đến ảnh bạn cần chọn làm ảnh
+		đại diện.</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_ea3fefcc.png" NAME="graphics4" ALIGN=BOTTOM WIDTH=176 HEIGHT=166 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Sau khi chọn ảnh xong bấm
+		nút “Cập nhật” để hoàn tất.</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_12e47a95.png" NAME="graphics5" ALIGN=BOTTOM WIDTH=193 HEIGHT=83 BORDER=0></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__11_1551966159"></A>
+<FONT SIZE=3>5.Đổi mật khẩu</FONT></H1>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Trong phần thiết lập cá
+nhân, mọi người có thể tiến hành đổi mật khẩu mới
+để đảm tính bảo mật của cá nhân vì hiện tại hệ
+thống đang để mật khẩu mặc định của mọi người
+là </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>“123456a@”</B></FONT></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_bc49b1b2.png" NAME="graphics6" ALIGN=BOTTOM WIDTH=601 HEIGHT=350 BORDER=0></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<UL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Trước tiên chọn vào chức
+	năng </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Đổi mật
+	khẩu.</B></FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Tiếp theo ở ô số 1: Nhập
+	mật khẩu hiện tại mà hệ thống đang gán cho mọi
+	người vào: </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>123456a@</B></FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Ở ô số 2 tiến hành nhập
+	mật khẩu bất kỳ của mình vào. (khuyến cáo nên đặt
+	mật khẩu mạnh để tăng tính bảo mật: gồm chữ
+	thường, chữ hoa, số, ký tự đặc biệt….và trên 8 ký
+	tự).</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Nhập lại mật khẩu vừa
+	nhập ở ô số 2 vào ô số 3</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Để hoàn tất bấm nút
+	</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Cập nhật</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+	(ô số 4)</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Trường hợp người dùng
+	sau khi đổi mật khẩu xong, vì một lý do nào đó mà
+	quên mất mật khẩu, có thể liên hệ với quản trị
+	đơn vị hoặc Sở Thông tin và Truyền thông để được
+	reset lại mật khẩu mới.</FONT></P>
+</UL>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__13_1551966159"></A>
+<FONT SIZE=3>6.Cấu hình chữ ký</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Cấu hình chữ ký giúp
+người dùng sử dụng tính năng chữ ký số. Điều này
+giúp việc trao đổi thông tin thuận tiện hơn và đảm
+bảo an toàn hơn. Để cấu hình chữ ký, người dùng cũng
+vào phần “Thiếp lập cá nhân” và chọn “Cấu hình
+chữ ký”. Sau đó, người dùng chọn “Thêm mới” như
+hình minh họa dưới đây:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_d3ef76f.png" NAME="graphics7" ALIGN=BOTTOM WIDTH=627 HEIGHT=154 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Trong cửa sổ “Thêm mới”,
+người dùng thiết lập các thông tin theo nội dung được
+mô tả và chọn “Cập nhật” để hoàn tất quá trình
+thiết lập:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_8747540f.png" NAME="graphics8" ALIGN=BOTTOM WIDTH=627 HEIGHT=364 BORDER=0></P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__15_1551966159"></A>
+<FONT SIZE=3>7.Cấu hình ủy quyền</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Chức năng này cho phép
+người dùng ủy quyền cho người khác xử lý văn bản,
+hồ sơ trong khi người dùng bận đi học hay đi công tác.
+Để sử dụng tính năng này, người dùng vào “Thiết
+lập cá nhân” chọn “Cấu hình ủy quyền” và chọn
+“Thêm mới” để tạo thêm ủy quyền mới như hình
+minh họa dưới đây:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_b2e5ed92.png" NAME="graphics9" ALIGN=BOTTOM WIDTH=627 HEIGHT=153 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Tiếp theo, trong cửa sổ
+thêm mới ủy quyền, người dùng thiết lập cá thông tin
+liên quan như: người nhận ủy quyền; ngày bắt đầu,
+ngày kết thúc ủy quyền; các loại hồ sơ ủy quyền …
+</FONT>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Sau khi thiết lập các thông
+tin xong, người dùng chọn cập nhật để hệ thống lưu
+các thông tin đã thiết lập. </FONT>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_90a2718.png" NAME="graphics10" ALIGN=BOTTOM WIDTH=627 HEIGHT=364 BORDER=0></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__17_1551966159"></A>
+<FONT SIZE=3>8.Trung tâm thông báo</FONT></H1>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Phần cấu hình này sẽ cho
+phép người dùng cấu hình các thông báo tương ứng với
+các mục: Xử lý văn bản, trao đổi, điều hành.</FONT></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Mỗi khi có thông báo mới,
+phần mềm sẽ cảnh báo bằng âm thanh và notify ở góc
+dưới bên phải màn hình làm việc của người dùng, giúp
+người dùng không bỏ xót bất kỳ </FONT>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_7bf16b57.png" NAME="graphics11" ALIGN=BOTTOM WIDTH=601 HEIGHT=349 BORDER=0></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__19_1551966159"></A>
+<FONT SIZE=3>9.Quản lý thiết bị</FONT></H1>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để tăng tính bảo mật
+cho tài khoản sử dụng phần mềm, hệ thống cung cấp
+chức năng </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Quản lý
+thiết bị </B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">giúp
+cho người dùng quản lý tài khoản của mình một cách an
+toàn nhất.</FONT></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Cơ chế của chức năng này
+nếu người dùng lựa chọn tick vào phần </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Chặn
+thiết bị mới đăng nhập theo địa chỉ MAC </B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">đó
+là: nếu hệ thống phát hiện ra bất kỳ một thiết bị
+nào đăng nhập vào tài khoản của người dùng, có địa
+chỉ MAC khác với địa chỉ MAC đã lưu trong CSDL thì hệ
+thống sẽ tự động Block thiết bị đó, đảm bảo rằng
+chỉ mình thiết bị của người dùng mới có thể đăng
+nhập được. </FONT>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Ngoài ra hệ thống cũng lưu
+lại tất cả các phiên đăng nhập của người dùng trên
+các thiết bị khác nhau, và để chặn bất kỳ thiết bị
+nào, người dùng chỉ việc bấm vào nút </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Chặn
+thiết bị </B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">như
+hình bên dưới.</FONT></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_baaa1409.png" NAME="graphics12" ALIGN=BOTTOM WIDTH=602 HEIGHT=350 BORDER=0></P>
+<P CLASS="western" STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__21_1551966159"></A>
+<FONT SIZE=3>10.Hội thoại</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Đây là hình thức trao đổi
+thường xuyên nhất giữa các cá nhân trong cơ quan, </FONT><FONT SIZE=3 STYLE="font-size: 13pt">nó
+cũng khá đơn giản khi bạn chỉ cần gõ thông điệp và
+gửi đi. </FONT>
+</P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Từ thanh công cụ phía
+		bên trái màn hình làm việc của phần mềm eGov chọn
+		</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Trao đổi </B></FONT>
+		</P>
+	</UL>
+</OL>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_56ef62da.png" NAME="graphics13" ALIGN=BOTTOM WIDTH=301 HEIGHT=463 BORDER=0></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Cửa sổ </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Hội
+		thoại</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> xuất hiện
+		kèm theo danh sách những người trong cơ </FONT><FONT SIZE=3 STYLE="font-size: 13pt">quan
+		đang có mặt trực tuyến trên eGov. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Tìm đến tên người mà
+		bạn muốn hội thoại và kích vào tên của người đó,
+		</FONT><FONT SIZE=3 STYLE="font-size: 13pt">Cửa sổ hội thoại
+		hiện ra phía bên phải màn hình.</FONT></P>
+	</UL>
+</OL>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6aa7f4a2.png" NAME="graphics14" ALIGN=BOTTOM WIDTH=673 HEIGHT=273 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Dùng bàn phím gõ lời
+		thoại vào ô trống phía dưới cửa sổ hội thoại rồi
+		</FONT><FONT SIZE=3 STYLE="font-size: 13pt">nhấn phím Enter để
+		gửi lời thoại của bạn cho </FONT><FONT SIZE=3 STYLE="font-size: 13pt">người
+		nhận. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Sử dụng thêm các tính
+		năng khác như: Định dạng kiểu chữ, cỡ chữ, </FONT><FONT SIZE=3 STYLE="font-size: 13pt">chèn
+		hình biểu cảm, hình minh họa</FONT><FONT FACE="Symbol, serif"><FONT SIZE=3 STYLE="font-size: 13pt"></FONT></FONT><FONT SIZE=3 STYLE="font-size: 13pt">(nếu
+		cần). </FONT>
+		</P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_80fbbf82.png" NAME="graphics15" ALIGN=BOTTOM WIDTH=535 HEIGHT=179 BORDER=0></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Trên cửa sổ hội thoại
+có hai lựa chọn để người dùng theo dõi là “Hội
+thoại” và “Toàn bộ”:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">- “Hội thoại”: hiển
+thị những nội dung người dùng đã hội thoại với
+những tài khoản khác. Người dùng có thể xem lại thông
+tin, tìm kiếm các thông tin trên cửa sổ này:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_c5c04e10.png" NAME="graphics16" ALIGN=BOTTOM WIDTH=627 HEIGHT=207 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">- “Toàn bộ”: Cho phép
+người dùng theo dõi các tài khoản theo cây thư mục phòng
+ban:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_9aa11b69.png" NAME="graphics17" ALIGN=BOTTOM WIDTH=627 HEIGHT=398 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__23_1551966159"></A>
+<FONT SIZE=3>11.Đọc thông báo mới</FONT></H1>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Khi có tin hoặc thông báo
+		mới do người khác gửi đến, eGov sẽ tự động báo
+		cho bạn biết thông qua một khung nhỏ ở góc phải phía
+		dưới màn hình, để đọc được tin, thông báo đó,
+		bạn chỉ cần kích chuột vào dòng chữ phía bên trong
+		của ô thông báo để đọc nội dung.</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_35bd7e58.png" NAME="graphics18" ALIGN=BOTTOM WIDTH=601 HEIGHT=207 BORDER=0></P>
+<P LANG="en-US" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><U><B>Lưu ý: </B></U></FONT>
+</P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt"><SPAN LANG="en-US">Việc bạn
+		có nhận được thông báo (Notify) của eGov hay không còn
+		tùy thuộc vào quyền hạn của bạn đối với từng mục
+		tin do người quản trị phân quyền. </SPAN></FONT>
+		</P>
+		<LI><P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Do vậy, trong trường hợp
+		có những người nhận được thông báo (Notify) nhưng
+		bạn lại không thì điều đó là hoàn toàn bình thường.</FONT></P>
+	</UL>
+</OL>
+<P LANG="en-US" CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__25_1551966159"></A>
+<FONT SIZE=3>12.Gửi email cho người khác</FONT></H1>
+<OL TYPE=I>
+	<OL START=0>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__27_1551966159"></A>
+		5.1. Gửi email cho người khác</H3>
+	</OL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để gửi email cho người
+khác bạn có thể thực hiện như sau:</FONT></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Chọn nút “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Soạn
+		thư</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">” ở góc
+		trên bên trái cửa sổ phần mềm eGov</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_99b0ec19.png" NAME="graphics19" ALIGN=BOTTOM WIDTH=601 HEIGHT=53 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Gõ địa chỉ email của
+		người nhận vào ô “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Gửi
+		tới</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">”. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Gõ tiêu đề bức thư vào
+		ô “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Tiêu đề</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">”.
+		Ví dụ: </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Họp
+		phòng</B></FONT></P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Để đính kèm file theo
+		email bạn chọn nút<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_fb3ce16c.png" NAME="graphics20" ALIGN=BOTTOM WIDTH=51 HEIGHT=32 BORDER=0>
+		và chọn file cần gửi kèm.</FONT></P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Chọn nút “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Gửi</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">”
+		ở góc trên bên trái cửa sổ soạn thư để gửi thư
+		đi.</FONT></P>
+	</UL>
+</OL>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_2239d866.png" NAME="graphics21" ALIGN=BOTTOM WIDTH=601 HEIGHT=178 BORDER=0><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6bacc46f.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_c957a0b2.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6be941bf.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_b57141db.gif" ALIGN=LEFT HSPACE=12></P>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P LANG="en-US" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<OL TYPE=I>
+	<OL START=0>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__29_1551966159"></A>
+		<FONT COLOR="#000000">5.1. Trả lời email</FONT></H3>
+	</OL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để trả lời email cho 1
+(hoặc toàn bộ những người trong danh sách nhận thư) bạn
+làm như sau:</FONT></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Bấm chuột phải vào thư
+		mà bạn cần trả lời</FONT></P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Chọn “Trả lời”</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_e280779e.png" NAME="graphics22" ALIGN=BOTTOM WIDTH=601 HEIGHT=449 BORDER=0></P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Sau đó bạn gõ nội dung
+		thư trả lời, đính kèm file (nếu cần)</FONT></P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Bấm nút “Gửi” để
+		gửi thư đi</FONT></P>
+	</UL>
+</OL>
+<H1 CLASS="eoffice---đề-muc-lớn-western"><A NAME="__RefHeading__31_1551966159"></A>
+<FONT COLOR="#000000"><FONT SIZE=3 STYLE="font-size: 13pt">5.2 Gửi
+tin vào các mục tin (Thông báo, Công cộng…)	</FONT></FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Tùy thuộc vào cơ cấu, tổ
+chức của cơ quan bạn mà ở đó có các mục tin khác
+nhau,</FONT><FONT SIZE=3 STYLE="font-size: 13pt"> ví dụ: mục
+Công cộng, Giải trí, Phòng A, Phòng B,</FONT><FONT FACE="Symbol, serif"><FONT SIZE=3 STYLE="font-size: 13pt"></FONT></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+Để gửi tin vào các mục này, bạn có thể làm theo như
+sau: </FONT>
+</P>
+<OL>
+	<UL>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Từ thanh tác vụ trên màn
+		hình eOffice chọn</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>
+		Tin điều hành</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">.
+		Cây phân cấp hiện ra với danh sách các mục tin có
+		trong cơ quan. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Kích chuột vào mục tin
+		mà bạn muốn gửi tin của mình vào. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Nhập vào tiêu đề của
+		tin để gửi đi. </FONT>
+		</P>
+		<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+		<FONT SIZE=3 STYLE="font-size: 13pt">Bấm nút</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>
+		Gửi</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> để hoàn
+		tất.</FONT></P>
+	</UL>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.5in; text-indent: -0.5in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_389e9a21.png" NAME="graphics23" ALIGN=BOTTOM WIDTH=400 HEIGHT=462 BORDER=0><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_216e5d92.gif" ALIGN=LEFT HSPACE=12></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.5in; text-indent: -0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; text-indent: -0.5in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">- Phản hồi tin trên một
+mục tin</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để phản hồi tin trên một
+mục tin, người dùng lựa chọn tin muốn phản hồi lên
+mục tin và chọn “Trả lời tất cả”:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_7128fea.png" NAME="graphics24" ALIGN=BOTTOM WIDTH=627 HEIGHT=411 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<H1 CLASS="eoffice---đề-muc-lớn-western"><A NAME="__RefHeading__33_1551966159"></A>
+<FONT SIZE=3 STYLE="font-size: 13pt">6. Lịch làm việc</FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Để
+giúp việc tạo lịch và theo dõi lịch họp trong cơ quan,
+hệ thống cho phép người dùng tạo và quản lý danh sách
+lịch họp như sau:</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Để
+vào chức năng Lịch, người đùng chọn vào menu Lịch bên
+trái phần mềm (mục 1). </FONT>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Để
+tạo và quản lý lịch, bấm vào mục </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Quản
+lý lịch</B></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Ở
+đây, người dùng có thể xem danh sách lịch đã duyệt,
+tạo lịch mới…..</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Các
+bước để tạo lịch họp rất đơn giản, cần điền đủ
+các thông tin vào các trường hệ thống yêu cầu và kết
+thúc thao tác bằng cách bấm vào </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Cập
+nhật.</B></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Sau
+khi hoàn tất quá trình tạo lịch, bước tiếp theo là chờ
+lịch được duyệt bởi người đã được hệ thống
+phân quyền.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_2c548175.png" NAME="graphics25" ALIGN=BOTTOM WIDTH=601 HEIGHT=312 BORDER=0></P>
+<H1 CLASS="eoffice---đề-muc-lớn-western" STYLE="page-break-before: always"><A NAME="__RefHeading__35_1551966159"></A>
+<FONT SIZE=3 STYLE="font-size: 13pt">PHẦN II: XỬ LÝ VĂN BẢN</FONT></H1>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__37_1551966159"></A>
+<FONT SIZE=3>1.Xử lý văn bản đến</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Khi có văn bản đến cần
+xử lý, phần mềm sẽ tự động thông báo (notify) trên
+giao diện phần mềm. </FONT>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_cf094313.png" NAME="graphics26" ALIGN=BOTTOM WIDTH=591 HEIGHT=195 BORDER=0></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<OL>
+	<OL>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__39_1551966159"></A>
+		Thao tác xử lý khi nhận văn bản đến</H3>
+	</OL>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><B>Bước 1:</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+Nhấp chuột vào dòng chữ bên trong cửa sổ notify.</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Một giao diện xử lý văn
+bản hiện ra cho phép bạn làm việc với văn bản vừa
+chọn</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_56c33beb.png" NAME="graphics27" ALIGN=BOTTOM WIDTH=601 HEIGHT=257 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><B>Bước 2:</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+Nhấp đúp </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>chuột
+trái</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> vào phần
+trích yếu của văn bản cần xử lý.</FONT></P>
+<UL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Một cửa sổ mới hiện
+	ra với nội dung văn bản, các tài liệu kèm theo (nếu
+	có) và các ý kiến xử lý liên quan.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">File đính kèm là pdf có
+	thể kích chuột trái mở để xem toàn bộ văn bản đính
+	kèm</FONT></P>
+</UL>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_eedf0bb7.png" NAME="graphics28" ALIGN=BOTTOM WIDTH=697 HEIGHT=315 BORDER=0><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_806f7b37.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_ac501b89.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_d365fdc8.gif" ALIGN=LEFT HSPACE=12><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_595d3772.gif" ALIGN=LEFT HSPACE=12></P>
+<P CLASS="western" STYLE="text-indent: 0.38in; margin-top: 0.17in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(1): Thanh công cụ, cho phép
+thực hiện các thao tác với văn bản</FONT></P>
+<P CLASS="western" STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(2): Cho phép người dùng
+ghi ý kiến xử lý vào mục này</FONT></P>
+<P CLASS="western" STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(3): File đính kèm văn bản</FONT></P>
+<P CLASS="western" STYLE="text-indent: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">(4): Vết xử lý của văn
+bản: cho phép theo dõi văn bản đã chuyển qua những ai,
+ai cho ý kiến gì, thời gian xử lý</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><B>Bước 3:</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+Nhấp chuột vào các đề mục trong phần nội dung văn bản
+để xem chi tiết các ý kiến xử lý liên quan và các vết
+công văn (văn bản khởi đầu từ đâu, chuyển đến
+những ai,…).</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__41_1551966159"></A>
+<FONT COLOR="#000000">1.2 Các nút công cụ có trong cửa sổ
+xứ lý văn bản đến</FONT></H3>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_90a8e4a4.png" NAME="graphics29" ALIGN=BOTTOM WIDTH=701 HEIGHT=347 BORDER=0></P>
+<UL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	“<FONT SIZE=3 STYLE="font-size: 13pt">Chuyển” cho phép chuyển
+	xử lý văn bản cho người khác theo quy trình</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Sửa” cho phép sửa
+	nội dung các phiếu, biểu mẫu gắn với nội dung văn
+	bản</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Đính kèm” cho phép
+	đính kèm thêm các file (.doc, .xls, .pdf…) vào văn bản.</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Kết thúc” cho phép
+	kết thúc 1 văn bản sau khi đã xử lý xong.</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Trả lời” chứa các
+	luồng văn bản phù hợp để phúc đáp công văn đến</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Phân loại” cho phép
+	chuyển 1 văn bản từ quy trình xử lý này sang quy trình
+	xử lý khác.</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">In” cho phép in văn bản
+	ra máy in</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Gia hạn” cho phép đặt
+	lại thời hạn xử lý cho văn bản</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Xin ý kiến” cho phép
+	xin ý kiến các cá nhân khác về cách giải quyết văn
+	bản này, và người xin ý kiến sẽ là người tổng hợp
+	các ý kiến này lại.</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Thông báo” cho phép
+	gửi một bản đến thông báo cho những người cần biết
+	về văn bản này</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Gửi ý kiến” cho phép
+	người dùng gửi ý kiến bổ sung vào văn bản (kể cả
+	khi văn bản đã gửi đi cho người khác</FONT></P>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	 “<FONT SIZE=3 STYLE="font-size: 13pt">Lưu sổ” cho phép lưu
+	một bản vào hồ sơ cá nhân của mình ( Giống như photo
+	giữ lại một bản)</FONT></P>
+</UL>
+    <div id='publishment'><a name="publishment">sfdfdfdfed</a></div>
+        <H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+            <A NAME="__RefHeading__43_1551966159"></A>
+            <FONT COLOR="#000000">1.3 Ghi ý kiến xử lý vào văn bản</FONT>
+        </H3>
+        <OL>
+            <OL>
+                <LI>
+                    <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                        <FONT SIZE=3 STYLE="font-size: 13pt">
+                            Khi mở văn bản ta sẽ
+                            thấy phần để ghi ý kiến xử lý của mình
+                        </FONT>
+                    </P>
+                <LI>
+                    <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                        <FONT SIZE=3 STYLE="font-size: 13pt">
+                            Ghi ý kiến xử lý vào ô
+                            ý kiến.
+                        </FONT>
+                    </P>
+                <LI>
+                    <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                        <FONT SIZE=3 STYLE="font-size: 13pt">
+                            Ý kiến xử lý của bạn
+                            sẽ được lưu lại khi bạn chuyển xử lý văn bản cho
+                            người khác.
+                        </FONT>
+                    </P>
+            </OL>
+        </OL>
+        <P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+            <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_397fd1f0.png" NAME="graphics30" ALIGN=BOTTOM WIDTH=466 HEIGHT=197 BORDER=0><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_6213e6bf.gif" ALIGN=LEFT HSPACE=12>
+        </P>
+        <P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+            <BR>
+        </P>
+        <P CLASS="western" STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                <B>
+                    L<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_e15c899c.gif" ALIGN=LEFT HSPACE=12>ưu
+                    ý :
+                </B>
+            </FONT>
+        </P>
+        <OL>
+            <OL>
+                <LI>
+                    <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                        <FONT SIZE=3 STYLE="font-size: 13pt">
+                            <I>
+                                Bạn có thể tạo ra
+                                các mẫu ý kiến xử lý và dùng lại cho tiện bằng
+                                cách bấm vào mục
+                            </I>
+                        </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                            <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_10ea46f3.png" NAME="graphics31" ALIGN=BOTTOM WIDTH=34 HEIGHT=18 BORDER=0>
+                        </FONT>
+                    </P>
+                <LI>
+                    <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                        <FONT SIZE=3 STYLE="font-size: 13pt">
+                            <I>
+                                Nếu bạn mở công văn
+                                ra và chưa xử lý ngay, bạn có thể mở lại cửa sổ
+                                xử lý văn bản bằng cách bấm vào mục
+                            </I>
+                        </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                            <I>
+                                <B>
+                                    Văn
+                                    bản chờ xử lý
+                                </B>
+                            </I>
+                        </FONT>
+                    </P>
+            </OL>
+        </OL>
+        <P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+            <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_c0a063df.png" NAME="graphics32" ALIGN=BOTTOM WIDTH=301 HEIGHT=427 BORDER=0>
+        </P>
+        <P CLASS="western" STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                <I>
+                    Sau đó bạn có thể xem
+                    nội dung văn bản cũng như ý kiến xử lý liên quan.
+                </I>
+            </FONT>
+        </P>
+        <P CLASS="western" STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+            <BR>
+        </P>
+        <H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+            <A NAME="__RefHeading__45_1551966159"></A>
+            <FONT COLOR="#000000">1.4 Chuyển xử lý văn bản đến</FONT>
+        </H3>
+        <OL>
+            <LI>
+                <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                    <FONT SIZE=3 STYLE="font-size: 13pt">
+                        Từ cửa sổ xử lý văn
+                        bản chọn  nút
+                    </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>“Chuyển”</B></FONT>
+                </P>
+        </OL>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Một menu hiện ra
+                với danh sách các nơi nhận được gợi ý sẵn.
+            </FONT>
+        </P>
+        <OL START=2>
+            <LI>
+                <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                    <FONT SIZE=3 STYLE="font-size: 13pt">
+                        Chọn đối tượng cần
+                        chuyển tới.
+                    </FONT>
+                </P>
+        </OL>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.88in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Một cửa sổ nhỏ hiện ra
+                cùng với danh sách những người thuộc đối tượng bạn
+                vừa chọn.
+            </FONT>
+        </P>
+        <OL START=3>
+            <LI>
+                <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                    <FONT SIZE=3 STYLE="font-size: 13pt">Chọn tên người xử lý.</FONT>
+                </P>
+            <LI>
+                <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+                    <FONT SIZE=3 STYLE="font-size: 13pt">
+                        Nếu văn bản do nhiều
+                        người xử lý (một người chính và nhiều người cho ý
+                        kiến) trong cửa sổ Chuyển xử lý ta tick chọn người
+                        người
+                    </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                        <B>
+                            xử lý
+                            chính
+                        </B>
+                    </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                        và chọn
+                        những người
+                    </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                        <B>
+                            đồng
+                            xử lý
+                        </B>
+                    </FONT><FONT SIZE=3 STYLE="font-size: 13pt">)</FONT>
+                </P>
+        </OL>
+        <P CLASS="western" ALIGN=CENTER STYLE="text-indent: 0.25in; margin-bottom: 0in; line-height: 150%">
+            <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_cfd578b0.png" NAME="graphics33" ALIGN=BOTTOM WIDTH=602 HEIGHT=222 BORDER=0>
+        </P>
+        <P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+            <BR>
+        </P>
+        <H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+            <A NAME="__RefHeading__47_1551966159"></A>
+            <FONT SIZE=3>2.Xử lý văn bản đi</FONT>
+        </H1>
+        <OL TYPE=I>
+            <OL START=0>
+                <LI>
+                    <H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+                        <A NAME="__RefHeading__49_1551966159"></A>
+                        <FONT COLOR="#000000">2.1 Khởi tạo một văn bản đi mới</FONT>
+                    </H3>
+            </OL>
+        </OL>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Từ thanh công cụ của
+                chương trình chọn mũi tên sổ xuống bên cạnh nút
+                <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_97732334.png" NAME="graphics34" ALIGN=BOTTOM WIDTH=40 HEIGHT=32 BORDER=0>
+                , một menu hiện ra.
+            </FONT>
+        </P>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Chọn quy trình tương ứng
+                trong danh sách
+            </FONT>
+        </P>
+        <P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+            <IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_b776d7ef.png" NAME="graphics35" ALIGN=BOTTOM WIDTH=601 HEIGHT=135 BORDER=0>
+        </P>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Cửa sổ soạn thảo văn
+                bản xuất hiện.
+            </FONT>
+        </P>
+        <H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                2.1.1 Dự thảo văn bản đi
+            </FONT>
+        </H4>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt">
+                Để dự thảo nội dung văn
+                bản đi, có 2 cách
+            </FONT>
+        </P>
+        <P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+            <FONT SIZE=3 STYLE="font-size: 13pt"><B>Cách 1</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                -  Dự thảo trên trình soạn thảo thông dụng (MS Word,
+                Excel,…): soạn  thảo nội dung trên một trình soạn thảo
+                bất kỳ sau đó gắn kèm file này vào văn bản, chi tiết
+                xem phần
+            </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                <B>
+                    Nhập tài
+                    liệu kèm theo
+                </B>
+            </FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+                . Đây
+                là cách thường sử dụng.
+            </FONT>
+        </P>
+
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><B>Cách 2</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+- Soạn nội dung trên trình soạn thảo của eGov: soạn
+trực tiếp trên phần nội dung của cửa sổ</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>
+Văn bản</B></FONT></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_2b77373f.png" NAME="graphics36" ALIGN=BOTTOM WIDTH=492 HEIGHT=297 BORDER=0></P>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.2 Nhập tài liệu kèm
+theo văn bản</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Bạn có thể gửi tài liệu
+kèm theo (dự thảo văn bản, tài liệu tham khảo liên quan
+tới văn bản, các văn bản liên quan,..) vào một văn bản
+để chuyển đi, bạn làm như sau:</FONT></P>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Trong cửa sổ làm việc
+	với văn bản, chọn </FONT>
+	</P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">		Một cửa sổ mở ra cho
+phép bạn duyệt đến file cần đính kèm.</FONT></P>
+<OL START=2>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Tìm đến file cần đính
+	kèm vào văn bản.</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="text-indent: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_7cff47b0.png" NAME="graphics37" ALIGN=BOTTOM WIDTH=553 HEIGHT=377 BORDER=0></P>
+<OL START=3>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Open</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+	để kết thúc việc chọn tài liệu gửi kèm.</FONT></P>
+</OL>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.3 Đính kèm văn bản
+liên quan</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Ngoài việc đính kèm các
+tài liệu, người dùng có thể đính kèm công văn liên
+quan vào văn bản như sau:</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_786f4abd.png" NAME="graphics38" ALIGN=BOTTOM WIDTH=602 HEIGHT=302 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_528ad22f.png" NAME="graphics39" ALIGN=BOTTOM WIDTH=601 HEIGHT=375 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><I><B>Người dùng có thể
+chọn các cách sau để tìm kiếm văn bản liên quan: </B></I></FONT>
+</P>
+<UL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">1: nhập trích yếu của
+	văn bản đính kèm.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">2: Nhập số ký hiệu cần
+	tìm của văn bản đính kèm</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">3: Nhập số đến của văn
+	bản muốn tìm kiếm.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">4: Sau khi nhập xong các
+	tiêu chí tìm kiếm, bấm vào ô này để hệ thống tự
+	động tìm kiếm văn bản liên quan.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Kết quả sau khi tìm kiếm
+	xong sẽ được liệt kê ra bảng bên dưới. Chọn văn
+	bản muốn đính kèm vào công văn bằng cách tick vào ô
+	bên trái ở </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>bảng
+	5</B></FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Kết thúc quá trình bằng
+	cách ấm nút </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>thêm</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+	(ô số 6)</FONT></P>
+</UL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_528ad22f.png" NAME="graphics40" ALIGN=BOTTOM WIDTH=601 HEIGHT=375 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.4 Nhập thông tin kèm
+theo văn bản</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Sau khi đã khởi tạo và dự
+thảo nội dung cho văn bản đi, bạn điền các thông tin
+liên quan tới văn bản: </FONT>
+</P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_315ca84d.png" NAME="graphics41" ALIGN=BOTTOM WIDTH=581 HEIGHT=184 BORDER=0></P>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.5 Chuyển xử lý văn bản
+đi</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.63in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Thực hiện tương tự như
+việc chuyển xử lý văn bản đến.</FONT></P>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Từ cửa sổ xử lý văn
+	bản chọn  </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Chuyển</B></FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">		         Một menu hiện ra
+với danh sách các nơi nhận được gợi ý sẵn.</FONT></P>
+<OL START=2>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn đối tượng cần
+	chuyển tới.</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.88in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Một cửa sổ nhỏ hiện ra
+cùng với danh sách những người thuộc đối tượng bạn
+ vừa chọn.</FONT></P>
+<OL START=3>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn tên người xử lý.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Nếu văn bản do nhiều
+	người xử lý (một người chính và nhiều người cho ý
+	kiến) trong cửa sổ Chuyển xử lý ta tick chọn người
+	người </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>xử lý
+	chính</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> và chọn
+	những người </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>đồng
+	xử lý</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">)</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="text-indent: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_cfd578b0.png" NAME="graphics42" ALIGN=BOTTOM WIDTH=602 HEIGHT=222 BORDER=0></P>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.6 Lấy lại văn bản vừa
+xử lý (Văn bản gửi nhầm địa chỉ)</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.38in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Khi bạn gửi nhầm địa
+chỉ hoặc muốn chỉnh sửa lại nội dung văn bản đã
+chuyển cho người khác, bạn có thể sử dụng tính năng
+</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Lấy lại văn bản</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">.</FONT></P>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Bạn vào phần </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>“Xử
+	lý văn bản”</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+	của phần mềm</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn mục </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Văn
+	bản đang theo dõi</B></FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Bấm chuột phải vào văn
+	bản cần lấy lại.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Một menu hiện ra.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Lấy
+	lại văn bản.</B></FONT></P>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_986be6f6.png" NAME="graphics43" ALIGN=BOTTOM WIDTH=601 HEIGHT=146 BORDER=0></P>
+<OL START=6>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Vào mục Văn bản chờ xử
+	lý để xem văn bản vừa lấy lại để xử lý lại.</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><I><U><B>Lưu ý:</B></U></I></FONT><FONT SIZE=3 STYLE="font-size: 13pt">
+</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><I>Văn bản chỉ có
+thể lấy lại khi người nhận văn bản chưa mở văn bản
+ra. Văn bản xin ý kiến của người khác, khi lấy lại
+văn bản xin ý kiến đồng nghĩa với việc bỏ việc xin
+ý kiến này</I></FONT></P>
+<H4 CLASS="style-heading-4-+-italic-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">2.1.7 Lưu văn bản vào hồ
+sơ</FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Hồ sơ lưu văn bản có thể
+là hồ sơ đã có hoặc bạn tạo mới (nếu cần). Muốn
+lưu văn bản vào hồ sơ nào bạn chỉ cần chọn vào tên
+hồ sơ đó rồi nhấn 
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_3c8ea24b.png" NAME="graphics44" ALIGN=BOTTOM WIDTH=49 HEIGHT=30 BORDER=0></FONT></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_95036d5d.png" NAME="graphics45" ALIGN=BOTTOM WIDTH=367 HEIGHT=461 BORDER=0></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<OL TYPE=I>
+	<OL START=0>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__51_1551966159"></A>
+		<FONT COLOR="#000000">2.2 Khởi tạo một văn bản đi trả
+		lời cho văn bản đến:</FONT></H3>
+	</OL>
+</OL>
+<H4 CLASS="style-eoffice---đề-muc-lớn-nho-+-italic-western" STYLE="margin-left: 0.28in; text-indent: 0.22in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Các bước khởi tạo</FONT></H4>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Mở văn bản đến cần xử
+	lý.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Trên cửa sổ xem chi tiết
+	văn bản chọn</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B> Trả
+	lời</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">.</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.28in; text-indent: 0.47in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">	Một menu hiện ra.</FONT></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_96524d10.png" NAME="graphics46" ALIGN=BOTTOM WIDTH=161 HEIGHT=165 BORDER=0></P>
+<OL START=3>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>quy
+	trình tương ứng</B></FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.28in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">	Cửa sổ soạn thảo văn
+bản đi xuất hiện và văn bản đến mà bạn đang xử lý
+đã được đính kèm vào văn bản đi mới khởi tạo.</FONT></P>
+<OL START=4>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Soạn thảo văn bản đi
+	(Gửi kèm tài liệu hoặc soạn trên trình soạn thảo
+	eOffice) rồi chuyển văn bản để trả lời</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Sau khi văn bản đi mới
+	khởi tạo được xử lý xong (được phát hành) thì văn
+	bản đến liên quan tới văn bản đi này cũng tự động
+	được kết thúc.</FONT></P>
+</OL>
+<OL TYPE=I>
+	<OL START=0>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__53_1551966159"></A>
+		<FONT COLOR="#000000">2.3 Để chỉnh sửa nội dung tài liệu
+		kèm theo khi nhận văn bản đi</FONT></H3>
+	</OL>
+</OL>
+<H4 CLASS="eoffice---đề-muc-lớn-nho-western" STYLE="margin-left: 0.28in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><I>	Các bước thực hiện </I></FONT>
+</H4>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Mở văn bản cần xử lý.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Nhấp đúp chuột vào file
+	văn bản đính kèm để mở và chỉnh sửa nội dung.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Lưu lại nội dung vừa
+	chỉnh sửa.</FONT></P>
+</OL>
+<OL TYPE=I>
+	<OL START=0>
+		<LI><H3 CLASS="eoffice---đề-mục-nhỏ---nhỏ-western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__55_1551966159"></A>
+		<FONT COLOR="#000000">2.4 Kết thúc xử lý văn bản</FONT></H3>
+	</OL>
+</OL>
+<H4 CLASS="eoffice---đề-muc-lớn-nho-nho-nho-western" STYLE="margin-left: 0.25in; margin-top: 0in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><I>Các bước thực hiện</I></FONT></H4>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Việc kết thúc xử lý văn
+bản được thực hiện khi bạn đã hoàn thành việc soạn
+thảo và kiểm duyệt nội dung của văn bản này.</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="text-indent: 0.25in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><B>Để kết thúc xử lý
+một văn bản</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">:</FONT></P>
+<OL>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Mở văn bản cần kết
+	thúc.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Chọn </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Kết
+	thúc</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> trên thanh
+	công cụ.</FONT></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Lưu văn bản vào hồ sơ.</FONT></P>
+</OL>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Nếu đã có sẵn hồ sơ để
+lưu, bạn chọn hồ sơ và nhấp đúp vào hồ sơ đó (hoặc
+chọn hồ sơ rồi nhấp vào  “Lưu”).</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Trường hợp chưa có hồ
+sơ cần để lưu văn bản, ta phải tạo hồ sơ mới bằng
+cách nhấp nút “Tạo mới”. Nhập tên hồ sơ rồi nhấp
+vào  “Tạo mới”  để tạo hồ sơ mới, sau đó lưu
+văn bản vào hồ sơ mới này.</FONT></P>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-left: 0.75in; margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_95036d5d.png" NAME="graphics47" ALIGN=BOTTOM WIDTH=367 HEIGHT=461 BORDER=0></P>
+<H1 CLASS="western" STYLE="margin-top: 0in; margin-bottom: 0in; line-height: 150%"><A NAME="__RefHeading__57_1551966159"></A>
+<FONT SIZE=3>3.Theo dõi, tìm kiếm văn bản</FONT></H1>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Để theo dõi 01 (hoặc
+nhiều) văn bản thì phần mềm đã có sẵn 1 mục là “</FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Văn
+bản đang theo dõi”</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt">,
+mục này tự động cập nhật các văn bản chưa xử lý
+xong để “người gửi” văn bản có thể theo dõi được
+văn bản mình gửi đang ở vị trí nào, đã duyệt hay
+chưa…</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_475d75f3.png" NAME="graphics48" ALIGN=BOTTOM WIDTH=601 HEIGHT=202 BORDER=0></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt">Ngoài ra phần mềm cho phép
+tìm kiếm văn bản theo bất cứ thông tin nào liên quan tới
+văn bản đó như: trích yếu, số ký hiệu, người soạn,
+loại văn bản, khoảng thời gian…</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0in; line-height: 150%">
+<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_456c3dae.png" NAME="graphics49" ALIGN=BOTTOM WIDTH=601 HEIGHT=142 BORDER=0></P>
+<H1 CLASS="eoffice---đề-muc-lớn-western"><A NAME="__RefHeading__59_1551966159"></A>
+<FONT SIZE=3 STYLE="font-size: 13pt">Chức năng tìm kiếm nâng
+cao</FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Để
+sử dụng chức năng tìm kiếm nâng cao của phần mềm,
+thay vì nhập luôn thông tin vào thanh tìm kiếm như hình
+trên, chúng ta sẽ bấm vào biểu tượng kính lúp như ở
+hình bên dưới.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Tiếp
+theo tick vào ô </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Tìm
+kiếm nâng cao</B></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Bảng
+tìm kiếm nâng cao sẽ hiển thị với rất nhiều tiêu chí
+tìm kiếm để người dùng nhập như Số ký hiệu, số
+đến, khoảng thời gian, cơ quan ban hành…..</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Sau
+khi nhập xong các dữ liệu tìm kiếm, bấm vào ô </FONT><FONT SIZE=3 STYLE="font-size: 13pt"><B>Tìm
+kiếm</B></FONT><FONT SIZE=3 STYLE="font-size: 13pt"> để hoàn
+tất và xem kết quả.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_4172ddff.png" NAME="graphics50" ALIGN=BOTTOM WIDTH=602 HEIGHT=325 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<H1 CLASS="western" STYLE="line-height: 150%"><A NAME="__RefHeading__61_1551966159"></A>
+<FONT SIZE=3>4.Báo cáo</FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Phần
+mềm cung cấp cho người dùng công cụ Báo cáo, giúp cho
+việc thống kê, báo cáo tình hình xử lý văn bản dễ
+hơn bao giờ hết.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Để
+vào mục báo cáo, chọn menu bên trái phần mềm như hình
+dưới:</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_4c8ae1da.png" NAME="graphics51" ALIGN=BOTTOM WIDTH=601 HEIGHT=285 BORDER=0></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Hệ
+thống báo cáo với nhiều các tiêu chí: Báo cáo giám sát,
+báo cáo Cá nhân, báo cáo xử lý văn bản…..</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Trong
+mỗi mục báo cáo sẽ có các tiêu chí lọc tương ứng để
+giúp người dùng có được kết quả một cách chính xác
+và đầy đủ nhất:<BR></FONT><BR>
+</P>
+<UL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Kiểu hiển thị</FONT></P>
+</UL>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_7944f2bb.png" NAME="graphics52" ALIGN=BOTTOM WIDTH=601 HEIGHT=170 BORDER=0><FONT SIZE=3 STYLE="font-size: 13pt">	</FONT></P>
+<UL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">K<IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_53720647.png" NAME="graphics53" ALIGN=LEFT HSPACE=12 WIDTH=601 HEIGHT=174 BORDER=0>hoảng
+	thời gian: Cho phép người dùng chọn theo khoảng thời
+	gian.</FONT></P>
+</UL>
+<P CLASS="western" STYLE="margin-left: 0.5in; margin-bottom: 0in; line-height: 150%">
+<FONT SIZE=3 STYLE="font-size: 13pt"><BR></FONT><BR>
+</P>
+<UL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%">
+	<FONT SIZE=3 STYLE="font-size: 13pt">Xuất báo cáo<BR>Cung cấp
+	cho người dùng các định dạng văn bản phổ biến để
+	xuất ra: Word, Excel, PDF…<BR></FONT><BR>
+	</P>
+</UL>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_1ddf95f6.png" NAME="graphics54" ALIGN=BOTTOM WIDTH=602 HEIGHT=188 BORDER=0><FONT SIZE=3 STYLE="font-size: 13pt"><BR></FONT><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<H1 CLASS="western" STYLE="line-height: 150%"><A NAME="__RefHeading__63_1551966159"></A>
+<FONT SIZE=3>5.Giám sát</FONT></H1>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Hệ
+thống cung cấp cho người dùng công cụ giám sát việc
+thực hiện các nội dung đã giao trên văn bản, để từ
+đó có thể thống kê và báo cáo theo các tiêu chí bất
+kỳ.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><FONT SIZE=3 STYLE="font-size: 13pt">Dựa
+vào công cụ giám sát này, có thể theo dõi và đánh giá
+năng lực xử lý công việc của từng cá nhân, phòng ban
+cụ thể.</FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0in; line-height: 150%"><BR>
+</P>
+<P CLASS="western" STYLE="margin-bottom: 0in"><IMG SRC="Tai_lieu_Huong_dan_day_du_eGov_Lam_Dong_1__html_bdeb0a7.png" NAME="graphics55" ALIGN=BOTTOM WIDTH=601 HEIGHT=293 BORDER=0></P>
+<DIV TYPE=FOOTER>
+	<P STYLE="margin-right: 0.25in; margin-bottom: 0in"><SPAN ID="Frame1" DIR="LTR" STYLE="position: absolute; top: 0in; left: 0in; width: 0.33in; height: 0.02in; border: none; padding: 0in; background: #ffffff">
+		<P STYLE="margin-bottom: 0in"><SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>41</SDFIELD></P>
+	</SPAN><BR>
+	</P>
+</DIV>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script>
+  $(function() {
+      setTimeout(function () {
+          if (window.location.hash) {
+              var target = $(window.location.hash);
+              target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+              if (target.length) {
+                  $('html,body').animate({
+                      scrollTop: target.offset().top
+                  }, 1000);
+                  return false;
+              }
+          }
+      },1000)
+  });
+    </script>
+</BODY>
+</HTML>
+

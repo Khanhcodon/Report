@@ -1,0 +1,190 @@
+﻿
+
+/*#region jquery layout */
+
+.ui-layout-resizer {
+    background: #dfe0e4;
+    border-right: 1px solid #b7b7b7;
+    border-right: 1px solid #e2e2e2;
+    background-image: none;
+}
+
+    .ui-layout-resizer:hover {
+        background: #b7b7b7;
+        cursor: w-resize !important;
+    }
+
+.ui-layout-resizer-west:hover {
+    width: 4px !important;
+}
+
+.ui-layout-resizer-south {
+    background: #dfe0e4;
+    border-top: 1px solid #b7b7b7;
+}
+
+    .ui-layout-resizer-south:hover {
+        height: 4px !important;
+        cursor: s-resize !important;
+    }
+
+.ui-resizable {
+    position: relative;
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    z-index: 99999;
+    display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+
+.ui-resizable-n {
+    cursor: n-resize !important;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+
+.ui-resizable-s {
+    cursor: s-resize !important;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+}
+
+.ui-resizable-e {
+    cursor: e-resize !important;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+
+.ui-resizable-w {
+    cursor: w-resize !important;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+
+.ui-resizable-se {
+    cursor: se-resize !important;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+
+.ui-resizable-sw {
+    cursor: sw-resize !important;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
+}
+
+.ui-resizable-nw {
+    cursor: nw-resize !important;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+
+.ui-resizable-ne {
+    cursor: ne-resize !important;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
+}
+
+/*#endregion*/
+
+/*#region Ck editor*/
+
+
+.cke_skin_kama .cke_wrapper {
+    background: none;
+    outline: 0;
+}
+
+span.cke_skin_kama {
+    padding: 0;
+    border: none;
+}
+
+/*#endregion*/
+
+/*#region Datepicker*/
+
+.ui-datepicker {
+    background: white;
+    padding: 15px;
+    -moz-box-shadow: 0 0 5px grey;
+    -webkit-box-shadow: 0 0 5px grey;
+    box-shadow: 0 0 5px grey;
+    width: 200px;
+    display: none;
+}
+
+    .ui-datepicker a.ui-datepicker-prev {
+        float: left;
+    }
+
+    .ui-datepicker a.ui-datepicker-next {
+        float: right;
+    }
+
+    .ui-datepicker .ui-datepicker-title {
+        text-align: center;
+    }
+
+    .ui-datepicker .ui-datepicker-calendar {
+        width: 100%;
+    }
+
+        .ui-datepicker .ui-datepicker-calendar tbody tr {
+            border-bottom: none;
+        }
+
+        .ui-datepicker .ui-datepicker-calendar td > a {
+            width: 26px;
+            display: inline-block;
+            text-align: center;
+            background: none;
+            color: #000;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            font-weight: normal;
+            border-radius: 50%;
+        }
+
+            .ui-datepicker .ui-datepicker-calendar td > a:hover,
+            .ui-datepicker .ui-datepicker-calendar td > a.ui-state-highlight {
+                background: #757575;
+                color: white;
+            }
+
+        .ui-datepicker .ui-datepicker-calendar td .ui-state-active {
+            background: #2b59ff;
+            color: white;
+            border: none;
+        }
+
+.ui-datepicker-header.ui-widget-header {
+    padding: 0 0 14px 0;
+    line-height: 19px;
+}
+
+/*#endregion*/
+
+

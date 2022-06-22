@@ -1,0 +1,20 @@
+﻿<li class="mdl-list__item mdl-list__item--three-line mail-list-item" id="maillist_${id}" data-id="${id}">
+    <span class="mdl-list__item-primary-content wrap-text">
+        <img src="${avatar}" class="mdl-list__item-avatar user-avatar" alt="" />
+        <span class="item-title">
+            ${subject}
+        </span>
+        <span class="mdl-list__item-text-body">
+            <span style="color: rgba(0,0,0,.87);">${sender.fullname}</span><br />
+            <span>{{html subcontent}}</span>
+        </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+        <span class="mdl-list__item-secondary-action mail-date" href="#" datetime="${date}" title="${date}">${date}</span>
+        {{if hasAttach }}
+        <span class="mdl-list__item-secondary-action">
+            <i class="material-icons">attach_file</i>
+        </span>
+        {{/if}}
+    </span>
+</li>

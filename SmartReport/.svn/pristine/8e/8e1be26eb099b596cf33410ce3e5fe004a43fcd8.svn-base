@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.ScopeAreaModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ScopeArea.Index");
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    function deleteScopeArea(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.ScopeArea.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.OkCancel,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListScopeArea").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divListScopeArea').unblockpanel();
+        }
+
+        function onFailure() {
+            eGovMessage.notification(egov.resources.notifications.hvaeError || '@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+            $('#divListScopeArea').unblockpanel();
+        }
+
+        function searchScropArea(_this) {
+            $(_this).parent()
+                .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-lock3"></i>
+        <span data-res="egov.resources.sitemap.scopearea"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/scopearea/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div class="bkavegov">
+
+    <div class="form-inline form-group">
+        @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListScopeArea", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+        {
+            <input type="text" class="form-control" name="key" id="key" value="@(ViewBag.Key ?? "")" placeholder="Tìm kiếm" style="width:40%" />
+            <input type="submit" class="btn" id="search" onclick="searchScropArea(this)" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+        }
+    </div>
+    @Html.Partial("_Notifications")
+    <div id="divListScopeArea">
+        @{
+            Html.RenderPartial("_List", Model);
+        }
+    </div>
+</div>

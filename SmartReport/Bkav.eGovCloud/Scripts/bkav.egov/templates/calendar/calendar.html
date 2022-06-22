@@ -1,0 +1,145 @@
+﻿
+
+<input type="hidden" id="" value="0" class="calendarId" />
+<div class="form-group form-group-sm">
+    <label class="form-label col-md-2">Tiêu đề cuộc họp</label>
+    <div class="col-md-14">
+        <input type="text" class="form-control title" tabindex="1" />
+    </div>
+</div>
+<div class="form-group form-group-sm">
+    <label class="form-label col-md-2">Thời gian</label>
+    <div class="col-md-4">
+        <input type="text" class="form-control timepicker" tabindex="2" placeholder="Chọn giờ" />
+        <input type="text" class="form-control datepicker" tabindex="3" placeholder="Chọn ngày" />
+    </div>
+
+    <label class="form-label col-md-2">Địa điểm</label>
+    <div class="col-md-8">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control place" tabindex="4">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chọn <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right resource">
+                    <li><a href="#" class="createResource">+ Thêm địa điểm</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group form-group-sm">
+    <label class="form-label col-md-2">Lịch của</label>
+    <div class="col-md-14">
+        <select class="office form-control" style=""></select>
+        <input type="checkbox" class="isPrimary" /> Lịch cá nhân
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-md-2">Nội dung cuộc họp</label>
+    <div class="col-md-16">
+        <table class="table table-bordered tblContents">
+            <colgroup>
+                <col style="width: 300px" />
+                <col style="width: 120px" />
+                <col style="width: 150px" />
+                <col style="width: 150px" />
+                <col style="width: 100px" />
+                <col style="width: 100px" />
+                <col style="width: 40px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Nội dung cuộc họp</th>
+                    <th>Đơn vị chuẩn bị</th>
+                    <th>Đ/c chủ trì</th>
+                    <th>Thành phần</th>
+                    <th>C/v chuẩn bị</th>
+                    <th>Ghi chú</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <textarea class="form-control content" rows="2" tabindex="5"></textarea>
+                        </div>
+                    </td>
+                    <td>
+                        <textarea class="form-control department" rows="2" tabindex="5"></textarea>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control input-sm userPrimary user" tabindex="5" placeholder="Cán bộ" />
+                        <input type="text" class="form-control input-sm userPrimary jobtitle" tabindex="5" placeholder="Chức danh" />
+                        <input type="hidden" value="[]" class="userSelected" />
+                        <ul class="userPrimaryList list-group"></ul>
+                    </td>
+                    <td><textarea class="form-control joined" rows="2" tabindex="5"></textarea></td>
+                    <td><textarea class="form-control prepare" rows="2" tabindex="5"></textarea></td>
+                    <td>
+                        <textarea class="form-control note" rows="2" tabindex="5"></textarea>
+                    </td>
+                    <td>
+                        <a href="#" class="deleteContent">xóa</a>
+                    </td>
+                </tr>
+                <tr class="newContent">
+                    <td colspan="7">
+                        <a href="#" tabindex="0">
+                            Thêm nội dung cuộc họp (ctrl + d)
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<form class="hidden">
+    <div class="form-group form-group-sm">
+        <label for="">Tiêu đề</label>
+        <input type="text" class="form-control title " tabindex="1" />
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group  form-group-sm form-inline">
+                <label for="exampleInputFile">Thời gian</label>
+                <div>
+                    <input type="text" class="form-control timepicker" tabindex="2" placeholder="Chọn giờ" />
+                    <input type="text" class="form-control datepicker" tabindex="3" placeholder="Chọn ngày" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="form-group">
+                <label for="exampleInputPassword1">Địa điểm</label>
+                <div>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control place" tabindex="4">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chọn <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right resource"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Nội dung cuộc họp</label>
+        <textarea class="form-control content" rows="2" tabindex="5"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Đơn vị chuẩn bị</label>
+        <input type="text" class="form-control department" tabindex="5" />
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> Lịch cá nhân
+        </label>
+    </div>
+</form>
+
+
+<iframe src="/Calendar/Index" style="width: 100%; height: 100%; border:none"></iframe>

@@ -1,0 +1,74 @@
+﻿    @model IEnumerable<ReportGroupModel>
+<script>
+    $(function () {
+        $(".table-main").addClass("table-bordered table-hover");
+        $("#tblReportGroup").openLink({ urlOpen: '/admin/Report/EditGroup' });
+    });
+</script>
+<div id="divListType">
+    <div class="grid">
+        <div class="grid-header">
+            <div class="grid-header-wrap">
+                <table class="table-main table ">
+                    <colgroup>
+                        <col style="width: 50px" />
+                        <col />
+                        <col style="width: 50px" />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">Stt
+                            </th>
+                            <th class="header">Tên nhóm
+                            </th>
+                            <th class="header">Sửa
+                            </th>
+                            <th class="header">Xóa
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div id="data" class="grid-content" style="overflow-x: auto; overflow-y: visible">
+            <table class="table-main table" id="tblReportGroup">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col style="width: 50px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var number = 0;
+                        foreach (var group in Model)
+                        {
+                            number += 1;
+                        <tr data-id="@group.ReportGroupId">
+                            <td>@number
+                            </td>
+                            <td>@group.Name
+                            </td>
+                            <td>
+                                @Html.ActionLink("Sửa", "EditGroup", new {id = group.ReportGroupId})
+                            </td>
+                            <td>
+                                @Html.ActionLink("Xóa", "DeleteGroup", new { id = group.ReportGroupId }, new { onclick = "return confirm('Bạn có chắc muốn xóa nhóm này?')" })
+                            </td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Không có nhóm báo cáo nào
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

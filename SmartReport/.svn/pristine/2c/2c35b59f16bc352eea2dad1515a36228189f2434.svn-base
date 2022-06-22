@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Welcome.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    table tr {
+        margin-bottom: 10px;
+    }
+
+    table td {
+        margin-right: 10px;
+    }
+</style>
+<script>
+    $(function () {
+        $(".control-btn").remove();
+    });
+</script>
+ @Html.Partial("_Notifications")
+<div class="content-right admin-home" id="test">
+    @*@Html.SiteMapMenu()*@
+</div>

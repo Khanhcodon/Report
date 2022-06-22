@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Import Loại hồ sơ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span>Import <span data-res="egov.resources.sitemap.doctype"></span></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase">Import</span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/doctype/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<div class="bkavegov">
+    <form method="post" enctype="multipart/form-data" class="form-horizontal">
+        <div class="form-group">
+            <label class="form-label"><b>Chọn tệp excel (.xlsx): </b></label>
+            <input type="file" accept=".xlsx" name="importFile" class="form-control" />
+            <p>
+                *Lưu ý: Format file Excel gồm 3 hoặc 4 cột:
+                <ol>
+                    <li>Cột A là tên thủ tục</li>
+                    <li>Cột B là tên lĩnh vực</li>
+                    <li>Cột C là mẫu đánh số hồ sơ (Ex: $n$/Bkav-QD)</li>
+                    <li>Cột D là cột mức dịch vụ công (từ 1 đến 4 - mặc định là 2)</li>
+                </ol>
+            </p>
+        </div>
+        <div class="form-group">
+            <label class="form-label"><b>Tên Sheet</b></label>
+            <input type="text" name="sheetName" class="form-control">
+        </div>
+    </form>
+</div>

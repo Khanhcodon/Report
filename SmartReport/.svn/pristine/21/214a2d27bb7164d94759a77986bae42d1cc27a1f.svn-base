@@ -1,0 +1,243 @@
+﻿@model PrinterModel
+@{
+    bool isCreate = (bool)ViewBag.IsCreate;
+    var allUsers = ViewBag.AllUsers as string;
+    var allDepartments = ViewBag.AllDepartments as string;
+    var allPositions = ViewBag.AllPositions as string;
+}
+
+<script type="text/javascript">
+    var allUsers = @(string.IsNullOrEmpty(allUsers) ? MvcHtmlString.Create("[]") : Html.Raw(allUsers));
+    var allDepartments = @(string.IsNullOrEmpty(allDepartments) ? MvcHtmlString.Create("[]") : Html.Raw(allDepartments));
+    var allPositions = @(string.IsNullOrEmpty(allPositions) ? MvcHtmlString.Create("[]") : Html.Raw(allPositions));
+
+    var users = [];
+    var deptPositions = [];
+    var types = {
+        user:"Người dùng",
+        dept:"Phòng ban"
+    }
+
+    $(function () {
+        var isCreate = @(isCreate ? "true" : "false");
+        if(!isCreate)
+        {
+            var userIds = @Html.Raw(string.IsNullOrWhiteSpace(Model.UserIds) ? "[]" : Model.UserIds);
+            var posDeptIds = @Html.Raw(string.IsNullOrWhiteSpace(Model.DepartmentPositions) ? "[]" : Model.DepartmentPositions);
+            if (userIds) {
+                _.each(userIds, function(userId){
+                    var user = allUsers.find(function(item){
+                        return item.value == userId;
+                    });
+                    if (user) {
+                        users.push({
+                            type: types.user,
+                            value: userId,
+                            label: user.label
+                        });
+                    }
+                })
+            }
+            if (posDeptIds) {
+                _.each(posDeptIds, function(posDept){
+                    var pos = allPositions.find(function(item){
+                        return item.value == posDept.PositionId;
+                    });
+                    var dept = allDepartments.find(function(item){
+                        return item.value == posDept.DepartmentId;
+                    });
+                    if (pos && dept) {
+                        deptPositions.push({
+                            type: types.dept,
+                            value: {
+                                DepartmentId: dept.value,
+                                PositionId: pos.value
+                            },
+                            label: dept.label + "\\"+ pos.label
+                        })
+                    }
+                })
+            }
+            bindDefaultValues();
+            $('#cbPrinterName').val('@Model.PrinterName');
+        }
+        $('input.input-validation-error').first().focus();
+        $("form").submit(function () {
+            $(this).find('input.input-validation-error').first().focus();
+        });
+
+        allPositions.unshift({
+            value:0,
+            label:"Tất cả"
+        })
+        $.each(allPositions, function() {
+            var option = $('<option>').attr('value', this.value).html(this.label);
+            $('#positionList').append(option);
+        });
+        var selectedDept;
+        $("#departmentList").autocomplete({
+            source:allDepartments,
+            autoFocus: true,
+            autoSelectFirst: true,
+            select: function (event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+                selectedDept=ui.item;
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            ul.addClass('dropdown-menu');
+            return $("<li>")
+                .data("item.autocomplete", item)
+                .append("<a href='#'>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $("#userList").autocomplete({
+            source:allUsers,
+            autoFocus: true,
+            autoSelectFirst: true,
+            select: function (event, ui) {
+                event.preventDefault();
+                $(this).val("");
+                users.push({
+                    type:types.user,
+                    value:ui.item.value,
+                    label:ui.item.label
+                });
+                bindDefaultValues();
+            }
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            ul.addClass('dropdown-menu');
+            return $("<li>")
+                .data("item.autocomplete", item)
+                .append("<a href='#'>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+        $("#addDept").click(function(){
+            if(selectedDept){
+                deptPositions.push({
+                    type:types.dept,
+                    value: {
+                        DepartmentId:selectedDept.value,
+                        PositionId:$("#positionList" ).val()
+                    },
+                    label: selectedDept.label + "\\"+ $("#positionList option:selected" ).text()
+                })
+            }
+            bindDefaultValues();
+        });
+
+    });
+
+    function bindDefaultValues(){
+        var $body=$("#defaultValues tbody");
+        $body.empty();
+        //if(users.length>0){
+            $("input[name=UserIds]").val(JSON.stringify(_.pluck(users,"value")));
+        //}
+        //if(deptPositions.length>0){
+            $("input[name=DepartmentPositions]").val(JSON.stringify(_.pluck(deptPositions,"value")));
+        //}
+        var defaultValues=users.concat(deptPositions);
+        $.each(defaultValues,function(){
+            var tr="<tr><td class='itemtype'>"+this.type+"</td><td class='itemlabel'>"+this.label+"</td><td><a onclick='deleteInfo(this)'>Xoá</a><td></tr>";
+            $body.append(tr);
+        });
+    }
+    function deleteInfo(item){
+        var $tr = $(item).closest("tr");
+        var type = $tr.children(".itemtype").text();
+        var label = $tr.children(".itemlabel").text();
+        if (type == types.user) {
+            var user= users.find(function(item){
+                return item.label == label;
+            });
+            if (user) {
+                users.splice(users.indexOf(user), 1);
+            }
+        }
+        else{
+            var deptPosition= deptPositions.find(function(item){
+                return item.label == label;
+            });
+            if (deptPosition) {
+                deptPositions.splice(deptPositions.indexOf(deptPosition), 1);
+            }
+        }
+        bindDefaultValues();
+    }
+    function onchangePrinterName(item) {
+        $('#PrinterName').val($(item).val());
+    }
+</script>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.PrinterId)
+<table>
+    <tr>
+        <td class="col-md-3" style="padding-left: 0;">
+            @Html.LabelRequireFor(model => model.PrinterName):
+    </td>
+    <td>
+        @Html.DropDownList("PrinterName", ViewBag.AllPrinter as List<SelectListItem>, null, new { onchange = "onchangePrinterName(this);" })
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelRequireFor(model => model.ShareName):
+</td>
+<td>
+    @Html.TextBoxFor(model => model.ShareName, new { style = "width:400px" })
+    @Html.ValidationMessageFor(model => model.ShareName)
+</td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelFor(model => model.IsShared):
+</td>
+<td>
+    @Html.CheckBoxFor(model => model.IsShared)
+    @Html.ValidationMessageFor(model => model.IsShared)
+</td>
+</tr>
+<tr>
+    <td>
+        @Html.LabelFor(model => model.IsActivated):
+</td>
+<td>
+    @Html.CheckBoxFor(model => model.IsActivated)
+    @Html.ValidationMessageFor(model => model.IsActivated)
+</td>
+</tr>
+<tr>
+    <td>
+        <label>Phân quyền:</label>
+    </td>
+    <td>
+        <input type="text" placeholder="Phòng ban" style="width: 30%; float: left; margin-right: 5px;" id="departmentList" />
+        <select style="width: 30%; float: left; margin-right: 5px;" id="positionList"></select>
+        <input type="button" value="Thêm" class="btn" id="addDept" />
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <input type="text" placeholder="Cán bộ" id="userList" />
+    </td>
+    @Html.HiddenFor(model => model.UserIds)
+    @Html.HiddenFor(model => model.DepartmentPositions)
+</tr>
+</table>
+<table class="table table-bodered" id="defaultValues">
+    <colgroup>
+        <col style="width: 150px" />
+        <col />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Kiểu</th>
+            <th>Giá trị</th>
+            <th>Xóa</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

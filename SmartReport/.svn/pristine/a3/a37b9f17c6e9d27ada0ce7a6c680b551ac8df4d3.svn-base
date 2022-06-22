@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="BaoCaoGiayPhep" targetNamespace="http://tempuri.org/BaoCaoGiayPhep.xsd" xmlns:mstns="http://tempuri.org/BaoCaoGiayPhep.xsd" xmlns="http://tempuri.org/BaoCaoGiayPhep.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="BaoCaoGiayPhep" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="BaoCaoGiayPhep" msprop:Generator_UserDSName="BaoCaoGiayPhep">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="BusinessLicense" msprop:Generator_TableClassName="BusinessLicenseDataTable" msprop:Generator_TableVarName="tableBusinessLicense" msprop:Generator_TablePropName="BusinessLicense" msprop:Generator_RowDeletingName="BusinessLicenseRowDeleting" msprop:Generator_RowChangingName="BusinessLicenseRowChanging" msprop:Generator_RowEvHandlerName="BusinessLicenseRowChangeEventHandler" msprop:Generator_RowDeletedName="BusinessLicenseRowDeleted" msprop:Generator_UserTableName="BusinessLicense" msprop:Generator_RowChangedName="BusinessLicenseRowChanged" msprop:Generator_RowEvArgName="BusinessLicenseRowChangeEvent" msprop:Generator_RowClassName="BusinessLicenseRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CitizenName" msprop:Generator_ColumnVarNameInTable="columnCitizenName" msprop:Generator_ColumnPropNameInRow="CitizenName" msprop:Generator_ColumnPropNameInTable="CitizenNameColumn" msprop:Generator_UserColumnName="CitizenName" type="xs:string" minOccurs="0" />
+              <xs:element name="DocTypeName" msprop:Generator_ColumnVarNameInTable="columnDocTypeName" msprop:Generator_ColumnPropNameInRow="DocTypeName" msprop:Generator_ColumnPropNameInTable="DocTypeNameColumn" msprop:Generator_UserColumnName="DocTypeName" type="xs:string" minOccurs="0" />
+              <xs:element name="LicenseCode" msprop:Generator_ColumnVarNameInTable="columnLicenseCode" msprop:Generator_ColumnPropNameInRow="LicenseCode" msprop:Generator_ColumnPropNameInTable="LicenseCodeColumn" msprop:Generator_UserColumnName="LicenseCode" type="xs:string" minOccurs="0" />
+              <xs:element name="LicenseNumber" msprop:Generator_ColumnVarNameInTable="columnLicenseNumber" msprop:Generator_ColumnPropNameInRow="LicenseNumber" msprop:Generator_ColumnPropNameInTable="LicenseNumberColumn" msprop:Generator_UserColumnName="LicenseNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="RegisDate" msprop:Generator_ColumnVarNameInTable="columnRegisDate" msprop:Generator_ColumnPropNameInRow="RegisDate" msprop:Generator_ColumnPropNameInTable="RegisDateColumn" msprop:Generator_UserColumnName="RegisDate" type="xs:string" minOccurs="0" />
+              <xs:element name="ExpireDate" msprop:Generator_ColumnVarNameInTable="columnExpireDate" msprop:Generator_ColumnPropNameInRow="ExpireDate" msprop:Generator_ColumnPropNameInTable="ExpireDateColumn" msprop:Generator_UserColumnName="ExpireDate" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

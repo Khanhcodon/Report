@@ -1,0 +1,55 @@
+﻿@model IEnumerable<WardModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Ward.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.grid.js")"></script>
+<script type="text/javascript">
+    function deleteWard(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Ward.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+
+    function onBegin() {
+        $("#divListWard").blockpanel({ text: egov.resources.notifications.searching || "@Localizer("Common.Searching.Label")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divListWard').unblockpanel();
+        }
+
+        function onFailure() {
+            alert("@Localizer("Common.Error")");
+            $('#divListWard').unblockpanel();
+        }
+</script>
+<div class="bkavegov-content-title">
+    <h3 data-res="egov.resources.ward.datalist">Danh sách xã/phường
+    </h3>
+</div>
+<div id="tabs" class="bkavegov ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+            <a href="#" data-res="egov.resources.commonlabel.list">Danh sách
+            </a>
+        </li>
+        <li class="ui-state-default ui-corner-top">@Html.ActionLink(Localizer("Common.Button.Create"), "Create")</li>
+    </ul>
+    <div class="bkavegov ui-tabs-panel ui-widget-content ui-corner-bottom">
+        @Html.Partial("_Notifications")
+        <div id="divListWard">
+            @{
+                Html.RenderPartial("_PartialList", Model);
+            }
+        </div>
+    </div>
+</div>

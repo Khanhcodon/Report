@@ -1,0 +1,234 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.FileLocationSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.FileLocation");
+    Layout = "_SettingLayout.cshtml";
+    var listFileLocation = ViewBag.ListFileLocation as IEnumerable<FileLocationModel>;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+<script type="text/javascript">
+    var objDefineDialog = {
+        autoOpen: false,
+        height: 'auto',
+        width: 'auto',
+        modal: true,
+        close: function () {
+            $("#FileLocationId").val("0");
+            $("#FileLocationAddress").val("");
+            $("#FileLocationType,#IsActivated").prop("checked", false);
+        }
+    };
+
+    $(function () {
+        $("#tblFileLocation").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered");
+        //$("th").removeClass("header");
+    });
+
+    function addFileLocation() {
+        objDefineDialog.buttons = {
+            "Lưu": function () {
+                $("#dialog-form form:first").submit();
+            },
+            "Hủy": function () {
+                $(this).dialog("close");
+            }
+        };
+        $("#dialog-form form:first").attr("action", "@Url.Action("CreateFileLocation")");
+        $("#FileLocationId").val("0");
+
+        $("#dialog-form form").removeData("validator");
+        $("#dialog-form form").removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse("#dialog-form form");
+        $("#FileLocationAddress").removeClass("input-validation-error");
+        $("#FileLocationAddress").siblings("span").html("");
+
+        $("#FileLocationAddress").val("");
+        $("#FileLocationType,#IsActivated").prop("checked", false);
+        objDefineDialog.title = egov.resources.setting.location.addlocation || "Thêm mới vị trí";
+        $("#dialog-form").dialog(objDefineDialog);
+        $("#dialog-form").dialog("open");
+    }
+
+    function editFileLocation(id, address, type, isactivated) {
+        objDefineDialog.buttons = {
+            @Localizer("Common.Button.Save"): function () {
+                $("#dialog-form form:first").submit();
+            },
+            "Hủy": function () {
+                $(this).dialog("close");
+            }
+        };
+        $("#dialog-form form:first").attr("action", "@Url.Action("EditFileLocation")");
+
+        $("#FileLocationId").val(id);
+
+        $("#dialog-form form").removeData("validator");
+        $("#dialog-form form").removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse("#dialog-form form");
+        $("#FileLocationAddress").removeClass("input-validation-error");
+        $("#FileLocationAddress").siblings("span").html("");
+
+        $("#FileLocationAddress").val(address);
+        $("#FileLocationType").prop("checked", type);
+        $("#IsActivated").prop("checked", isactivated);
+        objDefineDialog.title = egov.resources.setting.location.editlocation || "Sửa vị trí";
+        $("#dialog-form").dialog(objDefineDialog);
+        $("#dialog-form").dialog("open");
+    }
+
+    function deleteFileLocation(id, isActivated) {
+        var token = $('input[name=__RequestVerificationToken]', '#SettingDeleteFileLocation').val();
+        if (!isActivated) {
+            eGovMessage.show(
+                '@Localizer("egov.resources.setting.location.confirmdeletefilelocation")',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $.post("@Url.Action("DeleteFileLocation")",
+                        {
+                            id: id,
+                            __RequestVerificationToken: token
+                        },
+                        function (result) {
+                            if (result) {
+                                if (result.error) {
+                                    eGovMessage.show(result.message);
+                                } else {
+                                    document.location = "@Url.Action("FileLocation")";
+                                }
+                            }
+                        })
+                    .fail(function () {
+                        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+                    });
+                }
+            );
+            }
+            else {
+                eGovMessage.show("@Localizer("egov.resources.setting.location.canotdelete")");
+        }
+    }
+
+    function onBegin() {
+
+    }
+
+    function onSuccess(result) {
+        if (result) {
+            if (result.error) {
+                eGovMessage.notification(result.message, eGovMessage.messageTypes.error);
+            } else {
+                document.location = "@Url.Action("FileLocation")";
+            }
+        }
+    }
+
+    function onFailure() {
+        eGovMessage.notification('@Localizer("Common.Error")', eGovMessage.messageTypes.error);
+    }
+</script>
+<div id="tabs" class="bkavegov">
+    <div class="bkavegov">
+        @Html.Partial("_Notifications")
+        <div id="SettingDeleteFileLocation" style="display: none">@Html.AntiForgeryToken()</div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td style="padding-left: 0; width: 23%">
+                        @Html.LabelRequireFor(model => model.Threshold):
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Threshold)
+                        @Html.ValidationMessageFor(model => model.Threshold)
+                    </td>
+                </tr>
+            </table>
+            <h4 data-res="egov.resources.setting.location.listfilelocation"></h4>
+            <p>
+                <a href="javascript:addFileLocation();" data-res="egov.resources.setting.location.addlocation"></a>
+            </p>
+            <table class="table-main table table-hover" id="tblFileLocation">
+                <colgroup>
+                    <col style="width: 50px" />
+                    <col />
+                    <col style="width: 100px" />
+                    <col style="width: 100px" />
+                    <col style="width: 50px" />
+                    <col style="width: 50px" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.Numbers")
+                        </th>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.FileLocationAddress")
+                        </th>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.FileLocationType")
+                        </th>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.IsActivated")
+                        </th>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.Edit")
+                        </th>
+                        <th class="header">
+                            @Localizer("FileLocationSettings.FileLocation.List.Column.Delete")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (listFileLocation != null && listFileLocation.Any())
+                    {
+                        var number = 0;
+                        foreach (var location in listFileLocation)
+                        {
+                            number += 1;
+                        <tr>
+                            <td>
+                                @number
+                            </td>
+                            <td>
+                                @location.FileLocationAddress
+                            </td>
+                            <td>
+                                @(location.FileLocationType ? "Service" : "Local")
+                            </td>
+                            <td>
+                                @(location.IsActivated ? "X" : "")
+                            </td>
+                            <td align="center">
+                                <a href="javascript:editFileLocation(@location.FileLocationId, '@location.FileLocationAddress.Replace(@"\", @"\\")', @(location.FileLocationType ? "true" : "false"), @(location.IsActivated ? "true" : "false"))">@Localizer("FileLocationSettings.FileLocation.List.Column.Edit.Button")</a>
+                            </td>
+                            <td align="center">
+                                <a href="javascript:deleteFileLocation(@(location.FileLocationId),@(location.IsActivated ? "true" : "false"))">@Localizer("FileLocationSettings.FileLocation.List.Column.Delete.Button")</a>
+                            </td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" data-res="egov.resources.setting.location.nodata">Chưa có cấu hình vị trí lưu file
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<div id="dialog-form" data-restitle="egov.resources.setting.location.addlocation" title="Thêm mới vị trí" style="display: none">
+    @using (Ajax.BeginForm("CreateFileLocation", new AjaxOptions { HttpMethod = "POST", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure" }))
+    {
+        Html.RenderPartial("_CreateOrEditFileLocation", ViewBag.FileLocation as FileLocationModel);
+    }
+</div>

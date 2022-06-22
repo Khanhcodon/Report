@@ -1,0 +1,253 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.BusinessModel>
+@{
+    var allBusinessType = ViewBag.AllBusinessType as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.BusinessTypeModel>;
+    var allCity = ViewBag.AllCity as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.CityModel>;
+    var allDistrict = ViewBag.AllDistrict as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DistrictModel>;
+    var allWard = ViewBag.AllWard as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.WardModel>;
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as Bkav.eGovCloud.Models.BusinessSearchModel;
+}
+@using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListBusiness", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+{
+    <div style="margin-bottom: 4px;">
+        <table>
+            <tr>
+                <td>
+                    <span>Loại hình doanh nghiệp:</span>
+                </td>
+                <td>
+                    <select id="BusinessTypeId" name="BusinessTypeId" style="width: 200px" onchange="doSubmit($(this).parents('form'));">
+                        @if (allBusinessType != null && allBusinessType.Any())
+                        {
+                            foreach (var businesstype in allBusinessType)
+                            {
+                            <option value="@businesstype.BusinessTypeId" @(search.BusinessTypeId != null && search.BusinessTypeId == businesstype.BusinessTypeId ? "selected='selected'" : "")>@businesstype.BusinessTypeName</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Tỉnh/thành phố:</span>
+                </td>
+                <td>
+                    <select id="CityCode" name="CityCode" style="width: 200px" onchange="doSubmit($(this).parents('form'));">
+                        @if (allCity != null && allCity.Any())
+                        {
+                            foreach (var city in allCity)
+                            {
+                            <option value="@city.CityCode" @(search.CityCode != null && search.CityCode == city.CityCode ? "selected='selected'" : "")>@city.CityName</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Quận/huyện:</span>
+                </td>
+                <td>
+                    <select id="DistrictCode" name="DistrictCode" style="width: 200px" onchange="doSubmit($(this).parents('form'));">
+                        @if (allDistrict != null && allDistrict.Any())
+                        {
+                            foreach (var district in allDistrict)
+                            {
+                            <option value="@district.DistrictCode" @(search.DistrictCode != null && search.DistrictCode == district.DistrictCode ? "selected='selected'" : "")>@district.DistrictName</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Xã/phường:</span>
+                </td>
+                <td>
+                    <select id="WardId" name="WardId" style="width: 200px" onchange="doSubmit($(this).parents('form'));">
+                        @if (allWard != null && allWard.Any())
+                        {
+                            foreach (var ward in allWard)
+                            {
+                            <option value="@ward.WardId" @(search.WardId != null && search.WardId == ward.WardId ? "selected='selected'" : "")>@ward.WardName</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+        </table>
+        @*<span>Đăng ký GPKD từ:</span><input type="text" name="IssueDateFrom" id="IssueDateFrom"
+            style="width: 170px;" /><span>đến:</span><input type="text" name="IssueDateTo" id="IssueDateTo"
+                style="width: 170px;" /><br />*@
+    </div>
+}
+<div style="clear: both">
+</div>
+<br />
+<script type="text/javascript">
+    $(function () {
+        $("#tblBusiness").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#IssueDateFrom,#IssueDateTo").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        //$('.grid').normalGrid();
+    });
+    function doSubmit(form) {
+        form.attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        form.submit();
+    }
+
+    function openLicenseDialog(url) {
+        $("#my-dialog").dialog({
+            width: 860,
+            height: 600,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            }
+        });
+    }
+</script>
+<div id="my-dialog">
+</div>
+<table class="table-main" id="tblBusiness">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col style="width: 80px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("BusinessName", Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.BusinessName"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        businessTypeId = search.BusinessTypeId,
+                        cityCode = search.CityCode,
+                        districtCode = search.DistrictCode,
+                        wardId = search.WardId,
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divListBusiness",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.BusinessCode")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.IssueDate")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Address")
+            </th>
+            <th></th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var Business in Model)
+            {
+                number += 1;
+            <tr>
+                <td>@number
+                </td>
+                <td>@Business.BusinessName
+                </td>
+                <td>@Business.BusinessCode
+                </td>
+                <td>@Business.IssueDateShort
+                </td>
+                <td>@Business.Address
+                </td>
+                <td>
+                    @{
+                //var url = @Html.ActionLink(Localizer("Business.CreateOrEdit.Link.BusinessLicense"), "Create", "BusinessLicense", new { businessid = Model.BusinessId }, null);
+                var url = Url.Action("LicenseForBussiness", "BusinessLicense", new { businessId = Business.BusinessId });
+                    }
+                    <a href="#" onclick="openLicenseDialog('@Url.Action("LicenseForBussiness", "BusinessLicense", new { businessId = Business.BusinessId })')">@Localizer("Business.Index.Link.BusinessLicense")
+                    </a>@*@Html.ActionLink(Localizer("Business.Index.Link.BusinessLicense"), "Index", "BusinessLicense", new { businessId = Business.BusinessId }, null)*@
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Edit.Button"), "Edit", new { Id = Business.BusinessId })
+                </td>
+                <td>
+                    <a href="javascript:deleteBusiness(@(Business.BusinessId))">@Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(Business.BusinessId)" style="display: none" action="@Url.Action("Delete", new { Id = Business.BusinessId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">Không có doanh nghiệp nào
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <div class="grid-pager grid-pager-wrap grid-pager-top" style="@(Model != null && Model.Any() ? "" : "display:none;")">
+                    @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                                  {
+                                      businessTypeId = search.BusinessTypeId,
+                                      cityCode = search.CityCode,
+                                      districtCode = search.DistrictCode,
+                                      wardId = search.WardId,
+                                      sortBy = sortAndPage.SortBy,
+                                      isSortDesc = sortAndPage.IsSortDescending
+                                  },
+                              new AjaxOptions
+                                  {
+                                      UpdateTargetId = "divListBusiness",
+                                      OnBegin = "onBegin",
+                                      OnSuccess = "onSuccess",
+                                      OnFailure = "onFailure"
+                                  }, listPageSize)
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

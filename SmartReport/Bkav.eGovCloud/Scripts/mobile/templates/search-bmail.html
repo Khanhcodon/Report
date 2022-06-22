@@ -1,0 +1,64 @@
+﻿
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div aria-expanded="false" id="btnBackSearch" role="button" tabindex="0" class="backtoList">
+                <i class="material-icons">arrow_back</i>
+            </div>
+            <span class="mdl-layout-title">
+                Tìm kiếm thư
+            </span>
+        </div>
+    </header>
+
+    <div class="mdl-layout__content">
+        <div class="document-search-page">
+            <div style="padding-bottom: 10px;">
+                <div class="search-conditions">
+                    <table class="mdl-data-table mdl-js-data-table" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric" style="width: 100px;">Tiêu đề:</td>
+                                <td>
+                                    <input type="text" id="subject" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric" style="width: 100px;">Người gửi:</td>
+                                <td>
+                                    <input type="text" id="from"  />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric" style="width: 100px;">Ngày:</td>
+                                <td>
+                                    <input type="date" id="fromDate" placeholder="Từ" style="width: 110px;" class=""/>
+                                    <input type="date" id="toDate" placeholder="Đến" style="width: 110px;" class=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="mdl-data-table__cell--non-numeric">
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="btnSearch">
+                                        Tìm kiếm
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="background: rgba(0,0,0,.06);">
+                <div class="search-result">
+                    <div class="group-label">
+                        Kết quả tìm kiếm
+                    </div>
+                    <div id="searchResult">
+                        <ul class="mdl-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

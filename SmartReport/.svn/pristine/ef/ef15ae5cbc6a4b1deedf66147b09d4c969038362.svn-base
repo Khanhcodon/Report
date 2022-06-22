@@ -1,0 +1,78 @@
+﻿@model IEnumerable<StoreModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Store.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+}
+
+<script type="text/javascript">
+    function deleteStore(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Store.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+
+    function onBegin() {
+        $("#divListStores").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListStores').unblockpanel();
+    }
+
+    function onFailure() {
+        alert("@Localizer("Common.Error")");
+        $('#divListStores').unblockpanel();
+    }
+    function doSubmit(form) {
+        form.submit();
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-paste2"></i>
+        <span data-res="egov.resources.sitemap.store"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/store/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("StoreByCategoryBusinessCode", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "divListStores", InsertionMode = InsertionMode.Replace, OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure" }))
+    {
+        <span data-res="egov.resources.store.choosecategory">Chọn nghiệp vụ:</span>
+        <select class="form-control" id="categoryBusinessId" name="categoryBusinessId" style="width: 150px; display: inline" onchange="doSubmit($(this).parents('form'));">
+            <option value="0">@Localizer("Common.All.Label")</option>
+            @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+            {
+                foreach (var categoryBusiness in allCategoryBusiness)
+                {
+                <option value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "selected='selected'" : "")>@categoryBusiness.Text</option>
+                }
+            }
+        </select>
+        @:&nbsp;&nbsp;
+
+        <span>@Localizer("Admin.Store.SearchName"):</span>
+        <input type="text" id="searchName"
+                name="searchName" class="form-control" style="width: 300px; display: inline"
+                 placeholder=" @Localizer("Admin.Store.SearchName")" />
+        <input type="submit" value="@Localizer("Admin.Store.Submit")" />
+    }
+
+    <div id="divListStores">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

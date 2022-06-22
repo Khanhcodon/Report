@@ -1,0 +1,25 @@
+﻿@model QuestionModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Question.Edit"); 
+    ViewBag.BackUrl = "/Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+}
+<script>
+    backUrl = "/admin/Question";
+</script>
+<script>
+    $(document).ready(function () {
+        $("#create").remove();
+    });
+</script>
+<div class="content-right" style="overflow: auto;">
+    @using (Html.BeginForm("Edit", "Question", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.Partial("_Notifications")
+        <div id="divListLaw">
+            @{
+                Html.RenderPartial("_CreateOrEdit", Model);
+            }
+        </div>
+    }
+</div>

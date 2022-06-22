@@ -1,0 +1,38 @@
+﻿<div class="sv_row">
+    <div class="sv_qstn svd-survey-nopadding question-value" role="group" aria-labelledby="sq_249_ariaTitle" style="flex: 1 1 100%; width: 100%; min-width: 50px; max-width: initial; padding-right: 20px;">
+        <div>
+            <h5 aria-label="Hãy nhập/chọn giá trị">
+                <span style="position: static;">Hãy nhập/chọn giá trị</span>
+                <span class="sv_q_required_text"></span>
+            </h5>
+            <div class="small">
+                <span style="position: static;"></span>
+            </div>
+        </div>
+        <div>
+            <div role="alert" class="alert alert-danger sv_qstn_error_top" style="display: none;"></div>
+            <fieldset class="sv_qcbc sv_qcbx form-inline">
+                <legend aria-label="Hãy nhập/chọn giá trị"></legend>
+                {{each(i) choices}}
+                <div class="checkbox sv-q-col-1 undefined">
+                    <label>
+                        <input type="checkbox" name="value_${value}" aria-required="true" aria-label="${text}" ${($data.value || []).indexOf(value)>= 0 ? 'checked' : ''}>
+                        <span class="checkbox-material">
+                            <svg viewBox="0 0 24 24" class="sv-hidden">
+                                <path d="M5,13l2-2l3,3l7-7l2,2l-9,9L5,13z"></path>
+                            </svg>
+                            <span class="check"></span>
+                        </span>
+                        <span title="${text}">
+                            <span style="position: static;">${text}</span>
+                        </span>
+                    </label>
+                </div>
+                {{/each}}
+            </fieldset>
+            <div class="small" style="display: none;">
+                <span style="position: static;"></span>
+            </div>
+        </div>
+    </div>
+</div>

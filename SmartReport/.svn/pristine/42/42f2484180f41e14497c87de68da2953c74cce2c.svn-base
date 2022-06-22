@@ -1,0 +1,49 @@
+﻿@using Bkav.eGovCloud.Core.Document
+@using Bkav.eGovCloud.Entities
+@model Bkav.eGovCloud.Models.DocumentModel
+@{
+    var categoryBusiness = (CategoryBusinessTypes)ViewBag.CategoryBusiness;
+}
+<script type="text/javascript">
+    window.egov =  window.parent.egov||{};
+    //egov.models =  egov.models ||{};
+    /////các biến dung trong file egov.cshtml.document.js
+    //egov.cshtml = egov.cshtml|| {};
+    //egov.cshtml.document =egov.cshtml.document|| {};
+    //egov.views=egov.views||{};
+    ////Check quyền lưu văn bản/hồ sơ
+    egov.cshtml.document.documentPermissions = @(ViewBag.DocumentPermissions != null ? (int)(DocumentPermissions)ViewBag.DocumentPermissions : 0);
+    egov.cshtml.document.documentCopyId = @Model.DocumentCopyId;
+    egov.cshtml.document.isCreatingDocument = @(ViewBag.IsCreatingDocument ? "true" : "false");
+    egov.cshtml.document.doctypeId = '@(ViewBag.DocTypeIdString ?? "")';
+    egov.cshtml.document.documentId = '@ViewBag.DocumentId';
+    @if (!IsXuLyVanBanEdition)
+    {
+        <text> egov.cshtml.document.isHoso = @(categoryBusiness == CategoryBusinessTypes.Hsmc ? "true" : "false");</text>
+    }
+</script>
+
+<style type="text/css">
+    .ui-dialog-titlebar {
+        padding: 4px;
+        border-radius: 0px;
+        border: none;
+        color: #fff;
+    }
+
+    .ui-dialog {
+        padding: 0px;
+        border-radius: 0px;
+    }
+
+    .ui-widget-header {
+        background: #69cef5 /*{bgColorHeader}*/ url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAALElEQVQYlWN49OjRfyYGBgaGIUT8//8fSqBx0Yh///4RL8vAwAAVQ2MNOwIAl6g6KkOJwk8AAAAASUVORK5CYII=') /*{bgImgUrlHeader}*/ 50% /*{bgHeaderXPos}*/ 50% /*{bgHeaderYPos}*/ repeat-x /*{bgHeaderRepeat}*/;
+    }
+
+    .context-menu-item.disabled {
+        color: #a8a8a8;
+    }
+</style>
+
+<div class="toolbar-outer" id="toolbar">
+</div>

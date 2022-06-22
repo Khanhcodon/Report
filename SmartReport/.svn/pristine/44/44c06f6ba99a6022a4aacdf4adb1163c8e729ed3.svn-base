@@ -1,0 +1,175 @@
+﻿<div class="form-horizontal">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group form-group-sm">
+                <label class="col-md-4" data-res="egov.resources.document.StoreId">Sổ báo cáo</label>
+                <div class="col-md-12">
+                    <!--<select class="form-control" id="StoreId"></select>-->
+                    <input type="text" class="form-control" id="StoreId">
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-md-4" data-res="egov.resources.document.DocCode"></label>
+                <div class="col-md-12">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="Code">
+                        <!--<input type="text" class="form-control" id="Code" style="z-index: 1060;">-->
+                        <!--<div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 25px"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right code-list" id="CodeId">
+                            </div>
+                        </div>-->
+                    </div>
+                    <label for="Code" generated="false" class="warning" style="display: none;">Số ký hiệu trên đã có trên hệ thống.</label>
+                </div>
+            </div>
+            <!--<div class="form-group form-group-sm">
+                <label class="col-md-4" data-res="egov.resources.document.SecurityId.name"></label>
+                <div class="col-md-12">
+                    <select class="form-control" id="SecurityId"></select>
+                </div>
+            </div>-->
+            <!--<div class="form-group form-group-sm">
+                <label class="col-md-4" data-res="egov.resources.document.PublishMail"></label>
+                <div class="col-md-12">
+                    <input class="form-control input-sm" id="searchEmail" type="text" placeholder="liên thông qua mail" data-respholder=""/>
+                    <input type="hidden" id="tempEmail"/>
+                </div>
+            </div>-->
+            <div class="form-group form-group-sm">
+                <label class="col-md-4 " data-res="egov.resources.document.PlaceLabel"></label>
+                <div class="col-md-12">
+                    <input class="form-control input-sm" id="searchAddress" type="text" placeholder="Nơi nhận văn bản" data-respholder="egov.resources.documentQuickView.Place"/>
+                    <input type="hidden" id="tempAddress"/>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <div style="overflow: auto;">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col style="width: 40px"/>
+                            <col style="width: 250px"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th data-res="egov.resources.document.OfficeName"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="listAddress"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group form-group-sm hidden">
+                <div class="col-md-8">
+                    <a href="/admin/Address/Create" target="_blank" class="btn btn-sm pull-right">Tạo nhanh địa chỉ</a>
+                </div>
+                <div class="col-md-8">
+                    <a href="/admin/Address" target="_blank" class="btn btn-sm pull-right">Quản lý địa chỉ</a>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-md-16" data-res="egov.resources.document.PlaceInOffice"></label>
+            </div>
+            <div class="form-group">
+                <div class="col-md-16">
+                    <div class=" input-group input-group-sm">
+
+                        <input type="text" class="form-control" readonly style="z-index: 999;">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" id="privateDepts" data-target="#privateDepartments" style="height: 25px;"><span class="caret"></span></button>
+                            <div id="privateDepartments"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-md-16">Nhận thông báo</label>
+            </div>
+            <div class="form-group">
+                <div class="col-md-16 dg-view"></div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="form-group form-group-sm">
+                <label class="col-md-6 ">CQ ban hành</label>
+                <div class="col-md-10">
+                    <select id="Organization" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-md-6 " data-res="egov.resources.document.DatePublished"></label>
+                <div class="col-md-10">
+                    <input type="text" id="DatePublished1" class="form-control"/>
+                </div>
+            </div>
+            <!--<div class="form-group form-group-sm">
+                <label class="col-md-6" data-res="egov.resources.document.DateResponse"></label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input type="text" style="z-index: 2000" class="form-control" placeholder="Không yêu cầu" aria-describedby="addressDateResponse" id="DateResponse">
+                        <span class="input-group-addon icon icon-cog2" id="addressDateResponse" style="padding: 3px 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;"></span>
+                    </div>
+                </div>
+            </div>-->
+            <div class="form-group form-group-sm">
+                <label class="col-md-6 " data-res="egov.resources.document.Approvers"></label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="ApproverName">
+                        <div class="input-group-btn">
+                            <input type="hidden" class="form-control" id="Approvers">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right ddlApprovers"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group form-group-sm">
+                <label class="col-md-6 " data-res="egov.resources.document.DocInPage"></label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control total-copy" id="TotalCopy" value="1"/>
+                    <span>/ </span>
+                    <input type="text" class="form-control total-page" id="TotalPage" value="1"/>
+                </div>
+            </div>-->
+            <div class="form-group form-group-sm">
+                <label class="col-md-6" data-res="egov.resources.document.InPlace"></label>
+                <div class="col-md-10">
+                    <select class="form-control" id="InPlace"></select>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-md-16" style="color: blue;" data-res="egov.resources.document.publishReceive"></label>
+            </div>
+            <div class="form-group form-group-sm publish-receive">
+                <div class="col-md-16">
+                    <span class="bold" data-res="egov.resources.transfer.MainProcessUser"></span> <i data-res="egov.resources.transfer.MainProcessUserComment"></i>
+                    <div class="main-address">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+                <div class="col-md-16">
+                    <span class="bold">Nơi nhận trong đơn vị</span>
+                    <div class="private-dept">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+                <div class="col-md-16">
+                    <span class="bold">Nhận thông báo</span>
+                    <div class="private-anoun">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+                <div class="col-md-16">
+                    <span class="bold">Nhận liên thông qua mail</span>
+                    <div class="main-mail">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

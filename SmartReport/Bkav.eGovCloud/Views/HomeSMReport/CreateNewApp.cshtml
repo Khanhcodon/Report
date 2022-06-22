@@ -1,0 +1,146 @@
+﻿@model Bkav.eGovCloud.Models.AppCreateModel
+
+<script type="text/javascript">
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            url: '/Home/AppIconUpload',
+            autoUpload: true,
+            done: function (e, data) {
+                if (data.result.success) {
+                    $('#IconUrl').val(data.result.Avatar);
+                    $('#imgIconUrl').attr('src', data.result.Avatar);
+
+                    return;
+                }
+                else {
+                    alert(data.result.message);
+                }
+            }
+        });
+        $('#AppUrl').change(function () {
+            $("#preview").empty();
+            var iframe = $("<iframe />");
+            $("#preview").html(iframe);
+            iframe.attr("src", $(this).val());
+
+        });
+        $('#IconUrl').change(function () {
+            $('#imgIconUrl').attr('src', $(this).val());
+        });
+        var $submitBtn = $("#submitBtn");
+        $submitBtn.click(function (e) {
+            //prevent Default functionality
+            e.preventDefault();
+            $submitBtn.button("loading");
+            var $form = $("#newapp form");
+            //get the action-url of the form
+            var actionurl = $form.attr("action");
+
+            //do your own request an handle the results
+            $.ajax({
+                url: actionurl,
+                type: 'post',
+                dataType: 'json',
+                data: $form.serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        if (mainApps) {
+                            new mainApps.init({
+                                id: data.id,
+                                name: data.name,
+                                title: $("#Title").val(),
+                                icon: $("#IconUrl").val(),
+                                appUrl: $("#AppUrl").val(),
+                                isBackgroundApp: $("#IsBackgroundApp").is(":checked"),
+                                isCustomApp: true
+                            });
+                        }
+                        $form.find("input").val("");
+                        $('#imgIconUrl').attr('src', "");
+                        $("#preview").empty();
+                        $submitBtn.button("reset");
+                    }
+
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+            });
+            $("#closeBtn").click();
+        })
+
+        $(document).bindResources();
+    });
+
+</script>
+<style>
+    #newapp #fileupload {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+    }
+
+    #preview iframe {
+        width: 100%;
+    }
+
+    #newapp #imgIconUrl {
+        margin-top: 15px;
+    }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span><span class="sr-only">x</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">Tạo mới đường dẫn</h4>
+</div>
+<div class="modal-body" id="newapp">
+    @using (Html.BeginForm())
+    {
+        <div class="full-height ">
+            @Html.HiddenFor(model => model.Name)
+            <div class="form-group">
+                <label for="Title">Tên ứng dụng</label>
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="AppUrl">Đường dẫn</label>
+                @Html.TextBoxFor(model => model.AppUrl, new { @class = "form-control" })
+            </div>
+            <div id="preview">
+
+            </div>
+            <div class="row">
+                <div class="col-sm-13">
+                    <div class="form-group">
+                        <label for="IconUrl">Icon</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.IconUrl, new { @class = "form-control" })
+                            <span class="input-group-addon">
+                                <input id="fileupload" type="file" name="file">
+                                <span>Chọn</span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="IsBackgroundApp">Tự chạy khi vào hệ thống</label>
+                            @Html.CheckBoxFor(model => model.IsBackgroundApp)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <img id="imgIconUrl" src="@Model.IconUrl" width="60" height="60" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="modal-footer">
+    <button type="submit" id="submitBtn" class="btn btn-primary" data-loading-text="Đang tạo ..." data-res="egov.resources.buttons.add"></button>
+    <button type="button" id="closeBtn" class="btn btn-default" data-dismiss="modal" data-res="egov.resources.closeBtn"></button>
+</div>

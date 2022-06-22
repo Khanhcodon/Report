@@ -1,0 +1,1 @@
+INSERT INTO `permission` VALUES ('0', 'ReportKeyIndex', 'Danh sách các key báo cáo', 'Quản lý key báo cáo', 'Cho phép người dùng xem danh sách key của báo cáo');

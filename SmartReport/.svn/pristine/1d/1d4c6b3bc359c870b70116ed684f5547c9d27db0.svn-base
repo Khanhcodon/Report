@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"bkav.autocomplete.selectfirst.min.js",
+"lineCount":1,
+"mappings":"CAAC,QAAS,CAACA,CAAD,CAAI,CACVA,CAAC,CAAC,wBAAD,CAA0BC,KAAK,CAAC,kBAAkB,CAAE,QAAS,CAAA,CAAG,CAC7D,IAAIC,EAAeF,CAAC,CAAC,IAAD,CAAMG,KAAK,CAAC,cAAD,EAAkBC,EAAOF,CAAYE,KAAK,CAEpEF,CAAYG,QAAQC,Y,EAGzBF,CAAIG,SAAS,CAACP,CAACQ,MAAM,CAAC,CAAE,IAAI,CAAE,YAAR,CAAD,CAAwB,CAAEJ,CAAIK,QAAQC,SAAS,CAAA,CAAEC,MAAM,CAAA,CAA/D,CANgD,CAAjC,CADtB,EAUZ,CAACC,MAAD,C",
+"sources":["bkav.autocomplete.selectfirst.js"],
+"names":["$","bind","autocomplete","data","menu","options","selectFirst","activate","Event","element","children","first","jQuery"]
+}

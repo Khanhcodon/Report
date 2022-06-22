@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "_CalendarLayout.cshtml";
+}
+
+<div id="CreateForm">
+    <form class="form-horizontal">
+        <div class="create-form" style=" height: 100%;">
+            @Html.Partial("_CreateOrEdit")
+        </div>
+    </form>
+</div>

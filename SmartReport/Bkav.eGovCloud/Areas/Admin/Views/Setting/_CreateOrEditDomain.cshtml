@@ -1,0 +1,196 @@
+﻿@using Bkav.eGovCloud.Core.Utils
+@using Bkav.eGovCloud.Entities
+@model Bkav.eGovCloud.Admin.Models.DomainModel
+<style>
+    .ui-autocomplete-category {
+        font-weight: bold;
+        padding: .2em .4em;
+        margin: .8em 0 .2em;
+        line-height: 1.5;
+    }
+</style>
+<script type="text/javascript">
+
+    $(function () {
+        // ko.applyBindings(model, document.getElementById("domainInfo"));
+
+        $("#dbtype").val("2");
+    });
+
+</script>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.DomainId)
+<table id="domainInfo" style="width: 630px">
+    <tr >
+        <td style="width: 120px;">
+            @Html.LabelFor(model => model.CustomerName):
+        </td>
+        <td style="width: 500px">
+            @Html.TextBoxFor(model => model.CustomerName, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.CustomerName)
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px;">
+            @Html.LabelFor(model => model.DomainName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DomainName, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.DomainName)
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.Email):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Email, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Email)
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.Phone):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Phone, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Phone)
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.Address):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.Address, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Address)
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.CustomerType):
+        </td>
+        <td>
+            @Html.RadioButtonFor(model => model.CustomerType, Convert.ToBoolean((int)CustomerType.Organization), !Model.CustomerType ? new { @checked = "" } : null)
+            Là cơ quan hành chính
+            @Html.RadioButtonFor(model => model.CustomerType, Convert.ToBoolean((int)CustomerType.Business), Model.CustomerType ? new { @checked = "" } : null)
+            Là doanh nghiệp
+            @Html.ValidationMessageFor(model => model.Address)
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.Province):
+        </td>
+        <td>
+            <select id="province" name="province" data-bind='options: provinceDistrictCommune, optionsCaption: "---Chọn tỉnh---", optionsText: "Name",optionsValue: "Name", value: province'></select>
+            &nbsp;&nbsp;
+            @Html.LabelFor(model => model.District):&nbsp;
+            <select name="district" id="district" data-bind='options: districtList, optionsCaption: "---Chọn quận, huyện---", optionsText: "Name", optionsValue: "Name", value: district'></select>
+            &nbsp;&nbsp;<br />
+            @Html.LabelFor(model => model.Commune):&nbsp;
+            <select name="commune" id="commune" data-bind='options: communeList, optionsCaption: "---Chọn xã, phường---", optionsText: "Name", optionsValue: "Name", value: commune'></select>
+        </td>
+    </tr>
+    <tr style="display: none">
+        <td>
+            @Html.LabelFor(model => model.Connection.DbType):
+        </td>
+        <td>
+            @Html.DropDownListForEnum(model => model.Connection.DbType, typeof(DatabaseType), new { @id = "dbtype" }, Model.Connection != null ? Model.Connection.DbType.ToString() : "")
+            @Html.ValidationMessageFor(model => model.Connection.DbType)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Connection.Server):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Connection.Server, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Connection.Server)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Connection.Database):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Connection.Database, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Connection.Database)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Connection.Username):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Connection.Username, new { style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Connection.Username)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Connection.Password):
+        </td>
+        <td>
+            @Html.PasswordFor(model => model.Connection.Password)
+            @Html.ValidationMessageFor(model => model.Connection.Password)
+        </td>
+    </tr>
+    <tr id="trPort">
+        <td>
+            @Html.LabelFor(model => model.Connection.Port):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Connection.Port, new { @id = "port" })
+            @Html.ValidationMessageFor(model => model.Connection.Port)
+        </td>
+    </tr>
+    @if (Model.DomainId == 0)
+    {
+        <tr>
+            <td></td>
+            <td>
+                @Html.EditorFor(model => model.Connection.IsCreateDatabaseIfNotExist)
+                @Html.LabelFor(model => model.Connection.IsCreateDatabaseIfNotExist)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Tài khoản quản trị mặc định
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.AccountUsername):
+            </td>
+            <td>
+                egovadmin@bkav.com
+                <input type="hidden" name="AccountUsername" id="AccountUsername" value="egovadmin@bkav.com" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.AccountPassword):
+            </td>
+            <td>
+                egov123456a@@
+                <input type="hidden" name="AccountPassword" id="AccountPassword" value="egov123456a@@" />
+            </td>
+        </tr>
+    }
+    @if (Model.DomainId > 0)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IsActivated):
+            </td>
+            <td>
+                @Html.EditorFor(model => model.IsActivated)
+                @Html.ValidationMessageFor(model => model.IsActivated)
+            </td>
+        </tr>
+        @Html.HiddenFor(model => model.Connection.ConnectionId)
+        @Html.HiddenFor(model => model.IsPrimary)
+    }
+</table>

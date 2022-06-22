@@ -1,0 +1,29 @@
+﻿<div class="public-result">
+    {{if finishDate != null}}
+        <span data-res="egov.resources.document.publicResult.hasresult">Đã cập nhật kết quả xử lý ngày:</span>
+        <span><b>${finishDate}</b></span>
+    {{/if}}
+    <div class="form-group">
+        <label data-res="egov.resources.document.publicResult.finalResult">Kết quả giải quyết:</label>
+        <textarea class="form-control result" rows="5">${result}</textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label data-res="egov.resources.document.publicResult.dateAppoint">Ngày hẹn tiếp:</label>
+                <input type="datetime" class="form-control datepicker dateAppoint" value="${talkingDate}" />
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <input type="checkbox" id="isAllowPublic" class="isAllowPublic" {{if isPublic == true}} checked {{/if}} />
+                <label data-res="egov.resources.document.publicResult.isAllowPublic">Cho phép công bố kết quả</label>
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="finishProcess" />
+                <label data-res="egov.resources.document.publicResult.finish">Kết thúc xử lý hồ sơ</label>
+            </div>
+        </div>
+    </div>
+</div>

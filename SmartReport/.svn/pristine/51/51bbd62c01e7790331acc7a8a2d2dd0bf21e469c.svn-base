@@ -1,0 +1,8 @@
+﻿
+<div class="search-page trans trans-right dataDetail">
+    <div class="bmail-search hidden" id="mail-search" data-app="bmail"></div>
+
+    <div class="documents-search hidden" data-app="documents" id="document-search"></div>
+
+    <div class="chat-search hidden" data-app="chat" id="chat-search"></div>
+</div>

@@ -1,0 +1,192 @@
+﻿<div class="modal fade filter-config">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title" id="myLargeModalLabel">Cấu hình bộ lọc</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-4 text-right" style="padding-top: 5px">
+                        Trường:
+                    </div>
+                    <div class="col-md-6" id="filter-field">
+                    </div>
+                </div>
+                <div class="row">
+                        <div style="margin-left: 15px;">
+                            <input type="checkbox" id="checkAll"><span> Chọn tất cả</span>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-16">
+                        <ul class="nav nav-tabs nav-tabs-danger nav-justified tab-filter-config" role="tablist" id="tabFilterConfig">
+                            <li class="nav-item active">
+                                <a class="nav-link " data-toggle="tab" href="#tab-general" id="general" role="tab">Chọn giá trị</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab-condition" style="padding-top: 6px" id="condition" role="tab">Điều kiện</a>
+                            </li>
+                        </ul>
+
+                        <div class="box-body tab-content" style="max-height: 500px; overflow-y: auto;overflow-x: hidden">
+                            <div class="tab-pane fade in active" id="tab-general">
+                                <div class="row">
+                                    <div class="col-md-16" id="general-values">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tab-condition">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        Điều kiện
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select class="form-control" id="condition-list" name="condition-list"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="condition-value">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-primary" id="btnSaveFilterConfig">Ghi lại</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade add-datafield">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Thêm công thức</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 20px;">
+                    <div class="bold-text">
+                        Tên trường <span class="text-danger">*</span>
+                    </div>
+                    <div>
+                        <input type="text" name="Name" class="form-control" id="fieldmath-name" required />
+                        <div class="invalid-feedback">
+                            Không được để trống Tên trường
+                        </div>
+                        <div class="name-exist d-none">
+                            Tên trường đã tồn tại, bạn hãy nhập tên khác.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div style="">
+                            <div>
+                                Dimensions
+                                <input type="text" placeholder="search..." class="filter-field filter-dimensions-add" />
+                            </div>
+                            <div>
+                                <div class="media-list media-list-hover media-list-divided" id="ds-dimension-add-fields" style="max-height: 150px;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                Measures
+                                <input type="text" placeholder="search..." class="filter-field filter-measures-add" />
+                            </div>
+                            <div>
+                                <div class="media-list media-list-hover media-list-divided" id="ds-measure-add-fields" style="max-height: 350px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="mt-10">
+                            <div>
+                                Công thức <span class="text-danger">*</span>
+                            </div>
+                            <div>
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-success btn-xs pull-left" id="btnAddText">Text</button>
+                                    <button type="button" class="btn btn-success btn-xs pull-left" id="btnAddNumber" style="margin-left: 10px;">Numb</button>
+
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnPlus">+</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnSubtract">-</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnMultiply">*</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnDivision">/</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnOpenBrackets">(</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnCloseBrackets">)</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-10">
+                            <div class="col-md-16 col-sm-16">
+                                <div class="form-control datafield-container" style="min-height: 300px;">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Không được để trống Công thức
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-16 text-right">
+                        <button type="button" class="btn btn-primary" id="btnSaveFieldMath">Ghi lại</button>
+                        <button type="button" class="btn btn-danger" id="btnCloseAddFieldMath">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade xoay-filter-config">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title" id="myLargeModalLabel">Cấu hình alias cho dữ liệu xoay</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-4 text-right" style="padding-top: 5px">
+                        Trường:
+                    </div>
+                    <div class="col-md-12" id="xoay-filter-field">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-16">
+                        <div class="box-body tab-content" style="max-height: 500px; overflow-y: auto;overflow-x: hidden">
+                            <div class="row">
+                                <div class="col-md-16" id="xoay-general-values">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-primary" id="btnXoaySaveFilterConfig">Ghi lại</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

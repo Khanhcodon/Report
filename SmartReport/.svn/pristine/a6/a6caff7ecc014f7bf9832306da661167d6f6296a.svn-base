@@ -1,0 +1,16 @@
+﻿@model Bkav.eGovCloud.Models.AuthorizeModel
+@{
+    ViewBag.Title = "CreateSignature";
+}
+<div class="Hb qd">
+    @using (Ajax.BeginForm("EditAuthorize", "Account", new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "menuRight",
+
+    }, new { enctype = "multipart/form-data" }))
+    {     
+        @Html.Partial("_CreateOrEditAuthorize")
+    }
+</div>
+

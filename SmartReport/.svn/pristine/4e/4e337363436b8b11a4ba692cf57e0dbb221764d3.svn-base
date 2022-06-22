@@ -1,0 +1,108 @@
+﻿@model BackupRestoreFileConfigModel
+@{
+    var shareFolderList = ViewBag.FolderShareList as List<SelectListItem>;    
+}
+<style>
+    .input-group{
+        width: 80%;
+    }
+</style>
+<script>
+    $(function () {
+        $("#FileName").keyup(function () {
+            $("#fileNameEx").text($(this).val());
+        });
+    })
+</script>
+@using (Html.BeginForm(Model.BackupRestoreFileConfigId == 0 ? "Create" : "Edit"))
+{
+    @Html.ValidationSummary(true)
+  
+    @Html.HiddenFor(model => model.BackupRestoreFileConfigId)
+
+    <table id="timeJobInfo" style="width: 100%">
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Domain):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Domain)
+                @Html.ValidationMessageFor(model => model.Domain)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.FileName):
+            </td>
+            <td>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.FileName, new { @class= "form-control" })
+                    <span class="input-group-addon" id="basic-addon2"><span id="fileNameEx">@(Model.FileName)</span>_yyyyMMddHHmmss.zip</span>
+                </div>
+                @Html.ValidationMessageFor(model => model.FileName)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Directory):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Directory)
+                @Html.ValidationMessageFor(model => model.Directory)
+                <div>
+                    VD:
+                    <span style="color: red">\\10.2.22.184\share</span>
+                    or  <span style="color: red">F:\test\</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IsNetwork):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsNetwork)
+                @Html.ValidationMessageFor(model => model.IsNetwork)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.UserName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Password):
+            </td>
+            <td>
+                @Html.Password("Password", Model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ZipPassword):
+            </td>
+            <td>
+                @Html.Password("ZipPassword", Model.ZipPassword)
+                @Html.ValidationMessageFor(model => model.ZipPassword)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.HasAutoRun):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasAutoRun)
+                @Html.ValidationMessageFor(model => model.HasAutoRun)
+            </td>
+        </tr>
+
+    </table>
+    <br />  <br />
+}

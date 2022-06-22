@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style type="text/css">
+        body, html {
+            font-family: Tahoma;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .egov {
+            padding: 15px;
+        }
+
+        .officeName {
+            color: #4e4edc;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border: 1px solid #838383;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #0f6cc6;
+            margin-right: 15px;
+        }
+
+        ul li {
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="egov">
+        <h2>
+            <span class="officeName">@ViewBag.OfficeName</span>
+        </h2>
+        <div>
+            <div style="font-size: 16px;">
+                Thiết bị này hiện không được phép truy cập vào tài khoản <b> @ViewBag.UserName.</b>
+            </div>
+            <br />
+            <div>
+                Nếu bạn muốn truy cập trên thiết bị này, vui lòng kiểm tra lại theo các bước sau:<br />
+                <ul>
+                    <li>
+                        Nếu tài khoản của bạn đang giới hạn đăng nhập theo địa chỉ MAC, kiểm tra trình duyệt bạn đang sử dụng đã cài eGov Extension chưa?
+                    </li>
+                    <li>
+                        Nếu thiết bị hiện tại chưa được bạn cấp quyền truy cập, hãy cấp quyền truy cập cho thiết bị bằng cách:
+                        Đăng nhập trên thiết bị được phép, sau đó, vào mục <b>Thiết lập cá nhân</b> và chọn <b>Quản lý thiết bị</b>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br />
+        <div>
+            <a href="\Account\Login" class="btn">
+                Quay lại trang đăng nhập
+            </a>
+            <a href="/Install/extension" class="btn">
+                Cài extension
+            </a>
+        </div>
+    </div>
+</body>
+</html>

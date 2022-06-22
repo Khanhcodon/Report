@@ -1,0 +1,66 @@
+﻿@model IEnumerable<NotifyConfigModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Notify.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var count = 0;
+}
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.blockpanel.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.grid.js"></script>
+   <script type="text/javascript">
+       $(function () {
+           $("#tblNotify").grid({
+               isResizeColumn: true,
+               isFixHeightContent: false
+           });
+           $("#tblNotify").openLink({ urlOpen: '/Admin/NotifyConfig/Edit' });
+
+           $(".table-main").addClass("table-bordered table-hover");
+       });
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-bell"></i>
+        <span data-res="egov.resources.sitemap.notify"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/Notify/SMS">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+@Html.Partial("_Notifications")
+<table class="table-main table" id="tblNotify">
+    <colgroup>
+        <col style="width:50px"/>
+        <col />
+        <col />
+        <col style="width:50px"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th data-res="egov.resources.tableheader.stt"></th>
+            <th data-res="egov.resources.tableheader.function"></th>
+            <th data-res="egov.resources.tableheader.description"></th>
+            <th data-res="egov.resources.tableheader.edit"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var notify in Model)
+            {
+                count++;
+            <tr data-id="?key=@notify.Key">
+                <td>@count</td>
+                <td>@notify.Key</td>
+                <td>@notify.Description</td>
+                <td>
+                    @Html.ActionLink(Localizer("Common.Button.Edit"), "Edit", new { key = notify.Key })
+
+                </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>

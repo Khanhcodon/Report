@@ -1,0 +1,16 @@
+﻿@model Bkav.eGovCloud.Models.SignatureModel
+@{
+    ViewBag.Title = "CreateSignature";
+}
+
+<div class="Hb qd" style="max-width: 500px">
+    @using (Ajax.BeginForm("EditSignature", "Account", new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "menuRight",
+        
+    }, new { enctype = "multipart/form-data", refreshPage = true }))
+    {
+        @Html.Partial("_CreateOrEdit", Model)
+    }
+</div>

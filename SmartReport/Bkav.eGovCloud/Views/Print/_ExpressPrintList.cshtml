@@ -1,0 +1,83 @@
+﻿@using Bkav.eGovCloud.Entities.Enum;
+@using Bkav.eGovCloud.Core.Utils;
+@model IEnumerable<Bkav.eGovCloud.Models.DailyProcessModel>
+@{
+    var printDocs = Model.GroupBy(d => d.ProcessType);
+}
+<script src="../../Scripts/underscore.js"></script>
+<script src="../../Scripts/bkav.utilities.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+
+        $(".print-group").each(function () {
+            var checkAll = $(this).find(":checkbox[value='all']");
+            var children = $(this).find(".print-group-list :checkbox");
+            egov.utilities.checkbox.checkAndUnCheckAll(checkAll, children);
+        });
+
+        $(".printTemplateList").each(function () {
+            var $this = $(this);
+            var processType = $this.attr("processtype");
+            $.ajax({
+                url: "@Url.Action("GetPrintTemplates")",
+                type: "GET",
+                data: { processType: processType },
+                success: function (data) {
+                    var prints = JSON.parse(data.success);
+                    for (var i = 0; i < prints.length; i++) {
+                        var option = $("<option>");
+                        option.text(prints[i].Name);
+                        option.val(prints[i].TemplateId);
+                        $this.append(option);
+                    }
+                },
+                error: function (xhr) {
+                    alert(xhr.statusText);
+                }
+            });
+        });
+    });
+</script>
+
+@if (printDocs.Any())
+{
+    foreach (var group in printDocs)
+    { 
+    <div class="print-group">
+        <div class="print-group-title">
+            <input type="checkbox" value="all" title="Chọn / bỏ chọn tất cả" />
+            <span>Các hồ sơ đã @(EnumHelper<DocumentProcessType>.GetDescription((DocumentProcessType)group.Key))</span>
+            <span>( @group.Count() hồ sơ)</span>
+            <span class="print-template">
+                <span>Mẫu phiếu in: </span>
+                <select class="printTemplateList" processtype="@group.Key"></select>
+            </span>
+        </div>
+        <div class="print-group-list">
+            @foreach (var doc in group.ToList())
+            { 
+                <div class="print-list-item">
+                    <input type="checkbox" @(Model.First().DailyProcessId == doc.DailyProcessId ? "checked" : "") value="@doc.DocumentCopyId"/>
+
+                    <span class="doc-time-created" title="Giờ thực hiện">@doc.DateCreated.ToShortTimeString()</span>
+                    @if (doc.ProcessTypeEnum == DocumentProcessType.BanGiao)
+                    {
+                        <span class="doc-citizen" title="Người nhận bàn giao: @doc.Receiver">@doc.Receiver</span>
+                    }
+                    else
+                    {
+                        <span class="doc-citizen" title="Tên công dân: @doc.CitizenName">@doc.CitizenName</span>
+                    }
+                    <span class="doc-compendium" title="Trích yếu: @doc.Document.Compendium">@doc.Document.Compendium</span>
+
+                </div>
+            }
+        </div>
+    </div>
+    }
+}
+else
+{
+    <span>Không có hồ sơ nào</span>
+}

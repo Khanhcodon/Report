@@ -1,0 +1,185 @@
+﻿@model ActionLevelModel
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.ActionLevelId)
+
+<link href="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.css" rel="stylesheet" />
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                if ($("form").valid())
+                    $("form").submit();
+            }
+        });
+
+        $("form").data("validator").settings.ignore = ":hidden, .date"
+
+        $("#chooseStartDate, #chooseEndDate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $(".date").on('change', function () {
+            var _el = $(this).data('for');
+            var value = $(_el).val().split(' ')[1];
+            $(_el).val($(this).val() + ' ' + value);
+        })
+
+        $("#chooseStartTime, #chooseEndTime").timepicker({ 'timeFormat': 'H:i:s' });
+        $(".time").on('change', function () {
+            var _el = $(this).data('for');
+            var value = $(_el).val().split(' ')[0];
+            $(_el).val(value + ' ' + $(this).val());
+        });
+
+        var templateedit = $("#txtTemplateKey").val();
+        replacevalue(templateedit);
+
+        $("#txtTemplateKey").blur(function () {
+            var template = $(this).val();
+            replacevalue(template);
+        });
+
+        $("input[name='configTemplateKey']").bind('click',function(){
+            addtext($(this).val());
+        });
+
+        $("#choseDept").bind("click",function(){
+            showDialog();
+        });
+    });
+
+    function addtext(value) {
+        var template = $("#txtTemplateKey").val();
+        var templaceclick;
+        if (template == "") {
+            templaceclick = value;
+        }
+        else if (template.indexOf(value) == -1) {
+            templaceclick = template + value;
+        }
+        else {
+            templaceclick = template;
+        }
+        $("#txtTemplateKey").val(templaceclick);
+        replacevalue(templaceclick);
+    }
+
+    function replacevalue(value) {
+        var currentDate = new Date();
+        var day = currentDate.getDate();
+        var month = currentDate.getMonth() + 1;
+        var year = currentDate.getFullYear();
+
+        value = value.replace("$N$", "124");
+        value = value.replace("$n$", "124");
+        value = value.replace("$D$", day < 10 ? "0" + day : day);
+        value = value.replace("$d$", day);
+        value = value.replace("$M$", month < 10 ? "0" + month : month);
+        value = value.replace("$m$", month);
+        value = value.replace("$Y$", year);
+        value = value.replace("$y$", year.toString().substr(2,2));
+
+        $("#txtXemthu").text(value);
+    }
+</script>
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto; /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    #depts li[rel="dept"] > a > .jstree-icon {
+        background-image: url("/Content/Images/dept.png");
+        background-position: 0 0;
+    }
+</style>
+<table>
+    <tr>
+        <td style="width: 20%">
+            @Html.LabelRequireFor(model => model.ActionLevelName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.ActionLevelName)
+            @Html.ValidationMessageFor(model => model.ActionLevelName)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelRequireFor(model => model.ActionLevelCode):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.ActionLevelCode)
+            @Html.ValidationMessageFor(model => model.ActionLevelCode)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.StartTime):
+        </td>
+        <td>
+            <input data-for="#StartTime" type="text" name="chooseStartDate" id="chooseStartDate"
+                   style="width: 120px; display: inline" value="@(Model.StartTime.HasValue ? Model.StartTime.Value.ToString("dd/MM/yyyy") : "")" class="date" />
+            <input data-for="#StartTime" type="text" name="chooseStartTime" id="chooseStartTime"
+                   style="width: 100px; display: inline" value="@(Model.StartTime.HasValue ? Model.StartTime.Value.ToString("HH:mm:ss") : "")" class="time" />
+            @Html.Hidden("StartTime", Model.StartTime.HasValue ? Model.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : "")
+            @Html.ValidationMessageFor(model => model.StartTime)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.EndTime):
+        </td>
+        <td>
+            <input data-for="#EndTime" type="text" name="chooseEndDate" id="chooseEndDate"
+                   style="width: 120px; display: inline" value="@(Model.EndTime.HasValue ? Model.EndTime.Value.ToString("dd/MM/yyyy") : "")" class="date" />
+            <input data-for="#EndTime" type="text" name="chooseEndTime" id="chooseEndTime"
+                   style="width: 100px; display: inline" value="@(Model.EndTime.HasValue ? Model.EndTime.Value.ToString("HH:mm:ss") : "")" class="time" />
+            @Html.Hidden("EndTime", Model.EndTime.HasValue ? Model.EndTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : "")
+            @Html.ValidationMessageFor(model => model.EndTime)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.TemplateKey):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.TemplateKey, new { id = "txtTemplateKey" })
+            @Html.ValidationMessageFor(model => model.TemplateKey)
+            Sử dụng:
+            <input type="button" name="configTemplateKey" value="$D$" title="Lấy ngày hiện tại, nếu nhỏ hơn 10 thì thêm số 0 đằng trước" data-restitle="egov.resources.code.config1" />
+            &nbsp;
+            <input type="button" name="configTemplateKey" value="$d$" title="Lấy ngày hiện tại" data-restitle="egov.resources.code.config2" />
+            &nbsp;
+            <input type="button" name="configTemplateKey" value="$M$" title="Lấy tháng hiện tại, nếu nhỏ hơn 10 thì thêm số 0 đằng trước" data-restitle="egov.resources.code.config3" />
+            &nbsp;
+            <input type="button" name="configTemplateKey" value="$m$" title="Lấy tháng hiện tại" data-restitle="egov.resources.code.config4" />
+            &nbsp;
+            <input type="button" name="configTemplateKey" value="$Y$" title="Lấy năm hiện tại" data-restitle="egov.resources.code.config5" />
+            &nbsp;
+            <input type="button" name="configTemplateKey" value="$y$" title="Lấy 2 số cuối của năm hiện tại" data-restitle="egov.resources.code.config6" />
+        </td>
+    </tr>
+    <tr>
+        <td>@Localizer("Bkav.eGovCloud.Areas.Admin.ShowPreview")
+        </td>
+        <td>
+            <b><span id="txtXemthu"></span></b>
+        </td>
+    </tr>
+</table>

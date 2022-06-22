@@ -1,0 +1,92 @@
+﻿@model IEnumerable<NotifyModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Notify.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var count = 0;
+}
+<script>
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            width: 600,
+            height: 400,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: [
+                {
+                    text: egov.resources.buttons.select || "Chọn",
+                    click: function () {
+                        $("form").submit();
+                        $("#my-dialog").dialog("close");
+                    }
+                }]
+        });
+    }
+    $(function () {
+        $(".edit-btn").click(function () {
+            openDialog('@Url.Action("DisplayPapers", "Doctype", new { id = ViewBag.DocTypeId })')
+        });
+    });
+</script>
+@*<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Common.List"), "Index", null, new { @class = "selected" })</li>
+        <li>@Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Notify.SMSKB"), "SMS")</li>
+    </ul>
+</div>*@
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-bell"></i>
+        <span data-res="egov.resources.sitemap.notify"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/Notify/SMS">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div class="">
+@Html.Partial("_Notifications")
+<table class="table-main table-bordered table-hover">
+    <colgroup>
+        <col style="width:50px"/>
+        <col />
+        <col />
+        <col />
+        <col style="width:50px"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th data-res="egov.resources.tableheader.stt"></th>
+            <th data-res="egov.resources.tableheader.function"></th>
+            <th data-res="egov.resources.tableheader.description"></th>
+            <th data-res="egov.resources.tableheader.form"></th>
+            <th data-res="egov.resources.tableheader.edit"></th>
+        </tr>
+    </thead>
+    @foreach (var notify in Model)
+    {
+        count++;
+        <tr>
+            <td>@count</td>
+            <td>@notify.Option</td>
+            <td>@notify.Description</td>
+            @if (notify.Template != null)
+            {
+                <td>@notify.Template.Name</td>
+            }
+            else
+            {
+                <td data-res="egov.resources.notify.noform"></td>
+            }
+            <td>
+                <button class="btn-link" type="button" data-res="egov.resources.buttons.edit" onclick="openDialog('@Url.Action("Edit", "Notify", new { option = notify.Option })')">
+                </button></td>
+        </tr>
+    }
+</table>
+<div id="my-dialog"></div>
+</div>

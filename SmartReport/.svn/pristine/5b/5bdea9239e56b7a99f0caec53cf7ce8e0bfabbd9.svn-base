@@ -1,0 +1,652 @@
+﻿
+<!--20191126 VuHQ START REQ-5-->
+<style>
+    .ht_master .wtHolder {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+    .headerHandson tr td{
+        border: 1px solid #ccc;
+        text-align: center;
+        vertical-align: middle !important;
+        font-weight: bold;
+        background-color: #f1f1f1;
+    }
+    .gray
+    {
+        background-color: lightgray !important;
+    }
+
+    /*20191231 VuHQ START*/
+    .htCenter {
+        text-align: center;
+        color:black;
+    }
+    .htBold
+    {
+        font-weight: bold;
+    }
+
+    .htItalic {
+        font-style: italic;
+    }
+
+    .htStrike {
+        text-decoration: line-through;
+    }
+
+    .document-info {
+        overflow-x: hidden;
+    }
+    #wdr-toolbar-wrapper
+    {
+        height: 0 !important;
+    }
+
+    .wdr-credits
+    {
+        display: none;
+    }
+    .formHeader {
+        clear: both;
+        padding-left: 15px;
+    }
+    .formFooter
+    {
+        clear: both;
+        padding-left: 15px;
+        padding-top: 5px;
+    }
+
+    .document-navigation {
+        display: none;
+        flex: 1;
+        border: 1px solid #d1d1d1;
+        max-width: 100%;
+        overflow: hidden;
+        transition: max-width .5s ease;
+    }
+
+    .document-navigation-title {
+        border-bottom: 2px solid #d1d1d1;
+        padding: 5px;
+    }
+
+    .document-navigation-content ol {
+        margin-left: 10px;
+        padding-right: 0px;
+        counter-reset: item;
+        padding-inline-start: 15px;
+    }
+
+        .document-navigation-content ol li {
+            display: block;
+            position: relative;
+        }
+
+            .document-navigation-content ol li:before {
+                content: counters(item, ".");
+                counter-increment: item;
+                position: absolute;
+                margin-right: 100%;
+                right: 0.5rem;
+            }
+
+            .document-navigation-content ol li a {
+                color: #0782C1;
+                text-decoration: none;
+            }
+
+    .toggle-navigation {
+        min-width: 8px;
+        display: none;
+        align-items: center;
+        border-top: 1px solid #d1d1d1;
+        border-bottom: 1px solid #d1d1d1;
+    }
+
+        .toggle-navigation.hide-nav {
+            border-left: 1px solid #d1d1d1;
+        }
+
+    .toggle-navigation-btn {
+        flex: 1;
+        height: 50px;
+        background: #c1c1c1;
+        border-radius: 2px;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .toggle-navigation-btn:after {
+            content: '';
+            width: 100%;
+            height: 10px;
+            position: absolute;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            top: calc(50% - 7px);
+        }
+
+    .show-nav .toggle-navigation-btn:after {
+        border-right: 7px solid #525252;
+    }
+
+    .hide-nav .toggle-navigation-btn:after {
+        border-left: 7px solid #525252;
+    }
+
+    .handsontable thead th div {
+        font-weight: bold;
+    }
+
+    .document-info {
+        height: calc(100% - 105px) !important;
+    }
+
+    .htUnderline {
+        text-decoration: underline;
+    }
+
+    .handsontable .ht_master tr th {
+        visibility: inherit !important;
+    }
+    .handsontable .htDimmed {
+        color: #222 !important;
+    }
+    div[id$=_explicit_template] .cke_contents {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+<ul class="nav nav-pills toolbar"></ul>
+
+<div class="document-info">
+    <form>
+        <div class="staticPart">
+            <div class="form-horizontal doc-info-group">
+                <div class="doc-info-label hidden">
+                    <label>
+                        <span class="icon icon-info"></span> Thông tin báo cáo
+                    </label>
+                </div>
+                <div class="doc-info-content  document-info-template">
+                    <input type="hidden" name="DocumentId" value="${DocumentId}" />
+                    <input type="hidden" name="DocumentCopyId" value="${DocumentCopyId}" />
+
+                    <div class="formTmp">
+                        <div class="" id="wrapCompendium">
+                            <label class="control-label">Tiêu đề BC</label>
+                            <div class="control-value">
+                                <textarea cols="20" class="form-control" name="Compendium" rows="2" tabindex="3" required data-restitle="egov.resources.document.CompendiumTitle">${Compendium}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <div class="col-md-16">
+                                <div id="wrapComment">
+                                    <label class="control-label">
+                                        <span data-res="egov.resources.document.Comment"></span>
+                                        <input type="button" id="openDialogCommon" name="openDialogCommon" class="btn btn-xs btn-default" value="Chọn mẫu" />
+                                    </label>
+                                    <div class="control-value">
+                                        <textarea class="form-control" id="Comment" name="Comment" rows="2" cols="20"></textarea>
+                                    </div>
+                                </div>
+                                <div class="hidden-xs" id="wrapDoctype">
+                                    <label class="control-label">Loại báo cáo</label>
+                                    <div class="control-value">
+                                        <input type="hidden" name="DocTypeId" value="${DocTypeId}" />
+                                        <input type="text" value="${DocTypeName}" readonly class="form-control" id="DocTypeId" />
+                                    </div>
+                                </div>
+                                <div class="hidden-xs" id="wrapCategory">
+                                    <label class="control-label" data-res="egov.resources.document.Category"></label>
+                                    <div class="control-value">
+                                        <select id="CategoryId" name="CategoryId" tabindex="120" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="hidden-xs" id="wrapNote">
+                                    <label class="control-label" data-res="egov.resources.document.Note"></label>
+                                    <div class="control-value">
+                                        <input type="text" value="${Note}" class="form-control" id="Note" name="Note" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="hidden-xs col-xs-16 col-sm-16 col-md-16">
+                                <div id="wrapUrgent">
+                                    <label class="control-label" data-res="egov.resources.document.Urgent.name"></label>
+                                    <div class="control-value">
+                                        <select id="UrgentId" name="UrgentId" class="form-control">
+                                            <option value="1" {{if UrgentId==1}} selected{{/if}}>Thường</option>
+                                            <option value="2" {{if UrgentId==2}} selected{{/if}}>Khẩn</option>
+                                            <option value="3" {{if UrgentId==3}} selected{{/if}}>Thượng Khẩn</option>
+                                            <option value="4" {{if UrgentId==4}} selected{{/if}}>Hỏa tốc</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hidden-xs" id="wrapInOutPlace">
+                                    <label class="control-label">Đơn vị gửi</label>
+                                    <div class="control-value">
+                                        <select id="InOutPlace" name="InOutPlace"  class="js-example-basic-single form-control">
+                                            {{if InOutPlace}}
+                                            <option value="${OrganizationCode}">${InOutPlace}</option>
+                                            {{/if}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hidden-xs" id="wrapDateAppointed">
+                                    <label class="control-label" data-res="egov.resources.document.DateAppointed"></label>
+                                    <div class="control-value">
+                                        {{if (CategoryBusinessId == 4)}}
+                                        {{if DocumentCopyId == 0 || DocTypeId == null || DocTypeId == "" || DocTypeId == "00000000-0000-0000-0000-000000000000"}}
+                                        <select class="form-control" style="width: 90px; display: inline-block" id="ddlDateAppointRange">
+                                            {{each(i) _.range(365)}}
+                                            <option value="${i+1}" {{if ExpireProcess == i + 1 }} selected{{/if}}>${i+1} ngày</option>
+                                            {{/each}}
+                                        </select>
+                                        {{else}}
+                                        <select class="form-control" style="width: 90px; display: inline-block" id="ddlDateAppointRange">
+                                            <option value="${ExpireProcess}" selected>${ExpireProcess} ngày</option>
+                                        </select>
+                                        {{/if}}
+                                        <div class="input-group pull-right" style="width: auto">
+                                            <input type="text" class="form-control datepicker" name="DateAppointed" value="${DateAppointed}" />
+                                            <span class="input-group-addon icon-history changeWorkflowType" data-restitle="egov.resources.document.changeWorkflowType" style="padding: 3px 8px;"></span>
+                                        </div>
+                                        {{else}}
+                                        <div class="input-group col-md-16 pull-right">
+                                            {{if DocumentCopyId == 0 || DocTypeId == null || DocTypeId == "" || DocTypeId == "00000000-0000-0000-0000-000000000000"}}
+                                            <span class="input-group-addon" style="padding: 0 5px; height: 20px">
+                                                <input type="checkbox" aria-label="..." value="true" name="HasDateAppointed" id="HasDateAppointed">
+                                            </span>
+                                            <input type="text" class="form-control datepicker" value="${DateAppointed}" name="DateAppointed" readonly />
+                                            {{else}}
+                                            <input type="text" class="form-control datepicker" value="${DateAppointed}" name="DateAppointed" readonly disabled />
+                                            <input type="checkbox" aria-label="..." value="true" name="HasDateAppointed" id="HasDateAppointed" checked class="hidden">
+                                            <span class="input-group-addon icon-history changeDateAppointed" title="Thay đổi hạn xử lý" style="padding: 3px 8px; color: black"></span>
+                                            {{/if}}
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                    <input type="hidden" name="WorkflowTypeId" value="${WorkflowTypeId}" />
+                                </div>
+                                <div class="hidden-xs" id="wrapDateOverdue">
+                                    <label class="control-label" data-res="egov.resources.formtemplate.dateOverdue"></label>
+                                    <div class="control-value">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon" style="padding: 0 5px; height: 20px">
+                                                <input type="checkbox" aria-label="..." value="true" name="HasDateOverdue" id="HasDateOverdue">
+                                            </span>
+                                            <input type="text" class="form-control datepicker" value="${DateOverdue}" name="DateOverdue" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="wrapDatePublished">
+                            <label class="control-label" style="white-space:nowrap">Kỳ báo cáo</label>
+                            <div class="control-value">
+                                <input type="text" tabindex="122" value="${DatePublished}" name="DatePublished" class="form-control datepicker bcngayplus" />
+                                <div id="datebykybaocao" class="hidden">
+                                    <select class="form-control pull-right" style="width: 50%; display: inline-block" id="ddlYearReport">
+                                        {{each(i) _.range(21)}}
+                                        <option value="${i+2005}">Năm ${i+2005}</option>
+                                        {{/each}}
+                                    </select>
+                                    <div class="input-group " style="width: auto; min-width:50%" id="kybaocao">
+                                        <select class="form-control timeKey hidden" style="border-radius:4px" id="bctuan">
+                                            {{each(i) _.range(52)}}
+                                            <option value="${i+1}">Tuần ${i+1}</option>
+                                            {{/each}}
+                                        </select>
+                                        <strong id="week_date" style="display:none"> </strong>
+                                        <select class="form-control timeKey hidden" style="border-radius:4px" id="bcthang">
+                                            {{each(i) _.range(12)}}
+                                            <option value="${i}">Tháng ${i+1}</option>
+                                            {{/each}}
+                                        </select>
+
+                                        <select class="form-control timeKey hidden" style="border-radius:4px" id="bcquy">
+                                            {{each(i) _.range(4)}}
+                                            <option value="${i+1}">Quý ${i+1}</option>
+                                            {{/each}}
+                                        </select>
+
+                                        <select class="form-control timeKey hidden" style="border-radius:4px" id="bcnuanam">
+                                            <option value="1">6 tháng đầu năm</option>
+                                            <option value="2">6 tháng cuối năm</option>
+                                        </select>
+                                        <select class="form-control timeKey hidden" style="border-radius:4px" id="bc9thang">
+                                            <option value="9">9 tháng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="wrapOrganization">
+                            <label class="control-label">Nơi nhận</label>
+                            <div class="control-value">
+                                <input type="text" value="${Organization}" name="Organization" class="form-control" />
+                            </div>
+                        </div>
+                        {{if CategoryBusinessId == 1 || CategoryBusinessId == 2}}
+
+                        <div id="wrapOrganization">
+                            <label class="control-label">Nơi nhận</label>
+                            <div class="control-value">
+                                <input type="text" value="${Organization}" name="Organization" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div id="wrapDateArrived">
+                            <label class="control-label" data-res="egov.resources.document.DateArrived"></label>
+                            <div class="control-value">
+                                <input type="text" tabindex="121" value="${DateArrived}" name="DateArrived" class="form-control datepicker" />
+                            </div>
+                        </div>
+                        <div id="wrapDatePublished">
+                            <label class="control-label" style="white-space:nowrap">Ngày VB</label>
+                            <div class="control-value">
+                                <input type="text" tabindex="122" value="${DatePublished}" name="DatePublished" class="form-control datepicker" />
+                            </div>
+                        </div>
+                        <div id="wrapInOutCode">
+                            <label class="control-label" data-res="egov.resources.document.InOutCode"></label>
+                            <div class="control-value">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input type="checkbox" name="IsCustomCode" id="IsCustomCode" title="Đánh số bằng tay" />
+                                    </div>
+                                    <input type="text" class="form-control" name="InOutCode" value="${InOutCode}" id="InOutCode" readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle btnChangeDocCode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right ddlDocCodes"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="wrapSecurity">
+                            <label class="control-label" data-res="egov.resources.document.SecurityId.name"></label>
+                            <div class="control-value">
+                                <select class="form-control" name="SecurityId" id="SecurityId">
+                                    <option value="1" {{if SecurityId==1}} selected{{/if}} data-res="egov.resources.document.SecurityId.normal"></option>
+                                    <option value="2" {{if SecurityId==2}} selected{{/if}} data-res="egov.resources.document.SecurityId.high"></option>
+                                    <option value="3" {{if SecurityId==3}} selected{{/if}} data-res="egov.resources.document.SecurityId.important"></option>
+                                    <option value="4" {{if SecurityId==4}} selected{{/if}} data-res="egov.resources.document.SecurityId.highest"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="wrapDocField">
+                            <label class="control-label" data-res="egov.resources.document.DocField"></label>
+                            <div class="control-value" style="height:60px;overflow-y: scroll;">
+                                <input type="hidden" value="${DocFieldIds}" name="DocFieldIds" id="DocFieldIds" />
+                                <table id="tblDocField" class="table table-bordered table-hover">
+                                    <colgroup>
+                                        <col style="width:45px" />
+                                        <col />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center active">
+                                            </th>
+                                            <th class="text-center active">
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{each ListDocField}}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="ListDocField" value=${DocFieldId} id="ListDocField">
+                                            </td>
+                                            <td>
+                                                ${DocFieldName}
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="wrapKeyword">
+                            <label class="control-label">Từ khóa</label>
+                            <div class="control-value" style="height:60px;overflow-y: scroll;">
+                                <input type="text" class="form-control" value="${Keyword}" id="Keyword" name="Keyword" />
+                            </div>
+                        </div>
+                        <div id="wrapSendType">
+                            <label class="control-label" data-res="egov.resources.document.SendType"></label>
+                            <div class="control-value">
+                                <select id="SendTypeId" name="SendTypeId" class="form-control"></select>
+                            </div>
+                        </div>
+                        {{/if}}
+
+                        {{if CategoryBusinessId == 4}}
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <div id="wrapCitizenName">
+                                    <label class="control-label" data-res="egov.resources.document.CitizenName"></label>
+                                    <div class="control-value">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" tabindex="-1" value="${CitizenName}" name="CitizenName" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btnCheckCitizenInfo" style="height: 31px;">
+                                                    <span class="icon icon-search"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wrapAddress">
+                                    <label class="control-label" data-res="egov.resources.document.Address"></label>
+                                    <div class="control-value">
+                                        <input type="text" name="Address" value="${Address}" class="form-control" />
+                                    </div>
+                                </div>
+                                <div id="wrapDateCreated">
+                                    <label class="control-label" data-res="egov.resources.document.dateCreated"></label>
+                                    <div class="control-value">
+                                        {{if DocumentCopyId == 0}}
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="DateCreated" id="DateCreated" value="${DateCreated}" readonly>
+                                            <span class="input-group-addon changeDateCreated icon-history" data-restitle="egov.resources.document.changeDateCreated" style="padding: 3px 8px;"></span>
+                                        </div>
+                                        {{else}}
+                                        <input type="text" value="${DateCreated}" readonly disabled name="DateCreated" id="DateCreated" class="form-control" />
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div id="wrapPhone">
+                                    <label class="control-label" data-res="egov.resources.document.Phone"></label>
+                                    <div class="control-value">
+                                        <input type="text" value="${Phone}" name="Phone" tabindex="107" alt="phone-vn" required title="nhập số điện thoại." class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="wrapIdentityCard">
+                                    <label class="control-label" data-res="egov.resources.document.IdentityCard"></label>
+                                    <div class="control-value">
+                                        <input type="text" value="${IdentityCard}" tabindex="103" name="IdentityCard" alt="cmnd" class="form-control" />
+                                    </div>
+                                </div>
+                                <div id="wrapEmail">
+                                    <label class="control-label" data-res="egov.resources.document.Email"></label>
+                                    <div class="control-value">
+                                        <input type="text" name="Email" value="${Email}" tabindex="104" class="form-control" />
+                                    </div>
+                                </div>
+                                <div id="wrapCommune">
+                                    <label class="control-label" data-res="egov.resources.document.Commune"></label>
+                                    <div class="control-value">
+                                        <input type="text" class="tabIndex form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="wrapInOutCode">
+                            <label class="control-label">Số tiếp nhận</label>
+                            <div class="control-value">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="InOutCode" value="${InOutCode}" id="InOutCode">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle btnChangeDocCode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right ddlDocCodes"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="wrapKeyword">
+                            <label class="control-label">Tờ trình</label>
+                            <div class="control-value">
+                                <input type="text" class="form-control" value="${Keyword}" id="Keyword" name="Keyword" />
+                            </div>
+                        </div>
+                        <div id="wrapCatalog">
+                            <div id="catalogContent">
+
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-info-group hidden">
+                <div class="doc-info-label">
+                    <label> <span class="icon icon-calendar"></span> Kỳ báo cáo</label>
+                </div>
+                <div class="doc-info-content form-inline">
+                    <div class="form-group" style="width: 49%;">
+                        <label class="col-sm-4 control-label">Kỳ báo cáo</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group" style="width: 49%;">
+                        <label class="col-sm-4 control-label">Chọn kỳ</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="document-attachment doc-info-group">
+                <div class="doc-info-label">
+                    <label> <span class="icon icon-attachment"></span> File đính kèm</label>
+                    <a href="#" class="attachment-download-all">
+                        <span class="icon icon-download2"></span> <span data-res="egov.resources.attachment.downloadAll"></span>
+                    </a>
+                </div>
+                <div class="doc-info-content">
+                    <div id="wrapAttachment">
+                        <table class="table table-bordered table-striped divFiles" id="divFiles">
+                            <colgroup>
+                                <col />
+                                <col style="width: 120px;" />
+                                <col style="width: 100px;" />
+                            </colgroup>
+                            <tbody class="attachment-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-info-group hidden" id="warningTonghop">
+
+            </div>
+        </div>
+        <div class="doc-info-group document-relation" style="display: none;">
+            <div class="doc-info-label">
+                <label>
+                    <span class="icon icon-link"></span>Báo cáo liên quan
+                </label>
+            </div>
+            <div class="doc-info-content">
+                <div id="wrapDocumentRelation">
+                    <table class="table table-bordered table-striped">
+                        <colgroup>
+                            <col />
+                            <col style="width: 180px;" />
+                            <col style="width: 120px;" />
+                        </colgroup>
+                        <tbody class="relation-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="scrollPart">
+            <div class="clear"></div>
+            <div class="document-extend">
+                <div class="doc-info-group ">
+                    <div id="tinhTrangLienThongArea">
+                        <div class="doc-info-label">
+                            <label><span class="icon  icon-users2"></span>Tiến độ xử lý liên thông</label>
+                        </div>
+                        <div style="padding-left: 50px;">
+                            <span style="font-size:14px">Tình trạng: </span> <span style="font-size:14px" id="tinhTrangLienThong"></span>
+                        </div>
+                    </div>
+                    <div class="doc-info-label">
+                        <label><span class="icon  icon-users2"></span>Tiến độ xử lý</label>
+                        <button id="btnViewLeaf" type="button" class="hidden btn btn-success btn-small" 
+                                style="float: right; outline: none; cursor: pointer !important"><i class="fa fa-sitemap" aria-hidden="true"></i></button>
+                        <!--</i> <i class="fa fa-list" aria-hidden="true"></i>-->
+                    </div>
+                    <div id="viewSimple" class="doc-info-content">
+                        <div class="form-group">
+                            <ul id="coCommentList" class="commentList"></ul>
+                        </div>
+                        <div class="form-group">
+                            <ul id="commentList" class="commentList"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div>
+                <div class="col-md-16" style="margin-bottom:15px;display:none" >
+                    <button class="pull-left" id="btnAddRow" style="padding: .3rem .5rem .31rem;color: #fff;font-size: 13px;border: none;background: #9e9e9e; margin-right:15px">
+                        Thêm dòng
+                    </button>
+                    <button class="pull-left" id="btnMerge" style="padding: .3rem .5rem .31rem;color: #fff;font-size: 13px;border: none;background: #9e9e9e;">
+                        Gộp ô
+                    </button>
+                    <button class="pull-right" id="btnExportCSV" style="padding: .3rem .5rem .31rem;color: #fff;font-size: 13px;border: none;background: #9e9e9e;">
+                        Xuất file
+                    </button>
+                    <button class="pull-right" id="btnViewBCTH" style="padding: .3rem .5rem .31rem;color: #fff;font-size: 13px;border: none;background: #9e9e9e;  margin-right:15px">
+                        Xem báo cáo
+                    </button>
+                </div>
+                <!--20191126 VuHQ START REQ-5-->
+                <div class="formHeader"></div>
+
+                <div style="width: 99%; padding-left: 15px; display: flex;">
+                    <div class="document-navigation">
+                        <div class="document-navigation-title">Mục lục</div>
+                        <div class="document-navigation-content"></div>
+                    </div>
+                    <div class="toggle-navigation show-nav">
+                        <div class="toggle-navigation-btn"></div>
+                    </div>
+                    <div style="overflow:auto;">
+                        <table class="headerHandson">
+                            <colgroup id="colGroupHandson"></colgroup>
+                            <thead id="headHandson">
+                            </thead>
+                        </table>
+                        <div id="divContent" class="document-contents" style="padding-top:0px; flex: 3;font-size:14px; width:100%"></div>
+                    </div>
+                </div>
+                <div class="formFooter"></div>
+                <!--<div class="divImportExcel" style="padding: 10px 0 0 15px"></div>-->
+                <!--20191126 VuHQ END REQ-5-->
+            </div>
+        </div>
+    </form>
+</div>

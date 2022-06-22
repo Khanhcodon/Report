@@ -1,0 +1,37 @@
+﻿@model DocColumnSettingModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.DocColumnSetting.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var type = (int)ViewBag.Type;
+}
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-cogs"></i>
+        <span data-res="egov.resources.sitemap.docColumnSetting"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        @if (type == 1)
+        {
+            <a class="btn  btn-default control-btn" href="/admin/docColumnSetting/Index" id="back">
+                <span class="icon icon-arrow-left2"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn  btn-default control-btn" href="/admin/docColumnSetting/IndexReport" id="back">
+                <span class="icon icon-arrow-left2"></span>
+                <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+            </a>
+        }
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Head")
+    @Html.Partial("_Notifications")
+    @Html.Partial("_CreateOrEdit", Model)
+</div>

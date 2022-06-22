@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActiveQueryBuilder.AdvantageMetadataProvider</name>
+    </assembly>
+    <members>
+        <member name="T:ActiveQueryBuilder.Core.AdvantageMetadataProvider">
+            <summary> Metadata Provider for Advantage DB. </summary>
+        </member>
+    </members>
+</doc>

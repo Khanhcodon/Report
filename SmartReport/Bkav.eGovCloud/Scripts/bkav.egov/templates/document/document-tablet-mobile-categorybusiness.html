@@ -1,0 +1,129 @@
+﻿<input type="hidden" name="DocumentId" value="${DocumentId}" />
+<input type="hidden" name="DocumentCopyId" value="${DocumentCopyId}" />
+<input type="hidden" name="ResultStatus" value="${ResultStatus}" />
+{{if CategoryBusinessId == 1}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b data-res="egov.resources.document.documentInfo"></b>
+        <i class="material-icons pull-right">expand_less</i>
+    </div>
+    <div class="panel-body" style="display: none;">
+        <div id="wrapOrganization" class="form-group row">
+            <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.Organization"></label>
+            <div class="col-sm-13 col-md-4">
+                <input type="text" value="${Organization}" name="Organization" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+        <div id="wrapDocCode" class="form-group row">
+            <label for="DocCode" class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DocCode"></label>
+            <div class="col-sm-5 col-md-5">
+                <input type="text" class="form-control" id="DocCode" name="DocCode" value="${DocCode}" />
+                <label class="form-control-bar"></label>
+            </div>
+            <label class="col-sm-3 col-md-4 control-label" data-res="egov.resources.document.DateArrived"></label>
+            <div class="col-sm-5 col-md-4">
+                <input type="text" value="${DateArrived}" name="DateArrived" id="DateArrived" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{/if}}
+
+{{if CategoryBusinessId == 4}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b data-res="egov.resources.document.citizenInfo"></b>
+        <i class="material-icons pull-right">expand_less</i>
+    </div>
+    <div class="panel-body" style="display: none;">
+        <div id="wrapCitizenName" class="form-group row">
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.CitizenName"></label>
+            <div class="col-sm-13">
+                <input type="text" class="form-control" value="${CitizenName}" name="CitizenName" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+        <div id="wrapAddress" class="form-group row">
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.Address"></label>
+            <div class="col-sm-13">
+                <input type="text" name="Address" value="${Address}" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+        <div id="wrapIdentityCard" class="form-group row">
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.IdentityCard"></label>
+            <div class="col-sm-5">
+                <input type="text" value="${IdentityCard}" name="IdentityCard" alt="cmnd" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.Phone"></label>
+            <div class="col-sm-5">
+                <input type="text" value="${Phone}" name="Phone" alt="phone-vn" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.Email"></label>
+            <div class="col-sm-5">
+                <input type="text" name="Email" value="${Email}" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b data-res="egov.resources.document.documentInfo"></b>
+        <i class="material-icons pull-right">expand_less</i>
+    </div>
+    <div class="panel-body" style="display: none;">
+        <div id="wrapDocCode" class="form-group row">
+            <label class="col-sm-3 control-label" data-res="egov.resources.document.DocCode1"></label>
+            <div class="col-sm-5">
+                <input type="text" value="${DocCode}" name="DocCode" class="form-control" />
+                <label class="form-control-bar"></label>
+            </div>
+            <label class="col-sm-3 col-md-3 control-label" data-res="egov.resources.document.DocType"></label>
+            <div class="col-sm-5 col-md-5">
+                <input type="hidden" name="DocTypeId" value="${DocTypeId}" />
+                <input type="text" value="${DocTypeName}" readonly class="form-control" id="DocTypeId" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-md-3 control-label" data-res="egov.resources.document.dateCreated"></label>
+            <div class="col-sm-5 col-md-5">
+                {{if DocumentCopyId == 0}}
+                <div class="input-group">
+                    <input type="text" class="form-control" name="DateCreated" value="${DateCreated}" readonly>
+                    <label class="form-control-bar"></label>
+                    <span class="input-group-addon changeDateCreated icon-history" data-restitle="egov.resources.document.changeDateCreated" style="padding: 3px 8px;"></span>
+                </div>
+                {{else}}
+                <input type="text" name="DateCreated" value="${DateCreated}" class="form-control" />
+                <label class="form-control-bar"></label>
+                {{/if}}
+            </div>
+            <label class="col-sm-3 col-md-3 control-label" data-res="egov.resources.document.DateAppointed"></label>
+            <div class="col-sm-5 col-md-5">
+                {{if (CategoryBusinessId == 4) && (DocumentCopyId == 0 || HasJustCreated) }}
+                <div class="input-group col-md-8 pull-right">
+                    <input type="text" class="form-control datepicker" name="DateAppointed" value="${DateAppointed}" />
+                    <label class="form-control-bar"></label>
+                    <span class="input-group-addon icon-history changeWorkflowType" data-restitle="egov.resources.document.changeWorkflowType" style="padding: 3px 8px;"></span>
+                </div>
+                {{else}}
+                <input type="hidden" id="ddlDateAppointRange" value="${ExpireProcess}" />
+                <input type="hidden" name="DateAppointed" value="${DateAppointed}" />
+                <span class="form-control-static">${DateAppointed}</span>
+                <span class="form-control-static pull-right">${WorkflowTypeName}</span>
+                {{/if}}
+            </div>
+        </div>
+
+    </div>
+</div>
+{{/if}}

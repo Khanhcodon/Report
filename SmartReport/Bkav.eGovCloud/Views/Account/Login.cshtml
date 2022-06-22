@@ -1,0 +1,36 @@
+﻿@model Bkav.eGovCloud.Models.LoginModel
+@{
+    ViewBag.Title = "Đăng nhập hệ thống";
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+    var connectionSettings = ViewBag.ConnectionSettings as Bkav.eGovCloud.Entities.Customer.ConnectionSettings;
+
+    var useOtherSystem = connectionSettings.MailType > 1 && !string.IsNullOrWhiteSpace(connectionSettings.BmailLink);
+}
+
+<script src="../Scripts/bkav.egov/mvendor.min.js?v=2"></script>
+
+@{
+    Html.RenderPartial(Request.Browser.IsMobileDevice ? "_LoginMobile" : "_LoginNormal");
+}
+
+<script>
+    loginOtherEmailSystemConfig = {
+        enable: "@useOtherSystem" == "True",
+        type: "@connectionSettings.MailType",
+        mailUrl: "@connectionSettings.BmailLink"
+    },
+
+    returnUrl = "@ViewBag.ReturnUrl",
+    defaultDomain = "@ViewBag.DefaultDomain";
+    maximumUserInput = parseInt("@ViewBag.MaximumUserInput");
+    limitByMac = "@ViewBag.LimitByMAC" == "True";
+
+    //document.domain = "@ViewBag.DocumentDomain";
+</script>
+@if (IsQuanTriTapTrungEdition)
+{
+    
+}
+<script src="../Scripts/bkav.egov/views/login/material.min.js"></script>
+<script src="../Scripts/bkav.egov/egovcore.min.js?v=fe"></script>
+<script src="../Scripts/bkav.egov/views/login/login.js"></script>

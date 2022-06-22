@@ -1,0 +1,380 @@
+﻿@model Bkav.eGovCloud.Models.BusinessModel
+@using Bkav.eGovCloud.Entities
+@{
+    var allbusinesstype = ViewBag.AllBusinessType as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.BusinessTypeModel>;
+    var allcity = ViewBag.AllCity as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.CityModel>;
+    var alldistrict = ViewBag.AllDistrict as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DistrictModel>;
+    var allward = ViewBag.AllWard as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.WardModel>;
+    var search = ViewBag.Search as Bkav.eGovCloud.Models.BusinessSearchModel;
+}
+
+
+<style>
+    td > input[type="text"], select, td > input[type="button"] {
+        /*display: block;*/
+        /*width: 100%;*/
+        padding: 3px 5px;
+        /* font-size: 14px; */
+        line-height: 1.428571429;
+        color: #555;
+        vertical-align: middle;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#IssueDate,#ExpireDate,#IdCardDate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+    })
+    function openLicenseDialog(url) {
+        $("#my-dialog").dialog({
+            width: 800,
+            height: 580,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            }
+        });
+    }
+</script>
+<div id="my-dialog">
+</div>
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.BusinessId)
+<fieldset>
+    <legend>Thông tin người đại diện pháp luật</legend>
+    <table>
+        <colgroup>
+            <col width="194px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.UserName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.UserName, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Gender):
+            </td>
+            <td>
+                @Html.RadioButtonFor(model => model.Gender, true, Model.Gender ? new { @checked = "" } : null)
+                Nam
+                @Html.RadioButtonFor(model => model.Gender, false, !Model.Gender ? new { @checked = "" } : null)
+                Nữ
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.PermanentAddress):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.PermanentAddress, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.TemporaryAddress):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.TemporaryAddress, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IdCard):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IdCard, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IdCardDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IdCardDate, new { style = "width:280px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.IdCardPlace):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IdCardPlace, new { style = "width:300px" })
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Thông tin chung</legend>
+    <table>
+        <colgroup>
+            <col width="194px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.BusinessName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BusinessName, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.BusinessName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ForeignName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ForeignName, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.AbbreviationName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.AbbreviationName, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                @{
+                    //var url = @Html.ActionLink(Localizer("Business.CreateOrEdit.Link.BusinessLicense"), "Create", "BusinessLicense", new { businessid = Model.BusinessId }, null);
+                    var url = Url.Action("Create", "BusinessLicense", new { businessid = Model.BusinessId });
+                }
+                @if (Model.BusinessId > 0)
+                { 
+                    <a href="#" onclick="openLicenseDialog('@Url.Action("CreateForBussiness", "BusinessLicense", new { businessid = Model.BusinessId })')">@Localizer("Business.Link.BusinessLicense")
+                    </a>
+@* <a href="#" onclick="window.open('@url', 'DialogName', 'height=1000, width=1200, modal=yes, alwaysRaised=yes')">@Localizer("Business.CreateOrEdit.Link.BusinessLicense")
+                    </a>*@
+                }
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Loại hình doanh nghiệp</legend>
+    <table>
+        <colgroup>
+            <col width="194px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.BusinessTypeId):
+            </td>
+            <td>
+                <select id="BusinessTypeId" name="BusinessTypeId" style="width: 306px" @(Model.BusinessId > 0 ? "disabled='disabled'" : "")>
+                    @if (allbusinesstype != null && allbusinesstype.Any())
+                    {
+                        foreach (var businesstype in allbusinesstype)
+                        {
+                        <option value="@businesstype.BusinessTypeId" @(Model.BusinessId != null && Model.BusinessTypeId == businesstype.BusinessTypeId ? "selected='selected'" : (search.BusinessTypeId != null && search.BusinessTypeId == businesstype.BusinessTypeId ? "selected='selected'" : ""))>@businesstype.BusinessTypeName</option>
+                        }
+                    }
+                </select>
+                @if (Model.BusinessId > 0)
+                { 
+                    @Html.HiddenFor(model => model.BusinessTypeId)
+                }
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Thông tin đăng ký kinh doanh</legend>
+    <table>
+        <colgroup>
+            <col width="194px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.BusinessCode):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BusinessCode, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.BusinessCode)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.IssueCodeby):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IssueCodeby, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.IssueCodeby)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.IssueDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.IssueDate, new { style = "width:280px" })
+                @Html.ValidationMessageFor(model => model.IssueDate)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.ExpireDate):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ExpireDate, new { style = "width:280px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Capital):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Capital, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.LegalCapital):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.LegalCapital, new { style = "width:300px" })
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Thông tin liên hệ</legend>
+    <table>
+        <colgroup>
+            <col width="194px" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.Address):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Address, new { style = "width:300px" })
+                @Html.ValidationMessageFor(model => model.Address)
+                <table>
+                    <colgroup>
+                        <col width="114px" />
+                        <col />
+                    </colgroup>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.CityCode):
+                        </td>
+                        <td>
+                            <select id="CityCode" name="CityCode" style="width: 180px" @(Model.BusinessId > 0 ? "disabled='disabled'" : "")>
+                                @if (allcity != null && allcity.Any())
+                                {
+                                    foreach (var city in allcity)
+                                    {
+                                    <option value="@city.CityCode" @(Model.CityCode != null && Model.CityCode == city.CityCode ? "selected='selected'" : (search.CityCode != null && search.CityCode == city.CityCode ? "selected='selected'" : ""))>@city.CityName</option>
+                                    }
+                                }
+                            </select>
+                            @if (Model.BusinessId > 0)
+                            { 
+                                @Html.HiddenFor(model => model.CityCode)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.DistrictCode):
+                        </td>
+                        <td>
+                            <select id="DistrictCode" name="DistrictCode" style="width: 180px" @(Model.BusinessId > 0 ? "disabled='disabled'" : "")>
+                                @if (alldistrict != null && alldistrict.Any())
+                                {
+                                    foreach (var district in alldistrict)
+                                    {
+                                    <option value="@district.DistrictCode" @(Model.DistrictCode != null && Model.DistrictCode == district.DistrictCode ? "selected='selected'" : (search.DistrictCode != null && search.DistrictCode == district.DistrictCode ? "selected='selected'" : ""))>@district.DistrictName</option>
+                                    }
+                                }
+                            </select>
+                            @if (Model.BusinessId > 0)
+                            { 
+                                @Html.HiddenFor(model => model.DistrictCode)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.WardId):
+                        </td>
+                        <td>
+                            <select id="WardId" name="WardId" style="width: 180px" @(Model.BusinessId > 0 ? "disabled='disabled'" : "")>
+                                @if (allward != null && allward.Any())
+                                {
+                                    foreach (var ward in allward)
+                                    {
+                                    <option value="@ward.WardId" @(Model.WardId != null && Model.WardId == ward.WardId ? "selected='selected'" : (search.WardId != null && search.WardId == ward.WardId ? "selected='selected'" : ""))>@ward.WardName</option>
+                                    }
+                                }
+                            </select>
+                            @if (Model.BusinessId > 0)
+                            { 
+                                @Html.HiddenFor(model => model.WardId)
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Phone):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Phone, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Fax):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Fax, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Email):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Email, new { style = "width:300px" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Website):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Website, new { style = "width:300px" })
+            </td>
+        </tr>
+    </table>
+</fieldset>

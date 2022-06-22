@@ -1,0 +1,461 @@
+/* CSS Document */
+
+input.editor_fontsize_select, input.editor_font_select, input.editor_font_select:active {
+    margin-top: 3px !important;
+}
+
+input.editor_formatblock_select {
+    margin-top: 0px !important;
+    padding-left: 4px;
+    padding-top: 2px;
+    margin-left: 15px !important;
+}
+
+.tdEmoticon {
+    width: 27px;
+    height: 27px;
+}
+
+.tdMailEmoticon {
+    width: 35px;
+    height: 35px;
+}
+
+.bmeditor-emobutton {
+    width: 30px;
+}
+
+input.editor_fontsize_select {
+    width: 36px;
+    background: url("../icons/bg_size.png") no-repeat left;
+    border: 0px;
+    /*margin-right: 14px;*/
+    margin-left: 0px;
+    text-align: left;
+    padding-left: 0px;
+    line-height: 16px;
+    font-size: 12px;
+}
+
+.muiten {
+    position: absolute;
+    width: 7px;
+    right: 0px;
+    height: 10px;
+    background: url("../icons/muiten.png") no-repeat center;
+    top: 5px;
+    padding: 7px;
+    margin-left: 33px;
+}
+
+.bmeditor-insertTableButton .yui-button {
+    border: 0 !important;
+    height: 20px !important;
+    padding-right: 7px !important;
+    background: transparent !important;
+}
+
+    .bmeditor-insertTableButton .yui-button .first-child {
+        border: 0 !important;
+        margin-left: -8px;
+    }
+
+        .bmeditor-insertTableButton .yui-button .first-child button {
+            border: 0px;
+            background-color: transparent;
+        }
+
+ul.formatblockselector {
+    background: white;
+    border: 1px solid #ccc;
+    border-top: 0;
+    font-size: 14px;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    z-index: 10;
+    position: absolute;
+    width: 100px;
+    height: 145px;
+    overflow-y: auto;
+}
+
+ul.fontselector {
+    background: white;
+    border: 1px solid #ccc;
+    border-top: 0;
+    font-size: 14px;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    z-index: 10;
+    position: absolute;
+    width: 120px;
+    height: 145px;
+    overflow-y: auto;
+}
+
+    ul.fontsizeSelector li, ul.fontselector li, ul.colorselector li, ul.bgcolorselector li, ul.formatblockselector li {
+        margin: 0;
+        padding: 0;
+        list-style: none !important;
+    }
+
+        ul.fontsizeSelector a, ul.fontselector li a, ul.colorselector li a, ul.bgcolorselector li a, ul.formatblockselector li a {
+            display: block;
+            padding: 3px;
+            color: black;
+            text-decoration: none;
+            text-align: left;
+        }
+
+ul.colorselector li, ul.bgcolorselector li {
+    margin: 0;
+    padding: 0;
+    list-style: none !important;
+    width: 100%;
+    padding-top: 4px !important;
+}
+
+ul.colorselector, ul.bgcolorselector {
+    background: #F2F2F2;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    float: left;
+    list-style: none;
+    margin: 0;
+    line-height: 1.2;
+    z-index: 10;
+    position: absolute;
+    width: 50px;
+    overflow-y: auto;
+    padding: 4px;
+    padding-top: 0;
+}
+
+#yui-table-panel {
+    width: 100px;
+    height: 100px;
+}
+
+ul.colorselector, ul.bgcolorselector {
+    background: #F2F2F2;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    float: left;
+    list-style: none;
+    margin: 0;
+    line-height: 1.2;
+    z-index: 10;
+    position: absolute;
+    width: 50px;
+    overflow-y: auto;
+    padding: 4px;
+    padding-top: 0;
+}
+
+    ul.colorselector a, ul.bgcolorselector a {
+        display: block;
+        color: black;
+        height: 12px;
+        text-decoration: none;
+        text-align: left;
+        border: 1px solid #000000;
+    }
+
+ul.fontsizeSelector {
+    background: white;
+    border: 1px solid #ccc;
+    border-top: 0;
+    font-size: 13px;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
+    position: absolute;
+    width: 28px;
+    height: 145px;
+    overflow-y: auto;
+}
+
+input.editor_font_select, input.editor_font_select:active {
+    width: 120px;
+    background: url("../icons/bg_font.png") no-repeat left;
+    border: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+input.editor_formatblock_select {
+    width: 89px;
+    background: url("../icons/bg_heading.png") no-repeat scroll 0 3px transparent;
+    border: 0px;
+    margin-right: 5px;
+    text-align: left;
+    padding-left: 2px;
+    font-size: 12px;
+    line-height: 16px;
+    height: 20px;
+}
+
+.bmeditor-emobutton .button-menu {
+    margin-top: 20px;
+}
+
+.emoticonFace {
+    margin-top: 2px;
+}
+
+.mailEmoticonFace {
+    margin-top: -5px;
+}
+
+.aEmoticon, .emoticonFace {
+    width: 21px;
+    height: 23px;
+    background-image: url("../emoticon/Emoticon.png");
+    background-repeat: no-repeat;
+}
+
+.aMailEmoticon, .mailEmoticonFace {
+    width: 29px;
+    height: 31px;
+    background-image: url("../emoticon/MailEmoticon.png");
+    background-repeat: no-repeat;
+}
+
+.aEmoticon, .aMailEmoticon {
+    border: 1px solid #fff;
+}
+
+.signatureCompose .emoticonFace {
+    position: relative !important;
+    margin-top: 2px !important;
+    clear: both !important;
+}
+
+.signatureCompose .bmeditor-emobutton .muiten {
+    clear: both !important;
+    margin-top: -35px !important;
+}
+
+.bmeditor-insertTableButton {
+    margin-left: 3px;
+}
+
+.chatArea input.editor_fontsize_select, .chatArea input.editor_font_select, .chatArea input.editor_font_select:active, .chatArea input.editor_formatblock_select {
+    margin-top: 0px !important;
+}
+
+.rte-toolbar * {
+    cursor: default;
+}
+
+.rte-toolbar > table {
+    width: auto;
+}
+
+    .rte-toolbar > table td {
+        position: relative;
+        border: none !important;
+        padding: 1px 4px;
+    }
+
+.sub {
+    margin-top: 7px !important;
+}
+
+.bg_color_select, .color_select {
+    background: url("bg_color_select.png") no-repeat center;
+    width: 16px;
+    height: 3px;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    top: 17px;
+    line-height: 0px;
+    font-size: 0px;
+    left: 0px;
+}
+
+.bmeditor-attachbutton {
+    width: 25px;
+    height: 25px;
+}
+
+    .bmeditor-attachbutton img {
+        margin-top: 2px;
+        width: 23px;
+        height: 23px;
+        margin-left: -1px;
+    }
+.editor-iframe {
+    background-color:transparent !important;
+}
+.editor-iframe a {
+    cursor: pointer !important;
+}
+
+.bmeditor-insertImageButton .yui-button {
+    border: 0 !important;
+    background: transparent !important;
+    width: 15px;
+    height: 14px;
+}
+
+.bmeditor-insertImageButton button {
+    position: absolute;
+    left: 220px;
+    margin-top: -8px;
+}
+
+.bmeditor-insertImageButton .yui-button .first-child {
+    border: 0 !important;
+    background: transparent !important;
+    width: 15px;
+    height: 14px;
+}
+
+.bmeditor-underlinebutton {
+    margin-left: 0px;
+    margin-top: 1px;
+}
+
+.bmeditor-inserimagebutton {
+    margin-top: -1px;
+    margin-left: 2px;
+}
+
+.bmeditor-separator {
+    width: 1px;
+    height: 20px;
+    border-right: 1px solid #a2a2a2;
+    margin-left: 9px;
+    *margin-left: 0px;
+    margin-top: 1px;
+    margin-right: 4px;
+}
+
+.bmeditor-insertTableButton {
+    *margin-top: 4px !important;
+}
+
+.bmeditor-insertlinkbutton {
+    *margin-top: 0px !important;
+}
+
+.editor-bgcolor input {
+    margin-top: 4px !important;
+}
+
+.bmeditor-morebutton {
+    margin-left: 18px;
+}
+
+#imageExternalDialog {
+    display: none;
+}
+
+.imageUploadedDiv {
+    width: 98px;
+    height: 98px;
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.imageUploadedSelected {
+    border: 2px solid #000;
+}
+
+.imageUploaded {
+    width: 96px;
+    height: 96px;
+}
+
+.editor_fontsize_select {
+    margin-left: 5px;
+}
+
+.color_select {
+    background: transparent !important;
+}
+
+.bmeditor-imagebutton {
+    height: 21px;
+    width: 22px;
+    cursor: default;
+    margin-top: 1px;
+}
+
+div.rte-toolbar select {
+    font-size: 12px;
+}
+
+div.rte-toolbar {
+    background-repeat: repeat-x;
+    height: 27px;
+    padding-bottom: 2px;
+}
+
+.bmeditor-vietkeybutton {
+    margin-top: 1px;
+    margin-left: 4px;
+}
+
+.bmeditor-insertlinkbutton img {
+    top: 8px !important;
+}
+
+.rte-editor {
+    border: 0 none;
+}
+
+    .rte-editor .editor-iframe {
+        border: 1px solid #999999;
+    }
+
+/** d�nh cho menu button */
+
+.button-menu {
+    padding: 0.5em;
+    position: absolute;
+    z-index: 999;
+    display: none;
+    padding: 4px;
+    opacity: 1;
+    border: 1px solid #ccc !important;
+    background-color: #EEEEEE;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+    .button-menu a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+/** style cho select box */
+
+.styled-select {
+    background: url("icons/font.png") no-repeat scroll right center #DDDDDD;
+    height: 19px;
+    overflow: hidden;
+    width: 80px;
+}
+
+    .styled-select select {
+        background: none repeat scroll 0 0 transparent;
+        border: 1px solid #CCCCCC;
+        height: 17px;
+        width: 110px;
+    }

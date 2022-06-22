@@ -1,0 +1,91 @@
+﻿@model Bkav.eGovCloud.Areas.Admin.Models.Settings.WarningSettingsModel
+@{
+    ViewBag.Title = "Quản trị cảnh báo";
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div id="tabs" class="bkavegov">
+        @*@Html.AntiForgeryToken()*@
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b>Cấu hình cảnh báo xử lý văn bản, hồ sơ</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 400px;">
+                    <label>Kích hoạt gửi cảnh báo</label>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.IsActive)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Gửi cảnh báo tới mail cá nhân của người vi phạm</label>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.HasSentToInfringer)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <label>Gửi cảnh báo tới các phòng ban</label>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.HasSentToDepartment)
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <label>Gửi cảnh báo trước theo Ngày (Ngăn cách bằng dấu ';')</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="MomentToSentOverdue" value="@Model.MomentToSentOverdue" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Số hồ sơ, văn bản quá hạn cho phép</label>
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="NumberToWarning" value="@Model.NumberToWarning" />
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <label>Phần trăm hồ sơ, văn bản quá hạn cho phép</label>
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="PercenToWarning" value="@Model.PercenToWarning" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Danh sách email nhận cảnh báo (Ngăn cách bằng dấu ';')</label>
+                </td>
+                <td>
+                    <textarea row="3" class="form-control" name="SentMailOverdueTo">@Model.SentMailOverdueTo</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Tiêu đề mail</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="Subject" value="@Model.Subject" />                    
+                </td>
+            </tr>
+            <tr class="hidden">
+                <td>
+                    <label>Danh sách các người dùng không tính vi phạm</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="UserToIgnore" value="@Model.UserToIgnore" />
+                </td>
+            </tr>
+        </table>
+    </div>
+}

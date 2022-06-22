@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9d14ca64-67bd-4123-8c43-f7ccacb7d687" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://smsservice.com/SMSServiceSoap.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SMSServiceSoap.xsd" MetadataType="Schema" ID="40a31fa1-7739-41e6-bcde-df196ddaeac9" SourceId="1" SourceUrl="http://smsservice.com/SMSServiceSoap.svc?xsd=xsd0" />
+    <MetadataFile FileName="SMSServiceSoap.wsdl" MetadataType="Wsdl" ID="e7534233-6783-4c02-a025-95ffb912d79a" SourceId="1" SourceUrl="http://smsservice.com/SMSServiceSoap.svc?wsdl" />
+    <MetadataFile FileName="SMSServiceSoap1.xsd" MetadataType="Schema" ID="ad3a27d9-34c8-45c8-8297-34e193370638" SourceId="1" SourceUrl="http://smsservice.com/SMSServiceSoap.svc?xsd=xsd2" />
+    <MetadataFile FileName="SMSServiceSoap.disco" MetadataType="Disco" ID="0261a801-cb1c-449c-a6ff-0c90719bf5d0" SourceId="1" SourceUrl="http://smsservice.com/SMSServiceSoap.svc?disco" />
+    <MetadataFile FileName="SMSServiceSoap2.xsd" MetadataType="Schema" ID="aff64df3-2a57-4a87-9d83-fdbac95624c4" SourceId="1" SourceUrl="http://smsservice.com/SMSServiceSoap.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

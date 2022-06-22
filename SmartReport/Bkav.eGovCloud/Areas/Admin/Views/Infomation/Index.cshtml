@@ -1,0 +1,138 @@
+﻿@model IEnumerable<InfomationModel>
+@{
+    ViewBag.Title = Localizer("Common.Infomation.Label.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script>
+    $(function () {
+        $(".control-btn").remove();
+        var controller = '@ViewContext.Controller.ValueProvider.GetValue("controller").RawValue';
+        var action = '@ViewContext.Controller.ValueProvider.GetValue("action").RawValue';
+        if (action == "Index") {
+            action = "";
+        } else {
+            action = "/"+action;
+        }
+        var url = "/Admin" + "/" + controller + action;
+        $(".left-content ul li a").each(function () {
+            if (url.toLowerCase() == (this.pathname).toLowerCase()) {
+                $(this).addClass("selected");
+            }
+        });
+    });
+</script>
+<style>
+    .right-content {
+        font-size:16px;
+    }
+</style>
+<div class="col-md-3 left-content">
+    <ul>
+        <li>@Html.ActionLink(Localizer("Customer.DocType.CreateOrEdit.Fields.OfficeId.Label"), "Index")</li>
+        <li>
+            @if (Model == null || !Model.Any())
+            {
+                @Html.ActionLink(Localizer("Common.Button.Create"), "Create")
+            }
+
+        </li>
+        <li>
+            @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Update"), "Edit")
+        </li>
+    </ul>
+</div>
+<div class="col-md-13 right-content">
+    <div id="tabs" class="bkavegov">
+        <div class="bkavegov">
+            @Html.Partial("_Notifications")
+            <table id="tblInfomation" style="width: 100%">
+                <colgroup>
+                    <col style="width: 15%" />
+                    <col />
+                </colgroup>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var infomation in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Name"):
+                            </td>
+                            <td>
+                                @infomation.Name
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Address"):
+                            </td>
+                            <td>
+                                @infomation.Address
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Email"):
+                            </td>
+                            <td>
+                                @infomation.Email
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Phone"):
+                            </td>
+                            <td>
+                                @infomation.Phone
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.PhoneExt"):
+                            </td>
+                            <td>
+                                @infomation.PhoneExt
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Fax"):
+                            </td>
+                            <td>
+                                @infomation.Fax
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Website"):
+                            </td>
+                            <td>
+                                @infomation.Website
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.Index.List.Column.Alias"):
+                            </td>
+                            <td>
+                                @infomation.Alias
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 12px;"></td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">@Localizer("Bkav.eGovCloud.Areas.Admin.Infomation.List.Null")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

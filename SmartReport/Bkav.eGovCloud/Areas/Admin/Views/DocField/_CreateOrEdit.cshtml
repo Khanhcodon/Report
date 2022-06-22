@@ -1,0 +1,359 @@
+﻿@model DocFieldModel
+@using Bkav.eGovCloud.Entities
+@{
+    var allCategoryBusiness = ViewBag.AllCategoryBusiness as List<SelectListItem>;
+    var allStores = ViewBag.AllStores as string;
+    var selectedDocType = ViewBag.SelectedDocType as string;
+    var allDocTypes = ViewBag.AllDocTypes as string;
+}
+
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js")"></script>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/vendor/jquery.ui.widget.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.fileupload.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.fileupload/js/jquery.iframe-transport.js")"></script>
+
+<script>
+    var allStores = @(string.IsNullOrEmpty(allStores) ? MvcHtmlString.Create("[]") : Html.Raw(allStores)); 
+    var selectedStores=[];
+
+       @if (Model.DocFieldId > 0)
+       {
+       <text>
+    var selectedDocType = @(string.IsNullOrEmpty(selectedDocType) ? MvcHtmlString.Create("[]") : Html.Raw(selectedDocType));
+    var allDocTypes = @(string.IsNullOrEmpty(allDocTypes) ? MvcHtmlString.Create("[]") : Html.Raw(allDocTypes));
+
+    function deleteRowDocType(id){
+        eGovMessage.show(
+       '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.DocField.ConfirmDeleteRowDocType"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#tblDocType tbody tr[data-doctypeid='"+id+"']").remove();
+                if(selectedDocType && selectedDocType.length>0){
+                    selectedDocType=_.filter(selectedDocType,function(item){
+                        return item.DocTypeId !==id;
+                    });
+                }
+            }
+        ); 
+    }
+
+    </text>
+       }
+  
+    $(function () {
+        $("#tblStore").grid({
+            isFixHeightContent: true,
+            //height: 350,
+            isResizeColumn: true
+        });
+        @if (Model.DocFieldId > 0)
+        {
+       <text>
+
+        $("#tblDocType").grid({
+            isFixHeightContent: true,
+            //   height: 350,
+            isResizeColumn: true
+        });
+
+        $("#tmplDocType").tmpl(selectedDocType).appendTo("#tblDocType tbody");
+         
+        $("#findDocType").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allDocTypes, function( value ) {
+                    return matcher.test( value.DocTypeName ) 
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.DocTypeName ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#findDocType").val('');
+                var exist = _.find(allDocTypes, function(itm) {
+                    return itm.DocTypeId === ui.item.DocTypeId;
+                });
+
+                if(exist){
+                    var selected = _.find(selectedDocType, function(item) {
+                        return item.DocTypeId === ui.item.DocTypeId;
+                    });
+
+                    if (!selected) {
+                        selectedDocType.push(exist); 
+                        $("#tmplDocType").tmpl(exist).appendTo("#tblDocType tbody");
+                        $("#tblDocType").grid("refresh");
+                    }
+                }
+
+                return false;
+            }
+        })
+   .data("autocomplete")._renderItem = function(ul, item) {
+       return $("<li></li>")
+           .data("item.autocomplete", item)
+           .append("<a>" + item.DocTypeName + "</a>")
+           .appendTo(ul);
+   };
+        </text>
+        }
+       
+        $(".table-main").addClass("table-bordered table-hover");
+        $('tr th').css("line-height", "2.5");
+
+        $('.upload').fileupload({
+            dataType: 'json',
+            add: function (e, data) {
+                var filename = data.files[0].name;
+                data.submit();
+            },
+            done: function (e, data) {
+                var result = data.result[0];
+                $("input[name=IconFileName]").val(result.key);
+                $("input[name=IconFileDisplayName]").val(result.name);
+                $(".IconFileDisplayName").text(result.name);
+            },
+            fail: function (e, data) {
+            }
+        });
+        
+        $("#addStores").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allStores, function( value ) {
+                    return matcher.test( value.label ) 
+                        || matcher.test( egov.utilities.string.stripVietnameseChars( value.label ) );
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#addStores").val('');
+                var selected = _.find(allStores, function(item) {
+                    return item.value === ui.item.value;
+                });
+
+                if (selected) {
+                    var selectedStoreIds = _.pluck(selectedStores,"value");
+                    if(_.contains(selectedStoreIds,selected.value)){
+                        return false;
+                    }
+
+                    selectedStores.push(selected);
+                    selectedStoreIds.push(selected.value);
+                    $("input[name=StoreIds]").val(JSON.stringify(selectedStoreIds));
+                    var noresult = $("#tblStore tbody #noresult");
+                    if(noresult.length > 0) {
+                        noresult.remove();
+                    }
+
+                    $("#storeTemplate").tmpl(selected, { 
+                        getNumbers: function() {
+                            return selectedStores.length;
+                        }
+                    }).appendTo("#tblStore tbody");
+                }
+                return false;
+            }
+        })
+      .data("autocomplete")._renderItem = function(ul, item) {
+          return $("<li></li>")
+              .data("item.autocomplete", item)
+              .append("<a>" + item.label + "</a>")
+              .appendTo(ul);
+      };
+
+        var selectedStoreIds = [];
+        var StoreIds = $("input[name=StoreIds]").val();
+        if (StoreIds.length > 0) {
+            selectedStoreIds = JSON.parse($("input[name=StoreIds]").val());
+        }
+        selectedStores=_.filter(allStores,function(item){
+            return selectedStoreIds.indexOf(parseInt(item.value)) > -1;
+        });
+
+        _.each(selectedStores,function(item){
+            $("#storeTemplate").tmpl(item, { 
+                getNumbers: function() {
+                    return selectedStores.length;
+                }
+            }).appendTo("#tblStore tbody");
+        });
+
+    });
+
+    function removeStores(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.DocField.ConfirmStore"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                selectedStores = _.reject(selectedStores, function(user) {
+                    return user.value === id;
+                });
+
+                $("input[name=StoreIds]").val(JSON.stringify(_.pluck(selectedStores,"value")));
+                $("#tblStore tbody").find("tr[data-id='"+id+"']").remove();
+                if(selectedStores.length > 0) {
+                    $("#tblStore tbody tr td:first-child").each(function(index, el) {
+                        $(el).text(index + 1);
+                    });
+                } else {
+                    $("#tblStore tbody").html("<tr id='noresult'><td colspan='5' data-res='egov.resources.docfield.nodocumentstore'>"+egov.resources.docfield.nodocumentstore+"</td></tr>");
+                }
+            }   
+        );
+    }
+</script>
+
+@Html.HiddenFor(model => model.DocFieldId)
+
+<table>
+    @if (Model.DocFieldId == 0)
+    {
+        <tr>
+            <td style="width: 250px;">
+                @Html.LabelFor(model => model.HasCreatePacket):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasCreatePacket)
+                @Html.ValidationMessageFor(model => model.HasCreatePacket)
+            </td>
+        </tr>
+    }
+    <tr>
+        <td style="width: 12%;">
+            @Html.LabelRequireFor(model => model.DocFieldName):
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DocFieldName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+            @Html.ValidationMessageFor(model => model.DocFieldName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsActivated):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsActivated, new { @checked = "checked" })
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelRequireFor(model => model.CategoryBusinessId):
+        </td>
+        <td>
+            @if (allCategoryBusiness != null && allCategoryBusiness.Any())
+            {
+                foreach (var categoryBusiness in allCategoryBusiness)
+                {
+                    var categoryValue = Convert.ToInt32(categoryBusiness.Value);
+                <label>
+                    <input type="checkbox" name="CategoryBusiness" value="@categoryBusiness.Value" @(categoryBusiness.Selected ? "checked='checked'" : "")  
+                    @(Model.CategoryBusinessIdInEnum.HasFlag((CategoryBusinessTypes)categoryValue) ? "checked='checked'" : "")/>@categoryBusiness.Text</label>
+                }
+            }
+            @Html.ValidationMessageFor(model => model.CategoryBusiness)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.IconFileDisplayName):
+        </td>
+        <td>
+            <span class="IconFileDisplayName">@Model.IconFileDisplayName</span>
+            @Html.HiddenFor(model => model.IconFileDisplayName)
+            @Html.HiddenFor(model => model.IconFileName)
+            <span class="btn btn-upload icon icon-upload3" style="min-width: 0" onclick="$('.upload').click()"></span>
+            <input type="file" name="files" class="upload" style="display: none;" data-url="@Url.Action("UploadDoctypeIcon", "Attachment", new { area = "" })" accept="*.*" />
+        </td>
+    </tr>
+
+</table>
+<br />
+
+<fieldset>
+    <legend>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Store")</legend>
+
+    <div class="divDocFields">
+        <p>
+            <span >@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.Store"):</span>
+            <input id="addStores" style="width: 330px; display: inline" class="form-control" />
+            @Html.HiddenFor(model => model.StoreIds)
+        </p>
+    </div>
+
+    <table class="table-main table table-bordered table-hover" id="tblStore">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 50px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header text-center" data-res="egov.resources.tableheader.stt"></th>
+                <th class="header" data-res="egov.resources.docfield.store"></th>
+                <th class="header text-center" data-res="egov.resources.tableheader.delete"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</fieldset>
+
+<br />
+@if (Model.DocFieldId > 0)
+{
+    <fieldset>
+        <legend>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.DocType")</legend>
+        <div class="divDocFields">
+            <p>
+                <span>@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.DocType")</span>
+                <input id="findDocType" style="width: 330px; display: inline" class="form-control" />
+            </p>
+        </div>
+
+        <table class="table-main table table-bordered table-hover" id="tblDocType">
+            <colgroup>
+                <col />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header">@Localizer("Bkav.eGovCloud.Areas.Admin.DocField.DocType")</th>
+                    <th class="header text-center" data-res="egov.resources.tableheader.delete"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </fieldset>
+
+    <script id="tmplDocType" type="text/x-jquery-tmpl">
+        <tr data-doctypeid="${DocTypeId}">
+           
+            <td>${DocTypeName}
+            <input type="hidden" name="DocTypeIds" value="${DocTypeId}" />
+            <td style="text-align: center"><a href="javascript:deleteRowDocType('${DocTypeId}')" data-res="egov.resources.tableheader.delete">Xóa</a></td>
+        </tr>
+    </script>
+}
+
+<script id="storeTemplate" type="text/x-jquery-tmpl">
+    <tr data-id="${value}">
+         <td style="text-align: center">${$item.getNumbers()}</td>
+        <td id="pts${value}">
+        ${label}
+        <td style="text-align: center"><a href="javascript:removeStores(${value})" data-res="egov.resources.tableheader.delete">Xóa</a></td>
+    </tr>
+</script>
+

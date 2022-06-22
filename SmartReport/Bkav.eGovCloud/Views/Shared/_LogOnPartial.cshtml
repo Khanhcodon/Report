@@ -1,0 +1,8 @@
+﻿@using Bkav.eGovCloud.Entities
+@if(Request.IsAuthenticated) {
+    <text><strong>@(User.GetFullName())</strong>
+    @Html.ActionLink("Thoát", "Logout", "Account", new { area = "" }, null)</text>
+}
+else {
+    @:[ @Html.ActionLink("Log On", "LogIn", "Account") ]
+}

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<CodeModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Code.List");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var allGroup = ViewBag.AllGroup as IEnumerable<SelectListItem>;
+}
+
+<script type="text/javascript">
+    function deleteCode(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Code.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+
+    function onBegin() {
+        $("#divListCode").blockpanel({ text: "@Localizer("Common.Processing")", borderWidth: 1 });
+    }
+
+    function onSuccess() {
+        $('tr th').css("line-height", "2.5");
+        $('#divListCode').unblockpanel();
+    }
+
+    function onFailure() {
+        eGovMessage.notification("@Localizer("Common.Error")", eGovMessage.messageTypes.error);
+        $('#divListCode').unblockpanel();
+    }
+
+    function searchCode(_this) {
+        $(_this).parent()
+            .attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+    }
+
+    function onChange() {
+        $("#search").click();
+    }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-code"></i>
+        <span data-res="egov.resources.sitemap.code"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/code/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    @using (Ajax.BeginForm("Search",
+            new AjaxOptions
+            {
+                HttpMethod = "Get",
+                UpdateTargetId = "divListCode",
+                OnBegin = "onBegin",
+                OnFailure = "onFailure",
+                OnSuccess = "onSuccess"
+            }))
+    {
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Code.Search.Group.Label")</span>
+        @Html.DropDownList("groupId",
+        allGroup, @Localizer("Common.All.Label"),
+        new { @style = "display:inline;width:150px", onchange = "onChange();" })
+
+        @:&nbsp;
+        <span>@Localizer("Bkav.eGovCloud.Areas.Admin.Code.Search.CodeName.Label")</span>
+        <input style="display:inline;width:50%" type="text"
+                name="codeName" id="codeName" value="@(ViewBag.CodeName ?? "")"
+                 placeholder="@Localizer("Common.Resource.Index.Search.Name")" />
+
+        <input style="display:inline" class="btn" type="submit"
+            id="search" onclick="searchCode(this)" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+    <br />
+    <div id="divListCode">
+        @{
+            Html.RenderPartial("_PartialList", Model);
+        }
+    </div>
+</div>

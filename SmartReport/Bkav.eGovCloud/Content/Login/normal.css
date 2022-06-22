@@ -1,0 +1,455 @@
+﻿html, body, .login-form {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    font-size: 13px !important;
+}
+
+body {
+    margin: 0;
+    background: url(../../Content/Images/login/login-bg.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.login-form {
+    background: rgba(69, 125, 255, 0.36);
+    height: 100%;
+}
+
+#error {
+    padding: 0 15px;
+}
+
+.login-form .header {
+    height: 60px;
+    background: #1967B2;
+    display: none;
+}
+
+    .login-form .header img {
+        margin-left: 40px;
+        margin-top: 15px;
+    }
+
+.login-form .footer {
+    background-color: blue;
+    height: 90px;
+}
+
+
+.capslockalert {
+    color: rgb(160, 91, 13);
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: 13px;
+}
+
+.mesage-login-error {
+    position: absolute;
+    text-align: center;
+    z-index: 2000;
+    margin: auto;
+    top: 80px;
+    left: 0;
+    right: 0;
+    color: red;
+    line-height: 50px;
+}
+
+.mesage-login-error-show {
+    display: block;
+}
+
+.mesage-login-error-hide {
+    display: none;
+}
+
+.field-validation-valid {
+    display: none !important;
+}
+
+#captchaWrap {
+    display: none;
+}
+
+#captcha {
+    text-align: right;
+    position: relative;
+}
+
+    #captcha br {
+        display: none;
+    }
+
+    #captcha #CaptchaImage {
+        position: relative;
+        width: 125px;
+        float: left;
+        border: 1px solid #B7B7B7;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+
+    #captcha #CaptchaInputText {
+        float: right;
+        padding: 8px 15px;
+        margin-left: 5px;
+        outline: 0;
+        border: 1px solid #b7b7b7;
+        border-radius: 4px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 125px;
+        height: 43px;
+    }
+
+    #captcha a {
+        position: absolute;
+        top: 0;
+        color: #5b5be8;
+    }
+
+.text-left {
+    text-align: left;
+}
+
+.avatar {
+    width: 80px;
+    border-radius: 50%;
+    vertical-align: top;
+    margin-bottom: 20px;
+}
+
+.otherAccount {
+    line-height: 36px;
+    font-size: 10px;
+    color: #0057ae;
+}
+
+.usernameText {
+    color: #646464;
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 28px;
+}
+
+#egov-login-wrap {
+    width: 340px;
+    position: absolute;
+    top: 100px;
+    right: 100px;
+}
+
+#lblIntroduce {
+    text-align: right;
+    color: white;
+    font-size: 14px;
+    padding-right: 15px;
+    margin-top: 0;
+}
+
+.login.row {
+    position: relative;
+}
+
+#offcename-wrap {
+    width: 60%;
+    position: absolute;
+    top: 175px;
+    bottom: initial;
+    padding-left: 40px;
+    text-align: center;
+    font-size: 16px;
+}
+
+    #offcename-wrap > * {
+        text-align: center;
+        color: white;
+        /*text-shadow: 1px 1px 5px #c7c7c7;*/
+    }
+
+#egov-login {
+    padding: 30px 20px;
+    background: white;
+    border-radius: 10px;
+    /*margin-top: 100px;*/
+}
+
+.login-logo-text {
+    position: fixed;
+    bottom: -30px;
+    left: 50px;
+}
+
+#egov-login h3 {
+    text-align: center;
+    font-size: 28px;
+    color: #0057ae;
+    margin-top: 0;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+#egov-login .b-row {
+    margin-top: 0;
+    margin-bottom: 30px;
+    min-height: 50px;
+}
+
+.remember-me, .remember-me .form-group {
+    margin-bottom: 0 !important;
+}
+
+    .remember-me label {
+        color: #0057ae;
+        font-weight: normal;
+    }
+
+#login {
+    width: 100%;
+    color: white;
+    border-radius: 3px;
+    background: #0057ae none repeat scroll 0 0;
+    border: medium none;
+    font-size: 17.43px;
+    height: 48px;
+    /*margin-top: 13px;*/
+    text-transform: none;
+}
+
+/*.mdl-textfield {
+    width: 100%;
+    margin-bottom: 0;
+}*/
+
+/*.mdl-textfield__input {
+    outline: none;
+    border-bottom: 1px solid rgba(15, 13, 134, 0.52);
+}
+
+.mdl-textfield__label {
+    color: rgba(0, 0, 0, 0.46);
+    font-size: 13px;
+}
+
+    .mdl-textfield__label:after {
+        bottom: 15px;
+    }*/
+
+/*.mdl-checkbox__label {
+    font-size: 13.5px;
+}*/
+
+.field-validation-error {
+    color: red;
+    position: absolute;
+    right: 0;
+    font-size: 12px;
+    margin-top: 3px;
+    /*visibility: hidden;*/
+    display: block;
+}
+
+.mdl-textfield.is-invalid .field-validation-error {
+    visibility: visible;
+}
+
+#auto-login-desktop {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    text-align: center;
+    color: white;
+    font-size: 120%;
+}
+
+.login-processing {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    background-position: center center;
+    background-repeat: no-repeat;
+    /*-webkit-animation: colors 5.6s ease-in-out infinite;
+    animation: colors 5.6s ease-in-out infinite;*/
+}
+
+    .login-processing.show {
+        display: flex !important;
+    }
+
+    .login-processing .spinner {
+        -webkit-animation: rotation 1.4s linear infinite;
+        -moz-animation: rotation 1.4s linear infinite;
+        -o-animation: rotation 1.4s linear infinite;
+        animation: rotation 1.4s linear infinite;
+    }
+
+@-webkit-keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
+}
+
+@keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
+}
+
+.login-processing .spinner .circle {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+    -webkit-animation: turn 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+    animation: turn 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@-webkit-keyframes turn {
+    0% {
+        stroke-dashoffset: 187;
+    }
+
+    50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+    }
+
+    100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+    }
+}
+
+@keyframes turn {
+    0% {
+        stroke-dashoffset: 187;
+    }
+
+    50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+    }
+
+    100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+    }
+}
+
+@keyframes colors {
+    0% {
+        stroke: #4285F4;
+        background-color: #cfe1ff;
+        /* Safari 4-5, Chrome 1-9 */
+        /* Can't specify a percentage size? Laaaaaame. */
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#cfe1ff));
+        /* Safari 5.1+, Chrome 10+ */
+        background: -webkit-radial-gradient(circle, #ffffff, #cfe1ff);
+        /* Firefox 3.6+ */
+        background: -moz-radial-gradient(circle, #ffffff, #cfe1ff);
+        /* IE 10 */
+        background: -ms-radial-gradient(circle, #ffffff, #cfe1ff);
+    }
+
+    25% {
+        stroke: #DE3E35;
+        background-color: #ffe5e4;
+        /* Safari 4-5, Chrome 1-9 */
+        /* Can't specify a percentage size? Laaaaaame. */
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#ffe5e4));
+        /* Safari 5.1+, Chrome 10+ */
+        background: -webkit-radial-gradient(circle, #ffffff, #ffe5e4);
+        /* Firefox 3.6+ */
+        background: -moz-radial-gradient(circle, #ffffff, #ffe5e4);
+        /* IE 10 */
+        background: -ms-radial-gradient(circle, #ffffff, #ffe5e4);
+    }
+
+    50% {
+        stroke: #F7C223;
+        background-color: #fff5d7;
+        /* Safari 4-5, Chrome 1-9 */
+        /* Can't specify a percentage size? Laaaaaame. */
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#fff5d7));
+        /* Safari 5.1+, Chrome 10+ */
+        background: -webkit-radial-gradient(circle, #ffffff, #fff5d7);
+        /* Firefox 3.6+ */
+        background: -moz-radial-gradient(circle, #ffffff, #fff5d7);
+        /* IE 10 */
+        background: -ms-radial-gradient(circle, #ffffff, #fff5d7);
+    }
+
+    75% {
+        stroke: #1B9A59;
+        background-color: #b9ffdb;
+        /* Safari 4-5, Chrome 1-9 */
+        /* Can't specify a percentage size? Laaaaaame. */
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#b9ffdb));
+        /* Safari 5.1+, Chrome 10+ */
+        background: -webkit-radial-gradient(circle, #ffffff, #b9ffdb);
+        /* Firefox 3.6+ */
+        background: -moz-radial-gradient(circle, #ffffff, #b9ffdb);
+        /* IE 10 */
+        background: -ms-radial-gradient(circle, #ffffff, #b9ffdb);
+    }
+
+    100% {
+        stroke: #4285F4;
+        background-color: #cfe1ff;
+        /* Safari 4-5, Chrome 1-9 */
+        /* Can't specify a percentage size? Laaaaaame. */
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#cfe1ff));
+        /* Safari 5.1+, Chrome 10+ */
+        background: -webkit-radial-gradient(circle, #ffffff, #cfe1ff);
+        /* Firefox 3.6+ */
+        background: -moz-radial-gradient(circle, #ffffff, #cfe1ff);
+        /* IE 10 */
+        background: -ms-radial-gradient(circle, #ffffff, #cfe1ff);
+    }
+}
+
+#loginProcess {
+    width: 100%;
+    display: none;
+}
+
+.mdl-progress.mdl-progress__indeterminate > .bar1,
+.mdl-progress.mdl-progress__indeterminate > .bar3 {
+    background-color: #fbf413;
+}
+
+.text-right {
+    text-align: right;
+}
+
+input[type='text'] {
+    outline: none;
+}

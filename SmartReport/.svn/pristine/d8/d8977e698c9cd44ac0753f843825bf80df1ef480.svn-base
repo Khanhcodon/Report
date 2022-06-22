@@ -1,0 +1,30 @@
+﻿@model PositionModel
+@Html.HiddenFor(model => model.PositionId)
+
+<table>
+    <tr>
+        <td style="width: 15%">
+            @Html.LabelRequireFor(model => model.PositionName):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.PositionName, new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+             @if (Model.PositionId == 0)
+                    { 
+                        <div>
+                            <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                        </div>
+                    }
+            @Html.ValidationMessageFor(model => model.PositionName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.IsApproved):
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model.IsApproved)
+        </td>
+    </tr>
+</table>

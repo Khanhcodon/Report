@@ -1,0 +1,51 @@
+﻿
+<div id="placeholder" style="margin-top: 40px; height: 500px;"></div>
+<script type="text/javascript" src="http://reporting.quangninh.gov.vn:8000/web-apps/apps/api/documents/api.js"></script>
+<script type="text/javascript">
+    config = {
+        "document": {
+            "fileType": "xlsx",
+            "key": "@ViewBag.FormId",
+            "title": "Example Document Title.xlsx",
+            "url": "http://reporting.quangninh.gov.vn/test.xlsx",
+            "permissions": {
+                "comment": false,
+                "download": false,
+                "edit": true,
+                "fillForms": false,
+                "print": false,
+                "review": false
+            }
+        },
+        "height": "500px",
+        "lang": "vi_VN",
+        "documentType": "spreadsheet",
+        "editorConfig": {
+            "mode": "edit",
+            "callbackUrl": "http://reporting.quangninh.gov.vn/webeditor.ashx",
+            "customization": {
+                "compactToolbar": true,
+                "autosave": false,
+                "forcesave": true,
+                "chat": false,
+                "logo": {
+                    "image": "/Content/logo.png"
+                },
+                "customer": {
+                    "address": "My City, 123a-45",
+                    "info": "Some additional information",
+                    "logo": "https://example.com/logo-big.png",
+                    "mail": "john@example.com",
+                    "name": "Bkav Corp",
+                    "www": "bkav.com"
+                },
+                "help": false
+            },
+            "plugins": {
+                "pluginsData": []
+            }
+        }
+    };
+
+    var docEditor = new DocsAPI.DocEditor("placeholder", config);
+</script>

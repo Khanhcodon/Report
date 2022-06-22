@@ -1,0 +1,222 @@
+﻿body {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.site-header {
+    z-index: 1 !important;
+    background: #f5b56b;
+    padding: 0 15px;
+    background-image: url(../../Content/Images/home/bg-header.png);
+}
+
+.navbar-default .navbar-nav > li.module > a.office-name {
+    width: 335px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.site-header .form-search {
+    margin-left: 20px;
+}
+
+.site-header .search-query {
+    border-radius: 15px;
+    border-right: 0;
+    width: 300px !important;
+}
+
+.site-header .search-btn .btn {
+    border-radius: 15px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+    height: 29px;
+    line-height: 18px;
+    color: #8b8b8b;
+}
+
+    .site-header .search-btn .btn:active {
+        background-color: white;
+    }
+
+.site-header .notifyBell {
+    display: none;
+}
+
+    .site-header .notifyBell[app="documents"] {
+        display: inline-block;
+    }
+
+.egov-theme .navbar-default {
+    background-color: transparent !important
+    /*background: url(../../Content/Images/home/bg-header.png) !important;*/
+}
+
+.site-menu {
+    background: #2F4D5D;
+    background: #2b2f31;
+    color: white;
+}
+
+    .site-menu .list-group-item {
+        padding: 5px;
+        font-size: 11.5px;
+        text-align: center;
+        margin-bottom: 10px;
+        color: #ccc;
+    }
+
+        .site-menu .list-group-item img, svg, i {
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .site-menu .list-group-item img {
+            width: 25px;
+            height: 25px;
+            margin-left: 0px;
+            margin-right: 4px;
+            /*transition: all ease-in 0.1s;*/
+        }
+
+        .site-menu .list-group-item .btnDelete {
+            display: none;
+        }
+
+        .site-menu .list-group-item.customapp .btnDelete {
+            display: block;
+            opacity: 0;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            font-size: 8px;
+            line-height: 8px;
+            height: 3px;
+            width: 3px;
+        }
+
+        .site-menu .list-group-item:hover.customapp .btnDelete {
+            opacity: 0.6;
+            height: 10px;
+            width: 10px;
+            transition: all ease-in 0.2s;
+        }
+
+        .site-menu .list-group-item.customapp:hover .btnDelete:hover {
+            opacity: 1;
+            font-size: 12px;
+            line-height: 12px;
+            height: 15px;
+            width: 15px;
+        }
+
+    .site-menu div.menu-items > a.active {
+        background: transparent;
+        color: white !important;
+        position: relative;
+        background-color: #346986;
+    }
+
+        .site-menu div.menu-items > a.active::after {
+            position: absolute;
+            content: '';
+            left: 2px;
+            top: 5px;
+            width: 2px;
+            /*height: 46px;*/
+            height: calc(100% - 10px);
+            background-color: yellow;
+        }
+
+    .site-menu div.menu-items > a:hover,
+    .site-menu div.setting-items > a:hover,
+    .site-menu div.menu-items > a:focus,
+    .site-menu div.setting-items > a:focus {
+        color: white;
+        background-color: #346986;
+    }
+
+    .site-menu .setting-items {
+        background: #2b2f31;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+a.list-group-item.menu.main-menu {
+    /*margin-bottom: 5px;*/
+    margin-bottom: 15px;
+    padding: 0;
+    width: 100%;
+    height: 44px;
+    /*background-color: #0b5a69;*/
+    background-color: #223c78;
+}
+
+.navbar-default .navbar-nav > li.module > a {
+    margin-left: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.main-nav .notify-count {
+    top: 6px;
+    right: 6px;
+    background: #E65D5D;
+    border-radius: 100%;
+    height: 13px;
+    width: 13px;
+    line-height: 13px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 3px #963F3F;
+}
+
+    .main-nav .notify-count.notify-count-avaiable {
+        display: inline-block;
+    }
+
+.navbar-default .navbar-nav > li > a > img {
+    width: 25px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.input-group .dropdown-toggle {
+    height: 25px;
+    padding: 0px 10px;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(57,57,57, .6);
+    -moz-transition: all ease-in 0.8s;
+    -o-transition: all ease-in 0.8s;
+    -webkit-transition: all ease-in 0.8s;
+    transition: all ease-in 0.8s;
+}
+
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background-color: transparent;
+        -moz-transition: all ease-out 0.8s;
+        -o-transition: all ease-out 0.8s;
+        -webkit-transition: all ease-out 0.8s;
+        transition: all ease-out 0.8s;
+    }

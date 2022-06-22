@@ -1,0 +1,337 @@
+﻿@{
+    var allAddress = ViewBag.AllAddress as IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.AddressModel>;
+    var addresss = ViewBag.Addresss as string;
+    Layout = null;
+}
+<style type="text/css">
+    #dialogpublish {
+        height: 530px;
+        width: 765px;
+    }
+
+        #dialogpublish .publish-info {
+            width: 515px;
+            float: left;
+        }
+
+            #dialogpublish .publish-info > div {
+                height: 25px;
+            }
+
+            #dialogpublish .publish-info .field-label {
+                float: left;
+                width: 105px;
+                height: 25px;
+                line-height: 25px;
+            }
+
+            #dialogpublish .publish-info .field-value {
+                float: left;
+                height: 25px;
+                line-height: 25px;
+                margin-right: 5px;
+            }
+
+            #dialogpublish .publish-info .table-address {
+                min-height: 100px;
+                max-height: 150px;
+                overflow: hidden;
+                width: 510px;
+            }
+
+            #dialogpublish .publish-info .ui-datepicker-trigger {
+                position: absolute;
+                right: 2px;
+                top: 5px;
+            }
+
+        #dialogpublish .publish-receiver {
+            width: 238px;
+            float: left;
+            padding: 5px;
+            min-height: 275px;
+            max-height: 315px;
+            border: 1px solid #e3e3e3;
+        }
+
+    #tblAddress {
+        width: 600px;
+    }
+
+        #tblAddress thead .header {
+            background: #e3e3e3;
+            font-weight: normal;
+            padding: 5px;
+        }
+
+        #tblAddress.table-main td {
+            padding: 3px;
+        }
+
+    #dialogpublish .public-private {
+        float: left;
+        width: 767px;
+    }
+
+        #dialogpublish .public-private .dialog-south-south {
+            display: none;
+        }
+</style>
+<script type="text/javascript">
+    var alladdress = @(string.IsNullOrEmpty(addresss) ? MvcHtmlString.Create("[]") : Html.Raw(addresss));
+    $(function () {
+        $("#DatePublished").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        $("#chbSokyhieu").click(function () {
+            if ($(this).is(':checked')) {
+                $('#editcodes').css('display', '');
+                $('#Code').val($('#CodeId :selected').text());
+                $('#codes').css({ 'display': 'none' });
+            } else {
+                $('#editcodes').css({ 'display': 'none' });
+                $('#codes').css('display', '');
+            }
+        });
+
+        $('.table-address').niceScroll();
+
+        $("#searchAddress").autocomplete({
+            minLength: 1,
+            source: alladdress,
+            focus: function () {
+                return false;
+            },
+            selectFirst: true,
+            select: function (event, ui) {
+                $("#searchAddress").val('');
+                $("#tblAddress .addressItem").each(function () {
+                    if (ui.item.value == $(this).val()) {
+                        $(this).click();
+                        $(this).prop('checked', true);
+                    }
+                });
+                return false;
+            }
+        })
+        .data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.label + "</a>")
+                .appendTo(ul);
+        };
+
+        $("#tblAddress .addressItem").bind("change", function () {
+            var divViewAddress = $("#divViewAddress");
+            var spanaddress = "";
+            var addressids = "";
+            divViewAddress.html("");
+            $($("#tblAddress .addressItem:checked")).each(function () {
+                spanaddress += "<span style='font-weight:bold; padding-left: 20px;'>" + $(this).attr('addressname') + "<br /></span>";
+                addressids += addressids = ""? $(this).val() : ";" + $(this).val();
+            });
+            if (spanaddress != "")
+            {
+                divViewAddress.css('display','');
+                divViewAddress.append(spanaddress);
+            }
+            $("#hdfaddressIds").val(addressids);
+
+        });
+
+        $('#closeDonggui').click(function () {
+            $(".dialog-south").hide();
+            $('#openDonggui').show();
+            $('#closeDonggui').hide();
+        });
+
+        egov.cshtml.publish.openDongGui();
+
+        $("#Increase").change(function() {
+            var increase = parseInt($(this).val());
+            var value = parseInt(@ViewBag.Increase);
+            if (increase <= value)
+            {
+                messageTemp({ message: 'giá trị số của số/ký hiệu không phù hợp', type: 'error' });
+            }
+        });
+
+        $("#StoreId").change(function (event) {
+            var storeId = $(this).val();
+            $.get("@Url.Action("StoreChange")",
+                { storeId: storeId },
+                function (result) {
+                    if(result)
+                    {
+                        $('#dialogpublish #CodeId').empty();
+                        if(result.length >0 )
+                        {
+                            $("#codeTemplate").tmpl(result).appendTo("#dialogpublish #CodeId");
+                        }
+                    }
+                }
+            )
+            .complete(function () {
+
+            })
+            .fail(function () {
+                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+            });
+        });
+    });
+
+
+</script>
+<script id="codeTemplate" type="text/x-jquery-tmpl">
+    <option value="${CodeId}">${Template}</option>
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "DocumentPublish" }))
+{
+    @Html.Hidden("hdfaddressIds")
+    @Html.AntiForgeryToken()
+    <div id="dialogpublish">
+        <div style="float: left;">
+            <div class="publish-info">
+                <div>
+                    <div class="field-label">Sổ văn bản</div>
+                    <div class="field-value">
+                        @Html.DropDownList("StoreId", null, new { style = "width:405px;" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        <span>Số/ký hiệu</span><input type="checkbox" id="chbSokyhieu" />
+                    </div>
+                    <div class="field-value">
+                        <div id="codes">
+                            @Html.DropDownList("CodeId", null, new { style = "width:150px;" })
+                        </div>
+                        <div id="editcodes" style="display: none;">
+                            @Html.TextBox("Code", null, new { style = "width:146px" })
+                            @*<img alt='' id="imgSelectDeptForJobtitles" src="@Url.Content("~/Content/Images/drop-hidden.png")" style="cursor: pointer;vertical-align: middle;height:16px;width:17px; display:none;" />*@
+                        </div>
+                    </div>
+                    <div class="field-label">
+                        Ngày ban hành
+                    </div>
+                    <div class="field-value" style="position: relative;">
+                        @Html.TextBox("DatePublished", null, new { style = "width:140px" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">Độ mật</div>
+                    <div class="field-value">
+                        @Html.DropDownList("SecurityId", null, new { style = "width:150px;" })
+                    </div>
+                    <div class="field-label">Số bản/số trang</div>
+                    <div class="field-value" style="padding-left: 13px;">
+                        @Html.TextBox("TotalCopy", 1, new { style = "width: 55px;" }) / @Html.TextBox("TotalPage", 1, new { style = "width: 55px;" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        Người ký
+                    </div>
+                    <div class="field-value">
+                        @Html.DropDownList("Approvers", null, new { style = "width:405px;" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        Từ khóa
+                    </div>
+                    <div class="field-value">
+                        @Html.DropDownList("KeyWordId", null, new { style = "width:405px;" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        Nơi lưu bản gốc
+                    </div>
+                    <div class="field-value">
+                        @Html.DropDownList("InPlace", null, new { style = "width:405px;" })
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">
+                        Nơi nhận vb
+                    </div>
+                    <div class="field-value">
+                        <input type="text" id="searchAddress" placeholder="Gõ vào đây để tìm nhanh theo tên" style="width: 400px;" />
+                    </div>
+                </div>
+                <div class="table-address">
+                    <table class="table-main" id="tblAddress">
+                        <colgroup>
+                            <col style="width: 150px" />
+                            <col style="width: 120px" />
+                            <col style="width: 90px" />
+                            <col />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="header">
+                                    Gửi đến
+                                </th>
+                                <th class="header">
+                                    Hòm thư
+                                </th>
+                                <th class="header">
+                                    Số fax
+                                </th>
+                                <th class="header">
+                                    Địa chỉ
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (allAddress != null && allAddress.Any())
+                            {
+                                foreach (var address in allAddress)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" value='@address.AddressId' class="addressItem" addressname='@address.Name' />&nbsp;&nbsp;@address.Name
+                                        </td>
+                                        <td>
+                                            @address.Email
+                                        </td>
+                                        <td>
+                                            @address.Fax
+                                        </td>
+                                        <td>
+                                            @address.AddressString
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <strong>Nơi nhận trong đơn vị</strong>
+                </div>
+            </div>
+            <div class="publish-receiver">
+                <div id="divLabelAddress">
+                    <b>Nơi nhận văn bản:</b>
+                </div>
+                <div id="divViewAddress" style="display: none">
+                </div>
+                <div id="divViewThongbao" style="display: none">
+                </div>
+                <div id="divViewInfo" style="display: none">
+                </div>
+            </div>
+        </div>
+        <div class="public-private dialog-south" style="height: 200px;">
+        </div>
+    </div>
+}

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TemplateKeyModel>
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.TemplateKey.Index");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var listType = ViewBag.ListType as List<SelectListItem> ?? new List<SelectListItem>();
+}
+<style>
+    .dropdown1
+    {
+        display: inline;
+        width: 30%;
+    }
+</style>
+<script type="text/javascript">
+    function deleteTemplateKey(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.TemplateKey.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.Ok,
+                function () {
+                    $("#formdelete" + id).submit();
+                });
+    }
+
+    function onBegin() {
+        $("#divListKey").blockpanel({ text: "@Localizer("Common.Notify.Loading")", borderWidth: 1 });
+        }
+
+        function onSuccess() {
+            $('tr th').css("line-height", "2.5");
+            $('#divListKey').unblockpanel();
+        }
+
+        function onFailure() {
+            alert("@Localizer("Common.Error")");
+            $('#divListKey').unblockpanel();
+        }
+
+        function searchTemp(_this) {
+            $(_this).parent().attr('action', '@Url.Action("Search")?pageSize=' + $('select[name=pageSize]:first').val());
+        }
+</script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-paste2"></i>
+        <span data-res="egov.resources.sitemap.templatekey"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" href="/admin/TemplateKey/create">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+    </div>
+</div>
+<div id="tabs" class="bkavegov">
+    @using (Ajax.BeginForm("Search", new AjaxOptions { UpdateTargetId = "divListKey", OnBegin = "onBegin", OnSuccess = "onSuccess", OnFailure = "onFailure", HttpMethod = "Get" }))
+    {
+        <input type="text" name="searchKey" id="searchKey" value="@(ViewBag.KeySearch ?? "")" style="width:50%; display: inline;" />
+        @Html.DropDownList("type", listType, new { @class = "dropdown1" })
+        <input style="display:inline" class="btn" type="submit" id="search" onclick="searchTemp(this);" value="@Localizer("Common.Resource.Index.Search.Button.Search")" />
+    }
+    <div style="clear: both">
+    </div>
+    <br />
+    <div id="divListKey">
+        @{
+            Html.RenderPartial("_Notifications");
+            Html.RenderPartial("_PatialList", Model);
+        }
+    </div>
+</div>

@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Entities.Customer.DoctypeFee>
+    @{
+        ViewBag.Title = "Fee";
+        Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+        var count = 0;
+    }
+    <script>
+    $(function () {
+        $("#submit").remove();
+        $(".tab-fee").addClass("active");
+        $(".tab-paper").siblings().removeClass(" ui-tabs-selected ui-state-active");
+    });
+    function deleteDoctypeFee(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.Code.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            width: 800,
+            height: 400,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: [
+                //Xu ly refresh
+                {
+                    'id': "btnRefresh",
+                    text: "@Html.Raw(Localizer("Common.Refresh.Label"))",
+                    click: function () {
+                        $("#my-dialog").load(url);
+                    }
+                },
+                //Xu ly create
+                {
+                    'id': "btnCreate",
+                    text: "@Html.Raw(Localizer("Common.Create.Label"))",
+                    click: function () {
+                        window.open("@Url.Action("Create", "Fee")")
+                    }
+                },
+                //Xu ly select
+                {
+                    text: "@Html.Raw(Localizer("Common.Label.Select"))",
+                    click: function () {
+                        $("#tblPaper .chose[type=checkbox]").each(function () {
+                            if ($(this).is(":checked")) {
+                                $.ajax({
+                                    type: "POST",
+                                    //url: "/Admin/Doctype/AddFee",
+                                    url: "@Url.Action("AddFee")",
+                                    datatype: "json",
+                                    data: {
+                                        'doctypeId': '@ViewBag.DoctypeId',
+                                    'feeId': $(this).data('id')
+                                },
+                                success: function (result) {
+                                    location.reload();
+                                },
+                                error: function () {
+                                    location.reload();
+                                },
+                                });
+                        }
+                        });
+        $("#my-dialog").dialog("close");
+    }
+    }
+    ]
+    });
+    }
+
+    function changeRequire(doctypeFeeId) {
+        $.ajax({
+            url: "@Url.Action("ChangePaperRequire")",
+            type: "POST",
+            data: { doctypeFeeId: doctypeFeeId },
+            success: function (result) {
+                window.location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+    </script>
+    <div id="my-dialog">
+    </div>
+    <button class="btn" type="button" onclick="openDialog('@Url.Action("DisplayFees", "Doctype", new { id = ViewBag.DocTypeId })')">
+        Thêm lệ phí
+    </button>
+    <div>
+        <table class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col style="width: 80px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên lệ phí</th>
+                    <th>Bắt buộc</th>
+                    <th>Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doctypeFee in Model)
+                {
+                    count++;
+                    <tr>
+                        <td>@count</td>
+                        <td>@doctypeFee.Fee.FeeName</td>
+                        <td align="center">
+                            <input type="checkbox" onchange="changeRequire(@doctypeFee.Id)" @((doctypeFee.IsRequired.HasValue && doctypeFee.IsRequired.Value) ? "checked" : "") />
+                        </td>
+                        <td>
+                            <a href="javascript:deleteDoctypeFee('@(doctypeFee.Id)')">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(doctypeFee.Id)" style="display: none" action="@Url.Action("DeleteDoctypeFee", new { doctypeId = ViewBag.DoctypeId, doctypeFeeId = doctypeFee.Id })" method="POST"></form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

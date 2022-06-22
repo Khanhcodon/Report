@@ -1,0 +1,88 @@
+﻿<div class="return-result">
+    <div class="form-group">
+        <strong><span data-res="egov.resources.document.returnResult.result">Kết quả xử lý </span></strong>
+        {{if IsSuccess}}
+        <span data-res="egov.resources.document.returnResult.resultOk" style="color: blue; margin-left: 20px">Đồng ý</span>
+        {{else}}
+        <span data-res="egov.resources.document.returnResult.resultDeny" style="color: indianred; margin-left: 20px">Từ chối</span>
+        {{/if}}
+    </div>
+    <div class="form-group">
+        <label data-res="egov.resources.document.returnResult.personGive">Thông tin công dân nhận kết quả</label>
+        <textarea class="form-control resultComment"></textarea>
+    </div>
+    <div class="paper-fee row">
+        <div class="div-paper col-md-8">
+            <label>
+                <span data-res="egov.resources.document.supplementary.paper">Giấy tờ</span>
+            </label>
+            <ul class="ul-papers list-group">
+                {{each Papers}}
+                <li class="list-group-item">
+                    <input class="paper-id" type="checkbox" id="paper${PaperId}" value="${PaperId}" {{if IsRequired}} checked {{/if}} />
+                    <label class="paper-name" for="paper${PaperId}">${PaperName}</label>
+                    <input class="paper-amount form-control pull-right" type="text" value="${Amount}" />
+                </li>
+                {{/each}}
+                <li class="list-group-item clearfix">
+                    <input class="paper-id pull-left" type="checkbox" value="0" checked />
+                    <input class="paper-name form-control pull-left" data-respholder="egov.resources.document.supplementary.addPaper" />
+                    <input class="paper-amount form-control pull-right" type="text" value="1" />
+                </li>
+            </ul>
+        </div>
+        <div class="div-fee col-md-8">
+            <label>
+                <span data-res="egov.resources.document.supplementary.fee">Lệ phí</span>
+            </label>
+            <ul class="ul-fees list-group">
+                {{each Fee}}
+                <li class="list-group-item">
+                    <input class="fee-id" type="checkbox" id="fee{FeeId}" value="${FeeId}" {{if IsRequired}} checked {{/if}} />
+                    <label class="fee-name" for="fee{FeeId}">${FeeName}</label>
+                    <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                    <input class="fee-price pull-right form-control" type="text" value="${Price}" />
+                </li>
+                {{/each}}
+                <li class="list-group-item clearfix">
+                    <input class="fee-id pull-left" type="checkbox" value="0" checked />
+                    <input class="fee-name form-control pull-left" data-respholder="egov.resources.document.supplementary.addFee" />
+                    <span class="pull-right currencyUnit" data-res="egov.resources.common.currencyUnit"></span>
+                    <input class="fee-price form-control pull-right" type="text" value="0" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{if hasFinish}}
+    <div class="form-group">
+        <label data-res="egov.resources.document.returnResult.finish">Kết thúc xử lý hồ sơ</label>
+        <div class="container-fluid">
+            <label class="checkbox-inline">
+                <input type="checkbox" id="finishProcess" checked/>
+                <span data-res="egov.resources.document.returnResult.finishAfterReturn"></span>
+            </label>
+        </div>
+    </div>
+    {{/if}}
+    {{if IsTypeReturn}}
+    <div class="form-group form-group-sm">
+        <label class="" data-res="egov.resources.formtemplate.typeReturn"></label>
+        <div class="container-fluid">
+            <label class="radio-inline">
+                <input type="radio" name="TypeReturned" value="0" {{if TypeReturned == 0}} checked {{/if}} />Qua bưu điện
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="TypeReturned" value="1" {{if TypeReturned == 1}} checked {{/if}} />Trực tiếp
+            </label>
+        </div>
+    </div>
+    {{/if}}
+    <div class="form-group form-group-sm">
+        <div><label data-res="egov.resources.document.returnResult.printTemplate">Mẫu in</label></div>
+        <select class="form-control input-sm" id="ddlTemplate">
+            {{each PrintTemplates}}
+            <option value="${TemplateId}">${Name}</option>
+            {{/each}}
+        </select>
+    </div>
+</div>

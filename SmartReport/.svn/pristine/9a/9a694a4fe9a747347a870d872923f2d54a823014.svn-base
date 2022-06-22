@@ -1,0 +1,300 @@
+﻿@model CategoryDisaggreationModel
+@{
+    ViewBag.Title = "Quản lý danh mục phân tổ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutDataModel.cshtml";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border leftRightDis">
+                    <div class="leftdisaggregation">
+                        <h3 class="box-title">Quản lý danh mục phân tổ</h3>
+                    </div>
+                    <div class="rightdisaggregation">
+                        <a href="/Reports/TemplateCategoryDisaggregation.xlsx" style="font-style: italic; color: #008ae6;width: 100%;">
+                            <span class="fa fa-download"></span> Download file mẫu
+                        </a>
+                        @using (Html.BeginForm("ExportToExcel", "CategoryDisaggregations", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormImportCateDis" }))
+                        {
+                            @Html.Raw(ViewBag.Error)
+                            <div style="height: 33px;margin-right: 4px;">
+                                <label class="custom-file-upload">
+                                    <input type="file" name="excelfile" />
+                                    <i class="fa fa-cloud-upload"></i> Import Excel
+                                </label>
+                            </div>
+                            <br />
+                            <input type="submit" class="btn btn-brown" value="Lưu File" />
+                        }
+
+
+                        <a class="popup-with-form btn btn-block btn-successs" id="tagFormDisaggegation" href="#myFormCategoryDisaggegation" style="background-color:aquamarine;margin-right: 4px;">
+                            <i class="fa fa-plus-square"></i> Thêm
+                        </a>
+                        <button type="button" id="deleteMulDisaggegation" class="btn btn-block btn-danger"><i class="fa fa-times-circle"></i> Xóa</button>
+
+                        <!-- form itself -->
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myFormCategoryDisaggegation", @class = "mfp-hide white-popup-block" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.AntiForgeryToken()
+
+                            <h1 style="text-align: center;">Thêm danh mục phân tổ</h1>
+                            <br />
+                            <fieldset style="border:0;">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label" for="inputName">Tên danh mục phân tổ</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="txtNAME_FIELD_Dis" name="CategoryDisaggregationName" placeholder="Tiêu danh mục phân tổ">
+                                        @Html.ValidationMessageFor(model => model.CategoryDisaggregationName)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label" for="textarea">Mã danh mục phân tổ</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="txtDES_FIELD_Dis" name="CategoryDisaggregationCode" placeholder="Mã danh mục phân tổ" />
+                                        @Html.ValidationMessageFor(model => model.CategoryDisaggregationCode)
+                                    </div>    
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label>Chọn tiêu thức phân tổ</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select class="form-control  w-p100" id="IndicatorId_Dis" name="IndicatorId" data-width="100%">
+                                            @if (ViewBag.ListIndis != null)
+                                            {
+                                                foreach (var listCa in ViewBag.ListIndis as IEnumerable<SelectListItem>)
+                                                {
+                                                    <option @(listCa.Selected ? "selected" : "") value="@listCa.Value">@listCa.Text</option>
+                                                }
+                                            }                     
+                                        </select>
+                                    </div>                                     
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="IsActivated_Dis" name="IsActivated" value="true">
+                                    <label class="form-check-label" for="IsActivated_Dis">Sử dụng</label>
+                                </div>
+
+                                <button class="btn btn-primary" id="btnAddCategoryDisggregation" style="padding-top: 10px; float:right">
+                                    <span class="-ap icon icon-plus3"></span> Lưu lại
+                                </button>
+                            </fieldset>
+                            @Html.HiddenFor(model => model.CategoryDisaggregationId)
+                        }
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body row">
+                    <div class="table-responsive col-lg-5 col-sm-6 col-md-5">
+                        <table id="CategoryDisaggregationLeft" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                            <thead>
+                                <tr>   
+                                    <th hidden class="text-center">ID</th>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Chỉ tiêu phân tổ</th>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.ListIndis != null)
+                                {
+                                    var stt = 0;
+                                    foreach (var listCa in ViewBag.ListLeft)
+                                    {
+                                        <tr class="checkId">   
+                                            <td hidden class="text-center">@listCa.IndicatorId</td>
+                                            <td class="text-center">@(stt + 1)</td>       
+                                            <td class="text-center">@listCa.IndicatorName</td>                                   
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive col-lg-7 col-sm-6 col-md-5">
+                        <table id="CategoryDisaggregation" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="checkBoxAllsCategory" name="checkBoxAllCategory" class="custom-checkbox form-check-input labelThead" />
+                                        <label class="form-check-label" for="checkBoxAllsCategory"></label>
+                                    </th>
+                                    <th hidden class="text-center">ID</th>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Danh mục phân tổ</th>
+                                    <th class="text-center">Mã danh mục phân tổ</th>
+                                    <th class="text-center">Sử dụng</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CategoryDisagreationModels != null)
+                                {
+                                    var stt = 0;
+                                    foreach (var item in Model.CategoryDisagreationModels)
+                                    {
+                                        <tr>
+                                            <td class="tdInDi">
+                                                <input type="checkbox" id="@item.CategoryDisaggregationId" name="@item.CategoryDisaggregationId" value="@item.CategoryDisaggregationId"
+                                                        class="custom-checkbox form-check-input chkCheckBoxId" />
+                                                <label class="form-check-label labelIndicatorID" for="@item.CategoryDisaggregationId"></label>
+                                            </td>
+                                            <td hidden class="text-center">@item.CategoryDisaggregationId</td>
+                                            <td class="text-center">@(stt + 1)</td>
+                                            <td class="text-center">@item.CategoryDisaggregationName</td>
+                                            <td class="text-center">@item.CategoryDisaggregationCode</td>
+                                            <td class="text-center">
+                                                @if (item.IsActivated == true)
+                                                {
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="@item.IsActivated" disabled>
+                                                    <label for="md_checkbox_27"></label>
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="@item.IsActivated" disabled>
+                                                    <label for="md_checkbox_27"></label>
+                                                }
+                                            </td>
+                                            <td class="text-center" style="font-size: 23px;">
+                                                <i onclick="EditCategoryDis('@item.CategoryDisaggregationId')" class="fa fa-edit fa-hover" title="Sửa tiêu thức" aria-hidden="true" style="color: blue;"></i>
+                                                <i onclick="RemoveCategoryDis('@item.CategoryDisaggregationId')" class="fa fa-remove fa-hover" title="Xóa tiêu thức" aria-hidden="true" style="color: darkred;"></i>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+            
+
+<script type="text/x-jquery-tmpl" id="templaceDisagtion">
+    <tr>
+        <td class="tdInDi">
+            <input type="checkbox" id="${CategoryDisaggregationId}" name="${CategoryDisaggregationId}" value="${CategoryDisaggregationId}"
+                    class="custom-checkbox form-check-input chkCheckBoxId" />
+            <label class="form-check-label labelIndicatorID" for="${CategoryDisaggregationId}"></label>
+        </td>
+        <td hidden class="text-center">${CategoryDisaggregationId}</td>
+        <td class="text-center">${Stt + 1}</td>
+        <td class="text-center">${CategoryDisaggregationName}</td>
+        <td class="text-center">${CategoryDisaggregationCode}</td>
+        <td class="text-center">
+            {{if IsActivated == true}} 
+                <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" checked value="${IsActivated}" disabled>
+                <label for="md_checkbox_27"></label>
+            {{else}}
+                <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" value="${IsActivated}" disabled>
+                <label for="md_checkbox_27"></label>
+            {{/if}}     
+        </td>
+        <td class="text-center" style="font-size: 23px;">
+            <i onclick="EditCategoryDis('${CategoryDisaggregationId}')" class="fa fa-edit fa-hover" title="Sửa tiêu thức" aria-hidden="true" style="color: blue;"></i>
+            <i onclick="RemoveCategoryDis('${CategoryDisaggregationId}')" class="fa fa-remove fa-hover" title="Xóa tiêu thức" aria-hidden="true" style="color: darkred;"></i>
+        </td>
+    </tr>
+
+</script>
+
+<link href="~/Content/Admin/categoryDisaggration/style.css" rel="stylesheet" />
+<script src="~/Scripts/admin/categoryDisaggreation/createOrEditCategoryDisaggration.js"></script>
+<script type="text/javascript">
+
+    var checkCreate = "@ViewBag.Creates";
+    var checkUpdate = "@ViewBag.Updates";
+    var checkNotId = "@ViewBag.NotId";
+    if (checkCreate == "TC" && checkUpdate == "L") {
+        swal("Thành công!", "thêm tiêu thức danh mục thành công", "success");
+    } else if (checkUpdate == "TC" && checkCreate == "L") {
+        swal("Thành công!", "cập nhật tiêu thức danh mục thành công", "success");
+    } else if (checkNotId == "NotId") {
+        swal("Error!", "Bạn chưa chọn loại tiêu thức phân tổ", "warning");
+    }
+
+    var checkSuccess = "@ViewBag.Success";
+    var checkError = "@ViewBag.Success";
+   
+    if (checkSuccess == "SS") {
+        swal("Thành công!", "Import File Excel Thành công", "success");
+    } else if (checkError == "ER") {
+        swal("Error!", "Có lỗi trong quá trình Import File", "warring");
+    }
+
+    function EditCategoryDis(indicatorId) {
+        $.ajax({
+            url: '/CategoryDisaggregations/Edit',
+            data: { id: indicatorId },
+            success: function (result) {
+                var categoryDisId = result.CategoryDisaggregationId;
+                var indicatorId = result.IndicatorId;
+                var categoryDisaggregationCode = result.CategoryDisaggregationCode;
+                var categoryDisaggregationName = result.CategoryDisaggregationName;
+                var indiActive = result.IsActivated;
+
+                $('#CategoryDisaggregationId').val(categoryDisId);
+                $('#IndicatorId_Dis').val(indicatorId);
+                $('#txtNAME_FIELD_Dis').val(categoryDisaggregationName);
+                $('#txtDES_FIELD_Dis').val(categoryDisaggregationCode);
+                $("#IsActivated_Dis").attr("checked", indiActive);
+                $('#tagFormDisaggegation').click();
+            },
+            error: function (xhr) { },
+            complete: function () {
+            }
+        });
+    }
+    function RemoveCategoryDis(indicatorId) {
+
+        swal({
+            title: "Bạn có chắc?",
+            text: "Xóa tiêu thức phân tổ này không?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Đồng ý!",
+            cancelButtonText: "Hủy bỏ!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/CategoryDisaggregations/Delete',
+                    type: 'POST',
+                    data: { id: indicatorId },
+                    success: function (result) {
+
+                    },
+                    error: function (xhr) { swal("Hủy bỏ", "Hủy xóa tiêu thức không thành công :)", "warning"); },
+                    complete: function () {
+                        swal("Thành công!", "Xóa tiêu thức thành công", "success");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000)
+                    }
+                });
+            } else {
+                swal("Hủy bỏ", "Hủy xóa thành công!", "warning");
+            }
+        });  
+    }
+
+</script>

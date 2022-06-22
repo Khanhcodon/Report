@@ -1,0 +1,4 @@
+AppVersion: 2.0.2
+DataProvider: MySql
+DataConnectionString: server=127.0.0.1;User Id=root;password=Asdfghj38;database=eform;Convert Zero Datetime=True;Character Set=utf8;Persist Security Info=True;port=3306
+DatabaseMode: Multi

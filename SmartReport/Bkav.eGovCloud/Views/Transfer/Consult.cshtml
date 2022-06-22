@@ -1,0 +1,32 @@
+﻿@*<script type="text/javascript">
+    var strContent = '';
+    $(function () {       
+        $('body').delegate('#txtContent', 'keyup change', function(){
+            strContent='';
+            strContent = $('#txtContent').val();
+        });
+    });
+</script>*@
+<script id="consultTemplate" type="text/x-jquery-tmpl">
+    <div id="dialogBoxListUser" style="font-size: 12px;width: 100%;">
+        <div id="divDg">
+        </div>
+        <div>
+            <div id="contentComment" style="float: left;width: 49%;">
+                <div>
+                    Nhập nội dung</div>
+                <textarea style="width: 100%" rows="4" name="txtContent" id="txtContent" cols="20"></textarea>
+            </div>
+            <div id="viewUserThongbao" style="width: 49%;float: right;">
+                <div>
+                    Danh sách xin y kien <a href="javascript:void(0)" id="delAllSelected" style="float: right;color: Blue;" onclick="egov.cshtml.transfer.consult.delAllSelected()">
+                                             Xóa hết để chọn lại</a>
+                </div>
+                <div id="divListUserTransfer" style="border: 1px solid #e4e4e4;height: 82px;border-radius: 2px;">
+                    <div id="divViewThongbao" style="display: none">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

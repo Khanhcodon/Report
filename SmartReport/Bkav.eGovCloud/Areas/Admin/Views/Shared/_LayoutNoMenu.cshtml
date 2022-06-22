@@ -1,0 +1,144 @@
+﻿@using StackExchange.Profiling
+@{
+    var lang = Bkav.eGovCloud.Helper.LangHelper.GetAdminLangCode();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="../../../../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../../../Content/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/admin.css" rel="stylesheet" />
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/browser/jquery.browser.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery-ui-1.8.22.modified.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.cookie.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.blockUI.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/resource/egov.resources.bindresource.js"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/resource/egov.resources." + @lang + ".js")"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.messagebox.js"></script>
+    <script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js")"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.nicescroll.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/hashbase64.js"></script>
+    <script src="../../../../Scripts/bkav.egov/locache/egov.locache.js"></script>
+    <script src="../../../../Content/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(document).bindResources();
+            var interval = setInterval(function () {
+                var profiler = $("div.profiler-result").parent();
+                if (profiler.length > 0) {
+                    clearInterval(interval);
+                    profiler.css({ 'margin-left': 10 - profiler.width() + 'px' }).hover(function () {
+                        profiler.css({ 'margin-left': '0px' });
+                    }, function () {
+                        profiler.css({ 'margin-left': 10 - profiler.width() + 'px' });
+                    });
+                }
+            }, 100);
+            //$('html').niceScroll({ styler: "fb", autohidemode: false, cursorborder: "1px solid #DDDDDD", cursorborderradius: "5px", cursorcolor: "#424242" });
+            $(".system-tree").bind("click", function () {
+                if ($(".system-tree-view").css("display") == "none") {
+                    $(".system-tree-view").show();
+                }
+                else {
+                    $(".system-tree-view").hide();
+                }
+            });
+            $(".system-tree-view .children").each(function () {
+                var list = $(this);
+                var size = 7;
+                var current_size = 0;
+                list.children().each(function () {
+                    if (++current_size > size) {
+                        var new_list = $("<ul class='children'></ul>").insertAfter(list);
+                        list = new_list;
+                        current_size = 1;
+                    }
+                    list.append(this);
+                });
+            });
+            $('.system-tree-view .menu>li').bind("hover", function () {
+                var parentSize = $(this).closest("ul").children("li").size();
+                var childrenSize = $(this).find("li").size();
+                if (childrenSize < parentSize) {
+                    $(".system-tree-view .menu li > ul").css("height", "100%");
+                } else {
+                    $(".system-tree-view .menu li > ul").css("height", "auto");
+                }
+            });
+            $(".menu a.root").replaceWith(function () {
+                return $("<span>" + $(this).html() + "</span>");
+            });
+            $(".submit").bind("click", function () {
+                $('.main-content form').submit();
+            });
+            $(".system-tree-view .menu>li").hover(function () {
+                $(".system-tree-view .menu li ul").hide();
+                var x = $(this).children("ul").size();
+                $(".system-tree-view").css("width", (x + 1) * 250 + "px");
+                $(this).children("ul").show();
+                for (i = 1; i <= x; i++) {
+                    $(this).children("ul").eq(i - 1).css("left", 250 * i + "px");
+                }
+            });
+            $(".system-tree-view").on("mouseleave", function () {
+                $(".system-tree-view").hide();
+            })
+        });
+    </script>
+    @MiniProfiler.RenderIncludes()
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <div class="header">
+                <span class="header-name" data-res="egov.resources.shared.admincustomer">Quản trị khách hàng</span>
+                <span class="pull-right">@Html.Partial("_LogOnPartial")</span>
+                <span class="pull-right">@Html.Partial("_CulturePartial")</span>
+            </div>
+            <div class="tabs">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <span class="system-tree">
+                            <a>
+                                <i class="icon-list"></i>
+                                <span data-res="egov.resources.shared.systemtree"></span>Cây hệ thống
+                            </a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="home">
+                            <a href="/admin">
+                                <i class="icon-home"></i>
+                                <span data-res="egov.resources.shared.home"></span>Trang chủ
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+                <div style="clear: right"></div>
+                <ul class="nav navbar-nav navbar-right" id="control-btn">
+                    <li><span class="btn control-btn" id="submit" data-res="egov.resources.buttons.confirm">Xác nhận</span></li>
+                    <li><span class="btn" id="back" data-res="egov.resources.buttons.back">Quay lại</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            @RenderBody()
+        </div>
+        <div class="system-tree-view">
+            @Html.SiteMapMenu()
+        </div>
+        <div id="footer">
+            <p>
+                © 2012 Bkav Corporation.<br />
+                <span data-res="egov.resources.commonlabel.contact">Liên hệ</span>:
+            </p>
+        </div>
+    </div>
+    <div style="clear: both;">
+    </div>
+</body>
+</html>

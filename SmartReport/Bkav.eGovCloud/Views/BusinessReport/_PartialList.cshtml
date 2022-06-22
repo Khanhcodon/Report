@@ -1,0 +1,178 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Models.BusinessModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+}
+<span style="float: right;">
+    <input type="image" src="../../../../Content/Images/Word-16.gif" alt="Submit" id="extWord"
+        onclick="exportWord()" title="Lưu ra file word">
+    @*<input type="image" src="../../../../Content/Images/Excel-16.gif" alt="Submit" id="extExcel"
+        title="Lưu ra file excel">*@ </span>
+<div style="clear: both">
+</div>
+<br />
+<script type="text/javascript">
+    $(function () {
+        $("#tblBusiness").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $("#IssueDateFrom,#IssueDateTo").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/Images/calendar.gif")',
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+        $('#hdfContent').val(escape($('#divContent').html()));
+        //$('.grid').normalGrid();
+
+        //        $("#extWord").click(function (event) {
+        //            var content = $('#divContent').html();
+        //            $.post("@Url.Action("ExportWord")", 
+        //                { content: content }                
+        //            )
+        //            .complete(function () {
+        //                
+        //            })
+        //            .fail(function () {
+        //                messageTemp({ message: '@Localizer("Common.Error")', type: 'error' });
+        //            });
+        //        });
+    });
+
+
+    function doSubmit(form) {
+        form.attr('action', '@Url.Action("Search")');
+        form.submit();
+    }
+
+    function exportWord() {
+        var style = "<style> .table-main { border-collapse: collapse; width: 100%;} .table-main td{ padding: 5px; border-width: 0 0 0 1px; overflow: hidden; text-overflow: ellipsis; border-style: solid;" +
+        "border-color: #C5C5C5; vertical-align: middle;line-height: 1.5em;}  .grid{ border: 1px solid #D7D7D7; position: relative;} .grid table{ width: 100%; empty-cells: show; border-width: 0; outline: 0;}" +
+        ".grid-header { border-color: #c5c5c5; border-bottom-style: solid; border-bottom-width: 1px; background-color: #e3e3e3; background-position: 0 center; background-repeat: repeat-x;  line-height: 1.6em;}" +
+        ".grid-header .header {border-style: solid;border-width: 0 1px 1px 1px;border-color: #D7D7D7;overflow: hidden;padding: 5px; text-overflow: ellipsis; white-space: nowrap; color: #484848; text-align: center;}" +
+        "</style>";
+        var content = escape(style + $('#divContent').html());
+        $('#hdfContent').val(content);
+        $("form[name='ExportWord']").submit();
+    }
+
+    function openLicenseDialog(url) {
+        $("#my-dialog").dialog({
+            width: 860,
+            height: 600,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            }
+        });
+    }
+</script>
+<div id="my-dialog">
+</div>
+<form action="BusinessReport/ExportWord" name="ExportWord" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="hdfContent" name="reportContent" />
+</form>
+<div id="divContent">
+    <table class="table-main" id="tblBusiness">
+        <colgroup>
+            <col style="width: 50px" />
+            <col />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.Numbers")
+                </th>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.BusinessName")
+                </th>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.UserName")
+                </th>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.UserPhone")
+                </th>
+                <th class="header">
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.LicenseCode")
+                </th>
+                <td>
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.LicenseIssueDate")
+                </td>
+                <td>
+                    @Localizer("Bkav.eGovCloud.Areas.Admin.Business.Index.List.Column.LicenseExpireDate")
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var Business in Model)
+                {
+                    number += 1;
+                <tr>
+                    <td>@number
+                    </td>
+                    <td>@Business.BusinessName
+                    </td>
+                    <td>@Business.UserName
+                    </td>
+                    <td>@Business.UserPhone
+                    </td>
+                    <td colspan="3">
+                        <table width="100%">
+                            <colgroup>
+                                <col style="width: 150px" />
+                                <col style="width: 150px" />
+                                <col style="width: 100px" />
+                            </colgroup>
+                            <tbody>
+                                @if (Business.BusinessLicenses.Any())
+                                {
+                                    foreach (var license in Business.BusinessLicenses.ToList())
+                                    {
+                                    <tr>
+                                        <td>
+                                            @license.LicenseCode
+                                        </td>
+                                        <td>
+                                            @license.IssueDate
+                                        </td>
+                                        <td>
+                                            @license.ExpireDate
+                                        </td>
+                                    </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                        @*<a href="#" onclick="openLicenseDialog('@Url.Action("LicenseForBussiness", "BusinessLicense", new { businessId = Business.BusinessId })')">@Localizer("Business.Index.Link.BusinessLicense")
+                        </a><a href="#" onclick="window.open('@url', 'DialogName', 'height=1000, width=1200, modal=yes, alwaysRaised=yes')">@Localizer("Business.Index.Link.BusinessLicense")
+                        </a>*@
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">Không có kết quả nào thỏa mãn
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

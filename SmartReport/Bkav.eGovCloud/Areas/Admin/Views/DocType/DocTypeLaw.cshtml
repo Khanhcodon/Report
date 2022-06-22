@@ -1,0 +1,165 @@
+﻿@model DocTypeModel
+@{
+    Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+    var doctypeId = Model.DocTypeId;
+    var count = 0;
+}
+
+<script>
+    var listCheckName = "";
+    var listCheck = "";
+    var listCheckSubStr = "";
+    var listCheckIdStr = "";
+
+    function deleteDoctypeLaw(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.DoctypeTemplate.ConfirmDelete"))',
+                null,
+                eGovMessage.messageButtons.YesNo,
+                function () {
+                    $("#formdelete" + id).submit();
+                }
+            );
+    }
+
+    $(function () {
+        $("#submit").remove();
+        $("#tblDocTypeLaw").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+
+        $(".table-main").addClass("table-bordered table-hover");
+
+        $(".tab-doctypelaw").addClass("active");
+        $(".tab-paper").siblings().removeClass(" ui-tabs-selected ui-state-active");
+
+        $("#opener").click(function () {
+            $('#dialogs').dialog({
+                width: 700,
+                height: 450,
+                resizable: false,
+                title: '@Localizer("DocType.CreateOrEdit.Tab.DocTypeLaw")',
+                modal: true,
+                open: function (event, ui) {
+                    loadLaw();
+                },
+                buttons:[
+                    {
+                        text: "@Html.Raw(Localizer("Common.Refresh.Label"))",
+                        click: function () {
+                            loadLaw();
+                        }
+                    },
+                    {
+                        text: "@Html.Raw(Localizer("Common.Create.Label"))",
+                        click: function () {
+                            window.open("@Url.Action("Create", "Law")")
+                        }
+                    },
+                    {
+                    text:"@Localizer("Common.Label.Select")",
+                    click: function (e) {
+                        var lawIds = [];
+                        $("#dialogs input[type='checkbox']:checked").each(function () {
+                            lawIds.push(parseInt($(this).attr("value")));
+                        });
+
+                        $.ajax({
+                            url: "/admin/doctype/createDocTypeLaw",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                docTypeId: '@doctypeId',
+                            lawIds: lawIds
+                        },
+                        success: function (result) {
+                            if (result.error) {
+                                eGovMessage.notification(result.error, eGovMessage.messageTypes.error);
+                            } else if (result.success) {
+                                eGovMessage.notification(result.success, eGovMessage.messageTypes.success);
+                                if (result.data) {
+                                    $("#tblDocTypeLaw tbody").append($("#tempLaws").tmpl(result.data));
+                                    $("#tblDocTypeLaw").grid('refresh');
+                                }
+                            }
+
+                        }
+                    });
+                    $('#dialogs').dialog("close");
+                }
+            }
+        ]
+            });
+    });
+    });
+
+    function loadLaw() {
+        $.ajax({
+            url: "/admin/law/viewlaw",
+            type: "get",
+            success: function (ressult) {
+                $('#dialogs').html(ressult);
+            }
+        });
+    }
+</script>
+
+<div id="dialogs" title="Basic dialog"></div>
+
+@Html.HiddenFor(model => model.DocTypeId)
+<div class="form-horizontal">
+    <div class="form-group">
+        <div>
+            <input type="button" id="opener" value="" data-res="egov.resources.law.choosedocument" class="btn" />
+        </div>
+        <div class="clear" style="height: 10px"></div>
+
+        <table id="tblDocTypeLaw" class="table table-bordered table-hover">
+            <colgroup>
+                <col style="width: 150px" />
+                <col />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th data-res="egov.resources.law.lawnumbercode"></th>
+                    <th data-res="egov.resources.law.subContent"></th>
+                    <th class="text-center">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.DocTypeLaws != null)
+                {
+                    foreach (var docTypeLaw in Model.DocTypeLaws)
+                    {
+                    <tr>
+                        <td>@(docTypeLaw.Law == null ? "" : docTypeLaw.Law.NumberSign)</td>
+                        <td>@(docTypeLaw.Law == null ? "" : docTypeLaw.Law.SubContent)</td>
+                        <td>
+                            <a href="javascript:deleteDoctypeLaw('@(docTypeLaw.DocTypeLawId)')">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+                            <form id="formdelete@(docTypeLaw.DocTypeLawId)"
+                                     style="display: none"
+                                    action="@Url.Action("DeleteDoctypeLaw",
+                                    new { doctypeId = ViewBag.DoctypeId, lawId = docTypeLaw.LawId })" method="POST">
+                            </form>
+                        </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/x-jquery-tmpl" id="tempLaws">
+    <tr>
+        <td>${NumberSign}</td>
+        <td>${SubContent}</td>
+        <td>
+            <a href="javascript:deleteDoctypeLaw(${LawId})">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+            <form id="formdelete${LawId}" style="display: none"
+              action="/admin/DocType/DeleteDoctypeLaw?doctypeId=@ViewBag.DoctypeId&lawId=${LawId}" method="POST">
+            </form>
+        </td>
+    </tr>
+</script>

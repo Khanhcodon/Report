@@ -1,0 +1,30 @@
+﻿@model KeyWordModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.KeyWordId)
+<script>
+    $(function () {
+        addSubmitEvent();
+    });
+</script>
+
+<table>
+
+    <tr>
+        <td style="width:15%">
+            @Html.LabelRequireFor(model => model.KeyWordName):
+        </td>
+        <td>
+            @Html.TextAreaFor(model => model.KeyWordName,
+ new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+             @if (Model.KeyWordId == 0)
+                    { 
+                        <div>
+                            <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                        </div>
+                    }
+            @Html.ValidationMessageFor(model => model.KeyWordName)
+        </td>
+    </tr>  
+</table>

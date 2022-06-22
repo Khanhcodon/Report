@@ -1,0 +1,122 @@
+﻿@{
+    var listVote = ViewBag.ListVotes as IEnumerable<Bkav.eGovCloud.Models.VoteModel>;
+}
+@*<link href="../../Content/bkav.egov/egov.document.css" rel="stylesheet" />*@
+@*<link href="../../Scripts/bkav.egov/libs/jquery/jquery.timepicker/jquery.timepicker.css" rel="stylesheet" />*@
+<link href="../../Content/bkav.egov/egov.home.css" rel="stylesheet" />
+
+<div id="ListVoteBody">
+    <style>
+        #listVoteDialogTable tbody {
+            display: block;
+            height: 430px;
+            overflow: auto;
+        }
+
+        #listVoteDialogTable > thead, #listVoteDialogTable > tbody > tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed; /* even columns width , fix width of table too*/
+        }
+
+        #listVoteDialogTable > thead {
+            width: calc( 100% - 1em ); /* scrollbar is average 1em/16px width, remove it from thead width */
+        }
+
+        table#listVoteDialogTable {
+        }
+    </style>
+    <div class="form-horizontal" id="listVoteDialog">
+        <div class="row">
+            <div class="col-md-16">
+                <div class="form-group form-group-sm">
+                    <div class="col-md-16" style="overflow: auto;">
+                        <table class="table table-hover" style="display:block" id="listVoteDialogTable">
+                            <colgroup>
+                                <col>
+                                <col style="width: 150px">
+                                <col style="width: 100px">
+                                <col style="width: 100px;text-align:center">
+                                <col style="width: 100px;text-align:center">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th data-res="" style="">Chủ đề</th>
+                                    <th data-res="" style="text-align:right; width: 150px">Ngày Tháng</th>
+                                    <th data-res="" style="width: 100px">Người Soạn</th>
+                                    <th data-res="" style="width: 100px;text-align:center">Đang diễn ra</th>
+                                    <th data-res="" style="width: 130px;text-align:center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody class="listVote" style="display:block; overflow: auto; max-height:350px">
+                                @foreach (var item in listVote)
+                                {
+                                    var checkNow = item.IsNow ? "checked" : "";
+                                    <tr data-id="@item.VoteId">
+                                        <td class="wraptext">@item.Title</td>
+                                        <td class="second-color time-begin-vote" style="text-align:right;width: 150px"> @item.TimeEnd.ToString("hh:mm dd/MM/yyyy")</td>
+                                        <td class="second-color wraptext" style="width: 100px">@item.UsernameCreate</td>
+                                        <td style="text-align:center;width: 100px">
+                                            <label class="checkbox document-color">
+                                                <input name="checkbox[]" value="2378" type="checkbox" @checkNow disabled="">
+                                                <span class="document-color-1"><i class="icon-check"></i></span>
+                                            </label>
+                                        </td>
+                                        <td class="second-color wraptext" style="width: 130px" data-id="@item.VoteId">
+                                            <a class="viewVote" href="#" style="color: #09534f">Xem</a>
+                                            @if (item.IsCreate)
+                                            {
+                                                <a class="editVote" href="#" style="color: blue">Chi tiết</a>
+                                                <a href="#" class="deleteVote" style="color: red">Xóa</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#referendumVote").click(function () {
+        $("#settingDialog").find("#btnCloseSetting").click();
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.ShowReferendum();
+        documentId.EditVote();
+    })
+
+    $(".editVote").click(function (e) {
+        var id = $(e.target).closest("td").data("id");
+        $("#settingDialog").find("#btnCloseSetting").click();
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.EditVote(id);
+    });
+
+    $(".deleteVote").click(function (e) {
+        var that = this;
+        var r = confirm("Bạn có muốn xóa cuộc trưng cầu này");
+        if (r == false) {
+            return false;
+        }
+        var id = $(e.target).closest("td").data("id");
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.DeleteVote(id);
+        $(e.target).closest("tr").remove();
+    })
+    $(".viewVote").click(function (e) {
+        var id = $(e.target).closest("tr").data("id");
+        $("#settingDialog").find("#btnCloseSetting").click();
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.ShowVoteResult(id);
+    });
+    $(".listVote > tr").dblclick(function (e) {
+        var id = $(e.target).closest("tr").data("id");
+        $("#settingDialog").find("#btnCloseSetting").click();
+        var documentId = document.getElementById("documents").contentWindow;
+        documentId.ShowVoteResult(id);
+    })
+</script>
+

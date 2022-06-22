@@ -1,0 +1,171 @@
+﻿@model NotifyConfigModel
+@{
+    ViewBag.Title = Localizer("Common.NotifyConfig.Label.Update");
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var templates = ViewBag.Templates as string;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/underscore/underscore-min.js")"></script>
+<script>
+    var templates =  @(string.IsNullOrEmpty(templates) ? MvcHtmlString.Create("[]") : Html.Raw(templates));
+    var type={
+        phieuin:1,
+        mail:2, 
+        sms:3,       
+    };
+
+    function openDialog(inType) {
+        $("#my-dialog").dialog({
+            width: 600,
+            height: 400,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#tblOptions tbody").empty();
+                var filter= _.filter(templates,function(item){
+                    return item.type == inType;
+                });
+
+                $("#tmplTemplate").tmpl(filter).appendTo($("#tblOptions tbody"));
+                $("#tmplTemplateNotSelected").tmpl({}).appendTo($("#tblOptions tbody"));
+            },
+            buttons: [
+                {
+                    text: egov.resources.buttons.select || "Chọn",
+                    click: function () {
+                        if($("[name=ChoosseTemplateId]:checked").length>0){
+                            var valueSelected=$("[name=ChoosseTemplateId]:checked").val();
+                            var find = _.find(templates, function(item){
+                                return item.value == valueSelected;
+                            });
+
+                            if(find){
+                                if(inType == type.sms){
+                                    $("#nameTempSms").text(find.label);
+                                    $("#SmsTemplateId").val(find.value);
+                                    $("#SmsTemplateName").val(find.label);
+                                }
+                                else if(inType == type.mail){
+                                    $("#nameTempMail").text(find.label);
+                                    $("#MailTemplateId").val(find.value);
+                                    $("#MailTemplateName").val(find.label);
+                                }
+                            }
+                        }
+                        $("#my-dialog").dialog("close");
+                    }
+                }]
+        });
+    }
+</script>
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-bell"></i>
+        <span data-res="egov.resources.sitemap.notify"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/NotifyConfig/Index">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+@Html.Partial("_Notifications")
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Key)
+    @Html.HiddenFor(model => model.Id)
+    <div id="tabs" class="bkavegov">
+        <table>
+            <tr>
+                <td style="width: 20%">
+                    @Html.LabelFor(model => model.Key)
+                </td>
+                <td>@Html.DisplayFor(model => model.Key)</td>
+            </tr>
+            <tr>
+                <td style="width: 20%">
+                    @Html.LabelFor(model => model.Description)
+                </td>
+                <td>@Html.TextAreaFor(model => model.Description)</td>
+            </tr>
+            <tr>
+                <td style="width: 20%">
+                    @Html.LabelFor(model => model.HasAutoSendSms)
+                </td>
+                <td>@Html.CheckBoxFor(model => model.HasAutoSendSms)
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(3);"
+                             value="@Localizer("NotifyConfig.CreateOrEdit.Fields.SmsTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempSms">
+                        @Html.DisplayFor(model => model.SmsTemplateName)
+                    </div>
+                    @Html.HiddenFor(model => model.SmsTemplateId)
+                     @Html.HiddenFor(model => model.SmsTemplateName)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%">
+                    @Html.LabelFor(model => model.HasAutoSendMail)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.HasAutoSendMail)
+                    <div>
+                        <input class="btn" type="button" onclick="openDialog(2);"
+                            value="@Localizer("NotifyConfig.CreateOrEdit.Fields.MailTemplateId.Label")" />
+                    </div>
+                    <div id="nameTempMail"> @Html.DisplayFor(model => model.MailTemplateName)</div>
+                    @Html.HiddenFor(model => model.MailTemplateId)
+                     @Html.HiddenFor(model => model.MailTemplateName)
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+<div id="my-dialog" style="display: none">
+    <table id="tblOptions" class="table table-hover">
+        <thead>
+            <tr>
+                <th data-res="egov.resources.tableheader.formname">Tên mẫu</th>
+                <th data-res="egov.resources.tableheader.type">Kiểu</th>
+                <th data-res="egov.resources.tableheader.select" class="text-center">Chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script id="tmplTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${label}</td>
+        <td>{{if type==2}}
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Notify.Email")
+            {{else}}
+            @Localizer("Bkav.eGovCloud.Areas.Admin.Notify.SMS")
+            {{/if}}
+        </td>
+        <td style="text-align:center">
+            <input type="radio" name="ChoosseTemplateId" value="${value}" />
+
+        </td>
+    </tr>
+</script>
+
+<script id="tmplTemplateNotSelected" type="text/x-jquery-tmpl">
+    <tr>
+        <td colspan="2" data-res="egov.resources.notify.nouse">Không sử dụng</td>
+        <td style="text-align:center">
+            <input type="radio" name="ChoosseTemplateId" value="0" /></td>
+    </tr>
+</script>

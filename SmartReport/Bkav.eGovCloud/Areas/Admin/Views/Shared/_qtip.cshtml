@@ -1,0 +1,43 @@
+﻿<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.tooltip/jquery.qtip-1.0.0-rc3.min.js")" type="text/javascript"></script>
+<script>
+    $.fn.qtip.styles.mystyle = {
+        width: 600,
+        textAlign: 'left',
+        color: 'black',
+        border: {
+            width: 7,
+            radius: 5
+        },
+        tip: 'bottomLeft',
+        name: 'green' // dark, cream, light, red, blue, green
+    };
+
+    function initQtip() {
+        $('.egovQtip').each(function () {
+            var _this = $(this);
+            var textQtip = _this.attr('data-qtip');
+            if ($(textQtip).length > 0) {
+                _this.qtip({
+                    show: { when: { event: 'focus' } },
+                    hide: 'blur',
+                    content: $(textQtip).html(),
+                    position: {
+                        corner: {
+                            target: 'topLeft',
+                            tooltip: 'bottomLeft'
+                        }
+                    },
+                    style: 'mystyle'
+                });
+            }
+        });
+    }
+
+    function destroyQtip() {
+        $('.egovQtip').qtip("destroy");
+    }
+
+    $(function () {
+        initQtip();
+    });
+</script>

@@ -1,0 +1,180 @@
+﻿@using Bkav.eGovCloud.Entities
+@model IEnumerable<Bkav.eGovCloud.Models.SignatureModel>
+    @{
+        int number = 0;
+        var signature = ViewBag.Signature as string;
+    }
+
+    <script>
+        function deleteSignature(id) {
+            var egov = window.frames['documents'].egov;
+            egov.message.show(
+                   egov.resources.setting.signature.deleteMessage,
+                null,
+                egov.message.messageButtons.YesNo,
+                function () {
+                    var token = $("input[name='__RequestVerificationToken']", "#DeleteSignature").val();
+                    $.ajax({
+                        url: "/Account/DeleteSignature/",
+                        type: "Post",
+                        data: { id: id, __RequestVerificationToken: token },
+                        success: function (result) {
+                            if (result.success) {
+                                $("#tbSignature tbody tr input[id=" + id + "]").closest('tr').remove();
+                                if ($("#tbSignature tbody tr").length == 0) {
+                                    $("#tbSignature tbody").append('<tr><td colspan="8" data-res="egov.resources.setting.signature.table.body.noData">Không có dữ liệu</td> </tr>');
+                                }
+                                $("#tbSignature").refreshGrid();
+                                egov.message.show(result.message);
+                            }
+                            else {
+                                egov.message.show(result.message);
+                            }
+                        }
+                    });
+                }
+            );
+        }
+
+        $(function () {
+            debugger
+            $(document).bindResources();
+        })
+    </script>
+    <div id="dialog"></div>
+    <div id="result"></div>
+
+    <div class="Hb qd" style="max-width: 750px; margin: 0">
+        <div id="DeleteSignature" style="display: none">
+            @Html.AntiForgeryToken()
+        </div>
+        <button class="btn btn-success">
+            <a data-ajax="true" data-ajax-method="GET"
+               data-ajax-mode="replace"
+               data-ajax-update="#menuRight"
+               href="/Account/CreateSignature"
+               data-res="egov.resources.setting.signature.labelCreate">
+            </a>
+
+        </button>
+        <table id="tbSignature" class="table table-hover">
+            <colgroup>
+                <col style="width: 50px" />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+                <col style="width: 50px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.stt">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.configNameSignature">
+
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.wordsNeedFind">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.findTypes">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.signTypes">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.position">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.edit">
+                    </th>
+                    <th class="header" data-res="egov.resources.setting.signature.table.header.delete">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        number += 1;
+                        <tr>
+                            <td>
+                                @number
+                            </td>
+                            <td>
+                                <input type="hidden" value="@item.SignatureId" id="@item.SignatureId" />
+
+                                @item.SignatureName
+                            </td>
+                            <td>
+                                @item.SearchWord
+                            </td>
+                            <td>
+                                @if (item.IsFindType)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.findTypeBottomToTop">
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.findTypeTopToBottom">
+                                    </p>
+                                }
+                            <td>
+                                @if (item.IsTypeImage)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.imageSignature">
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.textSignature">
+                                    </p>
+                                }
+                            </td>
+                            <td>
+
+                                @if (item.SignaturePosition == (int)SignaturePositionType.Left)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.leftPosition">
+                                    </p>
+                                }
+                                else if (item.SignaturePosition == (int)SignaturePositionType.Above)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.abovePosition">
+                                    </p>
+
+                                }
+                                else if (item.SignaturePosition == (int)SignaturePositionType.Right)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.rightPosition">
+                                    </p>
+                                }
+                                else if (item.SignaturePosition == (int)SignaturePositionType.Below)
+                                {
+                                    <p data-res="egov.resources.setting.signature.table.body.belowPosition">
+                                    </p>
+                                }
+
+                            </td>
+                            <td style="text-align: center">
+                                @Ajax.ActionLink(Localizer("Common.Resource.Index.List.Column.Edit.Button"), "EditSignature", new { id = item.SignatureId }, new AjaxOptions
+                   {
+                       HttpMethod = "GET",
+                       UpdateTargetId = "menuRight"
+                   })
+                            </td>
+                            <td style="text-align: center">
+                                <a href="javascript:deleteSignature(@item.SignatureId)">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" data-res="egov.resources.setting.signature.table.body.noData"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>

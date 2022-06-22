@@ -1,0 +1,442 @@
+﻿@model IEnumerable<DocTypeModel>
+@{
+    ViewBag.Title = "Danh sách báo cáo";
+    Layout = "~/Areas/Admin/Views/DocType/_MainQH.cshtml";
+    var allDocFields = ViewBag.AllDocFields as string;
+    var search = ViewBag.Search as DocTypeSearchModel;
+}
+
+<style type="text/css">
+    body {
+        font-size: 13.3px;
+        line-height: 26px;
+    }
+
+    .docfield {
+        height: 35px;
+        background: #ffe3bc;
+        border-radius: 0;
+        margin-bottom: 0;
+    }
+    .docfield1 {
+        height: 35px;
+        background: #e3e3e3;
+        border-radius: 0;
+        margin-bottom: 0;
+    }
+     .docfield2 {
+        height: 35px;
+        background: #facc8c;
+        border-radius: 0;
+        margin-bottom: 0;
+    }
+
+        .docfield img, .docfield1 img, .docfield2 img {
+            width: 15px;
+            float: left;
+            margin-top: 5px;
+            margin-left: 8px;
+        }
+
+        .docfield .docfield-name,  .docfield1 .docfield-name,  .docfield2 .docfield-name {
+            padding-left: 37px;
+            font-size: 13.3px;
+            line-height: 26px;
+        }
+
+    .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-content: space-between;
+        align-items: flex-start;
+        padding-right: 10px;
+    }
+
+        .flex-container > div {
+            width: 13%;
+        }
+
+    .panel-heading {
+        text-align: center;
+        padding: 0;
+    }
+
+    .flex-container .office-overview {
+        font-size: 12px;
+        text-align: center;
+        padding: 0px;
+        font-weight: bold;
+    }
+
+    .table > tbody > tr > td {
+        padding: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    #content .content-panel {
+        padding-top: 15px;
+    }
+
+    .table {
+        margin-bottom: 0px;
+        background: white;
+    }
+
+    #content {
+        background: #e3e3e3;
+        background-image: url(../../Content/bkav.egov/images/bg_dn.png);
+        background-repeat: no-repeat;
+        background-position: top center;
+    }
+
+    #content {
+        position: relative;
+        height: auto;
+        padding: 15px 30px 60px 30px;
+        min-height: 530px;
+        margin: 0;
+    }
+
+    header {
+        background-color: #3f51b5;
+        height: 91px;
+        padding-bottom: 50px;
+    }
+
+    .media-heading {
+        margin: 0 0 5px;
+        color: #1384cb;
+        font-size: 20px;
+    }
+
+    .ui-draggable .ui-dialog-titlebar {
+        cursor: move;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #e3e3e3;
+        border-radius: 0;
+        background: red;
+        color: white;
+    }
+
+    .ui-dialog .ui-dialog-content {
+        font-family: 'Segoe UI',Tahoma,'Helvetica Neue',Helvetica,Arial,'sans-serif';
+    }
+</style>
+
+@Html.Partial("_Notifications")
+
+<div class="row">
+    <div class="col-md-4">
+        <div style="font-weight: bold; font-size: 15px;">
+            Tổng số báo cáo: 6689
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#province">Sở, Ngành</a>
+            </li>
+            <li><a data-toggle="tab" href="#district">Quận, Huyện</a></li>
+            <li><a data-toggle="tab" href="#Commune">Xã, Phường</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="province" class="tab-pane fade in active">
+                <div class="docfields">
+                    <ul>
+                        @foreach (var df in ViewBag.AllDocFields as IEnumerable<SelectListItem>)
+                        {
+                            <li>
+                                <div class="thumbnail docfield @(df.Selected ? "selected" : "")" data-id="@df.Value" data-level="1">
+                                    <img src="~/Content/bkav.egov/images/qh_logo.png" />
+                                    <div class="docfield-name">
+                                        @df.Text
+                                        @if (df.Selected)
+                                        {
+                                            <span class="icon icon-arrow-right4" style="color:yellow; float:right;    margin-top: 3px;"></span>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div id="district" class="tab-pane fade">
+                <div class="docfields">
+                    <ul>
+                        @foreach (var df in ViewBag.AllDocFields as IEnumerable<SelectListItem>)
+                        {
+                            <li>
+                                <div class="thumbnail docfield docfield1" data-id="@df.Value" data-level="2">
+                                    <img src="~/Content/bkav.egov/images/qh_logo.png" />
+                                    <div class="docfield-name">
+                                        @df.Text
+                                        @if (df.Selected)
+                                        {
+                                            <span class="icon icon-arrow-right4" style="color:yellow; float:right;    margin-top: 3px;"></span>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div id="Commune" class="tab-pane fade">
+                <ul>
+                    @foreach (var df in ViewBag.AllDocFields as IEnumerable<SelectListItem>)
+                    {
+                        <li>
+                            <div class="thumbnail docfield docfield1" data-id="@df.Value" data-level="3">
+                                <img src="~/Content/bkav.egov/images/qh_logo.png" />
+                                <div class="docfield-name">
+                                    @df.Text
+                                    @if (df.Selected)
+                                    {
+                                        <span class="icon icon-arrow-right4" style="color:yellow; float:right;    margin-top: 3px;"></span>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <a class="btn  btn-warning control-btn hidden" href="/admin/doctype/Create">
+            <span class="icon icon-plus"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.add"></span>
+        </a>
+
+        <div class="row">
+            <div class="flex-container">
+                <div>
+                    <div class="panel panel-primary actionLevel @(ViewBag.ActionLevel == 1? "selected": "")" data-id="1">
+                        <div class="panel-heading">Báo cáo Năm</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="1">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-default actionLevel  @(ViewBag.ActionLevel == 2? "selected": "")" data-id="3">
+                        <div class="panel-heading">Báo cáo 6 tháng</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="3">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-success actionLevel  @(ViewBag.ActionLevel == 3? "selected": "")" data-id="3">
+                        <div class="panel-heading">Báo cáo Quý</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="3">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-info actionLevel @(ViewBag.ActionLevel == 4? "selected": "")" data-id="4">
+                        <div class="panel-heading">Báo cáo Tháng</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="4">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-warning actionLevel @(ViewBag.ActionLevel == 5? "selected": "")" data-id="5">
+                        <div class="panel-heading">Báo cáo Tuần</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="5">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-danger actionLevel @(ViewBag.ActionLevel == 6? "selected": "")" data-id="6">
+                        <div class="panel-heading">Báo cáo Ngày</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total" data-id="6">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel panel-danger" id="reportDanger">
+                        <div class="panel-heading" style="background-color: #f40202; color: white;">BC Khẩn cấp</div>
+                        <div class="panel-body office-overview" data-app="hsmc">
+                            <div class="overview-detail">
+                                <span class="doc-total-total">2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" style="padding: 0 8px; margin-top: 13px; margin-bottom: 0; font-size: 17px;font-weight: 500;">
+            <span class="rdocfield-name" style="text-transform: uppercase;"></span> - <span class="rlevel-name"></span>
+            <a href="http://quochoi.essolution.net/VPQH/UBTVQH/UBTVQH-index.html" target="blank" class="btn btn-default pull-right">Tổng hợp báo cáo</a>
+        </div>
+
+        <div class="row" style="padding: 0px 16px 0 8px">
+            <div id="divListDocTypes">
+                @{    Html.RenderPartial("_PartialList", Model);
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="reportUrgent hidden">
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">
+                Xét xử 12 đối tượng tổ chức phản động 'Chính phủ quốc gia VN
+                lâm thời'
+            </h4>
+            <div>
+                <p>
+                    Hôm nay, TAND TP.HCM đã mở phiên tòa sơ thẩm, xét xử 12 bị cáo là thành
+                    viên của tổ chức phản động "Chính phủ quốc gia Việt Nam lâm thời" về tội
+                    "Hoạt động nhằm lật đổ chính quyền nhân dân" theo điều 79 Bộ luật Hình
+                    sự năm 1999.
+                </p>
+
+                <p>
+                    Dự kiến phiên xét xử sẽ kéo dài tới ngày 24/8, do thẩm phán Huỳnh Anh
+                    Kiệt, Phó chánh tòa Hình sự làm chủ tọa.
+                </p>
+
+                <p>
+                    Các bị cáo hầu tòa gồm: Nguyen James Han, Phan Angle, Đỗ Tài Nhân, Trương
+                    Nguyễn Minh Trí, Võ Hoàng Ngọc, Đỗ Quốc Bảo, Trần Tuấn Tài, Trần Văn
+                    Vinh, Trần Quang Vinh, Nguyễn Hùng Anh, Nguyễn Văn Chánh và Đỗ Thị Thùy
+                    Dung.
+                </p>
+
+                <p>
+                    Theo điều tra, các bị cáo này thuộc tổ chức Chính phủ quốc gia Việt Nam
+                    lâm thời có trụ sở đặt tại 2807 Anaheim, California 92814, Mỹ do Đào
+                    Minh Quân (tức Đào Văn) tự xưng là "Thủ tướng" và Phạm Lisa (tức Phạm
+                    Anh Đào) cầm đầu với nhiệm vụ tự nhận là tuyên truyền, kích động biểu
+                    tình, phá hoại nhân dịp các ngày lễ, tết của đất nước nhằm lật đổ Nhà
+                    nước CHXHCN Việt Nam.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">
+                Xét xử 12 đối tượng tổ chức phản động 'Chính phủ quốc gia VN
+                lâm thời'
+            </h4>
+            <div>
+                <p>
+                    Hôm nay, TAND TP.HCM đã mở phiên tòa sơ thẩm, xét xử 12 bị cáo là thành
+                    viên của tổ chức phản động "Chính phủ quốc gia Việt Nam lâm thời" về tội
+                    "Hoạt động nhằm lật đổ chính quyền nhân dân" theo điều 79 Bộ luật Hình
+                    sự năm 1999.
+                </p>
+
+                <p>
+                    Dự kiến phiên xét xử sẽ kéo dài tới ngày 24/8, do thẩm phán Huỳnh Anh
+                    Kiệt, Phó chánh tòa Hình sự làm chủ tọa.
+                </p>
+
+                <p>
+                    Các bị cáo hầu tòa gồm: Nguyen James Han, Phan Angle, Đỗ Tài Nhân, Trương
+                    Nguyễn Minh Trí, Võ Hoàng Ngọc, Đỗ Quốc Bảo, Trần Tuấn Tài, Trần Văn
+                    Vinh, Trần Quang Vinh, Nguyễn Hùng Anh, Nguyễn Văn Chánh và Đỗ Thị Thùy
+                    Dung.
+                </p>
+
+                <p>
+                    Theo điều tra, các bị cáo này thuộc tổ chức Chính phủ quốc gia Việt Nam
+                    lâm thời có trụ sở đặt tại 2807 Anaheim, California 92814, Mỹ do Đào
+                    Minh Quân (tức Đào Văn) tự xưng là "Thủ tướng" và Phạm Lisa (tức Phạm
+                    Anh Đào) cầm đầu với nhiệm vụ tự nhận là tuyên truyền, kích động biểu
+                    tình, phá hoại nhân dịp các ngày lễ, tết của đất nước nhằm lật đổ Nhà
+                    nước CHXHCN Việt Nam.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var counts = @Html.Raw(ViewBag.LevelCount);
+
+    $(function(){
+        _.each(counts, function(count){
+            var actionLevel = count.actionLevel;
+            var c = count.count;
+            $(".doc-total-total[data-id='" +actionLevel+"']").text(c);
+        });
+
+        $('.rdocfield-name').text($('.docfield.selected').text());
+        $('.rlevel-name').text($('.actionLevel.selected .panel-heading').text());
+
+        $(".docfields .docfield").click(function(e){
+            var target = $(e.target).closest(".docfield");
+            target.siblings().removeClass('selected');
+            target.addClass('selected');
+            reload();
+        });
+
+        $(".actionLevel").click(function(e){
+            var target = $(e.target).closest(".actionLevel");
+            $('.actionLevel').removeClass('selected');
+            target.addClass('selected');
+            reload();
+        });
+
+        $("#reportDanger").click(function(){
+            $(".reportUrgent").removeClass('hidden');
+            $(".reportUrgent").dialog({
+                width: 1100,
+                height: 600,
+                title: "Báo cáo khẩn cấp",
+                open: function(){
+                    $(".reportUrgent").closest(".ui-dialog-titlebar").hide();
+                },
+                buttons: [
+                    {
+                        text: "Đóng",
+                        click: function () {
+                            $(".reportUrgent").dialog("close");
+                        }
+                    }
+                ]
+            });
+        });
+    });
+
+    function reload(){
+        var docfieldid = $('.docfield.selected').attr("data-id");
+        var actionLevel = $('.actionLevel.selected').attr("data-id");
+        var levelId = $('.docfield.selected').attr("data-level");
+
+        var url = "/admin/doctype/IndexAIC?docfieldId=" + docfieldid + "&actionLevel=" + actionLevel +"&levelId=" +levelId;
+        location.href = url;
+    }
+</script>

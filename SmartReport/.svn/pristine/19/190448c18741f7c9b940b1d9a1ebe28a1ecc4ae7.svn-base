@@ -1,0 +1,90 @@
+﻿@model BackupRestoreFileConfigModel
+@{
+    ViewBag.Title = Localizer("Admin.BackupRestoreFileConfig.Title.Create");
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutMenu.cshtml";
+    var shareFolderList = ViewBag.FolderShareList as List<SelectListItem>;
+}
+
+<script src="../../../../Scripts/bkav.egov/libs/json2.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.min.js"></script>
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js"></script>
+<div id="tabs" class="bkavegov">
+    @Html.Partial("_Notifications")
+    <fieldset>
+        <legend>Thông tin</legend>
+        <table id="timeJobInfo" style="width: 100%">
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelRequireFor(model => model.PathFolder):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.PathFolder, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 200px;">
+                    @Html.LabelRequireFor(model => model.FileBackupName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.FileBackupName, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.UserName):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.UserName, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.Password):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Password, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.ZipFilePassWord):
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.ZipFilePassWord, new { disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelRequireFor(model => model.ShareFolderId):
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.ShareFolderId, shareFolderList, "-- Select --", new { disabled = "disabled" })
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+    @using (Html.BeginForm("Restore", "BackupRestoreFileConfig", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        <input type="hidden" name="id" id="id" value="@Model.BackupRestoreFileConfigId" />
+
+        <fieldset>
+            <legend>Restore File</legend>
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        <input type="file" name="fileRestore" id="fileRestore" />
+                        @Html.ValidationMessage("fileRestore")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                        <input type="submit" value="Restore" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>

@@ -1,0 +1,96 @@
+﻿@model Bkav.eGovCloud.Models.FAQSettingsModel
+@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.Setting.FAQSetting");
+    Layout = "~/Areas/Admin/Views/Setting/_SettingLayout.cshtml";
+    var allTreeGroups = ViewBag.AllTreeGroups as List<SelectListItem>;
+    var allPermission = ViewBag.AllPermissionSettings as List<SelectListItem>;
+}
+
+<style type="text/css">
+    .validationMessage {
+        color: Red;
+    }
+
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto; /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 100px;
+    }
+
+    #sticky.stuck {
+        position: fixed;
+        bottom: 0;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+</style>
+
+<script src="../../../../Scripts/bkav.egov/libs/jquery/jquery.unobtrusive-ajax.min.js"></script>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <table>
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.Active)
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.Active)
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.Name)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.ApiUrl)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ApiUrl)
+                @Html.ValidationMessageFor(model => model.ApiUrl)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%;">
+                Địa chỉ trang dịch vụ công
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.OnlineLink)
+                @Html.ValidationMessageFor(model => model.OnlineLink)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.TreeGroupId)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.TreeGroupId, allTreeGroups)
+                @Html.ValidationMessageFor(model => model.TreeGroupId)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%;">
+                @Html.LabelFor(model => model.PermissionSettingId)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.PermissionSettingId, allPermission, @Localizer("Common.Choose.Label"))
+                @Html.ValidationMessageFor(model => model.PermissionSettingId)
+            </td>
+        </tr>
+    </table>
+}

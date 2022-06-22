@@ -1,0 +1,61 @@
+﻿{{if TotalResult>0}}
+        <p style="font-size: 16px">
+            <span>Tìm thấy <span style="color: rgb(17, 34, 204); font-weight: bold" id="totalResult">${TotalResult}</span> kết quả phù hợp.</span>
+            {{if DidYouMean}}
+            Có phải bạn muốn tìm ${DidYouMean}
+            {{/if}}
+        </p>
+{{else}}
+        <p style="font-size: 16px">Không tìm thấy kết quả phù hợp</p>
+{{/if}}
+
+{{if SearchType}}
+    {{if SearchType==egov.enum.searchType.document}}
+<table class="table table-hover table-main" id="docSearchResult">
+    <colgroup>
+        <col style="width: 45px" />
+        <col style="width: 100px" />
+        <col />
+        <col style="width: 130px" />
+        <col style="width: 130px" />
+        <col style="width: 100px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Số ký hiệu</th>
+            <th>Trích yếu</th>
+            <th>Ngày khởi tạo</th>
+            <th>Người đang giữ</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+{{else SearchType==egov.enum.searchType.file}}
+<table class="table table-hover table-main" id="wrapAttachment">
+    <colgroup>
+        <col style="width: 45px" />
+        <col style="width: 200px" />
+        <col />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên file</th>
+            <th>Nội dung</th>
+            <th>Xem</th>
+            <th>Tải về</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+{{/if}}
+{{/if}}
+<div>
+    <ul id="pagingResult" class="pagination"></ul>
+</div>

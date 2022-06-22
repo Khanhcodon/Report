@@ -1,0 +1,162 @@
+﻿@{
+    var devides = ViewBag.Devices as List<Bkav.eGovCloud.Entities.Customer.MobileDevice>;
+    var ip = ViewBag.CurrentIP as string;
+    var mac = ViewBag.Mac as string;
+}
+
+<style>
+    .table > tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .table tr.disabled {
+        color: #bdbdbd;
+    }
+
+    .hint {
+        color: #bdbdbd;
+    }
+</style>
+
+<div id="resultparent">
+    <form action="/Account/ChangeDevicePermission" data-ajax="true" data-ajax-method="POST" id="form0" method="post" novalidate="novalidate">
+        <div class="checkbox hidden
+            <label>
+                <input type="checkbox" name="limitByIP" id="limitByIP" @((bool)ViewBag.LimitByIp ? "checked" : "") value="true" />
+                <b>Chặn thiết bị mới đăng nhập theo địa chỉ IP</b>
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="LimitByMAC" id="LimitByMAC" @((bool)ViewBag.LimitByMAC ? "checked" : "") value="true" />
+                <b>Chặn thiết bị mới đăng nhập theo địa chỉ MAC (cần cài đặt Bkav eGov Extension)</b>
+            </label>
+        </div>
+    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="panel-title">Thông tin các thiết bị truy cập tài khoản</span>
+            <span class="pull-right">
+                <a href="#" class="btn btn-edit reset-pass-all" style="color: #1e90ff" deviceid="0" onclick="activeDevice(this)">Đăng xuất khỏi tất cả thiết bị</a>
+            </span>
+        </div>
+
+        <table class="table">
+            <colgroup>
+                <col style="width:30px" />
+                <col style="width: 100px" />
+                <col style="width: 200px" />
+                <col style="width: 100px" />
+                <col style="width: 160px" />
+                <col style="width: 120px;" />
+                <col style="width: 80px;" />
+            </colgroup>
+            <tbody>
+                @foreach (var item in devides)
+                {
+                    var activityTime = item.LastUpdate.HasValue ? item.LastUpdate.Value.ToString("HH:mm dd/MM/yyyy") : item.CreatedDate.ToString("HH:mm dd/MM/yyyy");
+                    var urlImage = "/Content/Images/divices/android.png";
+                    var isCurrent = item.Serial == mac;
+                    switch (item.OS)
+                    {
+                        case 1:
+                            urlImage = "/Content/Images/divices/window.png";
+                            break;
+                        case 2:
+                            urlImage = "/Content/Images/divices/mac.png";
+                            break;
+                        case 3:
+                            urlImage = "/Content/Images/divices/ubuntu.png";
+                            break;
+                        case 4:
+                            urlImage = "/Content/Images/divices/android.png";
+                            break;
+                        case 5:
+                            urlImage = "/Content/Images/divices/iphone.png";
+                            break;
+                        default:
+                            urlImage = "/Content/Images/divices/window.png";
+                            break;
+                    }
+                    <tr valign="middle" style="height:50px" class="@(item.HasBlock ? "disabled" : "")" id="device@(item.MobileDeviceId)">
+                        <td>
+                            <img src="@urlImage" width="24" height="24" />
+                        </td>
+                        <td>@item.DeviceName</td>
+                        <td>
+                            @item.Serial
+                            @if (isCurrent)
+                            {
+                                <span style="color:#1e90ff">(Thiết bị hiện tại)</span>
+                            }
+                            else
+                            {
+                                <span style="color:#ff0000" class="blockStatus">@(item.HasBlock ? "(Không cho phép)" : "")</span>
+                            }
+                        </td>
+                        <td>@item.Browser</td>
+                        <td>@activityTime</td>
+                        <td>
+                            <a href="#">Xem lịch sử</a>
+                        </td>
+                        <td class="activeBtn">
+                            @if (item.HasBlock)
+                            {
+                                <a href="#" class="btn btn-xs btn-info btn-active" deviceid="@item.MobileDeviceId" has-block="false" onclick="activeDevice(this)">Cho phép</a>
+                            }
+                            else if (!isCurrent)
+                            {
+                                <a href="#" class="btn btn-xs btn-default btn-active" deviceid="@item.MobileDeviceId" has-block="true" onclick="activeDevice(this)">Chặn thiết bị</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function activeDevice(e) {
+        var deviceId = $(e).attr("deviceid");
+        var hasBlock = $(e).attr("has-block") === "true";
+        var r;
+        if (deviceId == 0) {
+            var r = confirm("Bạn có chắc muốn đăng xuất khỏi tất cả các thiết bị?");
+        } else {
+            var r = confirm("Bạn có chắc muốn chặn thiết bị này?");
+        }
+
+        if (r == true) {
+            $.ajax({
+                url: "/Account/ActiveDevice",
+                type: "Post",
+                data: {
+                    deviceId: deviceId,
+                    hasBlock: hasBlock
+                },
+                success: function (result) {
+                    if (result.error) {
+                        alert(result.error);
+                        return;
+                    }
+
+                    if (result.requireLogout) {
+                        window.location.href = "\\account\\logout";
+                        return;
+                    }
+
+                    debugger;
+                    var deviceRow = $("#device" + deviceId);
+                    if (deviceRow.length === 1) {
+                        deviceRow.attr("class", hasBlock ? "disabled" : "");
+                        deviceRow.find(".blockStatus").text(hasBlock ? "(Không cho phép)" : "");
+                        deviceRow.find(".btn-active").toggleClass("btn-info").toggleClass("btn-default")
+                                .attr("has-block", hasBlock ? "false" : "true")
+                                .text(hasBlock ? "Cho phép" : "Chặn thiết bị");
+                    }
+                }
+            });
+        }
+    }
+</script>

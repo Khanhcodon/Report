@@ -1,0 +1,1 @@
+﻿ALTER TABLE `mail` ADD COLUMN `CC`  varchar(1000) NULL

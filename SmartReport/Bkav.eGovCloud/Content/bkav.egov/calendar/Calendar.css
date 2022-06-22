@@ -1,0 +1,301 @@
+﻿body {
+    cursor: default !important;
+    height: 100%;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    overflow: hidden;
+    font-size: 11.5px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: black;
+}
+
+a {
+    color: blue;
+}
+
+textarea {
+    height: 40px;
+    resize: none;
+    width: 100%;
+}
+
+table {
+    font-size: 12px;
+}
+
+    table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+.viewCalendar table td {
+    white-space: pre-line;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.west-panel {
+    padding-right: 0;
+    padding-top: 15px;
+}
+
+    .west-panel .list-group-item {
+        border: none;
+    }
+
+.center-panel {
+    border-left: 1px solid #e7e9fd;
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 30px;
+}
+
+.toolbar {
+    padding: 10px 0;
+}
+
+.boldtext {
+    font-weight: bold;
+}
+
+.timestart {
+    font-weight: bold;
+    color: blue;
+}
+
+table tr.detail td {
+    border-top: 0;
+    border-bottom: 0;
+    padding: 8px;
+}
+
+table tr td.empty {
+    padding: 0;
+    border: none;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 15px;
+}
+
+.place {
+    color: #1919b3;
+}
+
+.form-control {
+    border-radius: 3px;
+    font-size: 11.5px;
+    color: #000;
+}
+
+a.list-group-item {
+    color: #000;
+}
+
+.form-inline .form-control {
+    width: 100%;
+}
+
+    .form-inline .form-control.content,
+    .form-inline .form-control.timeCreated,
+    .form-inline .form-control.title {
+        margin-top: 5px;
+    }
+
+.timepicker, .datepicker {
+    float: left;
+    width: 115px;
+    margin-right: 10px;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.status {
+    position: absolute;
+    padding: 12px;
+    bottom: 25px;
+    left: 30px;
+    z-index: 10;
+    font-size: 13px;
+    font-weight: normal;
+    display: none;
+}
+
+#left {
+    padding: 10px;
+}
+
+ul.userPrimaryList,
+ul.userSecondaryList {
+    margin-bottom: 0;
+}
+
+    ul.userPrimaryList li,
+    ul.userSecondaryList li {
+        /*padding: 5px 0;*/
+        display: block;
+    }
+
+        ul.userPrimaryList li[isGroup],
+        ul.userSecondaryList li[isGroup] {
+            margin-top: 10px;
+        }
+
+            ul.userPrimaryList li[isGroup]:first-child,
+            ul.userSecondaryList li[isGroup]:first-child {
+                margin-top: 0;
+            }
+
+        ul.userPrimaryList li .removeUser,
+        ul.userSecondaryList li .removeUser {
+            color: red;
+            display: none;
+        }
+
+#CreateForm ul.userPrimaryList li .removeUser,
+#CreateForm ul.userSecondaryList li .removeUser {
+    display: inline;
+}
+
+
+.privateCalendar, .notAcceptCalendar {
+    margin-bottom: 20px;
+}
+
+/* -- New Code -- CSS phần in phiếu -- */
+.head-top-calender {
+    margin-bottom: 35px;
+}
+
+.input-printer {
+    margin-bottom: 10px;
+}
+
+/* -- New Code -- Hidden printer --- */
+@media print {
+    .input-printer {
+        display: none !important;
+    }
+}
+
+/* -- New Code -- Hiển thị ngoài màn hình TV -- */
+.date-view-tv-calendar {
+    margin-top: 8px;
+    font-size: 17px;
+    color: black;
+    text-align: center;
+}
+
+.date-views-tv-calendar {
+    width: 100%;
+    height: 38px;
+    margin-bottom: 10px;
+}
+
+.title-view-tv-calendar {
+    font-size: 22px;
+    padding-left: 10px;
+    margin-top: 15px;
+}
+
+.logo-view-tv-calendar {
+    float: left;
+}
+
+.head-view-tv-calendar {
+    padding-top: 10px;
+    height: 60px;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+.style-th-view {
+    color: black;
+}
+
+.container-view-tv-fluid {
+    min-height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow-y: auto;
+    height: 100%;
+    font-size: 18px;
+    font-family: 'Times New Roman';
+}
+
+    .container-view-tv-fluid::after {
+        content: "";
+        background-image: url(images/BackGroundTable.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 80%;
+        opacity: 0.5;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+    }
+
+.title-view-tv-calendar-center {
+    color: blue;
+    text-align: center;
+    font-size: 32px; /* -- tieu de */
+	font-weight: bold;
+    margin-bottom: 15px;
+     margin-top: 20px;
+}
+
+.title-view-tv-calendar-right {
+    text-align: center;
+    font-size: 16px;
+    float: right;
+}
+
+.managerCalendar {
+    padding: 15px 0;
+}
+
+.userPrimary, .userSecondary {
+    float: left;
+    height: 22px;
+}
+
+.userPrimaryList li[isGroup],
+.userSecondaryList li[isGroup] {
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.container-view-tv-fluid table * {
+    font-size: 28px; /* -- noi dung llịc */
+}
+
+.container-view-tv-fluid .timestart {
+    color: red;
+}
+
+.removeResource {
+    color: red;
+    float: right;
+    margin-right: -8px;
+}

@@ -1,0 +1,1697 @@
+﻿@model ReportQueryModel
+@{
+    var isCreate = Model.ReportQueryId == 0;
+    var filters = ViewBag.Filters as List<Bkav.eGovCloud.Areas.Admin.Models.ReportQueryFilterModel> ?? new List<Bkav.eGovCloud.Areas.Admin.Models.ReportQueryFilterModel>();
+    var fieldNames = ViewBag.FieldNames;
+    var tableName = ViewBag.TableName as string;
+    var formCode = Model.FormCode == null ? "[]" : Model.FormCode;
+    var reportQueryData = ViewBag.ReportQueryData == null ? "[]" : ViewBag.ReportQueryData;
+}
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery.validate.unobtrusive.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery/jquery-ui-1.12.1.js")"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+        crossorigin="anonymous"></script>
+<script src="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/js/jquery.dataTables.min.js")"></script>
+<link href="@Url.Content("~/assets/vendors/datatables/DataTables-1.10.20/css/jquery.dataTables.min.css")" rel="stylesheet">
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/jquery.format/jquery.format.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.js")"></script>
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/bkav.egov/libs/handsontable/handsontable.full.min.css")">
+
+<link href="@Url.Content("~/Scripts/bkav.egov/libs/select2-4.0.13/css/select2.min.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/bkav.egov/libs/select2-4.0.13/js/select2.min.js")"></script>
+
+<style>
+    .xoayAliasItem {
+        padding-top: 5px;
+        text-align: right;
+    }
+
+    .add-datafield {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+        .add-datafield .modal-content, .add-datafield .modal-content .modal-body {
+            overflow: unset;
+        }
+
+    .hasSub {
+        position: relative;
+    }
+
+    .icon-chevron {
+        background-image: url("/Content/Images/home/chevron-right.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 10px;
+        height: 12px;
+    }
+
+    .sub-fomular {
+        background-color: #fff;
+        padding: 0px;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.15);
+        position: absolute;
+        min-width: 10rem;
+        left: 10rem;
+        top: 1px;
+    }
+
+    .datafield-container > li.row-item {
+        border: none;
+        display: inline;
+        margin-right: 10px;
+        padding: 0;
+    }
+
+    .datafield-container > li.row-item, .datafield-container > li.add-item {
+        border: none;
+        display: inline;
+        margin-right: 10px;
+        padding: 0;
+    }
+
+    .datafield-container {
+        height: auto;
+        min-height: 300px;
+    }
+
+        .datafield-container > li.list-group-item {
+            margin-bottom: 0;
+            border-bottom-right-radius: .25rem;
+            border-bottom-left-radius: .25rem;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+
+        .datafield-container .open .dropdown-menu {
+            position: absolute;
+            display: block;
+        }
+
+        .datafield-container span {
+            margin-right: 10px;
+        }
+
+        .datafield-container .btn-rounded {
+            border-radius: 60px;
+        }
+
+        .datafield-container .dropdown-toggle {
+            cursor: pointer;
+            -webkit-transition: .2s linear;
+            transition: .2s linear;
+        }
+
+        .datafield-container > li.row-item a {
+            margin-top: 5px;
+        }
+
+        .datafield-container .dropdown-item {
+            color: #747e8e;
+            font-weight: 300;
+            padding: 4px 12px;
+            width: auto;
+            margin: 4px;
+            -webkit-transition: 0.15s linear;
+            transition: 0.15s linear;
+        }
+
+        .datafield-container .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 10rem;
+            padding: .5rem 0;
+            margin: .125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: .25rem;
+        }
+
+        .datafield-container .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: .25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            font-size: 13px;
+        }
+
+        .datafield-container .dropdown-item {
+            width: -webkit-calc(100% - 10px);
+            width: calc(100% - 10px);
+            margin: 2px 5px;
+            padding: .429rem .929rem;
+            -webkit-transition: background-color .25s;
+            -o-transition: background-color .25s;
+            transition: background-color .25s;
+            border-radius: .215rem;
+        }
+
+        .datafield-container .dropdown-toggle:empty::after {
+            margin-left: 0;
+        }
+
+        .datafield-container .dropdown-toggle:after {
+            margin-right: 0;
+            margin-left: .3em;
+        }
+
+        .datafield-container .btn-rounded {
+            vertical-align: middle;
+            line-height: 1;
+            /* margin-top: 10px; */
+            padding-top: 10px;
+        }
+
+        .datafield-container .dropdown-toggle::after {
+            display: inline-block;
+            margin-left: .255em;
+            vertical-align: 0.355em;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-bottom: 0;
+            border-left: .3em solid transparent;
+        }
+
+        .datafield-container .sub-fomular {
+            display: none;
+        }
+
+
+        .datafield-container .glyphicon-menu-right:before {
+            content: "\e258";
+        }
+
+    .ui-draggable-handle {
+        z-index: 9999;
+    }
+
+    .filter-field {
+        margin-left: 10px;
+        border-radius: 5px;
+        border: 1px solid #e3e3e3;
+        padding: 1px 5px;
+        width: 100px !important;
+        height: 23px;
+        display: inline-block;
+    }
+
+    .handsontable table thead th {
+        /*white-space: pre-line;*/
+    }
+
+    #ds-dimension-fields, #ds-measure-fields, #general-values, #ds-dimension-add-fields, #ds-measure-add-fields {
+        overflow: auto;
+        margin-bottom: 21px;
+    }
+
+        #ds-measure-add-fields .media, #ds-dimension-add-fields .media {
+            padding: 5px;
+            width: 100%;
+            float: left;
+        }
+
+    .media-list-divided > .media:not(.media-list-header):not(.media-list-footer), .media-list-divided .media-list-body > .media {
+        border-bottom: 1px solid rgba(97, 106, 120, 0.07);
+    }
+
+    .media {
+        margin-top: 0;
+    }
+
+        .media > * {
+            margin: 0 8px;
+        }
+
+    .media-body > p:last-child {
+        color: #67757c;
+    }
+
+    .media-body > * {
+        margin-bottom: 0;
+    }
+
+    .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: .25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+
+    .add-datafield .name-exist {
+        color: #f00;
+        margin-top: 5px;
+    }
+
+    .d-none {
+        display: none;
+    }
+
+    .mt-10 {
+        margin-top: 10px;
+    }
+
+    .htBold {
+        font-weight: bold;
+    }
+
+    #divReportQueryTable > .ht_master.handsontable > .wtHolder {
+        /*max-height: 200px !important;*/
+    }
+
+    #divReportQueryTable {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .single h3.side-title:after {
+        content: '';
+        width: 60px;
+        height: 1px;
+        background: #ff173c;
+        display: block;
+        margin-top: 6px;
+    }
+
+    .single h3.side-title {
+        margin: 0;
+        margin-bottom: 10px;
+        padding: 0;
+        font-size: 16px;
+        color: #333;
+        text-transform: uppercase;
+    }
+
+    .single li a:hover {
+        color: #ff173c;
+    }
+
+    .single ul {
+        margin-bottom: 0;
+    }
+
+    .single li a {
+        color: #666;
+        line-height: 40px;
+        display: block;
+        text-decoration: none;
+    }
+
+    .single li:last-child a {
+        border-bottom: 0;
+    }
+
+    .single {
+        padding: 30px 15px;
+        margin-top: 10px;
+        background: #fcfcfc;
+        border: 1px solid #f0f0f0;
+    }
+
+    .pull-right {
+        font-size: 20px;
+        font-weight: bold;
+        padding-right: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .modal-footer .text-right {
+        margin-right: 15px;
+    }
+
+    .modal-header .close {
+        position: absolute;
+        right: 10px;
+        top: 12px;
+    }
+
+    #general-values .row-filter {
+        cursor: pointer;
+    }
+
+    #condition-value .row {
+        margin: 0;
+    }
+
+    #tab-condition .row {
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+
+    .droptarget {
+        float: left;
+        min-height: 100px;
+        min-width: 200px;
+        border: 1px solid black;
+        margin: 15px;
+        padding: 10px;
+        border: 1px solid #aaaaaa;
+    }
+
+    /*button clear on timeKey, organizeKey textbox*/
+    .clearable.x {
+        background-position: right 5px center;
+    }
+
+    .clearable.onX {
+        cursor: pointer;
+    }
+
+    .clearable::-ms-clear {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    .clearable {
+        background: #fff url(data:image/gif;base64,R0lGODlhBwAHAIAAAP///5KSkiH5BAAAAAAALAAAAAAHAAcAAAIMTICmsGrIXnLxuDMLADs=) no-repeat right -10px center;
+        border: 1px solid #999;
+        padding: 3px 18px 3px 4px; /* Use the same right padding (18) in jQ! */
+        border-radius: 3px;
+        transition: background 0.4s;
+    }
+
+    .active .nav-link {
+        font-weight: bold;
+    }
+
+    ul#fieldNames li {
+        border: 1px solid rgba(0,0,0,.125);
+        margin-bottom: -1px;
+        padding: .75rem 1.25rem;
+    }
+
+        ul#fieldNames li:first-child {
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+
+        ul#fieldNames li:last-child {
+            border-bottom-left-radius: .25rem;
+            border-bottom-right-radius: .25rem;
+            margin-bottom: 0;
+        }
+
+        ul#fieldNames li a {
+            line-height: unset;
+        }
+
+        ul#fieldNames li span {
+            background: #007bff;
+            border-radius: 15px;
+            width: 30px;
+            color: white;
+            text-align: center;
+            padding: 0;
+        }
+</style>
+<script type="text/javascript">
+    var queryDataTable = null;
+    var filterHand = false;
+    var IsXoay = false;
+    var rowAt = -1;
+    var reportQueryData = @Html.Raw(reportQueryData);
+    var reportQueryTable = null;
+    var reportQueryTableSetting = null;
+    var isLoad = true;
+    var fieldMaths = [];
+    var conditions = {
+        "string": ["=", "Like", "Is not null"],
+        "numeric": ["=", ">", "<", ">=", "<=", "<>", "Between"],
+        "date": ["=", ">", "<", ">=", "<=", "<>", "Between"]
+    };
+    var measuresType = ['TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'BIGINT', 'DECIMAL', 'FLOAT', 'DOUBLE'];
+    var _templateNumber = '<li class="add-item list-group-item"><div style="display: inline-block; background: #2196f3; padding: 3px 15px; border-radius: 15px;vertical-align: middle;"><input type="number" data-id="${DataId}" style="background-color: transparent; border: none; outline: none; color: white; width: 60px; text-align: center;"/><div></li>';
+    var _templateMath = '<li class="add-item list-group-item"><a href="#" class="btn btn-sm btn-primary btn-rounded" data-toggle="dropdown"><span class="dt-field" data-id="${DataId}">${MathType}</span><span class="dropdown-toggle pull-right"></span><div class="dropdown-menu"></div></a></li>';
+    var _template = '<li class="row-item list-group-item"><a href="#" class="btn btn-sm btn-primary btn-rounded" data-toggle="dropdown"><span class="dt-field" data-id="${DataId}">{{if Formula && Formula != "None"}} ${Formula}(${FieldName}){{else}}${FieldName}{{/if}}</span><span class="dropdown-toggle pull-right"></span><div class="dropdown-menu"></div></a></li>';
+    var _ddlTemplate = '<a class="dropdown-item row-formula-item" href="#">${}</a>';
+    var opTemplate = '<option>${}</option>';
+    var idx = 0;
+    var dbTypes = {
+        number: ['TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'BIGINT', 'DECIMAL', 'FLOAT', 'DOUBLE', 'BIT'],
+        date: ['DATE', 'DATETIME']
+    };
+    var _templateString = '<li class="row-item list-group-item"><a href="#" class="btn btn-sm btn-primary btn-rounded" ><span class="dt-field" data-id="${DataId}">${FieldName}</span></a></li>';
+    var _xoayTemplateString = '<li class="row-item list-group-item"><a href="#" class="btn btn-sm btn-primary btn-rounded"><span class="dt-field" data-id="${dataFieldId}">${dataFieldName}</span></a></li>';
+    var formulaType = { string: "string", numeric: "numeric", date: "date" };
+    var formulas = {
+        "string": ["None", "COUNT", "COUNT(DISTINCT)"],
+        "numeric": ["SUM", "AVG", "MIN", "MAX", "COUNT", "COUNT(DISTINCT)", "None", "FORMULA"],
+        "date": ["YEAR", "QUARTER", "MONTH", "WEEK", "DAY", "HOUR", "MINUTE", "SECOND", "COUNT", "COUNT(DISTINCT)"]
+    };
+    var group1 = {
+        7: ["LŨY KẾ", "TĂNG TRƯỞNG", "TĂNG TRƯỞNG (%)", "CÙNG KỲ", "CÙNG KỲ (%)", "SUMTOTAL", "SUMTOTAL (%)"]
+    }
+    var _mathType = ['+', '-', '*', '/', '(', ')'];
+    $(document).ready(function () {
+        $('#checkAll').click(function () {    
+            $('input[name="FieldValue"]:checkbox').prop('checked', this.checked);    
+        });
+        $('.checkbox :checkbox').click(function () {
+            generateQuery();
+        });
+
+        $('#ActionLevelId, #DataTableId, #FormulaDataColumnId').change(function () {
+            generateQuery();
+        });
+
+        // format query to beautify SQL
+        $('#Query').format({ method: 'sql' });
+
+        $("#ReportQueryName").focus();
+
+        $('#DataTableId').select2();
+
+        generateReportQueryDataTable();
+
+        var timeKeyDataFieldId = '@Html.Raw(filters[0].DataFieldId)';
+        if (timeKeyDataFieldId != "")
+            $('#Filters_0__DataFieldName')[tog(true)]('x');
+
+        var organizeKeyDataFieldId = '@Html.Raw(filters[1].DataFieldId)';
+        if (organizeKeyDataFieldId != "")
+            $('#Filters_1__DataFieldName')[tog(true)]('x');
+
+        $(".select-field-item").draggable({
+            helper: "clone",
+            appendTo: "body",
+            revert: "invalid",
+            cursor: "pointer",
+            scroll: false
+        });
+
+        $("#Filters_0__DataFieldName").droppable({
+            hoverClass: 'active',
+            drop: function (event, ui) {
+                this.value = $(ui.draggable).text().trim();
+                $('#Filters_0__DataFieldId').val($(ui.draggable).attr('value'));
+                $(this)["addClass"]('x');
+                generateQuery();
+            }
+        });
+
+        $("#Filters_1__DataFieldName").droppable({
+            hoverClass: 'active',
+            drop: function (event, ui) {
+                this.value = $(ui.draggable).text().trim();
+                $('#Filters_1__DataFieldId').val($(ui.draggable).attr('value'));
+                $(this)["addClass"]('x');
+                generateQuery();
+            }
+        });
+        $('#Filters_0__DataFieldName, #Filters_1__DataFieldName').keydown(function() {
+            return false;
+        });
+        // CLEARABLE INPUT
+        function tog(v) {
+            return v ? 'addClass' : 'removeClass';
+        }
+        $(document).on('input', '.clearable', function () {
+            $(this)[tog(this.value)]('x');
+        }).on('mousemove', '.x', function( e ){
+            $(this)[tog(this.offsetWidth - 18 < e.clientX - this.getBoundingClientRect().left)]('onX');
+        }).on('touchstart click', '.onX', function( ev ){
+            ev.preventDefault();
+            $(this).removeClass('x onX').val('').change();
+            // remove datatableId
+            $(this).next().next().val('');
+            generateQuery();
+        });
+
+        $(".field-item-config").click(function () {
+            var key = $(this).prev().val();
+            if (key != '') {
+                $('.filter-config').modal('toggle');
+                idx = $(this).attr("idx");
+                var dataFieldId = $(this).next().val();
+                renderFilter(dataFieldId);
+                $('#filter-field').text(key);
+            }
+        });
+        $(document).on('click', '.reportquery-pull-right', function () {
+            var rowIndex = reportQueryTable.countRows();
+            isLoad = true;
+            reportQueryTable.alter('insert_row', reportQueryTable.countRows());
+            reportQueryTable.setDataAtCell(rowIndex, 1, true);
+            reportQueryTable.setDataAtCell(rowIndex, 2, "None");
+            reportQueryTable.setDataAtCell(rowIndex, 3, $(this).prev().attr('title'));
+            reportQueryTable.setDataAtCell(rowIndex, 4, $(this).prev().text().trim());
+            reportQueryTable.setDataAtCell(rowIndex, 7, 'None');
+            reportQueryTable.setDataAtCell(rowIndex, 8, 'None');
+            isLoad = false;
+        });
+
+        $("#DataTableId").change(function (e) {
+            var tableId = $("#DataTableId").val();
+            var indexKey = $("#DataTableId option:selected").text().indexOf("&&&"); 
+            var tableName = $("#DataTableId option:selected").text().substring(0, indexKey);
+            $.ajaxSetup({ async: false });
+            $.getJSON("/Admin/ReportQuery/GetFieldNames",
+                { tableId: tableId },
+                function(data, textStatus, jqXHR) {
+                    if (data.success) {
+                        var fieldNames = data.Data;
+                        $("#fieldNames").empty();
+                        $("#FormulaDataColumnId").empty();
+                        $("#FormulaDataColumnId").append('<option selected="true" value="0">Cột công thức</option>');
+                        for (i = 0; i < fieldNames.length; i++) {
+                            var strControls = '';
+                            strControls += '<li><a href="#" title="' +
+                                fieldNames[i].Text +
+                                '"><label class="select-field-item" title="' +
+                                fieldNames[i].Text + '" value="' +
+                                fieldNames[i].Value +
+                                '">' +
+                                (fieldNames[i].Text.split('.')[1].length > 45
+                                    ? (fieldNames[i].Text.split('.')[1].substring(0, 45) + '...')
+                                    : fieldNames[i].Text.split('.')[1]) + ' ';
+
+                            if (fieldNames[i].Text.split('.')[0] != tableName)
+                                strControls += '<span class="icon icon-link" style="font-size: 12px; color: blue"></span>';
+
+                            strControls += '</label><span id="' +
+                                fieldNames[i].Value +
+                                '" class="pull-right reportquery-pull-right">+</span></a></li>';
+
+                            $("#fieldNames").append(strControls);
+
+                            $("#FormulaDataColumnId").append('<option value="' +
+                                fieldNames[i].Value +
+                                '">' +
+                                fieldNames[i].Text +
+                                '</option>');
+                        }
+
+                        $(".select-field-item").draggable({
+                            helper: "clone",
+                            appendTo: "body",
+                            revert: "invalid",
+                            cursor: "pointer",
+                            scroll: false
+                        });
+                    } else {
+                        $.notify({
+                                message: data.message
+                            },
+                            {
+                                type: 'danger',
+                                placement: {
+                                    from: "bottom",
+                                    align: "right"
+                                }
+                            });
+                    }
+                });
+            $.ajaxSetup({ async: true });
+        });
+
+        generateReportQueryConfig();
+
+        $('#condition-list').on('change', function () {
+            var field = { ConditionValue: "", ConditionToValue :"" };
+            setConditionValue(this.value, field);
+        });
+
+        $("#btnSaveFilterConfig").on('click', function () {
+
+            var arrValue = [];
+            $(".chk-col-light-blue:checked").each ( function() {
+                arrValue.push($(this).val());
+            });
+            if (!filterHand) {
+                $(`#Filters_${idx}_FilterValue`).val($("input[name=ConditionValue]").val());
+                $(`#Filters_${idx}_FilterToValue`).val($("input[name=ConditionToValue]").val());
+                $(`#Filters_${idx}_FilterValues`).val(JSON.stringify(arrValue));
+                $(`#Filters_${idx}_Condition`).val($("#condition-list").val());
+            } else {
+                try {
+                    var idFilterFieldName = "#filter-field";
+                    if (IsXoay)
+                        idFilterFieldName = "#xoay-filter-field";
+
+                    var objHand = {
+                        DataFieldId: $(idFilterFieldName).data('id'),
+                        FilterValues: JSON.stringify(arrValue),
+                        Condition: $("#condition-list").val(),
+                        FilterValue: $("input[name=ConditionValue]").val(),
+                        FilterToValue: $("input[name=ConditionToValue]").val()
+                    };
+                    reportQueryTable.setDataAtCell(rowAt, 6, JSON.stringify(objHand));
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+
+            rowAt = -1;
+            filterHand = false;
+            IsXoay = false;
+            $('.filter-config').modal('hide');
+            generateQuery();
+        });
+
+        $("#btnXoaySaveFilterConfig").on('click', function () {
+            var aliasNames = [];
+            $('input[name="aliasName"]').each ( function() {
+                aliasNames.push($(this).val());
+            });
+
+            try {
+                var objHand = {
+                    AliasNames: JSON.stringify(aliasNames)
+                };
+                reportQueryTable.setDataAtCell(rowAt, 9, JSON.stringify(objHand));
+            } catch (err) {
+                console.log(err);
+            }
+
+            rowAt = -1;
+            filterHand = false;
+            IsXoay = true;
+            $('.xoay-filter-config').modal('hide');
+            generateQuery();
+        });
+
+        $("#myInput").on("keyup",function() {
+            var that = this, $allElements = $('ul#fieldNames > li');
+            var $matchingElements = $allElements.filter(function(i, li){
+                var listItemText = $(li).text().toUpperCase(),
+                    searchText = that.value.toUpperCase();
+                return ~listItemText.indexOf(searchText);
+            });
+            $allElements.hide();
+            $matchingElements.show();
+        });
+
+        var formCode = { setting: reportQueryTableSetting, data: reportQueryTable.getData() };
+        $('#FormCode').val(JSON.stringify(formCode));
+        $('#addDimensionField').click(function () {
+            var id = Number($("#DataTableId").val());
+            if (id > 0) {
+                showAddDataField();
+                renderFields(id);
+            }
+        });
+        $('#btnPlus').on('click',
+            function() {
+                _addMath('+');
+            });
+        $('#btnSubtract').on('click',
+            function() {
+                _addMath('-');
+            });
+        $('#btnMultiply').on('click',
+            function() {
+                _addMath('*');
+            });
+        $('#btnDivision').on('click',
+            function() {
+                _addMath('/');
+            });
+        $('#btnOpenBrackets').on('click',
+            function() {
+                _addMath('(');
+            });
+        $('#btnCloseBrackets').on('click',
+            function() {
+                _addMath(')');
+            });
+        $('#btnAddNumber').on('click', _addNumb);
+        //$(".filter-measures-add").keyup(function() {
+        //        var term = $(this).val().toLowerCase();
+        //        if (term === '') {
+        //            $("#ds-measure-add-fields div").show();
+        //            return;
+        //        }
+        //        $("#ds-measure-add-fields div").each(function (idx, item) {
+        //            var value =`${$(item).attr("data-name")}`.toLowerCase();
+        //            if (value.indexOf(term) >= 0) {
+        //                $(item).show();
+        //            } else {
+        //                $(item).hide();
+        //            }
+        //        });
+        //});
+        //$(".filter-measures-add").keyup(function() {
+        //    var term = $(this).val().toLowerCase();
+        //    if (term === '') {
+        //        $("#ds-dimension-add-fields div").show();
+        //        return;
+        //    }
+        //    $("#ds-dimension-add-fields div").each(function (idx, item) {
+        //        var value =`${$(item).attr("data-name")}`.toLowerCase();
+        //        if (value.indexOf(term) >= 0) {
+        //            $(item).show();
+        //        } else {
+        //            $(item).hide();
+        //        }
+        //    });
+        //});
+    });
+
+    function generateReportQueryDataTable() {
+        var container = $("#tbl");
+        if(!reportQueryData || reportQueryData.length === 0){
+            container.InnerHtml = "Không có dữ liệu";
+            return;
+        }
+        var dimensions = _.keys(reportQueryData[0]);
+        var option = { };
+        option.columns = [];
+        dimensions.forEach((d, idx) => {
+            option.columns.push({
+                data: d,
+                title: d,
+                width: null,
+                className: null// idx === 0 ? null : 'text-right',
+            });
+        });
+        reportQueryData.forEach((r, idx) => {
+            r.stt = idx + 1;
+        });
+
+        option = $.extend(true, {}, option, {
+            destroy: true,
+            data: reportQueryData
+        });
+
+        try {
+            if (queryDataTable != undefined && queryDataTable != null) {
+                container.DataTable().clear();
+                container.DataTable().destroy();
+                container.DataTable().clear().destroy();
+                container.html('');
+            }
+
+            queryDataTable = container.DataTable(option);
+        }
+        catch (err) {
+            console.log(err);
+        };
+    }
+
+    function renderFilter(dataFieldId) {
+        var fieldValues = [];
+        var formulaType = "";
+        var number = ['float', 'int', 'bigint'];
+        var string = ['varchar', 'text'];
+        var date = ['date', 'datetime'];
+        $.ajax({
+            url: "/ReportQuery/GetValuesByDataField",
+            data: JSON.stringify({ dataFieldId: parseInt(dataFieldId) }),
+            type: 'post',
+            contentType: "application/json",
+            success: (response) => {
+                fieldValues = response.result;
+                var dataType = response.dataType;
+                var values = $(`#Filters_${idx}_FilterValues`).val();
+                if (values == "") values = "[]";
+                var arrValue = JSON.parse(values);
+                $.each(fieldValues, function (index, fieldValue) {
+                    fieldValue.ElId = 'FieldValue' + index;
+                    fieldValue.Selected = false;
+
+                    $.each(arrValue, function (index, filterValue) {
+                        if (filterValue == fieldValue.FieldValue) {
+                            fieldValue.Selected = true;
+                        }
+                    });
+                });
+
+                $('#general-values').html($.tmpl($("#filterConfigSelectValue"), fieldValues));
+                if (number.includes(dataType))
+                    formulaType = "numeric";
+                else if (date.includes(dataType))
+                    formulaType = "date";
+                else if (string.includes(dataType))
+                    formulaType = "string";
+                $('#condition-list').html($.tmpl(opTemplate, conditions[formulaType]));
+                var field = {
+                    ConditionValue: $(`#Filters_${idx}_FilterValue`).val(),
+                    ConditionToValue: $(`#Filters_${idx}_FilterToValue`).val()
+                };
+                setConditionValue($(`#Filters_${idx}_Condition`).val(), field);
+            }
+        });
+    }
+    function renderFilterHand(dataFieldId, dataFieldName) {
+        var fieldValues = [];
+        var formulaType = "";
+        var number = ['float', 'int', 'bigint'];
+        var string = ['varchar', 'text'];
+        var date = ['date', 'datetime'];
+
+        var idFilterFieldName = "#filter-field";
+        if (IsXoay)
+            idFilterFieldName = "#xoay-filter-field";
+
+        $(idFilterFieldName).data('id', dataFieldId);
+        $(idFilterFieldName).html($.tmpl(_xoayTemplateString, { dataFieldId: dataFieldId, dataFieldName: dataFieldName }));
+
+        $.ajax({
+            url: "/ReportQuery/GetValuesByDataField",
+            data: JSON.stringify({ dataFieldId: parseInt(dataFieldId) }),
+            type: 'post',
+            contentType: "application/json",
+            success: (response) => {
+                fieldValues = response.result;
+                var dataType = response.dataType;
+                var values = "";
+                try {
+                    if (!IsXoay) {
+                        values = reportQueryTable.getDataAtCell(rowAt, 6);
+                        if (values == null || values == "")
+                            values = '{ "DataFieldId": "", "IsFilter": "true", "IsSummary": "false", "FilterValues": "[]", "Condition":"", "FilterValue": "", "FilterToValue": "" }';
+                        var arrValue = JSON.parse(values);
+                        $.each(fieldValues, function (index, fieldValue) {
+                            fieldValue.ElId = 'FieldValue' + index;
+                            fieldValue.Selected = false;
+
+                            $.each(JSON.parse(arrValue.FilterValues), function (index, filterValue) {
+                                if (filterValue == fieldValue.FieldValue) {
+                                    fieldValue.Selected = true;
+                                }
+                            });
+                        });
+
+                        $('#general-values').html($.tmpl($("#filterConfigSelectValue"), fieldValues));
+                        if (number.includes(dataType))
+                            formulaType = "numeric";
+                        else if (date.includes(dataType))
+                            formulaType = "date";
+                        else if (string.includes(dataType))
+                            formulaType = "string";
+
+                        $('#condition-list').html($.tmpl(opTemplate, conditions[formulaType]));
+                        var field = {
+                            ConditionValue: arrValue.FilterValue,
+                            ConditionToValue: arrValue.FilterToValue
+                        };
+                        setConditionValue(arrValue.Condition, field);
+                    }
+                    else {
+                        values = reportQueryTable.getDataAtCell(rowAt, 9);
+                        $.each(fieldValues, function (index, fieldValue) {
+                            fieldValue.ElId = 'FieldValue' + index;
+                            fieldValue.FieldValue = fieldValue.FieldValue;
+                            fieldValue.FieldAlias = "";
+                        });
+                        if (values != undefined && values != "") {
+                            var arrValue = JSON.parse(values);
+                            if (arrValue.AliasNames != undefined) {
+                                var aliasNames = JSON.parse(arrValue.AliasNames);
+                                $.each(aliasNames, function (index, aliasName) {
+                                    fieldValues[index].FieldAlias = aliasName;
+                                });
+                            }
+                        }
+                        $('#xoay-general-values').html($.tmpl($("#xoayFilterConfigSelectValue"), fieldValues));
+                    }
+                } catch (ex) {
+
+                }
+            }
+        });
+    }
+    function setConditionValue(condition, field) {
+        if (condition == 'Between') {
+            $('#condition-value').html($.tmpl($("#tmpConditionValueBetween")));
+
+            setTimeout(function () {
+                if (field && field.ConditionValue) {
+                    $("input[name=ConditionValue]").val(field.ConditionValue);
+                }
+
+                if (field && field.ConditionToValue) {
+                    $("input[name=ConditionToValue]").val(field.ConditionToValue);
+                }
+            }, 200);
+        }
+        else {
+            $('#condition-value').html($.tmpl($("#tmpConditionValue")));
+
+            if (field && field.ConditionValue) {
+                setTimeout(function () { $("#ConditionValue").val(field.ConditionValue); }, 200);
+            }
+        }
+    }
+    function showConfigFilter(field, $el, e) {
+        if (this.parent.chart.Type == 'numberchart') {
+            $('#condition').addClass('disabled');
+            $('#general-values').html($.tmpl($("#filterConfigSelectValue-radio"), field.FieldValues));
+        } else {
+            $('#general-values').html($.tmpl($("#filterConfigSelectValue"), field.FieldValues));
+            $('#condition').removeClass('disabled');
+        }
+
+        if (field.FormulaType != 'date') {
+            $('#filter-field').html($.tmpl(_templateString, field));
+            $('#condition-list').html($.tmpl(opTemplate, conditions[field.FormulaType]));
+        }
+        else {
+            $('#filter-field').find('.dropdown-menu .dropdown-item.filter-formula-item').unbind();
+            $('#filter-field').html($.tmpl(_template, field));
+            $('#filter-field').find('.dropdown-menu').html($.tmpl(_ddlTemplate, formulas[field.FormulaType]));
+            $('#filter-field').find('.dropdown-menu .dropdown-item.filter-formula-item').click(this._selectFormula.bind(this, field));
+
+            $('#condition-list').html($.tmpl(_opTemplate, conditions.numeric));
+        }
+
+        $('#btnSaveFilterConfig').unbind();
+        $('#btnSaveFilterConfig').click(this._saveConfigFilter.bind(this, field));
+
+        $('.filter-config').modal();
+        $('#condition-list').off('change');
+
+        $('#condition-list').val(field.Condition);
+
+        $('#condition-list').on('change', function () {
+            setConditionValue(this.value, field);
+        });
+
+        setConditionValue(field.Condition, field);
+
+        $("input[name=ConditionValue]").val(field.Top);
+
+        //if (field.FilterType) {
+        //    $('.nav-tabs a[href="#tab-' + field.FilterType + '"]').tab('show');
+        //}
+
+        $('#displayOnUser-general').prop('checked', false);
+        $('#displayOnUser-condition').prop('checked', false);
+        if (field.GeneralDisplayOnUser) {
+            $('#displayOnUser-general').prop('checked', true);
+        }
+
+        if (field.ConditionDisplayOnUser) {
+            $('#displayOnUser-condition').prop('checked', true);
+        }
+    }
+
+    function generateReportQueryConfig() {
+        var actionRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+            var $button = $('<span class="icon icon-trash">');
+            $(td).empty();
+            $(td).addClass("htCenter");
+            $(td).append($button); //empty is needed because you are rendering to an existing cell
+        };
+
+        var filterActionRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+            var $button = $('<span class="icon icon-filter">');
+            $(td).empty();
+            $(td).addClass("htCenter");
+            $(td).append($button); //empty is needed because you are rendering to an existing cell
+        };
+
+        var isCreate = '@Html.Raw(@isCreate)';
+        if (isCreate == 'True') {
+            var colHeaders = [];
+            var functionSource = [];
+            var columsSetting = [];
+
+            colHeaders.push([{ label: 'Cấu hình chung', colspan: 8 }, { label: 'Xoay', colspan: 2 }]);
+            colHeaders.push(['Action','Hiển thị', 'Function', 'Tên trường', 'Alias', 'Nhóm theo', 'Điều kiện', "Sắp xếp", "Chỉ định", "Alias"]);
+            functionSource.push('None', 'AVG', 'COUNT', 'MIN', 'MAX', 'SUM', 'Lũy kế', 'Cùng kỳ','SS Cùng kỳ', 'SS Cùng kỳ (%)', 'Kỳ trước', 'SS Kỳ trước', 'SS Kỳ trước (%)');
+
+            // STT
+            columsSetting.push(
+                {
+                    allowInvalid: true,
+                    readOnly: true,
+                    renderer: actionRenderer
+                },
+                {
+                    type: 'checkbox',
+                    checkedTemplate: true,
+                    uncheckedTemplate: false,
+                    allowInvalid: true
+                },
+                {
+                    source: functionSource,
+                    type: 'dropdown',
+                    readOnly: false,
+                    allowInvalid: true
+                },
+                {
+                    readOnly: true,
+                    allowInvalid: true
+                },
+                {
+                    allowInvalid: true
+                },
+                {
+                    type: 'checkbox',
+                    checkedTemplate: true,
+                    uncheckedTemplate: false,
+                    allowInvalid: true
+                },
+                {
+                    allowInvalid: true,
+                    readOnly: true,
+                    renderer: filterActionRenderer
+                },
+                {
+                    source: ['None', 'ASC', 'DESC'],
+                    type: 'dropdown',
+                    readOnly: false,
+                    allowInvalid: true
+                },
+                {
+                    source: ['None', 'Cột', "Giá trị"],
+                    type: 'dropdown',
+                    readOnly: false,
+                    allowInvalid: true
+                },
+                {
+                    allowInvalid: true,
+                    readOnly: true,
+                    renderer: filterActionRenderer
+                }
+            );
+
+            reportQueryTableSetting = {
+                afterOnCellMouseDown: function (e, coords, TD) {
+                    var dataFieldId = 0;
+                    var dataFieldName = '';
+                    if (coords.col === 0) {
+                        this.alter('remove_row', coords.row);
+                    }
+                    else if (coords.col === 6) {
+                        filterHand = true;
+                        IsXoay = false;
+                        $('.filter-config').modal('toggle');
+                        rowAt = coords.row;
+
+                        var column = `${reportQueryTable.getDataAtRow(rowAt)[3]}`.split('.')[1];
+                        $.each($("#fieldNames li a label"),function (e, x) {
+                            if ($(this).text().trim() == column) {
+                                dataFieldId = $(this).attr('value');
+                                dataFieldName = $(this).text().trim();
+                            }
+                        });
+                        renderFilterHand(dataFieldId, dataFieldName);
+                    }
+                    else if (coords.col === 9) {
+                        rowAt = coords.row;
+                        var indexXoayCot = reportQueryTable.getData().findIndex(item => item[8] == 'Cột')
+                        if (reportQueryTable.getDataAtCell(rowAt, coords.col - 1) !== 'Giá trị' || indexXoayCot == -1)
+                            return;
+                        filterHand = true;
+                        IsXoay = true;
+                        $('.xoay-filter-config').modal('toggle');
+                        var column = `${reportQueryTable.getDataAtRow(indexXoayCot)[3]}`.split('.')[1];
+                        $.each($("#fieldNames li a label"),function (e, x) {
+                                if ($(this).text().trim() == column) {
+                                    dataFieldId = $(this).attr('value');
+                                    dataFieldName = $(this).text().trim();
+                                }
+                        });
+                        renderFilterHand(dataFieldId, dataFieldName);
+                    }
+                },
+                autoWrapCol: true,
+                autoWrapRow: true,
+                colHeaders: true,
+                nestedHeaders: colHeaders,
+                columns: columsSetting,
+                filters: true,
+                dropdownMenu: false,
+                className: "htCenter",
+                columnHeaderHeight: 40,
+                colWidths: [60, 80, 130, 350, 250, 100, 130, 80, 90, 90],
+                manualColumnResize: true,
+                rowHeaders: true,
+                manualRowMove: true,
+                viewportColumnRenderingOffset: 500,
+                viewportRowRenderingOffset: 1000,
+                licenseKey: 'non-commercial-and-evaluation'
+            };
+        }
+        else {
+            var formCode = @Html.Raw(formCode);
+            reportQueryTableSetting = formCode.setting;
+            reportQueryTableSetting.data = formCode.data;
+
+            var lack_number = 0;
+            var headerCount = reportQueryTableSetting.nestedHeaders[1].length;
+            if (headerCount <= 11)
+                lack_number = 11 - headerCount;
+            var removeActionNumber = 0;
+            var filterActionNumber = 6;
+            var aliasFilterActionNumber = 9;
+            if (lack_number != 0) {
+                for (var i = 0; i < lack_number; i++) {
+                    if (i == 0) {
+                        reportQueryTableSetting.nestedHeaders[1].push("Làm tròn");
+                        reportQueryTableSetting.colWidths.push(150);
+                        reportQueryTableSetting.columns.push(
+                        {
+                                // 4, 3, 2, 1, 0
+                                source: ['1,23456 ~ 1,2346', '1,23456 ~ 1,235', '1,23456 ~ 1,23', '1,23456 ~ 1,2', '1,23456 ~ 1'],
+                                type: 'dropdown',
+                                allowInvalid: true
+                            }
+                        );
+                    }
+                }
+            }
+            
+            reportQueryTableSetting["columns"][removeActionNumber]["renderer"] = actionRenderer;
+            reportQueryTableSetting["columns"][filterActionNumber]["renderer"] = filterActionRenderer;
+            reportQueryTableSetting["columns"][aliasFilterActionNumber]["renderer"] = filterActionRenderer;
+            reportQueryTableSetting["afterOnCellMouseDown"] = function (e, coords, TD) {
+                if (coords.col === removeActionNumber) {
+                    this.alter('remove_row', coords.row);
+                }
+                else if (coords.col === filterActionNumber) {
+                    filterHand = true;
+                    IsXoay = false;
+                    $('.filter-config').modal('toggle');
+                    rowAt = coords.row;
+                    var dataFieldId = 0;
+                    var dataFieldName = '';
+
+                    var column = `${reportQueryTable.getDataAtRow(rowAt)[3]}`.split('.')[1];
+                    $.each($("#fieldNames li a label"), function (e, x) {
+                        if ($(this).text().trim() == column) {
+                            dataFieldId = $(this).attr('value');
+                            dataFieldName = $(this).text().trim();
+                        }
+                    });
+                    renderFilterHand(dataFieldId, dataFieldName);
+                }
+                else if (coords.col === 9) {
+                    rowAt = coords.row;
+                    var indexXoayCot = reportQueryTable.getData().findIndex(item => item[8] == 'Cột')
+                    if (reportQueryTable.getDataAtCell(rowAt, coords.col - 1) !== 'Giá trị' || indexXoayCot == -1)
+                        return;
+                    filterHand = true;
+                    IsXoay = true;
+                    $('.xoay-filter-config').modal('toggle');
+                    var column = `${reportQueryTable.getDataAtRow(indexXoayCot)[3]}`.split('.')[1];
+                    $.each($("#fieldNames li a label"),function (e, x) {
+                            if ($(this).text().trim() == column) {
+                                dataFieldId = $(this).attr('value');
+                                dataFieldName = $(this).text().trim();
+                            }
+                    });
+                    renderFilterHand(dataFieldId, dataFieldName);
+                }
+            }
+        }
+
+        hooks = Handsontable.hooks.getRegistered();
+        hooks.forEach(function (hook) {
+            if (hook === 'afterChange' || hook === 'afterCreateRow' || hook === 'afterRemoveRow') {
+                reportQueryTableSetting[hook] = function () {
+                    if ((!isLoad && isCreate == 'True') || (!isLoad && isCreate == 'False')) {
+                        generateQuery();
+                    }
+                }
+            }
+        });
+
+        var divReportQueryTable = document.getElementById('divReportQueryTable');
+        reportQueryTable = new Handsontable(divReportQueryTable, reportQueryTableSetting);
+
+        isLoad = false;
+    }
+
+    function generateQuery() {
+        var formCode = JSON.stringify({ setting: reportQueryTableSetting, data: reportQueryTable.getData() });
+        $('#FormCode').val(formCode);
+
+        var tableId = $("#DataTableId").val();
+        var actionLevelId = $("#ActionLevelId").val();
+        var formulaDataColumnId = $("#FormulaDataColumnId").val();
+        $.ajax({
+            url: '@Url.Action("GenerateQuery")',
+            type: "POST",
+            data: {
+                ReportQueryName: "VuHQ",
+                FormCode: formCode,
+                DataTableId: tableId,
+                ActionLevelId: actionLevelId,
+                FormulaDataColumnId: formulaDataColumnId,
+                "Filters[0].FilterValue": $("#Filters_0_FilterValue").val(),
+                "Filters[0].FilterToValue": $("#Filters_0_FilterToValue").val(),
+                "Filters[0].FilterValues": $("#Filters_0_FilterValues").val() ,
+                "Filters[0].Condition": $("#Filters_0_Condition").val(),
+                "Filters[0].DataFieldId": $("#Filters_0__DataFieldId").val(),
+                "Filters[0].IsSummary": $("#Filters_0__IsSummary").is(':checked'),
+                "Filters[0].IsFilter": $("#Filters_0__IsFilter").is(':checked'),
+                "Filters[1].FilterValue": $("#Filters_1_FilterValue").val(),
+                "Filters[1].FilterToValue": $("#Filters_1_FilterToValue").val(),
+                "Filters[1].FilterValues": $("#Filters_1_FilterValues").val(),
+                "Filters[1].Condition": $("#Filters_1_Condition").val(),
+                "Filters[1].DataFieldId": $("#Filters_1__DataFieldId").val(),
+                "Filters[1].IsSummary": $("#Filters_1__IsSummary").is(':checked'),
+                "Filters[1].IsFilter": $("#Filters_1__IsFilter").is(':checked')
+            },
+            success: function (result) {
+                $("#Query").val(result.Query);
+                $('#Query').format({ method: 'sql' });
+
+                reportQueryData = JSON.parse(result.Data);
+                generateReportQueryDataTable();
+
+                $("#errMsg").text(result.ErrMsg);
+
+            },
+            error: function (result) {
+            }
+        });
+    }
+
+    function renderFields(dtId) {
+        $.ajax({
+            url: "/datasource/GetFields",
+            data: { id: dtId },
+            success: (response) => {
+                if (!response.fields) return;
+                var groupFields = parseFields(response.fields, response.fieldMaths, dtId);
+                renderDimension(groupFields.dimensions);
+                renderMeasures(groupFields.measures);
+                if (response.relations && response.relations.length > 0) {
+                    $(".relation-tables").html($.tmpl('<li><a href="/datasource/Showdata/${TargetTableId}" target="_blank">${TargetName}</a></li>', response.relations));
+                } else {
+                    $(".relations").remove();
+                }
+            }
+        });
+    }
+    function parseFields(fields, fieldMaths, sourceTableId) {
+        var result = { dimensions: [], measures: [] };
+        _.each(fields, (f) => {
+            var isNumberType = _.contains(measuresType, f.Datatype.toUpperCase());
+            if (f.DataTableId != sourceTableId) {
+                f.isRelation = true;
+            }
+            f.icon = isNumberType ? "numeral.svg" : "font.svg";
+            f.id = f.DataFieldId;
+            isNumberType ? result.measures.push(f) : result.dimensions.push(f);
+        });
+        _.each(fieldMaths, (f) => {
+            var isNumberType = f.Type == 'measure';
+
+            if (f.DataTableId != sourceTableId) {
+                f.isRelation = true;
+            }
+            f.icon = "func.svg";
+            f.isCustomField = true;
+            f.id = f.DataFieldMathId;
+            isNumberType ? result.measures.push(f) : result.dimensions.push(f);
+        });
+
+        return result;
+    }
+    function showAddDataField() {
+        $('.datafield-container').empty();
+        $('#fieldmath-name').val('');
+        $('.add-datafield').modal();
+    }
+    function renderDimension(dimensions) {
+        $("#ds-dimension-fields").html($.tmpl($("#tableSelected"), dimensions));
+        $("#ds-dimension-add-fields").html($.tmpl($("#tableSelected"), dimensions));
+        draggableDataField();
+        filterList($(".filter-dimensions-add"), $("#ds-dimension-add-fields a"), "data-name");
+    }
+
+    function renderMeasures(measures) {
+        $("#ds-measure-fields").html($.tmpl($("#tableSelected"), measures));
+        $("#ds-measure-add-fields").html($.tmpl($("#tableSelected"), measures));
+
+        draggableDataField();
+        filterList($(".filter-measures-add"), $("#ds-measure-add-fields a"), "data-name");
+    }
+    function draggableDataField() {
+        $("#ds-dimension-fields .media-single, #ds-measure-fields .media-single, #ds-dimension-add-fields .media-single, #ds-measure-add-fields .media-single").draggable({
+            helper: "clone",
+            appendTo: "body",
+            cursor: 'move'
+        });
+        $(".datafield-container").droppable({
+            drop: (event, ui) => {
+                var dragItem = ui.draggable;
+                if (dragItem.is("span")) return;
+                var fieldId = dragItem.attr('data-id');
+                if (fieldId) {
+                    addFieldMath(fieldId);
+                }
+            }
+        });
+    }
+    function filterList(input, listItems, attr) {
+        if (!input || input.length == 0 || !listItems || listItems.length === 0 || !attr || attr === '') return;
+
+        input.keyup(() => {
+            var term = input.val().toLowerCase();
+            if (term === '') {
+                listItems.show();
+                return;
+            }
+
+            listItems.each(function (idx, item) {
+                var value = `${$(item).attr(attr)}`.toLowerCase();
+                if (value.indexOf(term) >= 0) {
+                    $(item).show();
+                } else {
+                    $(item).hide();
+                }
+            });
+        });
+    }
+    function addFieldMath(id) {
+        $.ajax({
+            url: "/datasource/GetFieldInfor",
+            data: JSON.stringify({ id: parseInt(id) }),
+            type: 'post',
+            contentType: "application/json",
+            success: (response) => {
+                if (response.result) {
+                    var dataField = jQuery.extend({}, response.result);
+                    dataField.DataId = generateRandomId();
+                    var field = FieldItem(dataField, false);
+                    field.$el.find('.dropdown-menu .dropdown-item.row-formula-item').click(selectFormula);
+                    $('.datafield-container').append(field.$el);
+                    fieldMaths.push(dataField);
+                }
+            }
+        });
+    }
+    function _isNumb(type) {
+        type = type || '';
+        return _.contains(dbTypes.number, type.toUpperCase());
+    }
+    function selectFormula(e) {
+        var target = $(e.target).closest('.list-group-item').find('.dt-field');
+        var dtId = target.attr("data-id");
+        $.each(fieldMaths, function (index, field) {
+            if (field.DataId === dtId) {
+                field.Formula = e.target.innerText;
+                if (field.OrderBy) {
+                    target[0].innerHTML = (field.Formula !== 'None' ? `${field.Formula}(${field.FieldName})` : `${field.FieldName}`) + ` - ${field.OrderBy}`;
+                } else {
+                    target[0].innerHTML = field.Formula !== 'None' ? `${field.Formula}(${field.FieldName})` : `${field.FieldName}`;
+                }
+            }
+        });
+    }
+    function _isDate(type) {
+        type = type || '';
+        return _.contains(dbTypes.date, type.toUpperCase());
+    }
+    var FieldItem = function (field, isTemplate, isOrder) {
+        if (field.DataFieldId && !isTemplate) {
+            field.FormulaType = formulaType.string;
+
+            if (_isDate(field.Datatype)) {
+                field.FormulaType = formulaType.date;
+            }
+
+            if (_isNumb(field.Datatype)) {
+                field.FormulaType = formulaType.numeric;
+            }
+
+            if (!field.Formula) {
+                field.Formula = formulas[field.FormulaType][0];
+            }
+            this.$el = $($.tmpl(_template, field));
+            _renderFormula(field.FormulaType, this.$el, field, isOrder);
+
+        } else {
+            this.$el = $($.tmpl(_templateString, field));
+        }
+
+        return this;
+    };
+
+    function _renderFormula(type, $el, field, isOrder) {
+        if (type == "numeric") {
+            var formulasType = formulas[type];
+            var html = '';
+
+            for (var i = 0; i < formulasType.length; i++) {
+                if (typeof group1[i] != "undefined" && group1[i] != null) {
+                    var child_html = '<ul class="sub-fomular">';
+                    var group1_child = group1[i];
+                    for (var j = 0; j < group1_child.length; j++) {
+                        child_html += '<li href="#" class="dropdown-item row-formula-item">' + group1_child[j] + '</li>';
+                    }
+                    child_html += '</ul>';
+                    html += '<a class="dropdown-item hasSub" href="#"><span>' + formulasType[i] + "<span style='float: right; padding-top: 3px' class='icon-chevron'></span></span>" + child_html + '</a>';
+                } else {
+                    html += '<a class="dropdown-item row-formula-item" href="#">' + formulasType[i] + '</a>';
+                }
+
+            }
+            $el.find('.dropdown-menu').html(html);
+        } else {
+            $el.find('.dropdown-menu').html($.tmpl(_ddlTemplate, formulas[type]));
+        }
+
+        if (isOrder) {
+            $el.find('.dropdown-menu').append($.tmpl($("#dropdowOrder")));
+
+            if (field.OrderBy) {
+                $($el.find('.dt-field')).text(`${field.Formula}(${field.FieldName}) - ${field.OrderBy}`);
+            }
+        }
+        _getJSSubFormula($el);
+    }
+
+    function _addMath(mathType) {
+        var math = {
+            MathType: mathType,
+            DataId: generateRandomId()
+        };
+
+        var el = $($.tmpl(_templateMath, math));
+        el.find('.dropdown-menu').html($.tmpl(_ddlTemplate, _mathType));
+        el.find('.dropdown-menu .dropdown-item.row-formula-item').click(selectMath);
+        $('.datafield-container').append(el);
+
+        fieldMaths.push(math);
+    }
+    function selectMath(e) {
+        var target = $(e.target).parent().parent().find('.dt-field');
+        var dtId = target.attr("data-id");
+        $.each(fieldMaths, function (index, field) {
+            if (field.DataId === dtId) {
+                field.MathType = e.target.innerText;
+                target[0].innerHTML = e.target.innerText;
+            }
+        });
+    }
+    function _getJSSubFormula($el) {
+        $el.find('.sub-fomular').hide();
+        $el.find('.hasSub').off();
+        $el.find('.hasSub').hover(
+            function () {
+                var width = $el.find('.dropdown-menu').width() - 4;
+                $(this).children('.sub-fomular').attr('style', 'left:' + width + 'px');
+                $(this).children('.sub-fomular').show();
+            },
+
+            function () {
+                $(this).children('.sub-fomular').hide();
+            }
+        );
+    }
+    function _addNumb() {
+        var math = {
+            MathType: 'number',
+            DataId: generateRandomId()
+        };
+
+        $('.datafield-container').append($.tmpl(_templateNumber, math));
+    }
+    function generateRandomId() {
+        var id = '';
+        var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (var i = 1; i <= 15; i++) {
+            var randPos = Math.floor(Math.random() * charSet.length);
+            id += charSet[randPos];
+        }
+        return id;
+    }
+</script>
+
+
+@Html.HiddenFor(model => model.ReportQueryId)
+@Html.HiddenFor(model => model.CreatedAt)
+@Html.HiddenFor(model => model.CreatedBy)
+
+<table>
+    <tr>
+        <td style="width: 15%">
+            <div class="hidden">
+                @Html.TextBoxFor(model => model.ReportQueryId, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(model => model.ReportQueryName)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.ReportQueryName, new { @class = "form-control" })
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 15%">
+            @Html.LabelFor(model => model.DataTableId)
+        </td>
+        <td>
+            @Html.DropDownList("DataTableId")
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 15%">
+            @Html.LabelFor(model => model.ActionLevelId)
+        </td>
+        <td>
+            @Html.DropDownList("ActionLevelId")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.FormulaDataColumnId)
+        </td>
+        <td>
+            @Html.DropDownList("FormulaDataColumnId")
+        </td>
+    </tr>
+    @*START TimeKey & OrganizeKey*@
+
+    @*END TimeKey & OrganizeKey*@
+</table>
+<div class="col-sm-4" style="padding-left: 0px; padding-right: 5px">
+    <div class="single category">
+        <h3 class="side-title">Danh sách field</h3>
+        <input class="form-control" style="width: 100%" id="myInput" type="text" placeholder="Tìm kiếm ..">
+        <br>
+        <ul id="fieldNames" class="list-unstyled" style="height: 300px; overflow: auto;">
+            @foreach (var fieldName in fieldNames)
+            {
+                <li>
+                    <a href="#" title="@fieldName.Text">
+                        <label title="@fieldName.Text" class="select-field-item" value="@fieldName.Value">
+                            @(fieldName.Text.Split('.')[1].Length > 45 ? (fieldName.Text.Split('.')[1].Substring(0, 45) + "...") : fieldName.Text.Split('.')[1])
+                            @if (tableName != fieldName.Text.Split('.')[0])
+                            {
+                                <span class="icon icon-link" style="font-size: 12px; color: blue"></span>
+                            }
+                        </label>
+                        <span class="pull-right reportquery-pull-right">+</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div>
+        <div class="pull-right hidden">
+            <a href="#" style="font-size:14px; " title="Thêm trường" id="addDimensionField"><span style="color: #188ef4;" class="fa icon-plus"></span></a>
+        </div>
+    </div>
+</div>
+<div id="time-key">
+    @Html.Hidden("Filters[0].FilterValue", filters[0].FilterValue, new { @class = "form-control", @id = "Filters_0_FilterValue" })
+    @Html.Hidden("Filters[0].FilterToValue", filters[0].FilterToValue, new { @class = "form-control", @id = "Filters_0_FilterToValue" })
+    @Html.Hidden("Filters[0].FilterValues", filters[0].FilterValues, new { @class = "form-control", @id = "Filters_0_FilterValues" })
+    @Html.Hidden("Filters[0].Condition", filters[0].Condition, new { @class = "form-control", @id = "Filters_0_Condition" })
+</div>
+<div id="organize-key">
+    @Html.Hidden("Filters[1].FilterValue", filters[1].FilterValue, new { @class = "form-control", @id = "Filters_1_FilterValue" })
+    @Html.Hidden("Filters[1].FilterToValue", filters[1].FilterToValue, new { @class = "form-control", @id = "Filters_1_FilterToValue" })
+    @Html.Hidden("Filters[1].FilterValues", filters[1].FilterValues, new { @class = "form-control", @id = "Filters_1_FilterValues" })
+    @Html.Hidden("Filters[1].Condition", filters[1].Condition, new { @class = "form-control", @id = "Filters_1_Condition" })
+</div>
+<div class="col-sm-12" style="padding-left: 0px; padding-right: 5px">
+    <div class="single category">
+        <table>
+            <tr>
+                <td style="width: 10%">
+                    TimeKey
+                </td>
+                <td style="width: 15%">
+                    @Html.TextBox("Filters[0].DataFieldName", filters[0].DataFieldName, new { @style = "display: inline-block; width: 85%", @class = "form-control clearable" })
+                    <i idx="0" class="field-item-config icon-cog"></i>
+                    @Html.Hidden("Filters[0].DataFieldId", filters[0].DataFieldId, new { @class = "form-control" })
+                    @Html.Hidden("Filters[0].ReportQueryFilterId", filters[0].ReportQueryFilterId, new { @class = "form-control" })
+                    @Html.Hidden("Filters[0].ReportQueryId", filters[0].ReportQueryId, new { @class = "form-control" })
+                </td>
+                <td style="width: 5%"></td>
+                <td style="width: 10%">
+                    OrganizeKey
+                </td>
+                <td style="width: 15%">
+                    @Html.TextBox("Filters[1].DataFieldName", filters[1].DataFieldName, new { @style = "display: inline-block; width: 85%", @class = "form-control clearable" })
+                    <i idx="1" class="field-item-config icon-cog"></i>
+                    @Html.Hidden("Filters[1].DataFieldId", filters[1].DataFieldId, new { @class = "form-control" })
+                    @Html.Hidden("Filters[1].ReportQueryFilterId", filters[1].ReportQueryFilterId, new { @class = "form-control" })
+                    @Html.Hidden("Filters[1].ReportQueryId", filters[1].ReportQueryId, new { @class = "form-control" })
+                </td>
+                <td style="width: 50%"></td>
+            </tr>
+            <tr>
+                <td style="width: 10%">
+                    <div class="checkbox">
+                        <label>@Html.CheckBox("Filters[0].IsSummary", filters[0].IsSummary) Tổng hợp</label>
+                    </div>
+                </td>
+                <td style="width: 15%">
+                    <div class="checkbox">
+                        <label>@Html.CheckBox("Filters[0].IsFilter", filters[0].IsFilter) Sử dụng giá trị filter</label>
+                    </div>
+                </td>
+                <td style="width: 5%"></td>
+                <td style="width: 10%">
+                    <div class="checkbox">
+                        <label>@Html.CheckBox("Filters[1].IsSummary", filters[1].IsSummary) Tổng hợp</label>
+                    </div>
+                </td>
+                <td style="width: 15%">
+                    <div class="checkbox">
+                        <label>@Html.CheckBox("Filters[1].IsFilter", filters[1].IsFilter) Sử dụng giá trị filter</label>
+                    </div>
+                </td>
+                <td style="width: 50%"></td>
+            </tr>
+        </table>
+        <div id="divReportQueryTable"></div>
+        <div class="hidden">
+            @Html.TextBoxFor(model => model.FormCode, new { @class = "form-control" })
+        </div>
+        @Html.TextAreaFor(model => model.Query, new { style = "height: 250px;" })
+        <br />
+        <div class="box-body">
+            <table class="table stripe row-border" id="tbl"></table>
+            <label id="errMsg" style="color: red">@ViewBag.ErrMsg</label>
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal")
+
+@Html.Partial("_Template")

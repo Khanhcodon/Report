@@ -1,0 +1,1 @@
+﻿.ios .navheader.showSearchBox .txtSearch *{display:block}@media(max-width:321px){.mdl-checkbox__box-outline{left:-7px}#ddlNotification .imgAlphabet{margin-left:-12px}.chkCheck .imgAlphabet{left:7px}.comment-item .imgAlphabet{margin-left:-15px}}@media(max-width:767px){.ios .detail-layout{display:none !important}.ios.showdetail .detail-layout{display:block !important}}

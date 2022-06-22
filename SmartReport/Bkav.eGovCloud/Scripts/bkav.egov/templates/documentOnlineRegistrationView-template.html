@@ -1,0 +1,159 @@
+﻿<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Libdata.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Controls.min.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Lib.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.DB.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/eForm.Tool.js"></script>
+<link href="../../Scripts/bkav.egov/libs/eForm/css/eformTn.css" rel="stylesheet" />
+<script src="../../Scripts/bkav.egov/libs/eForm/Resize.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.applet.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.js"></script>
+<script src="../../Scripts/bkav.egov/libs/eForm/bkav.egate.compiler.js"></script>
+<style>
+    table {
+        width: 100%;
+    }
+
+    #tblDocOnline td:nth-child(1) {
+        font-weight: bold;
+        width: 20%;
+    }
+
+    #tblDocOnline td:nth-child(3) {
+        font-weight: bold;
+        width: 14%;
+    }
+
+    #tblDocOnline td, .comment-area > *, #attachment-area > * {
+        padding-top: 10px;
+    }
+
+    #action-bar {
+        width: 100%;
+        background-color: white;
+    }
+
+    #comment {
+        width: 80%;
+        height: 100px;
+    }
+
+    #docOnlinePanel {
+        height: calc(100% - 40px);
+        overflow: auto;
+        margin: 0px 0px 20px 20px;
+    }
+
+    .icontainer:hover {
+        background: none !important;
+    }
+
+    #pnl_root, .pnl_root {
+        background-color: transparent;
+    }
+</style>
+<ul class="nav nav-pills toolbar">
+    <li class="dropdown">
+        <a class="dropdown-toggle doc-online-btn" data-toggle="dropdown" href="#" data-status="Accept">
+            <span class="icon icon-checkmark3"></span>
+            <span data-res="egov.resources.toolbar.accept">Tiếp nhận</span>
+        </a>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle doc-online-btn" data-toggle="dropdown" href="#" data-status="Reject">
+            <span class="icon icon-spam"></span>
+            <span data-res="egov.resources.toolbar.reject">Từ chối</span>
+        </a>
+    </li>
+</ul>
+<div id="docOnlinePanel">
+    <table id="tblDocOnline">
+        <tr>
+            <td><span data-res="egov.resources.document.PersonInfo">Tên công dân / Doanh nghiệp:</span></td>
+            <td>${PersonInfo}</td>
+            <td>
+                <span data-res="egov.resources.document.DocCode1">Mã hồ sơ:</span>
+            </td>
+            <td>${DocCode}</td>
+        </tr>
+        <tr>
+            <td>
+                <span data-res="egov.resources.document.IdentityCard">Số chứng minh thư:</span>
+            </td>
+            <td>${IdCard}</td>
+            <td>
+                <p data-res="egov.resources.document.DocType">Loại hồ sơ:</p>
+            </td>
+            <td>${Doctype.DocTypeName}</td>
+        </tr>
+        <tr>
+            <td>
+                <span data-res="egov.resources.document.Phone">Số điện thoại:</span>
+            </td>
+            <td>${Phone}</td>
+            <td>
+                <span data-res="egov.resources.document.DocField">Lĩnh vực:</span>
+            </td>
+            <td>${DocFieldName}</td>
+        </tr>
+        <tr>
+            <td>
+                <span data-res="egov.resources.document.Email">Thư điện tử:</span>
+            </td>
+            <td>${Email}</td>
+            <td>Trạng thái:</td>
+            <td>{{if Status==1 }}
+                   Chờ duyệt
+                {{/if}}
+
+                 {{if Status==2 }}
+                    Đang xử lý
+                {{/if}}
+
+                 {{if Status==3 }}
+                    Chờ bổ sung
+                 {{/if}}
+
+                {{if Status==4 }}
+                  Chờ thanh toán lệ phí
+                {{/if}}
+
+                {{if Status==5 }}
+                  Chờ trả kết quả
+                {{/if}}
+
+                {{if Status==6 }}
+                    Đã trả kết quả
+                {{/if}}
+
+                 {{if Status==7 }}
+                    Bị từ chối
+                {{/if}}
+            </td>
+        </tr>
+        <!--    <tr>
+            <td>Ngày tiếp nhận:</td>
+            <td>${DateReceived}</td>
+            <td>Ngày hẹn trả: </td>
+            <td>${DateAppoint}</td>
+        </tr>-->
+        {{if Files.length>0}}
+        <tr id="files">
+            <td></td>
+            <td></td>
+            <td>
+                <span data-res="egov.resources.document.AttachmentList">File đính kèm:</span>
+            </td>
+            <td>
+                <ul class="file_attachments">
+                    {{each Files}}
+                      <li data-id="${FileId}" data-name="${FileName}">${FileName}</li>
+                    {{/each}}
+                </ul>
+            </td>
+        </tr>
+        {{/if}}
+    </table>
+
+    <div id="forms-area">
+    </div>
+</div>

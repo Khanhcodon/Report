@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Entities.Customer.CommonComment>
+@{
+    Layout = null;
+}
+<script type="text/ecmascript">
+    $(function () {
+        $(".common-comment").niceScroll();
+    });
+
+    function insertComment(text) {
+        var content = $("#Comments_Content").val();
+        if (content.indexOf(text) == -1) {
+            $("#Comments_Content").val(text); //$("#Comments_Content").val() + " " + text
+            $("#Comments_Content").qtip('hide');
+        }
+    }
+
+    function addComment() {
+        var text = $("#Comments_Content").val().trim();
+        var token = $("input[name='__RequestVerificaxtionToken']").val();
+        if (text != '') {
+            var isExisted = false;
+            $(".common-comment").find("a").each(function () {
+                $(this).find("span").each(function () {
+                    if ($(this).text() === text) {
+                        isExisted = true;
+                        return;
+                    }
+                });
+            });
+            if (!isExisted) {
+                if (text.length < 1000) {
+                    $(".common-comment").append($("<span>").append($("<a>").attr("href", "#").append($("<span>").attr("title", "Xóa ý kiến").attr("style", "color:red;font-weight: bold;").attr("onclick", "delComment('0','" + text + "',this)").append("X")).append("&nbsp;&nbsp;").append($("<span>").attr("onclick", "insertComment('" + text + "')").append(text))));
+                    egov.cshtml.document.addCommonComment(text, token);
+                }
+            }
+        }
+    }
+
+    function delComment(id, text, target) {
+        var content = $("#Comments_Content").val();
+        var token = $("input[name='__RequestVerificaxtionToken']").val();
+        if (content.indexOf(text) != -1) {
+            content = content.replace(text, " ");
+            $("#Comments_Content").val(content.trim());
+        }
+        if (id != '0') {
+            egov.cshtml.document.deleteCommonComment(id, target, token);
+        }
+        $(".common-comment").find("a").each(function () {
+            var isExisted = false;
+            var tab = $(this);
+            $(this).find("span").each(function () {
+                if ($(this).text() === text) {
+                    isExisted = true;
+                    return;
+                }
+            });
+            if (isExisted) {
+                tab.remove();
+            }
+        });
+        $(target).remove();
+    }
+</script>
+<div class="common-comment menu-dropdown" style="height: auto; overflow: hidden; max-height: 150px;">
+    <span><a href="#" onclick="addComment()">Thêm ý kiến hiện tại vào danh sách...</a></span>
+    @foreach (var comment in Model)
+    { 
+        <span><a href="#"><span title="Xóa ý kiến" onclick="delComment('@comment.CommonCommentId','@comment.Content',this)" style="color:red;font-weight:bold;">X</span>&nbsp;&nbsp;<span  onclick="insertComment('@comment.Content')">@comment.Content</span></a></span>
+    }
+</div>

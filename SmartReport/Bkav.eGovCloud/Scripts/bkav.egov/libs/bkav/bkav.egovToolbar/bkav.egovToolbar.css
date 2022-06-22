@@ -1,0 +1,559 @@
+﻿#toolbar, .toolbar
+{
+    z-index: 1;
+    filter: none !important;
+    border-bottom: 1px solid white;
+}
+
+.toolbar
+{
+    height: 35px;
+}
+
+.toolbar-item
+{
+    margin: 0;
+    padding: 0;
+    list-style-position: outside;
+    list-style-type: none;
+    vertical-align: middle;
+}
+
+.toolbar-item .toolbar-icon
+{
+    width: 24px;
+    height: 24px;
+    background-position: 1px 1px;
+}
+
+.toolbar .divider
+{
+    display: inline-block;
+    margin-left: 21px;
+    width: 2px;
+    height: 28px;
+    background: url("/content/images/toolbar/common/freshsprites-32x32-dark-ltr-93463.png") no-repeat scroll 50% -1015px transparent;
+    vertical-align: middle;
+}
+
+/*.toolbar .disabled
+{
+    opacity: 0.35;
+}*/
+
+.toolbar .toolbar-btn
+{
+    margin-left: 12px;
+    height: 28px;
+    border: 0 none;
+    background-color: transparent;
+    background-image: url("/content/images/toolbar/common/toolbar.png");
+    background-repeat: no-repeat;
+    box-shadow: none;
+    padding-left: 13px;
+    line-height: 28px;
+}
+
+.toolbar .toolbar-btn a
+{
+    display: block;
+    padding: 3px 0 0 20px;
+    height: 20px;
+    outline: 0 none;
+    background-color: transparent;
+    color: #454545;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.toolbar .toolbar-btn a b
+{
+    display: inline-block;
+    width: 12px;
+    height: 7px;
+    background: url("/content/images/toolbar/common/freshsprites-16x16-ltr-98433.png") no-repeat scroll 0 0 transparent;
+    background-position: 0 -548px;
+    text-indent: -9999px;
+}
+
+.toolbar .toolbar-outer
+{
+    display: table-cell;
+    margin-left: 5px;
+    padding-top: 4px;
+}
+
+.toolbar .btn:hover
+{
+    background-position: 0 -32px;
+    color: #333333;
+    text-decoration: none;
+    -moz-transition: none;
+    -o-transition: none;
+    -webkit-transition: none;
+    transition: none;
+}
+
+.toolbar .btn-TransferDoc
+{
+    background-position: 0 -596px;
+}
+
+.toolbar .btn-actions.btn-TransferDoc:hover
+{
+    background-position: 0 -629px;
+}
+
+.toolbar .btn-actions.btn-TransferDoc.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-TransferDoc.disabled:hover
+{
+    background-position: 0 -596px;
+	opacity:0.35;
+}
+
+.toolbar .btn-Edit
+{
+    background-position: 0 -132px;
+}
+
+.toolbar .btn-actions.btn-Edit:hover
+{
+    background-position: 0 -165px;
+}
+
+.toolbar .btn-actions.btn-Edit.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-Edit.disabled:hover
+{
+    background-position: 0 -132px;
+	opacity:0.35;
+}
+
+.toolbar .btn-Approver
+{
+    background-position: 0 -794px;
+}
+
+.toolbar .btn-actions.btn-Approver:hover
+{
+    background-position: 0 -826px;
+}
+
+.toolbar .btn-actions.btn-Approver.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-Approver.disabled:hover
+{
+    background-position: 0 -794px;
+	opacity:0.35;
+}
+
+.toolbar .btn-Return
+{
+    background-position: 0 -331px;
+}
+
+.toolbar .btn-actions.btn-Return:hover
+{
+    background-position: 0 -364px;
+}
+
+.toolbar .btn-actions.btn-Return.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-Return.disabled:hover
+{
+    background-position: 0 -331px;
+	opacity:0.35;
+}
+
+.toolbar .btn-Finish
+{
+    background-position: 0 -463px;
+}
+
+.toolbar .btn-actions.btn-Finish:hover
+{
+    background-position: 0 -497px;
+}
+
+.toolbar .btn-actions.btn-Finish.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-Finish.disabled:hover
+{
+    background-position: 0 -463px;
+	opacity:0.35;
+}
+
+.toolbar .btn-PrivateStore, .toolbar .btn-SaveDoc
+{
+    background-position: 0 -662px;
+}
+
+.toolbar .btn-actions.btn-PrivateStore:hover, .toolbar .btn-actions.btn-SaveDoc:hover
+{
+    background-position: 0 -696px;
+}
+
+.toolbar .btn-actions.btn-PrivateStore.disabled, .toolbar .btn-actions.btn-SaveDoc.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-PrivateStore.disabled:hover, .toolbar .btn-actions.btn-SaveDoc.disabled:hover
+{
+    background-position: 0 -662px;
+	opacity:0.35;
+}
+
+.toolbar .btn-XinYKien
+{
+    background-position: 0 0;
+}
+
+.toolbar .btn-actions.btn-XinYKien:hover
+{
+    background-position: 0 -33px;
+}
+
+.toolbar .btn-actions.btn-XinYKien.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-XinYKien.disabled:hover
+{
+    background-position: 0 0;
+	opacity:0.35;
+}
+
+.toolbar .btn-ThongBao
+{
+    background-position: 0 -398px;
+}
+
+.toolbar .btn-actions.btn-ThongBao:hover
+{
+    background-position: 0 -431px;
+}
+
+.toolbar .btn-actions.btn-ThongBao.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-ThongBao.disabled:hover
+{
+    background-position: 0 -398px;
+	opacity:0.35;
+}
+
+.toolbar .btn-GuiYKien, .toolbar .btn-TraLoi
+{
+    background-position: 0 -199px;
+}
+
+.toolbar .btn-actions.btn-GuiYKien:hover, .toolbar .btn-actions.btn-TraLoi:hover
+{
+    background-position: 0 -232px;
+}
+
+.toolbar .btn-actions.btn-GuiYKien.disabled, .toolbar .btn-actions.btn-TraLoi.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-GuiYKien.disabled:hover, .toolbar .btn-actions.btn-TraLoi.disabled:hover
+{
+    background-position: 0 -199px;
+	opacity:0.35;
+}
+
+.toolbar .btn-capphep
+{
+    background-position: 0 -332px;
+}
+
+.toolbar .btn-actions.btn-capphep:hover
+{
+    background-position: 0 -365px;
+}
+
+.toolbar .btn-actions.btn-capphep.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-capphep.disabled:hover
+{
+    background-position: 0 -332px;
+	opacity:0.35;
+}
+
+.toolbar .btn-luusophathanh
+{
+    background-position: 0 -332px;
+}
+
+.toolbar .btn-actions.btn-luusophathanh:hover
+{
+    background-position: 0 -365px;
+}
+
+.toolbar .btn-actions.btn-luusophathanh.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-luusophathanh.disabled:hover
+{
+    background-position: 0 -332px;
+	opacity:0.35;
+}
+
+.toolbar .btn-PhanLoai
+{
+    background-position: 0 -332px;
+}
+
+.toolbar .btn-actions.btn-PhanLoai:hover
+{
+    background-position: 0 -365px;
+}
+
+.toolbar .btn-actions.btn-PhanLoai.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-PhanLoai.disabled:hover
+{
+    background-position: 0 -332px;
+	opacity:0.35;
+}
+
+.toolbar .btn-Print
+{
+    background-position: 0 -859px;
+}
+
+.toolbar .btn-actions.btn-Print:hover
+{
+    background-position: 0 -892px;
+}
+
+.toolbar .btn-actions.btn-Print.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-Print.disabled:hover
+{
+    background-position: 0 -859px;
+	opacity:0.35;
+}
+
+.toolbar .btn-TiepNhanBoSung
+{
+    background-position: 0 -66px;
+}
+
+.toolbar .btn-actions.btn-TiepNhanBoSung:hover
+{
+    background-position: 0 -100px;
+}
+
+.toolbar .btn-actions.btn-TiepNhanBoSung.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-TiepNhanBoSung.disabled:hover
+{
+    background-position: 0 -66px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-create-vb, .toolbar .btn-actions.btn-create-hs
+{
+    background-position: 0 -66px;
+}
+
+.toolbar .btn-actions.btn-create-vb:hover, .toolbar .btn-actions.btn-create-hs:hover
+{
+    background-position: 0 -100px;
+}
+
+.toolbar .btn-actions.btn-create-vb.disabled, .toolbar .btn-actions.btn-create-hs.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-create-vb.disabled:hover, .toolbar .btn-actions.btn-create-hs.disabled:hover
+{
+    background-position: 0 -66px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-transfer
+{
+    background-position: 0 -596px;
+}
+
+.toolbar .btn-actions.btn-transfer:hover
+{
+    background-position: 0 -629px;
+}
+
+.toolbar .btn-actions.btn-transfer.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-transfer.disabled:hover
+{
+    background-position: 0 -596px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-return-transfer
+{
+    background-position: 0 -926px;
+}
+
+.toolbar .btn-actions.btn-return-transfer:hover
+{
+    background-position: 0 -957px;
+}
+
+.toolbar .btn-actions.btn-return-transfer.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-return-transfer.disabled:hover
+{
+    background-position: 0 -926px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-yes
+{
+    background-position: 0 -398px;
+}
+
+.toolbar .btn-actions.btn-yes:hover
+{
+    background-position: 0 -430px;
+}
+
+.toolbar .btn-actions.btn-yes.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-yes.disabled:hover
+{
+    background-position: 0 -398px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-no
+{
+    background-position: 0 -531px;
+}
+
+.toolbar .btn-actions.btn-no:hover
+{
+    background-position: 0 -564px;
+}
+
+.toolbar .btn-actions.btn-no.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-no.disabled:hover
+{
+    background-position: 0 -531px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-resfresh
+{
+    background-position: 0 -990px;
+}
+
+.toolbar .btn-actions.btn-resfresh:hover
+{
+    background-position: 0 -1023px;
+}
+
+.toolbar .btn-actions.btn-resfresh.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-resfresh.disabled:hover
+{
+    background-position: 0 -990px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-print
+{
+    background-position: 0 -859px;
+}
+
+.toolbar .btn-actions.btn-print:hover
+{
+    background-position: 0 -892px;
+}
+
+.toolbar .btn-actions.btn-print.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-print.disabled:hover
+{
+    background-position: 0 -859px;
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-email
+{
+    background-position: 0 -1052px;
+}
+
+.toolbar .btn-actions.btn-email:hover
+{
+    background-position: 0 -1079px;
+}
+
+.toolbar .btn-actions.btn-email.disabled
+{
+	opacity:0.35;
+}
+
+.toolbar .btn-actions.btn-email.disabled:hover
+{
+    background-position: 0 -1052px;
+	opacity:0.35;
+}

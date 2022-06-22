@@ -1,0 +1,222 @@
+﻿@model BackupRestoreConfigModel
+@{
+    var databaseTypeList = ViewBag.DatabaseTypeList as List<SelectListItem>;
+    var shareFolderList = ViewBag.FolderShareList as List<SelectListItem>;
+}
+
+<script type="text/javascript">
+    $.fn.serializeToJSON = function () {
+        var obj = {};
+        $(this).find('input[type="text"],input[type="checkbox"]').each(function () {
+            if (this.name === null || this.name === undefined || this.name === '')
+                return;
+
+            var elemValue = this.type === "checkbox" ? this.checked : this.value;
+            if (obj[this.name] !== undefined) {
+                if (!obj[this.name].push) {
+                    obj[this.name] = [obj[this.name]];
+                }
+                obj[this.name].push(elemValue === undefined ? "" : elemValue);
+            } else {
+                obj[this.name] = elemValue === undefined ? "" : elemValue;
+            }
+        });
+
+        return JSON.stringify(obj);
+    }
+
+    var databaseType = {
+        SqlServer: 1,
+        MySql: 2,
+        Oracle: 3
+    };
+
+    $(function () {
+        $("#Port").on("keypress", function (e) {
+            if (e.keyCode >= 48 && e.keyCode <= 57) {
+                return true;
+            }
+            return false;
+        });
+
+        $("#DatabaseType").on("change", function (e) {
+            var value = parseInt($(this).val());
+            var data, config;
+            switch (value) {
+                case databaseType.SqlServer:
+                    data = { DaySetBackup: "", DateTimeSetBackup: "" };
+                    config = JSON.stringify(data);
+                    break;
+
+                case databaseType.MySql:
+                    data = { HasGetTrigger: "true", HasGetFunctionAndProcedure: "true", WorkingDirectory: "" };
+                    config = JSON.stringify(data);
+                    break;
+
+                case databaseType.Oracle:
+                    config = "";
+                    break;
+
+                default:
+                    config = "";
+                    break;
+            }
+
+            $("#Config").val(config);
+        });
+
+    });
+
+    function config() {
+        var selectType = $("#DatabaseType").val();
+        if (selectType <= 0) {
+            eGovMessage.show(
+                '@Localizer("BackupRestoreConfig.CreateOrEdit.Fields.Config.ChooseDataBaseType")'
+                , '', eGovMessage.messageButtons.Ok);
+        return;
+    }
+
+    showDialog(selectType);
+}
+
+function showDialog(type) {
+    $.ajax({
+        url: '@Url.Action("Config", "BackupRestoreConfig")',
+        data: { "id": "@Model.BackupRestoreConfigId", type: type },
+        type: "GET",
+        success: function (result) {
+            $("#divConfig").empty().append(result);
+            var setting = {
+                title: "@Localizer("BackupRestoreConfig.CreateOrEdit.Fields.Config.Label")",
+                    modal: true,
+                    width: 400,
+                    height: 200,
+                    buttons: {
+                        "@Html.Raw(Localizer("Common.Button.Setting"))": function () {
+                            if ($("form[name=otherConfig]").valid()) {
+                                var config = $('form[name="otherConfig"]').serializeToJSON();
+                                $("#Config").val(config);
+                                $(this).dialog("destroy");
+                            }
+                        },
+                        "@Html.Raw(Localizer("Common.Button.Edit.Cancel"))": function () {
+                            $(this).dialog("destroy");
+                        }
+                    }
+                };
+
+                if (type == databaseType.MySql) {
+                    setting.width = 800;
+                    setting.height = 350;
+                }
+
+                $("#divConfig").dialog(setting);
+            },
+        error: function (xhr) {
+            console.log(xhr.message);
+        }
+    });
+    }
+</script>
+
+@using (Html.BeginForm(Model.BackupRestoreConfigId == 0 ? "Create" : "Edit"))
+{
+    @Html.ValidationSummary(true)
+  
+    @Html.HiddenFor(model => model.BackupRestoreConfigId)
+
+    <table id="timeJobInfo" style="width: 100%">
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Domain):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Domain)
+                @Html.ValidationMessageFor(model => model.Domain)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.DatabaseType):
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.DatabaseType, databaseTypeList, "-- Select --")
+                @Html.ValidationMessageFor(model => model.DatabaseType)
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 200px;">
+                @Html.LabelRequireFor(model => model.Server):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Server)
+                @Html.ValidationMessageFor(model => model.Server)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.DatabaseName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DatabaseName)
+                @Html.ValidationMessageFor(model => model.DatabaseName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.Port):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Port)
+                @Html.ValidationMessageFor(model => model.Port)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.UserName):
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Password):
+            </td>
+            <td>
+                @Html.Password("Password", Model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.LabelRequireFor(model => model.ShareFolderId):
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.ShareFolderId, shareFolderList, "-- Select --")
+                @Html.ValidationMessageFor(model => model.ShareFolderId)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.HasAutoRun):
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.HasAutoRun)
+                @Html.ValidationMessageFor(model => model.HasAutoRun)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.HiddenFor(model => model.Config)
+                <a href="#" onclick="config();">@Html.LabelRequireFor(model => model.Config)</a>
+                 @Html.ValidationMessageFor(model => model.Config)
+            </td>
+        </tr>
+    </table>
+    <div id="divConfig" style="display: none"></div>
+}
+

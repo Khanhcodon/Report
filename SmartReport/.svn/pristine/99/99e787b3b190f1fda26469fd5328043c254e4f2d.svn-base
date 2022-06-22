@@ -1,0 +1,98 @@
+﻿@model AccountModel
+@{
+    var accountDomains = ViewBag.AccountDomains as IEnumerable<int>;
+}
+<script>
+    $(function () {
+        $(document).bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                if ($("form").valid())
+                    $("form").submit();
+            }
+        });
+
+        $(".domains input:checkbox").click(function () {
+            var domainId = [];
+            $(".domains input:checked").each(function () {
+                domainId.push($(this).val());
+            });
+
+            $("#domains").val(domainId.join(','));
+        });
+    });
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.AccountId)
+
+<div id="tabs-1" class="tab">
+    <table>
+        <tr>
+            <td style="width: 15%">
+                Tên tài khoản:
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Username)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Họ và tên:
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.FullName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Cơ quan trực thuộc:
+            </td>
+            <td>
+                <input type="hidden" value="@Model.Domains" name="Domains" id="domains"/>
+                <ul class="list-group domains">
+                    @foreach (var domain in ViewBag.AllDomain as IEnumerable<SelectListItem>)
+                    {
+                        <li class="list-group-item" value="@domain.Value">
+                            @if (accountDomains.Contains(int.Parse(@domain.Value)))
+                            {
+                                <input type="checkbox" value="@domain.Value" checked/>
+                            }
+                            else
+                            {
+                                <input type="checkbox" value="@domain.Value" />
+                            }
+                            @domain.Text
+                        </li>
+                    }
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Hoạt động:
+            </td>
+            <td>
+                @Html.EditorFor(model => model.IsActivated)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Cho phép giám sát hệ thống một cửa:
+            </td>
+            <td>
+                @Html.EditorFor(model => model.HasViewReport)
+            </td>
+        </tr>
+    </table>
+
+    <br />
+    <div class="hidden">
+        <span data-res="egov.resources.user.defaultPasswordRest"></span>
+        <input type="text" id="defaultPassword" class="form-control" style="width: 250px;" data-respholder="egov.resources.user.clearToRandomData" value="@ViewBag.DefaultResetPassword" />
+    </div>
+    <p class="hidden">
+        <button class="btn" type="button" id="resetPassword" name="resetPassword">@Localizer("User.CreateOrEdit.Button.ResetPassword")</button>
+    </p>
+</div>
+

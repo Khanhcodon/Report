@@ -1,0 +1,1 @@
+ALTER TABLE `processfunction`  ADD COLUMN `HasTransferTheoLo`  bit NULL DEFAULT b'0' ;

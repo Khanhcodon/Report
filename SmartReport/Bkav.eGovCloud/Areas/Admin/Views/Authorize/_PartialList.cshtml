@@ -1,0 +1,152 @@
+﻿@model IEnumerable<AuthorizeModel>
+@{
+    var sortAndPage = ViewBag.SortAndPage as Bkav.eGovCloud.Admin.Models.SortAndPagingModel;
+    var listPageSize = ViewBag.ListPageSize as List<int>;
+    var number = (sortAndPage.CurrentPage - 1) * sortAndPage.PageSize;
+    var search = ViewBag.Search as string;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#tblAuthorize").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover");
+        $("#tblAuthorize").openLink({ urlOpen: '/admin/Authorize/Edit/' });
+    })
+</script>
+<table class="table-main table" id="tblAuthorize" style="width: 100%">
+    <colgroup>
+        <col style="width: 50px" />
+        <col />
+        <col />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 50px" />
+        <col style="width: 50px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.Numbers")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.AuthorizeUser")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.AuthorizedUser")
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateBegin", Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.DateBegin"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        search = search,
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divAuthorize",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Ajax.SortLink("DateEnd", Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.DateEnd"),
+                sortAndPage.SortBy, sortAndPage.IsSortDescending,
+                "SortAndPaging", "sort asc", "sort desc",
+                new
+                    {
+                        search = search,
+                        page = sortAndPage.CurrentPage,
+                        pageSize = sortAndPage.PageSize,
+                    },
+                new AjaxOptions
+                    {
+                        UpdateTargetId = "divAuthorize",
+                        OnBegin = "onBegin",
+                        OnSuccess = "onSuccess",
+                        OnFailure = "onFailure"
+                    })
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.Active")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.Edit")
+            </th>
+            <th class="header">
+                @Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.Delete")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var authorize in Model)
+            {
+                number += 1;
+            <tr data-id="@authorize.AuthorizeId">
+                <td>@number
+                </td>
+                <td>@authorize.AuthorizeUserName
+                </td>
+                <td>@authorize.AuthorizedUserName
+                </td>
+                <td>
+                    @authorize.DateBegin.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @authorize.DateEnd.ToString("dd/MM/yyyy")
+                </td>
+                <td>@(authorize.Active && authorize.DateEnd >= DateTime.Parse(DateTime.Now.ToString("dd/MM/yyyy")) ? "X" : "")
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Index.List.Column.Edit.Button"), "Edit", new { Id = authorize.AuthorizeId })
+                </td>
+                <td>
+                    <a href="javascript:deleteAuthorize(@(authorize.AuthorizeId))">@Localizer("Common.Resource.Index.List.Column.Delete.Button")</a>
+                    <form id="formdelete@(authorize.AuthorizeId)" style="display: none" action="@Url.Action("Delete", new { Id = authorize.AuthorizeId })" method="POST">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">@Localizer("Bkav.eGovCloud.Areas.Admin.Authorize.Null")
+                </td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="7">
+                @Ajax.Pager(sortAndPage.PageSize, sortAndPage.CurrentPage,
+                              sortAndPage.TotalRecordCount, "SortAndPaging",
+                              "pagerButton", "pagerButtonDisabled", "pagerButtonCurrentPage",
+                              new
+                              {
+                                  search = search,
+                                  sortBy = sortAndPage.SortBy,
+                                  isSortDesc = sortAndPage.IsSortDescending
+                              },
+                              new AjaxOptions
+                              {
+                                  UpdateTargetId = "divAuthorize",
+                                  OnBegin = "onBegin",
+                                  OnSuccess = "onSuccess",
+                                  OnFailure = "onFailure"
+                              }, listPageSize)
+            </td>
+        </tr>
+    </tfoot>
+</table>

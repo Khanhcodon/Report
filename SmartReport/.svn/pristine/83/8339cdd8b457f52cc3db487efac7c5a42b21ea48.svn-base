@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = Localizer("Bkav.eGovCloud.Areas.Admin.Title.ConnectionSetting.General");
+    Layout = "_SettingLayout.cshtml";
+}
+<form method="post">
+    <div class="form-group">
+        <label class="form-label col-md-2">Chuỗi kết nối</label>
+        <div class="col-md-14">
+            <input type="text" class="form-control" name="connectionSetting" value="@ViewBag.ConnectionString" />
+            <p style="font-size: 11px; color: #0094ff">
+                Hệ thống sẽ tự động restart lại sau khi thiết lập thành công.
+            </p>
+        </div>
+    </div>
+</form>

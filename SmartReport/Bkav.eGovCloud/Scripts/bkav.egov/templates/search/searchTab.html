@@ -1,0 +1,265 @@
+﻿<form class="form-horizontal egov-search" id="divSearchDoc">
+    <div class="form-group">
+        <label class="form-label col-sm-2">Tên báo cáo</label>
+        <div class="col-sm-14">
+            <input type="text" class="form-control input-medium" id="Compendium" value="${SearchQuery}" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="form-label col-sm-4" data-res="egov.resources.search.doccode"></label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="DocCode" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label class="form-label col-sm-2" data-res="egov.resources.search.FromDateStr"></label>
+                <div class="col-sm-14" >
+                    <input type="text" class="form-control pull-left" id="FromDateStr" style="width: 40%;" placeholder="Từ ngày" />
+                    <divc class="pull-left" style="width:20%;text-align:center">đến</divc>
+                    <input type="text" class="form-control pull-right" id="ToDateStr" style="width: 40%;" placeholder="Đến ngày" />
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div id="divSearchAdvance" style="display: none">
+        <div class="form-group">
+            <label class="form-label col-sm-2">Hình thức văn bản</label>
+            <div class="col-sm-6">
+                <select class="form-control" id="CategoryId">
+                    <option data-res="egov.resources.search.all"></option>
+                </select>
+            </div>
+            <label class="form-label col-sm-2" data-res="egov.resources.search.urgent"></label>
+            <div class="col-sm-6">
+                <select class="form-control" id="UrgentId">
+                    <option>Tất cả</option>
+                    <option value="1" data-res="egov.resources.document.Urgent.normal"></option>
+                    <option value="2" data-res="egov.resources.document.Urgent.fast"></option>
+                    <option value="3" data-res="egov.resources.document.Urgent.important"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label col-sm-2" data-res="egov.resources.search.storeprivate"></label>
+            <div class="col-sm-6">
+                <select class="form-control" id="StorePrivateId">
+                    <option value="" data-res="egov.resources.search.all"></option>
+                </select>
+            </div>
+            <label class="form-label col-sm-2" data-res="egov.resources.search.categorybusiness.name"></label>
+            <div class="col-sm-6">
+                <select name="CategoryBusinessId" class="form-control" id="CategoryBusinessId">
+                    <option data-res="egov.resources.search.categorybusiness.all">Tất cả</option>
+                    <option value="1" data-res="egov.resources.search.categorybusiness.in"></option>
+                    <option value="2" data-res="egov.resources.search.categorybusiness.out"></option>
+                    <option value="4" data-res="egov.resources.search.categorybusiness.one"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label col-sm-2" data-res="egov.resources.search.store"></label>
+            <div class="col-sm-6">
+                <select id="StoreId" class="form-control">
+                    <option value="" data-res="egov.resources.search.all"></option>
+                </select>
+            </div>
+            <label class="form-label col-sm-2" data-res="egov.resources.search.InOutPlace"></label>
+            <div class="col-sm-6">
+                <select id="InOutPlaceId" name="InOutPlaceId" class="form-control">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label col-sm-2" data-res="egov.resources.search.CurrentUser"></label>
+            <div class="col-sm-14">
+                <input type="text" class="form-control" id="CurrentUser" />
+                <input type="hidden" class="form-control" id="CurrentUserId" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label col-sm-2">Ngày ban hành</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control pull-left" id="FromPubDateStr" style="width: 48%;" placeholder="Từ ngày" />
+                <input type="text" class="form-control pull-right" id="ToPubDateStr" style="width: 48%;" placeholder="Đến ngày" />
+            </div>
+            <label class="form-label col-sm-2" data-res="egov.resources.search.UserSuccess"></label>
+            <div class="col-sm-6">
+                <select id="UserSuccessId" class="form-control">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label col-sm-2" data-res="egov.resources.search.OrganizationCreate"></label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="..." id="OrganizationCreate">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-left addressList"></ul>
+                    </div><!-- /btn-group -->
+                </div>
+            </div>
+            <label class="form-label col-sm-2" data-res="egov.resources.search.UserCreate"></label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="UserCreate" />
+                <input type="hidden" class="form-control" id="UserCreateId" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label col-sm-2"></label>
+        <div class="col-sm-6">
+            <div class="">
+                <label>
+                    <input type="checkbox" id="IsMainProcess"> Chỉ xem văn bản tham gia xử lý
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-14">
+            <button type="submit" id="btnAdvanceSearch" class="btn btn-primary btn-sm" data-res="egov.resources.search.search"></button>
+            <button type="button" id="btnAdvanceSearchNew" class="btn btn-default btn-sm hidden">Tìm mới</button>
+            <div class="checkbox-inline">
+                <label>
+                    <input type="checkbox" id="advanceSearch"> Tìm kiếm nâng cao
+                </label>
+            </div>            
+        </div>
+    </div>
+    <div id="divSearchFile">
+        <div class="form-group">
+            <label class="form-label col-sm-2" data-res="egov.resources.search.keyword"></label>
+            <div class="col-sm-14">
+                <input type="text" class="form-control" id="Keyword" value="${SearchQuery}" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<p >
+    <span>Tìm thấy <span style="color: rgb(17, 34, 204); font-weight: bold" id="totalResult">${TotalResult}</span> kết quả phù hợp.</span>
+    <span class="dateRange pull-right"></span>
+    {{if DidYouMean}}
+    <span data-res="egov.resources.search.DidYouMean"></span>${DidYouMean}
+    {{/if}}
+</p>
+<div>
+
+    {{if isRelationDoc}}
+    <div id="scrollSearchResult">
+        <table class="table table-hover table-bordered table-main" id="docSearchResult">
+            <colgroup>
+                <col style="width: 45px" />
+                <col style="width: 100px" />
+                <col style="width: 100px"/>
+                <col style="width: 300px" />
+                <col style="width: 130px" />
+                <col style="width: 130px" />
+                <col style="width: 130px" />
+                <col style="width: 100px" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <label class="checkbox document-color checkAll">
+                            <input name="checkbox[]" value="" type="checkbox">
+                            <span class="document-color-1"><i class="icon-check glyphicon"></i></span>
+                        </label>
+                    </th>
+                    <th>
+                        <a href="#" class="sort" data-column="DocCode" data-res="egov.resources.search.doccode"></a>
+                    </th>
+                    <th>
+                        <a href="#" class="sort" data-column="InOutCode">Số đến</a>
+                    </th>
+                    <th>
+                        <a href="#" class="sort" data-column="DocumentCompendium" data-res="egov.resources.search.compendium"></a>
+                    </th>
+                    <th>Cơ quan ban hành</th>
+                    <th>
+                        <a href="#" class="sort asc" data-column="DateReceived" data-res="egov.resources.search.createdate"></a>
+                    </th>
+                    <th data-res="egov.resources.search.CurrentUser"></th>
+                    <th>
+                       Hình thức
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    {{else}}
+    <table class="table table-hover table-bordered table-main" id="docSearchResult">
+        <colgroup>
+            <col style="width: 45px" />
+            <col  />
+            <col style="width: 130px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 130px" />
+            <col style="width: 100px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th data-res="egov.resources.search.order"></th>
+                <th>
+                    <a href="#" class="sort" data-column="DocumentCompendium" data-res="egov.resources.search.compendium"></a>
+                </th>
+                <th>
+                    <a href="#" class="sort" data-column="DocCode">Số KH</a>
+                </th>
+                <th>
+                    <a href="#" class="sort" data-column="Extension">Kỳ báo cáo</a>
+                </th>
+                <th>
+                    <a href="#" class="sort asc" data-column="Organization">Đơn vị BC</a>
+                </th>
+                <th>
+                    <a href="#" class="sort asc" data-column="DateReceived">Ngày tạo BC</a>
+                </th>
+                <th >Người ký</th>
+                <th data-res="egov.resources.search.UserCreate">Người tạo</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    {{/if}}
+
+    <table class="table table-hover table-main hidden" id="wrapAttachment">
+        <colgroup>
+            <col style="width: 45px" />
+            <col style="width: 200px" />
+            <col />
+            <col style="width: 70px" />
+            <col style="width: 70px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th data-res="egov.resources.search.order"></th>
+                <th data-res="egov.resources.search.search"></th>
+                <th data-res="egov.resources.search.content"></th>
+                <th data-res="egov.resources.search.view"></th>
+                <th data-res="egov.resources.search.download"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+{{if (typeof isRelationDoc == "undefined")}}
+<div class="paging">
+
+</div>
+{{/if}}

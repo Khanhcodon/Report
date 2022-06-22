@@ -1,0 +1,165 @@
+﻿@using Bkav.eGovCloud.Core.Utils;
+@using Bkav.eGovCloud.Core.Document;
+@model Bkav.eGovCloud.Models.ApproverModel
+@{
+    
+    var checkQuyenCapNhatKetQuaXuLyCuoi = false;
+    if (ViewBag.DocumentPermissions != null)
+    {
+        var documentPermissions = (DocumentPermissions)ViewBag.DocumentPermissions;
+        //checkQuyenCapNhatKetQuaXuLyCuoi = EnumHelper<DocumentPermissions>.ContainFlags(documentPermissions, DocumentPermissions.CapNhatKetQuaXuLyCuoi);
+    }
+}
+<style type="text/css">
+    .sign-main {
+        width: 100%;
+    }
+
+        .sign-main .signed-collection {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sign-main .sign-result {
+            margin-bottom: 10px;
+        }
+
+        .sign-main .sign-comment {
+            margin-bottom: 10px;
+        }
+
+        .sign-main .sign-button {
+            text-align: right;
+        }
+
+    .signed-collection .sign-collection-label {
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+
+    .signed-collection .signed-items {
+    }
+
+    .signed-collection .signed-item {
+
+    }
+
+    .signed-collection .no-signed {
+        margin-left: 20px;
+        font-weight: normal;
+        /*color: red;*/
+    }
+
+    .sign-result .sign-label, .sign-comment .sign-label {
+        width: 100px;
+        display: inline-block;
+    }
+
+    .sign-result .sign-content, .sign-comment .sign-content {
+        display: inline-block;
+        width: 375px;
+    }
+
+    .sign-button input {
+        border: none;
+        height: 25px;
+        color: white;
+        background-color: #21bbf7;
+        font-family: arial;
+    }
+
+    .signed-items .signed-content {
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
+
+    .signed-item span {
+        display: inline-block;
+    }
+
+    .signed-item .signed-label {
+        width: 100px;
+    }
+
+    .signed-item .signed-success {
+        color: red;
+        width: 130px;
+    }
+
+    .signed-item .signed-usersend {
+        color: blue;
+        width: 150px;
+    }
+
+    .signed-item .signed-datetime {
+        width: 100px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $("#Content").focus();
+    });
+</script>
+@using (Html.BeginForm("UpdateSign", "Approver", FormMethod.Post, new { name = "approver" }))
+{ 
+    <div class="sign-main">
+        @if (Model.IsDraft)
+        {
+            @Html.HiddenFor(model => model.ApproverId)
+            @Html.HiddenFor(model => model.DocumentCopyId)
+            @Html.HiddenFor(model => model.DocumentId)
+            @Html.HiddenFor(model => model.IsDraft)
+            <div class="signed-collection">
+                <div class="sign-collection-label">Tổng hợp ý kiến duyệt </div>
+                @if (ViewBag.SignedCollection.Count > 0)
+                { 
+                    <div class="signed-items">
+                        @foreach (var signed in ViewBag.SignedCollection)
+                        { 
+                            <div class="signed-item">
+                                <span class="signed-label">Ý kiến duyệt </span>
+                                <span class="signed-success">@(signed.IsSuccess ? "Đồng ý" : "Từ chối")</span>
+                                <span class="signed-usersend">@(signed.UserSend == null ? "" : signed.UserSend.FullName)</span>
+                                <span class="signed-datetime">@signed.DateCreated.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="signed-content">@signed.Content</div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="no-signed">
+                        <span>Không có</span>
+                    </div>
+                }
+            </div>
+            <div class="sign-result">
+                <strong><span class="sign-label">Ý kiến duyệt</span></strong>
+                <span class="sign-content">
+                   @* @Html.RadioButtonFor(model => model.IsSuccess, true) <strong style="color: green; margin-right: 10px;">Đồng ý</strong>
+                    @Html.RadioButtonFor(model => model.IsSuccess, false) <strong style="color: red">Từ chối</strong>*@
+                   @* @if (checkQuyenCapNhatKetQuaXuLyCuoi)
+                    { 
+                        <input name="IsDocSuccess" type="checkbox" @(Model.IsDocSuccess ? "checked" : "") style="margin-left: 65px"/><span> Hồ sơ xử lý xong</span>
+                    }*@
+                </span>
+            </div>
+            <div class="sign-comment">
+                <span class="sign-content">
+                    @Html.TextAreaFor(model => model.Content, new { style = "width: 493px; height: 40px " })
+                </span>
+            </div>
+        }
+        else
+        {
+            <div>
+                <div style="color: blue; font-weight: bold; margin-bottom: 10px;">
+                    Hồ sơ này đã được ký
+                </div>
+                <div><strong>Kết quả ký:</strong> @(Model.IsSuccess ? "Đồng ý" : "Từ chối")</div>
+                <div><strong>Nội dung ký:</strong> @Model.Content</div>
+                <div><strong>Ngày ký:</strong> @Model.DateCreated.ToString("hh:mm dd/MM/yyyy")</div>
+            </div>
+        }
+    </div>
+}

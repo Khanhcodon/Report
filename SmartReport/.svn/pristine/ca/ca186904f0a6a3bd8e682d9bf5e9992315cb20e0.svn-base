@@ -1,0 +1,195 @@
+﻿@model FormGroupModel
+@{
+    var allForms = ViewBag.AllForms as string;
+    var selectedForms = ViewBag.SelectedForms as string;
+}
+
+    <script src="../../../../Scripts/bkav.egov/libs/jquery/jQuery.tmpl.min.js"></script>
+    <script src="../../../../Scripts/bkav.egov/libs/bkav/bkav.autocomplete.selectfirst.min.js"></script>
+
+<div class="section-header">
+    <div class="title">
+        <i class="fa icon-docs"></i>
+        <span data-res="egov.resources.sitemap.formgroup"></span>
+    </div>
+    <div class="options">
+        <a class="btn  btn-warning control-btn" id="submit" href="#">
+            <span class="icon icon-checkmark"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.save"></span>
+        </a>
+        <a class="btn  btn-default control-btn" href="/admin/formgroup/Index" id="back">
+            <span class="icon icon-arrow-left2"></span>
+            <span class="text-uppercase" data-res="egov.resources.buttons.back"></span>
+        </a>
+    </div>
+</div>
+
+<script>
+    @if (Model.FormGroupId > 0)
+    {
+        <text>  
+    var allForms = @(string.IsNullOrEmpty(allForms) ? MvcHtmlString.Create("[]") : Html.Raw(allForms));
+    var selectedForms = @(string.IsNullOrEmpty(selectedForms) ? MvcHtmlString.Create("[]") : Html.Raw(selectedForms));
+        </text>  
+    }
+
+    $(function () {
+        var $tabContent = $('.ui-tabs-hide');
+        $tabContent.removeClass('ui-tabs-hide');
+        @if (Model.FormGroupId > 0)
+        {
+        <text>             
+
+        $("#tblForm").grid({
+            isResizeColumn: true,
+            isFixHeightContent: false
+        });
+        $(".table-main").addClass("table-bordered table-hover");
+        $('tr th').css("line-height", "2.5");
+
+        if(selectedForms && selectedForms.length>0){
+            $("#tmplForm").tmpl(selectedForms).appendTo("#tblForm tbody");
+            $("#tblForm").grid('refresh');
+        }
+
+        $("#findForm").autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request.term ), "i" );
+                response( $.grep( allForms, function( value ) {
+                    return matcher.test( value.FormName )
+                        || matcher.test( egov.utilities.string.stripVietnameseChars(value.FormName));
+                }) );
+            },
+            focus: function() {
+                return false;
+            },
+            selectFirst: true,
+            select: function(event, ui) {
+                $("#findForm").val('');
+                var exist = _.find(allForms, function(user) {
+                    return user.FormId === ui.item.FormId;
+                });
+
+                if (exist) {
+                    var selected = _.find(selectedForms, function(user) {
+                        return user.FormId === ui.item.FormId;
+                    });
+                    if (!selected) {
+                        selectedForms.push(exist);
+                        $("#tmplForm").tmpl(exist).appendTo("#tblForm tbody");
+                        $("#tblForm").grid('refresh');
+                    }
+                }
+                return false;
+            }
+        }).data("autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a>" + item.FormName + "</a>")
+                .appendTo(ul);
+        };
+          </text>  
+        }
+    });
+
+    function deleteRowForm(id){
+        eGovMessage.show(
+         '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.ConfirmDeleteRowForm"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#tblForm  tbody tr[data-formid='"+id+"']").remove();
+                if(selectedForms&& selectedForms.length>0){
+                    selectedForms=_.filter(selectedForms,function(item){
+                        return item.FormId !==id;
+                    });
+                }
+            }
+        );        
+    }
+
+    $(function(){
+        $('#tablist a').bind("click", function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            $(".tab").hide();
+            $(id).show();
+        });
+    });
+</script>
+
+<div id="tabs" class="bkavegov">
+
+    <div id="tabsChild">
+        <ul class="nav nav-tabs" role="tablist" id="tablist" style="margin-bottom: 20px;">
+            <li class="active"><a href="#tabs-1" role="tab" data-toggle="tab">@Localizer("FormGroup.CreateOrEdit.Tab.Detail")</a></li>
+            <li><a href="#tabs-2" role="tab" data-toggle="tab">@Localizer("FormGroup.CreateOrEdit.Tab.Form")</a></li>
+        </ul>
+
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.FormGroupId)
+            <div id="tabs-1" class="tab">
+                <table>
+                    <tr>
+                        <td style="width: 20%">
+                            @Html.LabelRequireFor(model => model.FormGroupName):
+                        </td>
+                        <td>
+                            @Html.TextAreaFor(model => model.FormGroupName,
+                                            new Dictionary<string, object>() {
+                                                    { "class", "egovQtip" },
+                                                    { "data-qtip", ".tooltipPacket" } })
+                            @if (Model.FormGroupId == 0)
+                            { 
+                                <div>
+                                    <p>@Html.Raw(Localizer("Admin.Common.CreatePacket"))</p>
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(model => model.FormGroupName)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+                            if (Model.FormGroupId > 0)
+                            {
+            <div id="tabs-2" style="display: none" class="tab">
+
+                <p>Biểu mẫu:<input type="text" id="findForm" name="findForm" style="width: 400px; display: inline" /></p>
+                <table class="table-main table" id="tblForm" style="width: 100%">
+                    <colgroup>
+                        <col />
+                        <col style="width: 50px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="header">
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Numbers")
+                            </th>
+                            <th class="header">
+                                @Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Delete")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+                            }
+        }
+    </div>
+</div>
+<script type="text/x-jquery-tmpl" id="tmplForm">
+    <tr data-formid="${FormId}">
+        <td>${FormName}
+            <input type="hidden" name="FormIds" value="${FormId}" />
+        </td>
+        <td>
+            <a href="javascript:deleteRowForm('${FormId}')">@Localizer("Bkav.eGovCloud.Areas.Admin.FormGroup.Index.List.Column.Delete")</a>
+        </td>
+    </tr>
+</script>

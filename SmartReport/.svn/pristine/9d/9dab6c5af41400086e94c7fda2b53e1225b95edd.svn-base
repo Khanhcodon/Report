@@ -1,0 +1,35 @@
+﻿@using Bkav.eGovCloud.Web.Framework.Utility
+@{
+
+    ViewBag.Cultures = new List<SelectListItem> {   new SelectListItem {Text = "Việt Nam", Value = "vi-VN", Selected = CultureHelper.GetCurrentCultureName()=="vi-VN"},
+                                                    new SelectListItem {Text = "English", Value = "en-US", Selected = CultureHelper.GetCurrentCultureName()=="en-US"},
+                                                    new SelectListItem {Text = "Lao", Value = "lo-LA", Selected = CultureHelper.GetCurrentCultureName()=="lo-LA"}};
+}
+
+<script type="text/javascript">
+    function changeCurrentCulture(sender) {
+        $.cookie("_culture", $(sender).val(), { expires: 365, path: '/' });
+        window.location.reload();
+    };
+</script>
+
+<div class="btn-group toppad pull-right">
+    <button class="btn dropdown-toggle navbar-tool" title="English" data-toggle="dropdown">
+        <img src="@Url.Content("~/Content/bkav.egov/images/changelanguage.PNG")" />
+        <span>VN</span>
+    </button>
+    <ul id="language-selector" class="dropdown-menu">
+        @*<li>
+            <a href="javascript:void(0)" data-lang-id="2">
+                <img src="@Url.Content("~/Content/bkav.egov/images/FlagEN.ico")" culturevalue="en-US" class="flagIcon" style="width:24px" />
+                Tiếng Anh
+            </a>
+        </li>*@
+        <li class="disabled">
+            <a href="javascript:void(0)" data-lang-id="1">
+                <img src="@Url.Content("~/Content/bkav.egov/images/FlagVN.ico")" culturevalue="vi-VN" class="flagIcon" style="width:24px" />
+                Tiếng Việt
+            </a>
+        </li>
+    </ul>
+</div>

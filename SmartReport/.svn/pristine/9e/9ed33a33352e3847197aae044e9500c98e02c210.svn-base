@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Bkav.eGovCloud.Areas.Admin.Models.DoctypeTemplateModel>
+@{
+    Layout = "~/Areas/Admin/Views/DocType/_EditMain.cshtml";
+    var count = 0;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#submit").remove();
+        $(".tab-template").addClass("active");
+        $(".tab-template").siblings().removeClass("ui-tabs-selected ui-state-active");
+    });
+    function deleteDoctypeTemplate(id) {
+        eGovMessage.show(
+            '@Html.Raw(Localizer("Bkav.eGovCloud.Areas.Admin.DoctypeTemplate.ConfirmDelete"))',
+            null,
+            eGovMessage.messageButtons.YesNo,
+            function () {
+                $("#formdelete" + id).submit();
+            }
+        );
+    }
+    function openDialog(url) {
+        $("#my-dialog").dialog({
+            width: 650,
+            height: 300,
+            resizable: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#my-dialog").load(url);
+            },
+            buttons: [
+                {
+                    text: "@Html.Raw(Localizer("Common.Refresh.Label"))",
+                    click: function () {
+                        $("#my-dialog").load(url);
+                    }
+                },
+    {
+        text: "@Html.Raw(Localizer("Common.Create.Label"))",
+        click: function () {
+            window.open("@Url.Action("Create", "OnlineTemplate")")
+    }
+    },
+                {
+                    text: "@Html.Raw(Localizer("Common.Label.Select"))",
+                    click: function () {
+                        $("#tblDoctypeTemplate .choose").each(function () {
+                            if ($(this).is(":checked")) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Admin/Doctype/AddDoctypeTemplate",
+                                    data: {
+                                        'doctypeId': '@ViewBag.DoctypeId',
+                            'onlineTemplateId': $(this).data("id"),
+                            'onlineTemplateName': $(this).data("name")
+                        },
+                    }).success(function () {
+                        location.reload()
+                    });
+                }
+            }
+                );
+            $("#my-dialog").dialog("close");
+        }
+    }
+    ]
+    });
+    }
+</script>
+<div id="my-dialog">
+</div>
+<button class="btn"type="button" onclick="openDialog('@Url.Action("DisplayOnlineTemplates", "Doctype")')">
+    Thêm biểu mẫu hành chính</button>
+<div>
+    <table class="table table-bordered table-hover" id="tblPaperInDoctype">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên biểu mẫu hành chính</th>
+                <th>Xóa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctypeTemplate in Model)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@doctypeTemplate.Name</td>
+                    <td>
+                        <a href="javascript:deleteDoctypeTemplate('@(doctypeTemplate.DoctypeTemplateId)')">@Localizer("Customer.DocType.Index.List.Column.Delete.Button")</a>
+                        <form id="formdelete@(doctypeTemplate.DoctypeTemplateId)" style="display: none" action="@Url.Action("DeleteDoctypeTemplate", new { doctypeId = ViewBag.DoctypeId, doctypeTemplateId = doctypeTemplate.DoctypeTemplateId })" method="POST"></form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
